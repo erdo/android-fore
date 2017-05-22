@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/asaf/asaf.iml" filepath="$PROJECT_DIR$/asaf/asaf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asafproject.iml" filepath="$PROJECT_DIR$/asafproject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exampleapp1/exampleapp1.iml" filepath="$PROJECT_DIR$/exampleapp1/exampleapp1.iml" />
+    </modules>
+  </component>
+</project>
