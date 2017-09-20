@@ -1,12 +1,12 @@
 # asaf
 Alarmingly Simple Android Framework
 
-##TL;DR
+## TL;DR
 
 
 This is a small collection of framework type classes that can help you write a concise and robust commercial grade android application. Used correctly it helps address some of the common problems of android development: **testability**; **lifecycle management**; **UI consistency**; and **memory leaks**. It usually results in a very concise code base and it supports rotation by default. It's also very simple.
 
-##Quick Start
+## Quick Start
 
 ...
 
@@ -24,12 +24,12 @@ In your app you'll need something to inject the feature models into your UI comp
 More details below, but essentially you will be writing observable and testable Model classes for all your logic and data, and getting your UI classes to observe these models for any changes so that they can update their views immediately.
 
 
-##Overall Approach
+## Overall Approach
 ASAF is basically a light touch implementation of **MVVM written for Android** using the observer pattern. It could almost be considered **MV** as we don't need to make a distinction between Models and ViewModels. You can use it to implement **MVP** if you wish, but you might find that with this framework you don't really need the **P**.
 
 It also formalises an approach to **simple one way data binding** using a syncView() method that never leaves your view out of sync with your model.
 
-###Models:
+### Models:
 There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** classes.
 
 In the sample apps, the models are all found in the **feature** package.
@@ -50,7 +50,7 @@ A check list of requirements for the model classes, as used in ASAF
 - By the way, it's very useful to immediately **crash in your model constructor if any caller tries to send you null obects**. Your constructor is your public interface and could be used by anyone. You can help other developers out by immediately crashing here rather than sometime later when the cause might not be so obvious.
 
 
-###Views:
+### Views:
 Views are not just XML layouts, in Android views are composed of the Activity, Fragment and View classes.
 
 These classes:
@@ -70,7 +70,7 @@ Sound familiar? I have no stats for this but I would guess that those issues acc
 All the view classes (Activity/Fragment/View) for the sample apps are found in the **ui** package and do as little as possible apart from manage their lifecycle and display the state of whatever model they are interested in. As you'll see in that package, click listeners and references to the UI widgets are in the subclassed Android View classes, and they reference model classes directly from there.
 
 
-###Model to View comms
+### Model to View comms
 
 The models are observable and the views mainly do the observing.
 
@@ -80,12 +80,12 @@ When an observer is told that something changed, it is the observers responsibil
 
 More details on this process in the data binding section
 
-###View to Model comms
+### View to Model comms
 
 The button click listeners etc are specified in the view classes and call methods directly on models.
 
 
-##Data Binding
+## Data Binding
 ***AKA - how can I stop getting bug reports about displaying the wrong state in some weird hard to reproduce situation - while also writing less code?***
 
 **One Way Data Binding**: Any changes of state in your underlying model get automatically represented in your view.
@@ -106,7 +106,7 @@ Anyway I'm going to show you how to do rock solid one way data binding with this
         });
 
 
-###SyncView()
+### SyncView()
 
 There are a load of different ways of implementing one way data binding. In line with the name of this framework, we are going to use the most simple (but extremely reliable) implementation you can have.
 
@@ -114,7 +114,7 @@ It really all boils down to a single syncView() method, but there are some impor
 
 > if a model being observed changes **in anyway**, then the **entire** view is refreshed.
 
-###simple example
+### simple example
 
 Here's an example of how addhoc data binding can get rapidly complicated, especially when you have a lifecycle to deal with.
 
@@ -192,7 +192,7 @@ And don't forget if we need to rotate this view, all the fields will be out of s
 
 That's already looking like quite a bit of code, but what if... we want disable a checkout button if there is nothing in the basket, or make the total colour red if it is under the minumum card transaction value of $1. It very quickly starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
-###But that's not the worst problem....
+### But that's not the worst problem....
 The worst problem with this code is that there is a bug in it. Did you spot it?
 
 It's class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and given that data binding is barely even a thing among most android developers, it's a class of bugs that crops up *all the time* in android apps, even ones that dissable rotation.
@@ -257,7 +257,7 @@ The syncView() gets called by the observer which is triggered whenever **any** s
         totalPrice.setText(basket.getTotalPrice);
     }
 
-###Writing an effect syncView() method
+### Writing an effect syncView() method
 
 
 The important thing about a syncView() method is that it must set an affirmative state for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
@@ -288,7 +288,7 @@ But you'll find that by focusing on the property first rather than the condition
 
 
 
-##Adapters
+## Adapters
 
 Ahh adapters, I miss the good old days when all you had to do was call notifyDataSetChanged(). And the best place to call it is from inside the syncView() method:
 
@@ -315,14 +315,14 @@ In order to get animations, you need to tell the adapter what kind of change act
 //TODO
 
 
-##Cursor Loaders
+## Cursor Loaders
 
 Cursor loaders are interesing, underneath the hood they use a standard observer pattern to propogate their changes to a view just as this library does. It works very nicely, the only criticism I have is that (as with so much Android code) it forces you down a path of adding model code to the Activity and Fragment classes.
 
 //TODO
 
 
-##Identifying Problems / How to smash code reviews
+## Identifying Problems / How to smash code reviews
 As mentioned, it can take a little bit of effort to understand how to use this library properly at first, so here is a list of warning signs you can use to highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen from developers who have just been introduced to this library).
 
 
@@ -350,9 +350,9 @@ As mentioned, it can take a little bit of effort to understand how to use this l
 
 
 
-##Occasionally Asked Questions
+## Occasionally Asked Questions
 
-###1) Why not put a parameter in the Observer.somethingChanged() method?
+### 1) Why not put a parameter in the Observer.somethingChanged() method?
 
 If I had a dollar for everyone who asked me this question! (I would have, maybe $4)
 
@@ -382,7 +382,7 @@ If you want a library that lets you send data in these observables, you should l
 > Once you remove the crazy, turns out it's not rocket science after all
 
 
-###2) Do tell me more about separating view code from everything else?
+### 2) Do tell me more about separating view code from everything else?
 
 No one asks me this. I wish they would though, rather than just nodding when I say it's important to keep your data and logic seperate from your views.
 
@@ -417,7 +417,7 @@ Fortunately with a few basic rules and techniques embodied in this library you c
 
 
 
-###3) When should I use an Observer, when should I use a callback listener?
+### 3) When should I use an Observer, when should I use a callback listener?
 
 An observer pattern is not always going to be suitable for what you want to do. In
 particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular call back will probably server you better. In this case the succes or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
@@ -494,7 +494,7 @@ Alternatively the network call might be fetching some data for the model as in t
   	}
   
 
-###4) What's the deal with the Controller in MVC, where is that? 
+### 4) What's the deal with the Controller in MVC, where is that? 
 
 In modern UI frameworks most of the controller work is implemented for you by the framework itself - these are the button click listeners that simply catch user input and send it on to the right place.
 
@@ -505,17 +505,17 @@ Nowadays we just use click listeners or something similar and we don't need to w
 (Android also lets you use Activities as kind of Controllers by letting you specify callback methods right in the XML for buttons which will end up getting called on whatever activity is hosting that particular view. It's kind of nasty, I'd recommend not using it at all because it encourages (forces) you to get the activity involved in something that it doesn't need to be involved in. If you leave everything out of the Activity then you can use your view in any activity you like, without needing to re-implement all those button call backs for each each time.)
 
 
-###5) But hey doesn't Android have an official data binding solution now?
+### 5) But hey doesn't Android have an official data binding solution now?
 Uh huh. Good luck with that.
 
 
-###6) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
+### 6) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
 
 Let me guess you're one of those people who only uses ints instead of enums right? or forgoes getters and setters for extra performance? I knew it!
 
 Well apart from the obvious "permature optimisation is the route of all evil" or however that quote goes, you might be in danger of seriously underestimating how fast even the most basic android phone runs nowadays.
 
-####In to the matrix
+#### In to the matrix
 
 Before we go any further, if you haven't already, go to developer settings on android and check out the debug tools that let you see the screen updates as they happen.
 
