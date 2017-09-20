@@ -289,14 +289,15 @@ Using a syncView() for the example above we end up with something like this:
         totalPrice.setText(basket.getTotalPrice);
     }
 
-The syncView() gets called by the observer which is triggered whenever **any** state of the model changes. It's also called on rotation. If you want to add any more states it's easy and clean and totally consistent if they are set inside the syncView() method:
+The syncView() gets called by the observer which is triggered whenever **any** state of the model changes. It's also called on rotation. If you want to add any more states it's easy, and clean, and totally consistent if they are set inside the syncView() method:
 
     private void syncView(){
     	checkoutButton.setEnabled(basket.isAboveMinimum());
     	totalPrice.setColour(basket.isAboveMinimum() ? black : red);
     	removeButton.setEnabled(basket.getTotalItems>0);
- 		totalItems.setText(basket.getTotalItems);
- 		totalDiscount.setText(basket.getTotalDiscount);		totalPrice.setText(basket.getTotalPrice);
+        totalItems.setText(basket.getTotalItems);
+        totalDiscount.setText(basket.getTotalDiscount);
+        totalPrice.setText(basket.getTotalPrice);
 	}
 
 ### Writing an effective syncView() method
