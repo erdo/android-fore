@@ -292,9 +292,9 @@ Using a syncView() for the example above we end up with something like this:
 The syncView() gets called by the observer which is triggered whenever **any** state of the model changes. It's also called on rotation. If you want to add any more states it's easy, and clean, and totally consistent if they are set inside the syncView() method:
 
     private void syncView(){
-    	checkoutButton.setEnabled(basket.isAboveMinimum());
-    	totalPrice.setColour(basket.isAboveMinimum() ? black : red);
-    	removeButton.setEnabled(basket.getTotalItems>0);
+        checkoutButton.setEnabled(basket.isAboveMinimum());
+        totalPrice.setColour(basket.isAboveMinimum() ? black : red);
+        removeButton.setEnabled(basket.getTotalItems>0);
         totalItems.setText(basket.getTotalItems);
         totalDiscount.setText(basket.getTotalDiscount);
         totalPrice.setText(basket.getTotalPrice);
@@ -303,7 +303,7 @@ The syncView() gets called by the observer which is triggered whenever **any** s
 ### Writing an effective syncView() method
 
 
-The important thing about a syncView() method is that it must set an affirmative state for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
+The important thing about the syncView() method is that it must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
 
 It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting any state, which means that the result will be undeterministic (it will be whatever state it had previously).
 
@@ -319,7 +319,7 @@ At the very least you must do this:
 	if (basket.isBelowMinimum()){
 		checkoutButton.setEnabled(false);
 		totalPrice.setColour(red);
-	}else{
+	} else {
 		checkoutButton.setEnabled(true);
 		totalPrice.setColour(black);
 	}
