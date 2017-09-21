@@ -3,7 +3,7 @@ Alarmingly Simple Android Framework
 
 ## TL;DR
 
-A few framework classes that aim to help you quickly write android code that is **simple** and **robust** for even the most complex android apps. The library is tiny, but you you need to know how to use it, and it also helps to know why it is like it is.
+A few framework classes that help you to quickly write android code that is **simple** and **robust** for even the most complex android app. The library is tiny, but you you need to know how to use it, and it also helps to know why it is like it is.
 
 
 ## Quick Start
