@@ -198,7 +198,9 @@ Here's what we end up with for our fake *Printer* model:
 
 There are a few things that snuck in to the final version: The WorkMode parameter tells the observable implementation *ObservableImp* how you want your notifications to be sent. Usually you will pass WorkMode.ASYNCHRONOUS here.
 
-When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy. That's bascially what the AsyncTaskWrapper is helping you to do, if you pass SYNCHRONOUS instead of ASYNCHRONOUS here then onPreExecute(), doInBackground(), onPostExecute() will all be called sequentially as if the AsyncTask was just normal code.
+When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
+
+That's bascially what the AsyncTaskWrapper is helping you to do, if you pass SYNCHRONOUS instead of ASYNCHRONOUS here then onPreExecute(), doInBackground(), onPostExecute() will all be called sequentially as if the AsyncTask was just normal code.
 
 ***NB: to make your view code extra clean, ASYNCHRONOUS notifications from an Observable in ASAF are always sent on the UI thread, so there is no need to do any thread hopping to update a UI.***
 
