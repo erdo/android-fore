@@ -3,7 +3,7 @@ Alarmingly Simple Android Framework
 
 ## TL;DR
 
-A few quick framework classes that help write android code that is **simple** and **robust** for even the most complex android app. The library is tiny, but you you need to know how to use it, and it also helps to know why it is like it is.
+A few quick framework classes that help you write android code that is **simple** and **robust** for even the most complex android app. The library is tiny, but you you need to know how to use it, and it also helps to know why it is like it is.
 
 
 ## Quick Start
@@ -15,7 +15,7 @@ A few quick framework classes that help write android code that is **simple** an
 
 ...
 
-Writing simple code turns out to be a lot harder than writing complicated code, ASAF is a small collection of framework type classes that can help you write a concise and robust commercial grade android application. Used correctly these classes should help you avoid some of the more common problems of android development on a non trivial app: **testability**; **lifecycle management**; **UI consistency**; and **memory leaks**. It usually results in a very concise code base and it supports rotation by default. It's also very simple.
+Writing simple code turns out to be a lot harder than writing complicated code, ASAF is a small collection of framework type classes that can help you write a concise and robust commercial grade android application with code that is as simple as possible. Used correctly these classes should help you avoid some of the more common problems of android development on a non trivial app: **testability**; **lifecycle management**; **UI consistency**; and **memory leaks**. It usually results in a very concise code base and it supports rotation by default. Did I mention it's also very simple?
 
 If you haven't coded with ASAF before, it's probably best to take a look at the sample app and literally copy and paste a feature and it's associated UI components (see the **feature/** and **ui/** packages) then change them from there. I will be writing a tutorial for each app as soon as I get a chance so that you can step through the process of writing an app from scratch.
 
