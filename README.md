@@ -65,25 +65,25 @@ The *Printer* model might have a boolean that says if it's busy printing or not.
     }
 
 
-The *Printer* class will have some public methods like *print(String thingToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished: 
+The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished: 
 
 
     public class Printer {
 
         private boolean isBusy = false;
         private boolean hasPaper = true;
-        private int thingsLeftToPrint;
+        private int numPagesLeftToPrint;
 
     
         public void printThis(Page pageToPrint, CompletionCallBack completionCallBack){
 
             isBusy = true;
-            thingsLeftToPrint++;
+            numPagesLeftToPrint++;
 
             //...do the printing asynchronously, then once back on the UI thread:
 
             isBusy = false;
-            thingsLeftToPrint--;
+            numPagesLeftToPrint--;
 
             completionCallBack.complete();
         }
@@ -98,13 +98,13 @@ The *Printer* class will have some public methods like *print(String thingToPrin
             return hasPaper;
         }
 
-        public int getThingsLeftToPrint() {
-            return thingsLeftToPrint;
+        public int getNumPagesLeftToPrint() {
+            return numPagesLeftToPrint;
         }
     }
 
 
-The Printer model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constuctor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediatley and obviously). (Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through)
+The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constuctor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediatley and obviously). (Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through)
 
         private final USBStuff usbStuff;
         private final Formatter formatter;
@@ -123,6 +123,12 @@ The quickest was to do that is to extend ObservableImp:
     
 Next we need to make sure that the observers are notifed each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens
 
+            isBusy = true;
+            numPagesLeftToPrint++;
+            notifyObservers();
+            
+Here's what we end up with for our fake *Printer* model:
+
 
     public class Printer extends ObservableImp {
     
@@ -132,7 +138,7 @@ Next we need to make sure that the observers are notifed each time the *Printer*
     
         private boolean isBusy = false;
         private boolean hasPaper = true;
-        private int thingsLeftToPrint;
+        private int numPagesLeftToPrint;
     
     
         public Printer(USBStuff usbStuff, Formatter formatter, WorkMode workMode) {
@@ -142,10 +148,10 @@ Next we need to make sure that the observers are notifed each time the *Printer*
             this.workMode = Affirm.notNull(workMode);
         }
     
-        public void printThis(String thingToPrint, final CompletionCallBack completionCallBack) {
+        public void printThis(Page pageToPrint, final CompletionCallBack completionCallBack) {
 
             isBusy = true;
-            thingsLeftToPrint++;
+            numPagesLeftToPrint++;
             notifyObservers();
 
 
@@ -166,7 +172,7 @@ Next we need to make sure that the observers are notifed each time the *Printer*
                     //back on the UI thread
                     
                     isBusy = false;
-                    thingsLeftToPrint--;
+                    numPagesLeftToPrint--;
                     notifyObservers();
 
                     completionCallBack.complete();
@@ -184,16 +190,17 @@ Next we need to make sure that the observers are notifed each time the *Printer*
             return hasPaper;
         }
     
-        public int getThingsLeftToPrint() {
-            return thingsLeftToPrint;
+        public int getNumPagesLeftToPrint() {
+            return numPagesLeftToPrint;
         }
     }
 
-That's what we end up with for our fake *Printer* model.
 
 There are a few things that snuck in to the final version: The WorkMode parameter tells the observable implementation *ObservableImp* how you want your notifications to be sent. Usually you will pass WorkMode.ASYNCHRONOUS here.
 
 When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy. That's bascially what the AsyncTaskWrapper is helping you to do, if you pass SYNCHRONOUS instead of ASYNCHRONOUS here then onPreExecute(), doInBackground(), onPostExecute() will all be called sequentially as if the AsyncTask was just normal code.
+
+NB: to make your view code extra clean, ASYNCHRONOUS notifications from an Observable in ASAF are always sent on the UI thread, so there is no need to do any thread hopping to update a UI.
 
 When you are writing your own model, it's worth reviewing the section below called "When should I use an Observer, when should I use a callback listener?" making an inappropriate choice here will get you into an untold mess.
 
