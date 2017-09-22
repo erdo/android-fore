@@ -726,8 +726,16 @@ Nowadays we just use click listeners or something similar and we don't need to w
 (Android also lets you use Activities as kind of Controllers by letting you specify callback methods right in the XML for buttons which will end up getting called on whatever activity is hosting that particular view. It's kind of nasty, I'd recommend not using it at all because it encourages (forces) you to get the activity involved in something that it doesn't need to be involved in. If you leave everything out of the Activity then you can use your view in any activity you like, without needing to re-implement all those button call backs for each time.)
 
 
-### 5) But hey doesn't Android have an official data binding solution now?
-Uh huh. Good luck with that.
+### 5) But hey doesn't Android have an official data binding and MVVM solution now?
+Hmm. I have to say that I'm generally not too impressed with some of the "helpful" code we get from Google sometimes. Too much of what is published seems like an after thought, or just the latest replacement for the last thing they messed up. Sometimes what they give the Android community is too complicated / badly thought out / rushed / or just not finished.
+
+If it's not good enough, or it's too new to know if it it's good enough, and it's from Google, and I have a better alternative - I'll hapilly skip it. (In the past when I've not done that, I have often regretted it).
+
+Don't get me wrong, I love Android, and the only reason it exists is because Google didn't want to loose out on mobile add revenue when everything moved away from desktops, so good for them! But (and sorry for any Google fans out there) just because Google wrote some new code, doesn't mean it's any good, or even that it is sticking around and people will adopt it and it will become standard.
+
+MVVM is not new, it's been around at least a decade, MVC for 3 decades! The fact that it has taken the google android team half a decade of running a UI platform to realise that MV* is a thing that's actually quite important when writing an app with a UI, well it speaks volumes doesn't it?
+
+Anyway rant over, but the code in this library is (I think) a lot better (of course, otherwise I wouldn't bother using it).
 
 
 ### 6) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
