@@ -1,3 +1,6 @@
+# nothing much here yet, still writing tutorials and sample apps, android project is there so you can clone it to get the code, but no gradle build yet!
+
+
 # asaf
 Alarmingly Simple Android Framework
 
