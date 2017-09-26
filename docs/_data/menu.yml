@@ -1,9 +1,9 @@
 - text: Main Readme
   url: /
-    subitems:
+  subitems:
     - text: TL;DR
       url: /#tldr
-	- text: Architectural Approach
+    - text: Architectural Approach
       url: /#arch
     - text: Quick Start
       url: /#quick
@@ -11,10 +11,10 @@
       url: /#licence
 - text: Sample Apps
   url: /00-sampleapps.html
-    subitems:
+  subitems:
     - text: How many frameworks
       url: /00-sampleapps-app1-how-many-tutorial.html
-	- text: Framework knows
+    - text: Framework knows
       url: /00-sampleapps-app2-who-the-tutorial.html
 - text: Models
   url: /01-models.html
