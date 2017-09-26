@@ -1,15 +1,30 @@
-- text: Home
+- text: Main Readme
   url: /
-- text: First menu
-  url: /first-menu/
-  subitems:
-    - text: First menu (sub)
-      url: /first-menu/first-menu-sub/
-      subitems:
-        - text: First menu (sub-sub)
-          url: /first-menu/first-menu-sub/first-menu-sub-sub/
-- text: Second menu
-  url: /second-menu/
-  subitems:
-    - text: Second menu (sub)
-      url: /second-menu/second-menu-sub/
+    subitems:
+    - text: TL;DR
+      url: /#tldr
+	- text: Architectural Approach
+      url: /#arch
+    - text: Quick Start
+      url: /#quick
+    - text: Licence
+      url: /#licence
+- text: Sample Apps
+  url: /00-sampleapps.html
+    subitems:
+    - text: How many frameworks
+      url: /00-sampleapps-app1-how-many-tutorial.html
+	- text: Framework knows
+      url: /00-sampleapps-app2-who-the-tutorial.html
+- text: Models
+  url: /01-models.html
+- text: Views
+  url: /02-views.html/
+- text: Data Binding
+  url: /03-databinding.html/
+- text: Adapters
+  url: /04-adapters.html/
+- text: Troubleshooting
+  url: /05-troubleshooting.html/
+- text: FAQ
+  url: /06-faq.html/
