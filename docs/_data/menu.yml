@@ -2,29 +2,29 @@
   url: /
   subitems:
     - text: TL;DR
-      url: /#tldr
+      url: #tldr
     - text: Architectural Approach
-      url: /#arch
+      url: #arch
     - text: Quick Start
-      url: /#quick
+      url: #quick
     - text: Licence
-      url: /#licence
+      url: #licence
 - text: Sample Apps
-  url: /00-sampleapps.html
+  url: 00-sampleapps.html
   subitems:
     - text: How many frameworks
-      url: /00-sampleapps-app1-how-many-tutorial.html
+      url: 00-sampleapps-app1-how-many-tutorial.html
     - text: Framework knows
-      url: /00-sampleapps-app2-who-the-tutorial.html
+      url: 00-sampleapps-app2-who-the-tutorial.html
 - text: Models
-  url: /01-models.html
+  url: 01-models.html
 - text: Views
-  url: /02-views.html/
+  url: 02-views.html
 - text: Data Binding
-  url: /03-databinding.html/
+  url: 03-databinding.html
 - text: Adapters
-  url: /04-adapters.html/
+  url: 04-adapters.html
 - text: Troubleshooting
-  url: /05-troubleshooting.html/
+  url: 05-troubleshooting.html
 - text: FAQ
-  url: /06-faq.html/
+  url: 06-faq.html
