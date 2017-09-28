@@ -12,8 +12,9 @@
     
     {% assign navurl = page.url | remove: 'index.html' %}
     
-    {{navurl}}
-    {{site.url}}
+    {{navurl}} and then
+    {{site.url}} and then
+    {{site.baseurl}}
 
     {% include nav.html nav=site.data.menu %}
 

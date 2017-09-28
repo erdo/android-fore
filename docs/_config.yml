@@ -2,5 +2,6 @@ theme: jekyll-theme-cayman
 
 # About/contact
 author:
-  name:       Eric Donovan
-  url:        https://erdo.github.io/asaf-project/
+  name:       erdo
+  url:        https://erdo.github.io
+  baseurl:    /asaf-project
