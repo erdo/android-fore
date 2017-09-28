@@ -1,7 +1,14 @@
 {% assign navurl = page.url | remove: 'index.html' %}
+
+    navurl |{{navurl}}| then
+    siteurl |{{site.url}}| and then
+    baseurl |{{site.baseurl}}|
+
 <ul>
 {% for item in include.nav %}
 	<li>
+	
+	now itemurl|{{item.url}}|
 	
 		{% if item.url == '/' %}
 		  {% if item.url == navurl %}
