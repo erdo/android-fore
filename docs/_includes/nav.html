@@ -8,7 +8,12 @@
 {% for item in include.nav %}
 	<li>
 	
+	{% if item.url == navurl %}
+	{% assign currentpage = true %}
+	{% endif %}
+	
 	itemurl|{{item.url}}|</br>
+	currentpage|{{currentpage}}|</br>
 	
 		{% if item.url == '/' %}
 		  {% if item.url == navurl %}
