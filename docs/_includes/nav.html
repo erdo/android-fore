@@ -17,7 +17,7 @@
 	
 		{% if item.url == '/' %}
 		  {% if item.url == navurl %}
-		     <a href="#">
+		     <a href="{{site.baseurl}}#">
 		  {% else %}
 		     <a href="{{ site.url }}{{ site.baseurl }}">
 		  {% endif %}
