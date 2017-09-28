@@ -2,12 +2,19 @@
 <ul>
 {% for item in include.nav %}
 	<li>
-		<a href="{{ item.url }}">
+	
+		{% if item.url == '' %}
+		  <a href="#">
+		{% else %}
+		  <a href="{{ item.url }}">
+		{% endif %}
+		
 			{% if item.url == navurl %}
 				<b>{{ item.text }}</b>
 			{% else %}
 				{{ item.text }}
 			{% endif %}
+			
 		</a>
 	</li>
 	{% if item.subitems and navurl contains item.url %}
