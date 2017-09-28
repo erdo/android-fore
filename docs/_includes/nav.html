@@ -9,41 +9,24 @@
 	<li>
 	
 	{% if item.url == navurl %}
-	{% assign currentpage = true %}
+	  {% assign currentpage = true %}
 	{% else %}
-	{% assign currentpage = true %}	
+	  {% assign currentpage = false %}	
 	{% endif %}
 	
+	{% if navurl == '/' %}
+	  {% assign homepage = true %}
+	{% else %}
+	  {% assign homepage = false %}	
+	{% endif %}
 	
+	-------
 	
-	
-	
-	
-	
-	
-	itemurl|{{item.url}}|</br>
+		item|{{item.text}}|{{item.url}}|</br>
 	currentpage|{{currentpage}}|</br>
+		homepage|{{homepage}}|</br>
 	
-		{% if item.url == '/' %}
-		  {% if item.url == navurl %}
-		     <a href="{{site.baseurl}}#">
-		  {% else %}
-		     <a href="{{ site.url }}{{ site.baseurl }}">
-		  {% endif %}
-		{% else %}
-		  <a href="{{ item.url }}">
-		{% endif %}
-		
-			{% if item.url == navurl %}
-				<b>{{ item.text }}</b>
-			{% else %}
-				{{ item.text }}
-			{% endif %}
-			
-		</a>
 	</li>
-	{% if item.subitems and currentpage %}
-		{% include nav.html nav=item.subitems %}
-	{% endif %}
+
 {% endfor %}
 </ul>
