@@ -12,6 +12,13 @@
 	{% assign currentpage = true %}
 	{% endif %}
 	
+	
+	
+	
+	
+	
+	
+	
 	itemurl|{{item.url}}|</br>
 	currentpage|{{currentpage}}|</br>
 	
@@ -33,7 +40,7 @@
 			
 		</a>
 	</li>
-	{% if item.subitems and navurl contains item.url %}
+	{% if item.subitems and currentpage %}
 		{% include nav.html nav=item.subitems %}
 	{% endif %}
 {% endfor %}
