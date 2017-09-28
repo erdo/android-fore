@@ -17,14 +17,14 @@
 	{% endif %}
 	
 		{% if currentpage %}
-		<a href="{{site.baseurl}}/{{ item.url }}">
+		<a href="{{site.baseurl}}{{ item.url }}">
 			<b>{{ item.text }}</b>
 		</a>	
 			{% if item.subitems %}
 				<ul>
 				{% for subitem in item.subitems %}
 					<li>
-						<a href="{{ subitem.url }}">
+						<a href="{{site.baseurl}}{{ subitem.url }}">
 							{{ subitem.text }}
 						</a>
 					</li>
@@ -32,7 +32,7 @@
 				</ul>
 			{% endif %}
 		{% else %}
-		<a href="{{site.baseurl}}/{{ item.url }}">
+		<a href="{{site.baseurl}}{{ item.url }}">
 			{{ item.text }}
 		</a>
 		{% endif %}
