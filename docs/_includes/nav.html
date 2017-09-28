@@ -3,8 +3,12 @@
 {% for item in include.nav %}
 	<li>
 	
-		{% if item.url == '' %}
-		  <a href="#">
+		{% if item.url == '/' %}
+		  {% if item.url == navurl %}
+		     <a href="#">
+		  {% else %}
+		     <a href="{{ site.url }}{{ site.baseurl }}">
+		  {% endif %}
 		{% else %}
 		  <a href="{{ item.url }}">
 		{% endif %}
