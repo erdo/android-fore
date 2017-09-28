@@ -9,6 +9,11 @@
     <section class="main-content">
     
     <h2>Contents</h2>
+    
+    {% assign navurl = page.url | remove: 'index.html' %}
+    
+    {{navurl}}
+    {{site.url}}
 
     {% include nav.html nav=site.data.menu %}
 
