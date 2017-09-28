@@ -2,13 +2,13 @@
   url: /
   subitems:
     - text: TL;DR
-      url: #tldr
+      url: /#tldr
     - text: Architectural Approach
-      url: #arch
+      url: /#arch
     - text: Quick Start
-      url: #quick
+      url: /#quick
     - text: Licence
-      url: #licence
+      url: /#licence
 - text: Sample Apps
   url: 00-sampleapps.html
   subitems:
