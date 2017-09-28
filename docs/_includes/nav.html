@@ -29,39 +29,26 @@
 		homepage|{{homepage}}|</br>
 		
 		
-		<a href="{{ item.url }}">
-		
-		
-		
 		{% if currentpage %}
-				<b>{{ item.text }}</b>
-				</a>
-				
+		<a href="{{ item.url }}">
+			<b>{{ item.text }}</b>
+		</a>	
 			{% if item.subitems %}
 				<ul>
-{% for subitem in item.subitems %}
-	<li>
-				
-				<a href="{{ subitem.url }}">
-		
-				{{ subitem.text }}
-				</a>
-				
-				
-				
-				</li>
+				{% for subitem in item.subitems %}
+					<li>
+						<a href="{{ subitem.url }}">
+							{{ subitem.text }}
+						</a>
+					</li>
+				{% endfor %}
 				</ul>
-							{% endif %}
-				
-				
-			{% else %}
-				{{ item.text }}
 			{% endif %}
-		
-		
+		{% else %}
+		<a href="{{ item.url }}">
+			{{ item.text }}
 		</a>
-		
+		{% endif %}
 	</li>
-
 {% endfor %}
 </ul>
