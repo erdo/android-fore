@@ -2,15 +2,15 @@
 
 .highlight table pre { margin: 0; }
 
-.highlight .cm { color: #999988; font-style: italic; }
+.highlight .cm { color: #C8C2B9; font-style: italic; }
 
 .highlight .cp { color: #999999; font-weight: bold; }
 
-.highlight .c1 { color: #999988; font-style: italic; }
+.highlight .c1 { color: #C8C2B9; font-style: italic; }
 
 .highlight .cs { color: #999999; font-weight: bold; font-style: italic; }
 
-.highlight .c, .highlight .cd { color: #999988; font-style: italic; }
+.highlight .c, .highlight .cd { color: #C8C2B9; font-style: italic; }
 
 .highlight .err { color: #a61717; background-color: #e3d2d2; }
 
@@ -48,17 +48,17 @@
 
 .highlight .k, .highlight .kv { color: #000000; font-weight: bold; }
 
-.highlight .mf { color: #009999; }
+.highlight .mf { color: #eda931; }
 
-.highlight .mh { color: #009999; }
+.highlight .mh { color: #eda931; }
 
-.highlight .il { color: #009999; }
+.highlight .il { color: #eda931; }
 
-.highlight .mi { color: #009999; }
+.highlight .mi { color: #eda931; }
 
-.highlight .mo { color: #009999; }
+.highlight .mo { color: #eda931; }
 
-.highlight .m, .highlight .mb, .highlight .mx { color: #009999; }
+.highlight .m, .highlight .mb, .highlight .mx { color: #eda931; }
 
 .highlight .sb { color: #d14; }
 
@@ -76,7 +76,7 @@
 
 .highlight .sx { color: #d14; }
 
-.highlight .sr { color: #009926; }
+.highlight .sr { color: #FF512E; }
 
 .highlight .s1 { color: #d14; }
 
@@ -84,17 +84,17 @@
 
 .highlight .s { color: #d14; }
 
-.highlight .na { color: #008080; }
+.highlight .na { color: #e38660; }
 
 .highlight .bp { color: #999999; }
 
-.highlight .nb { color: #0086B3; }
+.highlight .nb { color: #e38660; }
 
 .highlight .nc { color: #445588; font-weight: bold; }
 
-.highlight .no { color: #008080; }
+.highlight .no { color: #e38660; }
 
-.highlight .nd { color: #3c5d5d; font-weight: bold; }
+.highlight .nd { color: #e38661; font-weight: bold; }
 
 .highlight .ni { color: #800080; }
 
@@ -108,13 +108,13 @@
 
 .highlight .nt { color: #000080; }
 
-.highlight .vc { color: #008080; }
+.highlight .vc { color: #e38660; }
 
-.highlight .vg { color: #008080; }
+.highlight .vg { color: #e38660; }
 
-.highlight .vi { color: #008080; }
+.highlight .vi { color: #e38660; }
 
-.highlight .nv { color: #008080; }
+.highlight .nv { color: #e38660; }
 
 .highlight .ow { color: #000000; font-weight: bold; }
 
@@ -122,13 +122,13 @@
 
 .highlight .w { color: #bbbbbb; }
 
-.highlight { background-color: #f8f8f8; }
+.highlight { background-color: #fbfbfb; }
 
 * { box-sizing: border-box; }
 
-body { padding: 0; margin: 0; font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #606c71; }
+body { padding: 0; margin: 0; font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #777777; }
 
-a { color: #1e6bb8; text-decoration: none; }
+a { color: #444fa6; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .btn { display: inline-block; margin-bottom: 1rem; color: rgba(255, 255, 255, 0.7); background-color: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); border-style: solid; border-width: 1px; border-radius: 0.3rem; transition: color 0.2s, background-color 0.2s, border-color 0.2s; }
@@ -162,16 +162,16 @@ a:hover { text-decoration: underline; }
 .main-content img { max-width: 100%; }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 { margin-top: 2rem; margin-bottom: 1rem; font-weight: normal; color: #ff512f; }
 .main-content p { margin-bottom: 1em; }
-.main-content code { padding: 2px 4px; font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9rem; color: #567482; background-color: #f3f6fa; border-radius: 0.3rem; }
-.main-content pre { padding: 0.8rem; margin-top: 0; margin-bottom: 1rem; font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace; color: #567482; word-wrap: normal; background-color: #f3f6fa; border: solid 1px #dce6f0; border-radius: 0.3rem; }
-.main-content pre > code { padding: 0; margin: 0; font-size: 0.9rem; color: #567482; word-break: normal; white-space: pre; background: transparent; border: 0; }
+.main-content code { padding: 2px 4px; font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.9rem; color: #515673; background-color: #f3f6fa; border-radius: 0.3rem; }
+.main-content pre { padding: 0.8rem; margin-top: 0; margin-bottom: 1rem; font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace; color: #515673; word-wrap: normal; background-color: #f3f6fa; border: solid 1px #c8c2ba; border-radius: 0.3rem; }
+.main-content pre > code { padding: 0; margin: 0; font-size: 0.9rem; color: #515673; word-break: normal; white-space: pre; background: transparent; border: 0; }
 .main-content .highlight { margin-bottom: 1rem; }
 .main-content .highlight pre { margin-bottom: 0; word-break: normal; }
 .main-content .highlight pre, .main-content pre { padding: 0.8rem; overflow: auto; font-size: 0.9rem; line-height: 1.45; border-radius: 0.3rem; -webkit-overflow-scrolling: touch; }
 .main-content pre code, .main-content pre tt { display: inline; max-width: initial; padding: 0; margin: 0; overflow: initial; line-height: inherit; word-wrap: normal; background-color: transparent; border: 0; }
 .main-content pre code:before, .main-content pre code:after, .main-content pre tt:before, .main-content pre tt:after { content: normal; }
 .main-content ul, .main-content ol { margin-top: 0; }
-.main-content blockquote { padding: 0 1rem; margin-left: 0; color: #819198; border-left: 0.3rem solid #dce6f0; }
+.main-content blockquote { padding: 0 1rem; margin-left: 0; color: #c8c2bb; border-left: 0.3rem solid #c8c2ba; }
 .main-content blockquote > :first-child { margin-top: 0; }
 .main-content blockquote > :last-child { margin-bottom: 0; }
 .main-content table { display: block; width: 100%; overflow: auto; word-break: normal; word-break: keep-all; -webkit-overflow-scrolling: touch; }
@@ -189,4 +189,4 @@ a:hover { text-decoration: underline; }
 
 .site-footer-owner { display: block; font-weight: bold; }
 
-.site-footer-credits { color: #819198; }
+.site-footer-credits { color: #c8c2bb; }
