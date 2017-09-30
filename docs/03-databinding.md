@@ -33,9 +33,9 @@ Anyway we will show you how to do rock solid **one way data binding** with this 
 
 There are a load of different ways of implementing one way data binding. In line with the name of this framework, we are going to use the most simple (but extremely reliable) implementation you can have.
 
-It really all boils down to a single syncView() method, but there are some important implementation details to discuss. The basic philosophy is: If a model being observed changes **in anyway**, then the **entire** view is refreshed. That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself to make it seem more profound...
+It really all boils down to a single **syncView()** method, but there are some important implementation details to discuss. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed. That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself to make it seem more profound...
 
-> "If a model being observed changes **in anyway**, then the **entire** view is refreshed."
+> "If a model being observed changes **in any way**, then the **entire** view is refreshed."
 
 That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want, by the way.
 
@@ -45,9 +45,9 @@ Depending on your situation though, you might find that it's more convenient to 
 
 #### Simple Example
 
-Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method, especially when you have lifecycle issues to deal with.
+Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with.
 
-*Again the samples are written without taking advantage of lambdas (so that they are clearer for those who haven't go up to speed with lambdas yet), but their use makes no difference to the example.*
+*Again the samples are written without taking advantage of lambdas (so that they are clearer for those who haven't got up to speed with lambdas yet), but their use makes no difference to the example.*
 
 Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our basic view to this basket model.
 
@@ -71,12 +71,12 @@ Let's say you're developing a view for a very basic shopping basket. We need to 
         removeItemButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                basket.addItem();
+                basket.removeItem();
                 updateTotalPriceView();
             }
         });
 
-**Step 3)** The designers decide they want to display the **total number of items in the basket** as well as the price, so now we add a updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+**Step 3)** The designers decide they want to display the **total number of items in the basket** as well as the price, so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
 
 (dev thinks: so that we don't repeat ourselves, maybe we should have one method to update the whole basket, but step 4 persuades the dev otherwise)
 
@@ -98,7 +98,7 @@ Let's say you're developing a view for a very basic shopping basket. We need to 
             }
         });
 
-**Step 4)** Now we get to the **apply discount** checkbox, if the box is checked, the discount is applied, if not there is no discount applied. Remember the model calculations have already been written and tested so what we need in the click listener is: basket.setDiscount(applyDiscount); then updateDiscountView() which just shows the discount that has been applied. We also need to call updateTotalPriceView() as that will have changed, **but not updateTotalNumberOfItemsView()** because of course discounts have no effect there.
+**Step 4)** Now we get to the **apply discount** checkbox, if the box is checked: the discount is applied, if not: there is no discount applied. Remember the model calculations have already been written and tested so what we need in the click listener is: basket.setDiscount(applyDiscount); then updateDiscountView() which just shows the discount that has been applied. We also need to call updateTotalPriceView() as that will have changed, **but not updateTotalNumberOfItemsView()** because of course, discounts have no effect there.
 
 (dev thinks: great, we are only updating what we need to)
 
@@ -185,7 +185,7 @@ It's a class of bug related to UI consistency that crops up *all the time* in an
 
 I'm guessing you have gone back and spotted the bug by now? but in case you haven't you can recreate it in your brain by selecting the discount checkbox first and then adding or removing an item. It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call updateDiscountView() so this value will be incorrect in the view until the discount checkbox is toggled again.
 
-Even simple views can very easily have subtle UI consistency bugs like this. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
+Even simple views can very easily have subtle UI consistency bugs like this. And often they are hard to spot, for this one a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
 
 Remember what we said before? If a model being observed changes **in anyway**, then the **entire** view is refreshed.
 
@@ -254,7 +254,7 @@ The important thing about the syncView() method is that it must set an **affirma
 
 > "Where there is an if, there must always be an else"
 
-It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting any state, which means that the result will be undeterministic (it will be whatever state it had previously).
+It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be undeterministic (it will be whatever state it had previously).
 
 So don't do this:
 
@@ -284,4 +284,6 @@ But you'll find that by focusing on the property first rather than the condition
 
 The observables are how the models let the outside world that their state has changed. 
 
+
+//TODO
 
