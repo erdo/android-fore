@@ -177,6 +177,7 @@ a:hover { text-decoration: underline; }
     padding-left: 0;
     padding-right: 0;
     margin-left: 0;
+    margin-right: 0;
     border-top: 4px solid #000;
 	color: #000;
 	font-family: "NeueHaas",sans-serif;
@@ -185,7 +186,7 @@ a:hover { text-decoration: underline; }
     font-weight: 600;
     line-height: 1.2;
     quotes: "\201C" "\201D" "\2018" "\2019"; 
-    }
+}
 
 .main-content blockquote > :first-child { margin-top: 0; }
 .main-content blockquote > :last-child { margin-bottom: 0; }

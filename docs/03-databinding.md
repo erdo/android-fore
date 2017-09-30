@@ -27,7 +27,7 @@ There are a load of different ways of implementing one way data binding. In line
 
 It really all boils down to a single syncView() method, but there are some important implementation details to discuss. The basic philosophy is: if a model being observed changes **in anyway**, then the **entire** view is refreshed. That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself to make it seem more profound...
 
-> "If a model being observed changes **in anyway**, then the **entire** view is refreshed..."
+> "If a model being observed changes **in anyway**, then the **entire** view is refreshed."
 
 ### simple example
 
