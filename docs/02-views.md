@@ -9,6 +9,9 @@ These classes:
 - are tightly coupled to the context (including the physical characteristics of the display)
 - are slow to test
 
+> "View layers are: ephemeral; tightly coupled to the context; slow to test"
+
+
 In short they are no place to put business logic, any code placed in those classes will present the developer with a range of challenges related to managing a complicated lifecycle when screens are rotated or phone calls accepted such as:
 
 - loosing data stored in memory (causing null pointers)
