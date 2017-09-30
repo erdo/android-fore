@@ -1,6 +1,6 @@
 
 
-### Views:
+# Views
 Views are not just XML layouts, in Android the classes that form the view layer of an app are not just the classes extending View either, they include the **Activity**, **Fragment** *and* **View** classes.
 
 These classes:
@@ -25,7 +25,7 @@ There is more in the FAQ about Views and the mistakes that were made in the orig
 All the view classes (Activity/Fragment/View) for the sample apps are found in the **ui** package and do as little as possible apart from manage their lifecycle and display the state of whatever model they are interested in. As you'll see in that package, click listeners and references to the UI widgets are also in the subclassed Android View classes, and they reference model classes directly from there.
 
 
-### Custom Android Views
+## Custom Android Views
 
 You'll notice in the sample apps, nearly every view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout.
 

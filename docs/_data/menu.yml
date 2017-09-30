@@ -26,23 +26,23 @@
   url: /01-models.html
   subitems:
     - text: Writing a Basic Model
-      url: /#writing-a-basic-model
+      url: #writing-a-basic-model
     - text: Model Checklist
-      url: /#model-checklist
+      url: #model-checklist
 - text: Views
   url: /02-views.html
   subitems:
     - text: Custom Android Views
-      url: /#custom-android-views
+      url: #custom-android-views
 - text: Data Binding
   url: /03-databinding.html
   subitems:
     - text: One and Two Way
-      url: /#one-and-two-way
+      url: #one-and-two-way
     - text: SyncView()
-      url: /#syncview
+      url: #syncview
     - text: ASAF Observables
-      url: /#asaf-observables
+      url: #asaf-observables
 - text: Adapters
   url: /04-adapters.html
 - text: Code Review Checklist

@@ -1,8 +1,8 @@
 
 
-## ~~Frequently~~ Occasionally Asked Questions
+# ~~Frequently~~ Occasionally Asked Questions
 
-### 1) Why not put a parameter in the Observer.somethingChanged() method?
+## 1) Why not put a parameter in the Observer.somethingChanged() method?
 
 If I had a dollar for everyone who asked me this question! (I would have, about $4)
 
@@ -32,7 +32,7 @@ If you want a library that lets you send data in these observables, you should l
 > Once you remove the crazy, turns out it's not rocket science after all
 
 
-### 2) Do tell me more about separating view code from everything else...
+## 2) Do tell me more about separating view code from everything else...
 
 No one asks me this. I wish they would though, rather than just nodding when I say it's important to keep your data and logic seperate from your views.
 
@@ -71,7 +71,7 @@ Fortunately with a few basic rules and techniques embodied in this library you c
 
 
 
-### 3) When should I use an Observer, when should I use a callback listener?
+## 3) When should I use an Observer, when should I use a callback listener?
 
 An observer pattern is not always going to be suitable for what you want to do. In
 particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular call back will probably serve you better. In this case the succes or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
@@ -148,7 +148,7 @@ Alternatively the network call might be fetching some data for the model as in t
   	}
   
 
-### 4) What's the deal with the Controller in MVC, where is that? 
+## 4) What's the deal with the Controller in MVC, where is that? 
 
 In modern UI frameworks most of the controller work is implemented for you by the framework itself - these are the button click listeners that simply catch user input and send it on to the right place.
 
@@ -159,7 +159,7 @@ Nowadays we just use click listeners or something similar and we don't need to w
 (Android also lets you use Activities as kind of Controllers by letting you specify callback methods right in the XML for buttons which will end up getting called on whatever activity is hosting that particular view. It's kind of nasty, I'd recommend not using it at all because it encourages (forces) you to get the activity involved in something that it doesn't need to be involved in. If you leave everything out of the Activity then you can use your view in any activity you like, without needing to re-implement all those button call backs for each time.)
 
 
-### 5) But hey doesn't Android have an official data binding and MVVM solution now?
+## 5) But hey doesn't Android have an official data binding and MVVM solution now?
 Hmm. I have to say that I'm generally not too impressed with some of the "helpful" code we get from Google sometimes. Too much of what is published seems like an after thought, or just the latest replacement for the last thing they messed up. Sometimes what they give the Android community is too complicated / badly thought out / rushed / or just not finished.
 
 If it's not good enough, or it's too new to know if it it's good enough, and it's from Google, and I have a better alternative - I'll hapilly skip it. (In the past when I've not done that, I have often regretted it).
@@ -171,13 +171,13 @@ MVVM is not new, it's been around at least a decade, MVC for 3 decades! The fact
 Anyway rant over, but the code in this library is (I think) a lot better (of course, otherwise I wouldn't bother using it).
 
 
-### 6) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
+## 6) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
 
 Let me guess you're one of those people who only uses ints instead of enums right? or forgoes getters and setters for extra performance? I knew it!
 
 Well apart from the obvious "permature optimisation is the route of all evil" or however that quote goes, you might be in danger of seriously underestimating how fast even the most basic android phone runs nowadays.
 
-#### In to the matrix
+### In to the matrix
 
 Before we go any further, if you haven't already, go to developer settings on android and check out the debug tools that let you see the screen updates as they happen.
 

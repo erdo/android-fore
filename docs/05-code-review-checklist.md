@@ -1,6 +1,6 @@
 
 
-## Identifying Problems / How to smash code reviews
+# Identifying Problems / How to Smash Code Reviews
 As mentioned, it can take a little bit of effort to understand how to use this library properly at first, so here is a list of warning signs you can use to highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen from developers who have just been introduced to this library).
 
 

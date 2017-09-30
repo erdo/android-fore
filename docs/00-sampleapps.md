@@ -1,5 +1,5 @@
 
-## Sample apps
+# Sample apps
 
 ...
 
@@ -9,6 +9,10 @@
 ...
 
 
-## How Manny Frameworks
+## How Many Frameworks
 
-## Who the Framework
+## Who the Framework Knows
+
+## ASAF Twitter Client
+
+## ASAF Tic Tac Toe

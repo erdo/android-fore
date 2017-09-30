@@ -1,12 +1,12 @@
 
 
-## Data Binding
-### One and Two Way
+# Data Binding
+## One and Two Way
 First we're going to breifly review what data binding **is** as the term is not in common use among a lot of Android devs yet.
 
 ...
 
-#### One Way Data Binding
+### One Way Data Binding
 
 > Any changes of state in your underlying model, get automatically represented in your view.
 
@@ -14,7 +14,7 @@ So if your shopping basket model is empty: the checkout button on your view need
 
 ASAF took a deliberate decision to only support **One Way Data Binding** for the reasons outlined below, but for completenes...
 
-#### Two Way Data Binding
+### Two Way Data Binding
 In addition to the above, with two way data binding, the binding goes the other way too. So lets say you are editing your online profile in an editable text view, your view edits will automatically be reflected in your underlying profile model.
 
 Automatic two way data binding turns out to be a bit of a pain in the derriere, and once you consider all the exceptions, it's not as useful as you might expect. It's also very easy to do for specific cases (just not in the general case).
@@ -29,7 +29,7 @@ Anyway we will show you how to do rock solid **one way data binding** with this 
         });
 
 
-### SyncView()
+## SyncView()
 
 There are a load of different ways of implementing one way data binding. In line with the name of this framework, we are going to use the most simple (but extremely reliable) implementation you can have.
 
@@ -43,7 +43,7 @@ It's usually easier to refresh all the views in a single fragment at the same ti
 
 Depending on your situation though, you might find that it's more convenient to refresh both the RunningTrackView **and** the ClockView at the same time, and if that results in cleaner and more explicit code then you should absoutely go ahead and do that.
 
-#### Simple Example
+### Simple Example
 
 Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with.
 
@@ -178,7 +178,7 @@ It very quickly starts to become untidy and complicated (which is not what you w
 
 (Some of this can be moved to xml if that's your thing using android mvvm framework, but that has it's own issues - see the FAQ for more)
 
-#### But that's not the worst problem....
+### But that's not the worst problem....
 The worst problem with this code is that there is a **bug** in it. Did you spot it?
 
 It's a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that dissable rotation.
@@ -247,7 +247,7 @@ For the moment all we need to know is that syncView() is triggered whenever **an
 **Checkout any of the view classes in the sample apps and you'll see how they all follow this pattern.**
 
 
-#### Writing an effective syncView() method
+### Writing an effective syncView() method
 
 
 The important thing about the syncView() method is that it must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
@@ -280,7 +280,7 @@ But you'll find that by focusing on the property first rather than the condition
 	
 	
 	
-### ASAF Observables
+## ASAF Observables
 
 The observables are how the models let the outside world that their state has changed. 
 
