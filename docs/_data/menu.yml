@@ -5,8 +5,10 @@
       url: /#tldr
     - text: Quick Start
       url: /#quick-start
-    - text: Approach
-      url: /#approach
+    - text: What is it
+      url: /#what-is-it
+    - text: Background
+      url: /#background
     - text: Licence
       url: /#licence
 - text: Sample Apps
