@@ -14,14 +14,14 @@
 - text: Sample Apps
   url: /00-sampleapps.html
   subitems:
-    - text: How many frameworks
+    - text: How Many Frameworks
       url: /00-sampleapps-app1-how-many-tutorial.html
-    - text: Framework knows
+    - text: Who the Framework Knows
       url: /00-sampleapps-app2-who-the-tutorial.html
-    - text: Twitter client
+    - text: Twitter Client
       url: /00-sampleapps-app3-twitter-client.html
     - text: Tic Tac Toe
-      url: /00-sampleapps-app3-twitter-client.html
+      url: /00-sampleapps-app4-tic-tac-toe.html
 - text: Models
   url: /01-models.html
 - text: Views
