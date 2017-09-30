@@ -40,7 +40,7 @@
       url: /#asaf-observables
 - text: Adapters
   url: /04-adapters.html
-- text: Troubleshooting
-  url: /05-troubleshooting.html
+- text: Code Review Checklist
+  url: /05-code-review-checklist.html
 - text: FAQ
   url: /06-faq.html

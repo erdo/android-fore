@@ -42,7 +42,9 @@ Unfortunately, right from its inception the Android platform was developed with 
 
 Instead of seperating things horizontally in layers with views in one layer and data in another layer, they seperated things vertically. Each self contained Activity (encorprating UI, data and logic) wrapped up in it's own little reusable component. That's probably why testing was such an afterthougt for years with Android.
 
-> Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic. Instead of seperating things horizontally in layers with views in one layer and data in another layer, they seperated things vertically. Each self contained Activity (encorprating UI, data and logic) wrapped up in it's own little reusable component. 
+Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic. Instead of seperating things horizontally in layers with views in one layer and data in another layer, they seperated things vertically. Each self contained Activity (encorprating UI, data and logic) wrapped up in it's own little reusable component.
+
+>Instead of seperating things horizontally like most UI platforms (views/logic/data), Android decided to separate things vertically (login/take a photo/post it)
 
 Anyway a lot of the complication of Android development comes from subsequent attempts to fix issues that would not even exist were there a clearer separation here.
 
