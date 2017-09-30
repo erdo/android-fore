@@ -3,10 +3,10 @@
   subitems:
     - text: TL;DR
       url: /#tldr
-    - text: Approach
-      url: /#approach
     - text: Quick Start
       url: /#quick-start
+    - text: Approach
+      url: /#approach
     - text: Licence
       url: /#licence
 - text: Sample Apps
