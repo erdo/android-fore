@@ -184,7 +184,7 @@ a:hover { text-decoration: underline; }
     text-rendering: optimizeLegibility;
     font-weight: 600;
     line-height: 1.2;
-    
+    quotes: "\201C" "\201D" "\2018" "\2019"; 
     }
 
 .main-content blockquote > :first-child { margin-top: 0; }
