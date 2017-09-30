@@ -22,7 +22,7 @@
   url: /02-views.html
 - text: Data Binding
   url: /03-databinding.html
-    subitems:
+  subitems:
     - text: Types of Data Binding
       url: /#types-of-data-binding
     - text: SyncView()
