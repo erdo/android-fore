@@ -173,6 +173,10 @@ a:hover { text-decoration: underline; }
 .main-content ul, .main-content ol { margin-top: 0; }
 
 .main-content blockquote {
+    padding-top: 20px;
+    padding-left: 0;
+    margin-left: 0;
+    border-top: 4px solid #000;
 	color: #515673;
 	font-family: "NeueHaas",sans-serif;
     font-size: 40px;
