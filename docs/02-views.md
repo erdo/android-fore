@@ -1,7 +1,7 @@
 
 
 ### Views:
-Views are not just XML layouts, in Android the classes that form the view layer of an app are not just the classes extending Views, they include the **Activity**, **Fragment** *and* **View** classes.
+Views are not just XML layouts, in Android the classes that form the view layer of an app are not just the classes extending View either, they include the **Activity**, **Fragment** *and* **View** classes.
 
 These classes:
 
@@ -27,26 +27,10 @@ All the view classes (Activity/Fragment/View) for the sample apps are found in t
 
 ### Custom Android Views
 
-You'll notice in the sample apps, nearly every view is explicitly called out as such by being called **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout**. This means that they can be referenced directly in an XML Layout.
+You'll notice in the sample apps, nearly every view is explicitly called out as such by being called **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout.
 
 As much view related functionality gets put in these classes as possible, so unlike in many Android code bases you will have seen, the view elements like text fields and buttons all live here.
 
-This is part of the ASAF philosophy of calling a spade a spade and making things as clear as possible. If it's to do with the view, it should be in a class called *View. This also frees up the Fragment and Activity classes to do as little as possible except manage their lifecycles (which are considerably more complex than those of the custom views).
+This is part of the ASAF philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View. This also frees up the Fragment and Activity classes to do as little as possible except manage their lifecycles (which are considerably more complex than those of the custom views).
 
-
-
-### Model to View comms
-
-The models are observable and the views mainly do the observing.
-
-When a model changes, it's the model's responsibility to notify all the observing classes.
-
-When an observer is told that something changed, it is the observers responsibility to find out what the latest model state is.
-
-More details on this process in the data binding section
-
-### View to Model comms
-
-The button click listeners etc are specified in the view classes and call methods directly on models.
-
-//TODO example of a full view class
+The data binding section has more details about how views and models communicate in ASAF.
