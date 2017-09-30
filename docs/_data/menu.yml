@@ -18,6 +18,10 @@
       url: /00-sampleapps-app1-how-many-tutorial.html
     - text: Framework knows
       url: /00-sampleapps-app2-who-the-tutorial.html
+    - text: Twitter client
+      url: /00-sampleapps-app3-twitter-client.html
+    - text: Tic Tac Toe
+      url: /00-sampleapps-app3-twitter-client.html
 - text: Models
   url: /01-models.html
 - text: Views
@@ -28,8 +32,8 @@
 - text: Data Binding
   url: /03-databinding.html
   subitems:
-    - text: Types of Data Binding
-      url: /#types-of-data-binding
+    - text: One and Two Way
+      url: /#one-and-two-way
     - text: SyncView()
       url: /#syncview
     - text: ASAF Observables

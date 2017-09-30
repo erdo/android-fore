@@ -1,7 +1,7 @@
 
 
 ## Data Binding
-### Types of Data Binding
+### One and Two Way
 First we're going to breifly review what data binding **is** as the term is not in common use among a lot of Android devs yet.
 
 ...
