@@ -24,6 +24,11 @@
       url: /00-sampleapps-app4-tic-tac-toe.html
 - text: Models
   url: /01-models.html
+  subitems:
+    - text: Writing a Basic Model
+      url: /#writing-a-basic-model
+    - text: Model Checklist
+      url: /#model-checklist
 - text: Views
   url: /02-views.html
   subitems:

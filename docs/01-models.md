@@ -1,10 +1,10 @@
 
-### Models:
+## Models
 There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** classes.
 
 In the sample apps, the models are all found in the **feature** package.
 
-#### Writing a basic model
+### Writing a Basic Model
 
 How you write your models will have quite a big impact on how easy it is to use within your app. It gets easier with practice but as a starting point you could do a lot worse than to start by modelling real world concepts. That should also make it easier for other developers to understand what you are aiming for.
 
@@ -177,7 +177,7 @@ That's bascially what the AsyncTaskWrapper is helping you to do, if you pass SYN
 When you are writing your own model, it's worth reviewing the section below called "When should I use an Observer, when should I use a callback listener?" making an inappropriate choice here will get you into an untold mess.
 
 
-#### Model check list
+### Model Checklist
 
 For reference here's a check list of my recommendations for the model classes, as used in ASAF. Once you've had a go at writing one you can come back here to double check you have everything down:
 
