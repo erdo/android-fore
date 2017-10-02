@@ -51,6 +51,10 @@ Here's an example of what commonly happens in real world applications when you *
 
 Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our basic view to this basket model.
 
+![simple basket](img/simple-basket.png)
+
+We're assuming here all the items **cost $1** and pressing **add** and **remove** will simply add or remove one of these $1 items to/from your basket.
+
 
 **Step 1)** First we hook up the **add item button** so in the onclick listener we call basket.addItem(), and then we just call an updateTotalPriceView() method which updates the amount shown in the total field.
 
@@ -76,7 +80,7 @@ Let's say you're developing a view for a very basic shopping basket. We need to 
             }
         });
 
-**Step 3)** The designers decide they want to display the **total number of items in the basket** as well as the price, so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+**Step 3)** The designers decided they want to display the **total number of items in the basket** as well as the price (the little number in a circle by the basket icon), so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
 
 (dev thinks: so that we don't repeat ourselves, maybe we should have one method to update the whole basket, but step 4 persuades the dev otherwise)
 

@@ -40,15 +40,19 @@ Android developers (especially if they have only developed using Android during 
 
 Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic.
 
-Instead of seperating things horizontally in layers with views in one layer and data in another layer, they seperated things vertically. Each self contained Activity (encorprating UI, data and logic) wrapped up in it's own little reusable component. That's probably why testing was such an afterthougt for years with Android.
+Instead of seperating things horizontally in layers with views in one layer and data in another layer, they seperated things vertically. Each self contained Activity (encorprating UI, data and logic) wrapped up in it's own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely dificult.
 
-Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic. Instead of seperating things horizontally in layers with views in one layer and data in another layer, they seperated things vertically. Each self contained Activity (encorprating UI, data and logic) wrapped up in it's own little reusable component.
+Android seems to have been envisioned a little like this:
 
->Instead of seperating things horizontally like most UI platforms (views/logic/data), Android decided to separate things vertically (login/take a photo/post it)
+![vertical separation](img/vertical-separation.png)
 
-Anyway a lot of the complication of Android development comes from subsequent attempts to fix issues that would not even exist were there a clearer separation here.
+A more standard way of looking at UI frameworks would have been to do something like this:
 
-A classic mistake (one which I think even the original developers of Android fell in to) is to think of the view in Android as just being the XML layouts. Views are not just these XML layouts, in Android views are composed of the *Activity, Fragment and View classes. These classes:
+![horizontal separation](img/horizontal-separation.png)
+
+Forgive my crap diagrams ;) anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is). Much of the subsequent additions to Android were attempts to deal with this underlying problem.
+
+It's still a classic mistake is to think of the view in Android as just being the XML layouts. To make matters worse, it's a mistake repeated in many any online tutorials and even code samples from google. Views are not just these XML layouts, in Android views are composed of the *Activity, Fragment and View classes. These classes:
 
 * are all ephemeral
 * are tightly coupled to the context (including the physical
@@ -61,7 +65,7 @@ In short they are no place to put business logic, any code placed in those class
 * maintaining UI consistency
 * guarding against memory leaks
 
-Despite this obvious problem, think about how many Android apps you've encountered (including code samples from Google) that fill their Activity and Fragment classes with various pieces of logic or networking code. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the wood for the trees.
+Despite this obvious problem, think about how many Android apps you've encountered that fill their Activity and Fragment classes with various pieces of logic or networking code. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the wood for the trees.
 
 > Sometimes even smart developers can fail to see the wood for the trees
 
@@ -160,15 +164,15 @@ Nowadays we just use click listeners or something similar and we don't need to w
 
 
 ## 5) But hey doesn't Android have an official data binding and MVVM solution now?
-Hmm. I have to say that I'm generally not too impressed with some of the "helpful" code we get from Google sometimes. Too much of what is published seems like an after thought, or just the latest replacement for the last thing they messed up. Sometimes what they give the Android community is too complicated / badly thought out / rushed / or just not finished.
+I have to say that I'm generally not too impressed with some of the "helpful" code we get from Google sometimes. Too much of what is published seems like an after thought, or just the latest replacement for the last thing they messed up. Sometimes what they give the Android community is too complicated / badly thought out / rushed / or just not finished.
 
 If it's not good enough, or it's too new to know if it it's good enough, and it's from Google, and I have a better alternative - I'll hapilly skip it. (In the past when I've not done that, I have often regretted it).
 
-Don't get me wrong, I love Android, and the only reason it exists is because Google didn't want to loose out on mobile add revenue when everything moved away from desktops, so good for them! But (and sorry for any Google fans out there) just because Google wrote some new code, doesn't mean it's any good, or even that it is sticking around and people will adopt it and it will become standard.
+Don't get me wrong, I love Android, and yes the only reason it exists is because Google didn't want to loose out on mobile add revenue when everything moved away from desktops, so good for them! But (and sorry for any Google fans out there) just because Google wrote some new code, doesn't mean it's any good, or even that it is sticking around and people will adopt it and it will become standard.
 
 MVVM is not new, it's been around at least a decade, MVC for 3 decades! The fact that it has taken the google android team half a decade of running a UI platform to realise that MV* is a thing that's actually quite important when writing an app with a UI, well it speaks volumes doesn't it?
 
-Anyway rant over, but the code in this library is (I think) a lot better (of course, otherwise I wouldn't bother using it).
+Anyway rant over, but the code in this library is (I think) a little better and more lightweight and when combined with the syncview techinique a lot less likely to go wrong (of course, otherwise I wouldn't be using it).
 
 
 ## 6) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
@@ -176,6 +180,8 @@ Anyway rant over, but the code in this library is (I think) a lot better (of cou
 Let me guess you're one of those people who only uses ints instead of enums right? or forgoes getters and setters for extra performance? I knew it!
 
 Well apart from the obvious "permature optimisation is the route of all evil" or however that quote goes, you might be in danger of seriously underestimating how fast even the most basic android phone runs nowadays.
+
+First make sure you've understood the section on syncView() and the example of how doing adhoc updates can go wrong. And if you still want to sacrific that robustness to chase performance, then read on...
 
 ### In to the matrix
 
