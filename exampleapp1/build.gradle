@@ -1,15 +1,47 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+
+def secrets = new Properties()
+def secretsFile = new File('exampleapp1/secrets.properties')
+if (secretsFile.canRead()) {
+    secrets.load(new FileInputStream(secretsFile))
+} else {
+    println 'WARNING app secrets.properties not found! \n'
+}
+def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
+def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
+
+
+
+
 android {
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "co.early.asaf"
-        minSdkVersion 16
-        targetSdkVersion 24
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        jackOptions {
+            enabled true
+        }
+
     }
     buildTypes {
         release {
@@ -19,7 +51,27 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+
+    maven {
+        url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
+        //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
+        credentials(AwsCredentials) {
+            accessKey AWS_ACCESS_KEY
+            secretKey AWS_SECRET_KEY
+        }
+    }
+
+}
+
+
 dependencies {
+
+    compile (group: 'co.early.asaf', name: 'asaf', version: '0.9.0-SNAPSHOT', ext: 'aar'){//}, classifier: 'devDebug'){
+        transitive = true
+    }
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
