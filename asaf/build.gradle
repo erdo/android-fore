@@ -15,6 +15,8 @@ android {
         abortOnError false
     }
 
+    publishNonDefault true
+
     defaultConfig {
 
         minSdkVersion rootProject.ext.minSdkVersion

@@ -32,7 +32,7 @@ If you want a library that lets you send data in these observables, you should l
 > Once you remove the crazy, turns out it's not rocket science after all
 
 
-## 2) Do tell me more about separating view code from everything else...
+## <a name="code-separation"></a>2) Do tell me more about separating view code from everything else...
 
 No one asks me this. I wish they would though, rather than just nodding when I say it's important to keep your data and logic seperate from your views.
 
