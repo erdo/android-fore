@@ -5,87 +5,76 @@ import co.early.asaf.framework.Affirm;
 import co.early.asaf.framework.WorkMode;
 import co.early.asaf.framework.callbacks.DoThisCallback;
 import co.early.asaf.framework.callbacks.DoThisWithPayloadCallback;
-import co.early.asaf.framework.callbacks.DoThisWithVarargPayloadCallback;
 
 /**
- *
+ * Note that this class while a lot less verbose than AsafTask, doesn't support progress updates,
+ * for that you need to use AsafTask directly
  */
-public class AsafTaskBuilder <Input, Progress, Result>{
+public class AsafTaskBuilder <Input, Result>{
 
     private final WorkMode workMode;
 
-    private final DoInBackgroundCallback<Input, Result> doInBackground;
+    private DoInBackgroundCallback<Input, Result> doInBackground;
     private DoThisCallback onPreExecute;
-    private DoThisWithVarargPayloadCallback<Progress> onProgressUpdate;
     private DoThisWithPayloadCallback<Result> onPostExecute;
 
-    private AsafTask<Input, Progress, Result> asafTask = null;
+    private AsafTask<Input, Void, Result> asafTask = null;
 
-    public AsafTaskBuilder(WorkMode workMode, DoInBackgroundCallback<Input, Result> doInBackground) {
+    public AsafTaskBuilder(WorkMode workMode) {
         this.workMode = Affirm.notNull(workMode);
-        this.doInBackground = Affirm.notNull(doInBackground);
     }
 
-    public AsafTaskBuilder<Input, Progress, Result> onPreExecute(DoThisCallback onPreExecute){
+    public AsafTaskBuilder<Input, Result> doInBackground(DoInBackgroundCallback<Input, Result> doInBackground){
+        this.doInBackground = Affirm.notNull(doInBackground);
+        return this;
+    }
+
+    public AsafTaskBuilder<Input, Result> onPreExecute(DoThisCallback onPreExecute){
         this.onPreExecute = Affirm.notNull(onPreExecute);
         return this;
     }
 
-    public AsafTaskBuilder<Input, Progress, Result> onProgressUpdate(DoThisWithVarargPayloadCallback<Progress> onProgressUpdate){
-        this.onProgressUpdate = Affirm.notNull(onProgressUpdate);
-        return this;
-    }
-
-    public AsafTaskBuilder<Input, Progress, Result> onPostExecute(DoThisWithPayloadCallback<Result> onPostExecute){
+    public AsafTaskBuilder<Input, Result> onPostExecute(DoThisWithPayloadCallback<Result> onPostExecute){
         this.onPostExecute = Affirm.notNull(onPostExecute);
         return this;
     }
 
-    public AsafTask<Input, Progress, Result> execute(Input... inputs){
+    public AsafTask<Input, Void, Result> execute(Input... inputs){
 
-        if (asafTask == null){
+        if (asafTask != null){
             throw new IllegalStateException("Please construct a new AsafTaskBuilder, as with AsyncTask these instances can only be executed once");
-        }else {
-
-            asafTask = new AsafTask<Input, Progress, Result>(workMode) {
-
-                @Override
-                protected void onPreExecute() {
-                    if (onPreExecute != null) {
-                        onPreExecute.doThis();
-                    }
-                }
-
-                @Override
-                protected Result doInBackground(Input... inputs) {
-                    return doInBackground.doThisAndReturn(inputs);
-                }
-
-                @Override
-                protected void onProgressUpdate(Progress... values) {
-                    if (onProgressUpdate != null) {
-                        onProgressUpdate.doThis(values);
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(Result result) {
-                    if (onPostExecute != null) {
-                        onPostExecute.doThis(result);
-                    }
-                }
-            };
-
-            asafTask.executeTask(inputs);
-
-            return asafTask;
         }
+
+        if (doInBackground == null) {
+            throw new IllegalStateException("You must call at least doInBackground() before calling execute");
+        }
+
+        asafTask = new AsafTask<Input, Void, Result>(workMode) {
+
+            @Override
+            protected void onPreExecute() {
+                if (onPreExecute != null) {
+                    onPreExecute.doThis();
+                }
+            }
+
+            @Override
+            protected Result doInBackground(Input... inputs) {
+                return doInBackground.doThisAndReturn(inputs);
+            }
+
+            @Override
+            protected void onPostExecute(Result result) {
+                if (onPostExecute != null) {
+                    onPostExecute.doThis(result);
+                }
+            }
+        };
+
+        asafTask.executeTask(inputs);
+
+        return asafTask;
     }
 
-    private void publishProgress(Progress... payload) {
-        if (asafTask != null) {
-            asafTask.doPublishProgress(payload);
-        }
-    }
 
 }
