@@ -1,5 +1,6 @@
 package co.early.asaf.framework.threading;
 
+
 import co.early.asaf.framework.Affirm;
 import co.early.asaf.framework.WorkMode;
 import co.early.asaf.framework.callbacks.DoThisCallback;
@@ -13,14 +14,14 @@ public class AsafTaskBuilder <Input, Progress, Result>{
 
     private final WorkMode workMode;
 
-    private final DoInBackgroundCallback<Input, Progress, Result> doInBackground;
+    private final DoInBackgroundCallback<Input, Result> doInBackground;
     private DoThisCallback onPreExecute;
     private DoThisWithVarargPayloadCallback<Progress> onProgressUpdate;
     private DoThisWithPayloadCallback<Result> onPostExecute;
 
     private AsafTask<Input, Progress, Result> asafTask = null;
 
-    public AsafTaskBuilder(WorkMode workMode, DoInBackgroundCallback<Input, Progress, Result> doInBackground) {
+    public AsafTaskBuilder(WorkMode workMode, DoInBackgroundCallback<Input, Result> doInBackground) {
         this.workMode = Affirm.notNull(workMode);
         this.doInBackground = Affirm.notNull(doInBackground);
     }
@@ -57,15 +58,7 @@ public class AsafTaskBuilder <Input, Progress, Result>{
 
                 @Override
                 protected Result doInBackground(Input... inputs) {
-
-                    PublishProgressCallback<Progress> progressPublisher = new PublishProgressCallback<Progress>() {
-                        @Override
-                        public void publishProgress(Progress... payload) {
-                            asafTask.doPublishProgress(payload);
-                        }
-                    };
-
-                    return doInBackground.doThisAndReturn(progressPublisher, inputs);
+                    return doInBackground.doThisAndReturn(inputs);
                 }
 
                 @Override
@@ -86,6 +79,12 @@ public class AsafTaskBuilder <Input, Progress, Result>{
             asafTask.executeTask(inputs);
 
             return asafTask;
+        }
+    }
+
+    private void publishProgress(Progress... payload) {
+        if (asafTask != null) {
+            asafTask.doPublishProgress(payload);
         }
     }
 
