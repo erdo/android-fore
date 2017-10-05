@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/asaf/asaf.iml" filepath="$PROJECT_DIR$/asaf/asaf.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/exampleapp1/exampleapp1.iml" filepath="$PROJECT_DIR$/exampleapp1/exampleapp1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/examplethreading/examplethreading.iml" filepath="$PROJECT_DIR$/examplethreading/examplethreading.iml" />
     </modules>
   </component>
 </project>

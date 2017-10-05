@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.asafthreading.ui.ThreadingExampleView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example of using AsafTask to process a long running task while publishing progress, see the model code in feature.CounterWithProgress and associated tests for more" />
+
+        <Button
+            android:id="@+id/threadingexample_increaseprog_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="increase with AsafTask" />
+
+        <ProgressBar
+            android:id="@+id/threadingexample_busyprog_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="progress value:" />
+
+        <TextView
+            android:id="@+id/threadingexample_progressprog_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="latest count:" />
+
+        <TextView
+            android:id="@+id/threadingexample_currentprog_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_margin="20dp"
+            android:background="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example of using AsafTaskBuilder to process a long running task, see the model code in feature.CounterBasic and associated tests for more" />
+
+        <Button
+            android:id="@+id/threadingexample_increasebasic_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="increase with AsafTaskBuilder" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="progress value:" />
+
+        <ProgressBar
+            android:id="@+id/threadingexample_busybasic_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="latest count:" />
+
+        <TextView
+            android:id="@+id/threadingexample_currentbasic_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</foo.bar.example.asafthreading.ui.ThreadingExampleView>
