@@ -1,4 +1,4 @@
-package foo.bar.example.asafthreading;
+package foo.bar.example.asafthreading.feature.counter;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,7 +7,6 @@ import co.early.asaf.framework.WorkMode;
 import co.early.asaf.framework.logging.Logger;
 import co.early.asaf.framework.logging.TestLogger;
 import co.early.asaf.framework.observer.Observer;
-import foo.bar.example.asafthreading.feature.CounterWithProgress;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -60,8 +59,8 @@ public class CounterWithProgressTest {
      * to an expected number of times this method might be called. (This would be
      * testing an implementation detail and make the tests unnecessarily brittle)
      *
-     * The contract says nothing about how many times this will get called,
-     * only that it will be called if something changes ("something" is not defined
+     * The contract says nothing about how many times observers will get called,
+     * only that they will be called if something changes ("something" is not defined
      * and can change between implementations).
      *
      * See the databinding readme for more information about this

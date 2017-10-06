@@ -7,8 +7,8 @@ import java.util.Map;
 
 import co.early.asaf.framework.WorkMode;
 import co.early.asaf.framework.logging.AndroidLogger;
-import foo.bar.example.asafthreading.feature.CounterBasic;
-import foo.bar.example.asafthreading.feature.CounterWithProgress;
+import foo.bar.example.asafthreading.feature.counter.CounterBasic;
+import foo.bar.example.asafthreading.feature.counter.CounterWithProgress;
 
 import static co.early.asaf.framework.Affirm.notNull;
 
@@ -38,14 +38,15 @@ class ObjectGraph {
         AndroidLogger logger = new AndroidLogger();
 
 
-        //create dependency graph
-        // - this list gets looooooong, formatting one parameter per line helps with merging
+        // create dependency graph
+        // this list can get long, formatting one parameter per line helps with merging
         final CounterBasic counterBasic = new CounterBasic(
                 workMode,
                 logger);
         final CounterWithProgress counterWithProgress = new CounterWithProgress(
                 workMode,
                 logger);
+
 
 
         // add models to the dependencies map if you will need them later

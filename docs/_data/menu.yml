@@ -37,15 +37,24 @@
 - text: Data Binding
   url: /03-databinding.html
   subitems:
-    - text: One and Two Way
+    - text: What it is
       url: "#one-and-two-way"
     - text: SyncView()
       url: "#syncview"
     - text: ASAF Observables
       url: "#asaf-observables"
+- text: Asynchronous Code
+  url: /04-asynchronous-code.html
+  subitems:
+    - text: AsafTask
+      url: "#asaftask"
+    - text: AsafTaskBuilder and Lambda Expressions
+      url: "#asaftaskbuilder"
+    - text: Testing
+      url: "#testing"
 - text: Adapters
-  url: /04-adapters.html
+  url: /05-adapters.html
 - text: Code Review Checklist
-  url: /05-code-review-checklist.html
+  url: /06-code-review-checklist.html
 - text: FAQ
-  url: /06-faq.html
+  url: /07-faq.html

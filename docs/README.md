@@ -25,7 +25,7 @@ The library is the result of over half a decade of app development in teams comp
 
 ASAF is basically a light touch implementation of **MVVM** written for Android using the observer pattern. It could almost be considered **MV** as we don't need to make a distinction between Models and ViewModels. You can use it to implement **MVP** if you wish, but you might find that with this framework you don't really need the **P**.
 
-It also formalises an approach to **simple one way data binding** using a **syncView()** method that never leaves your view out of sync with your model.
+It also includes a testable alternative for AsyncTask ([AsafTask](/04-asynchronous-code.html#asaftask) and [AsafTaskBuilder](/04-asynchronous-code.html#asaftaskbuilder), and formalises an approach to **simple one way data binding** using a **syncView()** method that never leaves your view out of sync with your model.
 
 If you haven't coded with ASAF before, it's probably best to take a look at the sample app and literally copy and paste a feature and it's associated UI components (see the **feature/** and **ui/** packages) then change them from there. I will be writing a tutorial for each app as soon as I get a chance so that you can step through the process of writing an app from scratch. There is also a lot of information here already that will take you through the detail of how and why ASAF works.
 

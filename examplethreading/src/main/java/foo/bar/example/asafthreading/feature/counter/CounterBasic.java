@@ -1,9 +1,12 @@
-package foo.bar.example.asafthreading.feature;
+package foo.bar.example.asafthreading.feature.counter;
 
 
 import co.early.asaf.framework.WorkMode;
+import co.early.asaf.framework.callbacks.DoThisWithPayloadCallback;
 import co.early.asaf.framework.logging.Logger;
 import co.early.asaf.framework.observer.ObservableImp;
+import co.early.asaf.framework.threading.AsafTaskBuilder;
+import co.early.asaf.framework.threading.DoInBackgroundCallback;
 
 /**
  *
@@ -27,11 +30,20 @@ public class CounterBasic extends ObservableImp{
         isBusy = true;
         notifyObservers();
 
-//        new AsafTaskBuilder<Void, Integer>(workMode)
-//                .doInBackground(input -> doStuffInTheBackground(input))
-//                .onPostExecute(result -> doThingsWithTheResult(result))
-//                .execute((Void) null);
-//
+        new AsafTaskBuilder<Void, Integer>(workMode)
+                .doInBackground(new DoInBackgroundCallback<Void, Integer>() {
+                    @Override
+                    public Integer doThisAndReturn(Void... input) {
+                        return CounterBasic.this.doStuffInBackground(input);
+                    }
+                })
+                .onPostExecute(new DoThisWithPayloadCallback<Integer>() {
+                    @Override
+                    public void doThis(Integer result) {
+                        CounterBasic.this.doThingsWithTheResult(result);
+                    }
+                })
+                .execute((Void) null);
 
     }
 

@@ -1,4 +1,4 @@
-package foo.bar.example.asafthreading.feature;
+package foo.bar.example.asafthreading.feature.counter;
 
 
 import co.early.asaf.framework.WorkMode;

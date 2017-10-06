@@ -43,6 +43,7 @@ public class AndroidLogger implements Logger{
 
     public void v(String tag, String message, Throwable throwable) {
         Log.e(tag, message, throwable);
+
     }
 
 }
