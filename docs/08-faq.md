@@ -75,7 +75,7 @@ Fortunately with a few basic rules and techniques embodied in this library you c
 
 
 
-## 3) When should I use an Observer, when should I use a callback listener?
+## <a name="observer-listener"></a> 3) When should I use an Observer, when should I use a callback listener?
 
 An observer pattern is not always going to be suitable for what you want to do. In
 particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular call back will probably serve you better. In this case the succes or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
