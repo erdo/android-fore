@@ -7,8 +7,6 @@
       url: /#quick-start
     - text: What is it
       url: /#what-is-it
-    - text: Background
-      url: /#background
     - text: Licence
       url: /#licence
 - text: Sample Apps
@@ -43,8 +41,10 @@
       url: "#syncview"
     - text: ASAF Observables
       url: "#asaf-observables"
+- text: Dependency Injection
+  url: /04-dependency-injection.html
 - text: Asynchronous Code
-  url: /04-asynchronous-code.html
+  url: /05-asynchronous-code.html
   subitems:
     - text: AsafTask
       url: "#asaftask"
@@ -53,8 +53,8 @@
     - text: Testing
       url: "#testing"
 - text: Adapters
-  url: /05-adapters.html
+  url: /06-adapters.html
 - text: Code Review Checklist
-  url: /06-code-review-checklist.html
+  url: /07-code-review-checklist.html
 - text: FAQ
-  url: /07-faq.html
+  url: /08-faq.html
