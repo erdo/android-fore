@@ -41,7 +41,7 @@ At a very high level you will be writing observable and testable **Model** class
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
-ASAF also includes a testable alternative for AsyncTask ([AsafTask](/asaf-project/05-asynchronous-code.html#asaftask) and [AsafTaskBuilder](/asaf-project/05-asynchronous-code.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a **syncView()** method that never leaves your view out of sync with your model.
+ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-project/05-asynchronous-code.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/05-asynchronous-code.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a **syncView()** method that never leaves your view out of sync with your model.
 
 You might be surprised how much android code becomes uneccesasary when you take this approach to development.
 

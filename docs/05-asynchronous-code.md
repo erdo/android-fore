@@ -10,9 +10,9 @@ The quickest ASAF solution to all that is to use AsafTask as an (almost) drop in
 **Example 3 in the project is the simplest way to see this all in action by the way.**
 
 ## AsafTask
-AsafTask (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsynTask with two exceptions.
+AsafTask (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask* with two exceptions detailed below.
 
-*"Similar to which version of AsyncTask?" I hear you cry! well AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the source code for AsafTask, it's a tiny class anyway.*
+*AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the source code for AsafTask, don't worry it's tiny.
 
 
 ```
