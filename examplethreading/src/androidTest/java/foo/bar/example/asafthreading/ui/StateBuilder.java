@@ -4,7 +4,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import foo.bar.example.asafthreading.CustomApp;
-import foo.bar.example.asafthreading.feature.counter.CounterBasic;
+import foo.bar.example.asafthreading.feature.counter.CounterWithLambdas;
 import foo.bar.example.asafthreading.feature.counter.CounterWithProgress;
 
 import static org.mockito.Mockito.when;
@@ -14,16 +14,16 @@ import static org.mockito.Mockito.when;
  */
 public class StateBuilder {
 
-    private CounterBasic mockCounterBasic;
+    private CounterWithLambdas mockCounterWithLambdas;
     private CounterWithProgress mockCounterWithProgress;
 
-    StateBuilder(CounterBasic mockCounterBasic, CounterWithProgress mockCounterWithProgress) {
-        this.mockCounterBasic = mockCounterBasic;
+    StateBuilder(CounterWithLambdas mockCounterWithLambdas, CounterWithProgress mockCounterWithProgress) {
+        this.mockCounterWithLambdas = mockCounterWithLambdas;
         this.mockCounterWithProgress = mockCounterWithProgress;
     }
 
     StateBuilder counterBasicIsBusy(boolean busy) {
-        when(mockCounterBasic.isBusy()).thenReturn(busy);
+        when(mockCounterWithLambdas.isBusy()).thenReturn(busy);
         return this;
     }
 
@@ -33,7 +33,7 @@ public class StateBuilder {
     }
 
     StateBuilder counterBasicCount(int count) {
-        when(mockCounterBasic.getCount()).thenReturn(count);
+        when(mockCounterWithLambdas.getCount()).thenReturn(count);
         return this;
     }
 
@@ -47,9 +47,9 @@ public class StateBuilder {
         return this;
     }
 
-    ActivityTestRule<ThreadingExampleActivity>  createRule(){
+    ActivityTestRule<CounterActivity>  createRule(){
 
-        return new ActivityTestRule<ThreadingExampleActivity>(ThreadingExampleActivity.class) {
+        return new ActivityTestRule<CounterActivity>(CounterActivity.class) {
             @Override
             protected void beforeActivityLaunched() {
 
@@ -58,7 +58,7 @@ public class StateBuilder {
                 customApp.injectSynchronousObjectGraph();
 
                 //inject our mocks so our UI layer will pick them up
-                customApp.injectMockObject(CounterBasic.class, mockCounterBasic);
+                customApp.injectMockObject(CounterWithLambdas.class, mockCounterWithLambdas);
                 customApp.injectMockObject(CounterWithProgress.class, mockCounterWithProgress);
             }
 

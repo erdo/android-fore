@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+def secrets = new Properties()
+def secretsFile = new File('exampledatabinding/secrets.properties')
+if (secretsFile.canRead()) {
+    secrets.load(new FileInputStream(secretsFile))
+} else {
+    println 'WARNING app secrets.properties not found! \n'
+}
+def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
+def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
+
+
+
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+    defaultConfig {
+        applicationId "foo.bar.example.asafdatabinding"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
+        //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
+        credentials(AwsCredentials) {
+            accessKey AWS_ACCESS_KEY
+            secretKey AWS_SECRET_KEY
+        }
+    }
+}
+
+
+dependencies {
+
+    compile (group: 'co.early.asaf', name: 'asaf', version: '0.9.5-SNAPSHOT', ext: 'aar')
+
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+
+    // Unit testing dependencies
+    testCompile 'junit:junit:4.12'
+    // Set this dependency if you want to use Mockito
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    // Set this dependency if you want to use Hamcrest matching
+    testCompile 'org.hamcrest:hamcrest-library:1.1'
+
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    androidTestCompile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+    androidTestCompile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
+    androidTestCompile "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+}

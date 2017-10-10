@@ -1,6 +1,7 @@
 package foo.bar.example.asafthreading.feature.counter;
 
 
+import co.early.asaf.framework.Affirm;
 import co.early.asaf.framework.WorkMode;
 import co.early.asaf.framework.logging.Logger;
 import co.early.asaf.framework.observer.ObservableImp;
@@ -11,7 +12,10 @@ import co.early.asaf.framework.threading.AsafTask;
  */
 public class CounterWithProgress extends ObservableImp{
 
+    public static final String TAG = CounterWithProgress.class.getSimpleName();
+
     private final WorkMode workMode;
+    private final Logger logger;
 
     private boolean isBusy = false;
     private int count;
@@ -20,11 +24,14 @@ public class CounterWithProgress extends ObservableImp{
 
     public CounterWithProgress(WorkMode workMode, Logger logger) {
         super(workMode, logger);
-        this.workMode = workMode;
+        this.workMode = Affirm.notNull(workMode);
+        this.logger = Affirm.notNull(logger);
     }
 
 
     public void increaseBy20(){
+
+        logger.i(TAG, "increaseBy20()");
 
         isBusy = true;
         notifyObservers();
@@ -42,6 +49,7 @@ public class CounterWithProgress extends ObservableImp{
                         } catch (InterruptedException e) {
                         }
                     }
+
                     publishProgressTask(++totalIncrease);
                 }
 
@@ -50,12 +58,18 @@ public class CounterWithProgress extends ObservableImp{
 
             @Override
             protected void onProgressUpdate(Integer... values) {
+
+                logger.i(TAG, "-tick-");
+
                 progress = values[0];
                 notifyObservers();
             }
 
             @Override
             protected void onPostExecute(Integer result) {
+
+                logger.i(TAG, "done");
+
                 count = count + result;
                 isBusy = false;
                 progress = 0;

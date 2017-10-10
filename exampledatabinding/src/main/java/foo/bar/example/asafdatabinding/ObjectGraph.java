@@ -1,4 +1,4 @@
-package foo.bar.example.asafthreading;
+package foo.bar.example.asafdatabinding;
 
 import android.app.Application;
 
@@ -7,8 +7,7 @@ import java.util.Map;
 
 import co.early.asaf.framework.WorkMode;
 import co.early.asaf.framework.logging.AndroidLogger;
-import foo.bar.example.asafthreading.feature.counter.CounterWithLambdas;
-import foo.bar.example.asafthreading.feature.counter.CounterWithProgress;
+import foo.bar.example.asafdatabinding.feature.wallet.Wallet;
 
 import static co.early.asaf.framework.Affirm.notNull;
 
@@ -32,20 +31,12 @@ class ObjectGraph {
 
 
         // create dependency graph
-        // this list can get long, formatting one parameter per line helps with merging
         AndroidLogger logger = new AndroidLogger();
-        CounterWithLambdas counterWithLambdas = new CounterWithLambdas(
-                workMode,
-                logger);
-        CounterWithProgress counterWithProgress = new CounterWithProgress(
-                workMode,
-                logger);
-
+        Wallet wallet = new Wallet(logger);
 
 
         // add models to the dependencies map if you will need them later
-        dependencies.put(CounterWithLambdas.class, counterWithLambdas);
-        dependencies.put(CounterWithProgress.class, counterWithProgress);
+        dependencies.put(Wallet.class, wallet);
 
     }
 

@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 /**
  *
  */
-public class CounterBasicTest {
+public class CounterWithLambdasTest {
 
 
     private static Logger logger = new TestLogger();
@@ -24,13 +24,13 @@ public class CounterBasicTest {
     public void initialConditions() throws Exception {
 
         //arrange
-        CounterBasic counterBasic = new CounterBasic(WorkMode.SYNCHRONOUS, logger);
+        CounterWithLambdas counterWithLambdas = new CounterWithLambdas(WorkMode.SYNCHRONOUS, logger);
 
         //act
 
         //assert
-        Assert.assertEquals(false, counterBasic.isBusy());
-        Assert.assertEquals(0, counterBasic.getCount());
+        Assert.assertEquals(false, counterWithLambdas.isBusy());
+        Assert.assertEquals(0, counterWithLambdas.getCount());
     }
 
 
@@ -38,14 +38,14 @@ public class CounterBasicTest {
     public void increasesBy20() throws Exception {
 
         //arrange
-        CounterBasic counterBasic = new CounterBasic(WorkMode.SYNCHRONOUS, logger);
+        CounterWithLambdas counterWithLambdas = new CounterWithLambdas(WorkMode.SYNCHRONOUS, logger);
 
         //act
-        counterBasic.increaseBy20();
+        counterWithLambdas.increaseBy20();
 
         //assert
-        Assert.assertEquals(false, counterBasic.isBusy());
-        Assert.assertEquals(20, counterBasic.getCount());
+        Assert.assertEquals(false, counterWithLambdas.isBusy());
+        Assert.assertEquals(20, counterWithLambdas.getCount());
     }
 
 
@@ -69,12 +69,12 @@ public class CounterBasicTest {
     public void observersNotifiedAtLeastOnce() throws Exception {
 
         //arrange
-        CounterBasic counterBasic = new CounterBasic(WorkMode.SYNCHRONOUS, logger);
+        CounterWithLambdas counterWithLambdas = new CounterWithLambdas(WorkMode.SYNCHRONOUS, logger);
         Observer mockObserver = mock(Observer.class);
-        counterBasic.addObserver(mockObserver);
+        counterWithLambdas.addObserver(mockObserver);
 
         //act
-        counterBasic.increaseBy20();
+        counterWithLambdas.increaseBy20();
 
         //assert
         verify(mockObserver, atLeastOnce()).somethingChanged();

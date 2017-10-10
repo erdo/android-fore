@@ -15,40 +15,41 @@ import butterknife.ButterKnife;
 import co.early.asaf.framework.observer.Observer;
 import foo.bar.example.asafthreading.CustomApp;
 import foo.bar.example.asafthreading.R;
-import foo.bar.example.asafthreading.feature.counter.CounterBasic;
+import foo.bar.example.asafthreading.feature.counter.CounterWithLambdas;
 import foo.bar.example.asafthreading.feature.counter.CounterWithProgress;
 
 /**
  *
  */
-public class ThreadingExampleView extends ScrollView {
+public class CounterView extends ScrollView {
 
     //models that we need to sync with
     private CounterWithProgress counterWithProgress;
-    private CounterBasic counterBasic;
+    private CounterWithLambdas counterWithLambdas;
 
 
     //UI elements that we care about
-    @BindView(R.id.threadingexample_increaseprog_btn)
+    @BindView(R.id.counterwprog_increase_btn)
     public Button increaseBy20Prog;
 
-    @BindView(R.id.threadingexample_busyprog_progress)
+    @BindView(R.id.counterwprog_busy_progress)
     public ProgressBar busyProg;
 
-    @BindView(R.id.threadingexample_progressprog_txt)
+    @BindView(R.id.counterwprog_progress_txt)
     public TextView progressNumberProg;
 
-    @BindView(R.id.threadingexample_currentprog_txt)
+    @BindView(R.id.counterwprog_current_txt)
     public TextView currentNumberProg;
 
-    @BindView(R.id.threadingexample_increasebasic_btn)
+    @BindView(R.id.counterwlambda_increase_btn)
     public Button increaseBy20Basic;
 
-    @BindView(R.id.threadingexample_busybasic_progress)
+    @BindView(R.id.counterwlambda_busy_progress)
     public ProgressBar busyBasic;
 
-    @BindView(R.id.threadingexample_currentbasic_txt)
+    @BindView(R.id.counterwlambda_current_txt)
     public TextView currentNumberBasic;
+
 
 
     //single observer reference
@@ -60,20 +61,21 @@ public class ThreadingExampleView extends ScrollView {
     };
 
 
-    public ThreadingExampleView(Context context) {
+
+    public CounterView(Context context) {
         super(context);
     }
 
-    public ThreadingExampleView(Context context, AttributeSet attrs) {
+    public CounterView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ThreadingExampleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CounterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ThreadingExampleView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CounterView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -89,6 +91,12 @@ public class ThreadingExampleView extends ScrollView {
         setupButtonClickListeners();
     }
 
+
+    private void getModelReferences(){
+        counterWithProgress = CustomApp.get(CounterWithProgress.class);
+        counterWithLambdas = CustomApp.get(CounterWithLambdas.class);
+    }
+
     private void setupButtonClickListeners() {
 
         increaseBy20Prog.setOnClickListener(new OnClickListener() {
@@ -101,15 +109,9 @@ public class ThreadingExampleView extends ScrollView {
         increaseBy20Basic.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                counterBasic.increaseBy20();
+                counterWithLambdas.increaseBy20();
             }
         });
-    }
-
-
-    private void getModelReferences(){
-        counterWithProgress = CustomApp.get(CounterWithProgress.class);
-        counterBasic = CustomApp.get(CounterBasic.class);
     }
 
 
@@ -121,16 +123,16 @@ public class ThreadingExampleView extends ScrollView {
         progressNumberProg.setText("" + counterWithProgress.getProgress());
         currentNumberProg.setText("" + counterWithProgress.getCount());
 
-        increaseBy20Basic.setEnabled(!counterBasic.isBusy());
-        busyBasic.setVisibility(counterBasic.isBusy() ? VISIBLE : INVISIBLE);
-        currentNumberBasic.setText("" + counterBasic.getCount());
+        increaseBy20Basic.setEnabled(!counterWithLambdas.isBusy());
+        busyBasic.setVisibility(counterWithLambdas.isBusy() ? VISIBLE : INVISIBLE);
+        currentNumberBasic.setText("" + counterWithLambdas.getCount());
     }
 
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        counterBasic.addObserver(observer);
+        counterWithLambdas.addObserver(observer);
         counterWithProgress.addObserver(observer);
         syncView();
     }
@@ -139,7 +141,7 @@ public class ThreadingExampleView extends ScrollView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        counterBasic.removeObserver(observer);
+        counterWithLambdas.removeObserver(observer);
         counterWithProgress.removeObserver(observer);
     }
 }

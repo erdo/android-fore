@@ -1,60 +1,53 @@
 - text: Main Readme
   url: /
   subitems:
-    - text: TL;DR
-      url: /#tldr
     - text: Quick Start
       url: /#quick-start
-    - text: What is it
-      url: /#what-is-it
+    - text: Overview
+      url: /#overview
+    - text: Sample Apps
+      url: /#sample-apps
     - text: Licence
       url: /#licence
-- text: Sample Apps
-  url: /00-sampleapps.html
+- text: Views
+  url: /01-views.html
   subitems:
-    - text: How Many Frameworks
-      url: /00-sampleapps-app1-how-many-tutorial.html
-    - text: Who the Framework Knows
-      url: /00-sampleapps-app2-who-the-tutorial.html
-    - text: Twitter Client
-      url: /00-sampleapps-app3-twitter-client.html
-    - text: Tic Tac Toe
-      url: /00-sampleapps-app4-tic-tac-toe.html
+    - text: Custom Android Views
+      url: "#custom-android-views"
 - text: Models
-  url: /01-models.html
+  url: /02-models.html
   subitems:
     - text: Writing a Basic Model
       url: "#writing-a-basic-model"
     - text: Model Checklist
       url: "#model-checklist"
-- text: Views
-  url: /02-views.html
-  subitems:
-    - text: Custom Android Views
-      url: "#custom-android-views"
 - text: Data Binding
   url: /03-databinding.html
   subitems:
-    - text: What it is
+    - text: Overview
       url: "#one-and-two-way"
     - text: SyncView()
       url: "#syncview"
     - text: ASAF Observables
       url: "#asaf-observables"
-- text: Dependency Injection
-  url: /04-dependency-injection.html
-- text: Asynchronous Code
-  url: /05-asynchronous-code.html
+- text: Other Tools
+  url: /04-more.html
   subitems:
+    - text: Dependency Injection
+      url: "#di"
+    - text: Adapters
+      url: "#adapters"
     - text: AsafTask
       url: "#asaftask"
     - text: AsafTaskBuilder and Lambda Expressions
       url: "#asaftaskbuilder"
-    - text: Testing
+    - text: Asynchronous Testing
       url: "#testing"
-- text: Adapters
-  url: /06-adapters.html
+    - text: Retrofit
+      url: "#retrofit"
+    - text: Widgets
+      url: "#widgets"
 - text: Code Review Checklist
-  url: /07-code-review-checklist.html
+  url: /05-code-review-checklist.html
 - text: FAQ
-  url: /08-faq.html
+  url: /06-faq.html

@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 
 import foo.bar.example.asafthreading.ProgressBarIdler;
 import foo.bar.example.asafthreading.R;
-import foo.bar.example.asafthreading.feature.counter.CounterBasic;
+import foo.bar.example.asafthreading.feature.counter.CounterWithLambdas;
 import foo.bar.example.asafthreading.feature.counter.CounterWithProgress;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
@@ -33,20 +33,20 @@ import static org.mockito.Mockito.verify;
  * and that clicking the buttons results in the correct action being performed
  */
 @RunWith(AndroidJUnit4.class)
-public class ThreadingExampleViewTest {
+public class CounterViewTest {
 
 
-    private CounterBasic mockCounterBasic;
+    private CounterWithLambdas mockCounterWithLambdas;
     private CounterWithProgress mockCounterWithProgress;
 
 
     @Before
     public void setup(){
 
-        //MockitoAnnotations.initMocks(ThreadingExampleView.this);
+        //MockitoAnnotations.initMocks(CounterView.this);
         System.setProperty("dexmaker.dexcache", InstrumentationRegistry.getTargetContext().getCacheDir().getPath());
 
-        mockCounterBasic = mock(CounterBasic.class);
+        mockCounterWithLambdas = mock(CounterWithLambdas.class);
         mockCounterWithProgress = mock(CounterWithProgress.class);
 
         Application application = (Application)getInstrumentation().getTargetContext().getApplicationContext();
@@ -57,7 +57,7 @@ public class ThreadingExampleViewTest {
     public void initialState() throws Exception {
 
         //arrange
-        new StateBuilder(mockCounterBasic, mockCounterWithProgress)
+        new StateBuilder(mockCounterWithLambdas, mockCounterWithProgress)
                 .counterWithProgressIsBusy(true)
                 .counterWithProgressProgressValue(7)
                 .counterWithProgressCount(40)
@@ -69,20 +69,20 @@ public class ThreadingExampleViewTest {
         //act
 
         //assert
-        onView(withId(R.id.threadingexample_increaseprog_btn)).check(matches(not(isEnabled())));
-        onView(withId(R.id.threadingexample_busyprog_progress)).check(matches(isDisplayed()));
-        onView(withId(R.id.threadingexample_progressprog_txt)).check(matches(withText("7")));
-        onView(withId(R.id.threadingexample_currentprog_txt)).check(matches(withText("40")));
-        onView(withId(R.id.threadingexample_increasebasic_btn)).check(matches(isEnabled()));
-        onView(withId(R.id.threadingexample_busybasic_progress)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.threadingexample_currentbasic_txt)).check(matches(withText("0")));
+        onView(withId(R.id.counterwprog_increase_btn)).check(matches(not(isEnabled())));
+        onView(withId(R.id.counterwprog_busy_progress)).check(matches(isDisplayed()));
+        onView(withId(R.id.counterwprog_progress_txt)).check(matches(withText("7")));
+        onView(withId(R.id.counterwprog_current_txt)).check(matches(withText("40")));
+        onView(withId(R.id.counterwlambda_increase_btn)).check(matches(isEnabled()));
+        onView(withId(R.id.counterwlambda_busy_progress)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.counterwlambda_current_txt)).check(matches(withText("0")));
     }
 
     @Test
     public void rotationState() throws Exception {
 
         //arrange
-        Activity activity = new StateBuilder(mockCounterBasic, mockCounterWithProgress)
+        Activity activity = new StateBuilder(mockCounterWithLambdas, mockCounterWithProgress)
                 .counterWithProgressIsBusy(true)
                 .counterWithProgressProgressValue(7)
                 .counterWithProgressCount(40)
@@ -96,39 +96,39 @@ public class ThreadingExampleViewTest {
         activity.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
 
         //assert
-        onView(withId(R.id.threadingexample_increaseprog_btn)).check(matches(not(isEnabled())));
-        onView(withId(R.id.threadingexample_busyprog_progress)).check(matches(isDisplayed()));
-        onView(withId(R.id.threadingexample_progressprog_txt)).check(matches(withText("7")));
-        onView(withId(R.id.threadingexample_currentprog_txt)).check(matches(withText("40")));
-        onView(withId(R.id.threadingexample_increasebasic_btn)).check(matches(isEnabled()));
-        onView(withId(R.id.threadingexample_busybasic_progress)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.threadingexample_currentbasic_txt)).check(matches(withText("0")));
+        onView(withId(R.id.counterwprog_increase_btn)).check(matches(not(isEnabled())));
+        onView(withId(R.id.counterwprog_busy_progress)).check(matches(isDisplayed()));
+        onView(withId(R.id.counterwprog_progress_txt)).check(matches(withText("7")));
+        onView(withId(R.id.counterwprog_current_txt)).check(matches(withText("40")));
+        onView(withId(R.id.counterwlambda_increase_btn)).check(matches(isEnabled()));
+        onView(withId(R.id.counterwlambda_busy_progress)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.counterwlambda_current_txt)).check(matches(withText("0")));
     }
 
     @Test
     public void clickCallsBasicModel() throws Exception {
         //arrange
-        new StateBuilder(mockCounterBasic, mockCounterWithProgress)
+        new StateBuilder(mockCounterWithLambdas, mockCounterWithProgress)
                 .counterBasicIsBusy(false)
                 .createRule()
                 .launchActivity(null);
         //act
-        onView(withId(R.id.threadingexample_increasebasic_btn)).perform(click());
+        onView(withId(R.id.counterwlambda_increase_btn)).perform(click());
 
         //assert
-        verify(mockCounterBasic).increaseBy20();
+        verify(mockCounterWithLambdas).increaseBy20();
     }
 
     @Test
     public void clickCallsWithProgressModel() throws Exception {
         //arrange
-        new StateBuilder(mockCounterBasic, mockCounterWithProgress)
+        new StateBuilder(mockCounterWithLambdas, mockCounterWithProgress)
                 .counterWithProgressIsBusy(false)
                 .createRule()
                 .launchActivity(null);
 
         //act
-        onView(withId(R.id.threadingexample_increaseprog_btn)).perform(click());
+        onView(withId(R.id.counterwprog_increase_btn)).perform(click());
 
         //assert
         verify(mockCounterWithProgress).increaseBy20();

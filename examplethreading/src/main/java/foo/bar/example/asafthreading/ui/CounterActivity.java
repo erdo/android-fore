@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import foo.bar.example.asafthreading.R;
 
 
-public class ThreadingExampleActivity extends FragmentActivity {
+public class CounterActivity extends FragmentActivity {
 
     public static void start(Context context) {
         Intent intent = build(context);
@@ -18,7 +18,7 @@ public class ThreadingExampleActivity extends FragmentActivity {
     }
 
     public static Intent build(Context context) {
-        Intent intent = new Intent(context, ThreadingExampleActivity.class);
+        Intent intent = new Intent(context, CounterActivity.class);
         return intent;
     }
 
@@ -31,8 +31,8 @@ public class ThreadingExampleActivity extends FragmentActivity {
 
         if (savedInstanceState == null) {
             setFragment(
-                    ThreadingExampleFragment.newInstance(),
-                    ThreadingExampleFragment.class.getSimpleName());
+                    CounterFragment.newInstance(),
+                    CounterFragment.class.getSimpleName());
         }
     }
 
