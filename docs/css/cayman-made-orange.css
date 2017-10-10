@@ -195,6 +195,8 @@ a:hover { text-decoration: underline; }
     quotes: "\201C" "\201D" "\2018" "\2019"; 
 }
 
+.shoom div {height: 5px}
+
 .main-content blockquote > :first-child { margin-top: 0; }
 .main-content blockquote > :last-child { margin-bottom: 0; }
 .main-content table { display: block; width: 100%; overflow: auto; word-break: normal; word-break: keep-all; -webkit-overflow-scrolling: touch; }
