@@ -71,7 +71,7 @@ Despite the obvious problems of writing networking code or asynchronous code of 
 
 Fortunately it's almost all completely uneccessary. The sample apps should clearly demostrate how clean android code can become once you start peroperly seperating view code from the rest.
 
-## Even Ancient-er History
+### Even Ancient-er History
 While we're here we might as well mention the Controller (from MVC). It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]
 
 In modern UI frameworks most of the controller work is implemented for you by the framework itself - these are the button click listeners that simply catch user input and send it on to the right place.

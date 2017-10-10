@@ -30,7 +30,7 @@ But that's not the whole story. There is also code which has nothing to do with 
 
 The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern. Perhaps more appropriately it could be considered **MV** as we don't need to make a distinction between Models and ViewModels. It's flexible enough that you can use it to implement **MVP** if you wish.
 
-In any case, all the sample apps included here are written in the same way, this method results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
+In any case, all the sample apps included here are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
 
 
 ![data binding](img/data-binding.png)
@@ -40,7 +40,7 @@ At a very high level you will be writing observable and testable **Model** class
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
-ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-project/05-asynchronous-code.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/05-asynchronous-code.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a **syncView()** method that never leaves your view out of sync with your model.
+ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
 
 You might be surprised how much android code becomes uneccesasary when you take this approach to development.
 
@@ -56,21 +56,21 @@ Asside from the apps, there is also a lot of information (and more crap diagrams
 
 
 ### Data Binding Example
-This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/03-databinding.html). It's still a full app though, supports rotation and has a full set of tests to go alog with it.
+This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/03-databinding.html). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
-You move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram.
+In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
 
-[Data Binding Example App Source Code](/asaf-project/tree/master/exampledatabinding)
+[Data Binding Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampledatabinding)
 
 
 ### Asynchronous Code Example
-This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](/asaf-project/05-asynchronous-code.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/05-asynchronous-code.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
+This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, one which lets you take advantage of lambda expressions.
 
 It's really a very exciting app, I should probably put it on the play store before someone steals the idea.
 
-[Asynchronous Example App Source Code](/asaf-project/tree/master/examplethreading)
+[Asynchronous Example App Source Code](https://github.com/erdo/asaf-project/tree/master/examplethreading)
 
 
 
