@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.framework.observer.Observer;
+import co.early.asaf.core.observer.Observer;
 import foo.bar.example.asafadapters.CustomApp;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistSimpleModel;
-import foo.bar.example.asafadapters.framework.time.SystemTimeWrapper;
+import co.early.asaf.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters.ui.advanced.PlaylistAdapterAdvanced;
 import foo.bar.example.asafadapters.ui.simple.PlaylistAdapterSimple;
 

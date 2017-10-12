@@ -4,10 +4,10 @@ package foo.bar.example.asafadapters.feature.playlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.early.asaf.framework.Affirm;
-import co.early.asaf.framework.WorkMode;
-import co.early.asaf.framework.logging.Logger;
-import co.early.asaf.framework.observer.ObservableImp;
+import co.early.asaf.core.Affirm;
+import co.early.asaf.core.WorkMode;
+import co.early.asaf.core.logging.Logger;
+import co.early.asaf.core.observer.ObservableImp;
 
 import static foo.bar.example.asafadapters.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource;
 

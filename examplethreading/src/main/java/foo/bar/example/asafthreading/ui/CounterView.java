@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.framework.observer.Observer;
+import co.early.asaf.core.observer.Observer;
 import foo.bar.example.asafthreading.CustomApp;
 import foo.bar.example.asafthreading.R;
 import foo.bar.example.asafthreading.feature.counter.CounterWithLambdas;

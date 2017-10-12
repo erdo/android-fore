@@ -1,11 +1,11 @@
 package foo.bar.example.asafthreading.feature.counter;
 
 
-import co.early.asaf.framework.Affirm;
-import co.early.asaf.framework.WorkMode;
-import co.early.asaf.framework.logging.Logger;
-import co.early.asaf.framework.observer.ObservableImp;
-import co.early.asaf.framework.threading.AsafTask;
+import co.early.asaf.core.Affirm;
+import co.early.asaf.core.WorkMode;
+import co.early.asaf.core.logging.Logger;
+import co.early.asaf.core.observer.ObservableImp;
+import co.early.asaf.core.threading.AsafTask;
 
 /**
  *

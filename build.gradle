@@ -30,6 +30,20 @@ ext {
     buildToolsVersion = "25.0.0"
     supportLibVersion = "25.3.0"
     javaVersion = JavaVersion.VERSION_1_8
+
+    LIB_VERSION_NAME="0.9.7-SNAPSHOT"
+    LIB_VERSION_CODE=7
+
+    LIB_GROUP="co.early.asaf"
+    LIB_DEVELOPER_ID="erdo"
+    POM_PACKAGING="aar"
+    POM_URL="https://erdo.github.io/asaf-project/"
+    POM_SCM_URL="https://github.com/erdo/asaf-project"
+    POM_SCM_CONNECTION="scm:git@github.com:erdo/asaf-project.git"
+    POM_SCM_DEV_CONNECTION="scm:git@github.com:erdo/asaf-project.git"
+
+    exampleAsafLibVersion="0.9.7-SNAPSHOT"
+
 }
 
 task clean(type: Delete) {

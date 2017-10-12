@@ -3,9 +3,9 @@ package foo.bar.example.asafdatabinding.feature.wallet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import co.early.asaf.framework.logging.Logger;
-import co.early.asaf.framework.logging.TestLogger;
-import co.early.asaf.framework.observer.Observer;
+import co.early.asaf.core.logging.Logger;
+import co.early.asaf.core.logging.TestLogger;
+import co.early.asaf.core.observer.Observer;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;

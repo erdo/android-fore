@@ -1,6 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
+ext {
+    LIB_ARTIFACT_ID="asaf"
+    LIB_DESCRIPTION="Alarmingly Simple Android Framework"
+}
+
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -22,8 +27,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 
-        versionCode LIB_VERSION_CODE as Integer
-        versionName LIB_VERSION_NAME
+        versionCode rootProject.ext.LIB_VERSION_CODE as Integer
+        versionName rootProject.ext.LIB_VERSION_NAME
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

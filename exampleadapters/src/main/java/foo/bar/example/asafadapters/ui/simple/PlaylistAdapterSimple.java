@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.framework.Affirm;
+import co.early.asaf.core.Affirm;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistSimpleModel;
 import foo.bar.example.asafadapters.feature.playlist.Track;

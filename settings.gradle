@@ -1,1 +1,1 @@
-include ':asaf', ':examplethreading', ':exampledatabinding', ':exampleadapters'
+include ':asaf', ':examplethreading', ':exampledatabinding', ':exampleadapters', ':asaf-adapters'

@@ -9,14 +9,14 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.framework.Affirm;
+import co.early.asaf.core.Affirm;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.Track;
-import foo.bar.example.asafadapters.framework.list.SimpleChangeAwareAdapter;
-import foo.bar.example.asafadapters.framework.list.UpdateSpec;
-import foo.bar.example.asafadapters.framework.list.Updateable;
-import foo.bar.example.asafadapters.framework.time.SystemTimeWrapper;
+import co.early.asaf.adapters.SimpleChangeAwareAdapter;
+import co.early.asaf.adapters.UpdateSpec;
+import co.early.asaf.adapters.Updateable;
+import co.early.asaf.core.time.SystemTimeWrapper;
 
 /**
  *

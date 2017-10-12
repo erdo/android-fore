@@ -1,13 +1,13 @@
 package foo.bar.example.asafadapters.feature.playlist;
 
 
-import co.early.asaf.framework.Affirm;
-import co.early.asaf.framework.WorkMode;
-import co.early.asaf.framework.logging.Logger;
-import co.early.asaf.framework.observer.ObservableImp;
-import foo.bar.example.asafadapters.framework.list.SimpleChangeAwareList;
-import foo.bar.example.asafadapters.framework.list.UpdateSpec;
-import foo.bar.example.asafadapters.framework.list.Updateable;
+import co.early.asaf.core.Affirm;
+import co.early.asaf.core.WorkMode;
+import co.early.asaf.core.logging.Logger;
+import co.early.asaf.core.observer.ObservableImp;
+import co.early.asaf.adapters.SimpleChangeAwareList;
+import co.early.asaf.adapters.UpdateSpec;
+import co.early.asaf.adapters.Updateable;
 
 import static foo.bar.example.asafadapters.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource;
 

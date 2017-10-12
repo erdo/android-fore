@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/asaf/asaf.iml" filepath="$PROJECT_DIR$/asaf/asaf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" filepath="$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/exampleadapters/exampleadapters.iml" filepath="$PROJECT_DIR$/exampleadapters/exampleadapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/exampledatabinding/exampledatabinding.iml" filepath="$PROJECT_DIR$/exampledatabinding/exampledatabinding.iml" />

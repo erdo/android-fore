@@ -2,8 +2,8 @@ package foo.bar.example.asafadapters;
 
 import android.app.Application;
 
-import co.early.asaf.framework.Affirm;
-import co.early.asaf.framework.WorkMode;
+import co.early.asaf.core.Affirm;
+import co.early.asaf.core.WorkMode;
 
 /**
  * Try not to fill this class with lots of code, if possible move it to a model somewhere
