@@ -1,7 +1,12 @@
 package co.early.asaf.adapters;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collection;
+
+import co.early.asaf.core.Affirm;
+import co.early.asaf.core.time.SystemTimeWrapper;
 
 /**
  * <p>Android adapters used to just have a notifyDataSetChanged() method which would trigger a redraw of the list UI.
@@ -46,41 +51,57 @@ import java.util.Collection;
  */
 public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable {
 
+    private final SystemTimeWrapper systemTimeWrapper;
+    private UpdateSpec updateSpec;
 
-    private UpdateSpec updateSpec = new UpdateSpec(UpdateSpec.UpdateType.FULL_UPDATE, 0, 0);
-
-    public SimpleChangeAwareList() {
+    public SimpleChangeAwareList(SystemTimeWrapper systemTimeWrapper) {
         super();
+        this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
+        updateSpec = createFullUpdateSpec(systemTimeWrapper);
     }
 
-    public SimpleChangeAwareList(int capacity) {
+    public SimpleChangeAwareList(int capacity, SystemTimeWrapper systemTimeWrapper) {
         super(capacity);
+        this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
+        updateSpec = createFullUpdateSpec(systemTimeWrapper);
     }
 
     @Override
     public boolean add(T object) {
         boolean temp = super.add(object);
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, size() - 1, 1);
+
+        Log.e("eee", "add() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_INSERTED);
+
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, size() - 1, 1, systemTimeWrapper);
         return temp;
     }
 
     @Override
     public void add(int index, T object) {
         super.add(index, object);
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, index, 1);
+
+        Log.e("eee", "add() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_INSERTED);
+
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, index, 1, systemTimeWrapper);
     }
 
     @Override
     public T set(int index, T object) {
         T temp = super.set(index, object);
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, index, 1);
+
+        Log.e("eee", "set() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_CHANGED);
+
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, index, 1, systemTimeWrapper);
         return temp;
     }
 
     @Override
     public T remove(int index) {
         T temp = super.remove(index);
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, index, 1);
+
+        Log.e("eee", "remove() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_REMOVED);
+
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, index, 1, systemTimeWrapper);
         return temp;
     }
 
@@ -90,7 +111,10 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
         super.clear();
         //updateSpec = new UpdateSpec(FULL_UPDATE, 0, 0);
         // TODO below this causes problems in the MBH app?
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size);
+
+        Log.e("eee", "clear() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_REMOVED);
+
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size, systemTimeWrapper);
     }
 
 
@@ -106,7 +130,10 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      * @param rowIndex index of the row that had its data changed
      */
     public void makeAwareOfDataChange(int rowIndex){
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowIndex, 1);
+
+        Log.e("eee", "makeAwareOfDataChange() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_CHANGED);
+
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowIndex, 1, systemTimeWrapper);
     }
 
     /**
@@ -122,7 +149,7 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      * @param rowsAffected
      */
     public void makeAwareOfDataChange(int rowStartIndex, int rowsAffected){
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowStartIndex, rowsAffected);
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowStartIndex, rowsAffected, systemTimeWrapper);
     }
 
 
@@ -164,15 +191,28 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      * adapter will always get a FULL_UPDATE (meaning no
      * fancy animations for the second one)
      *
-     * @return UpdateSpec detail about which row changed and
-     * how it changed - suitable for passing onto your
-     * adapter's notifyItemXXX methods
+     * If the updateSpec is old, then we assume that whatever changes
+     * were made to the Updateable last time were never picked up by a
+     * recyclerView (maybe because the list was not visible at the time).
+     * In this case we clear the updateSpec and create a fresh one with a
+     * full update spec.
      *
+     * @return
      */
-    public UpdateSpec getAndClearMostRecentUpdateSpec() {
-        UpdateSpec tempSpec = updateSpec;
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.FULL_UPDATE, 0, 0);
-        return tempSpec;
+    public UpdateSpec getAndClearLatestUpdateSpec(long maxAgeMs){
+
+        UpdateSpec latestUpdateSpecAvailable = updateSpec;
+        updateSpec = createFullUpdateSpec(systemTimeWrapper);
+
+        if (systemTimeWrapper.currentTimeMillis() - latestUpdateSpecAvailable.timeStamp < maxAgeMs) {
+            return latestUpdateSpecAvailable;
+        }else{
+            return updateSpec;
+        }
+    }
+
+    private UpdateSpec createFullUpdateSpec(SystemTimeWrapper stw){
+        return new UpdateSpec(UpdateSpec.UpdateType.FULL_UPDATE, 0, 0, stw);
     }
 
 }

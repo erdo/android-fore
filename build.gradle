@@ -29,7 +29,7 @@ ext {
     targetSdkVersion = 23
     buildToolsVersion = "25.0.0"
     supportLibVersion = "25.3.0"
-    javaVersion = JavaVersion.VERSION_1_8
+    javaVersion = JavaVersion.VERSION_1_7
 
     LIB_VERSION_NAME="0.9.7-SNAPSHOT"
     LIB_VERSION_CODE=7

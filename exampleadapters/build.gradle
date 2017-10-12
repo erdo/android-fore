@@ -18,6 +18,12 @@ def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
 
 
 android {
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -34,6 +40,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 
@@ -53,8 +60,8 @@ repositories {
 
 dependencies {
 
-    compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
-
+  //  compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    compile project(path: ':asaf')
     compile project(path: ':asaf-adapters')
 
     compile 'com.jakewharton:butterknife:8.8.1'

@@ -37,6 +37,7 @@ class ObjectGraph {
         AndroidLogger logger = new AndroidLogger();
         SystemTimeWrapper systemTimeWrapper = new SystemTimeWrapper();
         PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(
+                systemTimeWrapper,
                 workMode,
                 logger);
         PlaylistSimpleModel playlistSimpleModel = new PlaylistSimpleModel(

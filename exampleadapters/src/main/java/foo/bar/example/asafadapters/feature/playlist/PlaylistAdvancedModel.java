@@ -8,6 +8,7 @@ import co.early.asaf.core.observer.ObservableImp;
 import co.early.asaf.adapters.SimpleChangeAwareList;
 import co.early.asaf.adapters.UpdateSpec;
 import co.early.asaf.adapters.Updateable;
+import co.early.asaf.core.time.SystemTimeWrapper;
 
 import static foo.bar.example.asafadapters.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource;
 
@@ -19,12 +20,13 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
     private static String TAG = PlaylistAdvancedModel.class.getSimpleName();
 
     private final Logger logger;
-    private SimpleChangeAwareList<Track> trackList = new SimpleChangeAwareList<>();
+    private SimpleChangeAwareList<Track> trackList;
 
 
-    public PlaylistAdvancedModel(WorkMode workMode, Logger logger) {
+    public PlaylistAdvancedModel(SystemTimeWrapper systemTimeWrapper, WorkMode workMode, Logger logger) {
         super(workMode, logger);
         this.logger = Affirm.notNull(logger);
+        trackList = new SimpleChangeAwareList<>(Affirm.notNull(systemTimeWrapper));
     }
 
     public void addNewTrack() {
@@ -78,7 +80,7 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
     }
 
     @Override
-    public UpdateSpec getAndClearMostRecentUpdateSpec() {
-        return trackList.getAndClearMostRecentUpdateSpec();
+    public UpdateSpec getAndClearLatestUpdateSpec(long maxAgeMs) {
+        return trackList.getAndClearLatestUpdateSpec(maxAgeMs);
     }
 }

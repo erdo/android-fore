@@ -146,7 +146,7 @@ public class PlaylistsView extends LinearLayout {
     private void setupAdapters(){
 
         adapterSimple = new PlaylistAdapterSimple(playlistSimpleModel);
-        adapterAdvanced = new PlaylistAdapterAdvanced(playlistAdvancedModel, systemTimeWrapper);
+        adapterAdvanced = new PlaylistAdapterAdvanced(playlistAdvancedModel);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
         linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);

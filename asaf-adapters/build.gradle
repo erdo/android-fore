@@ -15,6 +15,9 @@ android {
         targetCompatibility rootProject.ext.javaVersion
     }
 
+    lintOptions {
+        abortOnError false
+    }
 
     defaultConfig {
 
@@ -38,6 +41,8 @@ android {
 
 dependencies {
 
+    //compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+
     compile project(path: ':asaf')
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -48,3 +53,5 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
     testCompile 'junit:junit:4.12'
 }
+
+apply from: './publish.gradle'

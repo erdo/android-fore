@@ -9,14 +9,10 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.core.Affirm;
+import co.early.asaf.adapters.SimpleChangeAwareAdapter;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.Track;
-import co.early.asaf.adapters.SimpleChangeAwareAdapter;
-import co.early.asaf.adapters.UpdateSpec;
-import co.early.asaf.adapters.Updateable;
-import co.early.asaf.core.time.SystemTimeWrapper;
 
 /**
  *
@@ -27,14 +23,9 @@ public class PlaylistAdapterAdvanced extends SimpleChangeAwareAdapter<PlaylistAd
 
     private final PlaylistAdvancedModel playlistAdvancedModel;
 
-    public PlaylistAdapterAdvanced(final PlaylistAdvancedModel playlistAdvancedModel, SystemTimeWrapper systemTimeWrapper) {
-        super(new Updateable() {
-            @Override
-            public UpdateSpec getAndClearMostRecentUpdateSpec() {
-                return playlistAdvancedModel.getAndClearMostRecentUpdateSpec();
-            }
-        }, systemTimeWrapper);
-        this.playlistAdvancedModel = Affirm.notNull(playlistAdvancedModel);
+    public PlaylistAdapterAdvanced(final PlaylistAdvancedModel playlistAdvancedModel) {
+        super(playlistAdvancedModel);
+        this.playlistAdvancedModel = playlistAdvancedModel;
     }
 
     @Override
