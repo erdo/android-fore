@@ -16,12 +16,12 @@ apply plugin: 'maven-publish'
 
 
 def secrets = new Properties()
-def secretsFile = new File('asaf/secrets.properties')
+def secretsFile = new File('secrets.properties')
 
 if (secretsFile.canRead()) {
     secrets.load(new FileInputStream(secretsFile))
 } else {
-    println 'asaf/secrets.properties not found, expecting to find the AWS access details there if building locally'
+    println 'secrets.properties not found, expecting to find the AWS access details there if building locally'
 }
 def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
 def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
@@ -130,14 +130,14 @@ publishing {
                     if (!dep.transitive) {
                         // If this dependency is transitive, we should force exclude all its dependencies from the POM
                         def exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
-                        exclusionNode.appendNode('groupId', '*')
+                        //exclusionNode.appendNode('groupId', '*')
                         exclusionNode.appendNode('artifactId', '*')
                     } else if (!dep.properties.excludeRules.empty) {
                         // Otherwise add specified exclude rules
                         def exclusionsNode = dependencyNode.appendNode('exclusions')
                         dep.properties.excludeRules.each { ExcludeRule rule ->
                             def exclusionNode = exclusionsNode.appendNode('exclusion')
-                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                            //exclusionNode.appendNode('groupId', rule.group ?: '*')
                             exclusionNode.appendNode('artifactId', rule.module ?: '*')
                         }
                     }

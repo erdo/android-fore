@@ -1,0 +1,92 @@
+apply plugin: 'com.android.library'
+
+def secrets = new Properties()
+def secretsFile = new File('secrets.properties')
+if (secretsFile.canRead()) {
+    secrets.load(new FileInputStream(secretsFile))
+} else {
+    println 'WARNING secrets.properties not found! \n'
+}
+def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
+def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
+
+
+
+ext{
+    LIB_ARTIFACT_ID="asaf-retrofit"
+    LIB_DESCRIPTION="Alarmingly Simple Android Framework - Retrofit Helpers"
+}
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    publishNonDefault true
+
+    defaultConfig {
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionCode rootProject.ext.LIB_VERSION_CODE as Integer
+        versionName rootProject.ext.LIB_VERSION_NAME
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        proguardFiles 'proguard-library.pro'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
+        //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
+        credentials(AwsCredentials) {
+            accessKey AWS_ACCESS_KEY
+            secretKey AWS_SECRET_KEY
+        }
+    }
+}
+
+dependencies {
+
+    //compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+    compile project(path: ':asaf')
+
+
+    compile('com.squareup.retrofit2:retrofit:2.1.0') {
+        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
+        exclude module: 'okhttp'
+    }
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+    testCompile 'junit:junit:4.12'
+}
+
+apply from: './publish.gradle'

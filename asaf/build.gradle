@@ -34,7 +34,6 @@ android {
 
         proguardFiles 'proguard-library.pro'
     }
-
     buildTypes {
         debug {
             minifyEnabled false

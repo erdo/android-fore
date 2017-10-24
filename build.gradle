@@ -31,8 +31,8 @@ ext {
     supportLibVersion = "25.3.0"
     javaVersion = JavaVersion.VERSION_1_7
 
-    LIB_VERSION_NAME="0.9.7-SNAPSHOT"
-    LIB_VERSION_CODE=7
+    LIB_VERSION_NAME="0.9.11-SNAPSHOT"
+    LIB_VERSION_CODE=11
 
     LIB_GROUP="co.early.asaf"
     LIB_DEVELOPER_ID="erdo"
@@ -42,7 +42,7 @@ ext {
     POM_SCM_CONNECTION="scm:git@github.com:erdo/asaf-project.git"
     POM_SCM_DEV_CONNECTION="scm:git@github.com:erdo/asaf-project.git"
 
-    exampleAsafLibVersion="0.9.7-SNAPSHOT"
+    exampleAsafLibVersion="0.9.11-SNAPSHOT"
 
 }
 

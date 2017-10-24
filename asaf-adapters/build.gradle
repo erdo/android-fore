@@ -1,5 +1,17 @@
 apply plugin: 'com.android.library'
 
+def secrets = new Properties()
+def secretsFile = new File('secrets.properties')
+if (secretsFile.canRead()) {
+    secrets.load(new FileInputStream(secretsFile))
+} else {
+    println 'WARNING secrets.properties not found! \n'
+}
+def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
+def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
+
+
+
 ext{
     LIB_ARTIFACT_ID="asaf-adapters"
     LIB_DESCRIPTION="Alarmingly Simple Android Framework - Adapters"
@@ -18,6 +30,8 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    publishNonDefault true
 
     defaultConfig {
 
@@ -39,11 +53,25 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+
+    maven {
+        url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
+        //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
+        credentials(AwsCredentials) {
+            accessKey AWS_ACCESS_KEY
+            secretKey AWS_SECRET_KEY
+        }
+    }
+}
+
 dependencies {
 
     //compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
-
     compile project(path: ':asaf')
+
+
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

@@ -2,9 +2,19 @@
  *
  * Publish the SDK to an Amazon s3 repo
  *
+ * in asaf-project build.gradle:
+ *
+ * - bump the version number LIB_VERSION_NAME
+ * - but leave exampleAsafLibVersion as it is
+ *
+ * publish all the libraries:
  *
  * ./gradlew asaf:install
  * ./gradlew asaf:publishAsafPublicationToMavenRepository
+ *
+ *
+ * - finally bump the version number of exampleAsafLibVersion
+ * - check everything builds and then tag the commit
  *
  */
 
@@ -16,12 +26,12 @@ apply plugin: 'maven-publish'
 
 
 def secrets = new Properties()
-def secretsFile = new File('asaf/secrets.properties')
+def secretsFile = new File('secrets.properties')
 
 if (secretsFile.canRead()) {
     secrets.load(new FileInputStream(secretsFile))
 } else {
-    println 'asaf/secrets.properties not found, expecting to find the AWS access details there if building locally'
+    println 'secrets.properties not found, expecting to find the AWS access details there if building locally'
 }
 def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
 def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
