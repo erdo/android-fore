@@ -1,43 +1,62 @@
-package foo.bar.example.asafdatabinding.ui.wallet;
+package foo.bar.example.asafretrofit.ui.fruit;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
+import co.early.asaf.core.callbacks.SuccessCallBack;
 import co.early.asaf.core.observer.Observer;
-import foo.bar.example.asafdatabinding.CustomApp;
-import foo.bar.example.asafdatabinding.R;
-import foo.bar.example.asafdatabinding.feature.wallet.Wallet;
+import foo.bar.example.asafretrofit.CustomApp;
+import foo.bar.example.asafretrofit.R;
+import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
+import foo.bar.example.asafretrofit.message.UserMessage;
+import foo.bar.example.asafretrofit.ui.widgets.TastyRatingBar;
 
 /**
  *
  */
-public class WalletsView extends ScrollView {
+public class FruitView extends ScrollView {
 
     //models that we need to sync with
-    private Wallet wallet;
+    private FruitFetcher fruitFetcher;
 
 
     //UI elements that we care about
-    @BindView(R.id.wallet_increase_btn)
-    public Button increaseMobileWalletBtn;
+    @BindView(R.id.fruit_fetchok_btn)
+    public Button fruitRefreshSuccess;
 
-    @BindView(R.id.wallet_decrease_btn)
-    public Button decreaseMobileWalletBtn;
+    @BindView(R.id.fruit_fetchfailbasic_btn)
+    public Button fruitRefreshFailBasic;
 
-    @BindView(R.id.wallet_mobileamount_txt)
-    public TextView mobileWalletAmount;
+    @BindView(R.id.fruit_fetchfailadvanced_btn)
+    public Button fruitRefreshFailAdvanced;
 
-    @BindView(R.id.wallet_savingsamount_txt)
-    public TextView savingsWalletAmount;
+    @BindView(R.id.fruit_name_textview)
+    public TextView fruitName;
 
+    @BindView(R.id.fruit_citrus_img)
+    public ImageView isCitrus;
+
+    @BindView(R.id.fruit_tastyrating_tastybar)
+    public TastyRatingBar tasteValuePercentView;
+
+    @BindView(R.id.fruit_tastyrating_textview)
+    public TextView tasteScore;
+
+    @BindView(R.id.fruit_busy_progbar)
+    public ProgressBar busy;
+
+    @BindView(R.id.fruit_detailcontainer_linearlayout)
+    public View fruitDetailContainer;
 
 
     //single observer reference
@@ -50,22 +69,40 @@ public class WalletsView extends ScrollView {
 
 
 
-    public WalletsView(Context context) {
+    //just because we re-use these in 3 different button clicks
+    //in this example we define them here
+    private SuccessCallBack successCallBack = new SuccessCallBack() {
+        @Override
+        public void success() {
+            Toast.makeText(getContext(), "Success - you can use this trigger to " +
+                    "perform a one off action like starting a new activity or " +
+                    "something", Toast.LENGTH_SHORT).show();
+        }
+    };
+    private FailureCallbackWithPayload<UserMessage> failureCallback = new FailureCallbackWithPayload<UserMessage>() {
+        @Override
+        public void fail(UserMessage userMessage) {
+            Toast.makeText(getContext(), "Fail - maybe tell the user to try again, message:" + userMessage.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+
+
+
+    public FruitView(Context context) {
         super(context);
     }
 
-    public WalletsView(Context context, AttributeSet attrs) {
+    public FruitView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public WalletsView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FruitView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public WalletsView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
 
 
     @Override
@@ -80,39 +117,55 @@ public class WalletsView extends ScrollView {
     }
 
     private void getModelReferences(){
-        wallet = CustomApp.get(Wallet.class);
+        fruitFetcher = CustomApp.get(FruitFetcher.class);
     }
 
     private void setupButtonClickListeners() {
-        increaseMobileWalletBtn.setOnClickListener(new OnClickListener() {
+
+        fruitRefreshSuccess.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                wallet.increaseMobileWallet();
+                fruitFetcher.fetchFruits(successCallBack, failureCallback);
             }
         });
-        decreaseMobileWalletBtn.setOnClickListener(new OnClickListener() {
+
+        fruitRefreshFailBasic.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                wallet.decreaseMobileWallet();
+                fruitFetcher.fetchFruitsButFail(successCallBack, failureCallback);
+
             }
         });
+
+        fruitRefreshFailAdvanced.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fruitFetcher.fetchFruitsButFailGetCustomError(successCallBack, failureCallback);
+            }
+        });
+
     }
 
 
     //data binding stuff below
 
     public void syncView(){
-        increaseMobileWalletBtn.setEnabled(wallet.canIncrease());
-        decreaseMobileWalletBtn.setEnabled(wallet.canDecrease());
-        mobileWalletAmount.setText("" + wallet.getMobileWalletAmount());
-        savingsWalletAmount.setText("" + wallet.getSavingsWalletAmount());
+        fruitRefreshSuccess.setEnabled(!fruitFetcher.isBusy());
+        fruitRefreshFailBasic.setEnabled(!fruitFetcher.isBusy());
+        fruitRefreshFailAdvanced.setEnabled(!fruitFetcher.isBusy());
+        fruitName.setText(fruitFetcher.getCurrentFruit().name);
+        isCitrus.setImageResource(fruitFetcher.getCurrentFruit().isCitrus ? R.drawable.lemon_positive : R.drawable.lemon_negative);
+        tasteValuePercentView.setTastyPercent(fruitFetcher.getCurrentFruit().tastyPercentScore);
+        tasteScore.setText(String.format(getContext().getString(R.string.fruit_percent), String.valueOf(fruitFetcher.getCurrentFruit().tastyPercentScore)));
+        busy.setVisibility(fruitFetcher.isBusy() ?  VISIBLE : INVISIBLE);
+        fruitDetailContainer.setVisibility(fruitFetcher.isBusy() ? GONE : VISIBLE);
     }
 
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        wallet.addObserver(observer);
+        fruitFetcher.addObserver(observer);
         syncView(); //  <- don't forget this
     }
 
@@ -120,6 +173,6 @@ public class WalletsView extends ScrollView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        wallet.removeObserver(observer);
+        fruitFetcher.removeObserver(observer);
     }
 }

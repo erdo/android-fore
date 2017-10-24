@@ -2,6 +2,8 @@ package foo.bar.example.asafretrofit;
 
 import android.app.Application;
 
+import com.google.gson.GsonBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,11 +11,13 @@ import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.logging.AndroidLogger;
 import co.early.asaf.retrofit.CallProcessor;
 import foo.bar.example.asafretrofit.api.CustomGlobalErrorHandler;
+import foo.bar.example.asafretrofit.api.InterceptorLogging;
 import foo.bar.example.asafretrofit.api.fruits.FruitService;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 import foo.bar.example.asafretrofit.message.UserMessage;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static co.early.asaf.core.Affirm.notNull;
 
@@ -40,10 +44,13 @@ class ObjectGraph {
         AndroidLogger logger = new AndroidLogger();
 
 
-        // networking classes
+        // networking classes common to all models
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://erdo.github.io/")
-                .client(new OkHttpClient.Builder().build())
+                .baseUrl("http://www.mocky.io/v2/")
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .client(new OkHttpClient.Builder()
+                        .addNetworkInterceptor(new InterceptorLogging(logger))
+                        .build())
                 .build();
         CallProcessor<UserMessage> callProcessor = new CallProcessor<UserMessage>(
                 new CustomGlobalErrorHandler(logger),

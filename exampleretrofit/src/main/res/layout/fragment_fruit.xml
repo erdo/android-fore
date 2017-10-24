@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.asafdatabinding.ui.wallet.WalletsView xmlns:android="http://schemas.android.com/apk/res/android"
+<foo.bar.example.asafretrofit.ui.fruit.FruitView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -9,55 +10,115 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_margin="15dp"
+        android:padding="15dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="Mobile Wallet" />
+            android:paddingBottom="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/colorAccent"
+            android:text="Fruit Fetcher" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="180dp"
+            android:layout_margin="10dp"
+            android:background="@color/colorLightGrey">
 
-            <Button
-                android:id="@+id/wallet_increase_btn"
+            <ProgressBar
+                android:id="@+id/fruit_busy_progbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:text="+" />
+                android:layout_centerInParent="true" />
 
-            <Button
-                android:id="@+id/wallet_decrease_btn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/fruit_detailcontainer_linearlayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:text="-" />
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/fruit_name_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="fruit name"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
+                    android:textColor="@color/colorAccent" />
 
-        <TextView
-            android:id="@+id/wallet_mobileamount_txt"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="isCitrus"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textColor="@color/colorAccent"/>
+
+                    <ImageView
+                        android:id="@+id/fruit_citrus_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
+
+                <foo.bar.example.asafretrofit.ui.widgets.TastyRatingBar
+                    android:id="@+id/fruit_tastyrating_tastybar"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/colorAccent"/>
+
+                <TextView
+                    android:id="@+id/fruit_tastyrating_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100% tasty"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorAccent"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/fruit_fetchok_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$0" />
+            android:padding="10dp"
+            android:text="fetch - (success result)" />
 
-        <TextView
+        <Button
+            android:id="@+id/fruit_fetchfailbasic_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="Savings Wallet" />
+            android:padding="10dp"
+            android:text="fetch - (fail result basic)" />
 
-        <TextView
-            android:id="@+id/wallet_savingsamount_txt"
+        <Button
+            android:id="@+id/fruit_fetchfailadvanced_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="$10" />
+            android:padding="10dp"
+            android:text="fetch - (fail result advanced)" />
 
     </LinearLayout>
 
-</foo.bar.example.asafdatabinding.ui.wallet.WalletsView>
+</foo.bar.example.asafretrofit.ui.fruit.FruitView>

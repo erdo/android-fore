@@ -55,7 +55,7 @@ These apps are however, totally robust and comprehensively tested. And that's re
 Asside from the apps, there is also a lot of information (and more crap diagrams) in this guide that will take you through the detail of how and why ASAF works.
 
 
-### Data Binding Example
+### ASAF 1 Data Binding Example
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/03-databinding.html). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
@@ -63,7 +63,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 [Data Binding Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampledatabinding)
 
 
-### Asynchronous Code Example
+### ASAF 2 Asynchronous Code Example
 This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, one which lets you take advantage of lambda expressions.
@@ -73,10 +73,36 @@ It's really a very exciting app, I should probably put it on the play store befo
 [Asynchronous Example App Source Code](https://github.com/erdo/asaf-project/tree/master/examplethreading)
 
 
+### ASAF 3 Adapter Code Example
 
-### Networking Code Example
+This one demostrates how to use adapters with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
-//TODO
+It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and ASAF will take care of all the notify changes work.
+
+Two lists are displayed side to side so you can see the effect this has when adding or removing items.
+
+As usual it's a complete and tested app but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
+
+[Adapter Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleadapters)
+
+
+### ASAF 4 Retrofit Code Example
+
+If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use Retrofit 2 in a particularly clean and testable way. This is example app for that.
+
+Clicking the buttons will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome!).
+
+The first button gets a successful response, the last two get failed responses. The failed responses are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object.
+
+As you're using the app, notice:
+
+- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
+- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click mulitple buttons, the app is totally robust. There are no artificial delays in this code, it is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously. (Assuming everything in your app operates on the UI thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code. When you need to pop onto another thread, do it explicitly and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.)
+
+As usual it's a complete (~~and tested app~~ watch this space, I've been busy :/ ) but it contains just the minimum code required to demonstrate networking (ok apart from the unecessary animated-tasty-rating-bar, but whatever, it's just one class). I also hope you appreciate the lemon icons, I made them in Inkscape.
+
+[Networking Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleretrofit)
+
 
 
 ### Basic Twitter Client Example

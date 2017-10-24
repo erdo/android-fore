@@ -1,9 +1,5 @@
-package com.worldpay.android.sdk.api;
+package foo.bar.example.asafretrofit.api;
 
-import com.worldpay.android.sdk.framework.Affirm;
-import com.worldpay.android.sdk.framework.logging.LogSanitizer;
-import com.worldpay.android.sdk.framework.logging.Logger;
-import com.worldpay.android.sdk.utils.text.TextWrappingUtils;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -11,6 +7,9 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Random;
 
+import co.early.asaf.core.Affirm;
+import co.early.asaf.core.logging.Logger;
+import foo.bar.example.asafretrofit.utils.MonospacedTextWrapping;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -22,7 +21,6 @@ import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 import okio.BufferedSource;
 
-import static com.worldpay.android.sdk.framework.logging.LogSanitizer.sanitizeBody;
 
 /**
  * see https://github.com/square/okhttp/blob/master/okhttp-logging-interceptor/src/main/java/okhttp3/logging/HttpLoggingInterceptor.java
@@ -57,7 +55,7 @@ public class InterceptorLogging implements Interceptor {
 
         logger.i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url));
 
-        logHeaders(LogSanitizer.sanitizeHeaders(request.headers()), randomPostTag);
+        logHeaders(request.headers(), randomPostTag);
 
         RequestBody requestBody = request.body();
 
@@ -66,8 +64,8 @@ public class InterceptorLogging implements Interceptor {
             requestBody.writeTo(buffer);
             Charset charset = getCharset(requestBody.contentType());
             if (isPlaintext(buffer)) {
-                String bodyJson = truncate(sanitizeBody(buffer.clone().readString(charset)));
-                List<String> wrappedLines = TextWrappingUtils.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
+                String bodyJson = truncate(buffer.clone().readString(charset));
+                List<String> wrappedLines = MonospacedTextWrapping.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
                 for (String line : wrappedLines) {
                     logger.i(TAG + randomPostTag, line);
                 }
@@ -107,8 +105,8 @@ public class InterceptorLogging implements Interceptor {
                 return response;
             }else {
                 if (contentLength != 0) {
-                    String bodyJson = truncate(sanitizeBody(buffer.clone().readString(charset)));
-                    List<String> wrappedLines = TextWrappingUtils.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
+                    String bodyJson = truncate(buffer.clone().readString(charset));
+                    List<String> wrappedLines = MonospacedTextWrapping.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
                     for (String line : wrappedLines) {
                         logger.i(TAG + randomPostTag, line);
                     }

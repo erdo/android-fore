@@ -1,4 +1,4 @@
-package foo.bar.example.asafdatabinding.ui.wallet;
+package foo.bar.example.asafretrofit.ui.fruit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-import foo.bar.example.asafdatabinding.R;
+import foo.bar.example.asafretrofit.R;
 
 
-public class WalletsActivity extends FragmentActivity {
+public class FruitActivity extends FragmentActivity {
 
     public static void start(Context context) {
         Intent intent = build(context);
@@ -18,7 +18,7 @@ public class WalletsActivity extends FragmentActivity {
     }
 
     public static Intent build(Context context) {
-        Intent intent = new Intent(context, WalletsActivity.class);
+        Intent intent = new Intent(context, FruitActivity.class);
         return intent;
     }
 
@@ -31,8 +31,8 @@ public class WalletsActivity extends FragmentActivity {
 
         if (savedInstanceState == null) {
             setFragment(
-                    WalletsFragment.newInstance(),
-                    WalletsFragment.class.getSimpleName());
+                    FruitFragment.newInstance(),
+                    FruitFragment.class.getSimpleName());
         }
     }
 

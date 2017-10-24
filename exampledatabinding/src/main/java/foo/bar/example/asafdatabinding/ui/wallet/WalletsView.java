@@ -87,13 +87,13 @@ public class WalletsView extends ScrollView {
         increaseMobileWalletBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                wallet.increaseMobileWallet();
+                wallet.increaseMobileWallet();//notice how the data binding takes care of updating the view for you
             }
         });
         decreaseMobileWalletBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                wallet.decreaseMobileWallet();
+                wallet.decreaseMobileWallet();//notice how the data binding takes care of updating the view for you
             }
         });
     }

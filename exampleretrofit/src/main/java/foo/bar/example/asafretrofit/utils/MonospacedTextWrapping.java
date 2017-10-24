@@ -1,18 +1,15 @@
-package com.worldpay.android.sdk.utils.text;
+package foo.bar.example.asafretrofit.utils;
 
 import android.graphics.Paint;
-
-import com.worldpay.android.sdk.framework.Affirm;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * Created by eric on 15/11/2016.
- */
+import co.early.asaf.core.Affirm;
 
-public class TextWrappingUtils {
+
+public class MonospacedTextWrapping {
 
     private static final String LINE_BREAK = "\n";
     public static final String SPACE = " ";
@@ -66,68 +63,6 @@ public class TextWrappingUtils {
                         words.add(stringTokenizer.nextToken());
                     }
                     extractWrappedLines(finalLines, words, -1, null, charactersAvailable, leftToRight);
-                }
-            }
-        }
-        return finalLines;
-    }
-
-
-    /**
-     * Wrap fullText so that it will fit in widthAvailable, given the paint object,
-     * over however many lines it takes.
-     * <p>
-     * Attempts to wrap on spaces between words if possible, if not will break mid-word
-     * <p>
-     * Honours the line break '\n'
-     * <p>
-     * Does not honour large spaces (made up of multiple space characters in a row) - all spaces between
-     * words will return as single spaced
-     *
-     * @param fullText
-     * @param widthAvailable pixels available, has to be larger than 0
-     * @param paint
-     * @return lines of text, such that each line of text fits inside the widthAvailable, any line
-     * breaks in the original string will be converted to a empty string item in the list
-     */
-    public static List<String> wrapProportionalText(String fullText, float widthAvailable, Paint paint) {
-
-        Affirm.notNull(fullText);
-        Affirm.notNull(paint);
-
-        if (widthAvailable <= 0) {
-            throw new IllegalArgumentException("widthAvailable needs to be larger than 0, widthAvailable:" + widthAvailable);
-        }
-
-        boolean leftToRight = true; //TODO right to left languages, add tests and fix up (=false doesn't currently work)
-
-        //separate any line breaks out
-        List<String> linesWithExtractedLineBreaks = new ArrayList<String>();
-        expandLineBreaks(linesWithExtractedLineBreaks, fullText, leftToRight);
-
-        List<String> finalLines = new ArrayList<>();
-
-        for (String line : linesWithExtractedLineBreaks) {
-
-            if (EMPTY.equals(line)) {
-                finalLines.add(line);
-            } else {
-                String trimmedLine = line.trim();
-                if (EMPTY.equals(trimmedLine)) {
-                    finalLines.add(SPACE);
-                } else {
-
-                    //take the line with no line breaks in it and then wrap that
-
-                    StringTokenizer stringTokenizer = new StringTokenizer(line, " ", false);
-
-                    List<String> words = new ArrayList<>();
-
-                    while (stringTokenizer.hasMoreTokens()) {
-                        words.add(stringTokenizer.nextToken());
-                    }
-
-                    extractWrappedLines(finalLines, words, widthAvailable, paint, -1, leftToRight);
                 }
             }
         }

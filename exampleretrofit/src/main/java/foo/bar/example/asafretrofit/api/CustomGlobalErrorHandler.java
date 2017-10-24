@@ -14,16 +14,16 @@ import foo.bar.example.asafretrofit.message.UserMessage;
 import retrofit2.Response;
 
 import static co.early.asaf.core.Affirm.notNull;
-import static foo.bar.example.asafretrofit.message.UserMessage.*;
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_CLIENT;
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_MISC;
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_NETWORK;
+import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_SERVER;
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_SESSION_TIMED_OUT;
 
 /**
- * Created by eric on 20/02/15.
+ *
  */
-public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage>{
+public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage> {
 
     private static final String TAG = CustomGlobalErrorHandler.class.getSimpleName();
 
@@ -62,20 +62,20 @@ public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage>{
                     break;
             }
 
-            if (customErrorClazz != null){
+            if (customErrorClazz != null) {
                 //let's see if we can get more specifics about the error
                 message = parseCustomError(message, errorResponse, customErrorClazz);
             }
 
-        }else{//non HTTP error, probably some connection problem, but might be JSON parsing related also
+        } else {//non HTTP error, probably some connection problem, but might be JSON parsing related also
 
             logWrapper.e(TAG, "handleError() throwable:" + t);
 
             if (t != null) {
 
-                if (t instanceof com.google.gson.stream.MalformedJsonException){
+                if (t instanceof com.google.gson.stream.MalformedJsonException) {
                     message = ERROR_SERVER;
-                }else{
+                } else {
                     message = ERROR_NETWORK;
                 }
                 t.printStackTrace();
@@ -89,7 +89,7 @@ public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage>{
     }
 
 
-   private <CE extends MessageProvider<UserMessage>> UserMessage parseCustomError(UserMessage provisionalErrorMessage, Response errorResponse, Class<CE> customErrorClazz) {
+    private <CE extends MessageProvider<UserMessage>> UserMessage parseCustomError(UserMessage provisionalErrorMessage, Response errorResponse, Class<CE> customErrorClazz) {
 
         Gson gson = new Gson();
 
@@ -104,9 +104,9 @@ public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage>{
             return ERROR_SERVER;
         }
 
-        if (customError == null){
+        if (customError == null) {
             return provisionalErrorMessage;
-        }else{
+        } else {
             return customError.getMessage();
         }
     }
