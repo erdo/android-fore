@@ -24,7 +24,7 @@ Passing a parameter here is also the "obvious" thing to do - which means, if it'
 This is one case where ASAF is stopping you from making an easy but horrible archiectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
 
 
-> This library is as valuable for what you can't do with it, as it is for what you can do with it 
+> "This library is as valuable for what you can't do with it, as it is for what you can do with it."
 
 
 Try to get comfortable using these observers to just notify observing client code of any (unspecified) changes to the model's state (once the observing client code has been told there are changes, it can use fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly). For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.

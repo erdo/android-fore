@@ -78,7 +78,7 @@
 
                 </RelativeLayout>
 
-                <foo.bar.example.asafretrofit.ui.widgets.TastyRatingBar
+                <foo.bar.example.asafretrofit.ui.widgets.AnimatedTastyRatingBar
                     android:id="@+id/fruit_tastyrating_tastybar"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"

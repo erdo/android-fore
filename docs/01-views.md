@@ -78,7 +78,7 @@ In modern UI frameworks most of the controller work is implemented for you by th
 
 Originally a controller might have been a class that accepts mouse clicks at specific pixel co-ordinate, did some collision detection to find out which UI component was clicked, then sent that information on to the appropriate UI component classes for further processing.
 
-Nowadays we just use click listeners or something similar and we don't need to worry much about that, hence we talk more about things like MVVM which is only about 10 years old.
+Nowadays we just use click listeners or something similar and we don't need to worry much about that, hence we talk more about things like MVVM which is only about **10(!)** years old.
 
 (Android also lets you use Activities as kind of Controllers by letting you specify callback methods right in the XML for buttons which will end up getting called on whatever activity is hosting that particular view. It's kind of nasty, I'd recommend not using it at all because it encourages (forces) you to get the activity involved in something that it doesn't need to be involved in. If you leave everything out of the Activity then you can re-use your view in any activity you like, without needing to re-implement all those button call backs each time.)
 

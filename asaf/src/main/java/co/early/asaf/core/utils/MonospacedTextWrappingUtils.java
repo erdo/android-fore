@@ -1,4 +1,4 @@
-package foo.bar.example.asafretrofit.utils;
+package co.early.asaf.core.utils;
 
 import android.graphics.Paint;
 
@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import co.early.asaf.core.Affirm;
 
 
-public class MonospacedTextWrapping {
+public class MonospacedTextWrappingUtils {
 
     private static final String LINE_BREAK = "\n";
     public static final String SPACE = " ";

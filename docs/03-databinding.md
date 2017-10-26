@@ -8,7 +8,7 @@ First we're going to breifly review what data binding **is** as the term is not 
 
 ### One Way Data Binding
 
-> Any changes of state in your underlying model, get automatically represented in your view.
+> "Any changes of state in your underlying model, get automatically represented in your view."
 
 So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled (and obvs, it still needs to work when you rotate the screen)
 

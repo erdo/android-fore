@@ -12,7 +12,7 @@ import foo.bar.example.asafretrofit.R;
 /**
  *
  */
-public class TastyRatingBar extends AppCompatImageView {
+public class AnimatedTastyRatingBar extends AppCompatImageView {
 
     private Paint paint;
 
@@ -27,15 +27,15 @@ public class TastyRatingBar extends AppCompatImageView {
     private float step = 1;
     private boolean increasing = false;
 
-    public TastyRatingBar(Context context) {
+    public AnimatedTastyRatingBar(Context context) {
         super(context);
     }
 
-    public TastyRatingBar(Context context, AttributeSet attrs) {
+    public AnimatedTastyRatingBar(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public TastyRatingBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AnimatedTastyRatingBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

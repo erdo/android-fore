@@ -31,7 +31,7 @@ ext {
     supportLibVersion = "25.3.0"
     javaVersion = JavaVersion.VERSION_1_7
 
-    LIB_VERSION_NAME="0.9.11-SNAPSHOT"
+    LIB_VERSION_NAME="0.9.12-SNAPSHOT"
     LIB_VERSION_CODE=11
 
     LIB_GROUP="co.early.asaf"

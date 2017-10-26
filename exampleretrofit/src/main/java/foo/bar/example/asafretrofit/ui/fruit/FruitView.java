@@ -19,7 +19,7 @@ import foo.bar.example.asafretrofit.CustomApp;
 import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 import foo.bar.example.asafretrofit.message.UserMessage;
-import foo.bar.example.asafretrofit.ui.widgets.TastyRatingBar;
+import foo.bar.example.asafretrofit.ui.widgets.AnimatedTastyRatingBar;
 
 /**
  *
@@ -47,7 +47,7 @@ public class FruitView extends ScrollView {
     public ImageView isCitrus;
 
     @BindView(R.id.fruit_tastyrating_tastybar)
-    public TastyRatingBar tasteValuePercentView;
+    public AnimatedTastyRatingBar tasteValuePercentView;
 
     @BindView(R.id.fruit_tastyrating_textview)
     public TextView tasteScore;

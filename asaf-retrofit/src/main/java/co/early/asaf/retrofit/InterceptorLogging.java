@@ -1,4 +1,4 @@
-package foo.bar.example.asafretrofit.api;
+package co.early.asaf.retrofit;
 
 
 import java.io.EOFException;
@@ -9,7 +9,7 @@ import java.util.Random;
 
 import co.early.asaf.core.Affirm;
 import co.early.asaf.core.logging.Logger;
-import foo.bar.example.asafretrofit.utils.MonospacedTextWrapping;
+import co.early.asaf.core.utils.MonospacedTextWrappingUtils;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -28,14 +28,23 @@ import okio.BufferedSource;
 public class InterceptorLogging implements Interceptor {
 
     private final static String TAG = "Network";
-    private final static int MAX_BODY_LOG_LENGTH = 4000;
+    private final int MAX_BODY_LOG_LENGTH;
     Charset UTF8 = Charset.forName("UTF-8");
     private final Logger logger;
     private final Random random = new Random();
     private char[] somecharacters = "ABDEFGH023456789".toCharArray();
 
     public InterceptorLogging(Logger logger) {
+        this(logger, 4000);
+    }
+
+    public InterceptorLogging(Logger logger, int maxBodyLogCharacters) {
         this.logger = Affirm.notNull(logger);
+        this.MAX_BODY_LOG_LENGTH = maxBodyLogCharacters;
+
+        if (maxBodyLogCharacters<1){
+            throw new IllegalArgumentException("maxBodyLogCharacters must be greater than 0");
+        }
     }
 
     @Override
@@ -65,9 +74,11 @@ public class InterceptorLogging implements Interceptor {
             Charset charset = getCharset(requestBody.contentType());
             if (isPlaintext(buffer)) {
                 String bodyJson = truncate(buffer.clone().readString(charset));
-                List<String> wrappedLines = MonospacedTextWrapping.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
-                for (String line : wrappedLines) {
-                    logger.i(TAG + randomPostTag, line);
+                List<String> wrappedLines = MonospacedTextWrappingUtils.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
+                synchronized (this) {
+                    for (String line : wrappedLines) {
+                        logger.i(TAG + randomPostTag, line);
+                    }
                 }
             } else {
                 logger.i(TAG + randomPostTag, method + " (binary body omitted)");
@@ -106,9 +117,11 @@ public class InterceptorLogging implements Interceptor {
             }else {
                 if (contentLength != 0) {
                     String bodyJson = truncate(buffer.clone().readString(charset));
-                    List<String> wrappedLines = MonospacedTextWrapping.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
-                    for (String line : wrappedLines) {
-                        logger.i(TAG + randomPostTag, line);
+                    List<String> wrappedLines = MonospacedTextWrappingUtils.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
+                    synchronized (this) {
+                        for (String line : wrappedLines) {
+                            logger.i(TAG + randomPostTag, line);
+                        }
                     }
                 } else {
                     logger.i(TAG + randomPostTag, " (no body content)");
