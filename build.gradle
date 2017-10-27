@@ -58,8 +58,8 @@ ext {
     supportLibVersion = "26.0.1"
     javaVersion = JavaVersion.VERSION_1_8
 
-    LIB_VERSION_NAME="0.9.18"
-    LIB_VERSION_CODE=15
+    LIB_VERSION_NAME="0.9.19"
+    LIB_VERSION_CODE=16
 
     REPO="asaf"
     LIB_GROUP="co.early.asaf"
