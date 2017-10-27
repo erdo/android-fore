@@ -1,0 +1,50 @@
+/**
+ *
+ * > ./gradlew install
+ * > ./gradlew bintrayUpload
+ *
+ * Based on this very useful blog post: https://antoniocappiello.com/2015/11/11/publish-your-library-to-jcenter-in-3-steps/
+ *
+ */
+apply plugin: 'com.jfrog.bintray'
+
+println "[${LIB_ARTIFACT_ID} bintray file]"
+
+version = "${rootProject.ext.LIB_VERSION_NAME}"
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+
+    user = "${rootProject.ext.BINTRAY_USER}"
+    key = "${rootProject.ext.BINTRAY_API_KEY}"
+
+    configurations = ['archives']
+    pkg {
+        repo = REPO
+        name = LIB_ARTIFACT_ID
+        desc = LIB_DESCRIPTION
+        websiteUrl = POM_URL
+        vcsUrl = POM_SCM_CONNECTION
+        licenses = [LICENCE_SHORT_NAME]
+        publish = true
+        publicDownloadNumbers = false
+    }
+}

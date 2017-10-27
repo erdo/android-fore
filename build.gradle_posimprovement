@@ -52,14 +52,14 @@ allprojects {
 
 ext {
     minSdkVersion = 16
-    compileSdkVersion = 26
+    compileSdkVersion = 25
     targetSdkVersion = 23
     buildToolsVersion = "26.0.2"
-    supportLibVersion = "26.0.1"
+    supportLibVersion = "25.3.0"
     javaVersion = JavaVersion.VERSION_1_8
 
-    LIB_VERSION_NAME="0.9.18"
-    LIB_VERSION_CODE=15
+    LIB_VERSION_NAME="0.9.16"
+    LIB_VERSION_CODE=13
 
     REPO="asaf"
     LIB_GROUP="co.early.asaf"

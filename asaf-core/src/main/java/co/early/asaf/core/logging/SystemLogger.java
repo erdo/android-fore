@@ -3,7 +3,7 @@ package co.early.asaf.core.logging;
 
 import co.early.asaf.core.utils.TextPaddingUtils;
 
-public class TestLogger implements Logger {
+public class SystemLogger implements Logger {
 
     private int longestTagLength = 0;
 

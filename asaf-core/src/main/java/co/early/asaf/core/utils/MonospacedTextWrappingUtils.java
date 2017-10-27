@@ -27,7 +27,7 @@ public class MonospacedTextWrappingUtils {
      * Does not honour large spaces (made up of multiple space characters in a row) - all spaces between
      * words will return as single spaced
      *
-     * @param fullText
+     * @param fullText text that needs to be wrapped
      * @param charactersAvailable has to be larger than 0
      * @return lines of text, such that each line of text fits inside the charactersAvailable, any line
      * breaks in the original string will be converted to a empty string item in the list

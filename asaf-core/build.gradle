@@ -1,10 +1,13 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 ext {
-    LIB_ARTIFACT_ID="asaf"
+    LIB_ARTIFACT_ID="asaf-core"
     LIB_DESCRIPTION="Alarmingly Simple Android Framework"
 }
+
+
+println "[${LIB_ARTIFACT_ID} build file]"
+
 
 android {
 
@@ -20,8 +23,6 @@ android {
         abortOnError false
     }
 
-    publishNonDefault true
-
     defaultConfig {
 
         minSdkVersion rootProject.ext.minSdkVersion
@@ -32,14 +33,12 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        proguardFiles 'proguard-library.pro'
     }
+
     buildTypes {
-        debug {
-            minifyEnabled false
-        }
         release {
             minifyEnabled false
+            proguardFiles 'proguard-library.pro'
         }
     }
 
@@ -58,4 +57,6 @@ dependencies {
 
 }
 
+apply from: 'install.gradle'
+apply from: 'bintray.gradle'
 apply from: './publish.gradle'

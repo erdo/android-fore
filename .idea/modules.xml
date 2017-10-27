@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/asaf/asaf.iml" filepath="$PROJECT_DIR$/asaf/asaf.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" filepath="$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-core/asaf-core.iml" filepath="$PROJECT_DIR$/asaf-core/asaf-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" filepath="$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/exampleadapters/exampleadapters.iml" filepath="$PROJECT_DIR$/exampleadapters/exampleadapters.iml" />

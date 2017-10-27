@@ -1,0 +1,47 @@
+/**
+ *
+ *
+ * Based on this very useful blog post: https://antoniocappiello.com/2015/11/11/publish-your-library-to-jcenter-in-3-steps/
+ *
+ */
+apply plugin: 'com.github.dcendents.android-maven'
+
+println "[${LIB_ARTIFACT_ID} install file]"
+
+group = "${rootProject.ext.LIB_GROUP}"
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                artifactId LIB_ARTIFACT_ID
+                name rootProject.ext.PROJ_NAME
+                description LIB_DESCRIPTION
+
+                packaging rootProject.ext.POM_PACKAGING
+                groupId rootProject.ext.LIB_GROUP
+
+                url rootProject.ext.POM_URL
+
+                licenses {
+                    license {
+                        name rootProject.ext.LICENCE_NAME
+                        url rootProject.ext.LICENCE_URL
+                    }
+                }
+                developers {
+                    developer {
+                        id rootProject.ext.LIB_DEVELOPER_ID
+                        name rootProject.ext.LIB_DEVELOPER_NAME
+                        email rootProject.ext.LIB_DEVELOPER_EMAIL
+                    }
+                }
+                scm {
+                    connection rootProject.ext.POM_SCM_CONNECTION
+                    developerConnection rootProject.ext.POM_SCM_CONNECTION
+                    url rootProject.ext.POM_SCM_URL
+                }
+            }
+        }
+    }
+}

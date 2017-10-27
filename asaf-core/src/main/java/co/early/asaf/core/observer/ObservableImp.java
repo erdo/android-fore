@@ -64,6 +64,8 @@ public class ObservableImp implements Observable{
      *                         WorkMode.
      *                         Synchronizing any list updates is not enough, Android will call Adapter.count() and
      *                         Adapter.get() on the UI thread and you cannot change the adapter's size between these calls.
+     *
+     * @param logger           If you want to be told about warnings, pass an implementation of Logger here (recommended)
      */
     public ObservableImp(WorkMode notificationMode, Logger logger) {
         this.notificationMode = Affirm.notNull(notificationMode);

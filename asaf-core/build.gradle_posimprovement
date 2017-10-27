@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 ext {
-    LIB_ARTIFACT_ID="asaf-retrofit"
-    LIB_DESCRIPTION="Alarmingly Simple Android Framework - retrofit helpers"
+    LIB_ARTIFACT_ID="asaf-core"
+    LIB_DESCRIPTION="Alarmingly Simple Android Framework"
 }
 
 
@@ -47,15 +47,6 @@ android {
 
 dependencies {
 
-    compile project(path: ':asaf-core')
-
-    compile('com.squareup.retrofit2:retrofit:2.1.0') {
-        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-        exclude module: 'okhttp'
-    }
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-
-
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito
@@ -66,6 +57,6 @@ dependencies {
 
 }
 
-apply from: '../asaf-core/install.gradle'
-apply from: '../asaf-core/bintray.gradle'
+apply from: 'install.gradle'
+apply from: 'bintray.gradle'
 apply from: './publish.gradle'
