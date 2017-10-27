@@ -16,13 +16,15 @@ import retrofit2.Response;
  * S - Success pojo you expect to be returned from the API
  * CE - Custom error class that you expect from the specific API in the event of an error
  *
- * CE needs to implement MessageProvider<F> (i.e. it needs to be able to give you a failure
+ * CE needs to implement MessageProvider&lt;F&gt; (i.e. it needs to be able to give you a failure
  * message that can be passed back to the application)
  *
  * Note: this callProcessor won't enable you to access the headers in the response, if you need that
- * you'll have to write your own
+ * you'll have to write your own, or use a global response interceptor
+ *
+ * @param <F>  The class type passed back in the event of a failure, Globally applicable
+ *           failure message class, like an enum for example
  */
-
 public class CallProcessor<F> {
 
     public static final String TAG = CallProcessor.class.getSimpleName();
@@ -36,13 +38,30 @@ public class CallProcessor<F> {
         this.logger = Affirm.notNull(logger);
     }
 
-
+    /**
+     *
+     * @param call Retrofit call to be processed
+     * @param workMode how to process the call (synchronously or asynchronously)
+     * @param successCallbackWithPayload call back triggered in the event of a successful call
+     * @param failureCallbackWithPayload call back triggered in the event of a failed call
+     * @param <S> Successful response body type
+     */
     public <S> void processCall(Call<S> call, WorkMode workMode,
                                 final SuccessCallbackWithPayload<S> successCallbackWithPayload,
                                 final FailureCallbackWithPayload<F> failureCallbackWithPayload) {
         doProcessCall(call, workMode, null, successCallbackWithPayload, failureCallbackWithPayload);
     }
 
+    /**
+     *
+     * @param call Retrofit call to be processed
+     * @param workMode how to process the call (synchronously or asynchronously)
+     * @param customErrorClazz custom error class expected from the server in the event of an error
+     * @param successCallbackWithPayload call back triggered in the event of a successful call
+     * @param failureCallbackWithPayload call back triggered in the event of a failed call
+     * @param <S> Successful response body type
+     * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
+     */
     public <S, CE extends MessageProvider<F>> void processCall(Call<S> call, WorkMode workMode, final Class<CE> customErrorClazz,
                                            final SuccessCallbackWithPayload<S> successCallbackWithPayload,
                                            final FailureCallbackWithPayload<F> failureCallbackWithPayload) {

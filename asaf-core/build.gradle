@@ -57,6 +57,6 @@ dependencies {
 
 }
 
-apply from: 'install.gradle'
-apply from: 'bintray.gradle'
-apply from: './publish.gradle'
+apply from: '../install.gradle'
+apply from: '../bintray.gradle'
+apply from: '../s3publish.gradle'

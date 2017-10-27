@@ -1,7 +1,5 @@
 package co.early.asaf.adapters;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -38,6 +36,7 @@ import co.early.asaf.core.time.SystemTimeWrapper;
  *      break;
  * }
  *
+ * </code>
  *
  * <p>Android uses this information to apply default animations on the list view (like fading in
  * changes or animating a new row in to position).
@@ -69,9 +68,6 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
     @Override
     public boolean add(T object) {
         boolean temp = super.add(object);
-
-        Log.e("eee", "add() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_INSERTED);
-
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, size() - 1, 1, systemTimeWrapper);
         return temp;
     }
@@ -79,18 +75,12 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
     @Override
     public void add(int index, T object) {
         super.add(index, object);
-
-        Log.e("eee", "add() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_INSERTED);
-
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, index, 1, systemTimeWrapper);
     }
 
     @Override
     public T set(int index, T object) {
         T temp = super.set(index, object);
-
-        Log.e("eee", "set() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_CHANGED);
-
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, index, 1, systemTimeWrapper);
         return temp;
     }
@@ -98,9 +88,6 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
     @Override
     public T remove(int index) {
         T temp = super.remove(index);
-
-        Log.e("eee", "remove() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_REMOVED);
-
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, index, 1, systemTimeWrapper);
         return temp;
     }
@@ -109,11 +96,6 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
     public void clear() {
         int size = size();
         super.clear();
-        //updateSpec = new UpdateSpec(FULL_UPDATE, 0, 0);
-        // TODO below this causes problems in the MBH app?
-
-        Log.e("eee", "clear() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_REMOVED);
-
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size, systemTimeWrapper);
     }
 
@@ -130,9 +112,6 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      * @param rowIndex index of the row that had its data changed
      */
     public void makeAwareOfDataChange(int rowIndex){
-
-        Log.e("eee", "makeAwareOfDataChange() new UpdateSpec:" + UpdateSpec.UpdateType.ITEM_CHANGED);
-
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowIndex, 1, systemTimeWrapper);
     }
 
@@ -145,8 +124,8 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      * be incorrect as a result (you won't get default
      * animations on your recyclerview)
      *
-     * @param rowStartIndex
-     * @param rowsAffected
+     * @param rowStartIndex index of the row that had its data changed
+     * @param rowsAffected how many rows have been affected
      */
     public void makeAwareOfDataChange(int rowStartIndex, int rowsAffected){
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowStartIndex, rowsAffected, systemTimeWrapper);
@@ -197,7 +176,7 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      * In this case we clear the updateSpec and create a fresh one with a
      * full update spec.
      *
-     * @return
+     * @return the latest update spec for the list
      */
     public UpdateSpec getAndClearLatestUpdateSpec(long maxAgeMs){
 

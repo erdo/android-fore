@@ -1,10 +1,12 @@
 apply plugin: 'com.android.library'
 
-
-ext{
+ext {
     LIB_ARTIFACT_ID="asaf-adapters"
-    LIB_DESCRIPTION="Alarmingly Simple Android Framework - Adapters"
+    LIB_DESCRIPTION="Alarmingly Simple Android Framework - adapter helpers"
 }
+
+
+println "[${LIB_ARTIFACT_ID} build file]"
 
 
 android {
@@ -21,8 +23,6 @@ android {
         abortOnError false
     }
 
-    publishNonDefault true
-
     defaultConfig {
 
         minSdkVersion rootProject.ext.minSdkVersion
@@ -33,14 +33,15 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        proguardFiles 'proguard-library.pro'
     }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles 'proguard-library.pro'
         }
     }
+
 }
 
 
@@ -48,14 +49,26 @@ dependencies {
 
     //compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
     compile project(path: ':asaf-core')
+    
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+
+    // Unit testing dependencies
     testCompile 'junit:junit:4.12'
+    // Set this dependency if you want to use Mockito
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    // Set this dependency if you want to use Hamcrest matching
+    testCompile 'org.hamcrest:hamcrest-library:1.1'
+    testCompile 'com.google.code.gson:gson:2.7'
+
 }
 
-apply from: './publish.gradle'
+apply from: '../install.gradle'
+apply from: '../bintray.gradle'
+apply from: '../s3publish.gradle'

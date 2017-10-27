@@ -55,7 +55,6 @@ dependencies {
     }
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
-
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito
@@ -63,9 +62,13 @@ dependencies {
     // Set this dependency if you want to use Hamcrest matching
     testCompile 'org.hamcrest:hamcrest-library:1.1'
     testCompile 'com.google.code.gson:gson:2.7'
+    
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
 
 }
 
-apply from: '../asaf-core/install.gradle'
-apply from: '../asaf-core/bintray.gradle'
-apply from: './publish.gradle'
+apply from: '../install.gradle'
+apply from: '../bintray.gradle'
+apply from: '../s3publish.gradle'
