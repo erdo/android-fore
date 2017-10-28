@@ -2,6 +2,7 @@
 <foo.bar.example.asafdatabinding.ui.wallet.WalletsView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorLightGrey"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -11,52 +12,88 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="Mobile Wallet" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:background="@color/colorAccent"
+            android:layout_margin="20dp">
 
-            <Button
-                android:id="@+id/wallet_increase_btn"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:text="+" />
+                android:src="@drawable/phone"/>
 
-            <Button
-                android:id="@+id/wallet_decrease_btn"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:text="-" />
+                android:layout_marginTop="20dp"
+                android:text="Mobile Wallet" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/wallet_increase_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="70dp"
+                    android:text="+" />
+
+                <Button
+                    android:id="@+id/wallet_decrease_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="70dp"
+                    android:text="-" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/wallet_mobileamount_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0"
+                android:textSize="20sp"
+                android:textColor="@color/colorLightGrey"
+                android:paddingBottom="20dp"/>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/wallet_mobileamount_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="$0" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary"
+            android:layout_margin="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="Savings Wallet" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/moneybag"/>
 
-        <TextView
-            android:id="@+id/wallet_savingsamount_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="$10" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Savings Wallet" />
+
+            <TextView
+                android:id="@+id/wallet_savingsamount_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="$10"
+                android:textSize="20sp"
+                android:textColor="@color/colorLightGrey"
+                android:paddingBottom="20dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

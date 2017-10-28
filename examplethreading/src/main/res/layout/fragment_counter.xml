@@ -2,6 +2,7 @@
 <foo.bar.example.asafthreading.ui.CounterView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -11,77 +12,90 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Example of using AsafTask to process a long running task while publishing progress, see the model code in feature.CounterWithProgress and associated tests for more" />
-
-        <Button
-            android:id="@+id/counterwprog_increase_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="increase with AsafTask" />
-
-        <ProgressBar
-            android:id="@+id/counterwprog_busy_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="progress value:" />
-
-        <TextView
-            android:id="@+id/counterwprog_progress_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="latest count:" />
-
-        <TextView
-            android:id="@+id/counterwprog_current_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:layout_margin="20dp"
-            android:background="@color/colorPrimary" />
+            android:padding="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/counterwprog_increase_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="increase with AsafTask" />
+
+            <ProgressBar
+                android:id="@+id/counterwprog_busy_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="progress value:" />
+
+            <TextView
+                android:id="@+id/counterwprog_progress_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/colorLightGrey"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="latest count:" />
+
+            <TextView
+                android:id="@+id/counterwprog_current_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/colorLightGrey"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Example of using AsafTaskBuilder to process a long running task, see the model code in feature.CounterBasic and associated tests for more" />
+            android:background="@color/colorPrimary"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/counterwlambda_increase_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="increase with AsafTaskBuilder" />
+            <Button
+                android:id="@+id/counterwlambda_increase_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="increase with AsafTaskBuilder" />
 
-        <ProgressBar
-            android:id="@+id/counterwlambda_busy_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
+            <ProgressBar
+                android:id="@+id/counterwlambda_busy_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="latest count:" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="latest count:" />
 
-        <TextView
-            android:id="@+id/counterwlambda_current_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/counterwlambda_current_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/colorLightGrey"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

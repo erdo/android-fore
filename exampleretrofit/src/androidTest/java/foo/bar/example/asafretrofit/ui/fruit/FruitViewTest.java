@@ -161,6 +161,16 @@ public class FruitViewTest {
         onView(withId(R.id.fruit_citrus_img)).check(matches(not(isDisplayed())));
     }
 
+
+    @Test
+    public void properlyTestRotationMidRequest() throws Exception {
+
+        //TODO
+
+    }
+
+
+
     @Test
     public void clickCallsFetchSuccess() throws Exception {
         //arrange
