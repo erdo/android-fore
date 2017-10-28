@@ -99,7 +99,7 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/fruit_fetchok_btn"
+            android:id="@+id/fruit_fetchsuccess_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"

@@ -8,7 +8,20 @@ import foo.bar.example.asafretrofit.message.UserMessage;
 
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_MISC;
 
-
+/**
+ *
+ * <Code>
+ *
+ *  The server returns custom error codes in this form:
+ *
+ *  {
+ *    "errorCode":"FRUIT_USER_LOCKED"
+ *  }
+ *
+ * </Code>
+ *
+ *
+ */
 public class FruitsCustomError implements MessageProvider<UserMessage> {
 
     private ErrorCode errorCode;

@@ -6,7 +6,8 @@ import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
 
 /**
- * Try not to fill this class with lots of code, if possible move it to a model somewhere
+ * Try not to fill your own version of this class with lots of code, if possible move
+ * any additional code out to a model somewhere
  */
 public class CustomApp extends Application {
 
@@ -16,6 +17,8 @@ public class CustomApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXX onCreate()");
 
         instance = this;
 

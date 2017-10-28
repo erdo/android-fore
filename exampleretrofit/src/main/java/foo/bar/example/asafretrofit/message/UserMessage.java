@@ -6,7 +6,11 @@ import android.os.Parcelable;
 import foo.bar.example.asafretrofit.CustomApp;
 import foo.bar.example.asafretrofit.R;
 
-
+/**
+ * As an enum, this value can be passed around the app to indicate various states.
+ * If you want to display it to the user you can put it inside a dialog (it implements
+ * parcelable). Call getString() for the human readable text.
+ */
 public enum UserMessage implements Parcelable {
 
     ERROR_MISC(R.string.msg_error_misc),

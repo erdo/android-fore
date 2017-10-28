@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.logging.TestLogger;
+import co.early.asaf.core.logging.SystemLogger;
 import co.early.asaf.core.observer.Observer;
 
 import static org.mockito.Mockito.atLeastOnce;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 public class WalletTest {
 
 
-    private static Logger logger = new TestLogger();
+    private static Logger logger = new SystemLogger();
 
     @Test
     public void initialConditions() throws Exception {

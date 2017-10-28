@@ -2,8 +2,6 @@ package foo.bar.example.asafretrofit;
 
 import android.app.Application;
 
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,12 +10,12 @@ import co.early.asaf.core.logging.AndroidLogger;
 import co.early.asaf.retrofit.CallProcessor;
 import co.early.asaf.retrofit.InterceptorLogging;
 import foo.bar.example.asafretrofit.api.CustomGlobalErrorHandler;
+import foo.bar.example.asafretrofit.api.CustomGlobalRequestInterceptor;
+import foo.bar.example.asafretrofit.api.CustomRetrofitBuilder;
 import foo.bar.example.asafretrofit.api.fruits.FruitService;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 import foo.bar.example.asafretrofit.message.UserMessage;
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static co.early.asaf.core.Affirm.notNull;
 
@@ -43,15 +41,11 @@ class ObjectGraph {
         // create dependency graph
         AndroidLogger logger = new AndroidLogger();
 
-
         // networking classes common to all models
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.mocky.io/v2/")
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
-                .client(new OkHttpClient.Builder()
-                        .addNetworkInterceptor(new InterceptorLogging(logger))
-                        .build())
-                .build();
+        Retrofit retrofit = CustomRetrofitBuilder.create(
+                new CustomGlobalRequestInterceptor(logger),
+                new InterceptorLogging(logger));//logging interceptor should be the last one
+
         CallProcessor<UserMessage> callProcessor = new CallProcessor<UserMessage>(
                 new CustomGlobalErrorHandler(logger),
                 logger);

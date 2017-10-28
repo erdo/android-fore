@@ -57,7 +57,7 @@ repositories {
 
 dependencies {
 
-    //compile (group: 'co.early.asaf', name: 'asaf', version: '0.9.15', ext: 'aar')
+    //compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.15', ext: 'aar')
     //compile (group: 'co.early.asaf', name: 'asaf-adapters', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
     compile project(path: ':asaf-core')
     compile project(path: ':asaf-adapters')

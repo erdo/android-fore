@@ -31,7 +31,7 @@ public class FruitView extends ScrollView {
 
 
     //UI elements that we care about
-    @BindView(R.id.fruit_fetchok_btn)
+    @BindView(R.id.fruit_fetchsuccess_btn)
     public Button fruitRefreshSuccess;
 
     @BindView(R.id.fruit_fetchfailbasic_btn)

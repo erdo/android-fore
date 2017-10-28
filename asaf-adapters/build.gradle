@@ -47,7 +47,7 @@ android {
 
 dependencies {
 
-    //compile (group: 'co.early.asaf', name: 'asaf', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
     compile project(path: ':asaf-core')
     
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"

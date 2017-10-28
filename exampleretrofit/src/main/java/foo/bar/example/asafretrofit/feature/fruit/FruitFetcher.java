@@ -45,6 +45,9 @@ public class FruitFetcher extends ObservableImp{
 
         logger.i(TAG, "fetchFruits()");
 
+        Affirm.notNull(successCallBack);
+        Affirm.notNull(failureCallbackWithPayload);
+
         if (busy){
             failureCallbackWithPayload.fail(UserMessage.ERROR_BUSY);
             return;
@@ -57,16 +60,13 @@ public class FruitFetcher extends ObservableImp{
                 new SuccessCallbackWithPayload<List<FruitPojo>>() {
                     @Override
                     public void success(List<FruitPojo> successResponse) {
-                        currentFruit = selectRandomFruit(successResponse);
-                        complete();
-                        successCallBack.success();
+                        handleSuccess(successCallBack, successResponse);
                     }
                 },
                 new FailureCallbackWithPayload<UserMessage>() {
                     @Override
                     public void fail(UserMessage failureMessage) {
-                        complete();
-                        failureCallbackWithPayload.fail(failureMessage);
+                        handleFailure(failureCallbackWithPayload, failureMessage);
                     }
                 });
 
@@ -77,6 +77,9 @@ public class FruitFetcher extends ObservableImp{
     public void fetchFruitsButFail(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
         logger.i(TAG, "fetchFruitsButFail()");
+
+        Affirm.notNull(successCallBack);
+        Affirm.notNull(failureCallbackWithPayload);
 
         if (busy){
             failureCallbackWithPayload.fail(UserMessage.ERROR_BUSY);
@@ -90,16 +93,13 @@ public class FruitFetcher extends ObservableImp{
                 new SuccessCallbackWithPayload<List<FruitPojo>>() {
                     @Override
                     public void success(List<FruitPojo> successResponse) {
-                        currentFruit = selectRandomFruit(successResponse);
-                        complete();
-                        successCallBack.success();
+                        handleSuccess(successCallBack, successResponse);
                     }
                 },
                 new FailureCallbackWithPayload<UserMessage>() {
                     @Override
                     public void fail(UserMessage failureMessage) {
-                        complete();
-                        failureCallbackWithPayload.fail(failureMessage);
+                        handleFailure(failureCallbackWithPayload, failureMessage);
                     }
                 });
 
@@ -110,6 +110,9 @@ public class FruitFetcher extends ObservableImp{
     public void fetchFruitsButFailGetCustomError(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
         logger.i(TAG, "fetchFruitsButFailGetCustomError()");
+
+        Affirm.notNull(successCallBack);
+        Affirm.notNull(failureCallbackWithPayload);
 
         if (busy){
             failureCallbackWithPayload.fail(UserMessage.ERROR_BUSY);
@@ -123,21 +126,28 @@ public class FruitFetcher extends ObservableImp{
                 new SuccessCallbackWithPayload<List<FruitPojo>>() {
                     @Override
                     public void success(List<FruitPojo> successResponse) {
-                        currentFruit = selectRandomFruit(successResponse);
-                        complete();
-                        successCallBack.success();
+                        handleSuccess(successCallBack, successResponse);
                     }
                 },
                 new FailureCallbackWithPayload<UserMessage>() {
                     @Override
                     public void fail(UserMessage failureMessage) {
-                        complete();
-                        failureCallbackWithPayload.fail(failureMessage);
+                        handleFailure(failureCallbackWithPayload, failureMessage);
                     }
                 });
 
     }
 
+    private void handleSuccess(SuccessCallBack successCallBack, List<FruitPojo> successResponse){
+        currentFruit = selectRandomFruit(successResponse);
+        successCallBack.success();
+        complete();
+    }
+
+    private void handleFailure(FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload, UserMessage failureMessage){
+        failureCallbackWithPayload.fail(failureMessage);
+        complete();
+    }
 
     public boolean isBusy() {
         return busy;

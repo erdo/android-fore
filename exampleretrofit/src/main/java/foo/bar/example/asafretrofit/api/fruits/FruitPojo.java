@@ -1,7 +1,22 @@
 package foo.bar.example.asafretrofit.api.fruits;
 
 /**
- * Created by eric on 16/02/2017.
+ *
+ *
+ * <Code>
+ *
+ *  The server returns us a list of fruit that look like this:
+ *
+ *  {
+ *    "name":"papaya",
+ *    "isCitrus":false,
+ *    "tastyPercentScore":98
+ *  }
+ *
+ * </Code>
+ *
+ *
+ *
  */
 public class FruitPojo {
 

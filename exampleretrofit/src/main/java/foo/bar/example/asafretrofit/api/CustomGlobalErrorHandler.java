@@ -21,7 +21,8 @@ import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_SERVER;
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_SESSION_TIMED_OUT;
 
 /**
- *
+ * You can probably use this class almost as it is for your own app, but you might want to
+ * customise the behaviour for specific HTTP codes etc, hence it's not in the asaf library
  */
 public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage> {
 
@@ -50,7 +51,6 @@ public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage> {
                     break;
 
                 case 400:
-                case 403:
                 case 405:
                     message = ERROR_CLIENT;
                     break;
