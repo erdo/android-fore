@@ -18,7 +18,6 @@ import foo.bar.example.asafretrofit.api.CustomGlobalErrorHandler;
 import foo.bar.example.asafretrofit.api.CustomRetrofitBuilder;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.api.fruits.FruitService;
-import foo.bar.example.asafretrofit.api.fruits.FruitsCustomError;
 import foo.bar.example.asafretrofit.message.UserMessage;
 import retrofit2.Retrofit;
 
@@ -46,15 +45,15 @@ public class FruitFetcherTest {
             "fruit/success.json", //stubbed body response
             new FruitPojo("orange", true, 43)); //expected result
 
-    private static StubbedServiceDefinition<FruitsCustomError> stubbedFailUserLocked = new StubbedServiceDefinition<>(
+    private static StubbedServiceDefinition<UserMessage> stubbedFailUserLocked = new StubbedServiceDefinition<>(
             401, //stubbed HTTP code
             "common/error_user_locked.json", //stubbed body response
-            new FruitsCustomError(FruitsCustomError.ErrorCode.USER_LOCKED)); //expected result
+            UserMessage.ERROR_FRUIT_USER_LOCKED); //expected result
 
-    private static StubbedServiceDefinition<FruitsCustomError> stubbedFailureUserNotEnabled = new StubbedServiceDefinition<>(
+    private static StubbedServiceDefinition<UserMessage> stubbedFailureUserNotEnabled = new StubbedServiceDefinition<>(
             401, //stubbed HTTP code
             "common/error_user_not_enabled.json", //stubbed body response
-            new FruitsCustomError(FruitsCustomError.ErrorCode.USER_NOT_ENABLED)); //expected result
+            UserMessage.ERROR_FRUIT_USER_NOT_ENABLED); //expected result
 
 
 
@@ -138,7 +137,7 @@ public class FruitFetcherTest {
                     @Override
                     public void fail(UserMessage failureMessage) {
                         failureReported[0] = OK;
-                        Assert.assertEquals(stubbedFailUserLocked.expectedResult.getMessage(), failureMessage);
+                        Assert.assertEquals(stubbedFailUserLocked.expectedResult, failureMessage);
                     }
                 });
 
@@ -175,7 +174,7 @@ public class FruitFetcherTest {
                     @Override
                     public void fail(UserMessage failureMessage) {
                         failureReported[0] = OK;
-                        Assert.assertEquals(stubbedFailureUserNotEnabled.expectedResult.getMessage(), failureMessage);
+                        Assert.assertEquals(stubbedFailureUserNotEnabled.expectedResult, failureMessage);
                     }
                 });
 
@@ -193,13 +192,14 @@ public class FruitFetcherTest {
      * @throws Exception
      */
     @Test
-    public void fetchFruit_commonFailures() throws Exception {
+    public void fetchFruit_CommonFailures() throws Exception {
 
         for (StubbedServiceDefinition<UserMessage> stubbedServiceDefinition : new CommonServiceFailures()) {
 
-            logger.i(TAG, "Common Service Failure: HTTP:"
+            logger.i(TAG, "------- Common Service Failure: HTTP:"
                     + stubbedServiceDefinition.httpCode
-                    + " res:" + stubbedServiceDefinition.resourceFileName);
+                    + " res:" + stubbedServiceDefinition.resourceFileName
+                    + " --------");
 
             //arrange
             Retrofit retrofit = stubbedRetrofit(stubbedServiceDefinition);
@@ -223,7 +223,7 @@ public class FruitFetcherTest {
                         @Override
                         public void fail(UserMessage failureMessage) {
                             failureReported[0] = OK;
-                            Assert.assertEquals(stubbedServiceDefinition.expectedResult.getMessage(), failureMessage);
+                            Assert.assertEquals(stubbedServiceDefinition.expectedResult, failureMessage);
                         }
                     });
 

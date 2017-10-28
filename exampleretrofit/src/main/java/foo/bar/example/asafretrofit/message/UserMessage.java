@@ -33,7 +33,7 @@ public enum UserMessage implements Parcelable {
         this.messageResId = messageResId;
     }
 
-    public String getMessage() {
+    public String getString() {
 
         if (message == null) {
             message = getString(messageResId);

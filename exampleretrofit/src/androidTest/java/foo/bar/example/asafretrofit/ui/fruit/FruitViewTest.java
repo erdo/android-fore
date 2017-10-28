@@ -188,7 +188,7 @@ public class FruitViewTest {
         onView(withId(R.id.fruit_fetchfailbasic_btn)).perform(click());
 
         //assert
-        verify(mockFruitFetcher).fetchFruitsButFail(any(), any());
+        verify(mockFruitFetcher).fetchFruitsButFailBasic(any(), any());
     }
 
     @Test
@@ -203,6 +203,6 @@ public class FruitViewTest {
         onView(withId(R.id.fruit_fetchfailadvanced_btn)).perform(click());
 
         //assert
-        verify(mockFruitFetcher).fetchFruitsButFailGetCustomError(any(), any());
+        verify(mockFruitFetcher).fetchFruitsButFailAdvanced(any(), any());
     }
 }

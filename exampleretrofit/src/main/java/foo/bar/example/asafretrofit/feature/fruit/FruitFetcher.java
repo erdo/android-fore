@@ -56,7 +56,7 @@ public class FruitFetcher extends ObservableImp{
         busy = true;
         notifyObservers();
 
-        callProcessor.processCall(fruitService.getFruitsSimulateOk("3s"), workMode,
+        callProcessor.processCall(fruitService.getFruitsSimulateOk("3s"), workMode, FruitsCustomError.class,
                 new SuccessCallbackWithPayload<List<FruitPojo>>() {
                     @Override
                     public void success(List<FruitPojo> successResponse) {
@@ -73,10 +73,10 @@ public class FruitFetcher extends ObservableImp{
     }
 
 
-    //identical to fetchFruits() but for demo purposes the URL we point to will give us an error
-    public void fetchFruitsButFail(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
+    //identical to fetchFruits() but for demo purposes the URL we point to will give us an error, we also don't specify a custom error class here
+    public void fetchFruitsButFailBasic(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
-        logger.i(TAG, "fetchFruitsButFail()");
+        logger.i(TAG, "fetchFruitsButFailBasic()");
 
         Affirm.notNull(successCallBack);
         Affirm.notNull(failureCallbackWithPayload);
@@ -106,10 +106,10 @@ public class FruitFetcher extends ObservableImp{
     }
 
 
-    //identical to fetchFruitsButFail() but this time we specify a custom error class that we expect
-    public void fetchFruitsButFailGetCustomError(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
+    //identical to fetchFruits() but for demo purposes the URL we point to will give us an error
+    public void fetchFruitsButFailAdvanced(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
-        logger.i(TAG, "fetchFruitsButFailGetCustomError()");
+        logger.i(TAG, "fetchFruitsButFailAdvanced()");
 
         Affirm.notNull(successCallBack);
         Affirm.notNull(failureCallbackWithPayload);
@@ -166,7 +166,7 @@ public class FruitFetcher extends ObservableImp{
     }
 
     private FruitPojo selectRandomFruit(List<FruitPojo> listOfFruits){
-        return listOfFruits.get(random.nextInt(listOfFruits.size()-1));
+        return listOfFruits.get(listOfFruits.size() == 1 ? 0 : random.nextInt(listOfFruits.size()-1));
     }
 
 }

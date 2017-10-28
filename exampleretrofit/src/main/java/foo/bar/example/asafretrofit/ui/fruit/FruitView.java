@@ -82,7 +82,7 @@ public class FruitView extends ScrollView {
     private FailureCallbackWithPayload<UserMessage> failureCallback = new FailureCallbackWithPayload<UserMessage>() {
         @Override
         public void fail(UserMessage userMessage) {
-            Toast.makeText(getContext(), "Fail - maybe tell the user to try again, message:" + userMessage.getMessage(),
+            Toast.makeText(getContext(), "Fail - maybe tell the user to try again, message:" + userMessage.getString(),
                     Toast.LENGTH_SHORT).show();
         }
     };
@@ -132,7 +132,7 @@ public class FruitView extends ScrollView {
         fruitRefreshFailBasic.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                fruitFetcher.fetchFruitsButFail(successCallBack, failureCallback);
+                fruitFetcher.fetchFruitsButFailBasic(successCallBack, failureCallback);
 
             }
         });
@@ -140,7 +140,7 @@ public class FruitView extends ScrollView {
         fruitRefreshFailAdvanced.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                fruitFetcher.fetchFruitsButFailGetCustomError(successCallBack, failureCallback);
+                fruitFetcher.fetchFruitsButFailAdvanced(successCallBack, failureCallback);
             }
         });
 

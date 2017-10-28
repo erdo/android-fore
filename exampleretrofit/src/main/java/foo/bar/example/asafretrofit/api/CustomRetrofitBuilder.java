@@ -12,8 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * bare in mind that you should be able to use this class in your tests to mock the server
  * by passing different interceptors in:
  *
- * see @{@link co.early.asaf.retrofit.testhelpers.InterceptorOfflineData}
- * see @{@link co.early.asaf.retrofit.testhelpers.InterceptorServiceFailure}
+ * see @{@link co.early.asaf.retrofit.testhelpers.InterceptorStubbedService}
  *
  */
 public class CustomRetrofitBuilder {
@@ -40,7 +39,7 @@ public class CustomRetrofitBuilder {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         for (Interceptor interceptor : interceptors) {
-            builder.addNetworkInterceptor(interceptor);
+            builder.addInterceptor(interceptor);
         }
 
         return builder.build();
