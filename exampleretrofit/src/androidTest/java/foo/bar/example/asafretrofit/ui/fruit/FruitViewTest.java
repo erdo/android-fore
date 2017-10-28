@@ -16,7 +16,6 @@ import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -25,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static foo.bar.example.asafretrofit.EspressoTestsMatchers.withDrawable;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -57,7 +57,7 @@ public class FruitViewTest {
     public void hasCitrusFruit() throws Exception {
 
         //arrange
-        new StateBuilder(mockFruitFetcher)
+        Activity activity = new StateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit1", true, 45))
                 .createRule()
@@ -74,9 +74,9 @@ public class FruitViewTest {
 
         onView(withId(R.id.fruit_name_textview)).check(matches(withText("testFruit1")));
         onView(withId(R.id.fruit_tastyrating_textview)).check(matches(withText(
-                getContext().getString(R.string.fruit_percent, 45)
+                activity.getString(R.string.fruit_percent, 45)
         )));
-        onView(withId(R.id.fruit_citrus_img)).check(matches(withId(R.drawable.lemon_positive)));
+        onView(withId(R.id.fruit_citrus_img)).check(matches(withDrawable(R.drawable.lemon_positive)));
 
     }
 
@@ -84,7 +84,7 @@ public class FruitViewTest {
     public void hasNonCitrusFruit() throws Exception {
 
         //arrange
-        new StateBuilder(mockFruitFetcher)
+        Activity activity = new StateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
@@ -101,9 +101,9 @@ public class FruitViewTest {
 
         onView(withId(R.id.fruit_name_textview)).check(matches(withText("testFruit2")));
         onView(withId(R.id.fruit_tastyrating_textview)).check(matches(withText(
-                getContext().getString(R.string.fruit_percent, 75)
+                activity.getString(R.string.fruit_percent, 75)
         )));
-        onView(withId(R.id.fruit_citrus_img)).check(matches(withId(R.drawable.lemon_negative)));
+        onView(withId(R.id.fruit_citrus_img)).check(matches(withDrawable(R.drawable.lemon_negative)));
 
     }
 
@@ -114,6 +114,7 @@ public class FruitViewTest {
         //arrange
         new StateBuilder(mockFruitFetcher)
                 .isBusy(true)
+                .hasFruit(new FruitPojo("testFruit1", true, 45))
                 .createRule()
                 .launchActivity(null);
 
@@ -140,6 +141,7 @@ public class FruitViewTest {
         //arrange
         Activity activity = new StateBuilder(mockFruitFetcher)
                 .isBusy(true)
+                .hasFruit(new FruitPojo("testFruit1", true, 45))
                 .createRule()
                 .launchActivity(null);
         activity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
