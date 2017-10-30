@@ -66,7 +66,7 @@ Asside from the apps, there is also a lot of information (and more crap diagrams
 
 ### ASAF 1 Data Binding Example
 
-![screen shot sample 1](https://raw.githubusercontent.com/erdo/asaf-project/master/exampledatabinding/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampledatabinding/screenshot.png)
 
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
@@ -77,7 +77,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 ### ASAF 2 Asynchronous Code Example
 
-![screen shot sample 2](https://raw.githubusercontent.com/erdo/asaf-project/master/examplethreading/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/examplethreading/screenshot.png)
 
 This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
@@ -90,7 +90,7 @@ It's really a very exciting app, I should probably put it on the play store befo
 
 ### ASAF 3 Adapter Code Example
 
-![screen shot sample 3](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleadapters/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleadapters/screenshot.png)
 
 This one demostrates how to use [**adapters**](/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
@@ -105,7 +105,7 @@ As usual it's a complete and (~~and tested app~~ watch this space, I've been bus
 
 ### ASAF 4 Retrofit Code Example
 
-![screen shot sample 4](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleretrofit/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleretrofit/screenshot.png)
 
 If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [**Retrofit2**](/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
 
@@ -116,7 +116,7 @@ The first button gets a successful response, the last two get failed responses. 
 As you're using the app, notice:
 
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
-- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously. (Assuming everything in your app operates on the UI thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code. When you need to pop onto another thread, do it explicitly and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.)
+- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously, see more on that in [model](/asaf-project/02-models.html#shoom) section.
 
 The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
