@@ -1,6 +1,4 @@
 
-WIP!...
-
 # Models
 There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** classes.
 
@@ -59,144 +57,197 @@ public class Printer {
 
 The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished: 
 
+```
+public class Printer {
 
-    public class Printer {
-
-        private boolean isBusy = false;
-        private boolean hasPaper = true;
-        private int numPagesLeftToPrint;
+    private boolean isBusy = false;
+    private boolean hasPaper = true;
+    private int numPagesLeftToPrint;
 
     
-        public void printThis(Page pageToPrint, CompletionCallBack completionCallBack){
+    public void printThis(Page pageToPrint, CompleteCallBack completeCallBack){
 
-            isBusy = true;
-            numPagesLeftToPrint++;
+        isBusy = true;
+        numPagesLeftToPrint++;
 
-            //...do the printing asynchronously, then once back on the UI thread:
+        //...do the printing asynchronously, then once back on the UI thread:
 
-            isBusy = false;
-            numPagesLeftToPrint--;
+        isBusy = false;
+        numPagesLeftToPrint--;
 
-            completionCallBack.complete();
-        }
-
-
-
-        public boolean isBusy() {
-            return isBusy;
-        }
-
-        public boolean isHasPaper() {
-            return hasPaper;
-        }
-
-        public int getNumPagesLeftToPrint() {
-            return numPagesLeftToPrint;
-        }
+        completionCallBack.complete();
     }
 
 
-The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constuctor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediatley and obviously). (Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through)
+    public boolean isBusy() {
+        return isBusy;
+    }
 
-        private final USBStuff usbStuff;
-        private final Formatter formatter;
+    public boolean isHasPaper() {
+        return hasPaper;
+    }
 
-        public Printer(USBStuff usbStuff, Formatter formatter) {
-            this.usbStuff = Affirm.notNull(usbStuff);
-            this.formatter = Affirm.notNull(formatter);
-        }
+    public int getNumPagesLeftToPrint() {
+        return numPagesLeftToPrint;
+    }
+}
+```
+
+The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constuctor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
+
+```
+    private final USBStuff usbStuff;
+    private final Formatter formatter;
+
+    public Printer(USBStuff usbStuff, Formatter formatter) {
+        this.usbStuff = Affirm.notNull(usbStuff);
+        this.formatter = Affirm.notNull(formatter);
+    }
+```
 
 
-We're nearly there. If we want to involve this *Printer* model in the view layer we will probably want it to be observable so that any observing view will be notified whenever it changes (and therefore the view needs to be refreshed).
+We're nearly there. If we want to involve this *Printer* model in the view layer we will probably want it to be Observable so that any observing view will be notified whenever it changes (and therefore the view needs to be refreshed).
 
 The quickest was to do that is to extend ObservableImp:
 
-    public class Printer extends ObservableImp{
+```
+public class Printer extends ObservableImp {
+```
     
-Next we need to make sure that the observers are notifed each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens
+Next we need to make sure that the observers are notifed each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens:
 
-            isBusy = true;
-            numPagesLeftToPrint++;
-            notifyObservers();
-            
-Here's what we end up with for our fake *Printer* model:
+```
+    isBusy = true;
+    numPagesLeftToPrint++;
+    notifyObservers();  //ASAF Observable will take care of the rest
+```
 
+The asynchronous printing that we've glossed over so far could be implemented with an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) like so:
 
-    public class Printer extends ObservableImp {
-    
-        private final USBStuff usbStuff;
-        private final Formatter formatter;
-        private final WorkMode workMode;
-    
-        private boolean isBusy = false;
-        private boolean hasPaper = true;
-        private int numPagesLeftToPrint;
-    
-    
-        public Printer(USBStuff usbStuff, Formatter formatter, WorkMode workMode) {
-            super(workMode);
-            this.usbStuff = Affirm.notNull(usbStuff);
-            this.formatter = Affirm.notNull(formatter);
-            this.workMode = Affirm.notNull(workMode);
-        }
-    
-        public void printThis(Page pageToPrint, final CompletionCallBack completionCallBack) {
-
-            isBusy = true;
-            numPagesLeftToPrint++;
-            notifyObservers();
-
-
-            new AsyncTaskWrapper<Void, Void, Void>(workMode) {
-
+```
+        new AsafTaskBuilder<Void, Void>(workMode)
+            .doInBackground(new DoInBackgroundCallback<Void, Void>() {
                 @Override
-                protected Void doInBackground(Void... params) {
-
+                public Void doThisAndReturn(Void... input) {
+                
                     //...do the printing
                     
                     return null;
                 }
-
+            })
+            .onPostExecute(new DoThisWithPayloadCallback<Void>() {
                 @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
+                public void doThis(Void result) {
 
                     //back on the UI thread
-                    
+
                     isBusy = false;
                     numPagesLeftToPrint--;
                     notifyObservers();
 
-                    completionCallBack.complete();
+                    completeCallBack.complete();
                 }
-            }.executeWrapper();
+            })
+            .execute((Void) null);
+```
 
-        }
-    
-    
-        public boolean isBusy() {
-            return isBusy;
-        }
-    
-        public boolean isHasPaper() {
-            return hasPaper;
-        }
-    
-        public int getNumPagesLeftToPrint() {
-            return numPagesLeftToPrint;
-        }
+Taking advantage of lambda expressions this becomes:
+
+```
+    new AsafTaskBuilder<Void, Void>(workMode)
+            .doInBackground(input -> {
+                
+                //...do the printing
+                
+                return null;
+            })
+            .onPostExecute(result -> {
+
+                //back on the UI thread
+
+                isBusy = false;
+                numPagesLeftToPrint--;
+                notifyObservers();
+
+                completeCallBack.complete();
+            })
+            .execute((Void) null);
+```
+
+Here's what we end up with for our fake *Printer* model:
+
+```
+public class Printer extends ObservableImp {
+
+    private final USBStuff usbStuff;
+    private final Formatter formatter;
+    private final WorkMode workMode;
+
+    private boolean isBusy = false;
+    private boolean hasPaper = true;
+    private int numPagesLeftToPrint;
+
+
+    public Printer(USBStuff usbStuff, Formatter formatter, WorkMode workMode) {
+        super(workMode);
+        this.usbStuff = Affirm.notNull(usbStuff);
+        this.formatter = Affirm.notNull(formatter);
+        this.workMode = Affirm.notNull(workMode);
     }
 
+    public void printThis(Page pageToPrint, final CompleteCallBack completeCallBack) {
 
-There are a few things that snuck in to the final version: The WorkMode parameter tells the observable implementation *ObservableImp* how you want your notifications to be sent. Usually you will pass WorkMode.ASYNCHRONOUS here.
+        isBusy = true;
+        numPagesLeftToPrint++;
+        notifyObservers();
+
+        new AsafTaskBuilder<Void, Void>(workMode)
+                .doInBackground(input -> {
+
+                    //...do the printing
+
+                    return null;
+                })
+                .onPostExecute(result -> {
+
+                    //back on the UI thread
+
+                    isBusy = false;
+                    numPagesLeftToPrint--;
+                    notifyObservers();
+
+                    completeCallBack.complete();
+                })
+                .execute((Void) null);
+
+    }
+    
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    public boolean isHasPaper() {
+        return hasPaper;
+    }
+
+    public int getNumPagesLeftToPrint() {
+        return numPagesLeftToPrint;
+    }
+
+}
+```
+
+
+There are a few things that snuck in to the final version: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent. Usually you will pass WorkMode.ASYNCHRONOUS here.
 
 When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
 
-That's bascially what the AsyncTaskWrapper is helping you to do, if you pass SYNCHRONOUS instead of ASYNCHRONOUS here then onPreExecute(), doInBackground(), onPostExecute() will all be called sequentially as if the AsyncTask was just normal code.
+Take a look at how the CounterWithLambdas model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
 
 ***NB: to make your view code extra clean, ASYNCHRONOUS notifications from an Observable in ASAF are always sent on the UI thread, so there is no need to do any thread hopping to update a UI.***
 
-When you are writing your own model, it's worth reviewing the section below called "When should I use an Observer, when should I use a callback listener?" making an inappropriate choice here will get you into an untold mess.
+
+Take a look at the check list below and then head over to the [Data Binding](/asaf-project/03-databinding.html#shoom) section where we tie it all together.
 
 
 ## <a name="model-check"></a> Model Checklist
@@ -211,7 +262,7 @@ For reference here's a check list of my recommendations for the model classes, a
 - The model's current state at any point in time is typically exposed by getters. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do the work in the setters not the getters
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.
-- The models should make good use of dependency injection (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's **[AsafTask](/asaf-project/04-asynchronous-code.html#asaftask)** goes a long way to working around this.
+- The models should make good use of dependency injection (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's [AsafTask](/asaf-project/04-asynchronous-code.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/04-more.html#asaftaskbuilder)
 - Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thouroughly test model logic is a key part of reducing unecessary app bugs.
 - If the models are to be observable, they can do this in one of 2 ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally.
 - Do check out [When should I use an Observer, when should I use a callback listener?](/asaf-project/08-faq.html#observer-listener) in the FAQs to double check you're making the right choice for your model.
