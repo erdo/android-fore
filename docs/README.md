@@ -49,7 +49,7 @@ ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-pr
 
 There are also optional extras that help with using ([**adapters**](/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](/asaf-project/04-more.html#retrofit2)).
 
-You might be surprised how much android code becomes uneccesasary when you take this approach to development.
+You might be surprised how much android code becomes unnecessary when you take this approach to development.
 
 ## Sample Apps
 
@@ -65,7 +65,7 @@ Asside from the apps, there is also a lot of information (and more crap diagrams
 
 
 ### ASAF 1 Data Binding Example
-This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/asaf-project/03-databinding.html). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
 
