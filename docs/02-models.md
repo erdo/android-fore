@@ -8,14 +8,28 @@ In the sample apps, the models are all found in the **feature** package.
 
 ## Writing a Basic Model
 
-How you write your models will have quite a big impact on how easy it is to use within your app. It gets easier with practice but as a starting point you could do a lot worse than to start by modelling real world concepts. That should also make it easier for other developers to understand what you are aiming for.
+If you crack how to write a good model, using it in the rest of your app should be a piece of cake.
+
+You'll see that in all the sample apps, the models have been written with the assuption that all the methods are being accessed on a single thread, (which for a live app would be the UI thread).
+
+Assuming everything in your app operates on a single thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
+
+When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) for example, and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.
+
+If you're already comfortable writing model code skip down to the [check list](#model-check), check out a [few](https://github.com/erdo/asaf-project/blob/master/exampleretrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
+
+### For more detail, read on
+
+Writing model code gets easier with practice but as a starting point you could do a lot worse than to start by modelling real world concepts. That should also make it easier for other developers to understand what you are aiming for.
 
 For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model, that *Printer* model probably has global application scope because the real printer is right there by the app ready for printing no matter what part of the app you are in. There will also only be one instance of the *Printer* model, because: there is only one real printer.
 
+```
     public class Printer {
     }
+```
 
-The *Printer* model might have a boolean that says if it's busy printing or not. It might have a boolean that says that is has run out of paper. It might have a number thats tell you how many items it has in the queue at the moment. All of this state should be available via getters for any View or other code to access.
+The *Printer* model might have a boolean that says if it's busy printing or not. It might have a boolean that says that is has run out of paper. It might have a number that tells you how many items it has in the queue at the moment. All of this state should be available via getters for any View or other Observer code to access.
 
     public class Printer {
     
@@ -179,7 +193,7 @@ That's bascially what the AsyncTaskWrapper is helping you to do, if you pass SYN
 When you are writing your own model, it's worth reviewing the section below called "When should I use an Observer, when should I use a callback listener?" making an inappropriate choice here will get you into an untold mess.
 
 
-## Model Checklist
+## <a name="model-check"></a> Model Checklist
 
 For reference here's a check list of my recommendations for the model classes, as used in ASAF. Once you've had a go at writing one you can come back here to double check you have everything down:
 

@@ -35,7 +35,7 @@ The framework is basically a light touch implementation of **MVVM** written for 
 
 In any case, all the sample apps included here are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
 
-This diagram manges to make things look more complicated than they are, don't worry, the actual code is a lot more simple!
+This diagram manges to make things look more complicated than they are, don't worry, the actual code is a lot cleaner!
 
 
 ![data binding](img/data-binding.png)
@@ -47,7 +47,7 @@ At a very high level you will be writing observable and testable **Model** class
 
 ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
 
-There are also optional extras that help with using ([**adapters**](/asaf-project/04-more.html#adapters) and working with ([**Retrofit2**](/asaf-project/04-more.html#retrofit2).
+There are also optional extras that help with using ([**adapters**](/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](/asaf-project/04-more.html#retrofit2)).
 
 You might be surprised how much android code becomes uneccesasary when you take this approach to development.
 
@@ -56,6 +56,8 @@ You might be surprised how much android code becomes uneccesasary when you take 
 If you haven't coded with ASAF before, it's probably best to take a look at some of the  sample apps and literally copy and paste a feature and it's associated UI components (see the **feature/** and **ui/** packages) then change them from there.
 
 As for the apps, they are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts or implement ripple effects - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
+
+ASAF has been designed to make the most of lambda expressions by the way however most of the sample apps don't use lambdas - purely to make the code more accessible to people who aren't comfortable with them yet. Obviously replacing the anonymous inner classes with lambdas will make the code even tighter.
 
 These apps are however, totally robust and comprehensively tested. And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
@@ -82,7 +84,7 @@ It's really a very exciting app, I should probably put it on the play store befo
 
 ### ASAF 3 Adapter Code Example
 
-This one demostrates how to use adapters with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
+This one demostrates how to use [**adapters**](/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
 It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and ASAF will take care of all the notify changes work.
 
@@ -95,7 +97,7 @@ As usual it's a complete and (~~and tested app~~ watch this space, I've been bus
 
 ### ASAF 4 Retrofit Code Example
 
-If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use Retrofit 2 in a particularly clean and testable way. This is example app for that.
+If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [**Retrofit2**](/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
 
 Clicking the buttons will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome!).
 
@@ -106,7 +108,7 @@ As you're using the app, notice:
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
 - **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously. (Assuming everything in your app operates on the UI thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code. When you need to pop onto another thread, do it explicitly and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.)
 
-The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class).
+The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
 But as usual it's a complete and tested app. In reality the tests are probably more than I would do for a real app, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
 

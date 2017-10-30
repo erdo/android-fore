@@ -1,5 +1,6 @@
 package co.early.asaf.retrofit;
 
+import okhttp3.Request;
 import retrofit2.Response;
 
 /**
@@ -15,5 +16,5 @@ public interface ErrorHandler<M> {
      * @param <CE> class type of the custom error
      * @return the parsed error from the server
      */
-    <CE extends MessageProvider<M>> M handleError(Throwable t, Response errorResponse, Class<CE> customErrorClazz);
+    <CE extends MessageProvider<M>> M handleError(Throwable t, Response errorResponse, Class<CE> customErrorClazz, Request originalRequest);
 }

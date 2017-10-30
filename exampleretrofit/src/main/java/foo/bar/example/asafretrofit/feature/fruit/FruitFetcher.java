@@ -60,7 +60,7 @@ public class FruitFetcher extends ObservableImp{
                 new SuccessCallbackWithPayload<List<FruitPojo>>() {
                     @Override
                     public void success(List<FruitPojo> successResponse) {
-                        handleSuccess(successCallBack, successResponse);
+                        FruitFetcher.this.handleSuccess(successCallBack, successResponse);
                     }
                 },
                 new FailureCallbackWithPayload<UserMessage>() {

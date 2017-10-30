@@ -8,6 +8,7 @@ import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
 import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
 import co.early.asaf.core.logging.Logger;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -84,11 +85,11 @@ public class CallProcessor<F> {
             try {
                 response = call.execute();
             } catch (IOException e) {
-                processFailResponse(e, null, customErrorClazz, failureCallbackWithPayload);
+                processFailResponse(e, null, customErrorClazz, call.request(), failureCallbackWithPayload);
                 return;
             }
 
-            processSuccessResponse(response, customErrorClazz, successCallbackWithPayload, failureCallbackWithPayload);
+            processSuccessResponse(response, customErrorClazz, call.request(), successCallbackWithPayload, failureCallbackWithPayload);
 
         } else {
 
@@ -96,35 +97,37 @@ public class CallProcessor<F> {
 
                 @Override
                 public void onResponse(Call<S> call, Response<S> response) {
-                    processSuccessResponse(response, customErrorClazz, successCallbackWithPayload, failureCallbackWithPayload);
+                    processSuccessResponse(response, customErrorClazz, call.request(), successCallbackWithPayload, failureCallbackWithPayload);
                 }
 
                 @Override
                 public void onFailure(Call<S> call, Throwable t) {
-                    processFailResponse(t, null, customErrorClazz, failureCallbackWithPayload);
+                    processFailResponse(t, null, customErrorClazz, call.request(), failureCallbackWithPayload);
                 }
             });
         }
     }
 
     private <CE extends MessageProvider<F>, S> void processSuccessResponse(Response<S> response, Class<CE> customErrorClass,
+                                            Request originalRequest,
                                             final SuccessCallbackWithPayload<S> successCallbackWithPayload,
                                             final FailureCallbackWithPayload<F> failureCallbackWithPayload) {
         if (response.isSuccessful()) {
             successCallbackWithPayload.success(response.body());
         } else {
-            processFailResponse(null, response, customErrorClass, failureCallbackWithPayload);
+            processFailResponse(null, response, customErrorClass, originalRequest, failureCallbackWithPayload);
         }
     }
 
     private <CE extends MessageProvider<F>, S> void processFailResponse(Throwable t, Response errorResponse, Class<CE>  customErrorClass,
+                                                                        Request originalRequest,
                                                                         final FailureCallbackWithPayload<F> failureCallbackWithPayload) {
 
         if (t != null) {
             logger.w(TAG, "processFailResponse()", t);
         }
 
-        failureCallbackWithPayload.fail(globalErrorHandler.handleError(t, errorResponse, customErrorClass));
+        failureCallbackWithPayload.fail(globalErrorHandler.handleError(t, errorResponse, customErrorClass, originalRequest));
     }
 
 }

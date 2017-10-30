@@ -59,8 +59,8 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     //LIB_VERSION_NAME="0.9.19-SNAPSHOT"
-    LIB_VERSION_NAME="0.9.20"
-    LIB_VERSION_CODE=17
+    LIB_VERSION_NAME="0.9.21"
+    LIB_VERSION_CODE=18
 
     REPO="asaf"
     LIB_GROUP="co.early.asaf"

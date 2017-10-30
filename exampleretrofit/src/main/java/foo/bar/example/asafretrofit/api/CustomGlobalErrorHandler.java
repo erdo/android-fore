@@ -11,6 +11,7 @@ import co.early.asaf.core.logging.Logger;
 import co.early.asaf.retrofit.ErrorHandler;
 import co.early.asaf.retrofit.MessageProvider;
 import foo.bar.example.asafretrofit.message.UserMessage;
+import okhttp3.Request;
 import retrofit2.Response;
 
 import static co.early.asaf.core.Affirm.notNull;
@@ -36,7 +37,7 @@ public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage> {
 
 
     @Override
-    public <CE extends MessageProvider<UserMessage>> UserMessage handleError(Throwable t, Response errorResponse, @Nullable Class<CE> customErrorClazz) {
+    public <CE extends MessageProvider<UserMessage>> UserMessage handleError(Throwable t, Response errorResponse, @Nullable Class<CE> customErrorClazz, Request originalRequest) {
 
         UserMessage message = ERROR_MISC;
 
