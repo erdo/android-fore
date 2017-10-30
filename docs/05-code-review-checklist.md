@@ -30,4 +30,4 @@ As mentioned, it can take a little bit of effort to understand how to use this l
 
 <a name="view-state"></a> 13) **Any state kept in view layer classes is at risk of being lost**. How does this view survive rotation, would loosing that state matter? if yes, then it might be better kept inside a model, away from the view layer.
 
-<a name="view-logic"></a> 14) **Any logic kept in view layer classes is usually harder to test**. It can be hard to totally remove all the logic from the view layer (especially natigational logic) but be aware that the logic here is usually a lot harder to test and if you can move it away from the view layer reasonably easily, then you probably should.
+<a name="view-logic"></a> 14) **Any logic kept in view layer classes is usually harder to test**. It can be hard to totally remove all the logic from the view layer (especially navigational logic) but be aware that the logic here is usually a lot harder to test and if you can move it away from the view layer reasonably easily, then you probably should.

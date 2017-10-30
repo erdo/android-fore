@@ -1,4 +1,16 @@
 
+
+WIP...
+
+# Dependency Injection
+
+//TODO
+
+# Adapters
+
+//TODO
+
+
 # Asynchronous Code
 
 We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
@@ -98,3 +110,13 @@ That might not look particularly clean, but it gets a lot cleaner once you are u
 For both AsafTask and AsafTaskBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
 A conveient way to make this happen is to inject the WorkMode into the enclosing class at construciton time so that it WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in Example 3.
+
+
+# Retrofit and the CallProcessor
+
+//TODO
+
+
+# UI Widgets and Helpers
+
+//TODO
