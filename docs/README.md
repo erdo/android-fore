@@ -3,7 +3,7 @@ Alarmingly Simple Android Framework
 
 A few tiny framework classes that help you write android code that is **simple**, **robust** and **performant** for even the most complex commercial grade android application.
 
-The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being clear and easy to understand. Addressing areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** it lets the developer focus on the cool stuff and not have to worry about the usual android problems.
+The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**. Addressing areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** it lets the developer focus on the cool stuff and not have to worry about the usual android problems.
 
 Check out the [sample apps](#sample-apps) to see how it's done.
 
@@ -11,11 +11,15 @@ Check out the [sample apps](#sample-apps) to see how it's done.
 ## Quick Start
 
 main framework:
-``` compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.20', ext: 'aar')
+
+```
+compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.20', ext: 'aar')
 ```
 
 other tools:
-``` compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.20', ext: 'aar')
+
+```
+compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.20', ext: 'aar')
 ```
 
 
@@ -31,6 +35,8 @@ But that's not the whole story. There is also code which has nothing to do with 
 The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern. Perhaps more appropriately it could be considered **MV** as we don't need to make a distinction between Models and ViewModels. It's flexible enough that you can use it to implement **MVP** if you wish.
 
 In any case, all the sample apps included here are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
+
+Don't worry, the code is actually a lot more simple than this diagram:
 
 
 ![data binding](img/data-binding.png)
