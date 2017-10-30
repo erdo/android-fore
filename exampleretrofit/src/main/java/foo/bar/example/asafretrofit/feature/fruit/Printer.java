@@ -28,10 +28,6 @@ public class Printer extends ObservableImp {
 
     public void printThis(Page pageToPrint, final CompleteCallBack completeCallBack) {
 
-        if (isBusy){
-            completeCallBack.fail();
-            return;
-        }
 
         isBusy = true;
         numPagesLeftToPrint++;
