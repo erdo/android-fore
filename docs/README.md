@@ -65,6 +65,9 @@ Asside from the apps, there is also a lot of information (and more crap diagrams
 
 
 ### ASAF 1 Data Binding Example
+
+![screen shot sample 1](https://raw.githubusercontent.com/erdo/asaf-project/master/exampledatabinding/screenshot.png)
+
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
@@ -73,6 +76,9 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 
 ### ASAF 2 Asynchronous Code Example
+
+![screen shot sample 2](https://raw.githubusercontent.com/erdo/asaf-project/master/examplethreading/screenshot.png)
+
 This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, one which lets you take advantage of lambda expressions.
@@ -83,6 +89,8 @@ It's really a very exciting app, I should probably put it on the play store befo
 
 
 ### ASAF 3 Adapter Code Example
+
+![screen shot sample 3](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleadapters/screenshot.png)
 
 This one demostrates how to use [**adapters**](/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
@@ -96,6 +104,8 @@ As usual it's a complete and (~~and tested app~~ watch this space, I've been bus
 
 
 ### ASAF 4 Retrofit Code Example
+
+![screen shot sample 4](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleretrofit/screenshot.png)
 
 If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [**Retrofit2**](/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
 
