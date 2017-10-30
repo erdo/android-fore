@@ -88,7 +88,7 @@ It also demonstrates how to take advantage of the built in list animations that 
 
 Two lists are displayed side to side so you can see the effect this has when adding or removing items.
 
-As usual it's a complete and tested app but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
+As usual it's a complete and (~~and tested app~~ watch this space, I've been busy :/ ) but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
 
 [Adapter Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleadapters)
 
@@ -104,9 +104,13 @@ The first button gets a successful response, the last two get failed responses. 
 As you're using the app, notice:
 
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
-- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click mulitple buttons, the app is totally robust. There are no artificial delays in this code, it is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously. (Assuming everything in your app operates on the UI thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code. When you need to pop onto another thread, do it explicitly and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.)
+- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously. (Assuming everything in your app operates on the UI thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code. When you need to pop onto another thread, do it explicitly and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.)
 
-As usual it's a complete (~~and tested app~~ watch this space, I've been busy :/ ) but it contains just the minimum code required to demonstrate networking (ok apart from the unecessary animated-tasty-rating-bar, but whatever, it's just one class). I also hope you appreciate the lemon icons, I made them in Inkscape.
+The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class).
+
+But as usual it's a complete and tested app. In reality the tests are probably more than I would do for a real app, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
+
+I also hope you appreciate the lemon icons, I made them in Inkscape.
 
 [Networking Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleretrofit)
 
