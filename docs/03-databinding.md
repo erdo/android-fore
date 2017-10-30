@@ -39,7 +39,7 @@ That doesn't mean that you can't subdivide your views and only refresh one of th
 
 It's usually easier to refresh all the views in a single fragment at the same time. But if you have a custom **RunningTrackView**, and within that you have a custom **ClockView** which is observing a **ClockModel**, you can just refresh the ClockView eveytime the ClockModel changes.
 
-Depending on your situation though, you might find that it's more convenient to refresh both the RunningTrackView **and** the ClockView at the same time, and if that results in cleaner and more explicit code then you should absoutely go ahead and do that.
+Depending on your situation though, you might find that it's more convenient to refresh both the RunningTrackView **and** the ClockView at the same time - even if the RunningTrackView hardly changes compared with the ClockView. If that results in cleaner and more explicit code then you should absoutely go ahead and do that.
 
 ### Simple Example
 
