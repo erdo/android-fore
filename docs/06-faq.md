@@ -43,36 +43,36 @@ particular, if you are looking to receive a one off success/fail result from a m
 for example:
 
 ```
-   	model.doStuffOnAThread(new ResultListener{
-     	@Override
-     	public void success(){
-        	//do next thing
-     	}
-     	@Override
-     	public void fail(UserMessage reason){
-        	showMessage(reason);
-     	}
-   	});
+model.doStuffOnAThread(new ResultListener{
+    @Override
+    public void success(){
+        //do next thing
+    }
+    @Override
+    public void fail(UserMessage reason){
+        showMessage(reason);
+    }
+});
 ```
 
 
 You can use both patterns in the same model with no problem of course, in the example above the model could have a busy state that changes from false to true and back to false again during a network request so that view code can redraw itself as showing a busy swirly if appropriate. That would be better managed using an observer pattern as follows:
 
 ```
-  	public void doStuffOnAThread(final ResultListener resultListener){
+public void doStuffOnAThread(final ResultListener resultListener){
   	
-    	busy = true;
-    	notifyObservers();
+    busy = true;
+    notifyObservers();
     	
-    	startAsyncOperation(new FinishedListener(){
-        	@Override
-        	public void finished(){
-            	busy = false;
-            	resultListener.success();
-            	notifyObservers();
-        	}
-    	});
-    }
+    startAsyncOperation(new FinishedListener(){
+        @Override
+        public void finished(){
+            busy = false;
+            resultListener.success();
+            notifyObservers();
+        }
+    });
+}
 ```
   
   
