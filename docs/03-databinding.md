@@ -8,7 +8,7 @@ First we're going to briefly review what data binding **is** as the term is not 
 
 So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled (and obvs, it still needs to work when you rotate the screen).
 
-ASAF took a deliberate decision to only support **One Way Data Binding** for the reasons outlined below, but for completenes...
+ASAF took a deliberate decision to only support **One Way Data Binding** for the reasons outlined below, but for completeness...
 
 ### Two Way Data Binding
 In addition to the above, with two way data binding, the binding goes the other way too. So lets say you are editing your online profile in an editable text view, your view edits will automatically be reflected in your underlying profile model.
