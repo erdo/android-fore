@@ -99,7 +99,7 @@ public class WalletsViewTest {
     }
 
     @Test
-    public void rotationState() throws Exception {
+    public void stateMaintainedAfterRotation() throws Exception {
 
         //arrange
         Activity activity = new StateBuilder(mockWallet)

@@ -14,8 +14,6 @@ import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -53,6 +51,7 @@ public class FruitViewTest {
         application.registerActivityLifecycleCallbacks(new ProgressBarIdler());
     }
 
+
     @Test
     public void hasCitrusFruit() throws Exception {
 
@@ -63,22 +62,22 @@ public class FruitViewTest {
                 .createRule()
                 .launchActivity(null);
 
+
         //act
+
 
         //assert
         onView(withId(R.id.fruit_busy_progbar)).check(matches(not(isDisplayed())));
-
         onView(withId(R.id.fruit_fetchsuccess_btn)).check(matches(isEnabled()));
         onView(withId(R.id.fruit_fetchfailadvanced_btn)).check(matches(isEnabled()));
         onView(withId(R.id.fruit_fetchfailbasic_btn)).check(matches(isEnabled()));
-
         onView(withId(R.id.fruit_name_textview)).check(matches(withText("testFruit1")));
         onView(withId(R.id.fruit_tastyrating_textview)).check(matches(withText(
                 activity.getString(R.string.fruit_percent, 45)
         )));
         onView(withId(R.id.fruit_citrus_img)).check(matches(withDrawable(R.drawable.lemon_positive)));
-
     }
+
 
     @Test
     public void hasNonCitrusFruit() throws Exception {
@@ -90,21 +89,20 @@ public class FruitViewTest {
                 .createRule()
                 .launchActivity(null);
 
+
         //act
+
 
         //assert
         onView(withId(R.id.fruit_busy_progbar)).check(matches(not(isDisplayed())));
-
         onView(withId(R.id.fruit_fetchsuccess_btn)).check(matches(isEnabled()));
         onView(withId(R.id.fruit_fetchfailadvanced_btn)).check(matches(isEnabled()));
         onView(withId(R.id.fruit_fetchfailbasic_btn)).check(matches(isEnabled()));
-
         onView(withId(R.id.fruit_name_textview)).check(matches(withText("testFruit2")));
         onView(withId(R.id.fruit_tastyrating_textview)).check(matches(withText(
                 activity.getString(R.string.fruit_percent, 75)
         )));
         onView(withId(R.id.fruit_citrus_img)).check(matches(withDrawable(R.drawable.lemon_negative)));
-
     }
 
 
@@ -118,57 +116,19 @@ public class FruitViewTest {
                 .createRule()
                 .launchActivity(null);
 
+
         //act
+
 
         //assert
         onView(withId(R.id.fruit_busy_progbar)).check(matches(isDisplayed()));
-
         onView(withId(R.id.fruit_fetchsuccess_btn)).check(matches(not(isEnabled())));
         onView(withId(R.id.fruit_fetchfailadvanced_btn)).check(matches(not(isEnabled())));
         onView(withId(R.id.fruit_fetchfailbasic_btn)).check(matches(not(isEnabled())));
-
-        onView(withId(R.id.fruit_name_textview)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.fruit_tastyrating_textview)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.fruit_citrus_img)).check(matches(not(isDisplayed())));
-
-    }
-
-
-
-    @Test
-    public void rotationStateIsFetching() throws Exception {
-
-        //arrange
-        Activity activity = new StateBuilder(mockFruitFetcher)
-                .isBusy(true)
-                .hasFruit(new FruitPojo("testFruit1", true, 45))
-                .createRule()
-                .launchActivity(null);
-        activity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
-
-        //act
-        activity.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
-
-        //assert
-        onView(withId(R.id.fruit_busy_progbar)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.fruit_fetchsuccess_btn)).check(matches(not(isEnabled())));
-        onView(withId(R.id.fruit_fetchfailadvanced_btn)).check(matches(not(isEnabled())));
-        onView(withId(R.id.fruit_fetchfailbasic_btn)).check(matches(not(isEnabled())));
-
         onView(withId(R.id.fruit_name_textview)).check(matches(not(isDisplayed())));
         onView(withId(R.id.fruit_tastyrating_textview)).check(matches(not(isDisplayed())));
         onView(withId(R.id.fruit_citrus_img)).check(matches(not(isDisplayed())));
     }
-
-
-    @Test
-    public void properlyTestRotationMidRequest() throws Exception {
-
-        //TODO
-
-    }
-
 
 
     @Test
@@ -179,12 +139,16 @@ public class FruitViewTest {
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
                 .launchActivity(null);
+
+
         //act
         onView(withId(R.id.fruit_fetchsuccess_btn)).perform(click());
+
 
         //assert
         verify(mockFruitFetcher).fetchFruits(any(), any());
     }
+
 
     @Test
     public void clickCallsFetchFailBasic() throws Exception {
@@ -194,12 +158,16 @@ public class FruitViewTest {
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
                 .launchActivity(null);
+
+
         //act
         onView(withId(R.id.fruit_fetchfailbasic_btn)).perform(click());
+
 
         //assert
         verify(mockFruitFetcher).fetchFruitsButFailBasic(any(), any());
     }
+
 
     @Test
     public void clickCallsFetchFailAdvanced() throws Exception {
@@ -209,10 +177,14 @@ public class FruitViewTest {
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
                 .launchActivity(null);
+
+
         //act
         onView(withId(R.id.fruit_fetchfailadvanced_btn)).perform(click());
+
 
         //assert
         verify(mockFruitFetcher).fetchFruitsButFailAdvanced(any(), any());
     }
+
 }
