@@ -178,7 +178,7 @@ Here is the psuedo code we end up with for this (very over simplified) case:
     }
 ```
 
-And don't forget if we need to rotate this view, all the fields will be out of sync with our model. We could use the sticking plasters that android gives us to deal with this problem (onSaveInstanceState and co), but because we have been smart and seperated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
+And don't forget if we need to rotate this view, all the fields will be out of sync with our model. Because we have been smart and seperated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
 
 ```
 private void updatePostRotation(){
@@ -188,17 +188,17 @@ private void updatePostRotation(){
 }
 ```
 
-That's already looking like quite a bit of code, but what if we want to add some more UI details like disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1.
+Well that looks kind of ok, and it would mostly work - but what if we want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1.
 
-It very quickly starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
+It soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
 
 ### But that's not the worst problem....
-The worst problem with this code is that there is a **bug** in it. Did you spot it?
+The worst problem with this code though is that there is a **bug** in it. Did you spot it?
 
 It's a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that dissable rotation.
 
-I'm guessing you have gone back and tried to spot the bug by now? in case you haven't you can recreate it in your brain by selecting the discount checkbox first and then adding or removing an item. It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call updateDiscountView() so this value will be incorrect in the view until the discount checkbox is toggled again.
+I'm guessing you have gone back and tried to spot the bug by now? in case you haven't, you can recreate it in your brain by selecting the discount checkbox first and then adding or removing an item. It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call updateDiscountView() from the add and remove click listeners, so this value will be incorrect in the view until the discount checkbox is toggled again.
 
 Even simple views can very easily have subtle UI consistency bugs like this. And often they are hard to spot, for this one a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
 
@@ -302,9 +302,17 @@ But you'll find that by focusing on the property first rather than the condition
 	
 	
 ## ASAF Observables
+In ASAF, the models are usually Observable, and the Views are mostly doing the Observing.
 
-The observables are how the models let the outside world that their state has changed. 
+Most of the models in the sample apps become observable by extending ObservableImp, the [code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
 
+- Any observers can add() themselves to the model so that the observer will be told of any changes in the model's state
+- When the model's state changes, each added observer will be told in turn by having its somethingChanged() method called (which in turn typicallly causes a call to syncView())
+- For this to work, all the model must do is call notifyObservers() whenever it's own state changes
+- When used in ASYNCHRONOUS mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
+- To avoid memory leaks, observers are responsible for removing themselves from the observable model once they are no longer interested in receiving notifications
+- Typically observers add() and remove() themselves in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
 
-//TODO
+Now the remaing code in this [example view](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should make sense.
+
 
