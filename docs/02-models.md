@@ -22,33 +22,39 @@ If you're already comfortable writing model code skip down to the [check list](#
 
 Writing model code gets easier with practice but as a starting point you could do a lot worse than to start by modelling real world concepts. That should also make it easier for other developers to understand what you are aiming for.
 
-For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model, that *Printer* model probably has global application scope because the real printer is right there by the app ready for printing no matter what part of the app you are in. There will also only be one instance of the *Printer* model, because: there is only one real printer.
+For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model.
+
+(In ASAF, almost all the models end up having global scope, if for some reason you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Just don't call "new" in a View layer class because then you won't be able to mock it out for tests.)
+
+In this case it makes sense to give our *Printer* model global application scope because the real printer is right there by your phone ready for printing no matter what part of the app you are in. There will also only be one instance of the *Printer* model, because: there is only one real printer.
 
 ```
-    public class Printer {
-    }
+public class Printer {
+}
 ```
 
 The *Printer* model might have a boolean that says if it's busy printing or not. It might have a boolean that says that is has run out of paper. It might have a number that tells you how many items it has in the queue at the moment. All of this state should be available via getters for any View or other Observer code to access.
 
-    public class Printer {
+```
+public class Printer {
     
-        private boolean isBusy = false;
-        private boolean hasPaper = true;
-        private int thingsLeftToPrint;
+    private boolean isBusy = false;
+    private boolean hasPaper = true;
+    private int thingsLeftToPrint;
     
-        public boolean isBusy() {
-            return isBusy;
-        }
-    
-        public boolean isHasPaper() {
-            return hasPaper;
-        }
-    
-        public int getThingsLeftToPrint() {
-            return thingsLeftToPrint;
-        }
+    public boolean isBusy() {
+        return isBusy;
     }
+    
+    public boolean isHasPaper() {
+        return hasPaper;
+    }
+    
+    public int getThingsLeftToPrint() {
+        return thingsLeftToPrint;
+    }
+}
+```
 
 
 The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished: 
