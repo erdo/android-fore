@@ -10,15 +10,14 @@ Check out the [sample apps](#sample-apps) to see how it's done.
 
 ## Quick Start
 
-main framework:
 
 ```
 compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.20', ext: 'aar')
 ```
-
-other tools:
+optional:
 
 ```
+compile (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.20', ext: 'aar')
 compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.20', ext: 'aar')
 ```
 
@@ -36,7 +35,7 @@ The framework is basically a light touch implementation of **MVVM** written for 
 
 In any case, all the sample apps included here are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
 
-Don't worry, the code is actually a lot more simple than this diagram:
+This diagram manges to make things look more complicated than they are, don't worry, the actual code is a lot more simple!
 
 
 ![data binding](img/data-binding.png)
@@ -47,6 +46,8 @@ At a very high level you will be writing observable and testable **Model** class
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
+
+There are also optional extras that help with using ([**adapters**](/asaf-project/04-more.html#adapters) and working with ([**Retrofit2**](/asaf-project/04-more.html#retrofit2).
 
 You might be surprised how much android code becomes uneccesasary when you take this approach to development.
 
@@ -62,7 +63,7 @@ Asside from the apps, there is also a lot of information (and more crap diagrams
 
 
 ### ASAF 1 Data Binding Example
-This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/03-databinding.html). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/asaf-project/03-databinding.html). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
 
