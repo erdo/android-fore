@@ -107,7 +107,7 @@ As usual it's a complete and (~~and tested app~~ watch this space, I've been bus
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleretrofit/screenshot.png)
 
-If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [**Retrofit2**](/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
+If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
 
 Clicking the buttons will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome!).
 

@@ -8,9 +8,9 @@ In the sample apps, the models are all found in the **feature** package.
 
 If you crack how to write a good model, using it in the rest of your app should be a piece of cake.
 
-You'll see that in all the sample apps, the models have been written with the assuption that all the methods are being accessed on a single thread, (which for a live app would be the UI thread).
+You'll see that in all the sample apps, the models have been written with the assuption that all the methods are being accessed on a single thread (which for a live app would be the UI thread).
 
-Assuming everything in your app operates on a single thread is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
+Writing your app so that it operates on a single thread by default is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
 
 When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) for example, and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.
 
@@ -24,7 +24,9 @@ For example if you have a printer attached to your android app that you need to 
 
 (In ASAF, almost all the models end up having global scope, if for some reason you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Just don't call "new" in a View layer class because then you won't be able to mock it out for tests.)
 
-In this case it makes sense to give our *Printer* model global application scope because the real printer is right there by your phone ready for printing no matter what part of the app you are in. There will also only be one instance of the *Printer* model, because: there is only one real printer.
+In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy to do - also c) at some point the designers will probably want to be able to print various things, from various parts of the app and there is no point in limiting ourselves here.
+
+There will also only be one instance of the *Printer* model, because: there is only one real printer.
 
 ```
 public class Printer {
@@ -108,7 +110,7 @@ The *Printer* model will need USB connection stuff and maybe a Formatter that wi
 
 We're nearly there. If we want to involve this *Printer* model in the view layer we will probably want it to be Observable so that any observing view will be notified whenever it changes (and therefore the view needs to be refreshed).
 
-The quickest was to do that is to extend ObservableImp:
+The quickest way to do that is to extend ObservableImp:
 
 ```
 public class Printer extends ObservableImp {
@@ -174,7 +176,7 @@ Taking advantage of lambda expressions this becomes:
             .execute((Void) null);
 ```
 
-Here's what we end up with for our fake *Printer* model:
+Here's what we might end up with for a rough *Printer* model:
 
 ```
 public class Printer extends ObservableImp {
@@ -196,6 +198,11 @@ public class Printer extends ObservableImp {
     }
 
     public void printThis(Page pageToPrint, final CompleteCallBack completeCallBack) {
+
+        if (isBusy){
+            completeCallBack.fail();
+            return;
+        }
 
         isBusy = true;
         numPagesLeftToPrint++;
@@ -237,8 +244,9 @@ public class Printer extends ObservableImp {
 }
 ```
 
+Obviously that's not functional, we've ignored numPagesLeftToPrint and the printing details, but you get the idea.
 
-There are a few things that snuck in to the final version: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent. Usually you will pass WorkMode.ASYNCHRONOUS here.
+There is something important that snuck in to that version though: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent, it's also being used by the AsafTaskBuilder. Usually you will pass WorkMode.ASYNCHRONOUS here.
 
 When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
 
@@ -252,7 +260,7 @@ Take a look at the check list below and then head over to the [Data Binding](/as
 
 ## <a name="model-check"></a> Model Checklist
 
-For reference here's a check list of my recommendations for the model classes, as used in ASAF. Once you've had a go at writing one you can come back here to double check you have everything down:
+For reference here's a check list of recommendations for the model classes, as used in ASAF. Once you've had a go at writing one you can come back here to double check you have everything down:
 
 - The model classes should **know nothing about android lifecycle methods**
 - In fact **the less the models knows about Android the better**
@@ -262,7 +270,7 @@ For reference here's a check list of my recommendations for the model classes, a
 - The model's current state at any point in time is typically exposed by getters. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do the work in the setters not the getters
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.
-- The models should make good use of dependency injection (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's [AsafTask](/asaf-project/04-asynchronous-code.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/04-more.html#asaftaskbuilder)
+- The models should make good use of dependency injection (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's [AsafTask](/asaf-project/04-more.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/asaf-project/04-more.html#asaftaskbuilder)
 - Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thouroughly test model logic is a key part of reducing unecessary app bugs.
 - If the models are to be observable, they can do this in one of 2 ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally.
 - Do check out [When should I use an Observer, when should I use a callback listener?](/asaf-project/08-faq.html#observer-listener) in the FAQs to double check you're making the right choice for your model.
