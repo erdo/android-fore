@@ -1,6 +1,3 @@
-*Under construction!*
-
-
 # ASAF
 Alarmingly Simple Android Framework
 
@@ -13,11 +10,14 @@ Check out the [sample apps](#sample-apps) to see how it's done.
 
 ## Quick Start
 
-...
+main framework:
+``` compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.20', ext: 'aar')
+```
 
-//TODO gradle stuff
+other tools:
+``` compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.20', ext: 'aar')
+```
 
-...
 
 
 ## Overview
