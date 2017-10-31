@@ -2,7 +2,7 @@
 # Models
 There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** classes.
 
-In the sample apps, the models are all found in the **feature** package.
+In the sample apps, the models are all found in the **feature** package. Here's an example: [FruitFetcher.java](https://github.com/erdo/asaf-project/blob/master/exampleretrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java)
 
 ## Writing a Basic Model
 
