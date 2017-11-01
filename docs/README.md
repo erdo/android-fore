@@ -26,7 +26,7 @@ compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.21', ext: 
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
- 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/asaf-project/03-databinding.html#shoom) while refering to the code of the sample apps
+ 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while refering to the code of the sample apps
 
 
 ## Overview
@@ -51,9 +51,9 @@ At a very high level you will be writing observable and testable **Model** class
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
-ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
+ASAF also includes a testable alternative for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
 
-There are also optional extras that help with using ([**adapters**](/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](/asaf-project/04-more.html#retrofit2)).
+There are also optional extras that help with using ([**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit2)).
 
 You might be surprised how much android code becomes unnecessary when you take this approach to development.
 
@@ -74,7 +74,7 @@ Asside from the apps, there is also a lot of information (and more crap diagrams
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampledatabinding/screenshot.png)
 
-This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
 
@@ -85,7 +85,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/examplethreading/screenshot.png)
 
-This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
+This one demostrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, one which lets you take advantage of lambda expressions.
 
@@ -98,7 +98,7 @@ It's really a very exciting app, I should probably put it on the play store befo
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleadapters/screenshot.png)
 
-This one demostrates how to use [**adapters**](/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
+This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
 It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and ASAF will take care of all the notify changes work.
 
@@ -113,7 +113,7 @@ As usual it's a complete and (~~and tested app~~ watch this space, I've been bus
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleretrofit/screenshot.png)
 
-If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
+If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit2) in a particularly clean and testable way. This is example app for that.
 
 Clicking the buttons will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome!).
 
@@ -122,7 +122,7 @@ The first button gets a successful response, the last two get failed responses. 
 As you're using the app, notice:
 
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
-- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously, see more on that in [model](/asaf-project/02-models.html#shoom) section.
+- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously, see more on that in [model](https://erdo.github.io/asaf-project/02-models.html#shoom) section.
 
 The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
