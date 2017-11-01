@@ -1,7 +1,6 @@
 package foo.bar.example.asafretrofit.ui.fruit;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -22,7 +21,6 @@ import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.logging.SystemLogger;
 import co.early.asaf.core.observer.Observer;
 import co.early.asaf.retrofit.CallProcessor;
-import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.api.fruits.FruitService;
@@ -92,8 +90,6 @@ public class FruitViewRotationTest {
                 logger,
                 WorkMode.ASYNCHRONOUS);
 
-        Application application = (Application)getInstrumentation().getTargetContext().getApplicationContext();
-        application.registerActivityLifecycleCallbacks(new ProgressBarIdler());
     }
 
     @Test

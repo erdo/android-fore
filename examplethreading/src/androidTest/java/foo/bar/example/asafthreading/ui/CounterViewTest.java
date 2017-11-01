@@ -106,12 +106,6 @@ public class CounterViewTest {
     }
 
     @Test
-    public void properlyTestRotationMidRequest() throws Exception {
-        //arrange
-
-    }
-
-    @Test
     public void clickCallsBasicModel() throws Exception {
         //arrange
         new StateBuilder(mockCounterWithLambdas, mockCounterWithProgress)

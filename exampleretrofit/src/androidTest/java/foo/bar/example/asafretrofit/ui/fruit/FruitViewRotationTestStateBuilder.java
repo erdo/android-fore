@@ -9,6 +9,7 @@ import org.mockito.ArgumentCaptor;
 import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
 import co.early.asaf.core.logging.SystemLogger;
 import foo.bar.example.asafretrofit.CustomApp;
+import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 
 import static org.mockito.Matchers.any;
@@ -56,6 +57,7 @@ public class FruitViewRotationTestStateBuilder {
                 customApp.injectSynchronousObjectGraph();
                 //inject our test model
                 customApp.injectMockObject(FruitFetcher.class, fruitViewRotationTest.fruitFetcher);
+                customApp.registerActivityLifecycleCallbacks(new ProgressBarIdler());
 
             }
 

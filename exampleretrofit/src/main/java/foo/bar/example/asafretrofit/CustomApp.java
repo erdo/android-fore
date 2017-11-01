@@ -18,8 +18,6 @@ public class CustomApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXX onCreate()");
-
         instance = this;
 
         if (objectGraph == null) {

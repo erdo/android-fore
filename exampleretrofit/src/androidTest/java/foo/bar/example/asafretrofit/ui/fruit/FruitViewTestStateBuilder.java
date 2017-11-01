@@ -4,6 +4,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import foo.bar.example.asafretrofit.CustomApp;
+import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 
@@ -42,6 +43,7 @@ public class FruitViewTestStateBuilder {
 
                 //inject our mocks so our UI layer will pick them up
                 customApp.injectMockObject(FruitFetcher.class, mockFruitFetcher);
+                customApp.registerActivityLifecycleCallbacks(new ProgressBarIdler());
             }
 
         };

@@ -1,7 +1,6 @@
 package foo.bar.example.asafretrofit.ui.fruit;
 
 import android.app.Activity;
-import android.app.Application;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,12 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -47,8 +44,6 @@ public class FruitViewTest {
 
         mockFruitFetcher = mock(FruitFetcher.class);
 
-        Application application = (Application)getInstrumentation().getTargetContext().getApplicationContext();
-        application.registerActivityLifecycleCallbacks(new ProgressBarIdler());
     }
 
 
