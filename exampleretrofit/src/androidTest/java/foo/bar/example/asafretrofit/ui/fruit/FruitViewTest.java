@@ -56,7 +56,7 @@ public class FruitViewTest {
     public void hasCitrusFruit() throws Exception {
 
         //arrange
-        Activity activity = new StateBuilder(mockFruitFetcher)
+        Activity activity = new FruitViewTestStateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit1", true, 45))
                 .createRule()
@@ -83,7 +83,7 @@ public class FruitViewTest {
     public void hasNonCitrusFruit() throws Exception {
 
         //arrange
-        Activity activity = new StateBuilder(mockFruitFetcher)
+        Activity activity = new FruitViewTestStateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
@@ -110,7 +110,7 @@ public class FruitViewTest {
     public void isFetchingFruit() throws Exception {
 
         //arrange
-        new StateBuilder(mockFruitFetcher)
+        new FruitViewTestStateBuilder(mockFruitFetcher)
                 .isBusy(true)
                 .hasFruit(new FruitPojo("testFruit1", true, 45))
                 .createRule()
@@ -134,7 +134,7 @@ public class FruitViewTest {
     @Test
     public void clickCallsFetchSuccess() throws Exception {
         //arrange
-        new StateBuilder(mockFruitFetcher)
+        new FruitViewTestStateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
@@ -153,7 +153,7 @@ public class FruitViewTest {
     @Test
     public void clickCallsFetchFailBasic() throws Exception {
         //arrange
-        new StateBuilder(mockFruitFetcher)
+        new FruitViewTestStateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()
@@ -172,7 +172,7 @@ public class FruitViewTest {
     @Test
     public void clickCallsFetchFailAdvanced() throws Exception {
         //arrange
-        new StateBuilder(mockFruitFetcher)
+        new FruitViewTestStateBuilder(mockFruitFetcher)
                 .isBusy(false)
                 .hasFruit(new FruitPojo("testFruit2", false, 75))
                 .createRule()

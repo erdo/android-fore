@@ -12,20 +12,20 @@ import static org.mockito.Mockito.when;
 /**
  *
  */
-public class StateBuilder {
+public class FruitViewTestStateBuilder {
 
     private FruitFetcher mockFruitFetcher;
 
-    StateBuilder(FruitFetcher mockFruitFetcher) {
+    FruitViewTestStateBuilder(FruitFetcher mockFruitFetcher) {
         this.mockFruitFetcher = mockFruitFetcher;
     }
 
-    StateBuilder isBusy(boolean busy) {
+    FruitViewTestStateBuilder isBusy(boolean busy) {
         when(mockFruitFetcher.isBusy()).thenReturn(busy);
         return this;
     }
 
-    StateBuilder hasFruit(FruitPojo fruitPojo) {
+    FruitViewTestStateBuilder hasFruit(FruitPojo fruitPojo) {
         when(mockFruitFetcher.getCurrentFruit()).thenReturn(fruitPojo);
         return this;
     }

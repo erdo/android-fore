@@ -161,7 +161,7 @@ public class FruitFetcherIntegrationTest {
 
         //assert
         verify(mockSuccessCallBack, never()).success();
-        verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedFailUserLocked.expectedResult));
+        verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedFailureUserNotEnabled.expectedResult));
         Assert.assertEquals(false, fruitFetcher.isBusy());
         Assert.assertEquals(0, fruitFetcher.getCurrentFruit().tastyPercentScore);
     }
@@ -199,7 +199,7 @@ public class FruitFetcherIntegrationTest {
 
             //assert
             verify(mockSuccessCallBack, never()).success();
-            verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedFailUserLocked.expectedResult));
+            verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedServiceDefinition.expectedResult));
             Assert.assertEquals(false, fruitFetcher.isBusy());
             Assert.assertEquals(0, fruitFetcher.getCurrentFruit().tastyPercentScore);
         }

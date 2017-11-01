@@ -2,6 +2,9 @@ package foo.bar.example.asafretrofit.feature.fruit;
 
 import org.mockito.ArgumentCaptor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
 import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
 import co.early.asaf.retrofit.CallProcessor;
@@ -24,15 +27,18 @@ public class StateBuilder {
 
     StateBuilder getFruitSuccess(final FruitPojo fruitPojo) {
 
+        List<FruitPojo> fruitList = new ArrayList<>();
+        fruitList.add(fruitPojo);
+
         final ArgumentCaptor<SuccessCallbackWithPayload> callback = ArgumentCaptor.forClass(SuccessCallbackWithPayload.class);
 
         doAnswer(__ -> {
-            callback.getValue().success(fruitPojo);
+            callback.getValue().success(fruitList);
             return null;
         })
 
                 .when(mockCallProcessor)
-                .processCall(any(), any(), callback.capture(), any());
+                .processCall(any(), any(), any(), callback.capture(), any());
 
         return this;
     }
@@ -45,9 +51,8 @@ public class StateBuilder {
             callback.getValue().fail(userMessage);
             return null;
         })
-
-                .when(mockCallProcessor)
-                .processCall(any(), any(), any(), callback.capture());
+        .when(mockCallProcessor)
+        .processCall(any(), any(), any(), any(), callback.capture());
 
         return this;
     }
