@@ -1,5 +1,4 @@
 
-
 # Views
 Views are not just XML layouts, in Android the classes that form the view layer of an app are not just the classes extending View either, they include the **Activity**, **Fragment** *and* **View** classes.
 

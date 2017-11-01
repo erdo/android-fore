@@ -83,6 +83,9 @@ install {
                 artifactId LIB_ARTIFACT_ID
                 version rootProject.ext.LIB_VERSION_NAME
             }
+
+            println "install output dir:" + getOutputDir()
+
             repository(url: "file:///" + getOutputDir())
         }
     }

@@ -38,19 +38,19 @@
   url: /04-more.html
   subitems:
     - text: Dependency Injection
-      url: "#di"
-    - text: Adapters
-      url: "#adapters"
+      url: "#dependency-injection"
+    - text: Asynchronous Code
+      url: "#asynchronous-code"
     - text: AsafTask
       url: "#asaftask"
     - text: AsafTaskBuilder and Lambda Expressions
       url: "#asaftaskbuilder"
-    - text: Asynchronous Testing
-      url: "#testing"
+    - text: Adapters
+      url: "#adapters"
     - text: Retrofit
-      url: "#retrofit"
-    - text: Widgets
-      url: "#widgets"
+      url: "#retrofit-and-the-callprocessor"
+    - text: UI Widgets
+      url: "#ui-widgets-and-helpers"
 - text: Code Review Checklist
   url: /05-code-review-checklist.html
 - text: FAQ

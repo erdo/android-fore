@@ -1,14 +1,58 @@
 
-
-WIP...
-
 # Dependency Injection
 
-//TODO
+Dependency Inject is pretty important, without it I'm not sure how you could write a properly tested Android app. But it's not actually that complicated.
 
-# Adapters
+All it really means is instead of instantiating the things that you need to use (dependencies) inside of the class that you're currently in, pass them **to** your class instead (either via the constructor or some other method if the constructor is not available such the Android UI classes).
 
-//TODO
+
+Don't do this:
+
+```
+public MessageSender() {
+    networkAccess = new NetworkAccess();
+}
+```
+
+Do this instead
+
+```
+public MessageSender(NetworkAccess networkAccess) {
+    this.networkAccess = networkAccess;
+}
+```
+
+If you don't have access to the constructor, you can do this (like we do in a lot of the ASAF sample apps):
+
+```
+MessageSender messageSender;
+
+protected void onFinishInflate() {
+    super.onFinishInflate();
+
+    messageSender = CustomApp.get(MessageSender);
+}
+```
+
+In a commercial app, the number of dependencies you need to keep track can sometimes of can get pretty large, so some people use a library like Dagger2 to manage this:
+
+```
+@Inject MessageSender messageSender;
+
+protected void onFinishInflate() {
+    super.onFinishInflate();
+
+    DaggerComponent.inject(this);
+}
+```
+
+The main reason for all of this is that dependency injection enables you to swap out that NetworkAccess dependency (or swap out MessageSender). Maybe you want to swap in a mock NetworkAccess for a test so that it doesn't actually connnect to the network when you run the test. In addition, if NetworkAccess is an interface, dependency injection lets you replace the implementation with another one without having to alter the rest of your code.
+
+A quick way to check how your code is doing on this front is to look for the keyword *new*. If it's there, then that is a depenency that won't be able to be swapped or mocked out at a later date (which may be fine, as long as you are aware of it).
+
+*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the ASAF sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have a app with more than 100 global scope dependencies then you're probabaly doing something wrong, or maybe you're using a framework like MVP which could seriously increase the number of dependencies you need to keep track of... or maybe you're injecting all your networking dependencies directly into your Fragments instead of wrapping them up in model classes :/ )*
+
+Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself.
 
 
 # Asynchronous Code
@@ -19,7 +63,7 @@ AsyncTask suffers from a few problems - the main one being that it can't be test
 
 The quickest ASAF solution to all that is to use AsafTask as an (almost) drop in solution.
 
-**Example 3 in the project is the simplest way to see this all in action by the way.**
+**[Asynchronous Example App Source Code](/asaf-project/#asaf-2-asynchronous-code-example) is the simplest way to see this all in action by the way.**
 
 ## AsafTask
 AsafTask (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask* with two exceptions detailed below.
@@ -80,29 +124,30 @@ One restriction with AsafTaskBuilder is there is no way to pulish progress, so i
 
 
 ```
-        new AsafTaskBuilder<Void, Integer>(workMode)
-                .doInBackground(new DoInBackgroundCallback<Void, Integer>() {
-                    @Override
-                    public Integer doThisAndReturn(Void... input) {
-                        return MyModel.this.doLongRunningStuff(input);
-                    }
-                })
-                .onPostExecute(new DoThisWithPayloadCallback<Integer>() {
-                    @Override
-                    public void doThis(Integer result) {
-                        MyModel.this.doThingsWithTheResult(result);
-                    }
-                })
-                .execute((Void) null);
+new AsafTaskBuilder<Void, Integer>(workMode)
+    .doInBackground(new DoInBackgroundCallback<Void, Integer>() {
+        @Override
+        public Integer doThisAndReturn(Void... input) {
+            return MyModel.this.doLongRunningStuff(input);
+        }
+    })
+    .onPostExecute(new DoThisWithPayloadCallback<Integer>() {
+        @Override
+        public void doThis(Integer result) {
+            MyModel.this.doThingsWithTheResult(result);
+        }
+    })
+    .execute((Void) null);
+    
 ```
 
 That might not look particularly clean, but it gets a lot cleaner once you are using lambda expressions.
 
 ```
-        new AsafTaskBuilder<Void, Integer>(workMode)
-                .doInBackground(input -> MyModel.this.doStuffInBackground(input))
-                .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
-                .execute((Void) null);
+new AsafTaskBuilder<Void, Integer>(workMode)
+    .doInBackground(input -> MyModel.this.doStuffInBackground(input))
+    .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
+    .execute((Void) null);
 ```
 
 
@@ -112,9 +157,18 @@ For both AsafTask and AsafTaskBuilder, testing is done by passing WorkMode.SYNCH
 A conveient way to make this happen is to inject the WorkMode into the enclosing class at construciton time so that it WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in Example 3.
 
 
+# Adapters
+
+//TODO
+
+[Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-code-example)
+
+
 # Retrofit and the CallProcessor
 
 //TODO
+
+[Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-code-example)
 
 
 # UI Widgets and Helpers
