@@ -22,7 +22,7 @@ compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.21', ext: 
 ```
 
 
-**Either go ahead and start using ASAF if you know what you're doing, or if you want to get quickly up to speed with how this library works from scratch, it's probably 1-2 hours work. I'd recommend:**
+**If you're not familiar with ASAF and you want to get quickly up to speed with how this library works from scratch, it's probably 1-2 hours work. I'd recommend:**
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
