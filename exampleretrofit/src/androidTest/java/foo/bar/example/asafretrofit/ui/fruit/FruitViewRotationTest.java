@@ -1,6 +1,7 @@
 package foo.bar.example.asafretrofit.ui.fruit;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -9,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import co.early.asaf.core.WorkMode;
@@ -19,6 +22,7 @@ import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.logging.SystemLogger;
 import co.early.asaf.core.observer.Observer;
 import co.early.asaf.retrofit.CallProcessor;
+import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.api.fruits.FruitService;
@@ -71,6 +75,8 @@ public class FruitViewRotationTest {
     @Before
     public void setup(){
 
+        logger.i(TAG, "setup()");
+
         //MockitoAnnotations.initMocks(LoginViewTest.this);
         System.setProperty("dexmaker.dexcache", InstrumentationRegistry.getTargetContext().getCacheDir().getPath());
 
@@ -84,7 +90,10 @@ public class FruitViewRotationTest {
                 mockFruitService,
                 mockCallProcessor,
                 logger,
-                WorkMode.SYNCHRONOUS);
+                WorkMode.ASYNCHRONOUS);
+
+        Application application = (Application)getInstrumentation().getTargetContext().getApplicationContext();
+        application.registerActivityLifecycleCallbacks(new ProgressBarIdler());
     }
 
     @Test
@@ -95,7 +104,8 @@ public class FruitViewRotationTest {
         //arrange
         Activity activity = new FruitViewRotationTestStateBuilder(this)
                 .withDelayedCallProcessor()
-                .createRule().getActivity();
+                .createRule()
+                .launchActivity(null);
 
         checkUIBeforeClick(activity);
 
@@ -124,6 +134,9 @@ public class FruitViewRotationTest {
 
         logger.i(TAG, "callSuccessOnCachedSuccessFailCallback()");
 
+        List<FruitPojo> fruitList = new ArrayList<>();
+        fruitList.add(fruitPojo);
+
         //we need to be back on the UI thread for this
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
@@ -131,7 +144,7 @@ public class FruitViewRotationTest {
 
                 logger.i(TAG, "about to call success, id:" + Thread.currentThread().getId());
 
-                cachedSuccessCallback.success(fruitPojo);
+                cachedSuccessCallback.success(fruitList);
                 countDownLatch.countDown();
             }
         });

@@ -7,8 +7,8 @@ import android.support.test.rule.ActivityTestRule;
 import org.mockito.ArgumentCaptor;
 
 import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
+import co.early.asaf.core.logging.SystemLogger;
 import foo.bar.example.asafretrofit.CustomApp;
-import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 
 import static org.mockito.Matchers.any;
@@ -38,8 +38,8 @@ public class FruitViewRotationTestStateBuilder {
 
             return null;
         })
-                .when(fruitViewRotationTest.mockCallProcessor)
-                .processCall(any(), any(), any(), callback.capture(), any());
+        .when(fruitViewRotationTest.mockCallProcessor)
+        .processCall(any(), any(), any(), callback.capture(), any());
 
         return this;
     }
@@ -50,12 +50,13 @@ public class FruitViewRotationTestStateBuilder {
             @Override
             protected void beforeActivityLaunched() {
 
+                new SystemLogger().i("FruitViewRotationTestStateBuilder", "beforeActivityLaunched()");
+
                 CustomApp customApp = (CustomApp) InstrumentationRegistry.getTargetContext().getApplicationContext();
                 customApp.injectSynchronousObjectGraph();
                 //inject our test model
                 customApp.injectMockObject(FruitFetcher.class, fruitViewRotationTest.fruitFetcher);
-                //fix for any progress bars
-                customApp.registerActivityLifecycleCallbacks(new ProgressBarIdler());
+
             }
 
             @Override

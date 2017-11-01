@@ -107,8 +107,7 @@ public class CounterViewTest {
 
     @Test
     public void properlyTestRotationMidRequest() throws Exception {
-
-        //TODO
+        //arrange
 
     }
 
