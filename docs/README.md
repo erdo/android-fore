@@ -126,7 +126,7 @@ As you're using the app, notice:
 
 The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
-But as usual it's a complete and tested app. In reality the tests are probably more than I would do for a real app, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
+As usual it's a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
 
 I also hope you appreciate the lemon icons, I made them in Inkscape.
 
@@ -164,11 +164,8 @@ License
 
 
 ### Say Thanks
-Nothing says thank you like bitcoin...
+Nothing says thank you like bitcoin sent to 3MpUaLWeNUQLxonMxBYyaEugmoEMrEzuc6
 
-![data binding](img/bitcoin.png)
-
-
-3MpUaLWeNUQLxonMxBYyaEugmoEMrEzuc6
+![bitcoin](img/bitcoin.png)
 
 
