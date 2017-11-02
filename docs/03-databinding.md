@@ -1,8 +1,6 @@
 # Data Binding
-## One and Two Way
-First we're going to briefly review what data binding **is** as the term is not in common use among a lot of Android devs yet.
 
-### One Way Data Binding
+## One Way Data Binding
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 
@@ -10,12 +8,12 @@ So if your shopping basket model is empty: the checkout button on your view need
 
 ASAF took a deliberate decision to only support **One Way Data Binding** for the reasons outlined below, but for completeness...
 
-### Two Way Data Binding
+## Two Way Data Binding
 In addition to the above, with two way data binding, the binding goes the other way too. So lets say you are editing your online profile in an editable text view, your view edits will automatically be reflected in your underlying profile model.
 
 Automatic two way data binding turns out to be a bit of a pain in the derriere, and once you consider all the exceptions, it's not as useful as you might expect. It's also very easy to do for specific cases (just not in the general case).
 
-Anyway we will show you how to do rock solid **one way data binding** with this library, if it turns out you need some two way data binding you can just do something like this:
+Anyway this document will show you how to do rock solid **one way data binding** using ASAF, if it turns out you need some two way data binding you can just do something like this:
 
 ```
 saveChangesButton.setOnClickListener(new View.OnClickListener() {  

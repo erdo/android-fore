@@ -20,9 +20,6 @@ import retrofit2.Response;
  * CE needs to implement MessageProvider&lt;F&gt; (i.e. it needs to be able to give you a failure
  * message that can be passed back to the application)
  *
- * Note: this callProcessor won't enable you to access the headers in the response, if you need that
- * you'll have to write your own, or use a global response interceptor
- *
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  *           failure message class, like an enum for example
  */
