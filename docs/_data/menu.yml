@@ -7,8 +7,8 @@
       url: /#overview
     - text: Sample Apps
       url: /#sample-apps
-    - text: Licence
-      url: /#licence
+    - text: License
+      url: /#license
 - text: Views
   url: /01-views.html
   subitems:
