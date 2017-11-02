@@ -1,6 +1,7 @@
 # Data Binding
 
 ## One Way Data Binding
+A basic definition of one way databinding could be: any changes of state that happen in your underlying model, get automatically represented in your view.
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 

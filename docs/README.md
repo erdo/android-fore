@@ -145,8 +145,8 @@ I also hope you appreciate the lemon icons, I made them in Inkscape.
 
 
 
-License
--------
+## License
+
 
     Copyright 2017 early.co
 
