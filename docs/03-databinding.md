@@ -186,7 +186,7 @@ private void updatePostRotation(){
 }
 ```
 
-Well that looks kind of ok, and it would mostly work - but what if we want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1.
+Well that looks kind of ok, and it would mostly work, the add and remove listeners look pretty similar so we can extract that out to another method - but what if we also want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1.
 
 It soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
