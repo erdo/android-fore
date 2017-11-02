@@ -29,7 +29,7 @@
   url: /03-databinding.html
   subitems:
     - text: Overview
-      url: "#one-and-two-way"
+      url: "#data-binding"
     - text: SyncView()
       url: "#syncview"
     - text: ASAF Observables
