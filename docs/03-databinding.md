@@ -192,7 +192,7 @@ It soon starts to become untidy and complicated (which is not what you want in a
 
 
 ### But that's not the worst problem....
-The worst problem with this code though is that there is a **bug** in it. Did you spot it?
+The worst problem with this code though, is that there is a **bug** in it. Did you spot it?
 
 It's a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that dissable rotation.
 
@@ -304,9 +304,9 @@ In ASAF, the models are usually Observable, and the Views are mostly doing the O
 
 Most of the models in the sample apps become observable by extending ObservableImp, the [code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
 
-- Any observers can add() themselves to the model so that the observer will be told of any changes in the model's state
+- Any observers (usually views) can add() themselves to the model so that the observer will be told of any changes in the model's state
 - When the model's state changes, each added observer will be told in turn by having its somethingChanged() method called (which in turn typicallly causes a call to syncView())
-- For this to work, all the model must do is call notifyObservers() whenever it's own state changes
+- For this to work, all a model must do is call notifyObservers() whenever it's own state changes
 - When used in ASYNCHRONOUS mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
 - To avoid memory leaks, observers are responsible for removing themselves from the observable model once they are no longer interested in receiving notifications
 - Typically observers add() and remove() themselves in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()

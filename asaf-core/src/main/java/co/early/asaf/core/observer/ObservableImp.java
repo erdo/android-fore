@@ -86,7 +86,7 @@ public class ObservableImp implements Observable{
         if (observerList.size() > 2 && logger != null) {
             logger.w(TAG, "There are now:" + observerList.size() + " Observers added to this Observable, that's quite a lot.\n" +
                     "It's sometimes indicative of code which is not removing observers when it should\n" +
-                    "(forgetting to remove observers in an onPause() method for example)\n" +
+                    "(forgetting to remove observers in an onPause() or onDetachedFromWindow() method for example)\n" +
                     "Failing to remove observers when you no longer need them will cause memory leaks");
         }
 
