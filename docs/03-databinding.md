@@ -44,7 +44,7 @@ Depending on your situation though, you might find that it's more convenient to 
 
 Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with.
 
-*The following code written without taking advantage of lambdas (so that they are clearer for those who haven't got up to speed with lambdas yet), but their use makes no difference to the example.*
+*The following code is written without taking advantage of lambdas (so that they are clearer for those who haven't got up to speed with lambdas yet), but their use makes no difference to the example.*
 
 Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our basic view to this basket model.
 
