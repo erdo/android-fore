@@ -246,7 +246,7 @@ public class Printer extends ObservableImp {
 }
 ```
 
-Obviously that's not functional, we've ignored numPagesLeftToPrint and the printing details, but you get the idea.
+Obviously that doesn't work yet, we've ignored numPagesLeftToPrint and the printing details, but you get the idea.
 
 There is something important that snuck in to that version though: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent, it's also being used by the AsafTaskBuilder. Usually you will pass WorkMode.ASYNCHRONOUS here.
 

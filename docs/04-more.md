@@ -63,12 +63,12 @@ AsyncTask suffers from a few problems - the main one being that it can't be test
 
 The quickest ASAF solution to all that is to use AsafTask as an (almost) drop in solution.
 
-**[Asynchronous Example App Source Code](/asaf-project/#asaf-2-asynchronous-code-example) is the simplest way to see this all in action by the way.**
+[Asynchronous Example App Source Code](/asaf-project/#asaf-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
 ## AsafTask
 AsafTask (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask* with two exceptions detailed below.
 
-*AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the source code for AsafTask, don't worry it's tiny.
+*AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTask.java) for AsafTask, don't worry it's tiny.
 
 
 ```
@@ -118,7 +118,7 @@ The other difference with AsafTask is that to run it, you need to call executeTa
 
 ## AsafTaskBuilder
 
-For slightly more concise code, you can use AsafTaskBuilder. This class works in much the sameway as AsafTask, it just has a cut down APIto take advantage of lambda expressions.
+For slightly more concise code, you can use AsafTaskBuilder. This class works in much the sameway as AsafTask, it just has a cut down APIto take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTaskBuilder.java)
 
 One restriction with AsafTaskBuilder is there is no way to pulish progress, so if you need to publish progress during your asynchronous operation, just stick to a plain AsafTask.
 
