@@ -100,13 +100,13 @@ public class Printer {
 The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constuctor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
 
 ```
-    private final USBStuff usbStuff;
-    private final Formatter formatter;
+private final USBStuff usbStuff;
+private final Formatter formatter;
 
-    public Printer(USBStuff usbStuff, Formatter formatter) {
-        this.usbStuff = Affirm.notNull(usbStuff);
-        this.formatter = Affirm.notNull(formatter);
-    }
+public Printer(USBStuff usbStuff, Formatter formatter) {
+    this.usbStuff = Affirm.notNull(usbStuff);
+    this.formatter = Affirm.notNull(formatter);
+}
 ```
 
 
@@ -121,51 +121,27 @@ public class Printer extends ObservableImp {
 Next we need to make sure that the observers are notifed each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens:
 
 ```
-    isBusy = true;
-    numPagesLeftToPrint++;
-    notifyObservers();  //ASAF Observable will take care of the rest
+isBusy = true;
+numPagesLeftToPrint++;
+notifyObservers();  //ASAF Observable will take care of the rest
 ```
 
 The asynchronous printing that we've glossed over so far could be implemented with an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) like so:
 
 ```
-        new AsafTaskBuilder<Void, Void>(workMode)
-            .doInBackground(new DoInBackgroundCallback<Void, Void>() {
-                @Override
-                public Void doThisAndReturn(Void... input) {
-                
-                    //...do the printing
-                    
-                    return null;
-                }
-            })
-            .onPostExecute(new DoThisWithPayloadCallback<Void>() {
-                @Override
-                public void doThis(Void result) {
+new AsafTaskBuilder<Void, Void>(workMode)
+        .doInBackground(new DoInBackgroundCallback<Void, Void>() {
+            @Override
+            public Void doThisAndReturn(Void... input) {
 
-                    //back on the UI thread
-
-                    isBusy = false;
-                    numPagesLeftToPrint--;
-                    notifyObservers();
-
-                    completeCallBack.complete();
-                }
-            })
-            .execute((Void) null);
-```
-
-Taking advantage of lambda expressions this becomes:
-
-```
-    new AsafTaskBuilder<Void, Void>(workMode)
-            .doInBackground(input -> {
-                
                 //...do the printing
-                
+
                 return null;
-            })
-            .onPostExecute(result -> {
+            }
+        })
+        .onPostExecute(new DoThisWithPayloadCallback<Void>() {
+            @Override
+            public void doThis(Void result) {
 
                 //back on the UI thread
 
@@ -174,8 +150,32 @@ Taking advantage of lambda expressions this becomes:
                 notifyObservers();
 
                 completeCallBack.complete();
-            })
-            .execute((Void) null);
+            }
+        })
+        .execute((Void) null);
+```
+
+Taking advantage of lambda expressions this becomes:
+
+```
+new AsafTaskBuilder<Void, Void>(workMode)
+        .doInBackground(input -> {
+
+            //...do the printing
+
+            return null;
+        })
+        .onPostExecute(result -> {
+
+            //back on the UI thread
+
+            isBusy = false;
+            numPagesLeftToPrint--;
+            notifyObservers();
+
+            completeCallBack.complete();
+        })
+        .execute((Void) null);
 ```
 
 Here's what we might end up with for a rough *Printer* model:

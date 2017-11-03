@@ -124,56 +124,57 @@ apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 Here is the psuedo code we end up with for this (very over simplified) case:
 
 ```
-    Button addItemButton;
-    Button removeItemButton;
-    CheckBox apply10PercOff;
+Button addItemButton;
+Button removeItemButton;
+CheckBox apply10PercOff;
 
-    TextView totalItems;
-    TextView totalDiscount;
-    TextView totalPrice;
+TextView totalItems;
+TextView totalDiscount;
+TextView totalPrice;
 
-    private void setupButtonListeners() {
+private void setupButtonListeners() {
 
-        addItemButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                basket.addItem();
-                updateTotalPriceView();
-                updateTotalNumberOfItemsView();
-            }
-        });
+    addItemButton.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            basket.addItem();
+            updateTotalPriceView();
+            updateTotalNumberOfItemsView();
+        }
+    });
 
-        removeItemButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                basket.removeItem();
-                updateTotalPriceView();
-                updateTotalNumberOfItemsView();
-            }
-        });
+    removeItemButton.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            basket.removeItem();
+            updateTotalPriceView();
+            updateTotalNumberOfItemsView();
+        }
+    });
 
-        apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(boolean applyDiscount) {
-                basket.setDiscount(applyDiscount);
-                updateDiscountView();
-                updateTotalPriceView();
-            }
-        });
-    }
+    apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(boolean applyDiscount) {
+            basket.setDiscount(applyDiscount);
+            updateDiscountView();
+            updateTotalPriceView();
+        }
+    });
+}
 
 
-    private void updateTotalNumberOfItemsView(){
-        totalItems.setText(basket.getTotalItems);
-    }
+private void updateTotalNumberOfItemsView(){
+    totalItems.setText(basket.getTotalItems);
+}
 
-    private void updateDiscountView(){
-        totalDiscount.setText(basket.getTotalDiscount);
-    }
+private void updateDiscountView(){
+    totalDiscount.setText(basket.getTotalDiscount);
+}
 
-    private void updateTotalPriceView(){
-        totalPrice.setText(basket.getTotalPrice);
-    }
+private void updateTotalPriceView(){
+    totalPrice.setText(basket.getTotalPrice);
+}
+
 ```
 
 And don't forget if we need to rotate this view, all the fields will be out of sync with our model. Because we have been smart and seperated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
@@ -205,44 +206,58 @@ Remember what we said before? If a model being observed changes **in anyway**, t
 Using a syncView() to do this, we end up with something like this for the example above:
 
 ```
-    Button addItemButton;
-    Button removeItemButton;
-    CheckBox apply10PercOff;
+Button addItemButton;
+Button removeItemButton;
+CheckBox apply10PercOff;
 
-    TextView totalItems;
-    TextView totalDiscount;
-    TextView totalPrice;
-    
+TextView totalItems;
+TextView totalDiscount;
+TextView totalPrice;
 
-    private void setupButtonListeners() {
 
-        addItemButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                basket.addItem();
-            }
-        });
+private void setupButtonListeners() {
 
-        removeItemButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                basket.removeItem();
-            }
-        });
+    addItemButton.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            basket.addItem();
+        }
+    });
 
-        apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(boolean applyDiscount) {
-                basket.setDiscount(applyDiscount);
-            }
-        });
-    }
+    removeItemButton.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            basket.removeItem();
+        }
+    });
 
-    public void syncView(){
-        totalItems.setText(basket.getTotalItems);
-        totalDiscount.setText(basket.getTotalDiscount);
-        totalPrice.setText(basket.getTotalPrice);
-    }
+    apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(boolean applyDiscount) {
+            basket.setDiscount(applyDiscount);
+        }
+    });
+}
+
+public void syncView(){
+    totalItems.setText(basket.getTotalItems);
+    totalDiscount.setText(basket.getTotalDiscount);
+    totalPrice.setText(basket.getTotalPrice);
+}
+
+
+
+private void updateTotalNumberOfItemsView(){
+    totalItems.setText(basket.getTotalItems);
+}
+
+private void updateDiscountView(){
+    totalDiscount.setText(basket.getTotalDiscount);
+}
+
+private void updateTotalPriceView(){
+    totalPrice.setText(basket.getTotalPrice);
+}
 ```
 
 The code above leaves out details that are required for both solutions of course (the injection of the basket model, hooking up the view elements to the xml layout etc). And we haven't discussed yet how syncView() actually gets called by the model (more on that in the [ASAF Observables](#asaf-observables) section below). A full implementation is not that much larger though, see [here](https://github.com/erdo/asaf-project/blob/master/exampledatabinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) for example views from the sample apps.
@@ -293,8 +308,8 @@ if (basket.isBelowMinimum()){
 But you'll find that by focusing on the property first rather than the condition, you can get some extremely clean code using the elvis operator like so:
 
 ```
-    checkoutButton.setEnabled(!basket.isBelowMinimum());
-    totalPrice.setColour(basket.isBelowMinimum() ? red : black);
+checkoutButton.setEnabled(!basket.isBelowMinimum());
+totalPrice.setColour(basket.isBelowMinimum() ? red : black);
 ```
 	
 	
