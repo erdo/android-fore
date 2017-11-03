@@ -86,35 +86,35 @@ Here's how you use AsafTask:
 
 
 ```
-        new AsafTask<Void, Integer, Integer>(workMode) {
-        
-            @Override
-            protected Integer doInBackground(Void... voids) {
+new AsafTask<Void, Integer, Integer>(workMode) {
 
-                //do some stuff in the backgroud
-                ...
-                
-                //publish progress if you want
-                publishProgressTask(progress);
-                
-                //return results
-                return result;  
-            }
+    @Override
+    protected Integer doInBackground(Void... voids) {
 
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                progress = values[0];
-                //do something with the progress
-                ...
-            }
+        //do some stuff in the backgroud
+        ...
 
-            @Override
-            protected void onPostExecute(Integer result) {
-                //do something with the results once back on the UI thread
-                ...
-            }
+        //publish progress if you want
+        publishProgressTask(progress);
 
-        }.executeTask((Void)null);
+        //return results
+        return result;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        progress = values[0];
+        //do something with the progress
+        ...
+    }
+
+    @Override
+    protected void onPostExecute(Integer result) {
+        //do something with the results once back on the UI thread
+        ...
+    }
+
+}.executeTask((Void)null);
 ```
 
 
