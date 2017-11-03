@@ -50,7 +50,7 @@ The main reason for all of this is that dependency injection enables you to swap
 
 Maybe you want to swap in a mock NetworkAccess for a test so that it doesn't actually connnect to the network when you run the test. If NetworkAccess is an interface, dependency injection would let you replace the entire implementation with another one without having to alter the rest of your code.
 
-A quick way to check how your code is doing on this front is to look for the keyword *new*. If it's there, then that is a depenency that won't be able to be swapped or mocked out at a later date (which may be fine, as long as you are aware of it).
+A quick way to check how your code is doing on this front is to look for the keyword ***new***. If it's there, then that is a depenency that won't be able to be swapped or mocked out at a later date (which may be fine, as long as you are aware of it).
 
 *Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the ASAF sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have a app with more than 100 global scope dependencies then you're probabaly doing something wrong, or maybe you're using a framework like MVP which could seriously increase the number of dependencies you need to keep track of... or maybe you're injecting all your networking dependencies directly into your Fragments instead of wrapping them up in model classes :/ ) Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself.*
 
