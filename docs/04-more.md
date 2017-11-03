@@ -57,7 +57,7 @@ A quick way to check how your code is doing on this front is to look for the key
 
 ### Inversion of Control
 
-This term caused me a lot of confusion in past so here's how I look at it.
+This term really confused me when I first heard it, so here's my take in case it's helpful for you.
 
 Imagine if we have a company. It has a CEO at the top. Underneath the CEO are departments like Marketing, HR, Finance. Those departments all print documents using a printer.
 
