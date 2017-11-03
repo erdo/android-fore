@@ -52,7 +52,7 @@ Maybe you want to swap in a mock NetworkAccess for a test so that it doesn't act
 
 A quick way to check how your code is doing on this front is to look for the keyword ***new***. If it's there, then that is a depenency that won't be able to be swapped or mocked out at a later date (which may be fine, as long as you are aware of it).
 
-*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the ASAF sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have a app with more than 100 global scope dependencies then you're probabaly doing something wrong, or maybe you're using a framework like MVP which could seriously increase the number of dependencies you need to keep track of... or maybe you're injecting all your networking dependencies directly into your Fragments instead of wrapping them up in model classes :/ ) Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself.*
+*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the ASAF sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have a app with more than 100 global scope dependencies then you're probably doing something wrong, or maybe you're using a framework like MVP which could seriously increase the number of dependencies you need to keep track of... or maybe you're injecting all your networking dependencies directly into your Fragments instead of wrapping them up in model classes :/ ) Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself.*
 
 
 ### Inversion of Control
@@ -81,6 +81,8 @@ The quickest ASAF solution to all that is to use AsafTask as an (almost) drop in
 AsafTask (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask* with two exceptions detailed below.
 
 *AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTask.java) for AsafTask, don't worry it's tiny.
+
+Here's how you use AsafTask:
 
 
 ```
@@ -130,9 +132,9 @@ The other difference with AsafTask is that to run it, you need to call executeTa
 
 ## AsafTaskBuilder
 
-For slightly more concise code, you can use AsafTaskBuilder. This class works in much the sameway as AsafTask, it just has a cut down APIto take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTaskBuilder.java)
+For slightly more concise code, you can use AsafTaskBuilder. This class works in much the same way as AsafTask, it just uses the build pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTaskBuilder.java)
 
-One restriction with AsafTaskBuilder is there is no way to pulish progress, so if you need to publish progress during your asynchronous operation, just stick to a plain AsafTask.
+One restriction with AsafTaskBuilder is there is no way to pulish progress, so if you want to use that feature during your asynchronous operation, just stick to a plain AsafTask.
 
 
 ```
@@ -166,7 +168,7 @@ new AsafTaskBuilder<Void, Integer>(workMode)
 ## Testing
 For both AsafTask and AsafTaskBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
-A conveient way to make this happen is to inject the WorkMode into the enclosing class at construciton time so that it WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in Example 3.
+A conveient way to make this happen is to inject the WorkMode into the enclosing class at construciton time so that it WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java)
 
 
 # Adapters
