@@ -15,23 +15,23 @@ public class AndroidLogger implements Logger{
     }
 
     public void e(String tag, String message) {
-        Log.e(tag, message);
+        Log.e(addTagPrefixIfPresent(tag), message);
     }
 
     public void w(String tag, String message) {
-        Log.w(tag, message);
+        Log.w(addTagPrefixIfPresent(tag), message);
     }
 
     public void i(String tag, String message) {
-        Log.i(tag, message);
+        Log.i(addTagPrefixIfPresent(tag), message);
     }
 
     public void d(String tag, String message) {
-        Log.d(tag, message);
+        Log.d(addTagPrefixIfPresent(tag), message);
     }
 
     public void v(String tag, String message) {
-        Log.v(tag, message);
+        Log.v(addTagPrefixIfPresent(tag), message);
     }
 
     public void e(String tag, String message, Throwable throwable) {
@@ -39,23 +39,23 @@ public class AndroidLogger implements Logger{
     }
 
     public void w(String tag, String message, Throwable throwable) {
-        Log.w(tag, message, throwable);
+        Log.w(addTagPrefixIfPresent(tag), message, throwable);
     }
 
     public void i(String tag, String message, Throwable throwable) {
-        Log.i(tag, message, throwable);
+        Log.i(addTagPrefixIfPresent(tag), message, throwable);
     }
 
     public void d(String tag, String message, Throwable throwable) {
-        Log.d(tag, message, throwable);
+        Log.d(addTagPrefixIfPresent(tag), message, throwable);
     }
 
     public void v(String tag, String message, Throwable throwable) {
-        Log.e(tag, message, throwable);
+        Log.e(addTagPrefixIfPresent(tag), message, throwable);
     }
 
     private String addTagPrefixIfPresent(String message){
-        return (tagPrefix == null ? message : tagPrefix+message);
+        return (tagPrefix == null ? message : tagPrefix + message);
     }
 
 }
