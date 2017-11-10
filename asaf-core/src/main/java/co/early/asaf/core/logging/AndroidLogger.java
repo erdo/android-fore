@@ -5,6 +5,15 @@ import android.util.Log;
 
 public class AndroidLogger implements Logger{
 
+    private String tagPrefix = null;
+
+    public AndroidLogger() {
+    }
+
+    public AndroidLogger(String tagPrefix) {
+        this.tagPrefix = tagPrefix;
+    }
+
     public void e(String tag, String message) {
         Log.e(tag, message);
     }
@@ -43,7 +52,10 @@ public class AndroidLogger implements Logger{
 
     public void v(String tag, String message, Throwable throwable) {
         Log.e(tag, message, throwable);
+    }
 
+    private String addTagPrefixIfPresent(String message){
+        return (tagPrefix == null ? message : tagPrefix+message);
     }
 
 }
