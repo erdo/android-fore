@@ -37,7 +37,13 @@ Writing simple code is of course a lot harder than writing complicated code. And
 
 But that's not the whole story. There is also code which has nothing to do with features or business requirements, it's just there to handle the platform and tie things together. Sometimes this code is sprinkled throughout an app, mixed in with the busines logic, hiding in plain sight. This code is also where a lot of the bugs are found. Developing with ASAF isolates this code, drastically simplifies it and leaves your business logic testable and out in the clear.
 
-The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern. Perhaps more appropriately it could be considered **MV** as we don't need to make a distinction between Models and ViewModels. It's flexible enough that you can use it to implement **MVP** if you wish.
+The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings).
+
+Perhaps more appropriately it could be considered **MV** as we don't need to make a distinction between Models and ViewModels.
+
+(If you want to add a layer of abstraction to separate your presentation logic aka ViewModel, from your business logic aka model, then you absolutely can of course. The sample apps included here are written without that seperation though as I've found it to be generally unhelpful, even in large commercial projects.)
+
+If you want to use the ASAF Observables to implement an MVP framework, you can of course do that too if you wish.
 
 In any case, all the sample apps included here are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
 
@@ -59,11 +65,13 @@ You might be surprised how much android code becomes unnecessary when you take t
 
 ## Sample Apps
 
-In the sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. For these simple apps there is a one to one relationship between the view and the model but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
+In the sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
+
+For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
 The apps here are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts or implement ripple effects - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
 
-ASAF has been designed to make the most of lambda expressions by the way however most of the sample apps don't use lambdas - purely to make the code more accessible to people who aren't comfortable with them yet. Obviously replacing the anonymous inner classes with lambdas will make the code even tighter.
+ASAF has been designed to make the most of lambda expressions by the way, however most of the sample apps don't use lambdas - purely to make the code more accessible to people who aren't comfortable with them yet. Obviously replacing the anonymous inner classes with lambdas will make the code even tighter.
 
 These apps are however, totally robust and comprehensively tested. And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 

@@ -30,15 +30,14 @@ This is one case where ASAF is stopping you from making an easy but horrible arc
 
 Try to get comfortable using these observers to just notify observing client code of any (unspecified) changes to the model's state (once the observing client code has been told there are changes, it can use fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](/#observer-listener) discussion first). For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
-If you want a library that lets you send data in these observables, you should look at RxJava which gives you enough rope to hang yourself with (and then some). Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources, but RxJava has a huge and flexible API allowing you to be very clever indeed (which I think is a major problem with it).
+If you want a library that lets you send data in these observables, you should look at RxJava. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a suprising number of rxJava tutorials have databinding implementations which are broken, even the ones that are specifically demonstrating databinding!)
 
-Though we like to pretend otherwise sometimes, even the most complicated android app is often just some logic and data, a bit of network access, and a UI put on top of it. Once you remove the crazy (writing all the code in the view layer) turns out it's not rocket science after all.
+Though we like to pretend otherwise sometimes, even the most complicated android app is often just some logic and data, a bit of network access, and a UI put on top of it. Once you remove the crazy (writing all the code in the view layer) it turns out that Android development is not rocket science after all.
 
 
 ## <a name="observer-listener"></a> 2) When should I use an Observer, when should I use a callback listener?
 
-The observer pattern is not always going to be suitable for what you want to do. In
-particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback will probably serve you better. In this case the succes or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
+The observer pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback will probably serve you better. In this case the succes or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
 
 for example:
 
