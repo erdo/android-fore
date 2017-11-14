@@ -66,8 +66,6 @@ A more standard way of looking at UI frameworks would have been to do something 
 
 I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is). Much of the subsequent additions to Android were attempts to deal with this underlying problem.
 
-It's still a classic mistake to think of the view in Android as just being the XML layouts. To make matters worse, it's a mistake repeated in many online tutorials and even code samples from Google. Views are not just these XML layouts, as mentioned above, in Android the view layer is composed of the Activity, Fragment and View classes.
-
 Despite the obvious problems of writing networking code or asynchronous code of any kind inside a view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
 
 Fortunately it's almost all completely uneccessary. The sample apps should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
