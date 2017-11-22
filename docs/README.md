@@ -41,7 +41,7 @@ The framework is basically a light touch implementation of **MVVM** written for 
 
 Perhaps more appropriately it could be considered **MV** as we don't need to make a distinction between Models and ViewModels.
 
-(If you want to add a layer of abstraction to separate your presentation logic aka ViewModel, from your business logic aka model, then you absolutely can of course. The sample apps included here are written without that seperation though as I've found it to be generally unhelpful, even in large commercial projects.)
+(If you want to add a layer of abstraction to separate your presentation logic aka ViewModel, from your business logic aka model, then you absolutely can of course. The sample apps included here are written without that seperation though as I've found it to be generally unhelpful, even in large commercial Android projects.)
 
 If you want to use the ASAF Observables to implement an MVP framework, you can of course do that too if you wish.
 
