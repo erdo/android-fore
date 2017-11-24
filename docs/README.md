@@ -37,21 +37,9 @@ Writing simple code is of course a lot harder than writing complicated code. And
 
 But that's not the whole story. There is also code which has nothing to do with features or business requirements, it's just there to handle the platform and tie things together. Sometimes this code is sprinkled throughout an app, mixed in with the busines logic, hiding in plain sight. This code is also where a lot of the bugs are found. Developing with ASAF isolates this code, drastically simplifies it and leaves your business logic testable and out in the clear.
 
-The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings).
+The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html) in case you're interested. 
 
-Perhaps more appropriately it could be considered **MV** as we don't need to make a distinction between Models and ViewModels.
-
-(If you want to add a layer of abstraction to separate your presentation logic aka ViewModel, from your business logic aka model, then you absolutely can of course. The sample apps included here are written without that seperation though as I've found it to be generally unhelpful, even in large commercial Android projects.)
-
-If you want to use the ASAF Observables to implement an MVP framework, you can of course do that too if you wish.
-
-In any case, all the sample apps included here are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
-
-This diagram manges to make things look more complicated than they are, don't worry, the actual code is a lot cleaner!
-
-
-![data binding](img/data-binding.png)
-
+All the sample apps included are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
 
 At a very high level you will be writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately.
 
