@@ -7,15 +7,12 @@ import co.early.asaf.core.Affirm;
 
 /**
  *
- * @deprecated use {@link ChangeAwareAdapter} instead.
- *
  */
-@Deprecated
-public abstract class SimpleChangeAwareAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class ChangeAwareAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     private final Updateable updateable;
 
-    public SimpleChangeAwareAdapter(Updateable updateable) {
+    public ChangeAwareAdapter(Updateable updateable) {
         this.updateable = Affirm.notNull(updateable);
     }
 

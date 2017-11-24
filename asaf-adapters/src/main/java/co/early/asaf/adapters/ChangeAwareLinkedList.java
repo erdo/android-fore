@@ -1,7 +1,11 @@
 package co.early.asaf.adapters;
 
-import java.util.ArrayList;
+import android.os.Build;
+import android.support.annotation.NonNull;
+
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.function.UnaryOperator;
 
 import co.early.asaf.core.Affirm;
 import co.early.asaf.core.time.SystemTimeWrapper;
@@ -47,23 +51,20 @@ import co.early.asaf.core.time.SystemTimeWrapper;
  * <p>As this needs to be done for every list and it's reasonably involved, this class handles this work
  * automatically but it only supports single item changes at a time.
  *
- * @deprecated use {@link ChangeAwareList} {@link ChangeAwareArrayList} {@link ChangeAwareLinkedList} instead.
- *
  */
-@Deprecated
-public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable {
+public class ChangeAwareLinkedList<T> extends LinkedList<T> implements ChangeAwareList<T>, Updateable {
 
     private final SystemTimeWrapper systemTimeWrapper;
     private UpdateSpec updateSpec;
 
-    public SimpleChangeAwareList(SystemTimeWrapper systemTimeWrapper) {
+    public ChangeAwareLinkedList(SystemTimeWrapper systemTimeWrapper) {
         super();
         this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
         updateSpec = createFullUpdateSpec(systemTimeWrapper);
     }
 
-    public SimpleChangeAwareList(int capacity, SystemTimeWrapper systemTimeWrapper) {
-        super(capacity);
+    public ChangeAwareLinkedList(@NonNull Collection<? extends T> c, SystemTimeWrapper systemTimeWrapper) {
+        super(c);
         this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
         updateSpec = createFullUpdateSpec(systemTimeWrapper);
     }
@@ -97,11 +98,60 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
 
     @Override
     public void clear() {
-        int size = size();
         super.clear();
-        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size, systemTimeWrapper);
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size(), systemTimeWrapper);
     }
 
+    @Override
+    public boolean addAll(Collection collection) {
+        boolean temp = super.addAll(collection);
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, size() - 1, collection.size(), systemTimeWrapper);
+        return temp;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection collection) {
+        boolean temp = super.addAll(index, collection);
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_INSERTED, index, collection.size(), systemTimeWrapper);
+        return temp;
+    }
+
+    @Override
+    public void removeRange(int fromIndex, int toIndex) {
+        super.removeRange(fromIndex, toIndex);
+        updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, fromIndex, toIndex - fromIndex, systemTimeWrapper);
+    }
+
+    @Override
+    public boolean remove(Object object) {
+        int index = super.indexOf(object);
+        if (index != -1){
+            boolean temp = super.remove(object);
+            updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, index, 1, systemTimeWrapper);
+            return temp;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeAll(Collection collection) {
+        boolean temp = super.removeAll(collection);
+        if (temp){
+            updateSpec = createFullUpdateSpec(systemTimeWrapper);
+        }
+        return temp;
+    }
+
+    @Override
+    public void replaceAll(UnaryOperator<T> operator) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            super.replaceAll(operator);
+            updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, 0, size(), systemTimeWrapper);
+        } else {
+            throw new UnsupportedOperationException("Not supported by this class");
+        }
+    }
 
     /**
      * Inform the list that the content of one of its rows has
@@ -132,33 +182,6 @@ public class SimpleChangeAwareList<T> extends ArrayList<T> implements Updateable
      */
     public void makeAwareOfDataChange(int rowStartIndex, int rowsAffected){
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_CHANGED, rowStartIndex, rowsAffected, systemTimeWrapper);
-    }
-
-
-
-    @Override
-    public boolean addAll(Collection collection) {
-        throw new UnsupportedOperationException("Not supported by this class");
-    }
-
-    @Override
-    public boolean addAll(int index, Collection collection) {
-        throw new UnsupportedOperationException("Not supported by this class");
-    }
-
-    @Override
-    public boolean remove(Object object) {
-        throw new UnsupportedOperationException("Not supported by this class");
-    }
-
-    @Override
-    protected void removeRange(int fromIndex, int toIndex) {
-        throw new UnsupportedOperationException("Not supported by this class");
-    }
-
-    @Override
-    public boolean removeAll(Collection collection) {
-        throw new UnsupportedOperationException("Not supported by this class, please use clear() instead");
     }
 
 
