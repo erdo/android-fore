@@ -67,6 +67,24 @@ public class PlaylistSimpleModel extends ObservableImp{
         return trackList.size();
     }
 
+    public void add5NewTracks() {
+        logger.i(TAG, "add5NewTracks()");
+        List<Track> newTracks = new ArrayList<>();
+        for (int ii=0; ii<5; ii++){
+            newTracks.add(new Track(generateRandomColourResource()));
+        }
+        trackList.addAll(0, newTracks);
+        notifyObservers();
+    }
+
+    public void remove5Tracks() {
+        logger.i(TAG, "remove5Tracks()");
+        if (getTrackListSize()>4){
+            trackList.subList(0, 5).clear();
+            notifyObservers();
+        }
+    }
+
     private void checkIndex(int index) {
         if (trackList.size() == 0) {
             throw new IndexOutOfBoundsException("tracklist has no items in it, can not get index:" + index);

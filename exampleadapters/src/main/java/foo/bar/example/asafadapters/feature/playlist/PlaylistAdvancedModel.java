@@ -1,13 +1,17 @@
 package foo.bar.example.asafadapters.feature.playlist;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import co.early.asaf.adapters.ChangeAwareArrayList;
+import co.early.asaf.adapters.ChangeAwareList;
+import co.early.asaf.adapters.UpdateSpec;
+import co.early.asaf.adapters.Updateable;
 import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.observer.ObservableImp;
-import co.early.asaf.adapters.SimpleChangeAwareList;
-import co.early.asaf.adapters.UpdateSpec;
-import co.early.asaf.adapters.Updateable;
 import co.early.asaf.core.time.SystemTimeWrapper;
 
 import static foo.bar.example.asafadapters.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource;
@@ -20,13 +24,13 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
     private static String TAG = PlaylistAdvancedModel.class.getSimpleName();
 
     private final Logger logger;
-    private SimpleChangeAwareList<Track> trackList;
+    private ChangeAwareList<Track> trackList;
 
 
     public PlaylistAdvancedModel(SystemTimeWrapper systemTimeWrapper, WorkMode workMode, Logger logger) {
         super(workMode, logger);
         this.logger = Affirm.notNull(logger);
-        trackList = new SimpleChangeAwareList<>(Affirm.notNull(systemTimeWrapper));
+        trackList = new ChangeAwareArrayList<>(Affirm.notNull(systemTimeWrapper));
     }
 
     public void addNewTrack() {
@@ -71,6 +75,24 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
         return trackList.size();
     }
 
+    public void add5NewTracks() {
+        logger.i(TAG, "add5NewTracks()");
+        List<Track> newTracks = new ArrayList<>();
+        for (int ii=0; ii<5; ii++){
+            newTracks.add(new Track(generateRandomColourResource()));
+        }
+        trackList.addAll(0, newTracks);
+        notifyObservers();
+    }
+
+    public void remove5Tracks() {
+        logger.i(TAG, "remove5Tracks()");
+        if (getTrackListSize()>4){
+            trackList.removeRange(0, 5);
+            notifyObservers();
+        }
+    }
+
     private void checkIndex(int index) {
         if (trackList.size() == 0) {
             throw new IndexOutOfBoundsException("tracklist has no items in it, can not get index:" + index);
@@ -83,4 +105,5 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
     public UpdateSpec getAndClearLatestUpdateSpec(long maxAgeMs) {
         return trackList.getAndClearLatestUpdateSpec(maxAgeMs);
     }
+
 }

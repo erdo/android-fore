@@ -1,4 +1,4 @@
-package foo.bar.example.asafadapters.ui;
+package foo.bar.example.asafadapters.ui.playlist;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

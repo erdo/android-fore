@@ -19,7 +19,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static foo.bar.example.asafretrofit.EspressoTestsMatchers.withDrawable;
+import static foo.bar.example.asafretrofit.EspressoTestMatchers.withDrawable;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;

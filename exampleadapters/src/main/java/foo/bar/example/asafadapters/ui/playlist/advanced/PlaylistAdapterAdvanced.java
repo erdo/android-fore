@@ -1,4 +1,4 @@
-package foo.bar.example.asafadapters.ui.advanced;
+package foo.bar.example.asafadapters.ui.playlist.advanced;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

@@ -31,13 +31,11 @@ compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.21', ext: 
 
 ## Overview
 
-ASAF starts with the assumption that the clearer and more obvious code is, the easier it is to maintain, and the less likely it is that bugs will creep in when you're not looking.
-
-Writing simple code is of course a lot harder than writing complicated code. And all code can get complicated - because often, once you get into it, requirements are complicated.
+ASAF starts with the assumption that the clearer and more obvious code is, the easier it is to maintain, and the less likely it is that bugs will creep in when you're not looking. Writing simple code is of course a lot harder than writing complicated code. And all code can get complicated - because often, once you get into it, requirements are complicated.
 
 But that's not the whole story. There is also code which has nothing to do with features or business requirements, it's just there to handle the platform and tie things together. Sometimes this code is sprinkled throughout an app, mixed in with the busines logic, hiding in plain sight. This code is also where a lot of the bugs are found. Developing with ASAF isolates this code, drastically simplifies it and leaves your business logic testable and out in the clear.
 
-The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html) in case you're interested. 
+The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture). 
 
 All the sample apps included are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
 
@@ -47,7 +45,7 @@ At a very high level you will be writing observable and testable **Model** class
 
 ASAF also includes some testable alternatives for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
 
-There are also optional extras that help with using ([**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor)).
+There are also optional extras that help with using [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
 You might be surprised how much android code becomes unnecessary when you take this approach to development.
 
@@ -63,7 +61,7 @@ ASAF has been designed to make the most of lambda expressions by the way, howeve
 
 These apps are however, totally robust and comprehensively tested. And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
-Asside from the apps, there is also a lot of information (and more crap diagrams) in this guide that will take you through the detail of how and why ASAF works.
+Asside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why ASAF works.
 
 
 ### ASAF 1 Data Binding Example

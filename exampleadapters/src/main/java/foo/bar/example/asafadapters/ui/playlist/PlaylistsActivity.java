@@ -1,4 +1,4 @@
-package foo.bar.example.asafadapters.ui;
+package foo.bar.example.asafadapters.ui.playlist;
 
 import android.content.Context;
 import android.content.Intent;
