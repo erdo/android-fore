@@ -1,4 +1,4 @@
-package foo.bar.example.asafadapters.ui;
+package foo.bar.example.asafadapters.ui.playlist;
 
 import android.content.Context;
 import android.os.Build;
@@ -19,8 +19,8 @@ import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistSimpleModel;
 import co.early.asaf.core.time.SystemTimeWrapper;
-import foo.bar.example.asafadapters.ui.advanced.PlaylistAdapterAdvanced;
-import foo.bar.example.asafadapters.ui.simple.PlaylistAdapterSimple;
+import foo.bar.example.asafadapters.ui.playlist.advanced.PlaylistAdapterAdvanced;
+import foo.bar.example.asafadapters.ui.playlist.simple.PlaylistAdapterSimple;
 
 /**
  *

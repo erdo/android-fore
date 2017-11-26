@@ -1,4 +1,4 @@
-package foo.bar.example.asafadapters.ui.simple;
+package foo.bar.example.asafadapters.ui.playlist.simple;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

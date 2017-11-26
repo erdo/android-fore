@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
  * https://github.com/dbottillo/Blog/blob/espresso_match_imageview/app/src/androidTest/java/com/danielebottillo/blog/config/EspressoTestsMatchers.java
  *
  */
-public class EspressoTestsMatchers {
+public class EspressoTestMatchers {
 
     public static Matcher<View> withDrawable(final int resourceId) {
         return new DrawableMatcher(resourceId);
@@ -23,4 +23,5 @@ public class EspressoTestsMatchers {
     public static Matcher<View> hasDrawable() {
         return new DrawableMatcher(DrawableMatcher.ANY);
     }
+
 }
