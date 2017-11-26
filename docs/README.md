@@ -35,7 +35,7 @@ The ASAF framework is basically a light touch implementation of **MVVM** written
 
 *I have noticed recently that a lot of android blogs and github repos claim to solve the exact same problems that ASAF solves. (Some of them don't even get basic View / Model separation correct - try rotating the apps and see if that triggers any network calls - or if there are any ```if(firstTime){callNetwork()}``` style hacks in there).* 
 
-So if you're feeling as skeptical as I would be about ASAF, I strongly encourage you to glance at the sample app code to see for yourself just how clean it is. All the sample apps included are written in the same way, this technique results in an extremely robust, concise and scalable code base, which genuinely separates view code from the rest of the app.
+So if you're feeling as skeptical as I would be about ASAF, I strongly encourage you to glance at the sample app code to see for yourself just how clean it is.
 
 At a very high level ASAF involves writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately.
 
@@ -49,7 +49,9 @@ You might be surprised how much android code becomes unnecessary when you take t
 
 ## Sample Apps
 
-In the sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
+All the sample apps included are written in the same way, this technique results in an extremely robust, concise and scalable code base, which genuinely separates view code from the rest of the app.
+
+For these sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
