@@ -1,6 +1,8 @@
 # ASAF
 Alarmingly Simple Android Framework
 
+[(If you're reading this on github click here)](https://erdo.github.io/asaf-project/)
+
 A few tiny framework classes that help you write android code that is **simple**, **robust** and **performant** for even the most complex commercial grade android application.
 
 The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**. Addressing areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** it lets the developer focus on the cool stuff and not have to worry about the usual android problems.
