@@ -31,19 +31,17 @@ compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.21', ext: 
 
 ## Overview
 
-ASAF starts with the assumption that the clearer and more obvious code is, the easier it is to maintain, and the less likely it is that bugs will creep in when you're not looking. Writing simple code is of course a lot harder than writing complicated code. And all code can get complicated - because often, once you get into it, requirements are complicated.
+The ASAF framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture).
 
-But that's not the whole story. There is also code which has nothing to do with features or business requirements, it's just there to handle the platform and tie things together. Sometimes this code is sprinkled throughout an app, mixed in with the busines logic, hiding in plain sight. This code is also where a lot of the bugs are found. Developing with ASAF isolates this code, drastically simplifies it and leaves your business logic testable and out in the clear.
+*I have noticed recently that a lot of android blogs and github repos claim to solve the exact same problems that ASAF solves. (Some of them don't even get basic View / Model separation correct - try rotating the apps and see if that triggers any network calls - or if there are any ```if(firstTime){callNetwork()}``` style hacks in there).* 
 
-The framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture). 
+So if you're feeling as skeptical as I would be about ASAF, I strongly encourage you to glance at the sample app code to see for yourself just how clean it is. All the sample apps included are written in the same way, this technique results in an extremely robust, concise and scalable code base, which genuinely separates view code from the rest of the app.
 
-All the sample apps included are written in the same way, this technique results in an extremely concise code base, which of course is robust enough to support rotation and other context switches by default.
-
-At a very high level you will be writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately.
+At a very high level ASAF involves writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately.
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
-ASAF also includes some testable alternatives for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) method that never leaves your view out of sync with your model.
+ASAF also includes some testable alternatives for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) method that **never** leaves your view out of sync with your model.
 
 There are also optional extras that help with using [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
@@ -70,7 +68,7 @@ Asside from the apps, there is also a lot of information in this guide that will
 
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
-In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram above, although it sadly doesn't look quite as awesome as that diagram does.
+In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#architecture) section, although it sadly doesn't look quite as awesome as that diagram does.
 
 [Data Binding Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampledatabinding)
 
@@ -96,9 +94,9 @@ This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-proje
 
 It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and ASAF will take care of all the notify changes work.
 
-Two lists are displayed side to side so you can see the effect this has when adding or removing items.
+Two lists are displayed side to side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right.
 
-As usual it's a complete and (~~and tested app~~ watch this space, I've been busy :/ ) but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
+As usual it's a complete and tested but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
 
 [Adapter Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleadapters)
 
@@ -126,6 +124,10 @@ I also hope you appreciate the lemon icons, I made them in Inkscape.
 
 [Networking Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleretrofit)
 
+
+### Example using Dagger for DI
+
+//TODO
 
 
 ### Basic Twitter Client Example
