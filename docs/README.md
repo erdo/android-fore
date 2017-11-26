@@ -33,7 +33,7 @@ compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.21', ext: 
 
 The ASAF framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture).
 
-*I have noticed recently that a lot of android blogs and github repos claim to solve the exact same problems that ASAF solves. (Some of them don't even get basic View / Model separation correct - try rotating the apps and see if that triggers any network calls - or if there are any ```if(firstTime){callNetwork()}``` style hacks in there).* 
+*I have noticed recently that a lot of android blogs and github repos claim to solve: testability / memory leaks / ui consistency / lifecycle management etc. (Some of them don't even get basic View / Model separation correct - try rotating the apps and see if that triggers any network calls - or if there are any ```if(firstTime){callNetwork()}``` style hacks in there).* 
 
 So if you're feeling as skeptical as I would be about ASAF, I strongly encourage you to glance at the sample app code to see for yourself just how clean it is.
 
