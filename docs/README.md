@@ -1,5 +1,5 @@
 # ASAF
-Alarmingly Simple Android Framework
+**Alarmingly Simple Android Framework**
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
