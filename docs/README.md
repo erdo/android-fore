@@ -49,8 +49,6 @@ You might be surprised how much android code becomes unnecessary when you take t
 
 ## Sample Apps
 
-All the sample apps included are written in the same way, this technique results in an extremely robust, concise and scalable code base, which genuinely separates view code from the rest of the app.
-
 For these sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
