@@ -1,7 +1,7 @@
 # ASAF
 Alarmingly Simple Android Framework
 
-[(If you're reading this on github click here)](https://erdo.github.io/asaf-project/)
+[(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
 A few tiny framework classes that help you write android code that is **simple**, **robust** and **performant** for even the most complex commercial grade android application.
 
