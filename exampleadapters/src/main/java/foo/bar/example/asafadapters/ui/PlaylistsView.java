@@ -58,7 +58,6 @@ public class PlaylistsView extends LinearLayout {
     public Button clearAdvancedButton;
 
 
-
     //single observer reference
     Observer observer = new Observer() {
         @Override
