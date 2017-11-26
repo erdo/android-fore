@@ -98,8 +98,8 @@ public class ChangeAwareLinkedList<T> extends LinkedList<T> implements ChangeAwa
 
     @Override
     public void clear() {
-        super.clear();
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size(), systemTimeWrapper);
+        super.clear();
     }
 
     @Override

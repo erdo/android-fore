@@ -104,8 +104,8 @@ public class ChangeAwareArrayList<T> extends ArrayList<T> implements ChangeAware
 
     @Override
     public void clear() {
-        super.clear();
         updateSpec = new UpdateSpec(UpdateSpec.UpdateType.ITEM_REMOVED, 0, size(), systemTimeWrapper);
+        super.clear();
     }
 
     @Override
