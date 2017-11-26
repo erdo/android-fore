@@ -39,6 +39,12 @@ public class PlaylistsView extends LinearLayout {
     @BindView(R.id.playlist_list1_recycleview)
     public RecyclerView playListSimpleRecyclerView;
 
+    @BindView(R.id.playlist_addMany1_button)
+    public Button add5SimpleButton;
+
+    @BindView(R.id.playlist_removeMany1_button)
+    public Button clear5SimpleButton;
+
     @BindView(R.id.playlist_add1_button)
     public Button addSimpleButton;
 
@@ -50,6 +56,12 @@ public class PlaylistsView extends LinearLayout {
 
     @BindView(R.id.playlist_list2_recycleview)
     public RecyclerView playListAdvancedRecyclerView;
+
+    @BindView(R.id.playlist_addMany2_button)
+    public Button add5AdvancedButton;
+
+    @BindView(R.id.playlist_removeMany2_button)
+    public Button clear5AdvancedButton;
 
     @BindView(R.id.playlist_add2_button)
     public Button addAdvancedButton;
@@ -112,6 +124,34 @@ public class PlaylistsView extends LinearLayout {
 
     private void setupButtonClickListeners() {
 
+        add5SimpleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playlistSimpleModel.add5NewTracks();
+            }
+        });
+
+        clear5SimpleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playlistSimpleModel.remove5Tracks();
+            }
+        });
+
+        add5AdvancedButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playlistAdvancedModel.add5NewTracks();
+            }
+        });
+
+        clear5AdvancedButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playlistAdvancedModel.remove5Tracks();
+            }
+        });
+
         addSimpleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +203,8 @@ public class PlaylistsView extends LinearLayout {
     //data binding stuff below
 
     public void syncView(){
+        clear5SimpleButton.setEnabled(playlistSimpleModel.getTrackListSize()>4);
+        clear5AdvancedButton.setEnabled(playlistAdvancedModel.getTrackListSize()>4);
         clearSimpleButton.setEnabled(playlistSimpleModel.getTrackListSize()>0);
         clearAdvancedButton.setEnabled(playlistAdvancedModel.getTrackListSize()>0);
         totalTracksSimple.setText("[" + playlistSimpleModel.getTrackListSize() + "]");

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  *
  */
-public interface ChangeAwareList<E> extends List<E> {
+public interface ChangeAwareList<E> extends List<E>, Updateable {
 
     /**
      * Inform the list that the content of one of its rows has
@@ -32,6 +32,17 @@ public interface ChangeAwareList<E> extends List<E> {
      * @param rowStartIndex index of the row that had its data changed
      * @param rowsAffected how many rows have been affected
      */
-    public void makeAwareOfDataChange(int rowStartIndex, int rowsAffected);
+    void makeAwareOfDataChange(int rowStartIndex, int rowsAffected);
 
+    /**
+     * Removes from this list all of the elements whose index is between
+     * {@code fromIndex}, inclusive, and {@code toIndex}, exclusive.
+     * Shifts any succeeding elements to the left (reduces their index).
+     * This call shortens the list by {@code (toIndex - fromIndex)} elements.
+     * (If {@code toIndex==fromIndex}, this operation has no effect.)
+     *
+     * @param fromIndex index of first element to be removed
+     * @param toIndex index after last element to be removed
+     */
+    void removeRange(int fromIndex, int toIndex);
 }

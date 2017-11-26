@@ -6,65 +6,95 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-            android:layout_width="0px"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/playlist_title1_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:text="Playlist Adapter\n Simple" />
+
+        <TextView
+            android:id="@+id/playlist_totaltracks1_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@+id/playlist_title1_textview"
+            android:layout_toRightOf="@+id/playlist_title1_textview"
+            android:text="0" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/playlist_list1_recycleview"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:id="@+id/playlist_title1_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Playlist Adapter\n Simple"
-                android:layout_margin="10dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"/>
-
-            <TextView
-                android:id="@+id/playlist_totaltracks1_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:layout_toEndOf="@+id/playlist_title1_textview"
-                android:layout_toRightOf="@+id/playlist_title1_textview"
-                android:layout_margin="10dp"
-                android:layout_alignParentTop="true"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/playlist_list1_recycleview"
-                android:background="@color/colorAccent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="20dp"
-                android:layout_above="@+id/playlist_buttoncontainer1_linear"
-                android:layout_below="@+id/playlist_title1_textview"/>
+            android:layout_above="@+id/playlist_buttoncontainer1_linear"
+            android:layout_below="@+id/playlist_title1_textview"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:background="@color/colorAccent" />
 
         <LinearLayout
             android:id="@+id/playlist_buttoncontainer1_linear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/playlist_add1_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Track\nSimple"
-                android:layout_margin="5dp"/>
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/playlist_clear1_button"
+                <Button
+                    android:id="@+id/playlist_add1_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Add Track\nSimple" />
+
+                <Button
+                    android:id="@+id/playlist_clear1_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Clear\nTracks" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear\nTracks"
-                android:layout_margin="5dp"/>
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/playlist_addMany1_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="+ 5" />
+
+                <Button
+                    android:id="@+id/playlist_removeMany1_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="- 5" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
 
     </RelativeLayout>
 
@@ -78,53 +108,84 @@
             android:id="@+id/playlist_title2_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Playlist Adapter\nAdvanced"
-            android:layout_margin="10dp"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:text="Playlist Adapter\nAdvanced" />
 
         <TextView
             android:id="@+id/playlist_totaltracks2_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
             android:layout_toEndOf="@+id/playlist_title2_textview"
             android:layout_toRightOf="@+id/playlist_title2_textview"
-            android:layout_margin="10dp"
-            android:layout_alignParentTop="true"/>
+            android:text="0" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/playlist_list2_recycleview"
-            android:background="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/playlist_buttoncontainer2_linear"
+            android:layout_below="@+id/playlist_title2_textview"
             android:layout_centerHorizontal="true"
             android:layout_margin="20dp"
-            android:layout_above="@+id/playlist_buttoncontainer2_linear"
-            android:layout_below="@+id/playlist_title2_textview"/>
+            android:background="@color/colorAccent" />
 
         <LinearLayout
             android:id="@+id/playlist_buttoncontainer2_linear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/playlist_add2_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Track\nAdvanced"
-                android:layout_margin="5dp"/>
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/playlist_clear2_button"
+                <Button
+                    android:id="@+id/playlist_add2_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Add Track\nAdvanced" />
+
+                <Button
+                    android:id="@+id/playlist_clear2_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Clear\nTracks" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear\nTracks"
-                android:layout_margin="5dp"/>
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/playlist_addMany2_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="+ 5" />
+
+                <Button
+                    android:id="@+id/playlist_removeMany2_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="- 5" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

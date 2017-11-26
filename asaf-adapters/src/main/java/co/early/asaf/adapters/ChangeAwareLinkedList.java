@@ -116,6 +116,17 @@ public class ChangeAwareLinkedList<T> extends LinkedList<T> implements ChangeAwa
         return temp;
     }
 
+    /**
+     * Standard AbstractList and ArrayList have this method protected as you
+     * are supposed to remove a range by doing this:
+     * list.subList(start, end).clear();
+     * (clear() ends up calling removeRange() behind the scenes).
+     * This won't work for these change aware lists (plus it's a ball ache),
+     * so this gets made public
+     *
+     * @param fromIndex
+     * @param toIndex
+     */
     @Override
     public void removeRange(int fromIndex, int toIndex) {
         super.removeRange(fromIndex, toIndex);
