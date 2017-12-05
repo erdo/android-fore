@@ -6,10 +6,17 @@
       <module fileurl="file://$PROJECT_DIR$/asaf-core/asaf-core.iml" filepath="$PROJECT_DIR$/asaf-core/asaf-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" filepath="$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/exampleadapters/exampleadapters.iml" filepath="$PROJECT_DIR$/exampleadapters/exampleadapters.iml" />
-      <module fileurl="file://$PROJECT_DIR$/exampledatabinding/exampledatabinding.iml" filepath="$PROJECT_DIR$/exampledatabinding/exampledatabinding.iml" />
-      <module fileurl="file://$PROJECT_DIR$/exampleretrofit/exampleretrofit.iml" filepath="$PROJECT_DIR$/exampleretrofit/exampleretrofit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/examplethreading/examplethreading.iml" filepath="$PROJECT_DIR$/examplethreading/examplethreading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-ui/asaf-ui.iml" filepath="$PROJECT_DIR$/asaf-ui/asaf-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example01databinding/example01databinding.iml" filepath="$PROJECT_DIR$/example01databinding/example01databinding.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example02threading/example02threading.iml" filepath="$PROJECT_DIR$/example02threading/example02threading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example03adapters/example03adapters.iml" filepath="$PROJECT_DIR$/example03adapters/example03adapters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example04retrofit/example04retrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/example04retrofit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example05ui/example05ui.iml" filepath="$PROJECT_DIR$/example05ui/example05ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example03adapters/exampleadapters.iml" filepath="$PROJECT_DIR$/example03adapters/exampleadapters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example01databinding/exampledatabinding.iml" filepath="$PROJECT_DIR$/example01databinding/exampledatabinding.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example04retrofit/exampleretrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/exampleretrofit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example02threading/examplethreading.iml" filepath="$PROJECT_DIR$/example02threading/examplethreading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example05ui/exampleui.iml" filepath="$PROJECT_DIR$/example05ui/exampleui.iml" />
     </modules>
   </component>
 </project>

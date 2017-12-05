@@ -317,7 +317,7 @@ totalPrice.setColour(basket.isBelowMinimum() ? red : black);
 ## ASAF Observables
 In ASAF, the models are usually Observable, and the Views are mostly doing the Observing.
 
-Most of the models in the sample apps become observable by extending ObservableImp, the [code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
+Most of the models in the sample apps become observable by extending ObservableImp (or you can implement the Observable interface and proxy the methods through to an ObservableImp instance), the [code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the observer will be told of any changes in the model's state
 - When the model's state changes, each added observer will be told in turn by having its somethingChanged() method called (which in turn typicallly causes a call to syncView())

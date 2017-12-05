@@ -1,0 +1,101 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+def secrets = new Properties()
+def secretsFile = new File('example04retrofit/secrets.properties')
+if (secretsFile.canRead()) {
+    secrets.load(new FileInputStream(secretsFile))
+} else {
+    println 'WARNING app secrets.properties not found! \n'
+}
+def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
+def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
+
+
+
+android {
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "foo.bar.example.asafretrofit"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
+        //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
+        credentials(AwsCredentials) {
+            accessKey AWS_ACCESS_KEY
+            secretKey AWS_SECRET_KEY
+        }
+    }
+}
+
+dependencies {
+
+    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    //compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    implementation project(path: ':asaf-core')
+    implementation project(path: ':asaf-retrofit')
+
+
+    implementation('com.squareup.retrofit2:retrofit:2.1.0') {
+        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
+        exclude module: 'okhttp'
+    }
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+
+    // Unit testing dependencies
+    testImplementation 'junit:junit:4.12'
+    // Set this dependency if you want to use Mockito
+    testImplementation 'org.mockito:mockito-core:1.10.19'
+    // Set this dependency if you want to use Hamcrest matching
+    testImplementation 'org.hamcrest:hamcrest-library:1.1'
+
+    androidTestImplementation 'org.mockito:mockito-core:1.10.19'
+    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
+    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestImplementation 'com.android.support.test:runner:0.3'
+    androidTestImplementation 'com.android.support.test:rules:0.3'
+    androidTestImplementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+    androidTestImplementation "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
+    androidTestImplementation "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}

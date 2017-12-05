@@ -48,7 +48,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 **There are a few things in ASAF that allow you an architecture this simple:**
 
-* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/06-faq.html#-1-why-not-put-a-parameter-in-the-observersomethingchanged-method)).
+* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).
 * The second is the syncView() convention discussed [here](https://erdo.github.io/asaf-project/03-databinding.html#syncview). 
 * The third is writing models at an appropriate level of abstraction, something which comes with a little practice, see [here](https://erdo.github.io/asaf-project/02-models.html#shoom) for more.
 * The fourth is making appropriate use of DI, for more see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection).
