@@ -55,9 +55,8 @@ repositories {
 
 dependencies {
 
-    //compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.15', ext: 'aar')
-    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
-    implementation project(path: ':asaf-core')
+    compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    //implementation project(path: ':asaf-core')
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

@@ -13,6 +13,7 @@ public interface ErrorHandler<M> {
      * @param t throwable that caused the error
      * @param errorResponse error response from the server, the body of which may represent a custom error
      * @param customErrorClazz custom error class expected from the errorResponse
+     * @param originalRequest in case it's needed (if you need access to the headers for example)
      * @param <CE> class type of the custom error
      * @return the parsed error from the server
      */

@@ -56,10 +56,10 @@ repositories {
 
 dependencies {
 
-    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
-    //compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
-    implementation project(path: ':asaf-core')
-    implementation project(path: ':asaf-retrofit')
+    compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    //implementation project(path: ':asaf-core')
+    //implementation project(path: ':asaf-retrofit')
 
 
     implementation('com.squareup.retrofit2:retrofit:2.1.0') {

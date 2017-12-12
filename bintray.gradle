@@ -1,5 +1,6 @@
 /**
  *
+ * > ./gradlew clean
  * > ./gradlew install
  * > ./gradlew bintrayUpload
  *
@@ -20,6 +21,12 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+afterEvaluate {
+    javadoc.classpath += files(android.libraryVariants.collect { variant ->
+        variant.javaCompile.classpath.files
+    })
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
