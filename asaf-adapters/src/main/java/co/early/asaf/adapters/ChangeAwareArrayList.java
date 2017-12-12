@@ -129,9 +129,6 @@ public class ChangeAwareArrayList<T> extends ArrayList<T> implements ChangeAware
      * (clear() ends up calling removeRange() behind the scenes).
      * This won't work for these change aware lists (plus it's a ball ache),
      * so this gets made public
-     *
-     * @param fromIndex
-     * @param toIndex
      */
     @Override
     public void removeRange(int fromIndex, int toIndex) {

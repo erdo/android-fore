@@ -7,14 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import co.early.asaf.core.Affirm;
+import co.early.asaf.core.observer.Observable;
 import co.early.asaf.core.ui.SyncableView;
 import co.early.asaf.ui.LifecycleSyncer;
 
+
 /**
  * <p>
- *      Convenience class that uses a {@link co.early.asaf.ui.LifecycleSyncer} instance to ensure that
- *      {@link co.early.asaf.core.ui.SyncableView#syncView()} is called whenever the relevant Observable models change.
- *      Also uses android lifecycle hooks to tell {@link co.early.asaf.ui.LifecycleSyncer} when to add and remove
+ *      Convenience class that uses a {@link LifecycleSyncer} instance to ensure that
+ *      {@link SyncableView#syncView()} is called whenever the relevant Observable models change.
+ *      Also uses android lifecycle hooks to tell {@link LifecycleSyncer} when to add and remove
  *      observers to prevent memory leaks.</p>
  *
  * <p>
@@ -29,11 +31,11 @@ import co.early.asaf.ui.LifecycleSyncer;
  * </p>
  * <ul>
  *      <li>Extend it</li>
- *      <li>Implement {@link co.early.asaf.ui.fragment.SyncableSupportFragment#getResourceIdForSyncableView()} by returning a
+ *      <li>Implement {@link #getResourceIdForSyncableView()} by returning a
  *      layoutId that refers to an xml layout whose top most element
- *      is a custom view that implements {@link co.early.asaf.core.ui.SyncableView}</li>
- *      <li>Implement {@link co.early.asaf.ui.fragment.SyncableSupportFragment#getThingsToObserve()} by returning a {@link co.early.asaf.ui.LifecycleSyncer.Observables}
- *      instance constructed with all the {@link co.early.asaf.core.observer.Observable} models that the view is interested in</li>
+ *      is a custom view that implements {@link SyncableView}</li>
+ *      <li>Implement {@link #getThingsToObserve()} by returning a {@link LifecycleSyncer.Observables}
+ *      instance constructed with all the {@link Observable} models that the view is interested in</li>
  * </ul>
  *
  */
