@@ -168,23 +168,25 @@ new AsafTaskBuilder<Void, Integer>(workMode)
 ## Testing
 For both AsafTask and AsafTaskBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
-A conveient way to make this happen is to inject the WorkMode into the enclosing class at construciton time so that it WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java)
+A conveient way to make this happen is to inject the WorkMode into the enclosing class at construciton time so that it WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java)
 
 
 # Adapters
 
 //TODO
 
-[Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-code-example)
+[Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-example)
 
 
 # Retrofit and the CallProcessor
 
 //TODO
 
-[Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-code-example)
+[Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example)
 
 
 # UI Widgets and Helpers
 
 //TODO
+
+[UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe)

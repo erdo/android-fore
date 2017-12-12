@@ -260,7 +260,7 @@ private void updateTotalPriceView(){
 }
 ```
 
-The code above leaves out details that are required for both solutions of course (the injection of the basket model, hooking up the view elements to the xml layout etc). And we haven't discussed yet how syncView() actually gets called by the model (more on that in the [ASAF Observables](#asaf-observables) section below). A full implementation is not that much larger though, see [here](https://github.com/erdo/asaf-project/blob/master/exampledatabinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) for example views from the sample apps.
+The code above leaves out details that are required for both solutions of course (the injection of the basket model, hooking up the view elements to the xml layout etc). And we haven't discussed yet how syncView() actually gets called by the model (more on that in the [ASAF Observables](#asaf-observables) section below). A full implementation is not that much larger though, see [here](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) for example views from the sample apps.
 
 For the moment all we need to know is that syncView() is triggered whenever **any** state of the basket model changes. It's also called when the view is created, say after rotation. If you want to add any more states it's easy and clean, and totally consistent if they are set inside the syncView() method:
 
@@ -326,6 +326,6 @@ Most of the models in the sample apps become observable by extending ObservableI
 - To avoid memory leaks, observers are responsible for removing themselves from the observable model once they are no longer interested in receiving notifications
 - Typically observers add() and remove() themselves in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
 
-Now the remaing code in this [example view](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should make sense.
+Now the remaing code in this [example view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should make sense.
 
 

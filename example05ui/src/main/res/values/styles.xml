@@ -8,26 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppButton">
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textStyle">normal</item>
-        <item name="textAllCaps">true</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">@dimen/common_textsize_medium</item>
-        <item name="android:minWidth">@dimen/common_button_minwidth</item>
-        <item name="android:padding">@dimen/common_button_padding</item>
-        <item name="android:layout_margin">@dimen/common_space_small</item>
-        <item name="android:layout_gravity">center_vertical</item>
-    </style>
-
-    <style name="AppButtonPositive" parent="AppButton">
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:background">@color/colorGreen</item>
-    </style>
-
-    <style name="AppButtonNegative" parent="AppButton">
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:background">@color/colorRed</item>
+    <style name="tictactoebutton">
+        <item name="android:layout_width">@dimen/common_space_medium</item>
+        <item name="android:layout_height">@dimen/common_space_medium</item>
+        <item name="android:textSize">@dimen/common_textsize_large</item>
     </style>
 
 </resources>

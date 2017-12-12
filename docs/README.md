@@ -64,18 +64,18 @@ Asside from the apps, there is also a lot of information in this guide that will
 
 ### ASAF 1 Data Binding Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampledatabinding/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png)
 
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#architecture) section, although it sadly doesn't look quite as awesome as that diagram does.
 
-[Data Binding Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampledatabinding)
+[Data Binding Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
 
 ### ASAF 2 Asynchronous Code Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/examplethreading/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png)
 
 This one demonstrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
@@ -83,12 +83,12 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 It's really a very exciting app, I should probably put it on the play store before someone steals the idea.
 
-[Asynchronous Example App Source Code](https://github.com/erdo/asaf-project/tree/master/examplethreading)
+[Asynchronous Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
 
-### ASAF 3 Adapter Code Example
+### ASAF 3 Adapter Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleadapters/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png)
 
 This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
@@ -98,12 +98,12 @@ Two lists are displayed side to side so you can see the effect this has when add
 
 As usual it's a complete and tested but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
 
-[Adapter Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleadapters)
+[Adapter Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
 
-### ASAF 4 Retrofit Code Example
+### ASAF 4 Retrofit Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/exampleretrofit/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png)
 
 If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) in a particularly clean and testable way. This is the example app for that.
 
@@ -114,7 +114,7 @@ The first button gets a successful response, the last two get failed responses. 
 As you're using the app, notice:
 
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
-- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks come through on the UI thread, so it's impossible for two threads to access the model methods simultaneously, see more on that in [model](https://erdo.github.io/asaf-project/02-models.html#shoom) section.
+- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks and the network responses come through on the UI thread, see more on that in [model](https://erdo.github.io/asaf-project/02-models.html#shoom) section. Even with an android adapter involved, it would be impossible to get any problems when calling notifyDataSetChanged() as long as when any list data is changed it is changed on the UI thread and **immediately** after and on the same thread, notifyDataSetChanged() is called - there will be a more compex stadalone networking/adapter example that demonstrates that.
 
 The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
@@ -122,22 +122,38 @@ As usual it's a complete and tested app. In reality the tests are probably more 
 
 I also hope you appreciate the lemon icons, I made them in Inkscape.
 
-[Networking Example App Source Code](https://github.com/erdo/asaf-project/tree/master/exampleretrofit)
+[Networking Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
 
 
-### Example using Dagger for DI
 
-//TODO
+### ASAF 5 UI Helpers Example (Tic Tac Toe)
 
-
-### Basic Twitter Client Example
-
-//TODO
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png)
 
 
-### Tic Tac Toe Example
+##### SyncableX convenience classes
 
-//TODO
+The first thing this app demonstrates the use of the SyncableAppCompatActivity class - see also: SyncableActivity, SyncableSupportFragment, SyncableFragment which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
+
+##### SyncTrigger
+
+The second thing this app demonstrates is the use of the SyncTrigger class. One thing the Observer pattern is not great for (when you add rotating android screens into the mix) is firing one-off events such as you might use for running single shot animations. The SyncTrigger class lets you bridge the gap between syncView() (which is called at any time, any number of times) and an event like an animation that must happen only once.
+
+When using a SyncTrigger you need to implement a method to be run when it is triggered (e.g. running an animation), and also a method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON).
+
+The first time the threshold is breached, i.e. checkThreshold() returns **true**, the trigger will be called. Once checkThreshold() again returns **false**, the trigger is reset.
+
+Passing true in the check() method will cause the first checkThreshold() result to be ignored (so for example if the threshold has already been breached, the first check will not cause a trigger to occur). This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger.
+
+No tests on this one yet! when I get a second I will add them, at least for the Board class which contains all the logic.
+
+[UI Helpers Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example05ui)
+
+
+
+### Other Full App Examples
+
+//TODO - these aren't complete yet but they will be multiple activity apps, some using Dagger 2 for DI rather than the home grown ObjectGraph class and I'll be hosting them in a separate repo.
 
 
 

@@ -1,10 +1,10 @@
 
 # Models
-There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** classes.
+There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** layer classes - and this makes our Models extremely easy to test :)
 
 In the sample apps, the models are all found in the **feature** package.
 
-Here's an example: [FruitFetcher.java](https://github.com/erdo/asaf-project/blob/master/exampleretrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java)
+Here's an example: [FruitFetcher.java](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java)
 
 ## Writing a Basic Model
 
@@ -16,7 +16,7 @@ Writing your app so that it operates on a single thread by default is a *very* h
 
 When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) for example, and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.
 
-If you're already comfortable writing model code skip down to the [check list](#model-check), check out a [few](https://github.com/erdo/asaf-project/blob/master/exampleretrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
+If you're already comfortable writing model code skip down to the [check list](#model-check), check out a [few](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
 
 ### For more detail, read on
 
@@ -252,7 +252,7 @@ There is something important that snuck in to that version though: The **WorkMod
 
 When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
 
-Take a look at how the CounterWithLambdas model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/examplethreading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
+Take a look at how the CounterWithLambdas model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
 
 ***NB: to make your view code extra clean, ASYNCHRONOUS notifications from an Observable in ASAF are always sent on the UI thread, so there is no need to do any thread hopping to update a UI.***
 

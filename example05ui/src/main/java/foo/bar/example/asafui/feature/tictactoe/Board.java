@@ -1,31 +1,49 @@
 package foo.bar.example.asafui.feature.tictactoe;
 
 
+import android.os.Handler;
+
+import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.observer.ObservableImp;
+import co.early.asaf.core.observer.Observer;
+import co.early.asaf.core.time.SystemTimeWrapper;
 
-import static foo.bar.example.asafui.feature.tictactoe.Player.NONE;
+import static foo.bar.example.asafui.feature.tictactoe.Player.NOBODY;
 import static foo.bar.example.asafui.feature.tictactoe.Player.O;
 import static foo.bar.example.asafui.feature.tictactoe.Player.X;
 
 /**
- * erdo: Most of this package is taken from here: https://github.com/ericmaxwell2003/ticTacToe
+ * erdo: Most of this class is taken from here: https://github.com/ericmaxwell2003/ticTacToe
  *
- * The main alteration here is to make Board Observable, I also added a NONE player so that
- * nothing needs to be null
+ * The main alteration is to make Board Observable, I also added a NOBODY player so that
+ * nothing needs to be null, and there is also a timer that regularly fires notifications during
+ * a game which enables things like the jiggle reminder animation on the view
  */
 public class Board extends ObservableImp {
+
+    private final SystemTimeWrapper systemTimeWrapper;
+    private final WorkMode workMode;
 
     private Cell[][] cells = new Cell[3][3];
 
     private Player winner;
     private GameState state;
     private Player currentTurn;
+    private int movesMade = 0;
+    private long lastMoveMadeTimestamp = 0;
+
+    private Handler tickHandler;
 
     private enum GameState { IN_PROGRESS, FINISHED };
 
-    public Board() {
+    public Board(WorkMode workMode, SystemTimeWrapper systemTimeWrapper) {
         super(WorkMode.SYNCHRONOUS);
+        this.workMode = Affirm.notNull(workMode);
+        this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
+
+        tickHandler = new Handler();
+
         restart();
     }
 
@@ -34,9 +52,11 @@ public class Board extends ObservableImp {
      */
     public void restart() {
         clearCells();
-        winner = NONE;
+        winner = NOBODY;
         currentTurn = X;
         state = GameState.IN_PROGRESS;
+        movesMade = 0;
+        lastMoveMadeTimestamp = systemTimeWrapper.currentTimeMillis();
         notifyObservers();
     }
 
@@ -56,16 +76,25 @@ public class Board extends ObservableImp {
 
         if(isValid(row, col)) {
 
+            movesMade++;
+            lastMoveMadeTimestamp = systemTimeWrapper.currentTimeMillis();
+
             cells[row][col].setValue(currentTurn);
             playerThatMoved = currentTurn;
 
             if(isWinningMoveByPlayer(currentTurn, row, col)) {
                 state = GameState.FINISHED;
                 winner = currentTurn;
-            } else {
+                lastMoveMadeTimestamp = 0;
+            } else if (movesMade > 8) {
+                state = GameState.FINISHED;
+                winner = NOBODY;
+                lastMoveMadeTimestamp = 0;
+            }else {
                 // flip the current turn and continue
                 flipCurrentTurn();
             }
+
         }
 
         notifyObservers();
@@ -73,12 +102,29 @@ public class Board extends ObservableImp {
         return playerThatMoved;
     }
 
+
     public Player valueAtCell(int row, int col) {
         return cells[row][col].getValue();
     }
 
     public Player getWinner() {
         return winner;
+    }
+
+    public Player getNextPlayer() {
+        return currentTurn;
+    }
+
+    public int getMovesMade() {
+        return movesMade;
+    }
+
+    public boolean isGameInProgress() {
+        return state == GameState.IN_PROGRESS;
+    }
+
+    public long timeSinceLastMove(){
+        return lastMoveMadeTimestamp == 0 ? 0 : systemTimeWrapper.currentTimeMillis() - lastMoveMadeTimestamp;
     }
 
     private void clearCells() {
@@ -106,7 +152,7 @@ public class Board extends ObservableImp {
     }
 
     private boolean isCellValueAlreadySet(int row, int col) {
-        return cells[row][col].getValue() != NONE;
+        return cells[row][col].getValue() != NOBODY;
     }
 
 
@@ -139,5 +185,37 @@ public class Board extends ObservableImp {
     private void flipCurrentTurn() {
         currentTurn = currentTurn == X ? O : X;
     }
+
+
+    // erdo: the code below fires observers periodically whenever there is an observer
+    // present - this is only necessary to drive the kind of views that want
+    // continual updates - in this case the view jiggles if there has been
+    // no move made after x seconds. This implementation using our observable
+    // pattern lets everything work across screen orientation changes
+
+    private void tick(){
+        if (hasObservers() && workMode == WorkMode.ASYNCHRONOUS){
+            notifyObservers();
+            tickHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tick();
+                }
+            }, 1000);//the timing doesn't matter here, a bit late is fine
+        }
+    }
+
+    @Override
+    public synchronized void addObserver(Observer observer) {
+        super.addObserver(observer);
+        tick();
+    }
+
+    @Override
+    public synchronized void removeObserver(Observer observer) {
+        super.removeObserver(observer);
+        tickHandler.removeCallbacksAndMessages(null);
+    }
+
 
 }

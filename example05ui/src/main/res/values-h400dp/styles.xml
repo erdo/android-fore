@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="tictactoebutton">
+        <item name="android:layout_width">@dimen/common_space_extra_large</item>
+        <item name="android:layout_height">@dimen/common_space_extra_large</item>
+        <item name="android:textSize">@dimen/common_textsize_enormous</item>
+    </style>
+
+</resources>

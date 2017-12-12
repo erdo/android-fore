@@ -7,7 +7,7 @@ package foo.bar.example.asafui.feature.tictactoe;
 
 public class Cell {
 
-    private Player value = Player.NONE;
+    private Player value = Player.NOBODY;
 
     public Player getValue() {
         return value;

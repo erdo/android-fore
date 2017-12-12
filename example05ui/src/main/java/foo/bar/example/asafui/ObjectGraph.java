@@ -8,15 +8,8 @@ import java.util.Map;
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.logging.AndroidLogger;
 import co.early.asaf.core.logging.Logger;
-import co.early.asaf.retrofit.CallProcessor;
-import co.early.asaf.retrofit.InterceptorLogging;
-import foo.bar.example.asafui.api.CustomGlobalErrorHandler;
-import foo.bar.example.asafui.api.CustomGlobalRequestInterceptor;
-import foo.bar.example.asafui.api.CustomRetrofitBuilder;
-import foo.bar.example.asafui.api.authentication.AuthenticationService;
-import foo.bar.example.asafui.feature.authentication.Authentication;
-import foo.bar.example.asafui.message.UserMessage;
-import retrofit2.Retrofit;
+import co.early.asaf.core.time.SystemTimeWrapper;
+import foo.bar.example.asafui.feature.tictactoe.Board;
 
 import static co.early.asaf.core.Affirm.notNull;
 
@@ -34,40 +27,16 @@ class ObjectGraph {
     }
 
     void setApplication(Application application, final WorkMode workMode) {
-//
-//        notNull(application);
-//        notNull(workMode);
-//
-//
+
+        notNull(application);
+        notNull(workMode);
+
         // create dependency graph
         AndroidLogger logger = new AndroidLogger();
+        Board board = new Board(workMode, new SystemTimeWrapper());
 
-        // networking classes common to all models
-        Retrofit retrofit = CustomRetrofitBuilder.create(
-                new CustomGlobalRequestInterceptor(logger),
-                new InterceptorLogging(logger));//logging interceptor should be the last one
-
-        CallProcessor<UserMessage> callProcessor = new CallProcessor<UserMessage>(
-                new CustomGlobalErrorHandler(logger),
-                logger);
-
-
-        // models
-        Authentication authentication = new Authentication(
-                retrofit.create(AuthenticationService.class),
-                callProcessor,
-                workMode,
-                logger);
-
-//        FruitCollector fruitCollector = new FruitCollector(
-//                retrofit.create(FruitService.class),
-//                callProcessor,
-//                logger,
-//                workMode);
-//
-//
         // add models to the dependencies map if you will need them later
-        dependencies.put(Authentication.class, authentication);
+        dependencies.put(Board.class, board);
         dependencies.put(Logger.class, logger);
 
     }

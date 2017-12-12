@@ -4,4 +4,4 @@ package foo.bar.example.asafui.feature.tictactoe;
  *
  */
 
-public enum Player { X , O , NONE}
+public enum Player { X , O , NOBODY}
