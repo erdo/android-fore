@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.asafui.ui.login.LoginView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/colorWhite">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/login_logo_imgview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/logo" />
+
+        <LinearLayout
+            android:id="@+id/login_formfields_linear"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_below="@+id/login_logo_imgview"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:gravity="left"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/login_email_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_enter_email_hint"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/abc_control_inset_material"
+                android:textColor="@color/colourGrey"
+                android:textSize="@dimen/common_textsize_medium" />
+
+            <TextView
+                android:id="@+id/login_email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/abc_control_inset_material"
+                android:text="@string/login_not_a_valid_email"
+                android:textColor="@color/colorRed"
+                android:textSize="@dimen/common_textsize_small" />
+
+            <FrameLayout
+                android:id="@+id/login_removablespacer_1"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <EditText
+                android:id="@+id/login_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/login_enter_password_hint"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/abc_control_inset_material"
+                android:textColor="@color/colourGrey"
+                android:textSize="@dimen/common_textsize_medium"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Switch
+                    android:id="@+id/login_showpass_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_show_password"
+                    android:textColor="@color/colourGrey"
+                    android:textSize="@dimen/common_textsize_small" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/login_removablespacer_2"
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/login_logincontainer_rel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_formfields_linear"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:id="@+id/login_login_button"
+                style="@style/AppButtonPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/login"/>
+
+            <ProgressBar
+                android:id="@+id/login_loading_progressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</foo.bar.example.asafui.ui.login.LoginView>

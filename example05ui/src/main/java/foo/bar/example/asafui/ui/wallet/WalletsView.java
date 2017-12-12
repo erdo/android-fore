@@ -6,12 +6,17 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.asaf.core.observer.Observer;
+import co.early.asaf.core.ui.SyncableView;
+import co.early.asaf.ui.widget.SyncOnChange;
 import foo.bar.example.asafdatabinding.CustomApp;
 import foo.bar.example.asafdatabinding.R;
 import foo.bar.example.asafdatabinding.feature.wallet.Wallet;
@@ -19,7 +24,7 @@ import foo.bar.example.asafdatabinding.feature.wallet.Wallet;
 /**
  *
  */
-public class WalletsView extends ScrollView {
+public class WalletsView extends ScrollView implements SyncableView{
 
     //models that we need to sync with
     private Wallet wallet;
@@ -38,7 +43,8 @@ public class WalletsView extends ScrollView {
     @BindView(R.id.wallet_savingsamount_txt)
     public TextView savingsWalletAmount;
 
-
+private Switch sitch = null;
+private EditText editText = null;
 
     //single observer reference
     Observer observer = new Observer() {
@@ -77,6 +83,10 @@ public class WalletsView extends ScrollView {
         getModelReferences();
 
         setupButtonClickListeners();
+
+        sitch.setOnCheckedChangeListener(new SyncOnChange(this));
+        editText.setOn
+
     }
 
     private void getModelReferences(){

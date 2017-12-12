@@ -17,6 +17,14 @@ import co.early.asaf.ui.LifecycleSyncer;
  *      {@link SyncableView#syncView()} is called whenever the relevant Observable models change.
  *      Also uses android lifecycle hooks to tell {@link LifecycleSyncer} when to add and remove
  *      observers to prevent memory leaks.</p>
+ *
+ * <p>
+ *      If your app architecture uses fragments, and your fragments extend
+ *      {@link android.support.v4.app.Fragment}, to add ASAF behaviour to your app you can keep
+ *      your activity code the same but in your fragments instead of extending Fragment,
+ *      extend this class instead.
+ * </p>
+ *
  * <p>
  * To use this class, you need to:
  * </p>

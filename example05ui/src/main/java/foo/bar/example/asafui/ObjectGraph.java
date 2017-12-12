@@ -7,6 +7,16 @@ import java.util.Map;
 
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.logging.AndroidLogger;
+import co.early.asaf.core.logging.Logger;
+import co.early.asaf.retrofit.CallProcessor;
+import co.early.asaf.retrofit.InterceptorLogging;
+import foo.bar.example.asafui.api.CustomGlobalErrorHandler;
+import foo.bar.example.asafui.api.CustomGlobalRequestInterceptor;
+import foo.bar.example.asafui.api.CustomRetrofitBuilder;
+import foo.bar.example.asafui.api.authentication.AuthenticationService;
+import foo.bar.example.asafui.feature.authentication.Authentication;
+import foo.bar.example.asafui.message.UserMessage;
+import retrofit2.Retrofit;
 
 import static co.early.asaf.core.Affirm.notNull;
 
@@ -43,16 +53,23 @@ class ObjectGraph {
 
 
         // models
-        FruitCollector fruitCollector = new FruitCollector(
-                retrofit.create(FruitService.class),
+        Authentication authentication = new Authentication(
+                retrofit.create(AuthenticationService.class),
                 callProcessor,
-                logger,
-                workMode);
+                workMode,
+                logger);
+
+//        FruitCollector fruitCollector = new FruitCollector(
+//                retrofit.create(FruitService.class),
+//                callProcessor,
+//                logger,
+//                workMode);
 //
 //
-//        // add models to the dependencies map if you will need them later
-//        dependencies.put(FruitFetcher.class, fruitFetcher);
-//
+        // add models to the dependencies map if you will need them later
+        dependencies.put(Authentication.class, authentication);
+        dependencies.put(Logger.class, logger);
+
     }
 
     void init() {

@@ -62,6 +62,15 @@ dependencies {
     //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
     implementation project(path: ':asaf-core')
     implementation project(path: ':asaf-ui')
+    implementation project(path: ':asaf-retrofit')
+
+    implementation('com.squareup.retrofit2:retrofit:2.1.0') {
+        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
+        exclude module: 'okhttp'
+    }
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
