@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ASAF 5 ui helpers</string>
+    <string name="title_syncable_activity">Syncbl Act</string>
+    <string name="title_syncable_fragment">Syncbl Frag</string>
+    <string name="title_syncable_view">Syncbl View</string>
+
+    <string name="login_enter_email_hint">fake email</string>
+    <string name="login_enter_password_hint">fake password</string>
+    <string name="login_not_a_valid_email">invalid email</string>
+    <string name="login_show_password">show password</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+</resources>

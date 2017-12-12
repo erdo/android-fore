@@ -8,7 +8,7 @@ If you like architecture diagrams, then you'll love this page ;) discussions of 
 
 This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your activity to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's bascially a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
 
-There is one important thing to note about about this diagram however. If we focus on the **Model**, all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can support any number of different Views which can come and go as they please (when an Android device is rotated for example) and the Model is not affected - or even aware of it.
+There is one important thing to note about about this diagram however. If we focus on the **Model** [click here for our current definition of Model](https://erdo.github.io/asaf-project/02-models.html#shoom), all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can support any number of different Views which can come and go as they please (when an Android device is rotated for example) and the Model is not affected - or even aware of it.
 
 I did say that I thought the typical MVC diagram is not particularly useful, I think it's main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
 
@@ -48,7 +48,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 **There are a few things in ASAF that allow you an architecture this simple:**
 
-* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/06-faq.html#-1-why-not-put-a-parameter-in-the-observersomethingchanged-method)).
+* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).
 * The second is the syncView() convention discussed [here](https://erdo.github.io/asaf-project/03-databinding.html#syncview). 
 * The third is writing models at an appropriate level of abstraction, something which comes with a little practice, see [here](https://erdo.github.io/asaf-project/02-models.html#shoom) for more.
 * The fourth is making appropriate use of DI, for more see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection).

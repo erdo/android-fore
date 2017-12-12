@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'idea'
 
 def secrets = new Properties()
-def secretsFile = new File('exampleadapters/secrets.properties')
+def secretsFile = new File('example01databinding/secrets.properties')
 if (secretsFile.canRead()) {
     secrets.load(new FileInputStream(secretsFile))
 } else {
@@ -12,7 +12,6 @@ if (secretsFile.canRead()) {
 }
 def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
 def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
-
 
 
 
@@ -27,7 +26,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "foo.bar.example.asafadapters"
+        applicationId "foo.bar.example.asafdatabinding"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
@@ -40,9 +39,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
-
 
 repositories {
     maven {
@@ -53,22 +50,22 @@ repositories {
             secretKey AWS_SECRET_KEY
         }
     }
+
 }
 
 dependencies {
 
     //compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.15', ext: 'aar')
-    //compile (group: 'co.early.asaf', name: 'asaf-adapters', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
     implementation project(path: ':asaf-core')
-    implementation project(path: ':asaf-adapters')
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
 
@@ -82,7 +79,6 @@ dependencies {
     androidTestImplementation 'org.mockito:mockito-core:1.10.19'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
-
     androidTestImplementation 'com.android.support.test:runner:0.3'
     androidTestImplementation 'com.android.support.test:rules:0.3'
     androidTestImplementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"

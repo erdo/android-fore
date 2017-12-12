@@ -1,1 +1,1 @@
-include ':asaf-core', ':examplethreading', ':exampledatabinding', ':exampleadapters', ':asaf-adapters', ':exampleretrofit', ':asaf-retrofit'
+include ':asaf-core', ':example02threading', ':example01databinding', ':example03adapters', ':asaf-adapters', ':example04retrofit', ':asaf-retrofit', ':asaf-ui', ':example05ui'
