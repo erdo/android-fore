@@ -44,9 +44,9 @@ What's hard, is to produce something that is simple but also generically applica
 
 The ASAF framework is basically a light touch implementation of **MVVM** written for Android using a custom implementation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) to implement data binding (not using android xml bindings).
 
-You'll notice it uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle problems that you might otherwise ecounter). To help you do that, it makes extesive use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection). More about the architecture is [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn, is in the code of the [sample apps](#sample-apps).
+You'll notice it uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle problems that you might otherwise encounter). To help you do that, it makes extensive use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection). More about the architecture is [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn, is in the code of the [sample apps](#sample-apps).
 
-ASAF involves writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately / run animations etc.
+ASAF involves writing observable and testable **Model** classes for all your logic, and **View** layer classes observing these models for any changes so that they can update their views immediately / run animations etc.
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
