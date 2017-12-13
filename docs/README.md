@@ -3,7 +3,7 @@
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
-A few tiny framework classes *(asaf-core 0.9.24 is less than 500 lines of code, with all the optional packages it tops out at only 1422 lines)*.  These classes help you write android code that is **simple**, **robust** and **performant**. It's also highly **scalable** supporting commercial grade android applications and complex UIs.
+A few tiny framework classes that can help you write android code that is **simple**, **robust** and **performant**. It's also highly **scalable** supporting commercial grade android applications and complex UIs.  *(asaf-core is less than 500 lines of code, including all the optional packages, asaf 0.9.24 is still only 1422 lines)*
 
 The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**.
 
@@ -36,7 +36,7 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
 There are many over-engineered android app architectures in existence - (because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
 
-*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing even though there is a network call in progress? - you're looking at a broken data binding implementation and a UI consistency problem)*
+*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation and a UI consistency problem)*
 
 What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the *removal* of functionality and methods, in a way that wouldn't be feasible for a public project. Hopefully that should become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
@@ -73,7 +73,7 @@ Asside from the apps, there is also a lot of information in this guide that will
 
 ### ASAF 1 Data Binding Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) | [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
@@ -83,7 +83,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 ### ASAF 2 Asynchronous Code Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) | [source code](https://github.com/erdo/asaf-project/tree/master/example02threading)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
 This one demonstrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
@@ -95,7 +95,7 @@ It's really a very exciting app, I should probably put it on the play store befo
 
 ### ASAF 3 Adapter Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapter) | [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapter) \| [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
 This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
@@ -109,7 +109,7 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 ### ASAF 4 Retrofit Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) | [source code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
 
 If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) in a particularly clean and testable way. This is the example app for that.
 
@@ -132,7 +132,7 @@ I also hope you appreciate the lemon icons, I made them in Inkscape.
 
 ### ASAF 5 UI Helpers Example (Tic Tac Toe)
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) | [source code](https://github.com/erdo/asaf-project/tree/master/example05ui)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) \| [source code](https://github.com/erdo/asaf-project/tree/master/example05ui)
 
 
 #### SyncableX convenience classes
