@@ -53,7 +53,7 @@ allprojects {
 ext {
     minSdkVersion = 16
     compileSdkVersion = 26
-    targetSdkVersion = 23
+    targetSdkVersion = 26
     buildToolsVersion = "26.0.2"
     supportLibVersion = "26.0.1"
     javaVersion = JavaVersion.VERSION_1_8

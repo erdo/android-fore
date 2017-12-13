@@ -3,11 +3,11 @@
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
-A few tiny framework classes that help you write android code that is **simple**, **robust** and **performant** for even the most complex commercial grade android application.
+A few tiny framework classes *(asaf-core 0.9.24 is less than 500 lines of code, with all the optional packages it tops out at only 1422 lines)*.  These classes help you write android code that is **simple**, **robust** and **performant**. It's also highly **scalable** supporting commercial grade android applications and complex UIs.
 
-The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**. Addressing areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** it lets the developer focus on the cool stuff and not have to worry about the usual android problems.
+The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**.
 
-Check out the [sample apps](#sample-apps) to see how it's done.
+ASAF addresses areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** and it lets the developer focus on the cool stuff and not have to worry about the usual android problems. The ASAF architecture supports rotation **by default** - no additional work is required.
 
 
 ## Quick Start
@@ -29,16 +29,24 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
- 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while refering to the code of the sample apps
+ 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while refering to the code of the [sample apps](#sample-apps)
 
 
 ## Overview
 
-The ASAF framework is basically a light touch implementation of **MVVM** written for Android using the observer pattern (without using xml bindings). More about the architecture [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture).
+There are many over-engineered android app architectures in existence - (because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
 
-*I have noticed recently that a lot of android blogs and github repos claim to solve: testability / memory leaks / ui consistency / lifecycle management etc. (Some of them don't even get basic View / Model separation correct - try rotating the apps and see if that triggers any network calls - or if there are any ```if(firstTime){callNetwork()}``` style hacks in there). - So if you're feeling as skeptical as I would be about ASAF, I strongly encourage you to glance at the [sample app](#sample-apps) code to see for yourself just how clean it is.*
+*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing even though there is a network call in progress? - you're looking at a broken data binding implementation and a UI consistency problem)*
 
-Essentially, ASAF involves writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately.
+What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the *removal* of functionality and methods, in a way that wouldn't be feasible for a public project. Hopefully that should become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
+
+### Yes, but what is it?
+
+The ASAF framework is basically a light touch implementation of **MVVM** written for Android using a custom implementation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) to implement data binding (not using android xml bindings).
+
+You'll notice it uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle problems that you might otherwise ecounter). To help you do that, it makes extesive use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection). More about the architecture is [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn, is in the code of the [sample apps](#sample-apps).
+
+ASAF involves writing observable and testable **Model** classes for all your logic, with **View** layer classes observing these models for any changes so that they can update their views immediately / run animations etc.
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
@@ -65,18 +73,17 @@ Asside from the apps, there is also a lot of information in this guide that will
 
 ### ASAF 1 Data Binding Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) | [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#architecture) section, although it sadly doesn't look quite as awesome as that diagram does.
 
-[Data Binding Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
 
 ### ASAF 2 Asynchronous Code Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) | [source code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
 This one demonstrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
@@ -84,12 +91,11 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 It's really a very exciting app, I should probably put it on the play store before someone steals the idea.
 
-[Asynchronous Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
 
 ### ASAF 3 Adapter Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapter) | [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
 This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
@@ -97,14 +103,13 @@ It also demonstrates how to take advantage of the built in list animations that 
 
 Two lists are displayed side to side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right.
 
-As usual it's a complete and tested but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
+As usual it's a complete and tested app but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
 
-[Adapter Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
 
 ### ASAF 4 Retrofit Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) | [source code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
 
 If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) in a particularly clean and testable way. This is the example app for that.
 
@@ -123,20 +128,18 @@ As usual it's a complete and tested app. In reality the tests are probably more 
 
 I also hope you appreciate the lemon icons, I made them in Inkscape.
 
-[Networking Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
-
 
 
 ### ASAF 5 UI Helpers Example (Tic Tac Toe)
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png) | [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) | [source code](https://github.com/erdo/asaf-project/tree/master/example05ui)
 
 
-##### SyncableX convenience classes
+#### SyncableX convenience classes
 
 The first thing this app demonstrates the use of the SyncableAppCompatActivity class - see also: SyncableActivity, SyncableSupportFragment, SyncableFragment which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
 
-##### SyncTrigger
+#### SyncTrigger
 
 The second thing this app demonstrates is the use of the SyncTrigger class. One thing the Observer pattern is not great for (when you add rotating android screens into the mix) is firing one-off events such as you might use for running single shot animations. The SyncTrigger class lets you bridge the gap between syncView() (which is called at any time, any number of times) and an event like an animation that must happen only once.
 
@@ -148,7 +151,6 @@ Passing true in the check() method will cause the first checkThreshold() result 
 
 No tests on this one yet! when I get a second I will add them, at least for the Board class which contains all the logic.
 
-[UI Helpers Example App Source Code](https://github.com/erdo/asaf-project/tree/master/example05ui)
 
 
 

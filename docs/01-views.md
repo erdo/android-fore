@@ -68,5 +68,5 @@ I know, crap diagrams, but anyway a lot of the complication of Android developme
 
 Despite the obvious problems of writing networking code or asynchronous code of any kind inside a view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
 
-Fortunately it's almost all completely uneccessary. The sample apps should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
+Fortunately it's almost all completely uneccessary. The [sample apps](https://erdo.github.io/asaf-project/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
 
