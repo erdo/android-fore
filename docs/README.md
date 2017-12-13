@@ -3,7 +3,7 @@
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
-A few tiny framework classes that can help you write android code that is **simple**, **robust** and **performant**. It's also highly **scalable** supporting commercial grade android applications and complex UIs.  *(asaf-core is less than 500 lines of code, including all the optional packages, asaf 0.9.24 is still only 1422 lines)*
+A few tiny framework classes which can help you write android code that is **simple**, **robust** and **performant**. The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(asaf-core is less than 500 lines of code. With all the optional packages, asaf 0.9.24 is still only 1422 lines)*
 
 The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**.
 
@@ -36,7 +36,7 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
 There are many over-engineered android app architectures in existence - (because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
 
-*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation and a UI consistency problem)*
+*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
 
 What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the *removal* of functionality and methods, in a way that wouldn't be feasible for a public project. Hopefully that should become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
