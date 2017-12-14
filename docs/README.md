@@ -76,7 +76,7 @@ Asside from the apps, there is also a lot of information in this guide that will
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
-This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 

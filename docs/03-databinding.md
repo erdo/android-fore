@@ -246,18 +246,6 @@ public void syncView(){
 }
 
 
-
-private void updateTotalNumberOfItemsView(){
-    totalItems.setText(basket.getTotalItems);
-}
-
-private void updateDiscountView(){
-    totalDiscount.setText(basket.getTotalDiscount);
-}
-
-private void updateTotalPriceView(){
-    totalPrice.setText(basket.getTotalPrice);
-}
 ```
 
 The code above leaves out details that are required for both solutions of course (the injection of the basket model, hooking up the view elements to the xml layout etc). And we haven't discussed yet how syncView() actually gets called by the model (more on that in the [ASAF Observables](#asaf-observables) section below). A full implementation is not that much larger though, see [here](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) for example views from the sample apps.

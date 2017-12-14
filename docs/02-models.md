@@ -14,7 +14,7 @@ You'll see that in all the sample apps, the models have been written with the as
 
 Writing your app so that it operates on a single thread by default is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
 
-When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) for example, and then pop back on to the UI thread when you are done. The ASAF ASYNCHRONOUS Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.
+When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) for example, and then pop back on to the UI thread when you are done. The ASAF WorkMode.ASYNCHRONOUS parameter will make Observables notify on the UI thread [anyway](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java), so you don't need to do any extra work when you want to update the UI.
 
 If you're already comfortable writing model code skip down to the [check list](#model-check), check out a [few](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
 
