@@ -46,8 +46,6 @@ Well how does that work? you can't just remove boxes and call it better! (I hear
 
 As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any commands are sent directly to the relevant model (no benefit in sending them via a Presenter).
 
-<a name="bad-diagram"></a>
-
 **There are a few things in ASAF that allow you an architecture this simple:**
 
 * The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).
@@ -55,6 +53,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 * The third is writing models at an appropriate level of abstraction, something which comes with a little practice, see [here](https://erdo.github.io/asaf-project/02-models.html#shoom) for more.
 * The fourth is making appropriate use of DI, for more see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection).
 
+<a name="bad-diagram"></a>
 
 This can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code.
 

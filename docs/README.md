@@ -89,13 +89,13 @@ This one demonstrates asynchronous programing, and importantly how to test it. I
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
 
-It's really a very exciting app, I should probably put it on the play store before someone steals the idea.
+It's really a very exciting app, I recently launched it on the play store and I'm just waiting for the inevitable interview requests to come through from arstechnica and techcrunch.
 
 
 
 ### ASAF 3 Adapter Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapter) \| [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters) \| [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
 This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
@@ -120,7 +120,7 @@ The first button gets a successful response, the last two get failed responses. 
 As you're using the app, notice:
 
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
-- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: One is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks and the network responses come through on the UI thread, see more on that in [model](https://erdo.github.io/asaf-project/02-models.html#shoom) section. Even with an android adapter involved, it would be impossible to get any problems when calling notifyDataSetChanged() as long as when any list data is changed it is changed on the UI thread and **immediately** after and on the same thread, notifyDataSetChanged() is called - there will be a more compex stadalone networking/adapter example that demonstrates that.
+- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: one is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks and the network responses come through on the UI thread, see more on that in [model](https://erdo.github.io/asaf-project/02-models.html#shoom) section. Even with an android adapter involved, it would be impossible to get any problems when calling notifyDataSetChanged() as long as when any list data is changed it is changed on the UI thread and notifyDataSetChanged() is called **immediately** after - there will be a more compex standalone networking/adapter example that demonstrates that, but the best description for the moment is in the source of [ObservableImp](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) where it talks about the notificationMode.
 
 The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
@@ -137,15 +137,15 @@ I also hope you appreciate the lemon icons, I made them in Inkscape.
 
 #### SyncableX convenience classes
 
-The first thing this app demonstrates the use of the SyncableAppCompatActivity class - see also: SyncableActivity, SyncableSupportFragment, SyncableFragment which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
+The first thing this app demonstrates the use of the [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java) class - see also: [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity), [SyncableSupportFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment), [SyncableFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment) which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
 
 #### SyncTrigger
 
-The second thing this app demonstrates is the use of the SyncTrigger class. One thing the Observer pattern is not great for (when you add rotating android screens into the mix) is firing one-off events such as you might use for running single shot animations. The SyncTrigger class lets you bridge the gap between syncView() (which is called at any time, any number of times) and an event like an animation that must happen only once.
+The second thing this app demonstrates is the use of the [SyncTrigger](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) class. One thing the Observer pattern is not great for (when you add rotating android screens into the mix) is firing one-off events such as you might use for running single shot animations. The SyncTrigger class lets you bridge the gap between syncView() (which is called at any time, any number of times) and an event like an animation that must happen only once.
 
 When using a SyncTrigger you need to implement a method to be run when it is triggered (e.g. running an animation), and also a method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON).
 
-The first time the threshold is breached, i.e. checkThreshold() returns **true**, the trigger will be called. Once checkThreshold() again returns **false**, the trigger is reset.
+The first time the threshold is breached i.e. checkThreshold() returns **true**, the trigger will be called. Once checkThreshold() again returns **false**, the trigger is reset.
 
 Passing true in the check() method will cause the first checkThreshold() result to be ignored (so for example if the threshold has already been breached, the first check will not cause a trigger to occur). This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger.
 

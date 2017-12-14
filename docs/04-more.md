@@ -173,14 +173,16 @@ A conveient way to make this happen is to inject the WorkMode into the enclosing
 
 # Adapters
 
-More documentation to come but for now please see the [Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-example)
+More documentation to come but for now, please see the [Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-example)
+
+The best description for the moment regarding adapters and threading is in the source of [ObservableImp](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) where it talks about the notificationMode.
 
 
 # Retrofit and the CallProcessor
 
-More documentation to come but for now please see the [Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example)
+More documentation to come but for now, please see the [Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example)
 
 
 # UI Widgets and Helpers
 
-More documentation to come but for now please see the [UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe)
+More documentation to come but for now, please see the [UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe)
