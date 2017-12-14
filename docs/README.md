@@ -137,7 +137,7 @@ I also hope you appreciate the lemon icons, I made them in Inkscape.
 
 #### SyncableX convenience classes
 
-The first thing this app demonstrates the use of the [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java) class - see also: [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity), [SyncableSupportFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment), [SyncableFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment) which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
+The first thing this app demonstrates the use of the [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java) class - see also: [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java), [SyncableSupportFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment.java), [SyncableFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment.java) which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
 
 #### SyncTrigger
 
