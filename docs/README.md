@@ -3,7 +3,7 @@
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
-A few tiny framework classes which can help you write android code that is **simple**, **robust** and **performant**. The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(asaf-core is less than 500 lines of code. With all the optional packages, asaf 0.9.24 is still only 1422 lines)*
+A few tiny framework classes which can help you write android code that is **simple**, **robust** and **performant**. The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(asaf-core is less than 500 lines of code. With all the optional packages, it's still only 1422 lines)*
 
 The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**.
 
@@ -34,17 +34,17 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
 ## Overview
 
-There are many over-engineered android app architectures in existence - (because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
+There are many over-engineered android app architectures in existence - (probably because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
 
 *(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
 
-What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the *removal* of functionality and methods, in a way that wouldn't be feasible for a public project. Hopefully that should become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
+What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the *removal* of functionality and methods, in a way that would be more difficult for a public project. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
 ### Yes, but what is it?
 
-The ASAF framework is basically a light touch implementation of **MVVM** written for Android using a custom implementation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) to implement data binding (not using android xml bindings).
+The ASAF framework is basically a light touch implementation of MVVM written for Android using a custom implementation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) to implement data binding (not using android xml bindings).
 
-You'll notice it uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle problems that you might otherwise encounter). To help you do that, it makes extensive use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection). More about the architecture is [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn, is in the code of the [sample apps](#sample-apps).
+You'll notice it uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle problems that you might otherwise encounter). To help you do that, it makes extensive use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection). More about the architecture is [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn is in the code of the [sample apps](#sample-apps).
 
 ASAF involves writing observable and testable **Model** classes for all your logic, and **View** layer classes observing these models for any changes so that they can update their views immediately / run animations etc.
 
@@ -77,7 +77,7 @@ Asside from the apps, there is also a lot of information in this guide that will
 
 This app is a bare bones implementation ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
-In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It's inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#architecture) section, although it sadly doesn't look quite as awesome as that diagram does.
+In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
 
 

@@ -46,6 +46,8 @@ Well how does that work? you can't just remove boxes and call it better! (I hear
 
 As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any commands are sent directly to the relevant model (no benefit in sending them via a Presenter).
 
+<a name="bad-diagram"></a>
+
 **There are a few things in ASAF that allow you an architecture this simple:**
 
 * The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).

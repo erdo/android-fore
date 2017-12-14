@@ -173,20 +173,14 @@ A conveient way to make this happen is to inject the WorkMode into the enclosing
 
 # Adapters
 
-//TODO
-
-[Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-example)
+More documentation to come but for now please see the [Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-example)
 
 
 # Retrofit and the CallProcessor
 
-//TODO
-
-[Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example)
+More documentation to come but for now please see the [Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example)
 
 
 # UI Widgets and Helpers
 
-//TODO
-
-[UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe)
+More documentation to come but for now please see the [UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe)
