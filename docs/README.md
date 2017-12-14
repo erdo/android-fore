@@ -3,11 +3,12 @@
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
-A few tiny framework classes which can help you write android code that is **simple**, **robust** and **performant**. The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(asaf-core is less than 500 lines of code. With all the optional packages, it's still only 1422 lines)*
-
-The library is the result of over half a decade of app development in teams comprising developers with various backgrounds and abilities. It focuses relentlessly on being **clear** and **easy to understand**.
+A few tiny framework classes which can help you write android code that is **simple**, **robust** and **performant**. The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(it really is tiny - asaf-core is less than 500 lines of code)*
 
 ASAF addresses areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** and it lets the developer focus on the cool stuff and not have to worry about the usual android problems. The ASAF architecture supports rotation **by default** - no additional work is required.
+
+The library's lazer tight focus is the result of continuous iteration in private beta, during more than half a decade of app development in mixed ability teams. It's main goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**.
+
 
 
 ## Quick Start
@@ -36,9 +37,9 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
 There are many over-engineered android app architectures in existence - (probably because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
 
-*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent, how about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
+*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model code - that's a sure sign that the separation between the view layers and the model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent? How about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
 
-What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the *removal* of functionality and methods, in a way that would be more difficult for a public project. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
+What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
 ### Yes, but what is it?
 
@@ -46,7 +47,7 @@ The ASAF framework is basically a light touch implementation of MVVM written for
 
 You'll notice it uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle problems that you might otherwise encounter). To help you do that, it makes extensive use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection). More about the architecture is [here](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn is in the code of the [sample apps](#sample-apps).
 
-ASAF involves writing observable and testable **Model** classes for all your logic, and **View** layer classes observing these models for any changes so that they can update their views immediately / run animations etc.
+Developing with ASAF generally means writing observable and testable [**Model**](https://erdo.github.io/asaf-project/02-models.html#shoom) classes for all your logic (or converting the models you already have to be Observable), and writing [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) layer classes which observe these models for any changes (so that the views can sync their UI / run animations etc.)
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
@@ -54,7 +55,7 @@ ASAF also includes some testable alternatives for AsyncTask ([**AsafTask**](http
 
 There are also optional extras that help with using [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
-You might be surprised how much android code becomes unnecessary when you take this approach to development.
+You might be shocked at how much android code becomes unnecessary when you take this approach to development.
 
 ## Sample Apps
 
