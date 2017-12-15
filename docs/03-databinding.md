@@ -5,7 +5,7 @@ A basic definition of one way databinding could be: any changes of state that ha
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 
-So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled (and obvs, it still needs to work when you rotate the screen).
+So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled (and obvs, for android especially, it still needs to work when you rotate the screen).
 
 ASAF took a deliberate decision to only support **One Way Data Binding** for the reasons outlined below, but for completeness...
 
@@ -14,7 +14,7 @@ In addition to the above, with two way data binding, the binding goes the other 
 
 Automatic two way data binding turns out to be a bit of a pain in the derriere, and once you consider all the exceptions, it's not as useful as you might expect. It's also very easy to do for specific cases (just not in the general case).
 
-Anyway this document will show you how to do rock solid **one way data binding** using ASAF, if it turns out you need some two way data binding you can just do something like this:
+Anyway this document will show you how to do rock solid **one way data binding** using ASAF, if it turns out you need some two way data binding you can always do something like this:
 
 ```
 saveChangesButton.setOnClickListener(new View.OnClickListener() {  
@@ -36,9 +36,9 @@ It really all boils down to a single **syncView()** method, but there are some i
 
 That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want, by the way.
 
-It's usually easier to refresh all the views in a single fragment at the same time. But if you have a custom **RunningTrackView**, and within that you have a custom **ClockView** which is observing a **ClockModel**, you can just refresh the ClockView eveytime the ClockModel changes.
+It's usually easier to refresh all the views in a single fragment at the same time. But if you have a custom **BakingCakeView** (which won't change much), and within that you have a custom **ClockView** which is observing a **ClockModel** (which will change every second), you can just refresh the ClockView eveytime the ClockModel changes.
 
-Depending on your situation though, you might find that it's more convenient to refresh both the RunningTrackView **and** the ClockView at the same time - even if the RunningTrackView hardly changes compared with the ClockView. If that results in cleaner and more explicit code then you should absoutely go ahead and do that.
+Depending on your situation though, you might find that it's more convenient to refresh both the BakingCakeView **and** the ClockView at the same time - even if the BakingCakeView hardly changes compared with the ClockView. If that results in cleaner and more explicit code then you should absoutely go ahead and do that.
 
 ### Simple Example
 
@@ -46,7 +46,7 @@ Here's an example of what commonly happens in real world applications when you *
 
 *The following code is written without taking advantage of lambdas (so that they are clearer for those who haven't got up to speed with lambdas yet), but their use makes no difference to the example.*
 
-Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our basic view to this basket model.
+Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our simplistic view to this basket model.
 
 ![simple basket](img/simple-basket.png)
 
@@ -81,7 +81,7 @@ removeItemButton.setOnClickListener(new OnClickListener() {
 });
 ```
 
-**Step 3)** The designers decided they want to display the **total number of items in the basket** as well as the price (the little number in a circle by the basket icon), so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+**Step 3)** The designers want the view to display the **total number of items in the basket** as well as the price (the little number in a circle by the basket icon), so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
 
 
 ```
@@ -187,7 +187,7 @@ private void updatePostRotation(){
 }
 ```
 
-Well that looks kind of ok, and it would mostly work, the add and remove listeners look pretty similar so we can extract that out to another method - but what if we also want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1.
+Well that looks kind of ok, and it would mostly work, the add and remove listeners look pretty similar so we can extract that out to another method - but what if we also want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1 or whatever.
 
 It soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
@@ -293,7 +293,7 @@ if (basket.isBelowMinimum()){
 }
 ```
 
-But you'll find that by focusing on the property first rather than the condition, you can get some extremely clean code using the elvis operator like so:
+But you'll find that by focusing on the property first rather than the condition, you can get some extremely tight code using the elvis operator like so:
 
 ```
 checkoutButton.setEnabled(!basket.isBelowMinimum());
@@ -307,13 +307,58 @@ In ASAF, the models are usually Observable, and the Views are mostly doing the O
 
 Most of the models in the sample apps become observable by extending ObservableImp (or you can implement the Observable interface and proxy the methods through to an ObservableImp instance), the [code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
 
-- Any observers (usually views) can add() themselves to the model so that the observer will be told of any changes in the model's state
-- When the model's state changes, each added observer will be told in turn by having its somethingChanged() method called (which in turn typicallly causes a call to syncView())
-- For this to work, all a model must do is call notifyObservers() whenever it's own state changes
-- When used in ASYNCHRONOUS mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
-- To avoid memory leaks, observers are responsible for removing themselves from the observable model once they are no longer interested in receiving notifications
-- Typically observers add() and remove() themselves in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
+- Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
+- When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typicallly causes a call to **syncView()**)
+- For this to work, all a model must do is call **notifyObservers()** whenever it's own state changes (see the [Model](https://erdo.github.io/asaf-project/02-models.html#shoom) section)
+- When the model is constructed in **ASYNCHRONOUS** mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
+- To avoid memory leaks, **observers are responsible for removing themselves** from the observable model once they are no longer interested in receiving notifications
+- Typically observers **add()** and **remove()** themselves in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
 
-Now the remaing code in this [example view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should make sense.
+## Hooking it all up
+
+So bascially, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
+
+```
+    Observer observer = new Observer() {
+        @Override
+        public void somethingChanged() {
+            syncView();
+        }
+    };
+```
+
+
+And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using View lifecycle methods to do it)*:
+
+
+```
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        wallet.addObserver(observer);
+        account.addObserver(observer);
+        syncView(); //  <- don't forget this
+    }
+
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        wallet.removeObserver(observer);
+        account.removeObserver(observer);
+    }
+```
+
+## Removing boiler plate
+
+To save yourself writing that databinding boiler plate, you can use the optional **asaf-ui** package which gives you access to classes that do the adding and removing for you ([SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java), [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java), [SyncableSupportFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment.java), [SyncableFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment.java)) At that point the code starts to become so sparse that it's almost hard to see what is going on, I'm on the fence about whether that's a good thing or not (hence it's in an optional package).
+
+
+That's everything you need to do to get bullet proof data binding in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.
+
+
+The remaing code in this [example view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should now make sense to you.
+
+
 
 
