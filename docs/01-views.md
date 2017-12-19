@@ -54,7 +54,7 @@ Sometimes, us Android developers (especially if we have only developed using And
 
 Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
 
-Instead of separating things horizontally in layers with views in one layer and data in another layer, the Android designers separated things vertically. Each self contained Activity (encorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
+Instead of separating things *horizontally* in layers with views in one layer and data in another layer, the Android designers separated things *vertically*. Each self contained Activity (encorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
 
 Android seems to have been envisioned a little like this:
 

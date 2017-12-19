@@ -1,6 +1,8 @@
 
 # Models
-There are lots of definitions of the word **Model**. Here we use it to mean anything that is not a View. In practice model classes might have several layers, some contain data and/or logic, they would very likely pass off tasks like network or database access to other layers. The important thing is that none of this should be anywhere near our **View** layer classes - and this makes our Models extremely easy to test :)
+There are lots of definitions of the word **Model**. We will follow this description: [domain model](https://en.wikipedia.org/wiki/Domain_model) or alternatively, the M in [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
+
+In practice, model classes will mostly contain data and/or logic, they will very likely pass off tasks like network or database access to sub layers. The important thing is that none of this should be anywhere near our [View](https://erdo.github.io/asaf-project/01-views.html#shoom) layer classes - and this makes our Models extremely easy to test :)
 
 In the sample apps, the models are all found in the **feature** package.
 
@@ -8,7 +10,7 @@ Here's an example: [FruitFetcher.java](https://github.com/erdo/asaf-project/blob
 
 ## Writing a Basic Model
 
-If you crack how to write a good model, using it in the rest of your app should be a piece of cake.
+If you write a good model, using it in the rest of your app should be a piece of cake.
 
 You'll see that in all the sample apps, the models have been written with the assuption that all the methods are being accessed on a single thread (which for a live app would be the UI thread).
 
@@ -24,7 +26,7 @@ Writing model code gets easier with practice but as a starting point you could d
 
 For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model.
 
-(In ASAF, almost all the models end up having global scope, if for some reason you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Just don't call "new" in a View layer class because then you won't be able to mock it out for tests.)
+(In ASAF, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) for more info)
 
 In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy to do - also c) at some point the designers will probably want to be able to print various things, from various parts of the app and there is no point in limiting ourselves here.
 
@@ -252,7 +254,7 @@ There is something important that snuck in to that version though: The **WorkMod
 
 When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
 
-Take a look at how the CounterWithLambdas model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
+Take a look at how the [CounterWithLambdas](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
 
 ***NB: to make your view code extra clean, ASYNCHRONOUS notifications from an Observable in ASAF are always sent on the UI thread, so there is no need to do any thread hopping to update a UI.***
 
@@ -272,8 +274,8 @@ For reference here's a check list of recommendations for the model classes, as u
 - The model's current state at any point in time is typically exposed by getters. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do the work in the setters not the getters
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.
-- The models should make good use of dependency injection (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's [AsafTask](/asaf-project/04-more.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/asaf-project/04-more.html#asaftaskbuilder)
+- The models should make good use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's [AsafTask](/asaf-project/04-more.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/asaf-project/04-more.html#asaftaskbuilder)
 - Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thouroughly test model logic is a key part of reducing unecessary app bugs.
 - If the models are to be observable, they can do this in one of 2 ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally.
 - Do check out [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener) in the FAQs to double check you're making the right choice for your model.
-- By the way, it's very useful to immediately **crash in your model constructor if any caller tries to send you null obects**. Your constructor is your public interface and could be used by anyone. You can help other developers out by immediately crashing here rather than sometime later when the cause might not be so obvious.
+- By the way, it's very useful to immediately **crash in your model constructor if any caller tries to send you null obects**. Your constructor is your public interface and could be used by anyone. You can help other developers out by immediately crashing here rather than sometime later when the cause might not be so obvious, in the sample apps, this is done with the Affirm.notNull() call.
