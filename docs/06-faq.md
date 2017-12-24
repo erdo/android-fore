@@ -88,7 +88,7 @@ Well apart from the obvious "premature optimisation is the route of all evil" or
 
 This is not usually a problem for any developer that has written game loops, or implemented their own animations using easing equations or similar, but if you've never done that type of development, you might be surprised about the following.
 
-First make sure you've understood the section on [syncView()](/asaf-project/03-databinding.html#syncview) and the example of how doing adhoc updates can go wrong. And if you still want to sacrific that robustness to chase "performance" or "battery life", then read on...
+First make sure you've understood the section on [syncView()](/asaf-project/03-databinding.html#syncview) and the example of how doing adhoc updates can go wrong. And if you still want to sacrifice that robustness to chase "performance" or "battery life", then I encourage you to read on...
 
 ### In to the matrix
 

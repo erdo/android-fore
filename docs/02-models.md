@@ -18,7 +18,7 @@ Writing your app so that it operates on a single thread by default is a *very* h
 
 When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) for example, and then pop back on to the UI thread when you are done. The ASAF WorkMode.ASYNCHRONOUS parameter will make Observables notify on the UI thread [anyway](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java), so you don't need to do any extra work when you want to update the UI.
 
-If you're already comfortable writing model code skip down to the [check list](#model-check), check out a [few](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
+If you're already comfortable writing model code skip down to the [check list](#model-checklist), check out a [few](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
 
 ### For more detail, read on
 
@@ -262,7 +262,7 @@ Take a look at how the [CounterWithLambdas](https://github.com/erdo/asaf-project
 Take a look at the check list below and then head over to the [Data Binding](/asaf-project/03-databinding.html#shoom) section where we tie it all together.
 
 
-## <a name="model-check"></a> Model Checklist
+## Model Checklist
 
 For reference here's a check list of recommendations for the model classes, as used in ASAF. Once you've had a go at writing one you can come back here to double check you have everything down:
 
