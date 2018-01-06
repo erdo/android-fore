@@ -61,15 +61,15 @@ You might be shocked at how much android code becomes unnecessary when you take 
 
 ![simple basket](img/screenshot_asaf_samples_phone_all_1000.png)
 
-For these sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
-
-For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
-
 The apps here are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts or implement ripple effects - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
 
 ASAF has been designed to make the most of lambda expressions by the way, however most of the sample apps don't use lambdas - purely to make the code more accessible to people who aren't comfortable with them yet. Obviously replacing the anonymous inner classes with lambdas will make the code even tighter.
 
 These apps are however, totally robust and comprehensively tested. And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
+
+For these sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
+
+For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
 Asside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why ASAF works.
 
