@@ -4,9 +4,10 @@ import co.early.asaf.core.Affirm;
 import co.early.asaf.core.time.SystemTimeWrapper;
 
 /**
- *
+ * Indicates what was the most recent change in a list, helps the ChangeAware* classes
+ * call the correct notify* method for android adapters to take advantage of built in
+ * list animations
  */
-
 public class UpdateSpec {
 
     public enum UpdateType {

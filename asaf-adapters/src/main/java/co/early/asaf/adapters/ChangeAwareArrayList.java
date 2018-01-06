@@ -49,7 +49,9 @@ import co.early.asaf.core.time.SystemTimeWrapper;
  * inferring it automatically (like with iOS lists)
  *
  * <p>As this needs to be done for every list and it's reasonably involved, this class handles this work
- * automatically but it only supports single item changes at a time.
+ * automatically - but it only supports one type of change at a time (you can't handle a cell update;
+ * two removals; and three inserts, all in the same notify round trip - each has to be handled one at a time)
+ *
  *
  */
 public class ChangeAwareArrayList<T> extends ArrayList<T> implements ChangeAwareList<T>, Updateable {
