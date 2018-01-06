@@ -159,7 +159,7 @@ No tests on this one yet! when I get a second I will add them, at least for the 
 
 ### Other Full App Examples
 
-//TODO - these aren't complete yet but they will be multiple activity apps, some using Dagger 2 for DI rather than the home grown ObjectGraph class and I'll be hosting them in a separate repo.
+There is a full app example hosted in a seperate repo [here](https://github.com/erdo/asaf-full-app-example)
 
 
 
