@@ -164,7 +164,7 @@ No tests on this one yet! when I get a second I will add them, at least for the 
 ## License
 
 
-    Copyright 2017 early.co
+    Copyright 2017-2018 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
