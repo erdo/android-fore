@@ -159,7 +159,7 @@ No tests on this one yet! when I get a second I will add them, at least for the 
 
 ### Other Full App Examples
 
-There is a full app example hosted in a seperate repo [here](https://github.com/erdo/asaf-full-app-example)
+There is a full app example hosted in a separate repo [here](https://github.com/erdo/asaf-full-app-example)
 
 
 
