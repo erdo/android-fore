@@ -130,7 +130,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 A regular Tic Tac Toe game that makes use of a few UI convenience classes:
 
 
-- The [SyncableXXX](https://erdo.github.io/asaf-project/04-more.html#syncable-convenience-classes) classes which reduce boiler plate slightly and assist automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
+- The [SyncableXXX](https://erdo.github.io/asaf-project/04-more.html#syncable-convenience-classes) classes which reduce boiler plate slightly and automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
 
 - [SyncTrigger](https://erdo.github.io/asaf-project/04-more.html#synctrigger) which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 
