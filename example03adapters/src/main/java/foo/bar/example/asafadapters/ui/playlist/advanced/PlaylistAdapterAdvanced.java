@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.adapters.SimpleChangeAwareAdapter;
+import co.early.asaf.adapters.ChangeAwareAdapter;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.Track;
@@ -17,7 +17,7 @@ import foo.bar.example.asafadapters.feature.playlist.Track;
 /**
  *
  */
-public class PlaylistAdapterAdvanced extends SimpleChangeAwareAdapter<PlaylistAdapterAdvanced.ViewHolder> {
+public class PlaylistAdapterAdvanced extends ChangeAwareAdapter<PlaylistAdapterAdvanced.ViewHolder> {
 
     private static final String TAG = PlaylistAdapterAdvanced.class.getSimpleName();
 

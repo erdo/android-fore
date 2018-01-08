@@ -37,7 +37,7 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
 There are many over-engineered android app architectures in existence - (probably because it's easy to write something that is over-engineered). What's surprising is that many of these architectures don't even get basic View / Model separation correct or they gloss over rotation support.
 
-*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model layer - that's a sure sign that the separation between the view and model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent? How about if you rotate the screen mid-network call... "busy" indicators no longer showing, even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
+*(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model layer - that's a sure sign that the separation between the view and model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent? How about if you rotate the screen mid-network call... "busy" indicators no longer showing even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
 
 What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
@@ -71,7 +71,7 @@ For these sample apps, all the **View** components are located in the **ui/** pa
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
-Asside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why ASAF works.
+Aside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why ASAF works.
 
 
 ### ASAF 1 Data Binding Example
@@ -114,54 +114,43 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
 
-If you're using Retrofit (and I'm guessing you probably are), there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) in a particularly clean and testable way. This is the example app for that.
+If you're using Retrofit there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) in a particularly clean and testable way. This is the example app for that.
 
 Clicking the buttons will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome).
 
-The first button gets a successful response, the last two get failed responses. The failed responses are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://github.com/erdo/asaf-project/blob/master/asaf-retrofit/src/main/java/co/early/asaf/retrofit/CallProcessor.java) which is the main inovation in the asaf-retrofit library.
+The first button gets a successful response, the last two get failed responses. The failed responses are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://github.com/erdo/asaf-project/blob/master/asaf-retrofit/src/main/java/co/early/asaf/retrofit/CallProcessor.java) which is the main innovation in the asaf-retrofit library.
 
-As you're using the app, notice:
+As you're using the app, please notice:
 
-- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing).
-- **how it is not possible to mess things up by speed tapping the buttons**. No matter how rapidly the testers can click multiple buttons, the app is totally robust. It is robust for two reasons: one is that the model checks to see if it's busy before starting anything anyway. The other is that all the button clicks and the network responses come through on the UI thread, see more on that in [model](https://erdo.github.io/asaf-project/02-models.html#shoom) section. Even with an android adapter involved, it would be impossible to get any problems when calling notifyDataSetChanged() as long as when any list data is changed it is changed on the UI thread and notifyDataSetChanged() is called **immediately** after - there will be a more compex standalone networking/adapter example that demonstrates that, but the best description for the moment is in the source of [ObservableImp](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) where it talks about the notificationMode.
+- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
 
 The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
 
 As usual it's a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
-
-I also hope you appreciate the lemon icons, I made them in Inkscape.
-
 
 
 ### ASAF 5 UI Helpers Example (Tic Tac Toe)
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) \| [source code](https://github.com/erdo/asaf-project/tree/master/example05ui)
 
+A regular Tic Tac Toe game that makes use of a few UI convenience classes:
 
-#### SyncableX convenience classes
 
-The first thing this app demonstrates the use of the [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java) class - see also: [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java), [SyncableSupportFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment.java), [SyncableFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment.java) which all work in a similar fasion. These completely optional classes let you remove some lifecycle boiler plate from your custom view classes.
+- The Syncable... classes which reduce boiler plate slightly and assist automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
 
-#### SyncTrigger
+- SyncTrigger which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 
-The second thing this app demonstrates is the use of the [SyncTrigger](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) class. One thing the Observer pattern is not great for (when you add rotating android screens into the mix) is firing one-off events such as you might use for running single shot animations. The SyncTrigger class lets you bridge the gap between syncView() (which is called at any time, any number of times) and an event like an animation that must happen only once.
 
-When using a SyncTrigger you need to implement a method to be run when it is triggered (e.g. running an animation), and also a method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON).
-
-The first time the threshold is breached i.e. checkThreshold() returns **true**, the trigger will be called. Once checkThreshold() again returns **false**, the trigger is reset.
-
-Passing true in the check() method will cause the first checkThreshold() result to be ignored (so for example if the threshold has already been breached, the first check will not cause a trigger to occur). This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger.
-
-No tests on this one yet! when I get a second I will add them, at least for the Board class which contains all the logic.
+No automated tests for this app yet! (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included). If I get a spare moment I will add them at least for the **Board** class which contains all the logic.
 
 
 
 
 ### Other Full App Examples
 
-There is a full app example hosted in a separate repo: one branch for pure DI, one for Dagger 2 [here](https://github.com/erdo/asaf-full-app-example)
+**There is a full app example hosted in a separate repo: one branch for pure DI, one for Dagger 2 [here](https://github.com/erdo/asaf-full-app-example)**
 
-The same app written in Kotlin (functional but probably a little more to do clean code wise) [here](https://github.com/erdo/asaf-full-app-example-kotlin)
+**The same app written in Kotlin (functional but probably a little more to do clean code wise) [here](https://github.com/erdo/asaf-full-app-example-kotlin)**
 
 
 

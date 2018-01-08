@@ -316,7 +316,7 @@ Most of the models in the sample apps become observable by extending ObservableI
 
 ## Hooking it all up
 
-So bascially, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
+So basically, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
 
 ```
     Observer observer = new Observer() {
