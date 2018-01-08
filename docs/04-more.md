@@ -249,9 +249,9 @@ As with testing any asynchronous code with ASAF, we use WorkMode.SYNCHRONOUS to 
 
 For example useage please refer to the [UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe).
 
-## Syncable... Convenience Classes
+## SyncableXXX Convenience Classes
 
-ASAF includes various Syncable... classes which will reduce some of the boiler plate code in your views related to adding and removing observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activty / Fragment classes.
+ASAF includes various SyncableXXX classes which will reduce some of the boiler plate code in your views related to adding and removing observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activty / Fragment classes.
 
 - [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java)
 - [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java)

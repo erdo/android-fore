@@ -78,7 +78,7 @@ Aside from the apps, there is also a lot of information in this guide that will 
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
-This app is a bare bones implementation of ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [Data Binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
@@ -88,7 +88,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
-This one demonstrates asynchronous programing, and importantly how to test it. It uses ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
+This one demonstrates asynchronous programing, and importantly how to test it. It uses ([AsafTask](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [AsafTaskBuilder](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
 
@@ -114,19 +114,13 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
 
-If you're using Retrofit there are some nice ASAF classes that help you use [Retrofit2](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) in a particularly clean and testable way. This is the example app for that.
-
-Clicking the buttons will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome).
-
-The first button gets a successful response, the last two get failed responses. The failed responses are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://github.com/erdo/asaf-project/blob/master/asaf-retrofit/src/main/java/co/early/asaf/retrofit/CallProcessor.java) which is the main innovation in the asaf-retrofit library.
+Clicking the buttons in this app will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The first button gets a successful response, the last two get failed responses which are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor) which is the main innovation in the asaf-retrofit library.
 
 As you're using the app, please notice:
 
 - **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
 
-The app contains just the minimum code required to demonstrate networking (ok apart from an unecessary animated-tasty-rating-bar, but whatever, it's just one class ;p ).
-
-As usual it's a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
+As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
 
 
 ### ASAF 5 UI Helpers Example (Tic Tac Toe)
@@ -136,9 +130,9 @@ As usual it's a complete and tested app. In reality the tests are probably more 
 A regular Tic Tac Toe game that makes use of a few UI convenience classes:
 
 
-- The Syncable... classes which reduce boiler plate slightly and assist automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
+- The [SyncableXXX](https://erdo.github.io/asaf-project/04-more.html#syncable-convenience-classes) classes which reduce boiler plate slightly and assist automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
 
-- SyncTrigger which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
+- [SyncTrigger](https://erdo.github.io/asaf-project/04-more.html#synctrigger) which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 
 
 No automated tests for this app yet! (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included). If I get a spare moment I will add them at least for the **Board** class which contains all the logic.
@@ -148,9 +142,11 @@ No automated tests for this app yet! (but you should be getting the idea by now 
 
 ### Other Full App Examples
 
-**There is a full app example hosted in a separate repo: one branch for pure DI, one for Dagger 2 [here](https://github.com/erdo/asaf-full-app-example)**
+*There is a full app example hosted in a separate repo: one branch for **pure DI**, one for **Dagger 2***
+**[here](https://github.com/erdo/asaf-full-app-example)**
 
-**The same app written in Kotlin (functional but probably a little more to do clean code wise) [here](https://github.com/erdo/asaf-full-app-example-kotlin)**
+*The same app written in **Kotlin** (functional but probably a little more to do clean code wise)*
+**[here](https://github.com/erdo/asaf-full-app-example-kotlin)**
 
 
 
