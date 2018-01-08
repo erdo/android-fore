@@ -30,7 +30,7 @@ compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
- 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while refering to the code of the [sample apps](#sample-apps)
+ 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while referring to the code of the [sample apps](#sample-apps)
 
 
 ## Overview
