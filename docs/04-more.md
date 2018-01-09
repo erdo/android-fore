@@ -216,7 +216,7 @@ The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asa
 
 # Retrofit and the CallProcessor
 
-The CallProcessor is a wrapper for the Retrofit2 Call class. For a useage example, please see the [Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example). The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
+The [CallProcessor](https://github.com/erdo/asaf-project/blob/master/asaf-retrofit/src/main/java/co/early/asaf/retrofit/CallProcessor.java) is a wrapper for the Retrofit2 Call class. For a useage example, please see the [Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example). The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
 When taking advantage of lamda expressions, the code can become very tight indeed:
 
