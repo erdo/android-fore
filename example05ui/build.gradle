@@ -3,17 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'maven'
 apply plugin: 'idea'
 
-def secrets = new Properties()
-def secretsFile = new File('example05ui/secrets.properties')
-if (secretsFile.canRead()) {
-    secrets.load(new FileInputStream(secretsFile))
-} else {
-    println 'WARNING app secrets.properties not found! \n'
-}
-def AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.AWS_ACCESS_KEY
-def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
-
-
 
 
 android {
