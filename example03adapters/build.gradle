@@ -43,16 +43,10 @@ android {
 
 }
 
-
 repositories {
-    maven {
-        url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
-        //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
-        credentials(AwsCredentials) {
-            accessKey AWS_ACCESS_KEY
-            secretKey AWS_SECRET_KEY
-        }
-    }
+    jcenter()
+    mavenCentral()
+    google()
 }
 
 dependencies {
