@@ -12,11 +12,6 @@
       <module fileurl="file://$PROJECT_DIR$/example03adapters/example03adapters.iml" filepath="$PROJECT_DIR$/example03adapters/example03adapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/example04retrofit/example04retrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/example04retrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/example05ui/example05ui.iml" filepath="$PROJECT_DIR$/example05ui/example05ui.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example03adapters/exampleadapters.iml" filepath="$PROJECT_DIR$/example03adapters/exampleadapters.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example01databinding/exampledatabinding.iml" filepath="$PROJECT_DIR$/example01databinding/exampledatabinding.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example04retrofit/exampleretrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/exampleretrofit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example02threading/examplethreading.iml" filepath="$PROJECT_DIR$/example02threading/examplethreading.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example05ui/exampleui.iml" filepath="$PROJECT_DIR$/example05ui/exampleui.iml" />
     </modules>
   </component>
 </project>
