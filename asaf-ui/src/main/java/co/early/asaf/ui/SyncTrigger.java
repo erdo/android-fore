@@ -36,12 +36,58 @@ public class SyncTrigger {
         this.checkTriggerThreshold = Affirm.notNull(checkTriggerThreshold);
     }
 
+
+    /**
+     * <p>
+     * If you are using this in a view that supports rotation, you might want to look at
+     * {@link #checkLazy()}
+     * </p><p>
+     * SyncTriggers usually exist in the the view layer and as such they are completely
+     * reconstructed each time a view is rotated (on Android).
+     * </p><p>
+     * This means that if your trigger threshold is met (causing the trigger to be fired) and then
+     * you rotate the screen - the first check on the newly constructed syncTrigger will also cause
+     * the trigger to be fired, continually rotating the screen will result in continual trigger
+     * firing.
+     * </p><p>
+     * This is probably not what you want, so you can use checkLazy() instead which swallows
+     * the first trigger IF and only if it occurs on the FIRST EVER check of the trigger
+     * threshold for this syncTrigger.
+     * </p><p>
+     */
+    public void check(){
+        check(false);
+    }
+
+
+    /**
+     * <p>
+     * A trigger check (similar to {@link #check()} but which swallows the first trigger IF and
+     * only if it occurs on the FIRST EVER check of the trigger threshold for this syncTrigger.
+     * </p><p>
+     * SyncTriggers usually exist in the the view layer and as such they are completely
+     * reconstructed each time a view is rotated (on Android).
+     * </p><p>
+     * This means that if your trigger threshold is met (causing the trigger to be fired) and then
+     * you rotate the screen - the first check on the newly constructed syncTrigger will also cause
+     * the trigger to be fired, continually rotating the screen will result in continual trigger
+     * firing.
+     * </p><p>
+     * For this reason, you might want to use this method for your application
+     * </p>
+     */
+    public void checkLazy(){
+        check(true);
+    }
+
+
     /**
      *
-     * @param swallowTriggerForFirstCheck true to hide triggers on the first check - depending on your
-     *                         application this maybe useful to prevent triggers firing due
-     *                         to a screen rotation.
+     * @param swallowTriggerForFirstCheck true to swallow triggers on the first check - depending
+     *                                    on your application this maybe useful to prevent triggers
+     *                                    firing due to a screen rotation.
      */
+    @Deprecated
     public void check(boolean swallowTriggerForFirstCheck) {
 
         boolean reached = checkTriggerThreshold.checkThreshold();
@@ -76,6 +122,7 @@ public class SyncTrigger {
         this.immediatelyResetAfterCheck = true;
     }
 
+    @Deprecated
     public void setImmediatelyResetAfterCheck(boolean immediatelyResetAfterCheck) {
         this.immediatelyResetAfterCheck = immediatelyResetAfterCheck;
     }
@@ -87,7 +134,7 @@ public class SyncTrigger {
     public interface CheckTriggerThreshold {
         /**
          *
-         * @return true if the threshold has been reached or requirement is met, false if not
+         * @return true if the threshold has been reached or requirement is met. false if not
          */
         boolean checkThreshold();
     }
