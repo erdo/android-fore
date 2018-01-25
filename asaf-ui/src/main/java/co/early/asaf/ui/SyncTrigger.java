@@ -14,6 +14,10 @@ import co.early.asaf.core.ui.SyncableView;
  *      If {@link CheckTriggerThreshold#checkThreshold()} later
  *      returns false when checked, then the trigger is reset and will fire again if
  *      {@link CheckTriggerThreshold#checkThreshold()} once again returns true.
+ * </p><p>
+ *      To configure this trigger to immediately reset itself after each time it's fired without
+ *      having to wait for {@link CheckTriggerThreshold#checkThreshold()} to return false
+ *      call {@link CheckTriggerThreshold#resetAfterCheckAlways()}
  * </p>
  */
 public class SyncTrigger {
@@ -24,6 +28,7 @@ public class SyncTrigger {
 
     private boolean overThreshold = false;
     private boolean firstCheck = true;
+    private boolean immediatelyResetAfterCheck = false;
 
 
     public SyncTrigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold) {
@@ -50,7 +55,29 @@ public class SyncTrigger {
             overThreshold = reached;
         }
 
+        if (immediatelyResetAfterCheck){
+            overThreshold = false;
+        }
+
         firstCheck = false;
+    }
+
+    /**
+     * Trigger is reset after a successful check - only once a subsequent check fails. This is the default.
+     */
+    public void resetAfterCheckFails() {
+        this.immediatelyResetAfterCheck = false;
+    }
+
+    /**
+     * Trigger is reset after each successful check
+     */
+    public void resetAfterCheckAlways() {
+        this.immediatelyResetAfterCheck = true;
+    }
+
+    public void setImmediatelyResetAfterCheck(boolean immediatelyResetAfterCheck) {
+        this.immediatelyResetAfterCheck = immediatelyResetAfterCheck;
     }
 
     private void fireTrigger(){
