@@ -7,7 +7,7 @@ A few tiny framework classes which can help you write android code that is **sim
 
 ASAF addresses areas such as **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** and it lets the developer focus on the cool stuff and not have to worry about the usual android problems. The ASAF architecture supports rotation **by default** - no additional work is required.
 
-The library's lazer tight focus is the result of continuous iteration in private beta, during more than half a decade of app development in mixed ability teams. It's main goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**.
+In a nutshell, this is achieved with a very tight implementation of the observer pattern, which is used to bind data to your views. When combined with dependency injection this enables you to completely separate your view layer from the rest of your app (and in doing so remove a whole class of problems from typical android development).
 
 
 
@@ -39,7 +39,9 @@ There are many over-engineered android app architectures in existence - (probabl
 
 *(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model layer - that's a sure sign that the separation between the view and model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent? How about if you rotate the screen mid-network call... "busy" indicators no longer showing even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
 
-What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
+What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project.
+
+It's main goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
 ### Yes, but what is it?
 
