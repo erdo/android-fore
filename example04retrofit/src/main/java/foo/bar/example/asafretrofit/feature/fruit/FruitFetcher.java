@@ -7,7 +7,6 @@ import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
 import co.early.asaf.core.callbacks.SuccessCallBack;
-import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.observer.ObservableImp;
 import co.early.asaf.retrofit.CallProcessor;
@@ -57,18 +56,8 @@ public class FruitFetcher extends ObservableImp{
         notifyObservers();
 
         callProcessor.processCall(fruitService.getFruitsSimulateOk("3s"), workMode, FruitsCustomError.class,
-                new SuccessCallbackWithPayload<List<FruitPojo>>() {
-                    @Override
-                    public void success(List<FruitPojo> successResponse) {
-                        FruitFetcher.this.handleSuccess(successCallBack, successResponse);
-                    }
-                },
-                new FailureCallbackWithPayload<UserMessage>() {
-                    @Override
-                    public void fail(UserMessage failureMessage) {
-                        handleFailure(failureCallbackWithPayload, failureMessage);
-                    }
-                });
+                successResponse -> FruitFetcher.this.handleSuccess(successCallBack, successResponse),
+                failureMessage -> handleFailure(failureCallbackWithPayload, failureMessage));
 
     }
 
@@ -90,18 +79,8 @@ public class FruitFetcher extends ObservableImp{
         notifyObservers();
 
         callProcessor.processCall(fruitService.getFruitsSimulateNotAuthorised("3s"), workMode,
-                new SuccessCallbackWithPayload<List<FruitPojo>>() {
-                    @Override
-                    public void success(List<FruitPojo> successResponse) {
-                        handleSuccess(successCallBack, successResponse);
-                    }
-                },
-                new FailureCallbackWithPayload<UserMessage>() {
-                    @Override
-                    public void fail(UserMessage failureMessage) {
-                        handleFailure(failureCallbackWithPayload, failureMessage);
-                    }
-                });
+                successResponse -> handleSuccess(successCallBack, successResponse),
+                failureMessage -> handleFailure(failureCallbackWithPayload, failureMessage));
 
     }
 
@@ -123,18 +102,8 @@ public class FruitFetcher extends ObservableImp{
         notifyObservers();
 
         callProcessor.processCall(fruitService.getFruitsSimulateNotAuthorised("3s"), workMode, FruitsCustomError.class,
-                new SuccessCallbackWithPayload<List<FruitPojo>>() {
-                    @Override
-                    public void success(List<FruitPojo> successResponse) {
-                        handleSuccess(successCallBack, successResponse);
-                    }
-                },
-                new FailureCallbackWithPayload<UserMessage>() {
-                    @Override
-                    public void fail(UserMessage failureMessage) {
-                        handleFailure(failureCallbackWithPayload, failureMessage);
-                    }
-                });
+                successResponse -> handleSuccess(successCallBack, successResponse),
+                failureMessage -> handleFailure(failureCallbackWithPayload, failureMessage));
 
     }
 

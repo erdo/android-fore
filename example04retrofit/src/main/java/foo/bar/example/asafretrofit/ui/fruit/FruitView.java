@@ -122,27 +122,11 @@ public class FruitView extends ScrollView {
 
     private void setupButtonClickListeners() {
 
-        fruitRefreshSuccess.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fruitFetcher.fetchFruits(successCallBack, failureCallback);
-            }
-        });
+        fruitRefreshSuccess.setOnClickListener(v -> fruitFetcher.fetchFruits(successCallBack, failureCallback));
 
-        fruitRefreshFailBasic.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fruitFetcher.fetchFruitsButFailBasic(successCallBack, failureCallback);
+        fruitRefreshFailBasic.setOnClickListener(v -> fruitFetcher.fetchFruitsButFailBasic(successCallBack, failureCallback));
 
-            }
-        });
-
-        fruitRefreshFailAdvanced.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fruitFetcher.fetchFruitsButFailAdvanced(successCallBack, failureCallback);
-            }
-        });
+        fruitRefreshFailAdvanced.setOnClickListener(v -> fruitFetcher.fetchFruitsButFailAdvanced(successCallBack, failureCallback));
 
     }
 

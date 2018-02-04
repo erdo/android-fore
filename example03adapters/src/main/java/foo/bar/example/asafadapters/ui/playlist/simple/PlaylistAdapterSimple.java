@@ -40,37 +40,28 @@ public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterS
 
         final Track item = playlistSimpleModel.getTrack(position);
 
-        holder.increase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                int betterPosition = holder.getAdapterPosition();
-                if (betterPosition!=-1) {
-                    playlistSimpleModel.increasePlaysForTrack(betterPosition);
-                }
+        holder.increase.setOnClickListener(v -> {
+            int betterPosition = holder.getAdapterPosition();
+            if (betterPosition!=-1) {
+                playlistSimpleModel.increasePlaysForTrack(betterPosition);
             }
         });
 
-        holder.decrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                int betterPosition = holder.getAdapterPosition();
-                if (betterPosition!=-1) {
-                    playlistSimpleModel.decreasePlaysForTrack(betterPosition);
-                }
+        holder.decrease.setOnClickListener(v -> {
+            int betterPosition = holder.getAdapterPosition();
+            if (betterPosition!=-1) {
+                playlistSimpleModel.decreasePlaysForTrack(betterPosition);
             }
         });
 
-        holder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                //yuk, can't find a way around this, without checking
-                //here you will occasionally get outofindex errors
-                //if you tap very fast on different rows removing them
-                //while you are using adapter animations
-                int betterPosition = holder.getAdapterPosition();
-                if (betterPosition!=-1) {
-                    playlistSimpleModel.removeTrack(betterPosition);
-                }
+        holder.remove.setOnClickListener(v -> {
+            //yuk, can't find a way around this, without checking
+            //here you will occasionally get outofindex errors
+            //if you tap very fast on different rows removing them
+            //while you are using adapter animations
+            int betterPosition = holder.getAdapterPosition();
+            if (betterPosition!=-1) {
+                playlistSimpleModel.removeTrack(betterPosition);
             }
         });
 

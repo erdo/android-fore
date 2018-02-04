@@ -133,11 +133,7 @@ public class ObservableImp implements Observable{
             } else {
                 // post notifications to UI thread (so that no special work needs to be done by observers to update UI)
                 Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    public void run() {
-                        doNotification(observer);
-                    }
-                });
+                handler.post(() -> doNotification(observer));
             }
         }
     }

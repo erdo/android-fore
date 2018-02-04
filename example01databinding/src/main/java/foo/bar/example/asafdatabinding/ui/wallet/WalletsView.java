@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -41,12 +40,7 @@ public class WalletsView extends ScrollView {
 
 
     //single observer reference
-    Observer observer = new Observer() {
-        @Override
-        public void somethingChanged() {
-            syncView();
-        }
-    };
+    Observer observer = () -> syncView();
 
 
 
@@ -84,17 +78,11 @@ public class WalletsView extends ScrollView {
     }
 
     private void setupButtonClickListeners() {
-        increaseMobileWalletBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wallet.increaseMobileWallet();//notice how the data binding takes care of updating the view for you
-            }
+        increaseMobileWalletBtn.setOnClickListener(v -> {
+            wallet.increaseMobileWallet();//notice how the data binding takes care of updating the view for you
         });
-        decreaseMobileWalletBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wallet.decreaseMobileWallet();//notice how the data binding takes care of updating the view for you
-            }
+        decreaseMobileWalletBtn.setOnClickListener(v -> {
+            wallet.decreaseMobileWallet();//notice how the data binding takes care of updating the view for you
         });
     }
 

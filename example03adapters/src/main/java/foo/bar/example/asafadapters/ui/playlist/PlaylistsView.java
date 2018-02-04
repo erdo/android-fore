@@ -6,7 +6,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,11 +13,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.asaf.core.observer.Observer;
+import co.early.asaf.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters.CustomApp;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistSimpleModel;
-import co.early.asaf.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters.ui.playlist.advanced.PlaylistAdapterAdvanced;
 import foo.bar.example.asafadapters.ui.playlist.simple.PlaylistAdapterSimple;
 
@@ -71,12 +70,7 @@ public class PlaylistsView extends LinearLayout {
 
 
     //single observer reference
-    Observer observer = new Observer() {
-        @Override
-        public void somethingChanged() {
-            syncView();
-        }
-    };
+    Observer observer = () -> syncView();
 
 
     private PlaylistAdapterSimple adapterSimple;
@@ -124,61 +118,21 @@ public class PlaylistsView extends LinearLayout {
 
     private void setupButtonClickListeners() {
 
-        add5SimpleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistSimpleModel.add5NewTracks();
-            }
-        });
+        add5SimpleButton.setOnClickListener(v -> playlistSimpleModel.add5NewTracks());
 
-        clear5SimpleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistSimpleModel.remove5Tracks();
-            }
-        });
+        clear5SimpleButton.setOnClickListener(v -> playlistSimpleModel.remove5Tracks());
 
-        add5AdvancedButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistAdvancedModel.add5NewTracks();
-            }
-        });
+        add5AdvancedButton.setOnClickListener(v -> playlistAdvancedModel.add5NewTracks());
 
-        clear5AdvancedButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistAdvancedModel.remove5Tracks();
-            }
-        });
+        clear5AdvancedButton.setOnClickListener(v -> playlistAdvancedModel.remove5Tracks());
 
-        addSimpleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistSimpleModel.addNewTrack();
-            }
-        });
+        addSimpleButton.setOnClickListener(v -> playlistSimpleModel.addNewTrack());
 
-        clearSimpleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistSimpleModel.removeAllTracks();
-            }
-        });
+        clearSimpleButton.setOnClickListener(v -> playlistSimpleModel.removeAllTracks());
 
-        addAdvancedButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistAdvancedModel.addNewTrack();
-            }
-        });
+        addAdvancedButton.setOnClickListener(v -> playlistAdvancedModel.addNewTrack());
 
-        clearAdvancedButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playlistAdvancedModel.removeAllTracks();
-            }
-        });
+        clearAdvancedButton.setOnClickListener(v -> playlistAdvancedModel.removeAllTracks());
 
     }
 

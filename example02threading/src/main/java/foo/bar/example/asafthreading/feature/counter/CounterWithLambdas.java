@@ -3,11 +3,9 @@ package foo.bar.example.asafthreading.feature.counter;
 
 import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.callbacks.DoThisWithPayloadCallback;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.observer.ObservableImp;
 import co.early.asaf.core.threading.AsafTaskBuilder;
-import co.early.asaf.core.threading.DoInBackgroundCallback;
 
 /**
  *
@@ -39,18 +37,8 @@ public class CounterWithLambdas extends ObservableImp{
 
         //don't forget AsafTaskBuilder lets you use lambda expressions too
         new AsafTaskBuilder<Void, Integer>(workMode)
-                .doInBackground(new DoInBackgroundCallback<Void, Integer>() {
-                    @Override
-                    public Integer doThisAndReturn(Void... input) {
-                        return CounterWithLambdas.this.doStuffInBackground(input);
-                    }
-                })
-                .onPostExecute(new DoThisWithPayloadCallback<Integer>() {
-                    @Override
-                    public void doThis(Integer result) {
-                        CounterWithLambdas.this.doThingsWithTheResult(result);
-                    }
-                })
+                .doInBackground(input -> CounterWithLambdas.this.doStuffInBackground(input))
+                .onPostExecute(result -> CounterWithLambdas.this.doThingsWithTheResult(result))
                 .execute((Void) null);
 
     }
