@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -98,20 +97,8 @@ public class CounterView extends ScrollView {
     }
 
     private void setupButtonClickListeners() {
-
-        increaseBy20Prog.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counterWithProgress.increaseBy20();
-            }
-        });
-
-        increaseBy20Basic.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                counterWithLambdas.increaseBy20();
-            }
-        });
+        increaseBy20Prog.setOnClickListener(v -> counterWithProgress.increaseBy20());
+        increaseBy20Basic.setOnClickListener(v -> counterWithLambdas.increaseBy20());
     }
 
 

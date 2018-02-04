@@ -1,6 +1,8 @@
 package foo.bar.example.asafthreading.feature.counter;
 
 
+import android.annotation.SuppressLint;
+
 import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.logging.Logger;
@@ -29,6 +31,7 @@ public class CounterWithProgress extends ObservableImp{
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     public void increaseBy20(){
 
         logger.i(TAG, "increaseBy20()");

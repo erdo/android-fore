@@ -87,21 +87,11 @@ public class TicTacToeView extends ScrollView implements SyncableView {
 
     private void setupClickListeners() {
 
-        restartBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                board.restart();
-            }
-        });
+        restartBtn.setOnClickListener(v -> board.restart());
 
-        ButtonProcessor.runThroughButtons(boardGrid, new ButtonProcessor.ButtonOperation() {
-            @Override
-            public void operate(Button button, int xPos, int yPos) {
-                button.setOnClickListener(v -> {
-                    board.mark(xPos, yPos);
-                });
-            }
-        });
+        ButtonProcessor.runThroughButtons(boardGrid, (button, xPos, yPos) -> button.setOnClickListener(v -> {
+            board.mark(xPos, yPos);
+        }));
     }
 
 

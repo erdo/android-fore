@@ -97,16 +97,13 @@ public class CounterWithProgressTest {
         //arrange
         final CounterWithProgress counterWithProgress = new CounterWithProgress(WorkMode.SYNCHRONOUS, logger);
         final ProgressTracker pt = new ProgressTracker();
-        counterWithProgress.addObserver(new Observer() {
-            @Override
-            public void somethingChanged() {
-                int latestProgess = counterWithProgress.getProgress();
-                if (latestProgess!=0){//or we just ignore it
-                    Assert.assertEquals(true, latestProgess >= pt.latestProgress);//never want progress to go down
-                    if (latestProgess > pt.latestProgress) {//if progress ticks up, then we count it as a progress publication
-                        pt.latestProgress = latestProgess;
-                        pt.numberOfProgressPublications++;
-                    }
+        counterWithProgress.addObserver(() -> {
+            int latestProgess = counterWithProgress.getProgress();
+            if (latestProgess!=0){//or we just ignore it
+                Assert.assertEquals(true, latestProgess >= pt.latestProgress);//never want progress to go down
+                if (latestProgess > pt.latestProgress) {//if progress ticks up, then we count it as a progress publication
+                    pt.latestProgress = latestProgess;
+                    pt.numberOfProgressPublications++;
                 }
             }
         });

@@ -41,37 +41,28 @@ public class PlaylistAdapterAdvanced extends ChangeAwareAdapter<PlaylistAdapterA
 
         final Track item = playlistAdvancedModel.getTrack(position);
 
-        holder.increase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                int betterPosition = holder.getAdapterPosition();
-                if (betterPosition!=-1) {
-                    playlistAdvancedModel.increasePlaysForTrack(betterPosition);
-                }
+        holder.increase.setOnClickListener(v -> {
+            int betterPosition = holder.getAdapterPosition();
+            if (betterPosition!=-1) {
+                playlistAdvancedModel.increasePlaysForTrack(betterPosition);
             }
         });
 
-        holder.decrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                int betterPosition = holder.getAdapterPosition();
-                if (betterPosition!=-1) {
-                    playlistAdvancedModel.decreasePlaysForTrack(betterPosition);
-                }
+        holder.decrease.setOnClickListener(v -> {
+            int betterPosition = holder.getAdapterPosition();
+            if (betterPosition!=-1) {
+                playlistAdvancedModel.decreasePlaysForTrack(betterPosition);
             }
         });
 
-        holder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                //yuk, can't find a way around this, without checking
-                //here you will occasionally get outofindex errors
-                //if you tap very fast on different rows removing them
-                //while you are using adapter animations
-                int betterPosition = holder.getAdapterPosition();
-                if (betterPosition!=-1) {
-                    playlistAdvancedModel.removeTrack(betterPosition);
-                }
+        holder.remove.setOnClickListener(v -> {
+            //yuk, can't find a way around this, without checking
+            //here you will occasionally get outofindex errors
+            //if you tap very fast on different rows removing them
+            //while you are using adapter animations
+            int betterPosition = holder.getAdapterPosition();
+            if (betterPosition!=-1) {
+                playlistAdvancedModel.removeTrack(betterPosition);
             }
         });
 
