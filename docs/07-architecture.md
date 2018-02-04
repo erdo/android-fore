@@ -2,11 +2,13 @@
 
 # Architecture
 
-If you like architecture diagrams, then you'll love this page ;) discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
+If you enjoy architecture diagrams, hopefully you'll love this page. If you don't,  let's just say that ASAF is **MVW** and be done with it ;)
+
+Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
 ![simple basket](img/arch_mvc.png)
 
-This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your activity to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's bascially a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
+This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your activity to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
 
 There is one important thing to note about about this diagram however. If we focus on the **Model** [click here for our current definition of Model](https://erdo.github.io/asaf-project/02-models.html#shoom), all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can support any number of different Views which can come and go as they please (when an Android device is rotated for example) and the Model is not affected - or even aware of it.
 
