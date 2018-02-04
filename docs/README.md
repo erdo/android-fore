@@ -15,14 +15,14 @@ In a nutshell, this is achieved with a mini implementation of the observer patte
 
 
 ```
-compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.24', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.26', ext: 'aar')
 ```
 optional:
 
 ```
-compile (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.24', ext: 'aar')
-compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.24', ext: 'aar')
-compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.24', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.26', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.26', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.26', ext: 'aar')
 ```
 
 

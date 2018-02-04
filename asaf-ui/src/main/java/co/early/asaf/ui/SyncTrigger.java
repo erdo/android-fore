@@ -70,7 +70,7 @@ public class SyncTrigger {
      * This is probably not what you want, so you can use checkLazy() instead which swallows
      * the first trigger IF and only if it occurs on the FIRST EVER check of the trigger
      * threshold for this syncTrigger.
-     * </p><p>
+     * </p>
      */
     public void check(){
         check(false);

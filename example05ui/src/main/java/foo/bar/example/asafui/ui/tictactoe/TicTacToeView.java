@@ -190,9 +190,9 @@ public class TicTacToeView extends ScrollView implements SyncableView {
             button.setText(player == Player.NOBODY ? "" : player.name());
         });
 
-        animateWinTrigger.check(true);
-        animateJiggleTrigger.check(true);
-        animateResetTrigger.check(true);
+        animateWinTrigger.checkLazy();
+        animateJiggleTrigger.checkLazy();
+        animateResetTrigger.checkLazy();
 
     }
 

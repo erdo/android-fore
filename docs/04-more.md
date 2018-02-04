@@ -264,11 +264,12 @@ ASAF includes various SyncableXXX classes which will reduce some of the boiler p
 
 The [SyncTrigger](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) class lets you bridge the gap between syncView() (which is called at any time [an arbitrary number of times](https://erdo.github.io/asaf-project/05-code-review-checklist.html#notification-counting)) and an event like an animation that must be fired only once.
 
-When using a SyncTrigger you need to implement a method to be run when it is triggered (e.g. running an animation) called - **triggered()**, and also a method which will be used to check if some value is over a threshold - **checkThreshold()** (e.g. when a game state changes to WON).
+When using a SyncTrigger you need to implement: the **triggered()** method which will be run when it is triggered (e.g. to run an animation), and also the **checkThreshold()** method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON). If the threshold is breached i.e. checkThreshold() returns **true**, then triggered() will be called.
 
-You will need to call **check()** on the trigger each time the syncView() method is called. Passing true in the check() method will cause the first checkThreshold() result to be ignored (so for example if the threshold has already been breached, the first check will not cause a trigger to occur). This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger.
+For this to work you will need to call **check()** on the trigger each time the syncView() method is called. Alernatively you can call **checkLazy()** which will cause the first check  result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the [SyncTrigger source](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) for more details about this).
 
-The first time the threshold is breached i.e. checkThreshold() returns **true**, the trigger will be called. Once checkThreshold() again returns **false**, the trigger is reset.
 
-Please see [here](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for exampe useage of the SyncTrigger.
+By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
+
+Please see [here](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for example useage of the SyncTrigger.
 
