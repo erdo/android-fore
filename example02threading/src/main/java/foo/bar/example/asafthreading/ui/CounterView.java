@@ -52,12 +52,7 @@ public class CounterView extends ScrollView {
 
 
     //single observer reference
-    Observer observer = new Observer() {
-        @Override
-        public void somethingChanged() {
-            syncView();
-        }
-    };
+    Observer observer = () -> syncView();
 
 
 
