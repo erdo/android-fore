@@ -25,15 +25,32 @@ public class SyncTrigger {
 
     private final DoThisWhenTriggered doThisWhenTriggered;
     private final CheckTriggerThreshold checkTriggerThreshold;
+    private ResetRule resetRule; //TODO put back to final once deprecated methods have been removed
 
     private boolean overThreshold = false;
     private boolean firstCheck = true;
-    private boolean immediatelyResetAfterCheck = false;
+
+    public enum ResetRule{
+        /*
+            Trigger is reset after each successful check
+         */
+        IMMEDIATELY,
+        /*
+            Trigger is only reset after a successful check once a subsequent check fails.
+            This is the default.
+         */
+        ONLY_AFTER_REVERSION
+    }
 
 
     public SyncTrigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold) {
+        this(doThisWhenTriggered, checkTriggerThreshold, ResetRule.ONLY_AFTER_REVERSION);
+    }
+
+    public SyncTrigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold, ResetRule resetRule) {
         this.doThisWhenTriggered = Affirm.notNull(doThisWhenTriggered);
         this.checkTriggerThreshold = Affirm.notNull(checkTriggerThreshold);
+        this.resetRule = Affirm.notNull(resetRule);
     }
 
 
@@ -101,7 +118,7 @@ public class SyncTrigger {
             overThreshold = reached;
         }
 
-        if (immediatelyResetAfterCheck){
+        if (resetRule == ResetRule.IMMEDIATELY){
             overThreshold = false;
         }
 
@@ -111,20 +128,22 @@ public class SyncTrigger {
     /**
      * Trigger is reset after a successful check - only once a subsequent check fails. This is the default.
      */
+    @Deprecated
     public void resetAfterCheckFails() {
-        this.immediatelyResetAfterCheck = false;
+        resetRule = ResetRule.ONLY_AFTER_REVERSION;
     }
 
     /**
      * Trigger is reset after each successful check
      */
+    @Deprecated
     public void resetAfterCheckAlways() {
-        this.immediatelyResetAfterCheck = true;
+        resetRule = ResetRule.IMMEDIATELY;
     }
 
     @Deprecated
     public void setImmediatelyResetAfterCheck(boolean immediatelyResetAfterCheck) {
-        this.immediatelyResetAfterCheck = immediatelyResetAfterCheck;
+        resetRule = immediatelyResetAfterCheck ? ResetRule.IMMEDIATELY : ResetRule.ONLY_AFTER_REVERSION;
     }
 
     private void fireTrigger(){
