@@ -64,9 +64,9 @@ A more standard way of looking at UI frameworks would have been to do something 
 
 ![horizontal separation](img/horizontal-separation.png)
 
-I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is). Much of the subsequent additions to Android were attempts to deal with this underlying problem.
+I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is).  Hacks like onSaveInstanceState() etc, are the result of fundamentally misunderstanding the absolute basic requirement of (all?) UI platforms: the need to separate the view layer from everything else.
 
-Despite the obvious problems of writing networking code or asynchronous code of any kind inside a view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
+Despite the obvious problems of writing networking code or asynchronous code inside a view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
 
 Fortunately it's almost all completely uneccessary. The [sample apps](https://erdo.github.io/asaf-project/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
 
