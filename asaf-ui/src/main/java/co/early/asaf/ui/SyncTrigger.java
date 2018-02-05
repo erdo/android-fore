@@ -30,13 +30,21 @@ public class SyncTrigger {
     private boolean overThreshold = false;
     private boolean firstCheck = true;
 
+    // There is a reason we don't support ResetRule.NEVER here. SyncTriggers usually live in Views,
+    // and are destroyed and recreated on device rotation along with the View. We have no way of
+    // supporting ResetRule.NEVER across different SyncTrigger instances without getting involved
+    // in persistence or Activity methods.
+    //
+    // If the caller needs a trigger that once fired is never reset despite being rotated, this has
+    // to be done in the implementation of the checkThreshold() method - probably with reference to
+    // a long living model that knows if the trigger has been fired once already.
     public enum ResetRule{
         /*
             Trigger is reset after each successful check
          */
         IMMEDIATELY,
         /*
-            Trigger is only reset after a successful check once a subsequent check fails.
+            Trigger is only reset after a successful check, once a subsequent check fails.
             This is the default.
          */
         ONLY_AFTER_REVERSION
