@@ -12,6 +12,7 @@ In a nutshell, this is achieved with a mini implementation of the observer patte
 
 
 ## Quick Start
+Latest version: 0.9.26
 
 
 ```
@@ -41,7 +42,7 @@ There are many over-engineered android app architectures in existence - (probabl
 
 What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project.
 
-It's main goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
+ASAF's overriding goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
 ### Yes, but what is it?
 
