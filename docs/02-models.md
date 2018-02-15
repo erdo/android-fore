@@ -270,6 +270,7 @@ For reference here's a check list of recommendations for the model classes, as u
 - In fact **the less the models knows about Android the better**
 - **Avoid referencing Contexts** from your model if you can, although sometimes the design of Android makes this awkward
 - **Prefer referencing Application over Context or Activity** if you have a choice, as that reduces the chance of a memory leak
+- Any **callback/listener** references passed to the model via methods need to be used and then cleared as quickly as possible within the model itself (callbacks may contain references to contexts and leak memory so you don't want to keep them around).
 - The model **shouldn't know anything about View classes**, Fragments or specific Activities.
 - The model's current state at any point in time is typically exposed by getters. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do the work in the setters not the getters
