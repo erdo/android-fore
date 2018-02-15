@@ -39,6 +39,8 @@
   subitems:
     - text: Dependency Injection
       url: "#dependency-injection"
+    - text: Scopes and Rotation
+      url: "#global-vs-local-scope-dependencies-and-rotation"
     - text: Asynchronous Code
       url: "#asynchronous-code"
     - text: AsafTask
