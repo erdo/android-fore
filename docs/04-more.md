@@ -34,7 +34,7 @@ protected void onFinishInflate() {
 }
 ```
 
-In a commercial app, the number of dependencies you need to keep track can sometimes of can get pretty large, so some people use a library like Dagger2 to manage this:
+In a commercial app, the number of dependencies you need to keep track of can sometimes get pretty large, so some people use a library like Dagger2 to manage this:
 
 ```
 @Inject MessageSender messageSender;
