@@ -8,21 +8,21 @@ Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specifi
 
 ![simple basket](img/arch_mvc.png)
 
-This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your activity to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
+This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
 
-There is one important thing to note about about this diagram however. If we focus on the **Model** [click here for our current definition of Model](https://erdo.github.io/asaf-project/02-models.html#shoom), all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can support any number of different Views which can come and go as they please (when an Android device is rotated for example) and the Model is not affected - or even aware of it.
+There is one important thing to note about about this diagram however. If we focus on the **Model** [click here for our definition of Model](https://erdo.github.io/asaf-project/02-models.html#shoom), all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can be tested independently, and needs to know nothing about the view layer. It can support any number of different Views which can come and go as they please (when an Android device is rotated for example, the Model is not affected - or even aware of it).
 
 I did say that I thought the typical MVC diagram is not particularly useful, I think it's main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
 
 ![simple basket](img/arch_mvp.png)
 
-It's basically the same thing except here the View doesn't know about the Model. All interactions with the Model go via a Presenter class. The Presenter class does two things: it sets UI states on the View (so it needs to know about the View) and it forwards commands from click listeners and the like to the underlying Model / Models (so it needs to know about the Model too).
+It's basically the same thing except here the View doesn't know about the Model. All interactions with the Model go via a Presenter class. The Presenter class usually does main two things: it sets UI states on the View (so it needs to know about the View) and it forwards commands from click listeners and the like to the underlying Model / Models (so it needs to know about those Models too).
 
-In a typical MVP Android app, a lot of boiler plate is required to let the Presenter do its job - and I think that's its main problem.
+In a typical MVP Android app, quite a bit of boiler plate is required to let the Presenter do its job, typical implementations also create the Presenter from scratch each time the view is constructed, and that makes handling rotations difficult.
 
-Note that as with MVC, the Model is not aware of the higher level View related classes - which is a good thing.
+Note that as with MVC, the Model is not aware of the higher level View related classes - which is a good thing. Moving code from the View to a Presenter class also means that we can now unit test it, which is great. (The Presenter is aware of the View but this is usually via an injected interface, so for a unit test you don't need to set up an actual View, just its interface)
 
-The main issue with both of these approaches on Android is the arrow pointing to the View
+The main issue with both of these approaches on Android though, is the arrow pointing to the View
 
 ![simple basket](img/arch_mvpx.png)
 
@@ -38,7 +38,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using XML bindings on Android, but when you get into the details I don't think it's a particularly nice solution - especially the bit where you are moving code to XML, but it's a considerable step forward none the less. Importantly, all the arrows are pointing the right way!
+You can implement this using XML bindings on Android, but when you get into the details I don't think it's a particularly nice solution (but it may work for you) - I particularly dislike the bit where we move code to XML, but it's a considerable step forward none the less. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 Now finaly here is what ASAF looks like in a real app:
 
@@ -46,7 +46,7 @@ Now finaly here is what ASAF looks like in a real app:
 
 Well how does that work? you can't just remove boxes and call it better! (I hear you say). The devil is in the detail...
 
-As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any commands are sent directly to the relevant model (no benefit in sending them via a Presenter).
+As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any commands are sent directly to the relevant model (no benefit here in sending them via a Presenter).
 
 **There are a few things in ASAF that allow you an architecture this simple:**
 
@@ -57,7 +57,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 <a name="bad-diagram"></a>
 
-This can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code.
+This can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the code ;)
 
 
 ![data binding](img/data-binding.png)
