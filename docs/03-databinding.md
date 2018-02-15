@@ -81,7 +81,7 @@ removeItemButton.setOnClickListener(new OnClickListener() {
 });
 ```
 
-**Step 3)** The designers want the view to display the **total number of items in the basket** as well as the price (the little number in a circle by the basket icon), so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+**Step 3)** The designers want the view to display the **total number of items in the basket** (the little number in a circle by the basket icon) as well as the price, so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
 
 
 ```
