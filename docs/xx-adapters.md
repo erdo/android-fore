@@ -7,3 +7,5 @@ Cursor loaders are interesing, underneath the hood they use a standard observer 
 //TODO
 
 
+Though we like to pretend otherwise sometimes, even the most complicated android app is often just some logic and data, a bit of network access, and a UI put on top of it. Once you remove the crazy (writing all the code in the view layer) it turns out that Android development is not rocket science after all.
+

@@ -148,12 +148,13 @@ No automated tests for this app yet! (but you should be getting the idea by now 
 
 ### Other Full App Examples
 
-*There is a full app example hosted in a separate repo: one branch for **pure DI**, one for **Dagger 2***
+- *There is a full app example hosted in a separate repo: one branch for **pure DI**, one for **Dagger 2***
 **[here](https://github.com/erdo/asaf-full-app-example)**
 
-*The same app written in **Kotlin** (functional but probably a little more to do clean code wise)*
+- *The same app written in **Kotlin** (functional but probably a little more to do clean code wise)*
 **[here](https://github.com/erdo/asaf-full-app-example-kotlin)**
 
+- *The **pwned4android** sample app and android library use ASAF for databinding and the source is available for both. **[library](https://github.com/erdo/pwned4android)**, **[sample app (kotlin)](https://github.com/erdo/password123)**. (You might find the **[integration instructions](https://github.com/erdo/pwned4android#useage-the-long-version)** of that library enlightening as they are quite concise and focus on the requirements of the view layer only)*
 
 
 ## License

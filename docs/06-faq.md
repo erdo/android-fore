@@ -32,8 +32,6 @@ Try to get comfortable using these observers to just notify observing client cod
 
 If you want a library that lets you send data in these observables, you should look at RxJava. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a suprising number of rxJava tutorials have databinding implementations which are broken for device rotation, even the ones that are specifically demonstrating databinding!)
 
-Though we like to pretend otherwise sometimes, even the most complicated android app is often just some logic and data, a bit of network access, and a UI put on top of it. Once you remove the crazy (writing all the code in the view layer) it turns out that Android development is not rocket science after all.
-
 
 ## <a name="observer-listener"></a> 2) When should I use an Observer, when should I use a callback listener?
 
@@ -82,13 +80,19 @@ For consistency, and for the same reasons outlined [above](#somethingchanged-par
   
 ## <a name="syncview"></a> 3) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
 
-Let me guess you're one of those people who only uses ints instead of enums right? or forgoes getters and setters for extra performance? I knew it!
+This seems to be the reaction of about 20% of the developers that come across this pattern for the first time. I think it might depend on what style of development experience they have have had in the past. 
 
-Well apart from the obvious "premature optimisation is the route of all evil" or however that quote goes, you might be in danger of seriously underestimating how fast even the most basic android phone runs.
+The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
-This is not usually a problem for any developer that has written game loops, or implemented their own animations using easing equations or similar, but if you've never done that type of development, you might be surprised about the following.
+The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/asaf-project/03-databinding.html#syncview), particularly the example of how doing adhoc updates can go wrong.
 
-First make sure you've understood the section on [syncView()](/asaf-project/03-databinding.html#syncview) and the example of how doing adhoc updates can go wrong. And if you still want to sacrifice that robustness to chase "performance" or "battery life", then I encourage you to read on...
+Everything in computing is a trade off, and when considering a trade off you need to undestand two things: **the upsides** (in this case: being "efficient" and only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the syncView() link above).
+
+Making a tradeoff when you don't fully appreciate one of those sides (up or down) is obviously not a great place to be.
+
+If after appreciating the downsides of this tradeoff, there is still an interest in sacrifice that robustness in the name of "performance" or "battery life", then read on.
+
+This is not usually a problem for any developer that has written game loops, or implemented their own animations using easing equations or similar, but if you've never done that type of development, you might be in danger of seriously underestimating how fast even the most basic android phone runs.
 
 ### In to the matrix
 
@@ -106,7 +110,7 @@ If you put some logs in the syncView() method you'll also see that it is in fact
 
 The syncView() also completes pretty quickly as all of your getters should be returning fast anyway, as recommended [here](/asaf-project/02-models.html#model-checklist).
 
-In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not saying such bugs don't exist, but if you ever get any kind of performance issues with this technique, that's the time to measure and see what is happening, but if you follow the guidelines here correctly you will almost certainly  never have any problems at all, and what you get in return is unparalleled robustness).
+In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not saying such bugs don't exist, but if you ever get any kind of performance issues with this technique, that's the time to measure and see what is happening, but if you follow the guidelines here correctly you will almost certainly  never have any problems at all even on low end devices, and what you get in return is unparalleled robustness).
 
 If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unecessarily (but still not actually redrawing the screen): chilax and be happy with the knowledge that your UI is *definitely* consistent ;)
 
