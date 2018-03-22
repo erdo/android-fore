@@ -40,7 +40,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 You can implement this using XML bindings on Android, but when you get into the details I don't think it's a particularly nice solution (but it may work for you) - I particularly dislike the bit where we move code to XML, but it's a considerable step forward none the less. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
-Now finaly here is what ASAF looks like in a real app:
+Now finally here is what ASAF looks like in a real app:
 
 ![simple basket](img/arch_mvvm_light.png)
 

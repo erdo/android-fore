@@ -90,7 +90,7 @@ Everything in computing is a trade off, and when considering a trade off you nee
 
 Making a tradeoff when you don't fully appreciate one of those sides (up or down) is obviously not a great place to be.
 
-If after appreciating the downsides of this tradeoff, there is still an interest in sacrifice that robustness in the name of "performance" or "battery life", then read on.
+If after appreciating the downsides of this tradeoff, there is still an interest in sacrificing that robustness in the name of "performance" or "battery life", then read on.
 
 This is not usually a problem for any developer that has written game loops, or implemented their own animations using easing equations or similar, but if you've never done that type of development, you might be in danger of seriously underestimating how fast even the most basic android phone runs.
 
