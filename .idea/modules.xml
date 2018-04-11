@@ -3,14 +3,24 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" filepath="$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" filepath="$PROJECT_DIR$/asaf-adapters/asaf-adapters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-core/asaf-core.iml" filepath="$PROJECT_DIR$/asaf-core/asaf-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-core/asaf-core.iml" filepath="$PROJECT_DIR$/asaf-core/asaf-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" filepath="$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" filepath="$PROJECT_DIR$/asaf-retrofit/asaf-retrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/asaf-ui/asaf-ui.iml" filepath="$PROJECT_DIR$/asaf-ui/asaf-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asaf-ui/asaf-ui.iml" filepath="$PROJECT_DIR$/asaf-ui/asaf-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example01databinding/example01databinding.iml" filepath="$PROJECT_DIR$/example01databinding/example01databinding.iml" />
       <module fileurl="file://$PROJECT_DIR$/example01databinding/example01databinding.iml" filepath="$PROJECT_DIR$/example01databinding/example01databinding.iml" />
       <module fileurl="file://$PROJECT_DIR$/example02threading/example02threading.iml" filepath="$PROJECT_DIR$/example02threading/example02threading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example02threading/example02threading.iml" filepath="$PROJECT_DIR$/example02threading/example02threading.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example03adapters/example03adapters.iml" filepath="$PROJECT_DIR$/example03adapters/example03adapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/example03adapters/example03adapters.iml" filepath="$PROJECT_DIR$/example03adapters/example03adapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/example04retrofit/example04retrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/example04retrofit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example04retrofit/example04retrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/example04retrofit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example05ui/example05ui.iml" filepath="$PROJECT_DIR$/example05ui/example05ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/example05ui/example05ui.iml" filepath="$PROJECT_DIR$/example05ui/example05ui.iml" />
     </modules>
   </component>
