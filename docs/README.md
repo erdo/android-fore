@@ -15,7 +15,7 @@ More about the architecture is [**here**](https://erdo.github.io/asaf-project/07
 
 
 ## Quick Start
-Latest version: 0.9.26
+Latest version: 0.9.28
 
 
 ```
