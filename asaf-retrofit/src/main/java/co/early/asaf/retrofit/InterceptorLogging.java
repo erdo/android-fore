@@ -29,18 +29,29 @@ public class InterceptorLogging implements Interceptor {
 
     private final static String TAG = "Network";
     private final int MAX_BODY_LOG_LENGTH;
+    private static final int DEAFULT_MAX_BODY_LOG_LENGTH = 4000;
     Charset UTF8 = Charset.forName("UTF-8");
     private final Logger logger;
     private final Random random = new Random();
     private char[] somecharacters = "ABDEFGH023456789".toCharArray();
+    private NetworkingLogSanitizer networkingLogSanitizer;
 
     public InterceptorLogging(Logger logger) {
-        this(logger, 4000);
+        this(logger, DEAFULT_MAX_BODY_LOG_LENGTH, null);
     }
 
     public InterceptorLogging(Logger logger, int maxBodyLogCharacters) {
+        this(logger, maxBodyLogCharacters, null);
+    }
+
+    public InterceptorLogging(Logger logger, NetworkingLogSanitizer networkingLogSanitizer) {
+        this(logger, DEAFULT_MAX_BODY_LOG_LENGTH, networkingLogSanitizer);
+    }
+
+    public InterceptorLogging(Logger logger, int maxBodyLogCharacters, NetworkingLogSanitizer networkingLogSanitizer) {
         this.logger = Affirm.notNull(logger);
         this.MAX_BODY_LOG_LENGTH = maxBodyLogCharacters;
+        this.networkingLogSanitizer = networkingLogSanitizer;
 
         if (maxBodyLogCharacters<1){
             throw new IllegalArgumentException("maxBodyLogCharacters must be greater than 0");
@@ -64,7 +75,11 @@ public class InterceptorLogging implements Interceptor {
 
         logger.i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url));
 
-        logHeaders(request.headers(), randomPostTag);
+        if (networkingLogSanitizer == null){
+            logHeaders(request.headers(), randomPostTag);
+        }else {
+            logHeaders(networkingLogSanitizer.sanitizeHeaders(request.headers()), randomPostTag);
+        }
 
         RequestBody requestBody = request.body();
 
@@ -73,15 +88,22 @@ public class InterceptorLogging implements Interceptor {
             requestBody.writeTo(buffer);
             Charset charset = getCharset(requestBody.contentType());
             if (isPlaintext(buffer)) {
-                String bodyJson = truncate(buffer.clone().readString(charset));
-                List<String> wrappedLines = MonospacedTextWrappingUtils.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
+
+                String body;
+                if (networkingLogSanitizer == null){
+                    body = truncate(buffer.clone().readString(charset));
+                } else {
+                    body = truncate(networkingLogSanitizer.sanitizeBody(buffer.clone().readString(charset)));
+                }
+
+                List<String> wrappedLines = MonospacedTextWrappingUtils.wrapMonospaceText(body.replace(",", ", "), 150);
                 synchronized (this) {
                     for (String line : wrappedLines) {
                         logger.i(TAG + randomPostTag, line);
                     }
                 }
             } else {
-                logger.i(TAG + randomPostTag, method + " (binary body omitted)");
+                logger.i(TAG + randomPostTag, method + "- binary data -");
             }
         }
 

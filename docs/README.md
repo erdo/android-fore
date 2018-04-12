@@ -19,14 +19,14 @@ Latest version: 0.9.26
 
 
 ```
-compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.26', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.28', ext: 'aar')
 ```
 optional:
 
 ```
-compile (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.26', ext: 'aar')
-compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.26', ext: 'aar')
-compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.26', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.28', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.28', ext: 'aar')
+compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.28', ext: 'aar')
 ```
 
 
