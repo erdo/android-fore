@@ -15,18 +15,18 @@ More about the architecture is [**here**](https://erdo.github.io/asaf-project/07
 
 
 ## Quick Start
-Latest version: 0.9.28
+Latest version: 0.9.29
 
 
 ```
-compile (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.28', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.29', ext: 'aar')
 ```
 optional:
 
 ```
-compile (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.28', ext: 'aar')
-compile (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.28', ext: 'aar')
-compile (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.28', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.29', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.29', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.29', ext: 'aar')
 ```
 
 

@@ -23,7 +23,7 @@ public class StubbedServiceDefinition<R> {
         this.resourceFileName = null;
         this.mimeType = null;
         this.ioException = Affirm.notNull(ioException);
-        this.expectedResult = Affirm.notNull(expectedResult);
+        this.expectedResult = expectedResult;
     }
 
     public StubbedServiceDefinition(int httpCode, String resourceFileName, R expectedResult) {
@@ -35,7 +35,7 @@ public class StubbedServiceDefinition<R> {
         this.resourceFileName = Affirm.notNull(resourceFileName);
         this.mimeType = Affirm.notNull(mimeType);
         this.ioException = null;
-        this.expectedResult = Affirm.notNull(expectedResult);
+        this.expectedResult = expectedResult;
     }
 
     public boolean successfullyConnected(){
