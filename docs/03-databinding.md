@@ -327,6 +327,11 @@ So basically, somewhere in the view layer (Activity/Fragment/View) there will be
     };
 ```
 
+Or with Java 8, the rather lovely:
+
+```
+    Observer observer = this::syncView;
+```
 
 And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using View lifecycle methods to do it)*:
 

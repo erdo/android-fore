@@ -7,7 +7,7 @@ A few tiny framework classes which help you write android code that is **simple*
 
 ASAF addresses **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** and if you're spending time dealing with those issues in your code base while trying to support rotation, you should give it a try.
 
-The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(it really is tiny - asaf-core is less than 500 lines of code)*
+The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(and it really is tiny - asaf-core is less than 500 lines of code)*
 
 More about the architecture is [**here**](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn is in the code of the [sample apps](#sample-apps), or just keep reading.
 
@@ -15,18 +15,18 @@ More about the architecture is [**here**](https://erdo.github.io/asaf-project/07
 
 
 ## Quick Start
-Latest version: 0.9.29
+Latest version: 0.9.30
 
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.29', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.30', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.29', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.29', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.29', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.30', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.30', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.30', ext: 'aar')
 ```
 
 

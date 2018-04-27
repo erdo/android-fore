@@ -42,6 +42,7 @@ public class InterceptorStubbedService implements Interceptor {
                     .protocol(Protocol.HTTP_1_1)
                     .code(stubbedServiceDefinition.httpCode)
                     .body(ResponseBody.create(MediaType.parse(stubbedServiceDefinition.mimeType), bodyString))
+                    .message("")
                     .build();
     }
 

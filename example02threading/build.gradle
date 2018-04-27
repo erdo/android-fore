@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
 
-    compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    implementation (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
     //implementation project(path: ':asaf-core')
 
     implementation 'com.jakewharton:butterknife:8.8.1'
