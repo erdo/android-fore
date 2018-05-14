@@ -48,15 +48,6 @@ Here is what ASAF looks like in a real app:
 
 Well how does that work? you can't just remove boxes and call it better! (I hear you say).
 
-As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement it is a lot less verbose (and it's also very testable).
-
-**There are a few things in ASAF that allow you an architecture this simple:**
-
-* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).
-* The second is the syncView() convention discussed [here](https://erdo.github.io/asaf-project/03-databinding.html#syncview). 
-* The third is writing models at an appropriate level of abstraction, something which comes with a little practice, see [here](https://erdo.github.io/asaf-project/02-models.html#shoom) for more.
-* The fourth is making appropriate use of DI, for more see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection).
-
 <a name="bad-diagram"></a>
 
 The flow can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the [code](https://github.com/erdo/asaf-project/tree/master/example01databinding) ;)
@@ -66,6 +57,16 @@ The flow can be summarised by the diagram below which actually manages to make t
 
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
+
+
+As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement it is a lot less verbose (and it's also very testable and scalable).
+
+**There are a few important things in ASAF that allow you an architecture this simple:**
+
+* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).
+* The second is the syncView() convention discussed [here](https://erdo.github.io/asaf-project/03-databinding.html#syncview). 
+* The third is writing models at an appropriate level of abstraction, something which comes with a little practice, see [here](https://erdo.github.io/asaf-project/02-models.html#shoom) for more.
+* The fourth is making appropriate use of DI, for more see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection).
 
  
 ### BTW, What's a Controller
