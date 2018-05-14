@@ -2,7 +2,7 @@
 
 # Architecture
 
-If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;) [back to the docs](https://erdo.github.io/asaf-project/#shoom)
+If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;) [(...head back to the main docs)](https://erdo.github.io/asaf-project/#shoom)
 
 Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
