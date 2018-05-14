@@ -2,7 +2,7 @@
 
 # Architecture
 
-If you enjoy architecture diagrams, hopefully you'll love this page. If you don't,  let's just say that ASAF is **MVW** and be done with it ;)
+If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;) [back to the docs](https://erdo.github.io/asaf-project/#shoom)
 
 Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
@@ -40,13 +40,15 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 You can implement this using XML bindings on Android, but when you get into the details I don't think it's a particularly nice solution (but it may work for you) - I particularly dislike the bit where we move code to XML, but it's a considerable step forward none the less. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
-Now finally here is what ASAF looks like in a real app:
+## Finally ASAF
+
+Here is what ASAF looks like in a real app:
 
 ![simple basket](img/arch_mvvm_light.png)
 
-Well how does that work? you can't just remove boxes and call it better! (I hear you say). The devil is in the detail...
+Well how does that work? you can't just remove boxes and call it better! (I hear you say).
 
-As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter).
+As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches it self to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement it is a lot less verbose (and it's also very testable).
 
 **There are a few things in ASAF that allow you an architecture this simple:**
 
@@ -57,7 +59,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 <a name="bad-diagram"></a>
 
-This can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the code ;)
+The flow can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the [code](https://github.com/erdo/asaf-project/tree/master/example01databinding) ;)
 
 
 ![data binding](img/data-binding.png)
@@ -66,7 +68,7 @@ This can be summarised by the diagram below which actually manages to make thing
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
  
-### What's a Controller
+### BTW, What's a Controller
 It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]. A controller means different things on different platforms.
 
 Originally a controller might have been a class that accepts mouse clicks at specific pixel co-ordinate, did some collision detection to find out which UI component was clicked, then sent that information on to the appropriate UI classes for further processing. (A controller in a web app however, might be a main entry point URL that forwards on requests to different parts of the system.)
