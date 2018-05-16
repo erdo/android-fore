@@ -6,6 +6,10 @@ If you enjoy architecture diagrams, hopefully you'll love this page. If you don'
 
 Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
+![simple basket](img/arch_mvw_asaf.png)
+
+Here is what we'll end up with, but to see how we get there let's start with good old MVC:
+
 ![simple basket](img/arch_mvc.png)
 
 This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
@@ -44,7 +48,7 @@ You can implement this using XML bindings on Android, but when you get into the 
 
 Here is what ASAF looks like in a real app:
 
-![simple basket](img/arch_mvvm_light.png)
+![simple basket](img/arch_mvw_asaf.png)
 
 Well how does that work? you can't just remove boxes and call it better! (I hear you say).
 
