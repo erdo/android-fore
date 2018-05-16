@@ -4,11 +4,11 @@
 
 If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;) [(...head back to the main docs)](https://erdo.github.io/asaf-project/#shoom)
 
-Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
-
 ![simple basket](img/arch_mvw_asaf.png)
 
-Here is what we'll end up with, but to see how we get there let's start with good old MVC:
+This is what we'll end up with, but to see how we get there let's start with good old MVC.
+
+Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
 ![simple basket](img/arch_mvc.png)
 
