@@ -9,6 +9,8 @@
       url: /#sample-apps
     - text: License
       url: /#license
+- text: Architecture
+  url: /07-architecture.html
 - text: Views
   url: /01-views.html
   subitems:

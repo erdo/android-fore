@@ -6,15 +6,21 @@ If you enjoy architecture diagrams, hopefully you'll love this page. If you don'
 
 ![simple basket](img/arch_mvw_asaf.png)
 
-From a high level the block diagram above is what an android application written in ASAF ends up looking like (how we get there is detailed below). Another way to look at it is in *crap diagram* mode. So here's one showing a single **observable model** and a **view** that observes it:
+That block diagram above is what ASAF looks like (it's simplified of course, and how we get there is detailed below). Another way to look at it is in *crap diagram* mode. So here's one showing a single **observable model** and a **view** that observes it:
+
+<a name="bad-diagram"></a>
 
 ![data binding](img/data-binding.png)
 
-That diagram matches what is happening in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) that does the observing.
+That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) that does the observing.
 
-The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), or if you're doing [**threaded work in your model**](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/feature/fruitcollector/FruitCollectorModel.java). It even works when you have a heavily animated view like we do in [sample app 5](https://erdo.github.io/asaf-project/asaf-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) that has a lot of animations in it.
+See if you can follow through from Step 1) -> Step 3)... or you know... just read the code ;)
+
+The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), or if you're doing [**threaded work in your model**](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/feature/fruitcollector/FruitCollectorModel.java). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/asaf-project/asaf-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) that has a lot of animations in it.
 
 Oh and did I mention? all that code just works if you rotate the screen - without you needing to do a single thing.
+
+> "all that code just works if you rotate the screen - without you needing to do a single thing"
 
 ## How we got there
 
@@ -62,9 +68,8 @@ As we mentioned, here is what ASAF looks like in a real app:
 
 Well how does that work? you can't just remove boxes and call it better! (I hear you say).
 
-<a name="bad-diagram"></a>
 
-The observable flow is summarised by the crap diagram at the top of the page (which actually manages to make things look more complicated than they are in the code, anyhoo). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the [code](https://github.com/erdo/asaf-project/tree/master/example01databinding) ;)
+The observable flow is summarised by the crap diagram at the top of the page (which actually manages to make things look more complicated than they are in the code, anyhoo). 
 
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
@@ -74,11 +79,12 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 **There are a few important things in ASAF that allow you an architecture this simple:**
 
-* The first is a very robust but simple Observer implementation that lets views attach themselves to any model they are interested in (more info on that [here](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables)).
-* The second is the syncView() convention discussed [here](https://erdo.github.io/asaf-project/03-databinding.html#syncview). 
-* The third is writing models at an appropriate level of abstraction, something which comes with a little practice, see [here](https://erdo.github.io/asaf-project/02-models.html#shoom) for more.
-* The fourth is making appropriate use of DI, for more see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection).
+* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables) that lets views attach themselves to any model they are interested in
+* The second is the [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention
+* The third is writing [**models**](https://erdo.github.io/asaf-project/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
+* The fourth is making appropriate use of [**DI**](https://erdo.github.io/asaf-project/04-more.html#dependency-injection)
 
+ If you totally grok those 4 things, that's pretty much all you need to use ASAF successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy you as you get up to speed, or you bring your team up to speed.
  
 ### BTW, What's a Controller
 It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]. A controller means different things on different platforms.
