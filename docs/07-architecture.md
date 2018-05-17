@@ -6,7 +6,17 @@ If you enjoy architecture diagrams, hopefully you'll love this page. If you don'
 
 ![simple basket](img/arch_mvw_asaf.png)
 
-This is what we'll end up with, but to see how we get there let's start with good old MVC.
+From a high level the block diagram above is what an android application written in ASAF ends up looking like (how we get there is detailed below). Another way to look at it is in *crap diagram* mode. So here's one showing a single **observable model** and a **view** that observes it:
+
+![data binding](img/data-binding.png)
+
+That diagram matches what is happening in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) that does the observing.
+
+The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), or if you're doing [**threaded work in your model**](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/feature/fruitcollector/FruitCollectorModel.java). It even works when you have a heavily animated view like we do in [sample app 5](https://erdo.github.io/asaf-project/asaf-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) that has a lot of animations in it.
+
+Oh and did I mention? all that code just works if you rotate the screen - without you needing to do a single thing.
+
+## How we got there
 
 Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
@@ -46,7 +56,7 @@ You can implement this using XML bindings on Android, but when you get into the 
 
 ## Finally ASAF
 
-Here is what ASAF looks like in a real app:
+As we mentioned, here is what ASAF looks like in a real app:
 
 ![simple basket](img/arch_mvw_asaf.png)
 
@@ -54,10 +64,7 @@ Well how does that work? you can't just remove boxes and call it better! (I hear
 
 <a name="bad-diagram"></a>
 
-The flow can be summarised by the diagram below which actually manages to make things look more complicated than they are, don't worry, the actual code is a lot cleaner! (this diagram roughly matches what is going on in [sample app 1](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example)). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the [code](https://github.com/erdo/asaf-project/tree/master/example01databinding) ;)
-
-
-![data binding](img/data-binding.png)
+The observable flow is summarised by the crap diagram at the top of the page (which actually manages to make things look more complicated than they are in the code, anyhoo). It'll probably make more sense to you once you have looked at the code. See if you can follow through from Step 1) -> Step 3)... or you know... just read the [code](https://github.com/erdo/asaf-project/tree/master/example01databinding) ;)
 
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
