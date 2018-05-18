@@ -2,11 +2,11 @@
 
 # Architecture
 
-If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;) [(...head back to the main docs)](https://erdo.github.io/asaf-project/#shoom)
+If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;)
 
 ![simple basket](img/arch_mvw_asaf.png)
 
-That block diagram above is what ASAF looks like (it's simplified of course, and how we get there is detailed below). Another way to look at it is in *crap diagram* mode. So here's a crap diagram showing the flow from step 1 to 3 with a single **observable model** and a **view** that observes it:
+That block diagram above is what ASAF looks like (it's simplified of course, and how we get there is detailed below). Another way to look at it is in *crap diagram* mode. So here's a crap diagram showing the flow of a button click from **step 1** to **3** with a single **observable model** and a **view** that observes it:
 
 <a name="bad-diagram"></a>
 
@@ -65,9 +65,6 @@ As we mentioned, here is what ASAF looks like in a real app:
 ![simple basket](img/arch_mvw_asaf.png)
 
 Well how does that work? you can't just remove boxes and call it better! (I hear you say).
-
-
-The observable flow is summarised by the crap diagram at the top of the page (which actually manages to make things look more complicated than they are in the code, anyhoo). 
 
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"

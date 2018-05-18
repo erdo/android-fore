@@ -9,7 +9,7 @@ ASAF addresses **testability**; **lifecycle management**; **UI consistency**; an
 
 The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(and it really is tiny - asaf-core is less than 500 lines of code)*
 
-More about the architecture is [**here**](https://erdo.github.io/asaf-project/07-architecture.html#architecture), but probably the best place to learn is in the code of the [sample apps](#sample-apps), or just keep reading.
+A good place to start might be the architectural overview [**here**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), or you could check out the [**sample apps**](#sample-apps), or just keep reading.
 
 
 
@@ -34,16 +34,18 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.30', ext:
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
- 3. Reading the following sections on this site: [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while referring to the code of the [sample apps](#sample-apps)
+ 3. Reading the following sections on this site: [**Architecture**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while referring to the code of the [sample apps](#sample-apps)
 
 
-## Overview
+## Motivation
 
-There are many over-engineered android app architectures in existence - (probably because it's easy to accidentally write something that is over-engineered). What's surprising is that many of these architectures don't get basic View / Model separation correct or they gloss over rotation support.
+There are many over-engineered custom built android app architectures in existence - (probably because it's easy to accidentally write something that is over-engineered). What's surprising is that many of these architectures don't get basic View / Model separation correct or they gloss over rotation support.
 
 *(Try rotating a sample app or two and see if it triggers a network call each time - and if not, check for any ```if(firstTime){callNetwork()}``` style hacks that exist in the model layer - that's a sure sign that the separation between the view and model layers is a mirage. Now try adding a couple of seconds delay to the network call to simulate real behaviour - does the ui accurately reflect what's happening? are the "busy" indicators consistent? How about if you rotate the screen mid-network call... "busy" indicators no longer showing even though there is a network call in progress? - you're looking at a broken data binding implementation causing a UI consistency problem)*
 
-What's hard, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project.
+(If you're an android developer, I don't need to tell you that handling rotations is a useful proxy for handling all those other edge cases that android throws at you, but which are a lot harder to recreate on demand.)
+
+What's hard when building an architecture, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project.
 
 ASAF's overriding goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
 
