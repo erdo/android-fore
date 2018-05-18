@@ -9,7 +9,7 @@ ASAF addresses **testability**; **lifecycle management**; **UI consistency**; an
 
 The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(and it really is tiny - asaf-core is less than 500 lines of code)*
 
-A good place to start might be the architectural overview [**here**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), or you could check out the [**sample apps**](#sample-apps), or just keep reading.
+A good place to start might be the [**architectural overview**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), or you could check out the [**sample apps**](#sample-apps), or just keep reading.
 
 
 
