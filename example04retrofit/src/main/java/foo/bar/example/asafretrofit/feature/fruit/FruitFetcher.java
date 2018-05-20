@@ -6,7 +6,7 @@ import java.util.Random;
 import co.early.asaf.core.Affirm;
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallBack;
+import co.early.asaf.core.callbacks.SuccessCallback;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.observer.ObservableImp;
 import co.early.asaf.retrofit.CallProcessor;
@@ -40,11 +40,11 @@ public class FruitFetcher extends ObservableImp{
     }
 
 
-    public void fetchFruits(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
+    public void fetchFruits(final SuccessCallback successCallback, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
         logger.i(TAG, "fetchFruits()");
 
-        Affirm.notNull(successCallBack);
+        Affirm.notNull(successCallback);
         Affirm.notNull(failureCallbackWithPayload);
 
         if (busy){
@@ -56,18 +56,18 @@ public class FruitFetcher extends ObservableImp{
         notifyObservers();
 
         callProcessor.processCall(fruitService.getFruitsSimulateOk("3s"), workMode, FruitsCustomError.class,
-                successResponse -> FruitFetcher.this.handleSuccess(successCallBack, successResponse),
+                successResponse -> FruitFetcher.this.handleSuccess(successCallback, successResponse),
                 failureMessage -> handleFailure(failureCallbackWithPayload, failureMessage));
 
     }
 
 
     //identical to fetchFruits() but for demo purposes the URL we point to will give us an error, we also don't specify a custom error class here
-    public void fetchFruitsButFailBasic(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
+    public void fetchFruitsButFailBasic(final SuccessCallback successCallback, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
         logger.i(TAG, "fetchFruitsButFailBasic()");
 
-        Affirm.notNull(successCallBack);
+        Affirm.notNull(successCallback);
         Affirm.notNull(failureCallbackWithPayload);
 
         if (busy){
@@ -79,18 +79,18 @@ public class FruitFetcher extends ObservableImp{
         notifyObservers();
 
         callProcessor.processCall(fruitService.getFruitsSimulateNotAuthorised("3s"), workMode,
-                successResponse -> handleSuccess(successCallBack, successResponse),
+                successResponse -> handleSuccess(successCallback, successResponse),
                 failureMessage -> handleFailure(failureCallbackWithPayload, failureMessage));
 
     }
 
 
     //identical to fetchFruits() but for demo purposes the URL we point to will give us an error
-    public void fetchFruitsButFailAdvanced(final SuccessCallBack successCallBack, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
+    public void fetchFruitsButFailAdvanced(final SuccessCallback successCallback, final FailureCallbackWithPayload<UserMessage> failureCallbackWithPayload){
 
         logger.i(TAG, "fetchFruitsButFailAdvanced()");
 
-        Affirm.notNull(successCallBack);
+        Affirm.notNull(successCallback);
         Affirm.notNull(failureCallbackWithPayload);
 
         if (busy){
@@ -102,12 +102,12 @@ public class FruitFetcher extends ObservableImp{
         notifyObservers();
 
         callProcessor.processCall(fruitService.getFruitsSimulateNotAuthorised("3s"), workMode, FruitsCustomError.class,
-                successResponse -> handleSuccess(successCallBack, successResponse),
+                successResponse -> handleSuccess(successCallback, successResponse),
                 failureMessage -> handleFailure(failureCallbackWithPayload, failureMessage));
 
     }
 
-    private void handleSuccess(SuccessCallBack successCallBack, List<FruitPojo> successResponse){
+    private void handleSuccess(SuccessCallback successCallBack, List<FruitPojo> successResponse){
         currentFruit = selectRandomFruit(successResponse);
         successCallBack.success();
         complete();

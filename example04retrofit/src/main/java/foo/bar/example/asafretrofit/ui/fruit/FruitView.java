@@ -13,7 +13,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallBack;
+import co.early.asaf.core.callbacks.SuccessCallback;
 import co.early.asaf.core.observer.Observer;
 import foo.bar.example.asafretrofit.CustomApp;
 import foo.bar.example.asafretrofit.R;
@@ -71,7 +71,7 @@ public class FruitView extends ScrollView {
 
     //just because we re-use these in 3 different button clicks
     //in this example we define them here
-    private SuccessCallBack successCallBack = new SuccessCallBack() {
+    private SuccessCallback successCallback = new SuccessCallback() {
         @Override
         public void success() {
             Toast.makeText(getContext(), "Success - you can use this trigger to " +
@@ -122,11 +122,11 @@ public class FruitView extends ScrollView {
 
     private void setupButtonClickListeners() {
 
-        fruitRefreshSuccess.setOnClickListener(v -> fruitFetcher.fetchFruits(successCallBack, failureCallback));
+        fruitRefreshSuccess.setOnClickListener(v -> fruitFetcher.fetchFruits(successCallback, failureCallback));
 
-        fruitRefreshFailBasic.setOnClickListener(v -> fruitFetcher.fetchFruitsButFailBasic(successCallBack, failureCallback));
+        fruitRefreshFailBasic.setOnClickListener(v -> fruitFetcher.fetchFruitsButFailBasic(successCallback, failureCallback));
 
-        fruitRefreshFailAdvanced.setOnClickListener(v -> fruitFetcher.fetchFruitsButFailAdvanced(successCallBack, failureCallback));
+        fruitRefreshFailAdvanced.setOnClickListener(v -> fruitFetcher.fetchFruitsButFailAdvanced(successCallback, failureCallback));
 
     }
 

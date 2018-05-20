@@ -56,8 +56,8 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    LIB_VERSION_NAME="0.9.30"
-    LIB_VERSION_CODE=27
+    LIB_VERSION_NAME="0.9.31"
+    LIB_VERSION_CODE=28
 
     REPO="asaf"
     LIB_GROUP="co.early.asaf"
@@ -75,7 +75,7 @@ ext {
     LICENCE_NAME="The Apache Software License, Version 2.0"
     LICENCE_URL="http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-    exampleAsafLibVersion="0.9.30"
+    exampleAsafLibVersion="0.9.31"
 
     BINTRAY_USER = System.getenv("BINTRAY_USER") ?: secrets.BINTRAY_USER
     BINTRAY_API_KEY = System.getenv("BINTRAY_API_KEY") ?: secrets.BINTRAY_API_KEY

@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
 
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallBack;
+import co.early.asaf.core.callbacks.SuccessCallback;
 import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.logging.SystemLogger;
@@ -61,7 +61,7 @@ public class FruitViewRotationTest {
     Logger logger = new SystemLogger();
     FruitPojo fruitPojo = new FruitPojo("testFruit1", true, 45);
 
-    SuccessCallBack mockSuccessCallBack;
+    SuccessCallback mockSuccessCallback;
     FailureCallbackWithPayload mockFailureCallbackWithPayload;
     CallProcessor<UserMessage> mockCallProcessor;
     FruitService mockFruitService;
@@ -78,7 +78,7 @@ public class FruitViewRotationTest {
         //MockitoAnnotations.initMocks(LoginViewTest.this);
         System.setProperty("dexmaker.dexcache", InstrumentationRegistry.getTargetContext().getCacheDir().getPath());
 
-        mockSuccessCallBack = mock(SuccessCallBack.class);
+        mockSuccessCallback = mock(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
         mockCallProcessor = mock(CallProcessor.class);
         mockFruitService = mock(FruitService.class);
@@ -106,7 +106,7 @@ public class FruitViewRotationTest {
         checkUIBeforeClick(activity);
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
         checkUIWhenFetching(activity);
 

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallBack;
+import co.early.asaf.core.callbacks.SuccessCallback;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.logging.SystemLogger;
 import co.early.asaf.retrofit.CallProcessor;
@@ -46,7 +46,7 @@ public class FruitFetcherIntegrationTest {
 
     private Logger logger = new SystemLogger();
 
-    private SuccessCallBack mockSuccessCallBack;
+    private SuccessCallback mockSuccessCallback;
     private FailureCallbackWithPayload mockFailureCallbackWithPayload;
     private InterceptorLogging interceptorLogging;
     private CallProcessor<UserMessage> callProcessor;
@@ -70,7 +70,7 @@ public class FruitFetcherIntegrationTest {
 
     @Before
     public void setup(){
-        mockSuccessCallBack = mock(SuccessCallBack.class);
+        mockSuccessCallback = mock(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
         interceptorLogging = new InterceptorLogging(logger);
         callProcessor = new CallProcessor<UserMessage>(new CustomGlobalErrorHandler(logger), logger);
@@ -96,11 +96,11 @@ public class FruitFetcherIntegrationTest {
 
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
         //assert
-        verify(mockSuccessCallBack, times(1)).success();
+        verify(mockSuccessCallback, times(1)).success();
         verify(mockFailureCallbackWithPayload, never()).fail(any());
         Assert.assertEquals(false, fruitFetcher.isBusy());
         Assert.assertEquals(stubbedSuccess.expectedResult.name, fruitFetcher.getCurrentFruit().name);
@@ -127,11 +127,11 @@ public class FruitFetcherIntegrationTest {
 
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
         //assert
-        verify(mockSuccessCallBack, never()).success();
+        verify(mockSuccessCallback, never()).success();
         verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedFailUserLocked.expectedResult));
         Assert.assertEquals(false, fruitFetcher.isBusy());
         Assert.assertEquals(0, fruitFetcher.getCurrentFruit().tastyPercentScore);
@@ -156,11 +156,11 @@ public class FruitFetcherIntegrationTest {
 
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
         //assert
-        verify(mockSuccessCallBack, never()).success();
+        verify(mockSuccessCallback, never()).success();
         verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedFailureUserNotEnabled.expectedResult));
         Assert.assertEquals(false, fruitFetcher.isBusy());
         Assert.assertEquals(0, fruitFetcher.getCurrentFruit().tastyPercentScore);
@@ -183,7 +183,7 @@ public class FruitFetcherIntegrationTest {
                     + " --------");
 
             //arrange
-            mockSuccessCallBack = mock(SuccessCallBack.class);
+            mockSuccessCallback = mock(SuccessCallback.class);
             mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
             Retrofit retrofit = stubbedRetrofit(stubbedServiceDefinition);
             FruitFetcher fruitFetcher = new FruitFetcher(
@@ -194,11 +194,11 @@ public class FruitFetcherIntegrationTest {
 
 
             //act
-            fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+            fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
             //assert
-            verify(mockSuccessCallBack, never()).success();
+            verify(mockSuccessCallback, never()).success();
             verify(mockFailureCallbackWithPayload, times(1)).fail(eq(stubbedServiceDefinition.expectedResult));
             Assert.assertEquals(false, fruitFetcher.isBusy());
             Assert.assertEquals(0, fruitFetcher.getCurrentFruit().tastyPercentScore);

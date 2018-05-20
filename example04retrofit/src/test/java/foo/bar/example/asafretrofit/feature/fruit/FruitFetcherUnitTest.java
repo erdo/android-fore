@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import co.early.asaf.core.WorkMode;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallBack;
+import co.early.asaf.core.callbacks.SuccessCallback;
 import co.early.asaf.core.logging.Logger;
 import co.early.asaf.core.logging.SystemLogger;
 import co.early.asaf.core.observer.Observer;
@@ -38,7 +38,7 @@ public class FruitFetcherUnitTest {
     private static Logger logger = new SystemLogger();
     private FruitPojo fruitPojo = new FruitPojo("strawberry", false, 71);
 
-    private SuccessCallBack mockSuccessCallBack;
+    private SuccessCallback mockSuccessCallback;
     private FailureCallbackWithPayload mockFailureCallbackWithPayload;
     private CallProcessor<UserMessage> mockCallProcessor;
     private FruitService mockFruitService;
@@ -47,7 +47,7 @@ public class FruitFetcherUnitTest {
 
     @Before
     public void setUp() throws Exception {
-        mockSuccessCallBack = mock(SuccessCallBack.class);
+        mockSuccessCallback = mock(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
         mockCallProcessor = mock(CallProcessor.class);
         mockFruitService = mock(FruitService.class);
@@ -88,11 +88,11 @@ public class FruitFetcherUnitTest {
 
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
         //assert
-        verify(mockSuccessCallBack, times(1)).success();
+        verify(mockSuccessCallback, times(1)).success();
         verify(mockFailureCallbackWithPayload, never()).fail(any());
         Assert.assertEquals(false, fruitFetcher.isBusy());
         Assert.assertEquals(fruitPojo.name, fruitFetcher.getCurrentFruit().name);
@@ -115,11 +115,11 @@ public class FruitFetcherUnitTest {
 
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
         //assert
-        verify(mockSuccessCallBack, never()).success();
+        verify(mockSuccessCallback, never()).success();
         verify(mockFailureCallbackWithPayload, times(1)).fail(eq(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT));
         Assert.assertEquals(false, fruitFetcher.isBusy());
         Assert.assertEquals(false, fruitFetcher.getCurrentFruit().isCitrus);
@@ -158,7 +158,7 @@ public class FruitFetcherUnitTest {
 
 
         //act
-        fruitFetcher.fetchFruits(mockSuccessCallBack, mockFailureCallbackWithPayload);
+        fruitFetcher.fetchFruits(mockSuccessCallback, mockFailureCallbackWithPayload);
 
 
         //assert

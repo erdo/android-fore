@@ -1,5 +1,5 @@
 package co.early.asaf.core.callbacks;
 
-public interface SuccessCallBack{
+public interface SuccessCallback {
     void success();
 }
