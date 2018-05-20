@@ -34,12 +34,18 @@ captures/
 
 # Intellij
 *.iml
+*.iws
+.idea/vcs.xml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/compiler.xml
+.idea/misc.xml
+.idea/runConfigurations.xml
 .idea/dictionaries
 .idea/libraries
-.idea/codeStyles/Project.xml
+.idea/caches
 
 # Keystore files
 *.jks
@@ -56,12 +62,24 @@ freeline.py
 freeline/
 freeline_project_description.json
 
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+fastlane/readme.md
+
 #passwords
 secrets.properties
 
 .DS_Store
 *.db
 *.hprof
-*workspace.xml
 captures/
 ajcore*.txt
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
