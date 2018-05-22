@@ -35,7 +35,7 @@ public class AndroidLogger implements Logger{
     }
 
     public void e(String tag, String message, Throwable throwable) {
-        Log.e(tag, message, throwable);
+        Log.e(addTagPrefixIfPresent(tag), message, throwable);
     }
 
     public void w(String tag, String message, Throwable throwable) {
