@@ -58,7 +58,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using XML bindings on Android, but when you get into the details I don't think it's a particularly nice solution (but it may work for you) - I particularly dislike the bit where we move code to XML, but it's a considerable step forward none the less. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
+You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter) and the [syncView](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention that we use with ASAF) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 ## Finally ASAF
 
@@ -82,7 +82,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/asaf-project/04-more.html#dependency-injection)
 
  If you totally grok those 4 things, that's pretty much all you need to use ASAF successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
- 
+
 ### BTW, What's a Controller
 It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]. A controller means different things on different platforms.
 
@@ -91,4 +91,3 @@ Originally a controller might have been a class that accepts mouse clicks at spe
 In modern app frameworks most of the controller work is implemented for you by the UI framework itself - these are the button click listeners that simply catch user input and send it on to the right place. As we need to worry less about controllers now a days, we talk more about more "modern" things like MVVM - which is only about **10(!)** years old.
 
 (Android also lets you use Activities as kind of "Controllers" by letting you specify callback methods right in the XML for buttons which will end up getting called on whatever activity is hosting that particular view. The idea is to not have to write click listeners - I'd recommend not using it because it encourages (forces) you to get the activity involved in something that it doesn't need to be involved in. If you leave everything out of the Activity then you can re-use your custom view in any activity you like, without needing to re-implement all those button call backs each time.)
-
