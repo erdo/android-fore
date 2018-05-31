@@ -51,9 +51,9 @@ ASAF's overriding goal is to be **clear** and **easy to understand**, which make
 
 ### Yes, but what is it?
 
-The ASAF framework is basically a specific implmentation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) combined with [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) which enables you to bind data to the view layer in a way that completely separates it from the rest of your app (and in doing so remove a whole class of problems from typical android development).
+The ASAF framework is basically a specific implementation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) combined with [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) which enables you to bind data to the view layer in a way that completely separates it from the rest of your app (and in doing so remove a whole class of problems from typical android development).
 
-It most closely resembles MVVM (but without using any android xml bindings) the [**architecture page**](https://erdo.github.io/asaf-project/07-architecture.html#architecture) has more discussion about this.
+ASAF relies heavily on a few conventions, and you could implement a similar approach using a library like RxJava, LiveData or Agera. However for binding data to a view layer specifically, I've not come across anything cleaner or more straight forward than ASAF (there are also many fewer ways to get it wrong using ASAF, it's simplicity is a [feature](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter)).  See the [**architecture page**](https://erdo.github.io/asaf-project/07-architecture.html#architecture) for more details.
 
 You'll notice ASAF uses custom views as a place to put all the view related code (this enables you to avoid many Activity/Fragment lifecycle clutter that you might otherwise encounter).
 
@@ -181,5 +181,3 @@ No automated tests for this app yet! (but you should be getting the idea by now 
 Nothing says thank you like bitcoin sent to 3MpUaLWeNUQLxonMxBYyaEugmoEMrEzuc6
 
 ![bitcoin](img/bitcoin.png)
-
-

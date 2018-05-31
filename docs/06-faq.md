@@ -6,9 +6,9 @@
 
 If I had a dollar for everyone who asked me this question! (I would have, about $4)
 
-There is a very good reason why we don't have a parameter here, but it is complicated, so stay with me. We could use a generic maybe and let a model send data or a message directly to the observers. Sending data like that might at first seem like an easy, convenient thing to do, but in my experience it basically always ends up in a world of maintenance pain.
+There is a very good reason why we don't have a parameter here, but it is complicated, so stay with me. We could use a generic maybe and let a model send data or a message directly to the observers. Sending data like that might at first seem like an easy and convenient thing to do, but in my experience it basically always ends up in a world of maintenance pain.
 
-Adding a parameter here would let client code use the observer like some kind of messenger thing or an event bus. While that could be a perfectly valid thing to do for the specific situation you find yourself in, it almost always ends up destroying the long term maintainability of the code base.
+Adding a parameter here would let client code use the observer like some kind of messenger thing or an event bus. While that could be a perfectly valid thing to do for the specific situation you find yourself in, when it comes to binding data to an android view layer it almost always ends up destroying the long term maintainability of the code base.
 
 (Adding a parameter here has been tried by yours truly in many different projects over the years by the way, it always ends up being removed resulting in a considerably cleaner code base, so this has been the approach now for a number of years and it seems to work very well).
 
@@ -22,7 +22,7 @@ It just balloons the amount of code that needs to be written. It also leads deve
 
 Passing a parameter here is also the "obvious" thing to do - which means, if it's an option, it will always be chosen by the less experienced developers in the team. Apart from giving you code review headaches, letting a new developer do that would prevent that developer from learning the more powerful way to use this framework - which, although extremely simple, can take a while to get your head around.
 
-This is one case where ASAF is stopping you from making an easy but horrible archiectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
+This is one case where ASAF is stopping you from making an easy but horrible architectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
 
 
 > "This library is as valuable for what you **can't** do with it, as it is for what you **can** do with it."
@@ -30,7 +30,7 @@ This is one case where ASAF is stopping you from making an easy but horrible arc
 
 Try to get comfortable using these observers to just notify observing client code of any (unspecified) changes to the model's state (once the observing client code has been told there are changes, it can use fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](/#observer-listener) discussion first). For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
-If you want a library that lets you send data in these observables, you should look at RxJava. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a suprising number of rxJava tutorials have databinding implementations which are broken for device rotation, even the ones that are specifically demonstrating databinding!)
+If you want a library that lets you send data in these observables, you should look at RxJava and LiveData. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a suprising number of rxJava tutorials have databinding implementations which are broken for device rotation, even the ones that are specifically demonstrating databinding!)
 
 
 ## <a name="observer-listener"></a> 2) When should I use an Observer, when should I use a callback listener?
@@ -57,10 +57,10 @@ You can use both patterns in the same model with no problem of course, in the ex
 
 ```
 public void doStuffOnAThread(final ResultListener resultListener){
-  	
+
     busy = true;
     notifyObservers();
-    	
+
     startAsyncOperation(new FinishedListener(){
         @Override
         public void finished(){
@@ -71,16 +71,16 @@ public void doStuffOnAThread(final ResultListener resultListener){
     });
 }
 ```
-  
-  
+
+
 For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
 
 For consistency, and for the same reasons outlined [above](#somethingchanged-parameter), try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work, but it breaks the whole point of the Observer pattern and it leads any inexperienced developers who are trying to use your model for their own view down the wrong path - why would they bother to implement the observer pattern and syncView() properly in their view if they can just take a short cut here (hint: they won't). And then you will loose all the benefits of databinding, see [syncView()](/asaf-project/03-databinding.html#syncview) for a refresher.
 
-  
+
 ## <a name="syncview"></a> 3) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
 
-This seems to be the reaction of about 20% of the developers that come across this pattern for the first time. I think it might depend on what style of development experience they have have had in the past. 
+This seems to be the reaction of about 20% of the developers that come across this pattern for the first time. I think it might depend on what style of development experience they have have had in the past.
 
 The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
@@ -113,4 +113,3 @@ The syncView() also completes pretty quickly as all of your getters should be re
 In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not saying such bugs don't exist, but if you ever get any kind of performance issues with this technique, that's the time to measure and see what is happening, but if you follow the guidelines here correctly you will almost certainly  never have any problems at all even on low end devices, and what you get in return is unparalleled robustness).
 
 If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unecessarily (but still not actually redrawing the screen): chilax and be happy with the knowledge that your UI is *definitely* consistent ;)
-
