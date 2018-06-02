@@ -35,7 +35,7 @@ If you want a library that lets you send data in these observables, you should l
 
 ## <a name="observer-listener"></a> 2) When should I use an Observer, when should I use a callback listener?
 
-The observer pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback will probably serve you better. In this case the succes or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
+The observer pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback will probably serve you better. In this case the success or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
 
 for example:
 

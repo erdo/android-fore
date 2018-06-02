@@ -73,26 +73,15 @@ Most of the models used in ASAF (the dependencies in this case) tend to be globa
 
 This of course means that when a view is rotated, it makes no difference to the model.
 
-**[We're not talking about data pojos here btw, if your view is just being driven by some data that has a fixed state, you can use techiniques like fragments.setArguments(bundle), and rotation will work just fine.]**
+**[We're not talking about data pojos here btw, if your view is just being driven by some data that has a fixed state, you can use techniques like fragments.setArguments(bundle), and rotation will work just fine.]**
 
 For models whose state sometimes changes and are observable, once a rotation is complete and a new activity & view created by Android, ASAF databinding ensures that this new view is synced with the latest state of the model (if the model is still performing network access, the view will show a swirly, for example). The re-hooked up observers take care of any changes from there on in.
 
 However we still have a problem with locally scoped models: for locally scoped models (regardless if you are using Pure DI or Dagger) the actual scope of the model is usually tied to a class in the UI layer (Activity class, or your custom View class). On rotation, these View layer classes disappear and the locally scoped model reference (and the state it holds) disappears with it.
 
-If you live in a world where it never occured to you to properly separate your view layer from your business layer, this is where onSaveInstanceState() comes to the rescue. But once we have realised the power of removing business layer code from the view layer, onSaveInstanceState() begins to look very hacky indeed.
+If you live in a world where it never occurred to you to properly separate your view layer from your business layer, this is where onSaveInstanceState() comes to the rescue. But once we have realised the power of removing business layer code from the view layer, onSaveInstanceState() begins to look very hacky indeed.
 
-**One solution: don't use a locally scoped model to hold any state that you want maintained across rotations.**
-
-#### Extending scope across rotations
-
-The other solution is one I hesitate to recommend, but it does work, and that is to have a dedicated **ScopeExtender** class tied to application/global level scope that will keep hold of a reference to your locally scoped dependency for you while the device is rotated. In this way it extends the scope of your local dependency beyond that of the current activity instance. *(If you are using Dagger2, it is your locally scoped Component class that you need to keep a reference to)*. You can see this problem with the Basket tab of the [full sample app](https://github.com/erdo/asaf-full-app-example), which has been implemented with a locally scoped BasketModel on purpose, so that you can easily see the effect when the view is rotated.
-
-This **storeLocalDependency() -> re-create view -> retriveLocalDependency()** solution is tricky as you **only** want to store those locally scoped dependency references for rotations - you don't want to keep them around once you have moved on to another activity altogether. You can achieve that by adding the Activity class as a parameter in the store/retrieve method signature. For example, your view layer can check for the presence of a previously stored dependency like this **scopeExtender.retrieveLocalDependency(MyLocalDependency.class, BasketActivity.class)** and store a new one like this: **scopeExtender.storeLocalDependency(myLocalDependency, BasketActivity.class)**. ScopeExtender obviously needs to have global scope to survive rotation itself. Once the "ScopeExtender" class is called with a new activity class like this for example: **scopeExtender.storeLocalDependency(myLocalDependency, CheckoutActivity.class)** that's its queue to ditch the references to the local scopes it has been holding for BasketActivity.class.
-
-The specific requirements of a ScopeExtender type class will be different for each application and as such there is no implementation provided for you in this library. (Maybe you don't want to get rid of all the local dependencies as soon as a new activity is started, what about if a user navigates back to the original activity?). If I come up with a nice generic solution to this, I might add it - and if you do I'd happily look at a pull request. For the moment, the most straight forward way is probably to arrange your code to make use of globally scoped models for this kind of thing - whilst being careful you don't hold on to too much memory in your global object graph.
-
-By the way, for the avoidance of doubt and as discussed [elsewhere](https://erdo.github.io/asaf-project/02-models.html#model-checklist): no models should keep any references to Activites/Contexts/View components, and any listeners need to be used and then cleared quickly within the model itself to make sure we don't get any memory leaks.
-
+One solution is not to use locally scoped models to hold any state that you want maintained across rotations. Other solutions involve extending the scope of those models slightly by maintaining a reference to them in some code that exists beyond the lifecycle of the activity. Once the user has moved on to a completely different activity, then you can safely clear the references and they will be garbage collected. *(If you are using Dagger2, it is your locally scoped Component class that you need to keep a reference to)*
 
 
 # Asynchronous Code
@@ -180,7 +169,7 @@ new AsafTaskBuilder<Void, Integer>(workMode)
         }
     })
     .execute((Void) null);
-    
+
 ```
 
 That might not look particularly clean, but it gets a lot cleaner once you are using lambda expressions.
@@ -209,7 +198,7 @@ Ahh adapters, I miss the good old days when all you had to do was call notifyDat
 
 		// set enabled states and visibilities etc
 		...
-		
+
         adapter.notifyDataSetChanged();
     }
 
@@ -300,4 +289,3 @@ For this to work you will need to call **check()** on the SyncTrigger each time 
 By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
 
 Please see [here](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for example useage of the SyncTrigger.
-
