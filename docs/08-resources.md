@@ -22,6 +22,7 @@ This one takes you though all the important points of ASAF together with a lot o
 spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers do not realise this, even though with hindsight it kind of stares you in the face.
 
 <strong>Presenter perspective including notes is [here](http://asaf-asaf.surge.sh/#/?presenter&timer)</strong>
+
 <strong>Regular slides without notes is [here](http://asaf-asaf.surge.sh)</strong>
 
 (Again, if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
