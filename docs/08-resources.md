@@ -7,6 +7,9 @@ They were written using [spectacle](https://github.com/FormidableLabs/spectacle)
 
 
 ### Android architecture basics
+
+![android basics presentation](img/pres_screenshot_1.png)
+
 This spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers don't realise this, even though with hindsight it kind of stares you in the face.
 
 <strong>Presenter perspective including notes is [here](http://asaf-android.surge.sh/#/?presenter&timer)</strong>
@@ -17,6 +20,9 @@ This spells out the main problem with the default android architecture and the m
 
 
 ### ASAF basics
+
+![asaf basics presentation](img/pres_screenshot_2.png)
+
 This one takes you though all the important points of ASAF together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
 
 spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers do not realise this, even though with hindsight it kind of stares you in the face.
