@@ -25,8 +25,6 @@ This spells out the main problem with the default android architecture and the m
 
 This one takes you though all the important points of ASAF together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
 
-spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers do not realise this, even though with hindsight it kind of stares you in the face.
-
 <strong>Presenter perspective including notes is [here](http://asaf-asaf.surge.sh/#/?presenter&timer)</strong>
 
 <strong>Regular slides without notes is [here](http://asaf-asaf.surge.sh)</strong>
