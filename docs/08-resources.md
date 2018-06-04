@@ -6,7 +6,7 @@ There are a couple of presentations hosted on surge that I occasionally use, the
 They were written using [spectacle](https://github.com/FormidableLabs/spectacle) which is an awesome ReactJS presentation library.
 
 
-## Android architecture basics
+### Android architecture basics
 This spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers don't realise this, even though with hindsight it kind of stares you in the face.
 
 <strong>Presenter perspective including notes is [here](http://asaf-android.surge.sh/#/?presenter&timer)</strong>
@@ -16,7 +16,7 @@ This spells out the main problem with the default android architecture and the m
 (if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
 
 
-## ASAF basics
+### ASAF basics
 This one takes you though all the important points of ASAF together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
 
 spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers do not realise this, even though with hindsight it kind of stares you in the face.
