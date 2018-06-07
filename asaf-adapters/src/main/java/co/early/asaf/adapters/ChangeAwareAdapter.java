@@ -43,22 +43,47 @@ import co.early.asaf.core.Affirm;
  * <p>This architecture puts the onus on the developer to indicate the change type rather than the platform
  * inferring it automatically (like with iOS lists)
  *
- * <p>As this needs to be done for every list and it's reasonably involved, this class uses
- * {@link ChangeAwareArrayList} and {@link ChangeAwareLinkedList} to handle much of the work for you,
- * please refer to the ASAF adapters source code for example useage.
+ * <p>As this needs to be done for every list and it's reasonably involved, this class handles much
+ * of the work for you
+ *
+ * <p>The <strong>first method</strong>  is primarily for simple in memory lists, and uses
+ * {@link ChangeAwareArrayList} and {@link ChangeAwareLinkedList} in conjunction with
+ * {@link Updateable} interface. Please refer to the ASAF adapters source code for example useage.
+ *
+ *  <p>The <strong>second method</strong> is primarily for lists which are driven by database changes, and is more
+ *  computationally intensive, as it uses Android's {@link android.support.v7.util.DiffUtil.DiffResult}
+ *  for list comparison in conjunction with the {@link Diffable} and {@link DiffComparator} classes.
+ *  Please refer to the ASAF adapters source code for example useage.
  * *
  */
 public abstract class ChangeAwareAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
+    private static final int MAX_AGE_MS_BEFORE_IGNORE = 50;
+
     private final Updateable updateable;
+    private final Diffable diffable;
 
     public ChangeAwareAdapter(Updateable updateable) {
         this.updateable = Affirm.notNull(updateable);
+        this.diffable = null;
     }
 
-    public void notifyDataSetChangedAuto(){
+    public ChangeAwareAdapter(Diffable diffable) {
+        this.updateable = null;
+        this.diffable = diffable;
+    }
 
-        UpdateSpec updateSpec = updateable.getAndClearLatestUpdateSpec(50);
+    public void notifyDataSetChangedAuto() {
+        if (updateable != null){
+            processUpdateable();
+        } else {
+            processDiffable();
+        }
+    }
+
+    private void processUpdateable(){
+
+        UpdateSpec updateSpec = updateable.getAndClearLatestUpdateSpec(MAX_AGE_MS_BEFORE_IGNORE);
 
         switch (updateSpec.type) {
             case FULL_UPDATE:
@@ -76,4 +101,14 @@ public abstract class ChangeAwareAdapter<VH extends RecyclerView.ViewHolder> ext
         }
     }
 
+    private void processDiffable(){
+
+        DiffSpec diffSpec = diffable.getAndClearLatestDiffSpec(MAX_AGE_MS_BEFORE_IGNORE);
+
+        if (diffSpec.diffResult == null) {
+            notifyDataSetChanged();
+        }else {
+            diffSpec.diffResult.dispatchUpdatesTo(this);
+        }
+    }
 }
