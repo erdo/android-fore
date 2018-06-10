@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
 import co.early.asaf.core.callbacks.SuccessCallback;
 import co.early.asaf.core.observer.Observer;
+import co.early.asaf.core.ui.SyncableView;
 import foo.bar.example.asafretrofit.CustomApp;
 import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
@@ -24,7 +25,7 @@ import foo.bar.example.asafretrofit.ui.widgets.AnimatedTastyRatingBar;
 /**
  *
  */
-public class FruitView extends ScrollView {
+public class FruitView extends ScrollView implements SyncableView{
 
     //models that we need to sync with
     private FruitFetcher fruitFetcher;
@@ -60,12 +61,7 @@ public class FruitView extends ScrollView {
 
 
     //single observer reference
-    Observer observer = new Observer() {
-        @Override
-        public void somethingChanged() {
-            syncView();
-        }
-    };
+    Observer observer = this::syncView;
 
 
 

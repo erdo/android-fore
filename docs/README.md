@@ -15,18 +15,18 @@ A good place to start might be the [**architectural overview**](https://erdo.git
 
 
 ## Quick Start
-Latest version: 0.9.31
+Latest version: 0.9.32
 
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.31', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.32', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.31', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.31', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.31', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.32', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.32', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext: 'aar')
 ```
 
 

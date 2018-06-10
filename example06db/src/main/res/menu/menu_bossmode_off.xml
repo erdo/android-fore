@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/todo_boss_mode">
+        <menu>
+            <item
+                android:id="@+id/action_bossmode"
+                android:icon="@drawable/todo_menu_icon"
+                android:enabled="true"
+                android:title="@string/todo_action_bossmode_on" />
+        </menu>
+    </item>
+
+    <item android:title="@string/todo_work_from_home">
+        <menu>
+            <item
+                android:id="@+id/action_add_25_web"
+                android:icon="@drawable/todo_menu_icon"
+                android:title="@string/todo_action_add25_web" />
+        </menu>
+    </item>
+
+</menu>

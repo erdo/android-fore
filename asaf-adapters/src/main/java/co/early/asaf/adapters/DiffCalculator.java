@@ -17,8 +17,8 @@ public class DiffCalculator<T extends DiffComparator> {
      * <p>
      * Once these lists start to get larger than about 1000 rows, this method becomes unusable
      * <p>
-     * @param oldList
-     * @param newList
+     * @param oldList the list about to be replaced
+     * @param newList the new list
      * @return the DiffResult for the two lists
      */
     public DiffUtil.DiffResult createDiffResult(List<T> oldList, List<T> newList) {

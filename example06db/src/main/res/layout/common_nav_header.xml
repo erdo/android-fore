@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.asafadapters2.ui.NavHeader xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nav_bg_bossmode_off"
+    android:gravity="bottom"
+    android:padding="0dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <ImageView
+            android:id="@+id/navheader_logo_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:paddingTop="@dimen/common_space_medium"
+            app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+        <TextView
+            android:id="@+id/navheader_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/navheader_logo_imageview"
+            android:paddingTop="@dimen/common_space_small_medium"
+            android:text="@string/app_name"
+            android:textSize="@dimen/common_textsize_medium" />
+
+        <TextView
+            android:id="@+id/navheader_bossmode_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/common_space_small_medium"
+            android:paddingStart="@dimen/common_space_small_medium"
+            android:paddingTop="@dimen/common_space_medium_large"
+            android:layout_toEndOf="@+id/navheader_logo_imageview"
+            android:layout_toRightOf="@+id/navheader_logo_imageview"
+            android:text="BOSS MODE:"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/common_textsize_medium" />
+
+        <TextView
+            android:id="@+id/navheader_bossmodestate_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/common_space_medium_large"
+            android:layout_toEndOf="@+id/navheader_bossmode_textview"
+            android:layout_toRightOf="@+id/navheader_bossmode_textview"
+            android:text="ON"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/common_textsize_medium"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/navheader_connectionslabel_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/navheader_name_textview"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/todo_connections"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/common_textsize_medium" />
+
+        <TextView
+            android:id="@+id/navheader_connections_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:layout_below="@+id/navheader_name_textview"
+            android:layout_toEndOf="@+id/navheader_connectionslabel_textview"
+            android:layout_toRightOf="@+id/navheader_connectionslabel_textview"
+            android:text="12"
+            android:textSize="@dimen/common_textsize_medium" />
+
+        <ProgressBar
+            android:id="@+id/navheader_networkbusy_progressbar"
+            android:layout_width="@dimen/nav_network_busy_size"
+            android:layout_height="@dimen/nav_network_busy_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:progressTint="@color/colorWhite"/>
+
+    </RelativeLayout>
+
+    <foo.bar.example.asafadapters2.ui.common.widgets.PercentBar
+        android:id="@+id/navheader_bossmodeprog_percentbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_space_small_medium"
+        android:layout_alignParentBottom="true" />
+
+</foo.bar.example.asafadapters2.ui.NavHeader>

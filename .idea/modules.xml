@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/example03adapters/example03adapters.iml" filepath="$PROJECT_DIR$/example03adapters/example03adapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/example04retrofit/example04retrofit.iml" filepath="$PROJECT_DIR$/example04retrofit/example04retrofit.iml" />
       <module fileurl="file://$PROJECT_DIR$/example05ui/example05ui.iml" filepath="$PROJECT_DIR$/example05ui/example05ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example06db/example06db.iml" filepath="$PROJECT_DIR$/example06db/example06db.iml" />
     </modules>
   </component>
 </project>

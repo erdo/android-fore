@@ -196,6 +196,6 @@ public class TicTacToeView extends ScrollView implements SyncableView {
 
     }
 
-
+    //here we are using SyncableAppCompatActivity for the host activity so there is less databinding boilerplate
 
 }
