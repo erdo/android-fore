@@ -70,7 +70,7 @@ public class BossMode extends ObservableImp{
                         }
                     }
 
-                    if(RANDOM.nextInt(21)<1) { //about 5% of the time the boss creates a todoitem
+                    if(RANDOM.nextInt(6)<1) { //about 20% of the time the boss creates a todoitem
                         todoListModel.add(new TodoItem(systemTimeWrapper.currentTimeMillis(), BOSS + RandomTodoCreator.createLabel()));
                     }
 

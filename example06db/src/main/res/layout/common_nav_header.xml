@@ -25,7 +25,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:paddingTop="@dimen/common_space_medium"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+            app:srcCompat="@mipmap/ic_launcher_round" />
 
         <TextView
             android:id="@+id/navheader_name_textview"

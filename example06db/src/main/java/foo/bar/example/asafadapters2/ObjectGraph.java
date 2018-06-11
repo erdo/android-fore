@@ -91,6 +91,8 @@ class ObjectGraph {
 
             // run any necessary initialization code once object graph has been created here
 
+            get(TodoListModel.class).fetchLatestFromDb();
+
         }
     }
 

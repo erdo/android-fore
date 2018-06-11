@@ -37,10 +37,10 @@ public abstract class TodoItemDao {
     @Delete
     public abstract int deleteTodoItem(TodoItemEntity logEntry);
 
-    @Query("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_CREATE_TIMESTAMP + " DESC")
+    @Query("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_CREATE_TIMESTAMP + " DESC, id")
     public abstract List<TodoItemEntity> getAllTodoItems();
 
-    @Query("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DONE + " = :done " + " ORDER BY " + COLUMN_CREATE_TIMESTAMP + " DESC")
+    @Query("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_DONE + " = :done " + " ORDER BY " + COLUMN_CREATE_TIMESTAMP + " DESC, id")
     public abstract List<TodoItemEntity> getTodoItems(boolean done);
 
     @Query("SELECT COUNT(*) FROM " + TABLE_NAME)

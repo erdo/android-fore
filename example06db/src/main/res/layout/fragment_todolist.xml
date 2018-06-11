@@ -4,17 +4,24 @@
     android:layout_height="match_parent"
     android:background="@color/colorLightGrey">
 
-
     <TextView
         android:id="@+id/todo_number_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/todo_networking_prog"
+        android:layout_toStartOf="@+id/todo_networking_prog"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="normal"
+        android:textSize="@dimen/common_textsize_small"/>
+
+    <ProgressBar
+        android:id="@+id/todo_networking_prog"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
-        android:textSize="@dimen/common_space_medium"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/common_space_medium"
+        android:layout_height="@dimen/common_space_medium"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/todo_list_recycleview"
@@ -25,7 +32,7 @@
         android:layout_marginBottom="@dimen/common_space_small_medium"
         android:layout_marginLeft="@dimen/common_space_small_medium"
         android:layout_marginRight="@dimen/common_space_small_medium"
-        android:layout_marginTop="@dimen/common_space_medium_large"
+        android:layout_marginTop="@dimen/common_space_medium"
         android:background="@color/colorWhite"
         android:fadeScrollbars="false"
         android:scrollbars="vertical" />

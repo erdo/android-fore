@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import co.early.asaf.core.observer.Observer;
 import co.early.asaf.core.ui.SyncableView;
 import foo.bar.example.asafadapters2.App;
 import foo.bar.example.asafadapters2.R;
+import foo.bar.example.asafadapters2.feature.remote.RemoteWorker;
 import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel;
 import foo.bar.example.asafadapters2.ui.common.uiutils.SyncerTextWatcher;
 
@@ -36,6 +38,7 @@ public class TodoListView extends RelativeLayout implements SyncableView{
 
     //models that we need
     private TodoListModel todoListModel;
+    private RemoteWorker remoteWorker;
     private Logger logger;
 
     private InputMethodManager keyboard;
@@ -78,6 +81,10 @@ public class TodoListView extends RelativeLayout implements SyncableView{
     @BindView(R.id.todo_number_text)
     protected TextView numberTodos;
 
+    @BindView(R.id.todo_networking_prog)
+    protected ProgressBar networking;
+
+
 
     //single observer reference
     Observer observer = this::syncView;
@@ -117,6 +124,7 @@ public class TodoListView extends RelativeLayout implements SyncableView{
 
     private void getModelReferences(){
         todoListModel = App.get(TodoListModel.class);
+        remoteWorker = App.get(RemoteWorker.class);
         logger = App.get(Logger.class);
         keyboard = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -219,20 +227,19 @@ public class TodoListView extends RelativeLayout implements SyncableView{
     private void hideAddDropDown(){
         addButton.setEnabled(true);
         keyboard.hideSoftInputFromWindow(newDescription.getWindowToken(), 0);
-        animationSet.playTogether(
-                ObjectAnimator.ofFloat(newItemContainer, "translationY", 0f, -200f));
+        animationSet.playTogether(ObjectAnimator.ofFloat(newItemContainer, "translationY", 0f, -200f));
         animationSet.start();
     }
 
-1
-
+    
     //data binding stuff below
 
     public void syncView(){
         createButton.setEnabled(todoListModel.isValidItemLabel(newDescription.getText().toString()));
         showDoneItems.setChecked(todoListModel.isShowDone());
         clearList.setEnabled(todoListModel.size()>0);
-        numberTodos.setText(todoListModel.getTotalNumberOfRemainingTodos() + "/" + todoListModel.getTotalNumberOfTodos());
+        numberTodos.setText("remaining todos: " + todoListModel.getTotalNumberOfRemainingTodos() + "/" + todoListModel.getTotalNumberOfTodos());
+        networking.setVisibility(remoteWorker.isBusy() ? VISIBLE : INVISIBLE);
         todoListAdapter.notifyDataSetChangedAuto();
     }
 
@@ -241,6 +248,7 @@ public class TodoListView extends RelativeLayout implements SyncableView{
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         todoListModel.addObserver(observer);
+        remoteWorker.addObserver(observer);
         syncView(); //  <- don't forget this
     }
 
@@ -249,6 +257,7 @@ public class TodoListView extends RelativeLayout implements SyncableView{
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         todoListModel.removeObserver(observer);
+        remoteWorker.removeObserver(observer);
     }
 
 }

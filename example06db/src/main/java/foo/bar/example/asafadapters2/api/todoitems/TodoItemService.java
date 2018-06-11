@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  */
 public interface TodoItemService {
 
-    @GET("59efa0132e0000ef331c5f9b/")
+    @GET("5b1a81703300005400fb14da/")
     Call<List<TodoItemPojo>> getTodoItems(@Query("mocky-delay") String delayScalaDurationFormat);
 
 }
