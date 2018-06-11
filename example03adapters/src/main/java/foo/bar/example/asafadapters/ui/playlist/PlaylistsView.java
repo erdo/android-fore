@@ -13,7 +13,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.asaf.core.observer.Observer;
-import co.early.asaf.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters.CustomApp;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
@@ -29,7 +28,7 @@ public class PlaylistsView extends LinearLayout {
     //models that we need to sync with
     private PlaylistSimpleModel playlistSimpleModel;
     private PlaylistAdvancedModel playlistAdvancedModel;
-    private SystemTimeWrapper systemTimeWrapper;
+
 
     //UI elements that we care about
     @BindView(R.id.playlist_totaltracks1_textview)
@@ -70,7 +69,7 @@ public class PlaylistsView extends LinearLayout {
 
 
     //single observer reference
-    Observer observer = () -> syncView();
+    Observer observer = this::syncView;
 
 
     private PlaylistAdapterSimple adapterSimple;
@@ -113,7 +112,6 @@ public class PlaylistsView extends LinearLayout {
     private void getModelReferences(){
         playlistAdvancedModel = CustomApp.get(PlaylistAdvancedModel.class);
         playlistSimpleModel = CustomApp.get(PlaylistSimpleModel.class);
-        systemTimeWrapper = CustomApp.get(SystemTimeWrapper.class);
     }
 
     private void setupButtonClickListeners() {

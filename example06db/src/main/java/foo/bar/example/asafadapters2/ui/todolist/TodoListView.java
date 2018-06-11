@@ -231,7 +231,7 @@ public class TodoListView extends RelativeLayout implements SyncableView{
         animationSet.start();
     }
 
-    
+
     //data binding stuff below
 
     public void syncView(){
