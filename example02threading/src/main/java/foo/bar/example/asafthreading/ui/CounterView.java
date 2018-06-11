@@ -1,8 +1,6 @@
 package foo.bar.example.asafthreading.ui;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -52,7 +50,7 @@ public class CounterView extends ScrollView {
 
 
     //single observer reference
-    Observer observer = () -> syncView();
+    Observer observer = this::syncView;
 
 
 
@@ -68,10 +66,6 @@ public class CounterView extends ScrollView {
         super(context, attrs, defStyleAttr);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public CounterView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
 
 
     @Override
@@ -116,7 +110,7 @@ public class CounterView extends ScrollView {
         super.onAttachedToWindow();
         counterWithLambdas.addObserver(observer);
         counterWithProgress.addObserver(observer);
-        syncView();
+        syncView(); //<-- don't forget this
     }
 
 

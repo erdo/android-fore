@@ -15,18 +15,18 @@ A good place to start might be the [**architectural overview**](https://erdo.git
 
 
 ## Quick Start
-Latest version: 0.9.31
+Latest version: 0.9.32
 
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.31', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.32', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.31', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.31', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.31', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.32', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.32', ext: 'aar')
+implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext: 'aar')
 ```
 
 
@@ -126,7 +126,7 @@ Clicking the buttons in this app will perform a network request to some static f
 
 As you're using the app, please notice:
 
-- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to seperate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
+- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to separate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
 
 As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
 
@@ -143,9 +143,27 @@ A regular Tic Tac Toe game that makes use of a few UI convenience classes:
 - [SyncTrigger](https://erdo.github.io/asaf-project/04-more.html#synctrigger) which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 
 
-No automated tests for this app yet! (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included). If I get a spare moment I will add them at least for the **Board** class which contains all the logic.
+No automated tests for this app (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included).
 
 
+### ASAF 6 DB Example (Room db driven todo list)
+<div class="shoom" id="asaf-6-db-example-room"/>
+
+[screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example06db/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters2) \| [source code](https://github.com/erdo/asaf-project/tree/master/example06db)
+
+A Todo list on steroids that lets you:
+
+- manually add 50 random todos at a time
+- turn on a "boss mode" which randomly fills your list with even more todos over the following 10 seconds
+- "work from home" which connects to the network and downloads 25 extra todos (up to 9 simultaneous network connections)
+- randomly delete about 10% of your todos
+- randomly change 10% of your outstanding todos to done
+
+It's obviously ridiculously contrived, but the idea is to implement something that would be quite challenging and to see how little code you need in the view layer to do it.
+
+It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
+
+All the database changes are done off the UI thread, RecyclerView animations are supported (for lists below 1000 rows) and the app is totally robust and supports rotation out of the box. For testing, please see example apps 1-4
 
 
 ### Other Full App Examples

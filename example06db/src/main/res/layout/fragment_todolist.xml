@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.asafadapters2.ui.todolist.TodoListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightGrey">
+
+    <TextView
+        android:id="@+id/todo_number_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/todo_networking_prog"
+        android:layout_toStartOf="@+id/todo_networking_prog"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="normal"
+        android:textSize="@dimen/common_textsize_small"/>
+
+    <ProgressBar
+        android:id="@+id/todo_networking_prog"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="@dimen/common_space_medium"
+        android:layout_height="@dimen/common_space_medium"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/todo_list_recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/todo_btns_linear"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/common_space_small_medium"
+        android:layout_marginLeft="@dimen/common_space_small_medium"
+        android:layout_marginRight="@dimen/common_space_small_medium"
+        android:layout_marginTop="@dimen/common_space_medium"
+        android:background="@color/colorWhite"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:id="@+id/todo_newcontainer_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/shadow"
+        android:orientation="horizontal"
+        android:translationY="-200dp">
+
+        <EditText
+            android:id="@+id/todo_description_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="@string/todo_desc_hint"
+            android:imeOptions="flagNoExtractUi|actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorLightGrey" />
+
+        <Button
+            android:id="@+id/todo_create_button"
+            style="@style/AppButtonPositive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todo_create" />
+
+        <Button
+            android:id="@+id/todo_hide_button"
+            style="@style/AppButtonNegative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todo_hide" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/todo_btns_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/todo_footer_linear"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/todo_add50_button"
+            style="@style/AppButtonPositive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todo_action_add50" />
+
+        <Button
+            android:id="@+id/todo_do10pc_button"
+            style="@style/AppButtonPositive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todo_action_do10pc" />
+
+        <Button
+            android:id="@+id/todo_del10pc_button"
+            style="@style/AppButtonNegative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todo_action_del10pc" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/todo_footer_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/common_space_small">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/common_space_medium"
+            android:paddingRight="@dimen/common_space_medium">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:text="@string/todo_show_done"
+                android:textSize="@dimen/common_textsize_small" />
+
+            <Switch
+                android:id="@+id/todo_showdone_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/todo_clear_button"
+            style="@style/AppButtonNegative"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/todo_clear" />
+
+        <Button
+            android:id="@+id/todo_add_button"
+            style="@style/AppButtonPositive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/todo_add" />
+
+    </LinearLayout>
+
+</foo.bar.example.asafadapters2.ui.todolist.TodoListView>

@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">ASAF 6 db ex</string>
+
+    <!-- common error messages -->
+    <string name="msg_empty_message"></string>
+    <string name="msg_error_misc">Some kind of error, maybe check logs</string>
+    <string name="msg_error_network">Network error, check connection</string>
+    <string name="msg_error_server">Server down, try again soon</string>
+    <string name="msg_error_client">Client error</string>
+    <string name="msg_error_session_timeout">Unauthorized</string>
+    <string name="msg_error_busy">Busy</string>
+    <string name="msg_error_cancelled">Cancelled</string>
+
+    <!-- common -->
+    <string name="common_on">ON</string>
+    <string name="common_off">OFF</string>
+
+    <!-- nav drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- todolist -->
+    <string name="todo_clear">Clear All</string>
+    <string name="todo_mark_done">Mark As Done</string>
+    <string name="todo_create">Create</string>
+    <string name="todo_add">Add</string>
+    <string name="todo_hide">Hide</string>
+    <string name="todo_show_done">Show Done</string>
+    <string name="todo_desc_hint">Description</string>
+    <string name="todo_the">\u0020the\u0020</string>
+    <string name="todo_boss">(boss)\u0020</string>
+    <string name="todo_web">(web)\u0020</string>
+    <string name="todo_connections">connections:</string>
+    <string name="todo_boss_mode">Boss Mode</string>
+
+    <string name="todo_action_add50">Add 50</string>
+    <string name="todo_action_do10pc">Do 10%</string>
+    <string name="todo_action_del10pc">Delete 10%</string>
+    <string name="todo_action_add25_web">Download 25 extra tasks from the internet each time you tap this</string>
+    <string name="todo_action_bossmode_on">Turn boss mode on for extra random todos</string>
+    <string name="todo_work_from_home">Work from home</string>
+
+</resources>
