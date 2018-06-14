@@ -36,7 +36,8 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext:
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
- 3. Reading the following sections on this site: [**Architecture**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while referring to the code of the [sample apps](#sample-apps)
+ 3. Reading the following sections on this site:
+  [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) (and maybe  [**Architecture**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), if you're so inclined) while referring to the code of the [sample apps](#sample-apps)
 
 
 It's usually quite challenging to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project.
