@@ -32,7 +32,7 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext:
 ```
 
 
-**If you're not familiar with ASAF and you want to get up to speed quickly with how this library works from scratch, it's probably 1-2 hours work. I'd recommend:**
+**If you're new to ASAF, Welcome! Might I suggest:**
 
  1. Cloning the git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
