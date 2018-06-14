@@ -36,13 +36,15 @@ As with testing any asynchronous code with ASAF, we use WorkMode.SYNCHRONOUS to 
 
 Ahh adapters, I miss the good old days when all you had to do was call notifyDataSetChanged(). And the best place to call it is from inside the syncView() method:
 
+```
     public void syncView() {
 
-		// set enabled states and visibilities etc
-		...
+	  // set enabled states and visibilities etc
+      ...
 
-        adapter.notifyDataSetChanged();
+      adapter.notifyDataSetChanged();
     }
+```
 
 In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes).
 
