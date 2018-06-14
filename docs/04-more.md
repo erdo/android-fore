@@ -99,6 +99,14 @@ The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asa
 
 # AsyncTasks with Lambdas
 
+```
+new AsafTaskBuilder<Void, Integer>(workMode)
+    .doInBackground(input -> MyModel.this.doStuffInBackground(input))
+    .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
+    .execute((Void) null);
+```
+
+
 We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
 
 AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because of the "new" keyword.
