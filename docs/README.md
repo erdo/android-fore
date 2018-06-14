@@ -40,7 +40,7 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext:
   [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom) (and maybe  [**Architecture**](https://erdo.github.io/asaf-project/07-architecture.html#shoom) if you're so inclined) while referring to the code of the [sample apps](#sample-apps)
 
 
-### Yes, but what is it?
+### So, what is it?
 
 The ASAF framework is basically a specific implementation of the [Observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) combined with [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) which enables you to bind data to the view layer in a way that completely separates it from the rest of your app (and in doing so remove a whole class of problems from typical android development).
 
