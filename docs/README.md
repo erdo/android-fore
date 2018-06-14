@@ -47,7 +47,7 @@ There are many over-engineered custom built android app architectures in existen
 
 What's hard when building an architecture, is to produce something that is simple but also generically applicable - that often requires multiple iterations. ASAF (though now very stable) has been going through those iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would be more difficult for a public project.
 
-ASAF's overriding goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarize yourself with how to use ASAF in your own projects.
+ASAF's overriding goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarise yourself with how to use ASAF in your own projects.
 
 ### Yes, but what is it?
 
@@ -63,7 +63,7 @@ Developing with ASAF generally means writing observable and testable [**Model**]
 
 ASAF also includes some testable alternatives for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) method that **never** leaves your view out of sync with your model.
 
-There are also optional extras that help with using [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
+There are also optional extras that help with using [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
 You might be shocked at how much android code becomes unnecessary when you take this approach to development.
 
@@ -86,7 +86,7 @@ Aside from the apps, there is also a lot of information in this guide that will 
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
-This app is a bare bones implementation of ASAF databinding. No threading, no networking, no database access - just the minimum required to demostrate [Data Binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of ASAF databinding. No threading, no networking, no database access - just the minimum required to demonstrate [Data Binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
@@ -96,7 +96,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
-This one demonstrates asynchronous programing, and importantly how to test it. It uses ([AsafTask](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [AsafTaskBuilder](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demostrate asynchronous programing.
+This one demonstrates asynchronous programming, and importantly how to test it. It uses ([AsafTask](https://erdo.github.io/asaf-project/04-more.html#asaftask) and [AsafTaskBuilder](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
 
@@ -108,13 +108,13 @@ It's really a very exciting app, I recently launched it on the play store and I'
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters) \| [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
-This one demostrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
+This one demonstrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
 
 It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and ASAF will take care of all the notify changes work.
 
 Two lists are displayed side to side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right.
 
-As usual it's a complete and tested app but contains just the minimum required to demostrate adapters. It's not been nominated for any design awards, as yet.
+As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters. It's not been nominated for any design awards, as yet.
 
 
 
@@ -138,7 +138,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 A regular Tic Tac Toe game that makes use of a few UI convenience classes:
 
 
-- The [SyncableXXX](https://erdo.github.io/asaf-project/04-more.html#syncable-convenience-classes) classes which reduce boiler plate slightly and automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
+- The [SyncableXXX](https://erdo.github.io/asaf-project/04-more.html#lifecycle-components) classes which reduce boiler plate slightly and automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
 
 - [SyncTrigger](https://erdo.github.io/asaf-project/04-more.html#synctrigger) which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 

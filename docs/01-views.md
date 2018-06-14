@@ -13,7 +13,7 @@ These classes:
 
 In short they are no place to put business logic, any code placed in those classes will present the developer with a range of challenges related to managing a complicated lifecycle when screens are rotated or phone calls accepted such as:
 
-- loosing data stored in memory (causing null pointers or requiring uneccessary network calls)
+- loosing data stored in memory (causing null pointers or requiring unecessary network calls)
 - maintaining UI consistency
 - guarding against memory leaks
 
@@ -54,7 +54,7 @@ Sometimes, us Android developers (especially if we have only developed using And
 
 Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
 
-Instead of separating things *horizontally* in layers with views in one layer and data in another layer, the Android designers separated things *vertically*. Each self contained Activity (encorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
+Instead of separating things *horizontally* in layers with views in one layer and data in another layer, the Android designers separated things *vertically*. Each self contained Activity (incorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
 
 Android seems to have been envisioned a little like this:
 
@@ -68,5 +68,4 @@ I know, crap diagrams, but anyway a lot of the complication of Android developme
 
 Despite the obvious problems of writing networking code or asynchronous code inside an ephemeral view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
 
-Fortunately it's almost all completely uneccessary. The [sample apps](https://erdo.github.io/asaf-project/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
-
+Fortunately it's almost all completely unecessary. The [sample apps](https://erdo.github.io/asaf-project/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.

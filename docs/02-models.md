@@ -12,7 +12,7 @@ Here's an example: [FruitFetcher.java](https://github.com/erdo/asaf-project/blob
 
 If you write a good model, using it in the rest of your app should be a piece of cake.
 
-You'll see that in all the sample apps, the models have been written with the assuption that all the methods are being accessed on a single thread (which for a live app would be the UI thread).
+You'll see that in all the sample apps, the models have been written with the assumption that all the methods are being accessed on a single thread (which for a live app would be the UI thread).
 
 Writing your app so that it operates on a single thread by default is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
 
@@ -41,19 +41,19 @@ The *Printer* model might have a boolean that says if it's busy printing or not.
 
 ```
 public class Printer {
-    
+
     private boolean isBusy = false;
     private boolean hasPaper = true;
     private int thingsLeftToPrint;
-    
+
     public boolean isBusy() {
         return isBusy;
     }
-    
+
     public boolean isHasPaper() {
         return hasPaper;
     }
-    
+
     public int getThingsLeftToPrint() {
         return thingsLeftToPrint;
     }
@@ -61,7 +61,7 @@ public class Printer {
 ```
 
 
-The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished: 
+The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished:
 
 ```
 public class Printer {
@@ -70,7 +70,7 @@ public class Printer {
     private boolean hasPaper = true;
     private int numPagesLeftToPrint;
 
-    
+
     public void printThis(Page pageToPrint, CompleteCallBack completeCallBack){
 
         isBusy = true;
@@ -99,7 +99,7 @@ public class Printer {
 }
 ```
 
-The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constuctor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
+The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constructor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
 
 ```
 private final USBStuff usbStuff;
@@ -119,8 +119,8 @@ The quickest way to do that is to extend ObservableImp:
 ```
 public class Printer extends ObservableImp {
 ```
-    
-Next we need to make sure that the observers are notifed each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens:
+
+Next we need to make sure that the observers are notified each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens:
 
 ```
 isBusy = true;
@@ -232,7 +232,7 @@ public class Printer extends ObservableImp {
                 .execute((Void) null);
 
     }
-    
+
     public boolean isBusy() {
         return isBusy;
     }
@@ -252,7 +252,7 @@ Obviously that doesn't work yet, we've ignored numPagesLeftToPrint and the print
 
 There is something important that snuck in to that version though: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent, it's also being used by the AsafTaskBuilder. Usually you will pass WorkMode.ASYNCHRONOUS here.
 
-When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the contructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
+When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the constructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
 
 Take a look at how the [CounterWithLambdas](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
 
@@ -276,7 +276,7 @@ For reference here's a check list of recommendations for the model classes, as u
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do the work in the setters not the getters
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.
 - The models should make good use of [dependency injection](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but ASAF's [AsafTask](/asaf-project/04-more.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/asaf-project/04-more.html#asaftaskbuilder)
-- Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thouroughly test model logic is a key part of reducing unecessary app bugs.
+- Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thoroughly test model logic is a key part of reducing unecessary app bugs.
 - If the models are to be observable, they can do this in one of 2 ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally.
 - Do check out [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener) in the FAQs to double check you're making the right choice for your model.
-- By the way, it's very useful to immediately **crash in your model constructor if any caller tries to send you null obects**. Your constructor is your public interface and could be used by anyone. You can help other developers out by immediately crashing here rather than sometime later when the cause might not be so obvious, in the sample apps, this is done with the Affirm.notNull() call.
+- By the way, it's very useful to immediately **crash in your model constructor if any caller tries to send you null objects**. Your constructor is your public interface and could be used by anyone. You can help other developers out by immediately crashing here rather than sometime later when the cause might not be so obvious, in the sample apps, this is done with the Affirm.notNull() call.

@@ -36,9 +36,9 @@ It really all boils down to a single **syncView()** method, but there are some i
 
 That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want, by the way.
 
-It's usually easier to refresh all the views in a single fragment at the same time. But if you have a custom **BakingCakeView** (which won't change much), and within that you have a custom **ClockView** which is observing a **ClockModel** (which will change every second), you can just refresh the ClockView eveytime the ClockModel changes.
+It's usually easier to refresh all the views in a single fragment at the same time. But if you have a custom **BakingCakeView** (which won't change much), and within that you have a custom **ClockView** which is observing a **ClockModel** (which will change every second), you can just refresh the ClockView every time the ClockModel changes.
 
-Depending on your situation though, you might find that it's more convenient to refresh both the BakingCakeView **and** the ClockView at the same time - even if the BakingCakeView hardly changes compared with the ClockView. If that results in cleaner and more explicit code then you should absoutely go ahead and do that.
+Depending on your situation though, you might find that it's more convenient to refresh both the BakingCakeView **and** the ClockView at the same time - even if the BakingCakeView hardly changes compared with the ClockView. If that results in cleaner and more explicit code then you should absolutely go ahead and do that.
 
 ### Simple Example
 
@@ -177,7 +177,7 @@ private void updateTotalPriceView(){
 
 ```
 
-And don't forget if we need to rotate this view, all the fields will be out of sync with our model. Because we have been smart and seperated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
+And don't forget if we need to rotate this view, all the fields will be out of sync with our model. Because we have been smart and separated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
 
 ```
 private void updatePostRotation(){
@@ -187,7 +187,7 @@ private void updatePostRotation(){
 }
 ```
 
-Well that looks kind of ok, and it would mostly work, the add and remove listeners look pretty similar so we can extract that out to another method - but what if we also want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minumum card transaction value of $1 or whatever.
+Well that looks kind of ok, and it would mostly work, the add and remove listeners look pretty similar so we can extract that out to another method - but what if we also want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minimum card transaction value of $1 or whatever.
 
 It soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
@@ -195,7 +195,7 @@ It soon starts to become untidy and complicated (which is not what you want in a
 ### But that's not the worst problem....
 The worst problem with this code though, is that there is a **bug** in it. Did you spot it?
 
-It's a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that dissable rotation.
+It's a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that disable rotation.
 
 I'm guessing you have gone back and tried to spot the bug by now? in case you haven't, you can recreate it in your brain by selecting the discount checkbox first and then adding or removing an item. It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call updateDiscountView() from the add and remove click listeners, so this value will be incorrect in the view until the discount checkbox is toggled again.
 
@@ -280,9 +280,9 @@ if (basket.isBelowMinimum()){
     totalPrice.setColour(red);
 }
 ```
-	
+
 At the very least you must do this:
-	
+
 ```
 if (basket.isBelowMinimum()){
     checkoutButton.setEnabled(false);
@@ -299,16 +299,16 @@ But you'll find that by focusing on the property first rather than the condition
 checkoutButton.setEnabled(!basket.isBelowMinimum());
 totalPrice.setColour(basket.isBelowMinimum() ? red : black);
 ```
-	
-	
-	
+
+
+
 ## ASAF Observables
 In ASAF, the models are usually Observable, and the Views are mostly doing the Observing.
 
 Most of the models in the sample apps become observable by extending ObservableImp (or you can implement the Observable interface and proxy the methods through to an ObservableImp instance), the [code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
-- When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typicallly causes a call to **syncView()**)
+- When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
 - For this to work, all a model must do is call **notifyObservers()** whenever it's own state changes (see the [Model](https://erdo.github.io/asaf-project/02-models.html#shoom) section)
 - When the model is constructed in **ASYNCHRONOUS** mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
 - To avoid memory leaks, **observers are responsible for removing themselves** from the observable model once they are no longer interested in receiving notifications
@@ -362,8 +362,4 @@ To save yourself writing that databinding boiler plate, you can use the optional
 That's everything you need to do to get bullet proof data binding in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.
 
 
-The remaing code in this [example view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should now make sense to you.
-
-
-
-
+The remaining code in this [example view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) should now make sense to you.

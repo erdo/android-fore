@@ -39,22 +39,18 @@
 - text: Other Tools
   url: /04-more.html
   subitems:
-    - text: Dependency Injection
-      url: "#dependency-injection"
-    - text: Scopes and Rotation
-      url: "#global-vs-local-scope-dependencies-and-rotation"
-    - text: Asynchronous Code
-      url: "#asynchronous-code"
-    - text: AsafTask
-      url: "#asaftask"
-    - text: AsafTaskBuilder and Lambda Expressions
-      url: "#asaftaskbuilder"
-    - text: Adapters
-      url: "#adapters"
-    - text: Retrofit
+    - text: Retrofit and the CallProcesor
       url: "#retrofit-and-the-callprocessor"
-    - text: UI Widgets
-      url: "#ui-widgets-and-helpers"
+    - text: notifyDataSetChangedAuto() Adapters
+      url: "#adapters-notifydatasetchangedauto"
+    - text: AsyncTask but with Lambdas
+      url: "#asynctasks-with-lambdas"
+    - text: Lifecycle Components
+      url: "#lifecycle-components"
+    - text: SyncTrigger
+      url: "#synctrigger"
+    - text: Dependency Injection and Rotation
+      url: "#dependency-injection"
 - text: Code Review Checklist
   url: /05-code-review-checklist.html
 - text: Resources

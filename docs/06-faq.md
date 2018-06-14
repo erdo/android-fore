@@ -30,7 +30,7 @@ This is one case where ASAF is stopping you from making an easy but horrible arc
 
 Try to get comfortable using these observers to just notify observing client code of any (unspecified) changes to the model's state (once the observing client code has been told there are changes, it can use fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](/#observer-listener) discussion first). For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
-If you want a library that lets you send data in these observables, you should look at RxJava and LiveData. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a suprising number of rxJava tutorials have databinding implementations which are broken for device rotation, even the ones that are specifically demonstrating databinding!)
+If you want a library that lets you send data in these observables, you should look at RxJava and LiveData. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a surprising number of RxJava tutorials have databinding implementations which are broken for device rotation, even the ones that are specifically demonstrating databinding!)
 
 
 ## <a name="observer-listener"></a> 2) When should I use an Observer, when should I use a callback listener?
@@ -84,9 +84,9 @@ This seems to be the reaction of about 20% of the developers that come across th
 
 The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
-The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/asaf-project/03-databinding.html#syncview), particularly the example of how doing adhoc updates can go wrong.
+The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/asaf-project/03-databinding.html#syncview), particularly the example of how doing ad-hoc updates can go wrong.
 
-Everything in computing is a trade off, and when considering a trade off you need to undestand two things: **the upsides** (in this case: being "efficient" and only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the syncView() link above).
+Everything in computing is a trade off, and when considering a trade off you need to understand two things: **the upsides** (in this case: being "efficient" and only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the syncView() link above).
 
 Making a tradeoff when you don't fully appreciate one of those sides (up or down) is obviously not a great place to be.
 
@@ -112,4 +112,4 @@ The syncView() also completes pretty quickly as all of your getters should be re
 
 In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not saying such bugs don't exist, but if you ever get any kind of performance issues with this technique, that's the time to measure and see what is happening, but if you follow the guidelines here correctly you will almost certainly  never have any problems at all even on low end devices, and what you get in return is unparalleled robustness).
 
-If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unecessarily (but still not actually redrawing the screen): chilax and be happy with the knowledge that your UI is *definitely* consistent ;)
+If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unecessarily (but still not actually redrawing the screen): chillax and be happy with the knowledge that your UI is *definitely* consistent ;)
