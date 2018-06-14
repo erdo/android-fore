@@ -5,11 +5,11 @@
 
 A few tiny framework classes which help you write android code that is **simple**, **robust** and **performant**. ASAF is most helpful when applied to the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
-ASAF addresses **testability**; **lifecycle management**; **UI consistency**; and **memory leaks** and if you're spending time dealing with those issues in your code base while trying to support rotation, you should give it a try.
+ASAF addresses **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** and if you're spending time dealing with those issues in your code base while trying to support rotation, you should give it a try.
 
 The overriding goal is to be **clear** and **easy to understand**, which makes the apps it supports **robust**, **quick to develop**, and **easy to change**. Hopefully that will become obvious to you as you familiarise yourself with how to use ASAF in your own projects.
 
-The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(and it really is tiny - asaf-core is less than 500 lines of code)*
+The architecture is also highly **scalable**, supporting commercial grade android applications and complex UIs.  *(it really is tiny - asaf-core is less than 500 lines of code)*
 
 A good place to start might be the [**architectural overview**](https://erdo.github.io/asaf-project/07-architecture.html#shoom), or you could check out the [**sample apps**](#sample-apps), or just keep reading.
 
