@@ -2,11 +2,24 @@
 
 # Architecture
 
-If you enjoy architecture diagrams, hopefully you'll love this page. If you don't, let's just say that ASAF is **MVW** and be done with it ;)
+This little library helps you implement an architecture we'll call **MVO (Model View Observer)**.
 
 ![simple basket](img/arch_mvw_asaf.png)
 
-That block diagram above is what ASAF looks like (it's simplified of course, and how we get there is detailed below). Another way to look at it is in *crap diagram* mode. So here's a crap diagram showing the flow of a button click from **step 1** to **3** with a single **observable model** and a **view** that observes it:
+That block diagram above is what MVO looks like (it's simplified of course, further details below).
+
+By [**Model**](https://erdo.github.io/asaf-project/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a ViewModel - it makes no difference from an MVO perspective.
+
+By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models. In the ASAF library implementation: Views implement an Observer interface and the Models implement an Observable interface. (This has nothing specifically to do with rxJava by the way, though you absolutely can implement an MVO architecture using rxJava if you wish).
+
+By [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from android.view.View.
+
+In a nutshell this is what we have with MVO:
+
+> "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
+
+
+Another way to look at it is in *crap diagram* mode. So here's a crap diagram showing the flow of a button click from **step 1** to **3** with a single **observable model** and a **view** that observes it:
 
 <a name="bad-diagram"></a>
 
@@ -18,9 +31,33 @@ That diagram matches what is happening in [**sample app 1**](https://erdo.github
 
 The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), or if you're doing [**threaded work in your model**](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/feature/fruitcollector/FruitCollectorModel.java). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/asaf-project/asaf-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) that similarly has a lot of animations in it.
 
-Oh and did I mention? all that code just works if you rotate the screen - without you needing to do a single thing.
+One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In all the examples above, the code just works if you rotate the screen - without you needing to do a single thing.
 
 > "the code works if you rotate the screen - without you needing to do a single thing"
+
+
+## A word about state and functional programming
+In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way: dependency injection is not a functional pattern either.
+
+Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
+
+*Depending on how far you want to go down the functional rabbit hole with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMM of course, but when I've used it, I've found it pretty heavy for anything more than a fairly trivial UI). MVI's render() is the equivalent of MVO's syncView().*
+
+## State versus Events
+This is quite subtle but the issue presents itself in many different architectures, so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
+
+Let's take the example of a network error.
+
+If you choose to treat the network error as state, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
+
+Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you  still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible is when the error state is actually back to being ERROR_NONE.
+
+Looks like choosing to store our error as state was the right move here.
+
+Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in ASAF you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By not treating our error as state, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
+
+This comes up a lot with displaying menus, popups, errors and running animations. There is a little more here [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
+
 
 ## How we got there
 
@@ -30,7 +67,7 @@ Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specifi
 
 This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
 
-There is one important thing to note about about this diagram however. If we focus on the **Model** [click here for our definition of Model](https://erdo.github.io/asaf-project/02-models.html#shoom), all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can be tested independently, and needs to know nothing about the view layer. It can support any number of different Views which can come and go as they please (when an Android device is rotated for example, the Model is not affected - or even aware of it).
+There is one important thing to note about about this diagram however. If we focus on the Model, all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can be tested independently, and needs to know nothing about the view layer. It can support any number of different Views which can come and go as they please (when an Android device is rotated for example, the Model is not affected - or even aware of it).
 
 I did say that I thought the typical MVC diagram is not particularly useful, I think it's main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
 
@@ -60,7 +97,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter) and the [syncView](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention that we use with ASAF) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
-## Finally ASAF
+## Finally MVO
 
 As we mentioned, here is what ASAF looks like in a real app:
 
@@ -72,16 +109,16 @@ Well how does that work? you can't just remove boxes and call it better! (I hear
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 
-As with all the architectures discussed so far, here the Model knows nothing about the View. In ASAF, when the view is destroyed and recreated, the view re-attaches itself to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose (and it's also very testable and scalable).
+As with all the architectures discussed so far, here the Model knows nothing about the View. In MVO, when the view is destroyed and recreated, the view re-attaches itself to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose (and it's also very testable and scalable).
 
-**There are a few important things in ASAF that allow you an architecture this simple:**
+**There are a few important things in MVO that allow you an architecture this simple:**
 
 * The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables) that lets views attach themselves to any model they are interested in
 * The second is the [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/asaf-project/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/asaf-project/04-more.html#dependency-injection)
 
- If you totally grok those 4 things, that's pretty much all you need to use ASAF successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
+ If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 ### BTW, What's a Controller
 It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]. A controller means different things on different platforms.
