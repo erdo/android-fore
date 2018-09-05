@@ -4,11 +4,11 @@
 
 A tiny *(<500 lines of core code)* library that helps you write android code in the [**MVO**](https://erdo.github.io/asaf-project/07-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
-MVO addresses **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** and if you're spending time dealing with those issues in your code base while trying to support rotation, you should give it a try.
+MVO addresses **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** and if you're spending time dealing with those issues in your code base, in a large team, while trying to support rotation: you should give it a try.
 
 Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: chiefly that the [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) layer (and that includes Activities/Fragments/Custom Views) is quite separate to the application itself where most of the clever stuff happens (logic, db access, networking etc). The view layer is extremely thin, typically more so than with other architectures. Hopefully this guide will help you begin to grok how to implement MVO with the ASAF library and its implications.
 
-MVO is particularly **scalable** with regards to UI complexity due to the sparseness of the resulting view layer code, and reset assured the ASAF library implementation supports a number of commercial grade android applications and is stable and small (small enough for you to literally just copy and paste it into your app should you so wish).
+MVO is particularly **scalable with regards to UI complexity** due to the sparseness of the resulting view layer code, and reset assured the ASAF library implementation supports a number of commercial grade android applications and is stable and small (small enough for you to literally just copy and paste it into your app should you so wish).
 
 
 ## Quick Start

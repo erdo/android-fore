@@ -1,8 +1,12 @@
 
 # Models
-There are lots of definitions of the word **Model**. We will follow this description: [domain model](https://en.wikipedia.org/wiki/Domain_model) or alternatively, the M in [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller).
+There are lots of definitions of the word **Model**. We will follow this description: [domain model](https://en.wikipedia.org/wiki/Domain_model).
 
-In practice, model classes will mostly contain data and/or logic, they will very likely pass off tasks like network or database access to sub layers. The important thing is that none of this should be anywhere near our [View](https://erdo.github.io/asaf-project/01-views.html#shoom) layer classes - and this makes our Models extremely easy to test :)
+In practice, model classes in MVO will mostly contain data and/or logic, they will very likely pass off tasks like network or database access to sub layers, making good use of composition. They typically employ dependency injection techniques to do that, preferably via their constructors. In MVO, the state is located in these models and accessible via quick returning getter methods (usually called by thin views), it's the state of these models that is the main focus for tests.
+
+You'll notice that keeping state in models is not a particularly functional pattern, and you'd be right (also neither is dependency injection for what it's worth). But avoiding a functionally driven UI, actually provides some stunning wins when it comes to [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom). MVO says nothing about the code behind the getter methods of the models of course, it can be as functional as you like.
+
+An important thing about these models is that none of the code should know anything about [View](https://erdo.github.io/asaf-project/01-views.html#shoom) layer classes. The models are concerned with their data, their logic and their state, and that is all. They don't know or care what interrogates their state via their getter methods - and this makes our Models extremely easy to test.
 
 In the sample apps, the models are all found in the **feature** package.
 
