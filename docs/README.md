@@ -2,7 +2,7 @@
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
-A tiny *(<500 lines of core code)* library that helps you write android code in the [**MVO**](https://erdo.github.io/asaf-project/07-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
+A tiny *(<500 lines of core code)* library that helps you write android code in the [**MVO**](https://erdo.github.io/asaf-project/07-architecture.html#overview) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** and if you're spending time dealing with those issues in your code base, in a large team, while trying to support rotation: you should give it a try!
 
@@ -10,7 +10,7 @@ Though the resulting code is often very sparse and clear, there is a considerabl
 
 Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. It's typically very performant, and the ASAF library implementation supports a number of commercial android applications.
 
-ASAF (though now very stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. Even though ASAF is stable, if you don't want to depend on this random github repo & maven central, the ASAF library code is small and manageable enough for you to literally just copy and paste it into your app should you so wish), or you know, just fork it.
+ASAF (though now very stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. Even though ASAF is stable, if you don't want to depend on this random github repo & maven central, the ASAF library code is small and manageable enough for you to literally just copy and paste it into your app should you so wish. Or you know, just fork it. There's also no reason you can't implement MVO yourself of course.
 
 
 ## Quick Start
@@ -29,7 +29,7 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext:
 ```
 
 
-**If you're new to ASAF, Welcome! Might I suggest:**
+**If you're new to ASAF, Welcome! might I suggest:**
 
  1. Cloning this git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
@@ -37,14 +37,14 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext:
   [**MVO Overview**](https://erdo.github.io/asaf-project/07-architecture.html#overview),
   [**Views**](https://erdo.github.io/asaf-project/01-views.html#shoom), [**Models**](https://erdo.github.io/asaf-project/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/asaf-project/03-databinding.html#shoom)
 
-I'm hoping you will actually be shocked at how much android code becomes unnecessary when you take this approach to development.
+In a nutshell, developing with MVO means:
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 
-The ASAF library also includes some testable alternatives for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder)), and formalises an approach to **simple one way data binding** using a [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) method that **never** leaves your view out of sync with your model.
+The ASAF library also includes some testable wrappers for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder) which lets you make use of lambdas)
 
-There are also optional extras that help with using [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) and working with [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
+There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
 
 ## Sample Apps

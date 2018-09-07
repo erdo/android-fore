@@ -37,7 +37,7 @@ One great thing about MVO is that the view layer and the rest of the app are so 
 > "the code works if you rotate the screen - without you needing to do a single thing"
 
 
-## State
+## Handling State
 In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either) as developers we aim to select the best tool for the job.
 
 Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
@@ -60,7 +60,7 @@ Now let's consider another UI style, one where we display a temporary toast mess
 This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
 
 
-## Origins
+## Further reading, the origins of MVO
 
 A little bit of background if you are coming from a different architecture, definitely not required reading though. Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
@@ -98,7 +98,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter) and inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention that exists in MVO) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
-## Finally MVO
+### Finally MVO
 
 As we mentioned, here is what MVO looks like in a real app:
 
@@ -121,7 +121,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
 
-## Comparison with MVI
+### Comparison with MVI
  (Disclosure: the author currently works in a large commercial team implementing MVI in a published app)
 
  The two architectures are very similar in that they both have a single method that updates the UI according to state.

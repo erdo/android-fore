@@ -3,21 +3,19 @@
   subitems:
     - text: Quick Start
       url: /#quick-start
-    - text: Overview
-      url: /#so-what-is-it
     - text: Sample Apps
       url: /#sample-apps
     - text: License
       url: /#license
-- text: Architecture
+- text: MVO
   url: /07-architecture.html
   subitems:
-    - text: MVO Overview
+    - text: Overview
       url: "#overview"
-    - text: State
-      url: "#state"
-    - text: Origins
-      url: "#origins"
+    - text: Handling State
+      url: "#handling-state"
+    - text: Further Reading
+      url: "#further-reading-the-origins-of-mvo"
 - text: Views
   url: /01-views.html
   subitems:
@@ -34,21 +32,19 @@
       url: "#writing-a-basic-model"
     - text: Model Checklist
       url: "#model-checklist"
-- text: Data Binding
+- text: Data Binding with the Observer Pattern
   url: /03-databinding.html
   subitems:
-    - text: Overview
-      url: "#data-binding"
     - text: SyncView()
       url: "#syncview"
     - text: ASAF Observables
       url: "#asaf-observables"
-- text: Other Tools
+- text: ASAF Extras
   url: /04-more.html
   subitems:
     - text: Retrofit and the CallProcesor
       url: "#retrofit-and-the-callprocessor"
-    - text: notifyDataSetChangedAuto() Adapters
+    - text: Adapters and notifyDataSetChangedAuto()
       url: "#adapters-notifydatasetchangedauto"
     - text: AsyncTask but with Lambdas
       url: "#asynctasks-with-lambdas"
@@ -58,9 +54,16 @@
       url: "#synctrigger"
     - text: Dependency Injection and Rotation
       url: "#dependency-injection"
-- text: Code Review Checklist
-  url: /05-code-review-checklist.html
-- text: Resources
-  url: /08-resources.html
-- text: FAQ
-  url: /06-faq.html
+- text: More Help
+  url: /09-more.html
+  subitems:
+    - text: Presentations
+    url: "#presentations"
+    - text: Coding Excercise
+    url: "#coding-exercise"
+    - text: Troubleshooting and Code Reviews
+    url: "#troubleshooting-how-to-smash-code-reviews"
+    - text: Dependency Injection Basics
+    url: "#dependency-injection-basics"
+    - text: FAQ
+    url: "#frequently-occasionally-asked-questions"
