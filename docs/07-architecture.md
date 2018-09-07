@@ -60,7 +60,7 @@ Now let's consider another UI style, one where we display a temporary toast mess
 This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
 
 
-## Origins
+## Origins or MVO
 
 A little bit of background if you are coming from a different architecture, definitely not required reading though. Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 

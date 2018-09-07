@@ -16,8 +16,8 @@
       url: "#overview"
     - text: State
       url: "#state"
-    - text: Origins
-      url: "#origins"
+    - text: Origins of MVO
+      url: "#origins-of-mvo"
 - text: Views
   url: /01-views.html
   subitems:
