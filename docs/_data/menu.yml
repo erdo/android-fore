@@ -11,6 +11,13 @@
       url: /#license
 - text: Architecture
   url: /07-architecture.html
+    subitems:
+      - text: MVO Overview
+        url: /#overview
+      - text: State
+        url: /#state
+      - text: Origins
+        url: /#origins
 - text: Views
   url: /01-views.html
   subitems:

@@ -24,6 +24,8 @@ When you need to pop onto another thread, do it explicitly with something like a
 
 If you're already comfortable writing model code skip down to the [check list](#model-checklist), check out a [few](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
 
+What follows is a basic tutorial on how to write a good model.
+
 ### For more detail, read on
 
 Writing model code gets easier with practice but as a starting point you could do a lot worse than to start by modelling real world concepts. That should also make it easier for other developers to understand what you are aiming for.
