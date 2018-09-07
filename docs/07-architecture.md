@@ -2,6 +2,7 @@
 
 # Architecture
 
+## Overview
 This little library helps you implement an architecture we'll call **MVO (Model View Observer)**.
 
 ![simple basket](img/arch_mvw_asaf.png)
@@ -36,32 +37,32 @@ One great thing about MVO is that the view layer and the rest of the app are so 
 > "the code works if you rotate the screen - without you needing to do a single thing"
 
 
-## A word about state and functional programming
-In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way: dependency injection is not a functional pattern either.
+## State
+In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either) as developers we aim to select the best tool for the job.
 
 Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
 
-*Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course, but when I've used it, I've found it becomes a little heavy for anything more than a fairly trivial UI). MVI's render() is the equivalent of MVO's syncView().*
+*Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course, but when I've used it, I've found it becomes a little heavy for anything more than a fairly trivial UI). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
 
-## State versus Events
+### State versus Events
 This is quite subtle but the issue presents itself in many different architectures, so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
 
 Let's take the example of a network error.
 
-If you choose to treat the network error as state, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
+If you choose to treat the network error as **state**, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
 
-Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you  still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible is when the error state is actually back to being ERROR_NONE.
+Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you  still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible, is when the error state has actually been reset to ERROR_NONE by some logic processing away from the view layer.
 
 Looks like choosing to store our error as state was the right move here.
 
-Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in ASAF you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By not treating our error as state, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
+Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in ASAF you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
 
 This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
 
 
-## How we got there
+## Origins
 
-Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
+A little bit of background if you are coming from a different architecture, definitely not required reading though. Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
 ![simple basket](img/arch_mvc.png)
 
@@ -119,6 +120,25 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/asaf-project/04-more.html#dependency-injection)
 
  If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
+
+## Comparison with MVI
+ (Disclosure: the author currently works in a large commercial team implementing MVI in a published app)
+
+ The two architectures are very similar in that they both have a single method that updates the UI according to state.
+
+ MVO has syncView() which takes no parameters. The method sets the UI according to whatever models it has, eg: loggedInStatus.setText(accountModel.isLoggedIn ? "IN" : "OUT").
+
+ MVI has render() which takes a ViewState parameter containing all the required state for the UI, eg: loggedInStatus.setText(viewState.isLoggedIn ? "IN" : "OUT").
+
+ Most testing takes place just below the UI layer for both architectures, in **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example: test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object for passing back to the UI). The complication here is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable. **MVO** simply tests that when you call accountModel.login() you a) receive a notification if you are observing that model and it changes and b) the accountModel.isLoggedIn() method subsequently returns the expected value. Both architectures mock out dependencies and have strategies for dealing with asynchronous code which makes the tests small.
+
+ There is a thin part of the app that can only be tested with the help of android itself (and is therefore sometimes skipped). For MVI: testing that when you click on the login button it actually sends a LOGIN_INTENTION for processing. For MVO: testing that when you click on the login button, it actually calls accountModel.login(). On the return trip to the UI: For MVI: testing that when render() is called with the appropriate ViewState, the login text does actually read "Logged in". For MVO: testing that when syncView() is called with an appropriately mocked accountModel object, the login text does actually read "Logged in".
+
+ Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.
+
+ It goes without saying that the boiler plate requirements of MVI are not insignificant compared with MVO (this is the cost for writing UI data-binding code in a functional style). The challenges with regard to MVI boilerplate get more significant when the UI complexity increases, for instance when a single view depends on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus).
+
+ TODO: add a diagram
 
 ### BTW, What's a Controller
 It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]. A controller means different things on different platforms.
