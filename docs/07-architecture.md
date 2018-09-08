@@ -109,13 +109,21 @@ As with all the architectures discussed so far, here the Model knows nothing abo
  If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 ### Comparison with MVI
- (Disclosure: the author currently works in a large commercial team implementing MVI in a published app)
+ *(Disclosure: the author currently works in a large commercial team implementing MVI in a published app)*
 
  The two architectures are very similar in that they both have a single method that updates the UI according to state.
 
- MVO has syncView() which takes no parameters. The method sets the UI according to whatever models it has, eg: loggedInStatus.setText(accountModel.isLoggedIn() ? "IN" : "OUT").
+ **MVO has syncView()** which takes no parameters. The method sets the UI according to whatever models it has, eg:
 
- MVI has render() which takes a ViewState parameter containing all the required state for the UI, eg: loggedInStatus.setText(viewState.isLoggedIn ? "IN" : "OUT").
+ ```
+ loggedInStatus.setText(accountModel.isLoggedIn() ? "IN" : "OUT")
+ ```
+
+ **MVI has render()** which takes a ViewState parameter containing all the required state for the UI, eg:
+
+ ```
+ loggedInStatus.setText(viewState.isLoggedIn ? "IN" : "OUT")
+ ```
 
  Most testing takes place just below the UI layer for both architectures, in **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example: test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object for passing back to the UI). The complication here is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable. **MVO** simply tests that when you call accountModel.login() you a) receive a notification if you are observing that model and it changes and b) the accountModel.isLoggedIn() method subsequently returns the expected value. Both architectures mock out dependencies and have strategies for dealing with asynchronous code which makes the tests small.
 
