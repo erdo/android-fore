@@ -2,8 +2,9 @@
 
 # MVO Architecture
 
-## Overview
 This little library helps you implement an architecture we'll call **MVO (Model View Observer)**.
+
+## Overview
 
 ![simple basket](img/arch_mvw_asaf.png)
 
