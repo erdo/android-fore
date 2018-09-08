@@ -129,13 +129,15 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  Most testing takes place just below the UI layer for both architectures.
 
- In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object for passing back to the UI). The complication here is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable.
+ In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected RESULT.
 
  **MVO** simply tests that when you call accountModel.login() you a) receive a notification if you are observing that model and it changes and b) the accountModel.isLoggedIn() method subsequently returns the expected value.
 
  Both architectures mock out dependencies and have strategies for dealing with asynchronous code which makes the tests small.
 
- There is a thin part of the app that can only be tested with the help of android itself (and is therefore sometimes skipped). For MVI: testing that when you click on the login button it actually sends a LOGIN_INTENTION for processing. For MVO: testing that when you click on the login button, it actually calls accountModel.login(). On the return trip to the UI: For MVI: testing that when render() is called with the appropriate ViewState, the login text does actually read "Logged in". For MVO: testing that when syncView() is called with an appropriately mocked accountModel object, the login text does actually read "Logged in".
+ There is a thin part of the app that can only be tested with the help of android itself (and is therefore sometimes skipped). For **MVI**: testing that when you click on the login button it actually sends a LOGIN_INTENTION for processing. For **MVO**: testing that when you click on the login button, it actually calls accountModel.login().
+
+ On the return trip to the UI: For **MVI**: testing that when render() is called with the appropriate ViewState, the login text does actually read "Logged in". For **MVO**: testing that when syncView() is called with an appropriately mocked accountModel object, the login text does actually read "Logged in".
 
  Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.
 
