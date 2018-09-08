@@ -54,16 +54,3 @@
       url: "#synctrigger"
     - text: Dependency Injection and Rotation
       url: "#dependency-injection"
-- text: More Help
-  url: /09-more.html
-  subitems:
-    - text: Presentations
-    url: "#presentations"
-    - text: Coding Excercise
-    url: "#coding-exercise"
-    - text: Troubleshooting and Code Reviews
-    url: "#troubleshooting-how-to-smash-code-reviews"
-    - text: Dependency Injection Basics
-    url: "#dependency-injection-basics"
-    - text: FAQ
-    url: "#frequently-occasionally-asked-questions"
