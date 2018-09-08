@@ -1,50 +1,28 @@
 # Data Binding
 
-## One Way Data Binding
-A basic definition of one way databinding could be: any changes of state that happen in your underlying model, get automatically represented in your view.
+For some reason data binding is not something that is discussed much in Android circles, so just in case, a basic definition of one way databinding could be: any changes of state that happen in your underlying model, get automatically represented in your view.
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 
-So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled (and obvs, for android especially, it still needs to work when you rotate the screen).
+So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled. This concept is decades old, and in UI frameworks is generally implemented with some form of Observer pattern.
 
-ASAF took a deliberate decision to only support **One Way Data Binding** for the reasons outlined below, but for completeness...
-
-## Two Way Data Binding
-In addition to the above, with two way data binding, the binding goes the other way too. So lets say you are editing your online profile in an editable text view, your view edits will automatically be reflected in your underlying profile model.
-
-Automatic two way data binding turns out to be a bit of a pain in the derriere, and once you consider all the exceptions, it's not as useful as you might expect. It's also very easy to do for specific cases (just not in the general case).
-
-Anyway this document will show you how to do rock solid **one way data binding** using ASAF, if it turns out you need some two way data binding you can always do something like this:
-
-```
-saveChangesButton.setOnClickListener(new View.OnClickListener() {  
-    @Override
-    public void onClick(View v) {
-        myProfile.setText(profileEditText.getText().toString());
-    }
-});
-```
+Lately it's been applied to other (non UI) areas of code very successfully under the name of *reactive* programming. Back at the UI layer, you could say that the view is *reacting* to changes in the model.
 
 
 ## SyncView()
 
-There are a load of different ways of implementing one way data binding. In line with the name of this framework, we are going to use the most simple (but extremely reliable) implementation you can have.
+MVO uses one the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method, but there are some important details to discuss. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
 
-It really all boils down to a single **syncView()** method, but there are some important implementation details to discuss. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed. That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself to make it seem more profound...
+That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself to make it seem more profound...
 
 > "If a model being observed changes **in any way**, then the **entire** view is refreshed."
 
-That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want, by the way.
+That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want by the way - as long as both (sub)views have their own syncView() method and they are observing their respective models.
 
-It's usually easier to refresh all the views in a single fragment at the same time. But if you have a custom **BakingCakeView** (which won't change much), and within that you have a custom **ClockView** which is observing a **ClockModel** (which will change every second), you can just refresh the ClockView every time the ClockModel changes.
-
-Depending on your situation though, you might find that it's more convenient to refresh both the BakingCakeView **and** the ClockView at the same time - even if the BakingCakeView hardly changes compared with the ClockView. If that results in cleaner and more explicit code then you should absolutely go ahead and do that.
 
 ### Simple Example
 
-Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with.
-
-*The following code is written without taking advantage of lambdas (so that they are clearer for those who haven't got up to speed with lambdas yet), but their use makes no difference to the example.*
+Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with. It should serve as a warning for those considering ["optimising"](https://erdo.github.io/asaf-project/09-more.html#syncview) the syncView method.
 
 Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our simplistic view to this basket model.
 

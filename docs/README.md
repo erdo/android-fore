@@ -10,7 +10,7 @@ Though the resulting code is often very sparse and clear, there is a considerabl
 
 Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. It's typically very performant, and the ASAF library implementation supports a number of commercial android applications.
 
-ASAF (though now very stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. Even though ASAF is stable, if you don't want to depend on this random github repo & maven central, the ASAF library code is small and manageable enough for you to literally just copy and paste it into your app should you so wish. Or you know, just fork it. There's also no reason you can't implement MVO yourself of course.
+ASAF (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. Even though ASAF is stable, if you don't want to depend on this random github repo & maven central, the ASAF library code is small and manageable enough for you to literally just copy and paste it into your app should you so wish. Or you know, just fork it. There's also no reason you can't implement MVO yourself of course.
 
 
 ## Quick Start
