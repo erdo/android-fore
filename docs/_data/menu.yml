@@ -14,7 +14,7 @@
       url: "#overview"
     - text: Handling State
       url: "#handling-state"
-    - text: Further Reading
+    - text: Comparison with MV*
       url: "#further-reading-the-origins-of-mvo"
 - text: Views
   url: /01-views.html
