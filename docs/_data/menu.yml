@@ -21,13 +21,9 @@
   subitems:
     - text: Custom Android Views
       url: "#custom-android-views"
-    - text: Examples
-      url: "#examples"
 - text: Models
   url: /02-models.html
   subitems:
-    - text: Writing a Basic Model
-      url: "#writing-a-basic-model"
     - text: Model Checklist
       url: "#model-checklist"
 - text: Data Binding
@@ -50,17 +46,17 @@
       url: "#lifecycle-components"
     - text: SyncTrigger
       url: "#synctrigger"
-    - text: Dependency Injection and Rotation
-      url: "#dependency-injection"
 - text: More Help
   url: /09-more.html
   subitems:
-    - text: Presentations
+    - text: Presentation Slides
       url: "#presentations"
     - text: Coding Excercise
       url: "#coding-exercise"
     - text: State versus Events
       url: "#state-versus-events"
+    - text: Basic Model Tutorial
+      url: "#basic-model-tutorial"
     - text: Android's Original Mistake
       url: "#androids-original-mistake"
     - text: Troubleshooting and Code Reviews
