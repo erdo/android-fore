@@ -113,7 +113,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  The two architectures are very similar in that they both have a single method that updates the UI according to state.
 
- MVO has syncView() which takes no parameters. The method sets the UI according to whatever models it has, eg: loggedInStatus.setText(accountModel.isLoggedIn ? "IN" : "OUT").
+ MVO has syncView() which takes no parameters. The method sets the UI according to whatever models it has, eg: loggedInStatus.setText(accountModel.isLoggedIn() ? "IN" : "OUT").
 
  MVI has render() which takes a ViewState parameter containing all the required state for the UI, eg: loggedInStatus.setText(viewState.isLoggedIn ? "IN" : "OUT").
 
