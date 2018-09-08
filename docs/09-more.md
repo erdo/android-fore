@@ -43,6 +43,285 @@ As the mistakes made are all so similar, I plan to add an equivalent exercise he
 Stay tuned....
 
 
+# State versus Events
+This is quite subtle but the issue presents itself in many different architectures, so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
+
+Let's take the example of a network error.
+
+If you choose to treat the network error as **state**, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
+
+Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you  still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible, is when the error state has actually been reset to ERROR_NONE by some logic processing away from the view layer.
+
+Looks like choosing to store our error as state was the right move here.
+
+Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in ASAF you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
+
+This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
+
+
+# Basic model tutorial
+
+Writing model code gets easier with practice but as a starting point you could do a lot worse than to start by modelling real world concepts. That should also make it easier for other developers to understand what you are aiming for.
+
+For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model.
+
+(In ASAF, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) for more info)
+
+In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy to do - also c) at some point the designers will probably want to be able to print various things, from various parts of the app and there is no point in limiting ourselves here.
+
+There will also only be one instance of the *Printer* model, because: there is only one real printer.
+
+```
+public class Printer {
+}
+```
+
+The *Printer* model might have a boolean that says if it's busy printing or not. It might have a boolean that says that is has run out of paper. It might have a number that tells you how many items it has in the queue at the moment. All of this state should be available via getters for any View or other Observer code to access.
+
+```
+public class Printer {
+
+    private boolean isBusy = false;
+    private boolean hasPaper = true;
+    private int thingsLeftToPrint;
+
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    public boolean isHasPaper() {
+        return hasPaper;
+    }
+
+    public int getThingsLeftToPrint() {
+        return thingsLeftToPrint;
+    }
+}
+```
+
+
+The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished:
+
+```
+public class Printer {
+
+    private boolean isBusy = false;
+    private boolean hasPaper = true;
+    private int numPagesLeftToPrint;
+
+
+    public void printThis(Page pageToPrint, CompleteCallBack completeCallBack){
+
+        isBusy = true;
+        numPagesLeftToPrint++;
+
+        //...do the printing asynchronously, then once back on the UI thread:
+
+        isBusy = false;
+        numPagesLeftToPrint--;
+
+        completionCallBack.complete();
+    }
+
+
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    public boolean isHasPaper() {
+        return hasPaper;
+    }
+
+    public int getNumPagesLeftToPrint() {
+        return numPagesLeftToPrint;
+    }
+}
+```
+
+The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constructor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
+
+```
+private final USBStuff usbStuff;
+private final Formatter formatter;
+
+public Printer(USBStuff usbStuff, Formatter formatter) {
+    this.usbStuff = Affirm.notNull(usbStuff);
+    this.formatter = Affirm.notNull(formatter);
+}
+```
+
+
+We're nearly there. If we want to involve this *Printer* model in the view layer we will probably want it to be Observable so that any observing view will be notified whenever it changes (and therefore the view needs to be refreshed).
+
+The quickest way to do that is to extend ObservableImp:
+
+```
+public class Printer extends ObservableImp {
+```
+
+Next we need to make sure that the observers are notified each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens:
+
+```
+isBusy = true;
+numPagesLeftToPrint++;
+notifyObservers();  //ASAF Observable will take care of the rest
+```
+
+The asynchronous printing that we've glossed over so far could be implemented with an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) like so:
+
+```
+new AsafTaskBuilder<Void, Void>(workMode)
+        .doInBackground(new DoInBackgroundCallback<Void, Void>() {
+            @Override
+            public Void doThisAndReturn(Void... input) {
+
+                //...do the printing
+
+                return null;
+            }
+        })
+        .onPostExecute(new DoThisWithPayloadCallback<Void>() {
+            @Override
+            public void doThis(Void result) {
+
+                //back on the UI thread
+
+                isBusy = false;
+                numPagesLeftToPrint--;
+                notifyObservers();
+
+                completeCallBack.complete();
+            }
+        })
+        .execute((Void) null);
+```
+
+Taking advantage of lambda expressions this becomes:
+
+```
+new AsafTaskBuilder<Void, Void>(workMode)
+        .doInBackground(input -> {
+
+            //...do the printing
+
+            return null;
+        })
+        .onPostExecute(result -> {
+
+            //back on the UI thread
+
+            isBusy = false;
+            numPagesLeftToPrint--;
+            notifyObservers();
+
+            completeCallBack.complete();
+        })
+        .execute((Void) null);
+```
+
+Here's what we might end up with for a rough *Printer* model:
+
+```
+public class Printer extends ObservableImp {
+
+    private final USBStuff usbStuff;
+    private final Formatter formatter;
+    private final WorkMode workMode;
+
+    private boolean isBusy = false;
+    private boolean hasPaper = true;
+    private int numPagesLeftToPrint;
+
+
+    public Printer(USBStuff usbStuff, Formatter formatter, WorkMode workMode) {
+        super(workMode);
+        this.usbStuff = Affirm.notNull(usbStuff);
+        this.formatter = Affirm.notNull(formatter);
+        this.workMode = Affirm.notNull(workMode);
+    }
+
+    public void printThis(Page pageToPrint, final CompleteCallBack completeCallBack) {
+
+        if (isBusy){
+            completeCallBack.fail();
+            return;
+        }
+
+        isBusy = true;
+        numPagesLeftToPrint++;
+        notifyObservers();
+
+        new AsafTaskBuilder<Void, Void>(workMode)
+                .doInBackground(input -> {
+
+                    //...do the printing
+
+                    return null;
+                })
+                .onPostExecute(result -> {
+
+                    //back on the UI thread
+
+                    isBusy = false;
+                    numPagesLeftToPrint--;
+                    notifyObservers();
+
+                    completeCallBack.complete();
+                })
+                .execute((Void) null);
+
+    }
+
+    public boolean isBusy() {
+        return isBusy;
+    }
+
+    public boolean isHasPaper() {
+        return hasPaper;
+    }
+
+    public int getNumPagesLeftToPrint() {
+        return numPagesLeftToPrint;
+    }
+
+}
+```
+
+Obviously that doesn't work yet, we've ignored numPagesLeftToPrint and the printing details, but you get the idea.
+
+There is something important that snuck in to that version though: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent, it's also being used by the AsafTaskBuilder. Usually you will pass WorkMode.ASYNCHRONOUS here.
+
+When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the constructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
+
+Take a look at how the [CounterWithLambdas](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
+
+
+Take a look at the [Model Check List](/asaf-project/02-models.html#model-checklist) to make sure you have everything down, and then head over to the [Data Binding](/asaf-project/03-databinding.html#shoom) section where we tie it all together with the view layer.
+
+
+# Android's Original Mistake
+
+Sometimes, us Android developers (especially if we have only developed using Android during our career) can have a hard time understanding **in practice** how to separate view code from everything else (despite universally declaring it to be a good thing).
+
+Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
+
+Instead of separating things *horizontally* in layers with views in one layer and data in another layer, the Android designers separated things *vertically*. Each self contained Activity (incorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
+
+Android seems to have been envisioned a little like this:
+
+![vertical separation](img/vertical-separation.png)
+
+A more standard way of looking at UI frameworks would have been to do something like this:
+
+![horizontal separation](img/horizontal-separation.png)
+
+I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is).  Hacks like onSaveInstanceState() etc, are the result of fundamentally missing the basic requirement of (all?) UI platforms: the need to separate the view layer from everything else.
+
+Despite the obvious problems of writing networking code or asynchronous code inside an ephemeral view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
+
+Fortunately it's almost all completely unecessary. The [sample apps](https://erdo.github.io/asaf-project/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
+
+
 # Troubleshooting / How to Smash Code Reviews
 Android apps that are written using ASAF have a certain *look* to them code-wise, the code in these docs and the sample apps looks very similar. This really helps when performing code reviews because structural errors tend to jump out at you a little more. The first part of this [**post**](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/) explains the concept better than I could, and I'd recommend you give it a quick read.
 

@@ -44,21 +44,7 @@ Whatever drives the state of your models and the rest of your app can be as func
 
 *Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course, but when I've used it, I've found it becomes a little heavy for anything more than a fairly trivial UI). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
 
-### State versus Events
-This is quite subtle but the issue presents itself in many different architectures, so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
-
-Let's take the example of a network error.
-
-If you choose to treat the network error as **state**, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
-
-Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you  still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible, is when the error state has actually been reset to ERROR_NONE by some logic processing away from the view layer.
-
-Looks like choosing to store our error as state was the right move here.
-
-Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in ASAF you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
-
-This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
-
+There is further discussion of state versus events [**here**](https://erdo.github.io/asaf-project/09-more.html#state-versus-events)
 
 ## Further reading, the origins of MVO
 

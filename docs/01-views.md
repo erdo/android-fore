@@ -46,26 +46,3 @@ As much view related functionality gets put in these classes as possible, so unl
 This is part of the ASAF philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View. This also frees up the Fragment and Activity classes to do as little as possible except manage their lifecycles (which are considerably more complex than those of custom views).
 
 The [data binding](/asaf-project/03-databinding.html#shoom) section has more details about how views and models communicate in ASAF.
-
-
-## Ancient Android History
-
-Sometimes, us Android developers (especially if we have only developed using Android during our career) can have a hard time understanding **in practice** how to separate view code from everything else (despite universally declaring it to be a good thing).
-
-Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
-
-Instead of separating things *horizontally* in layers with views in one layer and data in another layer, the Android designers separated things *vertically*. Each self contained Activity (incorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
-
-Android seems to have been envisioned a little like this:
-
-![vertical separation](img/vertical-separation.png)
-
-A more standard way of looking at UI frameworks would have been to do something like this:
-
-![horizontal separation](img/horizontal-separation.png)
-
-I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is).  Hacks like onSaveInstanceState() etc, are the result of fundamentally missing the basic requirement of (all?) UI platforms: the need to separate the view layer from everything else.
-
-Despite the obvious problems of writing networking code or asynchronous code inside an ephemeral view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the forrest for all the trees.
-
-Fortunately it's almost all completely unecessary. The [sample apps](https://erdo.github.io/asaf-project/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.

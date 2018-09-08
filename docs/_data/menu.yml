@@ -23,8 +23,6 @@
       url: "#custom-android-views"
     - text: Examples
       url: "#examples"
-    - text: Ancient Android History
-      url: "#ancient-android-history"
 - text: Models
   url: /02-models.html
   subitems:
@@ -32,7 +30,7 @@
       url: "#writing-a-basic-model"
     - text: Model Checklist
       url: "#model-checklist"
-- text: Data Binding with the Observer Pattern
+- text: Data Binding
   url: /03-databinding.html
   subitems:
     - text: SyncView()
@@ -61,8 +59,12 @@
       url: "#presentations"
     - text: Coding Excercise
       url: "#coding-exercise"
+    - text: State versus Events
+      url: "#state-versus-events"
+    - text: Android's Original Mistake
+      url: "#androids-original-mistake"
     - text: Troubleshooting and Code Reviews
-      url: "#troubleshooting-how-to-smash-code-reviews"
+      url: "#troubleshooting--how-to-smash-code-reviews"
     - text: Dependency Injection Basics
       url: "#dependency-injection-basics"
     - text: FAQ
