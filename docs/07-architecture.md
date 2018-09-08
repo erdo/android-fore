@@ -47,7 +47,7 @@ Whatever drives the state of your models and the rest of your app can be as func
 
 There is further discussion of state versus events [**here**](https://erdo.github.io/asaf-project/09-more.html#state-versus-events)
 
-## Further reading, the origins of MVO
+## Comparisons with MV*
 
 A little bit of background if you are coming from a different architecture, definitely not required reading though. Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
