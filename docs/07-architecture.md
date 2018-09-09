@@ -129,7 +129,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  Most testing takes place just below the UI layer for both architectures.
 
- ![testing with MVI and MO](img/test_mvi_mvo.png)
+ ![testing with MVI and MO](img/test_mvo_mvi.png)
 
  In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object (including a field like ViewState.isLoggedIn = true), for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected RESULT.
 
