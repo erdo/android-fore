@@ -15,7 +15,7 @@
     - text: Handling State
       url: "#handling-state"
     - text: Comparison with MV*
-      url: "#further-reading-the-origins-of-mvo"
+      url: "#comparisons-with-mv"
 - text: Views
   url: /01-views.html
   subitems:

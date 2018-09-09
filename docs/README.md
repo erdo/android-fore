@@ -6,11 +6,11 @@ A tiny *(<500 lines of core code)* library that helps you write android code in 
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** and if you're spending time dealing with those issues in your code base, in a large team, while trying to support rotation: you should give it a try!
 
-Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: chiefly that the [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) layer (and that includes Activities/Fragments/Custom Views) is quite separate to the application itself where most of the clever stuff happens (logic, db access, networking etc). The view layer is extremely thin, typically more so than with other architectures.
+Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: the [**View layer**](https://erdo.github.io/asaf-project/01-views.html#shoom) is extremely thin, typically more so than with other architectures.
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. It's typically very performant, and the ASAF library implementation supports a number of commercial android applications.
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. Because of the [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) strategy used, it's typically very performant, and the ASAF library implementation supports a number of commercial android applications.
 
-ASAF (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. Even though ASAF is stable, if you don't want to depend on this random github repo & maven central, the ASAF library code is small and manageable enough for you to literally just copy and paste it into your app should you so wish. Or you know, just fork it. There's also no reason you can't implement MVO yourself of course.
+ASAF (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & maven central, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
 
 
 ## Quick Start
@@ -42,7 +42,7 @@ In a nutshell, developing with MVO means:
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 
-The ASAF library also includes some testable wrappers for AsyncTask ([**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder) which lets you make use of lambdas)
+The ASAF library also includes some testable wrappers for AsyncTask: [**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder) (which lets you make use of lambdas)
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
@@ -53,7 +53,7 @@ There are also optional extras that simplify [**adapter animations**](https://er
 
 The apps here are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts or implement ripple effects - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
 
-These apps are however, totally robust and comprehensively tested. And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
+These apps are however, totally robust and comprehensively tested (and properly support rotation). And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
 For these sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
 

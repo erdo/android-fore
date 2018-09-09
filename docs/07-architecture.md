@@ -6,15 +6,15 @@ This little library helps you implement an architecture we'll call **MVO (Model 
 
 ## Overview
 
-![simple basket](img/arch_mvw_asaf.png)
+![simple basket](img/arch_mvo.png)
 
 That block diagram above is what MVO looks like (it's simplified of course, further details below).
 
 By [**Model**](https://erdo.github.io/asaf-project/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a ViewModel - it makes no difference from an MVO perspective.
 
-By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models. In the ASAF library implementation: Views implement an Observer interface and the Models implement an Observable interface. (This has nothing specifically to do with rxJava by the way, though you absolutely can implement an MVO architecture using rxJava if you wish).
+By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing specifically to do with rxJava by the way, though you absolutely can implement an MVO architecture using rxJava if you wish).
 
-By [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from android.view.View.
+By [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
 
 In a nutshell this is what we have with MVO:
 
@@ -89,7 +89,7 @@ You can implement this using something like LiveData on Android, but when you ge
 
 As we mentioned, here is what MVO looks like in a real app:
 
-![simple basket](img/arch_mvw_asaf.png)
+![simple basket](img/arch_mvo.png)
 
 Well how does that work? you can't just remove boxes and call it better! (I hear you say).
 
@@ -129,17 +129,19 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  Most testing takes place just below the UI layer for both architectures.
 
+ ![testing with MVI and MO](img/test_mvi_mvo.png)
+
  In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object (including a field like ViewState.isLoggedIn = true), for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected RESULT.
 
  **MVO** simply tests that when you call accountModel.login() you a) receive a notification if you are observing that model and it changes and b) the accountModel.isLoggedIn() method subsequently returns the expected value.
 
- Both architectures mock out dependencies and have strategies for dealing with asynchronous code which makes the tests small.
+ *Both architectures mock out dependencies and have strategies for dealing with asynchronous code which makes the tests small.*
 
  There is a thin part of the app that can only be tested with the help of android itself (and is therefore sometimes skipped). For **MVI**: testing that when you click on the login button it actually sends a LOGIN_INTENTION for processing. For **MVO**: testing that when you click on the login button, it actually calls accountModel.login().
 
  On the return trip to the UI: For **MVI**: testing that when render() is called with the appropriate ViewState, the login text does actually read "Logged in". For **MVO**: testing that when syncView() is called with an appropriately mocked accountModel object, the login text does actually read "Logged in".
 
- Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.
+ *Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.*
 
  It goes without saying that the boiler plate requirements of MVI are not insignificant compared with MVO (this is the cost for writing UI data-binding code in a functional style). The challenges with regard to MVI boilerplate get more significant when the UI complexity increases, for instance when a single view depends on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus).
 
