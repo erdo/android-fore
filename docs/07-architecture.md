@@ -127,7 +127,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
    viewState.isLoggedIn ? "IN" : "OUT")
  ```
 
- Most testing takes place just below the UI layer for both architectures.
+ Most testing takes place just below the UI layer for both architectures:
 
  ![testing with MVI and MO](img/test_mvo_mvi.png)
 
@@ -145,7 +145,6 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  It goes without saying that the boiler plate requirements of MVI are not insignificant compared with MVO (this is the cost for writing UI data-binding code in a functional style). The challenges with regard to MVI boilerplate get more significant when the UI complexity increases, for instance when a single view depends on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus).
 
- TODO: add a diagram
 
 ### BTW, What's a Controller
 It helps to remember that MVC is at least 3 decades old, I think it was Microsoft who invented it [I saw a Microsoft white paper written about it once, but I can't find it anywhere now]. A controller means different things on different platforms.
