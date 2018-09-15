@@ -1,7 +1,7 @@
 
 # Retrofit and the CallProcessor
 
-The [CallProcessor](https://github.com/erdo/asaf-project/blob/master/asaf-retrofit/src/main/java/co/early/asaf/retrofit/CallProcessor.java) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](/asaf-project/#asaf-4-retrofit-example). The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
+The [CallProcessor](https://github.com/erdo/android-fore/blob/master/asaf-retrofit/src/main/java/co/early/asaf/retrofit/CallProcessor.java) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](/android-fore/#asaf-4-retrofit-example). The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
 When taking advantage of lambda expressions, the code can become very tight indeed:
 
@@ -14,7 +14,7 @@ When taking advantage of lambda expressions, the code can become very tight inde
 
 ## Custom APIs
 
-All APIs will be slightly different regarding what global headers they require, what HTTP response code they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/asaf-project/tree/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/api) of this customisation.
+All APIs will be slightly different regarding what global headers they require, what HTTP response code they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/api) of this customisation.
 
 The sample apps all use JSON over HTTP, but there is no reason you can't use something like protobuf, for example.
 
@@ -23,8 +23,8 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 
 Another advantage of using the CallProcessor is that it can be mocked out during tests. The asaf-retrofit sample app takes two alternative approaches to testing:
 
-- [one](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/test/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcherUnitTest.java) is to simply mock the callProcessor so that it returns successes or failures to the model
-- [the other](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/test/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcherIntegrationTest.java) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
+- [one](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcherUnitTest.java) is to simply mock the callProcessor so that it returns successes or failures to the model
+- [the other](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcherIntegrationTest.java) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
 As with testing any asynchronous code with **fore**, we use WorkMode.SYNCHRONOUS to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
@@ -32,7 +32,7 @@ As with testing any asynchronous code with **fore**, we use WorkMode.SYNCHRONOUS
 
 # Adapters notifyDataSetChangedAuto()
 
-*For a clean implementation in a small sample app, please see the [Adapter Example App Source Code](/asaf-project/#asaf-3-adapter-example)*
+*For a clean implementation in a small sample app, please see the [Adapter Example App Source Code](/android-fore/#asaf-3-adapter-example)*
 
 Ahh adapters, I miss the good old days when all you had to do was call notifyDataSetChanged(). And the best place to call it is from inside the syncView() method:
 
@@ -48,14 +48,14 @@ public void syncView() {
 
 In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes).
 
-You could also add your adapter as an observer on the model directly, but doing it like that usually causes problems because you will also need to find a way to remove it correctly (see these items in the code review check list [here](https://erdo.github.io/asaf-project/05-code-review-checklist.html#non-lifecycle-observers) and [here](https://erdo.github.io/asaf-project/05-code-review-checklist.html#add-remove)).
+You could also add your adapter as an observer on the model directly, but doing it like that usually causes problems because you will also need to find a way to remove it correctly (see these items in the code review check list [here](https://erdo.github.io/android-fore/05-code-review-checklist.html#non-lifecycle-observers) and [here](https://erdo.github.io/android-fore/05-code-review-checklist.html#add-remove)).
 
 If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API)
 
 
 ## RecyclerView Animations
 
-So onwards and upwards! if you want list animations on android, they make you work quite hard for it. In order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc. This is one case in particular that it was so tempting to just add a parameter to the **fore** observable. [It still wasn't worth it though](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter).
+So onwards and upwards! if you want list animations on android, they make you work quite hard for it. In order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc. This is one case in particular that it was so tempting to just add a parameter to the **fore** observable. [It still wasn't worth it though](https://erdo.github.io/android-fore/05-more.html#somethingchanged-parameter).
 
 Happily by using the ChangeAware\* classes found in the asaf-adapters library you can get **fore** to do most of the work for you.
 
@@ -75,7 +75,7 @@ public void syncView() {
 ```
 
 
-See [here](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code. This radically simplifies any [view code](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method.
+See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code. This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method.
 
 ## Database driven RecyclerView Animations
 
@@ -83,11 +83,11 @@ For lists that are being driven by a database table, the only way we can get ani
 
 **fore** wraps some of these Android classes and handles threading for you, so all you need to do is extend ChangeAwareAdapter but this time with a construction parameter that implements the Diffable interface, rather than the Updatable interface.
 
-The [**fore** 6 db example**](https://erdo.github.io/asaf-project/#asaf-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
+The [**fore** 6 db example**](https://erdo.github.io/android-fore/#asaf-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
 
 ## Ensuring Robustness
 
-More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) where it talks about the notificationMode. The subtle gotcha with android adapters is that when you update list data that is driving an adapter, **the actual change to the list MUST to be done on the UI thread** and the **notify* must be called straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
+More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java) where it talks about the notificationMode. The subtle gotcha with android adapters is that when you update list data that is driving an adapter, **the actual change to the list MUST to be done on the UI thread** and the **notify* must be called straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
 
 > "the change to the list data MUST to be done on the UI thread AND notify*() MUST be called before the current thread yields"
 
@@ -113,12 +113,12 @@ AsyncTask suffers from a few problems - the main one being that it can't be test
 
 The quickest **fore** solution to all that is to use AsafTask as an (almost) drop in solution.
 
-[Asynchronous Example App Source Code](/asaf-project/#asaf-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
+[Asynchronous Example App Source Code](/android-fore/#asaf-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
 ## AsafTask
 AsafTask (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask* with two exceptions detailed below.
 
-*AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTask.java) for AsafTask, don't worry it's tiny.
+*AsafTask uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTask.java) for AsafTask, don't worry it's tiny.
 
 Here's how you use AsafTask:
 
@@ -170,7 +170,7 @@ The other difference with AsafTask is that to run it, you need to call executeTa
 
 ## AsafTaskBuilder
 
-For slightly more concise code, you can use AsafTaskBuilder. This class works in much the same way as AsafTask, it just uses the build pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/asaf-project/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTaskBuilder.java)
+For slightly more concise code, you can use AsafTaskBuilder. This class works in much the same way as AsafTask, it just uses the build pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/asaf-core/src/main/java/co/early/asaf/core/threading/AsafTaskBuilder.java)
 
 One restriction with AsafTaskBuilder is there is no way to publish progress, so if you want to use that feature during your asynchronous operation, just stick to a plain AsafTask.
 
@@ -206,7 +206,7 @@ new AsafTaskBuilder<Void, Integer>(workMode)
 ## Testing Asynchronous Code
 For both AsafTask and AsafTaskBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
-A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/asaf-project/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java)
+A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java)
 
 
 
@@ -214,29 +214,29 @@ A convenient way to make this happen is to inject the WorkMode into the enclosin
 
 # Lifecycle Components
 
-Totally optional, but you can use them to remove the databinding boiler plate from your views completely. For example usage please refer to the [UI Helpers Example App Source Code](/asaf-project/#asaf-5-ui-helpers-example-tic-tac-toe).
+Totally optional, but you can use them to remove the databinding boiler plate from your views completely. For example usage please refer to the [UI Helpers Example App Source Code](/android-fore/#asaf-5-ui-helpers-example-tic-tac-toe).
 
 ## SyncableXXX Convenience Classes
 
 **fore** includes various SyncableXXX classes which will do the work of adding and removing observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activity / Fragment classes.
 
-- [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java)
-- [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java)
-- [SyncableSupportFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment.java)
-- [SyncableFragment](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment.java)
+- [SyncableAppCompatActivity](https://github.com/erdo/android-fore/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java)
+- [SyncableActivity](https://github.com/erdo/android-fore/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java)
+- [SyncableSupportFragment](https://github.com/erdo/android-fore/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableSupportFragment.java)
+- [SyncableFragment](https://github.com/erdo/android-fore/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/fragment/SyncableFragment.java)
 
 
 
 
 # SyncTrigger
 
-The [SyncTrigger](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) class lets you bridge the gap between syncView() (which is called at any time [an arbitrary number of times](https://erdo.github.io/asaf-project/05-code-review-checklist.html#notification-counting)) and an event like an animation that must be fired only once.
+The [SyncTrigger](https://github.com/erdo/android-fore/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) class lets you bridge the gap between syncView() (which is called at any time [an arbitrary number of times](https://erdo.github.io/android-fore/05-more.html#notification-counting)) and an event like an animation that must be fired only once.
 
 When using a SyncTrigger you need to implement the **triggered()** method which will be run when the SyncTrigger is fired (e.g. to run an animation), and also implement the **checkThreshold()** method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON). If the threshold is breached i.e. checkThreshold() returns **true**, then triggered() will be called.
 
-For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the [SyncTrigger source](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) for more details about this).
+For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the [SyncTrigger source](https://github.com/erdo/android-fore/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/SyncTrigger.java) for more details about this).
 
 
 By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
 
-Please see [here](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for example usage of the SyncTrigger.
+Please see [here](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for example usage of the SyncTrigger.

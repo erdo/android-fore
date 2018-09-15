@@ -10,11 +10,11 @@ This little library helps you implement an architecture we'll call **MVO (Model 
 
 That block diagram above is what MVO looks like (it's simplified of course, further details below).
 
-By [**Model**](https://erdo.github.io/asaf-project/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a ViewModel - it makes no difference from an MVO perspective.
+By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a ViewModel - it makes no difference from an MVO perspective.
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing specifically to do with rxJava by the way, though you absolutely can implement an MVO architecture using rxJava if you wish).
 
-By [**View**](https://erdo.github.io/asaf-project/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
+By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
 
 In a nutshell this is what we have with MVO:
 
@@ -27,11 +27,11 @@ Another way to look at it is in *crap diagram* mode. So here's a crap diagram sh
 
 ![data binding](img/data-binding.png)
 
-Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/asaf-project/03-databinding.html#syncview), it's a fundamental part of why **fore** code looks so sparse.
+Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/android-fore/03-databinding.html#syncview), it's a fundamental part of why **fore** code looks so sparse.
 
-That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) that does the observing.
+That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#asaf-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) that does the observing.
 
-The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), or if you're doing [**threaded work in your model**](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/feature/fruitcollector/FruitCollectorModel.java). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/asaf-project/asaf-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/asaf-project/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) which is probably one of the most complicated view layers you will encounter with MVO due to all the animation code written in it.
+The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), or if you're doing [**threaded work in your model**](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/feature/fruitcollector/FruitCollectorModel.java). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/android-fore/asaf-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/asafui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) which is probably one of the most complicated view layers you will encounter with MVO due to all the animation code written in it.
 
 One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In all the examples above, the code just works if you rotate the screen - without you needing to do a single thing.
 
@@ -45,7 +45,7 @@ Whatever drives the state of your models and the rest of your app can be as func
 
 *Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course, but when I've used it, I've found it becomes a little heavy for anything more than a fairly trivial UI). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
 
-There is further discussion of state versus events [**here**](https://erdo.github.io/asaf-project/09-more.html#state-versus-events)
+There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/09-more.html#state-versus-events)
 
 ## Comparisons with MV*
 
@@ -83,7 +83,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter) and inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention that exists in MVO) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
+You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/android-fore/06-faq.html#somethingchanged-parameter) and inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention that exists in MVO) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 ### Finally MVO
 
@@ -101,12 +101,12 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
-* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/asaf-project/03-databinding.html#asaf-observables) that lets views attach themselves to any model they are interested in
-* The second is the [**syncView()**](https://erdo.github.io/asaf-project/03-databinding.html#syncview) convention
-* The third is writing [**models**](https://erdo.github.io/asaf-project/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
-* The fourth is making appropriate use of [**DI**](https://erdo.github.io/asaf-project/04-more.html#dependency-injection)
+* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-databinding.html#asaf-observables) that lets views attach themselves to any model they are interested in
+* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention
+* The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
+* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/04-more.html#dependency-injection)
 
- If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/asaf-project/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
+ If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 ### Comparison with MVI
  *(Disclosure: the author currently works in a large commercial team implementing MVI in a published app)*

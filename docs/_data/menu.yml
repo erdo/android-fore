@@ -31,9 +31,9 @@
   subitems:
     - text: SyncView()
       url: "#syncview"
-    - text: fore Observables
+    - text: Observables
       url: "#fore-observables"
-- text: fore Extras
+- text: Extras
   url: /04-extras.html
   subitems:
     - text: Retrofit and the CallProcesor
