@@ -61,23 +61,23 @@ ext {
     LIB_VERSION_NAME="0.9.32"
     LIB_VERSION_CODE=29
 
-    REPO="asaf"
-    LIB_GROUP="co.early.asaf"
-    PROJ_NAME="ASAF"
+    REPO="fore"
+    LIB_GROUP="co.early.fore"
+    PROJ_NAME="fore"
     LIB_DEVELOPER_ID="erdo"
     LIB_DEVELOPER_NAME="E Donovan"
     LIB_DEVELOPER_EMAIL="eric@early.co"
     POM_PACKAGING="aar"
-    POM_URL="https://erdo.github.io/asaf-project/"
-    POM_SCM_URL="https://github.com/erdo/asaf-project"
-    POM_SCM_CONNECTION="scm:git@github.com:erdo/asaf-project.git"
-    POM_SCM_DEV_CONNECTION="scm:git@github.com:erdo/asaf-project.git"
+    POM_URL="https://erdo.github.io/android-fore/"
+    POM_SCM_URL="https://github.com/erdo/android-fore"
+    POM_SCM_CONNECTION="scm:git@github.com:erdo/android-fore.git"
+    POM_SCM_DEV_CONNECTION="scm:git@github.com:erdo/android-fore.git"
 
     LICENCE_SHORT_NAME="Apache-2.0"
     LICENCE_NAME="The Apache Software License, Version 2.0"
     LICENCE_URL="http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-    exampleAsafLibVersion="0.9.32"
+    exampleForeLibVersion="0.9.32"
 
     BINTRAY_USER = System.getenv("BINTRAY_USER") ?: secrets.BINTRAY_USER
     BINTRAY_API_KEY = System.getenv("BINTRAY_API_KEY") ?: secrets.BINTRAY_API_KEY

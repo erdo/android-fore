@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 ext {
-    LIB_ARTIFACT_ID="asaf-adapters"
-    LIB_DESCRIPTION="Alarmingly Simple Android Framework - adapter helpers"
+    LIB_ARTIFACT_ID="fore-adapters"
+    LIB_DESCRIPTION="android fore - adapter helpers"
 }
 
 
@@ -47,8 +47,8 @@ android {
 
 dependencies {
 
-    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
-    implementation project(path: ':asaf-core')
+    //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+    implementation project(path: ':fore-core')
 
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"

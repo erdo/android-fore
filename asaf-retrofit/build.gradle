@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 ext {
-    LIB_ARTIFACT_ID="asaf-retrofit"
-    LIB_DESCRIPTION="Alarmingly Simple Android Framework - retrofit helpers"
+    LIB_ARTIFACT_ID="fore-retrofit"
+    LIB_DESCRIPTION="android fore - retrofit helpers"
 }
 
 
@@ -47,8 +47,8 @@ android {
 
 dependencies {
 
-    //compile (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
-    implementation project(path: ':asaf-core')
+    //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+    implementation project(path: ':fore-core')
 
     api('com.squareup.retrofit2:retrofit:2.1.0') {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import

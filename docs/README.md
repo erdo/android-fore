@@ -1,4 +1,4 @@
-# fore
+# android fore
 
 [(if you're reading this on github click here)](https://erdo.github.io/android-fore/#shoom)
 

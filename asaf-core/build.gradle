@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 ext {
-    LIB_ARTIFACT_ID="asaf-core"
-    LIB_DESCRIPTION="Alarmingly Simple Android Framework"
+    LIB_ARTIFACT_ID="fore-core"
+    LIB_DESCRIPTION="android fore - core"
 }
 
 

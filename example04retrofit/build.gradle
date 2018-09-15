@@ -39,8 +39,8 @@ repositories {
 
 dependencies {
 
-    implementation (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
-    implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: "${rootProject.ext.exampleAsafLibVersion}", ext: 'aar')
+    implementation (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
     //implementation project(path: ':asaf-core')
     //implementation project(path: ':asaf-retrofit')
 
