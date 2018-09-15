@@ -10,7 +10,7 @@ They were written using [spectacle](https://github.com/FormidableLabs/spectacle)
 
 ![android basics presentation](img/pres_screenshot_1.png)
 
-This spells out the main problem with the default android architecture and the motivation for using libraries like ASAF in the first place. I think many android developers don't realise this, even though with hindsight it kind of stares you in the face.
+This spells out the main problem with the default android architecture and the motivation for using libraries like **fore** in the first place. I think many android developers don't realise this, even though with hindsight it kind of stares you in the face.
 
 <strong>Presenter perspective including notes is [here](http://asaf-android.surge.sh/#/?presenter&timer)</strong>
 
@@ -19,11 +19,11 @@ This spells out the main problem with the default android architecture and the m
 (if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
 
 
-### ASAF basics
+### **fore** basics
 
-![asaf basics presentation](img/pres_screenshot_2.png)
+![**fore** basics presentation](img/pres_screenshot_2.png)
 
-This one takes you though all the important points of ASAF together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
+This one takes you though all the important points of **fore** together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
 
 <strong>Presenter perspective including notes is [here](http://asaf-asaf.surge.sh/#/?presenter&timer)</strong>
 
@@ -34,7 +34,7 @@ This one takes you though all the important points of ASAF together with a lot o
 
 # Coding Exercise
 
-In my day job I often take new developers through the basics of ASAF and I've found the most effective way of doing this (aside from pointing them in the direction of these docs) is to get them to do a basic two page android app. I give them as much time as they need as the focus should be on learning and understanding rather than producing code. They typically take between a few days and a week, although once they know what they are doing they could easily complete the whole thing in an hour or so.
+In my day job I often take new developers through the basics of **fore** and I've found the most effective way of doing this (aside from pointing them in the direction of these docs) is to get them to do a basic two page android app. I give them as much time as they need as the focus should be on learning and understanding rather than producing code. They typically take between a few days and a week, although once they know what they are doing they could easily complete the whole thing in an hour or so.
 
 What I find truly fascinating is that the feedback I give them once they have finished, tends to be around 75% identical. I could almost copy and paste my feedback from the last developer and just change the lines of code that I am referring to.
 
@@ -54,7 +54,7 @@ Now let's think about the UI that might represent that error. Maybe when you are
 
 Looks like choosing to store our error as state was the right move here.
 
-Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in ASAF you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
+Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in **fore** you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
 
 This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/asaf-project/06-faq.html#observer-listener)
 
@@ -65,7 +65,7 @@ Writing model code gets easier with practice but as a starting point you could d
 
 For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model.
 
-(In ASAF, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) for more info)
+(In **fore**, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/asaf-project/04-more.html#dependency-injection) for more info)
 
 In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy to do - also c) at some point the designers will probably want to be able to print various things, from various parts of the app and there is no point in limiting ourselves here.
 
@@ -164,7 +164,7 @@ Next we need to make sure that the observers are notified each time the *Printer
 ```
 isBusy = true;
 numPagesLeftToPrint++;
-notifyObservers();  //ASAF Observable will take care of the rest
+notifyObservers();  //**fore** Observable will take care of the rest
 ```
 
 The asynchronous printing that we've glossed over so far could be implemented with an [AsafTaskBuilder](/04-more.html#asaftaskbuilder) like so:
@@ -323,15 +323,15 @@ Fortunately it's almost all completely unecessary. The [sample apps](https://erd
 
 
 # Troubleshooting / How to Smash Code Reviews
-Android apps that are written using ASAF have a certain *look* to them code-wise, the code in these docs and the sample apps looks very similar. This really helps when performing code reviews because structural errors tend to jump out at you a little more. The first part of this [**post**](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/) explains the concept better than I could, and I'd recommend you give it a quick read.
+Android apps that are written using **fore** have a certain *look* to them code-wise, the code in these docs and the sample apps looks very similar. This really helps when performing code reviews because structural errors tend to jump out at you a little more. The first part of this [**post**](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/) explains the concept better than I could, and I'd recommend you give it a quick read.
 
-## Typical characteristics of an app built with ASAF
+## Typical characteristics of an app built with **fore**
 
 - **The package structure** tends to contain two main packages (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/asaf-full-app-example-kotlin/tree/master/app/src/main/java/co/early/asaf/fullapp01), [here](https://github.com/erdo/password123/tree/master/app/src/main/java/co/early/password123) and [here](https://github.com/erdo/asaf-project/tree/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit)
 - **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/asaf-project/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserFragment.kt), [here](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/ui/fruit/FruitFragment.java) and [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserActivity.kt)
 - **The View classes follow a very standard flow** which is: get a reference to UI components -> inject model dependencies -> setup click listeners/adapters etc -> setup any animations if needed -> implement databinding by adding and removing an observer and using a syncView method. Examples: [here](https://github.com/erdo/asaf-project/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) and [here](https://github.com/erdo/asaf-full-app-example-kotlin/blob/master/app/src/main/java/co/early/asaf/fullapp01/ui/fruitcollector/FruitCollectorView.kt)
 
-Given any app that is attempting to implement ASAF: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a View class to see if you recognise the flow mentioned above. Check the databinding especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any ui state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen from developers who have just been introduced to this library).
+Given any app that is attempting to implement **fore**: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a View class to see if you recognise the flow mentioned above. Check the databinding especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any ui state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen from developers who have just been introduced to this library).
 
 
 <a name="adhoc-state-setting"></a> 1) **Any code setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the data binding section where it talks about [syncView()](/asaf-project/03-databinding.html#syncview).
@@ -389,7 +389,7 @@ public MessageSender(NetworkAccess networkAccess) {
 }
 ```
 
-If you don't have access to the constructor, you can do this (like we do in a lot of the ASAF sample apps):
+If you don't have access to the constructor, you can do this (like we do in a lot of the **fore** sample apps):
 
 ```
 MessageSender messageSender;
@@ -419,7 +419,7 @@ Maybe you want to swap in a mock NetworkAccess for a test so that it doesn't act
 
 A quick way to check how your Java code is doing on this front is to look for the keyword ***new*** (it's slightly less obvious in Kotlin as there is no *new* keyword). If you are instantiating an object, then that is a dependency that won't be able to be swapped or mocked out at a later date (which may be fine, as long as you are aware of it).
 
-*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the ASAF sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have an app with more than 100 global scope dependencies then you're probably doing something wrong) Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself. See [here](http://blog.ploeh.dk/2014/06/10/pure-di/) for more on this*
+*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the **fore** sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have an app with more than 100 global scope dependencies then you're probably doing something wrong) Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself. See [here](http://blog.ploeh.dk/2014/06/10/pure-di/) for more on this*
 
 
 ### Inversion of Control
@@ -436,13 +436,13 @@ Inversion of control means turning that control on its head and giving it to the
 
 ### Global vs Local scope dependencies and rotation
 
-Most of the models used in ASAF (the dependencies in this case) tend to be global in scope i.e. they exist throughout the lifetime of the app. A good example would be an **AccountModel** with methods such as **login(), logout(), isLoggedIn(), isCurrentlyPerformingNetworkAccess(), getUserName()** etc. This means they will maintain any state they have (such as whether they are currently performing network access or not) independent of anything that is happening in the view layer.
+Most of the models used in **fore** (the dependencies in this case) tend to be global in scope i.e. they exist throughout the lifetime of the app. A good example would be an **AccountModel** with methods such as **login(), logout(), isLoggedIn(), isCurrentlyPerformingNetworkAccess(), getUserName()** etc. This means they will maintain any state they have (such as whether they are currently performing network access or not) independent of anything that is happening in the view layer.
 
 This of course means that when a view is rotated, it makes no difference to the model.
 
 **[We're not talking about data pojos here btw, if your view is just being driven by some data that has a fixed state, you can use techniques like fragments.setArguments(bundle), and rotation will work just fine.]**
 
-For models whose state sometimes changes and are observable, once a rotation is complete and a new activity & view created by Android, ASAF databinding ensures that this new view is synced with the latest state of the model (if the model is still performing network access, the view will show a swirly, for example). The re-hooked up observers take care of any changes from there on in.
+For models whose state sometimes changes and are observable, once a rotation is complete and a new activity & view created by Android, **fore** databinding ensures that this new view is synced with the latest state of the model (if the model is still performing network access, the view will show a swirly, for example). The re-hooked up observers take care of any changes from there on in.
 
 However we still have a problem with locally scoped models: for locally scoped models (regardless if you are using Pure DI or Dagger) the actual scope of the model is usually tied to a class in the UI layer (Activity class, or your custom View class). On rotation, these View layer classes disappear and the locally scoped model reference (and the state it holds) disappears with it.
 
@@ -469,11 +469,11 @@ Similarly there will often be views or other Observables that are interested in 
 
 It just balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/asaf-project/03-databinding.html#shoom) section).
 
-[Quick example, [this view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for ASAF by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
+[Quick example, [this view](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/asaf-project/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for **fore** by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
 
 Passing a parameter here is also the "obvious" thing to do - which means, if it's an option, it will always be chosen by the less experienced developers in the team. Apart from giving you code review headaches, letting a new developer do that would prevent that developer from learning the more powerful way to use this framework - which, although extremely simple, can take a while to get your head around.
 
-This is one case where ASAF is stopping you from making an easy but horrible architectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
+This is one case where **fore** is stopping you from making an easy but horrible architectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
 
 
 > "This library is as valuable for what you **can't** do with it, as it is for what you **can** do with it."

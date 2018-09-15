@@ -26,7 +26,7 @@ Another advantage of using the CallProcessor is that it can be mocked out during
 - [one](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/test/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcherUnitTest.java) is to simply mock the callProcessor so that it returns successes or failures to the model
 - [the other](https://github.com/erdo/asaf-project/blob/master/example04retrofit/src/test/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcherIntegrationTest.java) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
-As with testing any asynchronous code with ASAF, we use WorkMode.SYNCHRONOUS to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
+As with testing any asynchronous code with **fore**, we use WorkMode.SYNCHRONOUS to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
 
 
@@ -55,9 +55,9 @@ If you're not overly concerned with list animations I would continue to call not
 
 ## RecyclerView Animations
 
-So onwards and upwards! if you want list animations on android, they make you work quite hard for it. In order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc. This is one case in particular that it was so tempting to just add a parameter to the ASAF observable. [It still wasn't worth it though](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter).
+So onwards and upwards! if you want list animations on android, they make you work quite hard for it. In order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc. This is one case in particular that it was so tempting to just add a parameter to the **fore** observable. [It still wasn't worth it though](https://erdo.github.io/asaf-project/06-faq.html#somethingchanged-parameter).
 
-Happily by using the ChangeAware\* classes found in the asaf-adapters library you can get ASAF to do most of the work for you.
+Happily by using the ChangeAware\* classes found in the asaf-adapters library you can get **fore** to do most of the work for you.
 
 As the name implies, the ChangeAware\*Lists are aware of how they have been changed and they feed that information back to the ChangeAwareAdapter (for your own code, just extend ChangeAwareAdapter instead of RecyclerView.Adapter).
 
@@ -81,9 +81,9 @@ See [here](https://github.com/erdo/asaf-project/blob/master/example03adapters/sr
 
 For lists that are being driven by a database table, the only way we can get animated changes is by comparing the two lists (the new versus the old) and try to work out what changed. This is because the view layer will not be aware of how the list has been changed as it will often be changed in another part of the system at the database layer. Thankfully Android has a *DiffResult* class that does that for us, however it's a more heavy weight approach and isn't really useful once your lists gets larger than about 1000 items.
 
-ASAF wraps some of these Android classes and handles threading for you, so all you need to do is extend ChangeAwareAdapter but this time with a construction parameter that implements the Diffable interface, rather than the Updatable interface.
+**fore** wraps some of these Android classes and handles threading for you, so all you need to do is extend ChangeAwareAdapter but this time with a construction parameter that implements the Diffable interface, rather than the Updatable interface.
 
-The [**ASAF 6 db example**](https://erdo.github.io/asaf-project/#asaf-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
+The [**fore** 6 db example**](https://erdo.github.io/asaf-project/#asaf-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
 
 ## Ensuring Robustness
 
@@ -111,7 +111,7 @@ We don't really want to be putting asynchronous code in the View layer unless we
 
 AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because of the "new" keyword.
 
-The quickest ASAF solution to all that is to use AsafTask as an (almost) drop in solution.
+The quickest **fore** solution to all that is to use AsafTask as an (almost) drop in solution.
 
 [Asynchronous Example App Source Code](/asaf-project/#asaf-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
@@ -157,7 +157,7 @@ new AsafTask<Void, Integer, Integer>(workMode) {
 
 
 ### WorkMode Parameter
-AsafTask takes a constructor argument: WorkMode (in the same way that ASAF Observable does). The WorkMode parameter tells AsafTask to operate in one of two modes (Asynchronous or Synchronous).
+AsafTask takes a constructor argument: WorkMode (in the same way that **fore** Observable does). The WorkMode parameter tells AsafTask to operate in one of two modes (Asynchronous or Synchronous).
 
 Passing WorkMode.ASYNCHRONOUS in the constructor makes the AsafTask operate with the same behaviour as a normal AsyncTask.
 
@@ -218,7 +218,7 @@ Totally optional, but you can use them to remove the databinding boiler plate fr
 
 ## SyncableXXX Convenience Classes
 
-ASAF includes various SyncableXXX classes which will do the work of adding and removing observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activity / Fragment classes.
+**fore** includes various SyncableXXX classes which will do the work of adding and removing observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activity / Fragment classes.
 
 - [SyncableAppCompatActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableAppCompatActivity.java)
 - [SyncableActivity](https://github.com/erdo/asaf-project/blob/master/asaf-ui/src/main/java/co/early/asaf/ui/activity/SyncableActivity.java)

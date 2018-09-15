@@ -1,4 +1,4 @@
-# ASAF
+# fore
 
 [(if you're reading this on github click here)](https://erdo.github.io/asaf-project/#shoom)
 
@@ -8,9 +8,9 @@ MVO addresses issues like **testability**; **lifecycle management**; **UI consis
 
 Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: the [**View layer**](https://erdo.github.io/asaf-project/01-views.html#shoom) is extremely thin, typically more so than with other architectures.
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. Because of the [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) strategy used, it's typically very performant, and the ASAF library implementation supports a number of commercial android applications.
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. Because of the [data binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom) strategy used, it's typically very performant, and the **fore** library implementation supports a number of commercial android applications.
 
-ASAF (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & maven central, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
+**fore** (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & maven central, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
 
 
 ## Quick Start
@@ -29,7 +29,7 @@ implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext:
 ```
 
 
-**If you're new to ASAF, Welcome! might I suggest:**
+**If you're new to **fore**, Welcome! might I suggest:**
 
  1. Cloning this git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
@@ -42,7 +42,7 @@ In a nutshell, developing with MVO means:
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 
-The ASAF library also includes some testable wrappers for AsyncTask: [**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder) (which lets you make use of lambdas)
+The **fore** library also includes some testable wrappers for AsyncTask: [**AsafTask**](https://erdo.github.io/asaf-project/04-more.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/asaf-project/04-more.html#asaftaskbuilder) (which lets you make use of lambdas)
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/asaf-project/04-more.html#retrofit-and-the-callprocessor).
 
@@ -59,20 +59,20 @@ For these sample apps, all the **View** components are located in the **ui/** pa
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
-Aside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why ASAF works.
+Aside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why **fore** works.
 
 
-### ASAF 1 Data Binding Example
+### **fore** 1 Data Binding Example
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/asaf-project/tree/master/example01databinding)
 
-This app is a bare bones implementation of ASAF databinding. No threading, no networking, no database access - just the minimum required to demonstrate [Data Binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of **fore** databinding. No threading, no networking, no database access - just the minimum required to demonstrate [Data Binding](https://erdo.github.io/asaf-project/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/asaf-project/07-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
 
 
-### ASAF 2 Asynchronous Code Example
+### **fore** 2 Asynchronous Code Example
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/asaf-project/tree/master/example02threading)
 
@@ -84,13 +84,13 @@ It's really a very exciting app, I recently launched it on the play store and I'
 
 
 
-### ASAF 3 Adapter Example
+### **fore** 3 Adapter Example
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters) \| [source code](https://github.com/erdo/asaf-project/tree/master/example03adapters)
 
-This one demonstrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) with ASAF (essentially call notifyDataSetChanged() inside the syncView() method).
+This one demonstrates how to use [**adapters**](https://erdo.github.io/asaf-project/04-more.html#adapters-notifydatasetchangedauto) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
 
-It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and ASAF will take care of all the notify changes work.
+It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work.
 
 Two lists are displayed side to side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right.
 
@@ -98,7 +98,7 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 
 
-### ASAF 4 Retrofit Example
+### **fore** 4 Retrofit Example
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/asaf-project/tree/master/example04retrofit)
 
@@ -106,12 +106,12 @@ Clicking the buttons in this app will perform a network request to some static f
 
 As you're using the app, please notice:
 
-- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used ASAF to separate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
+- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used **fore** to separate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
 
-As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using ASAF.
+As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using **fore**.
 
 
-### ASAF 5 UI Helpers Example (Tic Tac Toe)
+### **fore** 5 UI Helpers Example (Tic Tac Toe)
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example05ui/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) \| [source code](https://github.com/erdo/asaf-project/tree/master/example05ui)
 
@@ -126,7 +126,7 @@ A regular Tic Tac Toe game that makes use of a few UI convenience classes:
 No automated tests for this app (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included).
 
 
-### ASAF 6 DB Example (Room db driven todo list)
+### **fore** 6 DB Example (Room db driven todo list)
 <div class="shoom" id="asaf-6-db-example-room"/>
 
 [screen shot](https://raw.githubusercontent.com/erdo/asaf-project/master/example06db/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters2) \| [source code](https://github.com/erdo/asaf-project/tree/master/example06db)
@@ -154,7 +154,7 @@ All the database changes are done off the UI thread, RecyclerView animations are
 - The same app written in **Kotlin** (functional but probably a little more to do clean code wise)
 **[here](https://github.com/erdo/asaf-full-app-example-kotlin)**
 
-- The **pwned4android** sample app and android library use ASAF for databinding and the source is available for both. **[library](https://github.com/erdo/pwned4android)**, **[sample app (kotlin)](https://github.com/erdo/password123)**. (You might find the **[integration instructions](https://github.com/erdo/pwned4android#useage-the-long-version)** of that library enlightening as they are quite concise and focus on the requirements of the view layer only)
+- The **pwned4android** sample app and android library use **fore** for databinding and the source is available for both. **[library](https://github.com/erdo/pwned4android)**, **[sample app (kotlin)](https://github.com/erdo/password123)**. (You might find the **[integration instructions](https://github.com/erdo/pwned4android#useage-the-long-version)** of that library enlightening as they are quite concise and focus on the requirements of the view layer only)
 
 
 ## License

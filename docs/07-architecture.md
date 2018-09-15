@@ -27,7 +27,7 @@ Another way to look at it is in *crap diagram* mode. So here's a crap diagram sh
 
 ![data binding](img/data-binding.png)
 
-Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/asaf-project/03-databinding.html#syncview), it's a fundamental part of why ASAF code looks so sparse.
+Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/asaf-project/03-databinding.html#syncview), it's a fundamental part of why **fore** code looks so sparse.
 
 That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/asaf-project/#asaf-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/asaf-project/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) that does the observing.
 
