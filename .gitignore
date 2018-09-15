@@ -83,3 +83,8 @@ ajcore*.txt
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# jekyll
+_site/
+Gemfile
+Gemfile.lock
