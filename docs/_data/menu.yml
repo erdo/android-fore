@@ -8,7 +8,7 @@
     - text: License
       url: /#license
 - text: MVO
-  url: /07-architecture.html
+  url: /00-architecture.html
   subitems:
     - text: Overview
       url: "#overview"
@@ -31,10 +31,10 @@
   subitems:
     - text: SyncView()
       url: "#syncview"
-    - text: ASAF Observables
-      url: "#asaf-observables"
-- text: ASAF Extras
-  url: /04-more.html
+    - text: fore Observables
+      url: "#fore-observables"
+- text: fore Extras
+  url: /04-extras.html
   subitems:
     - text: Retrofit and the CallProcesor
       url: "#retrofit-and-the-callprocessor"
@@ -47,7 +47,7 @@
     - text: SyncTrigger
       url: "#synctrigger"
 - text: More Help
-  url: /09-more.html
+  url: /05-more.html
   subitems:
     - text: Presentation Slides
       url: "#presentations"
