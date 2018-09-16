@@ -3,8 +3,8 @@ package foo.bar.example.asafadapters.ui.playlist;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
-import co.early.asaf.adapters.UpdateSpec;
-import co.early.asaf.core.time.SystemTimeWrapper;
+import co.early.fore.adapters.UpdateSpec;
+import co.early.fore.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters.CustomApp;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistSimpleModel;

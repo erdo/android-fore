@@ -41,8 +41,8 @@ repositories {
 
 dependencies {
 
-    implementation (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation project(path: ':asaf-core')
+    implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    //implementation project(path: ':fore-core')
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

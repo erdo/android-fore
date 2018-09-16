@@ -1,7 +1,7 @@
 package foo.bar.example.asafadapters2.feature.todoitems;
 
-import co.early.asaf.adapters.DiffComparator;
-import co.early.asaf.core.Affirm;
+import co.early.fore.adapters.DiffComparator;
+import co.early.fore.core.Affirm;
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity;
 
 /**

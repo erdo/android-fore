@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.core.observer.Observer;
+import co.early.fore.core.observer.Observer;
 import foo.bar.example.asafdatabinding.CustomApp;
 import foo.bar.example.asafdatabinding.R;
 import foo.bar.example.asafdatabinding.feature.wallet.Wallet;

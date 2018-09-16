@@ -3,10 +3,10 @@ package foo.bar.example.asafthreading.feature.counter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.logging.SystemLogger;
-import co.early.asaf.core.observer.Observer;
+import co.early.fore.core.WorkMode;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.core.logging.SystemLogger;
+import co.early.fore.core.observer.Observer;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;

@@ -7,14 +7,14 @@ import com.google.gson.Gson;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.retrofit.ErrorHandler;
-import co.early.asaf.retrofit.MessageProvider;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.retrofit.ErrorHandler;
+import co.early.fore.retrofit.MessageProvider;
 import foo.bar.example.asafadapters2.message.UserMessage;
 import okhttp3.Request;
 import retrofit2.Response;
 
-import static co.early.asaf.core.Affirm.notNull;
+import static co.early.fore.core.Affirm.notNull;
 import static foo.bar.example.asafadapters2.message.UserMessage.ERROR_CLIENT;
 import static foo.bar.example.asafadapters2.message.UserMessage.ERROR_MISC;
 import static foo.bar.example.asafadapters2.message.UserMessage.ERROR_NETWORK;

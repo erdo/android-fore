@@ -3,7 +3,7 @@ package foo.bar.example.asafadapters2.ui.common.uiutils;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import co.early.asaf.core.ui.SyncableView;
+import co.early.fore.core.ui.SyncableView;
 
 /**
  *

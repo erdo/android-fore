@@ -3,11 +3,11 @@ package foo.bar.example.asafui.feature.tictactoe;
 
 import android.os.Handler;
 
-import co.early.asaf.core.Affirm;
-import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.observer.ObservableImp;
-import co.early.asaf.core.observer.Observer;
-import co.early.asaf.core.time.SystemTimeWrapper;
+import co.early.fore.core.Affirm;
+import co.early.fore.core.WorkMode;
+import co.early.fore.core.observer.ObservableImp;
+import co.early.fore.core.observer.Observer;
+import co.early.fore.core.time.SystemTimeWrapper;
 
 import static foo.bar.example.asafui.feature.tictactoe.Player.NOBODY;
 import static foo.bar.example.asafui.feature.tictactoe.Player.O;

@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.adapters.ChangeAwareAdapter;
-import co.early.asaf.core.Affirm;
-import co.early.asaf.core.logging.Logger;
+import co.early.fore.adapters.ChangeAwareAdapter;
+import co.early.fore.core.Affirm;
+import co.early.fore.core.logging.Logger;
 import foo.bar.example.asafadapters2.R;
 import foo.bar.example.asafadapters2.feature.todoitems.TodoItem;
 import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel;

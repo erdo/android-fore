@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.ui.SyncableView;
-import co.early.asaf.ui.SyncTrigger;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.core.ui.SyncTrigger;
+import co.early.fore.core.ui.SyncableView;
 import foo.bar.example.asafui.CustomApp;
 import foo.bar.example.asafui.R;
 import foo.bar.example.asafui.feature.tictactoe.Board;

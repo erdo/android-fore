@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import co.early.asaf.adapters.DiffCalculator;
-import co.early.asaf.adapters.DiffSpec;
-import co.early.asaf.adapters.Diffable;
-import co.early.asaf.core.Affirm;
-import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.observer.ObservableImp;
-import co.early.asaf.core.threading.AsafTaskBuilder;
-import co.early.asaf.core.time.SystemTimeWrapper;
+import co.early.fore.adapters.DiffCalculator;
+import co.early.fore.adapters.DiffSpec;
+import co.early.fore.adapters.Diffable;
+import co.early.fore.core.Affirm;
+import co.early.fore.core.WorkMode;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.core.observer.ObservableImp;
+import co.early.fore.core.threading.AsafTaskBuilder;
+import co.early.fore.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemDatabase;
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity;
 

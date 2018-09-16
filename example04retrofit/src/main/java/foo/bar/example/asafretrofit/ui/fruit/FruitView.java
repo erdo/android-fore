@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallback;
-import co.early.asaf.core.observer.Observer;
-import co.early.asaf.core.ui.SyncableView;
+import co.early.fore.core.callbacks.FailureCallbackWithPayload;
+import co.early.fore.core.callbacks.SuccessCallback;
+import co.early.fore.core.observer.Observer;
+import co.early.fore.core.ui.SyncableView;
 import foo.bar.example.asafretrofit.CustomApp;
 import foo.bar.example.asafretrofit.R;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;

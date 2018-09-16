@@ -6,19 +6,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import co.early.asaf.ui.LifecycleSyncer;
-import co.early.asaf.ui.activity.SyncableAppCompatActivity;
+import co.early.fore.lifecycle.LifecycleSyncer;
+import co.early.fore.lifecycle.activity.SyncableAppCompatActivity;
 import foo.bar.example.asafui.CustomApp;
 import foo.bar.example.asafui.R;
 import foo.bar.example.asafui.feature.tictactoe.Board;
 
 /**
- * This is an example of implementing ASAF at the <b>Activity</b> level, no fragments used here
+ * This is an example of implementing fore at the <b>Activity</b> level, no fragments used here
  *
  * alternatively:
- * {@link co.early.asaf.ui.activity.SyncableActivity},
- * {@link co.early.asaf.ui.fragment.SyncableSupportFragment},
- * {@link co.early.asaf.ui.fragment.SyncableFragment}
+ * {@link co.early.fore.lifecycle.activity.SyncableActivity},
+ * {@link co.early.fore.lifecycle.fragment.SyncableSupportFragment},
+ * {@link co.early.fore.lifecycle.fragment.SyncableFragment}
  */
 public class TicTacToeActivity extends SyncableAppCompatActivity {
 

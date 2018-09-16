@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.observer.Observer;
-import co.early.asaf.core.ui.SyncableView;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.core.observer.Observer;
+import co.early.fore.core.ui.SyncableView;
 import foo.bar.example.asafadapters2.App;
 import foo.bar.example.asafadapters2.R;
 import foo.bar.example.asafadapters2.feature.bossmode.BossMode;

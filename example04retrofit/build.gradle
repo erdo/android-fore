@@ -39,10 +39,10 @@ repositories {
 
 dependencies {
 
-    implementation (group: 'co.early.asaf', name: 'asaf-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation project(path: ':asaf-core')
-    //implementation project(path: ':asaf-retrofit')
+    implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    implementation (group: 'co.early.fore', name: 'fore-retrofit', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    //implementation project(path: ':fore-core')
+    //implementation project(path: ':fore-retrofit')
 
 
     implementation('com.squareup.retrofit2:retrofit:2.1.0') {

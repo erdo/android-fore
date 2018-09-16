@@ -5,10 +5,10 @@ import android.app.Application;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.logging.AndroidLogger;
-import co.early.asaf.retrofit.CallProcessor;
-import co.early.asaf.retrofit.InterceptorLogging;
+import co.early.fore.core.WorkMode;
+import co.early.fore.core.logging.AndroidLogger;
+import co.early.fore.retrofit.CallProcessor;
+import co.early.fore.retrofit.InterceptorLogging;
 import foo.bar.example.asafretrofit.api.CustomGlobalErrorHandler;
 import foo.bar.example.asafretrofit.api.CustomGlobalRequestInterceptor;
 import foo.bar.example.asafretrofit.api.CustomRetrofitBuilder;
@@ -17,7 +17,7 @@ import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;
 import foo.bar.example.asafretrofit.message.UserMessage;
 import retrofit2.Retrofit;
 
-import static co.early.asaf.core.Affirm.notNull;
+import static co.early.fore.core.Affirm.notNull;
 
 /**
  * This is the price you pay for not using Dagger, the payback is not having to write modules

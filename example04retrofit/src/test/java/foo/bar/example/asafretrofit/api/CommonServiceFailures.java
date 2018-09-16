@@ -3,7 +3,7 @@ package foo.bar.example.asafretrofit.api;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import co.early.asaf.retrofit.testhelpers.StubbedServiceDefinition;
+import co.early.fore.retrofit.testhelpers.StubbedServiceDefinition;
 import foo.bar.example.asafretrofit.message.UserMessage;
 
 /**

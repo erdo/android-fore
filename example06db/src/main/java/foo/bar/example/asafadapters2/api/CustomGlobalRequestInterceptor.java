@@ -2,9 +2,9 @@ package foo.bar.example.asafadapters2.api;
 
 import java.io.IOException;
 
-import co.early.asaf.core.Affirm;
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.retrofit.BuildConfig;
+import co.early.fore.core.Affirm;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.retrofit.BuildConfig;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -37,7 +37,7 @@ public class CustomGlobalRequestInterceptor implements Interceptor {
 
         requestBuilder.addHeader("content-type", "application/json");
         //requestBuilder.addHeader("X-MyApp-Auth-Token", !session.hasSession() ? "expired" : session.getSessionToken());
-        requestBuilder.addHeader("User-Agent", "ASAF-example-user-agent-" + BuildConfig.VERSION_NAME);
+        requestBuilder.addHeader("User-Agent", "fore-example-user-agent-" + BuildConfig.VERSION_NAME);
 
 
         requestBuilder.method(original.method(), original.body());

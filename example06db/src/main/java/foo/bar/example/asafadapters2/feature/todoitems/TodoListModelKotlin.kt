@@ -3,19 +3,22 @@ package foo.bar.example.asafadapters2.feature.todoitems
 import android.arch.persistence.room.InvalidationTracker
 import android.support.v4.util.Pair
 import android.support.v7.util.DiffUtil
-import co.early.asaf.adapters.DiffCalculator
-import co.early.asaf.adapters.DiffSpec
-import co.early.asaf.adapters.Diffable
-import co.early.asaf.core.WorkMode
-import co.early.asaf.core.logging.Logger
-import co.early.asaf.core.observer.ObservableImp
-import co.early.asaf.core.threading.AsafTaskBuilder
-import co.early.asaf.core.time.SystemTimeWrapper
+import co.early.fore.adapters.DiffCalculator
+import co.early.fore.adapters.DiffSpec
+import co.early.fore.adapters.Diffable
+import co.early.fore.core.WorkMode
+import co.early.fore.core.logging.Logger
+import co.early.fore.core.observer.ObservableImp
+import co.early.fore.core.threading.AsafTaskBuilder
+import co.early.fore.core.time.SystemTimeWrapper
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemDatabase
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity.TABLE_NAME
-import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel.RefreshStatus.*
-import java.util.*
+import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel.RefreshStatus.ADDITIONAL_REFRESH_WAITING
+import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel.RefreshStatus.IDLE
+import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel.RefreshStatus.REQUESTED
+import foo.bar.example.asafadapters2.feature.todoitems.TodoListModel.RefreshStatus.TAKEN_DB_LIST_SNAPSHOT
+import java.util.ArrayList
 
 
 /**

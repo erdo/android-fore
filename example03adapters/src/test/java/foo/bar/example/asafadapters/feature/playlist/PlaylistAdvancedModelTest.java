@@ -4,12 +4,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import co.early.asaf.adapters.UpdateSpec;
-import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.logging.SystemLogger;
-import co.early.asaf.core.observer.Observer;
-import co.early.asaf.core.time.SystemTimeWrapper;
+import co.early.fore.adapters.UpdateSpec;
+import co.early.fore.core.WorkMode;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.core.logging.SystemLogger;
+import co.early.fore.core.observer.Observer;
+import co.early.fore.core.time.SystemTimeWrapper;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;

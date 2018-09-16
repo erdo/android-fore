@@ -5,9 +5,9 @@ import org.mockito.ArgumentCaptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.early.asaf.core.callbacks.FailureCallbackWithPayload;
-import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
-import co.early.asaf.retrofit.CallProcessor;
+import co.early.fore.core.callbacks.FailureCallbackWithPayload;
+import co.early.fore.core.callbacks.SuccessCallbackWithPayload;
+import co.early.fore.retrofit.CallProcessor;
 import foo.bar.example.asafretrofit.api.fruits.FruitPojo;
 import foo.bar.example.asafretrofit.message.UserMessage;
 

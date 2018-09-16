@@ -5,8 +5,8 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 
-import co.early.asaf.core.Affirm;
-import co.early.asaf.core.WorkMode;
+import co.early.fore.core.Affirm;
+import co.early.fore.core.WorkMode;
 
 
 /**

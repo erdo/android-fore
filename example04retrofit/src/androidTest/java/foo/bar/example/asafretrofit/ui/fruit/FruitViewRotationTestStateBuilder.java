@@ -6,8 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 
 import org.mockito.ArgumentCaptor;
 
-import co.early.asaf.core.callbacks.SuccessCallbackWithPayload;
-import co.early.asaf.core.logging.SystemLogger;
+import co.early.fore.core.callbacks.SuccessCallbackWithPayload;
+import co.early.fore.core.logging.SystemLogger;
 import foo.bar.example.asafretrofit.CustomApp;
 import foo.bar.example.asafretrofit.ProgressBarIdler;
 import foo.bar.example.asafretrofit.feature.fruit.FruitFetcher;

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.design.widget.NavigationView;
 import android.util.AttributeSet;
 
-import co.early.asaf.core.logging.Logger;
-import co.early.asaf.core.ui.SyncableView;
+import co.early.fore.core.logging.Logger;
+import co.early.fore.core.ui.SyncableView;
 import foo.bar.example.asafadapters2.App;
 import foo.bar.example.asafadapters2.R;
 import foo.bar.example.asafadapters2.feature.bossmode.BossMode;

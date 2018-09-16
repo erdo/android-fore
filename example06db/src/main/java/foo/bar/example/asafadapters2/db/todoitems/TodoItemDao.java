@@ -10,7 +10,7 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 import java.util.Random;
 
-import co.early.asaf.core.time.SystemTimeWrapper;
+import co.early.fore.core.time.SystemTimeWrapper;
 
 import static foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity.COLUMN_CREATE_TIMESTAMP;
 import static foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity.COLUMN_DONE;

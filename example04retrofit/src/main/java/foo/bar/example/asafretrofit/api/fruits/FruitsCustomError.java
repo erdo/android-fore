@@ -2,8 +2,8 @@ package foo.bar.example.asafretrofit.api.fruits;
 
 import com.google.gson.annotations.SerializedName;
 
-import co.early.asaf.core.Affirm;
-import co.early.asaf.retrofit.MessageProvider;
+import co.early.fore.core.Affirm;
+import co.early.fore.retrofit.MessageProvider;
 import foo.bar.example.asafretrofit.message.UserMessage;
 
 import static foo.bar.example.asafretrofit.message.UserMessage.ERROR_MISC;

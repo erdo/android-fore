@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.asaf.core.observer.Observer;
+import co.early.fore.core.observer.Observer;
 import foo.bar.example.asafadapters.CustomApp;
 import foo.bar.example.asafadapters.R;
 import foo.bar.example.asafadapters.feature.playlist.PlaylistAdvancedModel;

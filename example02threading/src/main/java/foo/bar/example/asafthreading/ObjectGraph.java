@@ -5,12 +5,12 @@ import android.app.Application;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.early.asaf.core.WorkMode;
-import co.early.asaf.core.logging.AndroidLogger;
+import co.early.fore.core.WorkMode;
+import co.early.fore.core.logging.AndroidLogger;
 import foo.bar.example.asafthreading.feature.counter.CounterWithLambdas;
 import foo.bar.example.asafthreading.feature.counter.CounterWithProgress;
 
-import static co.early.asaf.core.Affirm.notNull;
+import static co.early.fore.core.Affirm.notNull;
 
 /**
  * This is the price you pay for not using Dagger, the payback is not having to write modules
