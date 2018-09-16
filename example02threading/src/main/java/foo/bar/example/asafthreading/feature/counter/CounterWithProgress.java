@@ -7,7 +7,7 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.ObservableImp;
-import co.early.fore.core.threading.AsafTask;
+import co.early.fore.core.threading.Async;
 
 /**
  *
@@ -39,7 +39,7 @@ public class CounterWithProgress extends ObservableImp{
         isBusy = true;
         notifyObservers();
 
-        new AsafTask<Void, Integer, Integer>(workMode) {
+        new Async<Void, Integer, Integer>(workMode) {
             @Override
             protected Integer doInBackground(Void... voids) {
 

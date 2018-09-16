@@ -9,7 +9,7 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.ObservableImp;
-import co.early.fore.core.threading.AsafTask;
+import co.early.fore.core.threading.Async;
 import co.early.fore.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters2.App;
 import foo.bar.example.asafadapters2.R;
@@ -55,7 +55,7 @@ public class BossMode extends ObservableImp{
         bossModeOn = true;
         notifyObservers();
 
-        new AsafTask<Void, Integer, Void>(workMode) {
+        new Async<Void, Integer, Void>(workMode) {
             @Override
             protected Void doInBackground(Void... voids) {
 

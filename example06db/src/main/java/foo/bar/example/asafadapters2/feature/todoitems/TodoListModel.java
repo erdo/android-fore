@@ -16,7 +16,7 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.ObservableImp;
-import co.early.fore.core.threading.AsafTaskBuilder;
+import co.early.fore.core.threading.AsyncBuilder;
 import co.early.fore.core.time.SystemTimeWrapper;
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemDatabase;
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity;
@@ -182,7 +182,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
 
 
             //noinspection unchecked
-            new AsafTaskBuilder<List<TodoItem>, Pair<List<TodoItem>, DiffUtil.DiffResult>>(workMode)
+            new AsyncBuilder<List<TodoItem>, Pair<List<TodoItem>, DiffUtil.DiffResult>>(workMode)
                 .doInBackground(oldList -> {
 
                     logger.i(LOG_TAG, "2 asking for latest data");
@@ -260,7 +260,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
         logger.i(LOG_TAG, "add()");
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        new AsafTaskBuilder<TodoItem, Long>(workMode)
+        new AsyncBuilder<TodoItem, Long>(workMode)
                 .doInBackground(todoItems -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().insertTodoItem(todoItems[0].getEntity());
@@ -275,7 +275,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
         //noinspection unchecked
-        new AsafTaskBuilder<List<TodoItem>, Void>(workMode)
+        new AsyncBuilder<List<TodoItem>, Void>(workMode)
                 .doInBackground(newTodoItems -> {
 
                     //see the docs above for alternative ways of doing this
@@ -298,7 +298,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
         logger.i(LOG_TAG, "remove()");
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        new AsafTaskBuilder<TodoItem, Integer>(workMode)
+        new AsyncBuilder<TodoItem, Integer>(workMode)
                 .doInBackground(todoItems -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().deleteTodoItem(todoItems[0].getEntity());
@@ -312,7 +312,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
         logger.i(LOG_TAG, "update()");
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        new AsafTaskBuilder<TodoItemEntity, Integer>(workMode)
+        new AsyncBuilder<TodoItemEntity, Integer>(workMode)
                 .doInBackground(todoItems -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().updateTodoItem(todoItems[0]);
@@ -326,7 +326,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
         logger.i(LOG_TAG, "clear()");
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        new AsafTaskBuilder<Void, Integer>(workMode)
+        new AsyncBuilder<Void, Integer>(workMode)
                 .doInBackground(voids -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().clear();
@@ -344,7 +344,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
         //noinspection unchecked
-        new AsafTaskBuilder<Integer, Integer>(workMode)
+        new AsyncBuilder<Integer, Integer>(workMode)
                 .doInBackground(howMany -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().addRandom(howMany[0], systemTimeWrapper);
@@ -364,7 +364,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
         //noinspection unchecked
-        new AsafTaskBuilder<Integer, Integer>(workMode)
+        new AsyncBuilder<Integer, Integer>(workMode)
                 .doInBackground(howMany -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().doRandomXPercent(howMany[0], systemTimeWrapper);
@@ -384,7 +384,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
         //noinspection unchecked
-        new AsafTaskBuilder<Integer, Integer>(workMode)
+        new AsyncBuilder<Integer, Integer>(workMode)
                 .doInBackground(howMany -> {
                     synchronized (dbMonitor) {
                         return todoItemDatabase.todoItemDao().deleteRandomXPercent(howMany[0], systemTimeWrapper);

@@ -9,7 +9,7 @@ import co.early.fore.adapters.Diffable
 import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.ObservableImp
-import co.early.fore.core.threading.AsafTaskBuilder
+import co.early.fore.core.threading.AsyncBuilder
 import co.early.fore.core.time.SystemTimeWrapper
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemDatabase
 import foo.bar.example.asafadapters2.db.todoitems.TodoItemEntity
@@ -171,7 +171,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
 
 
 
-            AsafTaskBuilder<List<TodoItem>, Pair<List<TodoItem>, DiffUtil.DiffResult>>(workMode)
+            AsyncBuilder<List<TodoItem>, Pair<List<TodoItem>, DiffUtil.DiffResult>>(workMode)
                 .doInBackground { oldList ->
 
                     logger.i(LOG_TAG, "2 asking for latest data")
@@ -243,7 +243,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
         logger.i(LOG_TAG, "add()")
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        AsafTaskBuilder<TodoItem, Long>(workMode)
+        AsyncBuilder<TodoItem, Long>(workMode)
             .doInBackground { todoItems ->
                 synchronized(dbMonitor) {
                     todoItemDatabase.todoItemDao().insertTodoItem(todoItems[0].entity)
@@ -257,7 +257,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
         logger.i(LOG_TAG, "remove()")
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        AsafTaskBuilder<TodoItem, Int>(workMode)
+        AsyncBuilder<TodoItem, Int>(workMode)
             .doInBackground { todoItems ->
                 synchronized(dbMonitor) {
                     todoItemDatabase.todoItemDao().deleteTodoItem(todoItems[0].entity)
@@ -271,7 +271,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
         logger.i(LOG_TAG, "update()")
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        AsafTaskBuilder<TodoItemEntity, Int>(workMode)
+        AsyncBuilder<TodoItemEntity, Int>(workMode)
             .doInBackground { todoItems ->
                 synchronized(dbMonitor) {
                     todoItemDatabase.todoItemDao().updateTodoItem(todoItems[0])
@@ -285,7 +285,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
         logger.i(LOG_TAG, "clear()")
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        AsafTaskBuilder<Void, Int>(workMode)
+        AsyncBuilder<Void, Int>(workMode)
             .doInBackground { voids ->
                 synchronized(dbMonitor) {
                     todoItemDatabase.todoItemDao().clear()
