@@ -1,7 +1,7 @@
 package co.early.fore.core.logging;
 
 
-import co.early.fore.core.utils.TextPaddingUtils;
+import co.early.fore.core.utils.text.TextPaddingUtils;
 
 public class SystemLogger implements Logger {
 

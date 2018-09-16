@@ -1,7 +1,6 @@
-package co.early.fore.ui;
+package co.early.fore.core.ui;
 
 import co.early.fore.core.Affirm;
-import co.early.fore.core.ui.SyncableView;
 
 /**
  * <p>
@@ -17,15 +16,14 @@ import co.early.fore.core.ui.SyncableView;
  * </p><p>
  *      To configure this trigger to immediately reset itself after each time it's fired without
  *      having to wait for {@link CheckTriggerThreshold#checkThreshold()} to return false
- *      call {@link CheckTriggerThreshold#resetAfterCheckAlways()}
+ *      construct this class with the ResetRule.IMMEDIATELY flag
  * </p>
  */
 public class SyncTrigger {
 
-
     private final DoThisWhenTriggered doThisWhenTriggered;
     private final CheckTriggerThreshold checkTriggerThreshold;
-    private ResetRule resetRule; //TODO put back to final once deprecated methods have been removed
+    private final ResetRule resetRule;
 
     private boolean overThreshold = false;
     private boolean firstCheck = true;
@@ -112,8 +110,7 @@ public class SyncTrigger {
      *                                    on your application this maybe useful to prevent triggers
      *                                    firing due to a screen rotation.
      */
-    @Deprecated
-    public void check(boolean swallowTriggerForFirstCheck) {
+    private void check(boolean swallowTriggerForFirstCheck) {
 
         boolean reached = checkTriggerThreshold.checkThreshold();
 
@@ -131,27 +128,6 @@ public class SyncTrigger {
         }
 
         firstCheck = false;
-    }
-
-    /**
-     * Trigger is reset after a successful check - only once a subsequent check fails. This is the default.
-     */
-    @Deprecated
-    public void resetAfterCheckFails() {
-        resetRule = ResetRule.ONLY_AFTER_REVERSION;
-    }
-
-    /**
-     * Trigger is reset after each successful check
-     */
-    @Deprecated
-    public void resetAfterCheckAlways() {
-        resetRule = ResetRule.IMMEDIATELY;
-    }
-
-    @Deprecated
-    public void setImmediatelyResetAfterCheck(boolean immediatelyResetAfterCheck) {
-        resetRule = immediatelyResetAfterCheck ? ResetRule.IMMEDIATELY : ResetRule.ONLY_AFTER_REVERSION;
     }
 
     private void fireTrigger(){

@@ -9,7 +9,7 @@ import java.util.Random;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.logging.Logger;
-import co.early.fore.core.utils.MonospacedTextWrappingUtils;
+import co.early.fore.core.utils.text.MonospacedTextWrappingUtils;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;

@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
 ext {
-    LIB_ARTIFACT_ID="fore-ui"
-    LIB_DESCRIPTION="android fore - ui helpers"
+    LIB_ARTIFACT_ID="fore-lifecycle"
+    LIB_DESCRIPTION="android fore - lifecycle helpers"
 }
 
 

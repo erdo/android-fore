@@ -1,7 +1,7 @@
-package co.early.fore.ui.fragment;
+package co.early.fore.lifecycle.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
-import co.early.fore.ui.LifecycleSyncer;
+import co.early.fore.lifecycle.LifecycleSyncer;
+
 
 /**
  * <p>
@@ -20,7 +21,7 @@ import co.early.fore.ui.LifecycleSyncer;
  *
  * <p>
  *      If your app architecture uses fragments, and your fragments extend
- *      {@link android.app.Fragment}, to add ASAF behaviour to your app you can keep
+ *      {@link android.support.v4.app.Fragment}, to add ASAF behaviour to your app you can keep
  *      your activity code the same but in your fragments instead of extending Fragment,
  *      extend this class instead.
  * </p>
@@ -38,7 +39,7 @@ import co.early.fore.ui.LifecycleSyncer;
  * </ul>
  *
  */
-public abstract class SyncableFragment extends Fragment {
+public abstract class SyncableSupportFragment extends Fragment {
 
     private LifecycleSyncer lifecycleSyncer;
 

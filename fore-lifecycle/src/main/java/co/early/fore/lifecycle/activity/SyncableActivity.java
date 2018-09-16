@@ -1,4 +1,4 @@
-package co.early.fore.ui.activity;
+package co.early.fore.lifecycle.activity;
 
 
 import android.app.Activity;
@@ -8,7 +8,7 @@ import android.view.View;
 import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
-import co.early.fore.ui.LifecycleSyncer;
+import co.early.fore.lifecycle.LifecycleSyncer;
 
 /**
  * <p>

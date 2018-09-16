@@ -1,4 +1,4 @@
-package co.early.fore.ui;
+package co.early.fore.lifecycle;
 
 import android.view.LayoutInflater;
 
@@ -9,10 +9,10 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.observer.Observer;
 import co.early.fore.core.ui.SyncableView;
-import co.early.fore.ui.activity.SyncableActivity;
-import co.early.fore.ui.activity.SyncableAppCompatActivity;
-import co.early.fore.ui.fragment.SyncableFragment;
-import co.early.fore.ui.fragment.SyncableSupportFragment;
+import co.early.fore.lifecycle.activity.SyncableActivity;
+import co.early.fore.lifecycle.activity.SyncableAppCompatActivity;
+import co.early.fore.lifecycle.fragment.SyncableFragment;
+import co.early.fore.lifecycle.fragment.SyncableSupportFragment;
 
 /**
  * <p>

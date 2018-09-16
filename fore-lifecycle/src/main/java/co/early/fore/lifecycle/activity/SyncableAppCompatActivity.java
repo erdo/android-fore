@@ -1,16 +1,14 @@
-package co.early.fore.ui.fragment;
+package co.early.fore.lifecycle.activity;
+
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
-import co.early.fore.ui.LifecycleSyncer;
-
+import co.early.fore.lifecycle.LifecycleSyncer;
 
 /**
  * <p>
@@ -20,10 +18,10 @@ import co.early.fore.ui.LifecycleSyncer;
  *      observers to prevent memory leaks.</p>
  *
  * <p>
- *      If your app architecture uses fragments, and your fragments extend
- *      {@link android.support.v4.app.Fragment}, to add ASAF behaviour to your app you can keep
- *      your activity code the same but in your fragments instead of extending Fragment,
- *      extend this class instead.
+ *      If your app architecture does not use fragments, and your activities extend
+ *      {@link android.support.v7.app.AppCompatActivity}
+ *      This is probably the right class to use to add ASAF behaviour to your app,
+ *      start by extending this class instead of AppCompatActivity
  * </p>
  *
  * <p>
@@ -39,13 +37,21 @@ import co.early.fore.ui.LifecycleSyncer;
  * </ul>
  *
  */
-public abstract class SyncableSupportFragment extends Fragment {
+public abstract class SyncableAppCompatActivity extends AppCompatActivity {
+
 
     private LifecycleSyncer lifecycleSyncer;
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return setLifecycleSyncer(new LifecycleSyncer(inflater, getResourceIdForSyncableView(),
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SyncableView syncableView = Affirm.notNull((SyncableView)(getLayoutInflater().inflate(getResourceIdForSyncableView(), null)));
+
+        setContentView((View)syncableView);
+
+        setLifecycleSyncer(new LifecycleSyncer(syncableView,
                 getThingsToObserve()));
     }
 
@@ -56,18 +62,18 @@ public abstract class SyncableSupportFragment extends Fragment {
 
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         if (lifecycleSyncer == null){
-            throw new RuntimeException("You must call super.onCreateView() from within your onCreateView() method");
+            throw new RuntimeException("You must call super.onCreate() from within your onCreate() method");
         }
         // add our observer to any models we want to observe
         lifecycleSyncer.addObserversAndSync();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         // remove our observer from any models we are observing
         lifecycleSyncer.removeObservers();
     }

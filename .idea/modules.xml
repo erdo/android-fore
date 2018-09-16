@@ -11,8 +11,8 @@
       <module fileurl="file://$PROJECT_DIR$/example06db/example06db.iml" filepath="$PROJECT_DIR$/example06db/example06db.iml" />
       <module fileurl="file://$PROJECT_DIR$/fore-adapters/fore-adapters.iml" filepath="$PROJECT_DIR$/fore-adapters/fore-adapters.iml" />
       <module fileurl="file://$PROJECT_DIR$/fore-core/fore-core.iml" filepath="$PROJECT_DIR$/fore-core/fore-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fore-lifecycle/fore-lifecycle.iml" filepath="$PROJECT_DIR$/fore-lifecycle/fore-lifecycle.iml" />
       <module fileurl="file://$PROJECT_DIR$/fore-retrofit/fore-retrofit.iml" filepath="$PROJECT_DIR$/fore-retrofit/fore-retrofit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fore-ui/fore-ui.iml" filepath="$PROJECT_DIR$/fore-ui/fore-ui.iml" />
     </modules>
   </component>
 </project>

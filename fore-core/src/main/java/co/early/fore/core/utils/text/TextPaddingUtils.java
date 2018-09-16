@@ -1,4 +1,4 @@
-package co.early.fore.core.utils;
+package co.early.fore.core.utils.text;
 
 import co.early.fore.core.Affirm;
 

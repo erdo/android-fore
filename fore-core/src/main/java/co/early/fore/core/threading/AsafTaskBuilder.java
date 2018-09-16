@@ -76,5 +76,7 @@ public class AsafTaskBuilder <Input, Result>{
         return asafTask;
     }
 
-
+    public interface DoInBackgroundCallback<Input, Result> {
+        Result doThisAndReturn(Input... inputs);
+    }
 }
