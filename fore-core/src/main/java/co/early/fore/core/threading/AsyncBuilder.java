@@ -7,10 +7,10 @@ import co.early.fore.core.WorkMode;
 import co.early.fore.core.callbacks.DoThisCallback;
 
 /**
- * Note that this class while a lot less verbose than AsafTask, doesn't support progress updates,
- * for that you need to use AsafTask directly
+ * Note that this class while a lot less verbose than Async, doesn't support progress updates,
+ * for that you need to use Async directly
  */
-public class AsafTaskBuilder <Input, Result>{
+public class AsyncBuilder<Input, Result>{
 
     private final WorkMode workMode;
 
@@ -18,30 +18,30 @@ public class AsafTaskBuilder <Input, Result>{
     private DoThisCallback onPreExecute;
     private DoThisWithPayloadCallback<Result> onPostExecute;
 
-    private AsafTask<Input, Void, Result> asafTask = null;
+    private Async<Input, Void, Result> async = null;
 
-    public AsafTaskBuilder(WorkMode workMode) {
+    public AsyncBuilder(WorkMode workMode) {
         this.workMode = Affirm.notNull(workMode);
     }
 
-    public AsafTaskBuilder<Input, Result> doInBackground(DoInBackgroundCallback<Input, Result> doInBackground){
+    public AsyncBuilder<Input, Result> doInBackground(DoInBackgroundCallback<Input, Result> doInBackground){
         this.doInBackground = Affirm.notNull(doInBackground);
         return this;
     }
 
-    public AsafTaskBuilder<Input, Result> onPreExecute(DoThisCallback onPreExecute){
+    public AsyncBuilder<Input, Result> onPreExecute(DoThisCallback onPreExecute){
         this.onPreExecute = Affirm.notNull(onPreExecute);
         return this;
     }
 
-    public AsafTaskBuilder<Input, Result> onPostExecute(DoThisWithPayloadCallback<Result> onPostExecute){
+    public AsyncBuilder<Input, Result> onPostExecute(DoThisWithPayloadCallback<Result> onPostExecute){
         this.onPostExecute = Affirm.notNull(onPostExecute);
         return this;
     }
 
-    public AsafTask<Input, Void, Result> execute(Input... inputs){
+    public Async<Input, Void, Result> execute(Input... inputs){
 
-        if (asafTask != null){
+        if (async != null){
             throw new IllegalStateException("Please construct a new AsafTaskBuilder, as with AsyncTask these instances can only be executed once");
         }
 
@@ -49,7 +49,7 @@ public class AsafTaskBuilder <Input, Result>{
             throw new IllegalStateException("You must call at least doInBackground() before calling execute");
         }
 
-        asafTask = new AsafTask<Input, Void, Result>(workMode) {
+        async = new Async<Input, Void, Result>(workMode) {
 
             @Override
             protected void onPreExecute() {
@@ -71,9 +71,9 @@ public class AsafTaskBuilder <Input, Result>{
             }
         };
 
-        asafTask.executeTask(inputs);
+        async.executeTask(inputs);
 
-        return asafTask;
+        return async;
     }
 
     public interface DoInBackgroundCallback<Input, Result> {

@@ -6,7 +6,7 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;
 
 
-public abstract class AsafTask<Input, Progress, Result> extends AsyncTask<Input, Progress, Result> {
+public abstract class Async<Input, Progress, Result> extends AsyncTask<Input, Progress, Result> {
 
     protected final WorkMode workMode;
 
@@ -35,7 +35,7 @@ public abstract class AsafTask<Input, Progress, Result> extends AsyncTask<Input,
      * method as expected.
      *
      */
-    public AsafTask(WorkMode workMode) {
+    public Async(WorkMode workMode) {
         this.workMode = Affirm.notNull(workMode);
     }
 
@@ -62,16 +62,16 @@ public abstract class AsafTask<Input, Progress, Result> extends AsyncTask<Input,
 
     @Override
     protected void onPreExecute() {
-        //not calling super because that now throws a runtime (not mocked) exception during tests. yay android
+        //no opp
     }
 
     @Override
     protected void onPostExecute(Result result) {
-        //not calling super because that now throws a runtime (not mocked) exception during tests. yay android
+        //no opp
     }
 
     @Override
     protected void onProgressUpdate(Progress... values) {
-        //not calling super because that now throws a runtime (not mocked) exception during tests. yay android
+        //no opp
     }
 }
