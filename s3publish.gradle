@@ -2,18 +2,18 @@
  *
  * Publish the SDK to an Amazon s3 repo
  *
- * in asaf-project build.gradle:
+ * in android-fore build.gradle:
  *
  * - bump the version number LIB_VERSION_NAME
- * - but leave exampleAsafLibVersion as it is
+ * - but leave exampleForeLibVersion as it is
  *
  * publish all the libraries:
  *
- * ./gradlew asaf:install
- * ./gradlew asaf:publishAsafPublicationToMavenRepository
+ * ./gradlew fore:install
+ * ./gradlew fore:publishForePublicationToMavenRepository
  *
  *
- * - finally bump the version number of exampleAsafLibVersion
+ * - finally bump the version number of exampleForeLibVersion
  * - check everything builds and then tag the commit
  *
  */
@@ -115,12 +115,12 @@ task androidSourcesJar(type: Jar) {
 
 publishing {
     publications {
-        asaf (MavenPublication) {
+        fore (MavenPublication) {
             groupId rootProject.ext.LIB_GROUP
             artifactId LIB_ARTIFACT_ID
             version rootProject.ext.LIB_VERSION_NAME
 
-            artifact "${buildDir}/outputs/aar/asaf-debug.aar"
+            artifact "${buildDir}/outputs/aar/fore-debug.aar"
 
             //artifact sourcesJar
             //artifact javadocJar

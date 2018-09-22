@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.asafretrofit.ui.fruit.FruitView xmlns:android="http://schemas.android.com/apk/res/android"
+<foo.bar.example.foreretrofit.ui.fruit.FruitView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
@@ -78,7 +78,7 @@
 
                 </RelativeLayout>
 
-                <foo.bar.example.asafretrofit.ui.widgets.AnimatedTastyRatingBar
+                <foo.bar.example.foreretrofit.ui.widgets.AnimatedTastyRatingBar
                     android:id="@+id/fruit_tastyrating_tastybar"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
@@ -121,4 +121,4 @@
 
     </LinearLayout>
 
-</foo.bar.example.asafretrofit.ui.fruit.FruitView>
+</foo.bar.example.foreretrofit.ui.fruit.FruitView>
