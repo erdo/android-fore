@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/asaf-project.iml" filepath="$PROJECT_DIR$/asaf-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-fore.iml" filepath="$PROJECT_DIR$/android-fore.iml" />
       <module fileurl="file://$PROJECT_DIR$/example01databinding/example01databinding.iml" filepath="$PROJECT_DIR$/example01databinding/example01databinding.iml" />
       <module fileurl="file://$PROJECT_DIR$/example02threading/example02threading.iml" filepath="$PROJECT_DIR$/example02threading/example02threading.iml" />
       <module fileurl="file://$PROJECT_DIR$/example03adapters/example03adapters.iml" filepath="$PROJECT_DIR$/example03adapters/example03adapters.iml" />

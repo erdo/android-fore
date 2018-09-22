@@ -31,9 +31,9 @@ All the view classes (Activity/Fragment/View) for the sample apps are found in t
 
 Here are few examples:
 
-- [Wallets View](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/asafdatabinding/ui/wallet/WalletsView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/res/layout/fragment_wallet.xml)
+- [Wallets View](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/res/layout/fragment_wallet.xml)
 
-- [Counter View](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/res/layout/fragment_counter.xml)
+- [Counter View](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/res/layout/fragment_counter.xml)
 
 
 

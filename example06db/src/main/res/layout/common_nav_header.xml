@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.asafadapters2.ui.NavHeader xmlns:android="http://schemas.android.com/apk/res/android"
+<foo.bar.example.foredb.ui.NavHeader xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -97,10 +97,10 @@
 
     </RelativeLayout>
 
-    <foo.bar.example.asafadapters2.ui.common.widgets.PercentBar
+    <foo.bar.example.foredb.ui.common.widgets.PercentBar
         android:id="@+id/navheader_bossmodeprog_percentbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/common_space_small_medium"
         android:layout_alignParentBottom="true" />
 
-</foo.bar.example.asafadapters2.ui.NavHeader>
+</foo.bar.example.foredb.ui.NavHeader>

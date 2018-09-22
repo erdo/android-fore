@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.asafui.ui.tictactoe.TicTacToeView xmlns:android="http://schemas.android.com/apk/res/android"
+<foo.bar.example.foreui.ui.tictactoe.TicTacToeView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
@@ -123,4 +123,4 @@
 
     </RelativeLayout>
 
-</foo.bar.example.asafui.ui.tictactoe.TicTacToeView>
+</foo.bar.example.foreui.ui.tictactoe.TicTacToeView>

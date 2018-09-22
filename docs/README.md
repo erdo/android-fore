@@ -1,8 +1,11 @@
 # android fore
 
+![methods](https://img.shields.io/badge/methods-126-orange.svg)
+![lines of code](https://img.shields.io/badge/lines%20of%20code-535-lightgrey.svg)
+
 [(if you're reading this on github click here)](https://erdo.github.io/android-fore/#shoom)
 
-A tiny *(<500 lines of core code)* library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
+A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** and if you're spending time dealing with those issues in your code base, in a large team, while trying to support rotation: you should give it a try!
 
@@ -14,20 +17,29 @@ Due to the sparseness of the resulting view layer code, MVO is particularly **sc
 
 
 ## Quick Start
-Latest version: 0.9.32
+Latest version: 0.11.1
 
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-core', version: '0.9.32', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-core', version: '0.11.1', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.asaf', name: 'asaf-adapters', version: '0.9.32', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-retrofit', version: '0.9.32', ext: 'aar')
-implementation (group: 'co.early.asaf', name: 'asaf-ui', version: '0.9.32', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-adapters', version: '0.11.1', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '0.11.1', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '0.11.1', ext: 'aar')
 ```
+### Method Counts
+![fore-core methods](https://img.shields.io/badge/fore--core-126-orange.svg)
+![fore-adapters methods](https://img.shields.io/badge/fore--adapters-84-orange.svg)
+![fore-retrofit methods](https://img.shields.io/badge/fore--retrofit-38-orange.svg)
+![fore-lifecycle methods](https://img.shields.io/badge/fore--lifecycle-59-orange.svg)
 
+See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+
+
+## New to fore
 
 **If you're new to fore, Welcome! might I suggest:**
 
@@ -42,7 +54,7 @@ In a nutshell, developing with MVO means:
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 
-The **fore** library also includes some testable wrappers for AsyncTask: [**AsafTask**](https://erdo.github.io/android-fore/04-extras.html#asynctasks-with-lambdas) and [**AsafTaskBuilder**](https://erdo.github.io/android-fore/04-extras.html#asaftaskbuilder) (which lets you make use of lambdas)
+The **fore** library also includes some testable wrappers for AsyncTask: [**Async**](https://erdo.github.io/android-fore/04-extras.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-extras.html#asyncbuilder) (which lets you make use of lambdas)
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-extras.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-extras.html#retrofit-and-the-callprocessor).
 
@@ -76,7 +88,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/android-fore/tree/master/example02threading)
 
-This one demonstrates asynchronous programming, and importantly how to test it. It uses ([AsafTask](https://erdo.github.io/android-fore/04-extras.html#asaftask) and [AsafTaskBuilder](https://erdo.github.io/android-fore/04-extras.html#asaftaskbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
+This one demonstrates asynchronous programming, and importantly how to test it. It uses ([Async](https://erdo.github.io/android-fore/04-extras.html#asynctask) and [AsyncBuilder](https://erdo.github.io/android-fore/04-extras.html#asyncbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
 
@@ -102,7 +114,7 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/android-fore/tree/master/example04retrofit)
 
-Clicking the buttons in this app will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The first button gets a successful response, the last two get failed responses which are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://erdo.github.io/android-fore/04-extras.html#retrofit-and-the-callprocessor) which is the main innovation in the asaf-retrofit library.
+Clicking the buttons in this app will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The first button gets a successful response, the last two get failed responses which are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://erdo.github.io/android-fore/04-extras.html#retrofit-and-the-callprocessor) which is the main innovation in the fore-retrofit library.
 
 As you're using the app, please notice:
 
@@ -127,7 +139,7 @@ No automated tests for this app (but you should be getting the idea by now - sam
 
 
 ### **fore** 6 DB Example (Room db driven todo list)
-<div class="shoom" id="asaf-6-db-example-room"/>
+<div class="shoom" id="fore-6-db-example-room"/>
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example06db/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters2) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
 

@@ -10,7 +10,7 @@ An important thing about these models is that none of the code should know anyth
 
 In the sample apps, the models are all found in the **feature** package.
 
-Here's an example: [FruitFetcher.java](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java)
+Here's an example: [FruitFetcher.java](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java)
 
 ## Writing a Basic Model
 
@@ -20,9 +20,9 @@ You'll see that in all the sample apps, the models have been written with the as
 
 Writing your app so that it operates on a single thread by default is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
 
-When you need to pop onto another thread, do it explicitly with something like an [AsafTaskBuilder](/04-extras.html#asynctasks-with-lambdas) for example, and then pop back on to the UI thread when you are done. The **fore** WorkMode.ASYNCHRONOUS parameter will make Observables notify on the UI thread [anyway](https://github.com/erdo/android-fore/blob/master/asaf-core/src/main/java/co/early/asaf/core/observer/ObservableImp.java), so you don't need to do any extra work when you want to update the UI.
+When you need to pop onto another thread, do it explicitly with something like an [AsyncBuilder](/04-extras.html#asynctasks-with-lambdas) for example, and then pop back on to the UI thread when you are done. The **fore** WorkMode.ASYNCHRONOUS parameter will make Observables notify on the UI thread [anyway](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java), so you don't need to do any extra work when you want to update the UI.
 
-If you're already comfortable writing model code skip down to the [check list](#model-checklist), check out a [few](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
+If you're already comfortable writing model code skip down to the [check list](#model-checklist), check out a [few](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [examples](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithProgress.java) from the sample apps and you should be good to go.
 
 ***NB: to make your view code extra clean, ASYNCHRONOUS notifications from an Observable in **fore** are always sent on the UI thread, so there is no need to do any thread hopping to update a UI.***
 
@@ -41,7 +41,7 @@ For reference here's a check list of recommendations for the model classes, as u
 - The model's current state at any point in time is typically exposed by getters. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do the work in the setters not the getters
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.
-- The models should make good use of [dependency injection](https://erdo.github.io/android-fore/05-more.html#dependency-injection-basics) (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but **fore**'s [AsafTask](/android-fore/04-extras.html#asaftask) goes a long way to working around this as does [AsafTaskBuilder](/android-fore/04-extras.html#asaftaskbuilder)
+- The models should make good use of [dependency injection](https://erdo.github.io/android-fore/05-more.html#dependency-injection-basics) (via constructor arguments or otherwise). A good way to check this is to look for the **new** keyword anywhere in the model's code. If you see **new** anywhere, then you have a dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but **fore**'s [Async](/android-fore/04-extras.html#async) goes a long way to working around this as does [AsyncBuilder](/android-fore/04-extras.html#asyncbuilder)
 - Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thoroughly test model logic is a key part of reducing unecessary app bugs.
 - If the models are to be observable, they can do this in one of 2 ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally.
 - Do check out [When should I use an Observer, when should I use a callback listener?](/android-fore/05-more.html#observer-listener) in the FAQs to double check you're making the right choice for your model.

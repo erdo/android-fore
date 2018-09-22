@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.asafadapters.ui.playlist.PlaylistsView xmlns:android="http://schemas.android.com/apk/res/android"
+<foo.bar.example.foreadapters.ui.playlist.PlaylistsView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -192,4 +192,4 @@
 
     </RelativeLayout>
 
-</foo.bar.example.asafadapters.ui.playlist.PlaylistsView>
+</foo.bar.example.foreadapters.ui.playlist.PlaylistsView>

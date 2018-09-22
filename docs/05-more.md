@@ -23,7 +23,7 @@ This spells out the main problem with the default android architecture and the m
 
 ![**fore** basics presentation](img/pres_screenshot_2.png)
 
-This one takes you though all the important points of **fore** together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
+(NB this still has the old name of the library: ASAF)This one takes you though all the important points of **fore** together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
 
 <strong>Presenter perspective including notes is [here](http://asaf-asaf.surge.sh/#/?presenter&timer)</strong>
 
@@ -167,10 +167,10 @@ numPagesLeftToPrint++;
 notifyObservers();  //**fore** Observable will take care of the rest
 ```
 
-The asynchronous printing that we've glossed over so far could be implemented with an [AsafTaskBuilder](/04-extras.html#asaftaskbuilder) like so:
+The asynchronous printing that we've glossed over so far could be implemented with an [AsyncBuilder](/04-extras.html#asyncbuilder) like so:
 
 ```
-new AsafTaskBuilder<Void, Void>(workMode)
+new AsyncBuilder<Void, Void>(workMode)
         .doInBackground(new DoInBackgroundCallback<Void, Void>() {
             @Override
             public Void doThisAndReturn(Void... input) {
@@ -199,7 +199,7 @@ new AsafTaskBuilder<Void, Void>(workMode)
 Taking advantage of lambda expressions this becomes:
 
 ```
-new AsafTaskBuilder<Void, Void>(workMode)
+new AsyncBuilder<Void, Void>(workMode)
         .doInBackground(input -> {
 
             //...do the printing
@@ -251,7 +251,7 @@ public class Printer extends ObservableImp {
         numPagesLeftToPrint++;
         notifyObservers();
 
-        new AsafTaskBuilder<Void, Void>(workMode)
+        new AsyncBuilder<Void, Void>(workMode)
                 .doInBackground(input -> {
 
                     //...do the printing
@@ -289,11 +289,11 @@ public class Printer extends ObservableImp {
 
 Obviously that doesn't work yet, we've ignored numPagesLeftToPrint and the printing details, but you get the idea.
 
-There is something important that snuck in to that version though: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent, it's also being used by the AsafTaskBuilder. Usually you will pass WorkMode.ASYNCHRONOUS here.
+There is something important that snuck in to that version though: The **WorkMode** parameter tells the Observable implementation *ObservableImp* how you want your notifications to be sent, it's also being used by the AsyncBuilder. Usually you will pass WorkMode.ASYNCHRONOUS here.
 
 When you construct this *Printer* model for a test though, along with mocking the USBStuff, you will pass in WorkMode.SYNCHRONOUS as the constructor argument. SYNCHRONOUS will have the effect of making all the asynchronous code run in sequence so that testing is super easy.
 
-Take a look at how the [CounterWithLambdas](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdasTest.java) for example.
+Take a look at how the [CounterWithLambdas](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java) for example.
 
 
 Take a look at the [Model Check List](/android-fore/02-models.html#model-checklist) to make sure you have everything down, and then head over to the [Data Binding](/android-fore/03-databinding.html#shoom) section where we tie it all together with the view layer.
@@ -327,9 +327,9 @@ Android apps that are written using **fore** have a certain *look* to them code-
 
 ## Typical characteristics of an app built with **fore**
 
-- **The package structure** tends to contain two main packages (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/asaf-full-app-example-kotlin/tree/master/app/src/main/java/co/early/asaf/fullapp01), [here](https://github.com/erdo/password123/tree/master/app/src/main/java/co/early/password123) and [here](https://github.com/erdo/android-fore/tree/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit)
-- **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/android-fore/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserFragment.kt), [here](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/ui/fruit/FruitFragment.java) and [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserActivity.kt)
-- **The View classes follow a very standard flow** which is: get a reference to UI components -> inject model dependencies -> setup click listeners/adapters etc -> setup any animations if needed -> implement databinding by adding and removing an observer and using a syncView method. Examples: [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/asafadapters/ui/playlist/PlaylistsView.java), [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) and [here](https://github.com/erdo/asaf-full-app-example-kotlin/blob/master/app/src/main/java/co/early/asaf/fullapp01/ui/fruitcollector/FruitCollectorView.kt)
+- **The package structure** tends to contain two main packages (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/asaf-full-app-example-kotlin/tree/master/app/src/main/java/co/early/asaf/fullapp01), [here](https://github.com/erdo/password123/tree/master/app/src/main/java/co/early/password123) and [here](https://github.com/erdo/android-fore/tree/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit)
+- **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/android-fore/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserFragment.kt), [here](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/ui/fruit/FruitFragment.java) and [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserActivity.kt)
+- **The View classes follow a very standard flow** which is: get a reference to UI components -> inject model dependencies -> setup click listeners/adapters etc -> setup any animations if needed -> implement databinding by adding and removing an observer and using a syncView method. Examples: [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java), [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) and [here](https://github.com/erdo/asaf-full-app-example-kotlin/blob/master/app/src/main/java/co/early/asaf/fullapp01/ui/fruitcollector/FruitCollectorView.kt)
 
 Given any app that is attempting to implement **fore**: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a View class to see if you recognise the flow mentioned above. Check the databinding especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any ui state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen from developers who have just been introduced to this library).
 
@@ -362,7 +362,7 @@ Given any app that is attempting to implement **fore**: first check the package 
 
 <a name="view-logic"></a> 14) **Any logic kept in view layer classes is usually harder to test**. It can be hard to totally remove all the logic from the view layer (especially navigational logic once you factor in the back button) but be aware that the logic here is usually a lot harder to test and if you can move it away from the view layer reasonably easily, then you probably should. If there is some particularly complicated logic for a view state in the syncView() method for example, that logic is a prime candidate to be moved out of the view layer into a model/util class where it can more easily be tested and simply called from the syncView() method.
 
-<a name="syncview-name"></a> 15) **Having a syncView() method, but not calling it syncView()**. I'm not sure why people do that (it's probably just annoying to be told what to call your method). But this specific method is talked about a lot and it's very handy to call it the same thing so that everyone knows what everyone else is talking about. Making your View implement [SyncableView](https://github.com/erdo/android-fore/blob/master/asaf-core/src/main/java/co/early/asaf/core/ui/SyncableView.java) is probably a good idea anyway.
+<a name="syncview-name"></a> 15) **Having a syncView() method, but not calling it syncView()**. I'm not sure why people do that (it's probably just annoying to be told what to call your method). But this specific method is talked about a lot and it's very handy to call it the same thing so that everyone knows what everyone else is talking about. Making your View implement [SyncableView](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncableView.java) is probably a good idea anyway.
 
 
 
@@ -469,7 +469,7 @@ Similarly there will often be views or other Observables that are interested in 
 
 It just balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/android-fore/03-databinding.html#shoom) section).
 
-[Quick example, [this view](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/asafthreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for **fore** by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
+[Quick example, [this view](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for **fore** by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
 
 Passing a parameter here is also the "obvious" thing to do - which means, if it's an option, it will always be chosen by the less experienced developers in the team. Apart from giving you code review headaches, letting a new developer do that would prevent that developer from learning the more powerful way to use this framework - which, although extremely simple, can take a while to get your head around.
 
@@ -524,7 +524,7 @@ public void doStuffOnAThread(final ResultListener resultListener){
 ```
 
 
-For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/asafretrofit/feature/fruit/FruitFetcher.java). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
+For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
 
 For consistency, and for the same reasons outlined [above](#somethingchanged-parameter), try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work, but it breaks the whole point of the Observer pattern and it leads any inexperienced developers who are trying to use your model for their own view down the wrong path - why would they bother to implement the observer pattern and syncView() properly in their view if they can just take a short cut here (hint: they won't). And then you will loose all the benefits of databinding, see [syncView()](/android-fore/03-databinding.html#syncview) for a refresher.
 

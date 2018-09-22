@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven'
 apply plugin: 'idea'
+//apply plugin: 'com.getkeepsafe.dexcount' //uncomment for library method stats
 
 
 
@@ -17,7 +18,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "foo.bar.example.asafadapters2"
+        applicationId "foo.bar.example.foredb"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
