@@ -45,7 +45,7 @@ Whatever drives the state of your models and the rest of your app can be as func
 
 *Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course, but when I've used it, I've found it becomes a little heavy for anything more than a fairly trivial UI). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
 
-There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/09-more.html#state-versus-events)
+There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-more.html#state-versus-events)
 
 ## Comparisons with MV*
 
@@ -53,7 +53,7 @@ A little bit of background if you are coming from a different architecture, defi
 
 ![simple basket](img/arch_mvc.png)
 
-This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#whats-a-controller)).
+This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#btw-whats-a-controller)).
 
 There is one important thing to note about about this diagram however. If we focus on the Model, all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can be tested independently, and needs to know nothing about the view layer. It can support any number of different Views which can come and go as they please (when an Android device is rotated for example, the Model is not affected - or even aware of it).
 
@@ -83,7 +83,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/android-fore/06-faq.html#somethingchanged-parameter) and inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention that exists in MVO) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
+You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/android-fore/05-more.html#somethingchanged-parameter) and inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention that exists in MVO) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 ### Finally MVO
 
@@ -104,12 +104,12 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 * The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-databinding.html#fore-observables) that lets views attach themselves to any model they are interested in
 * The second is the [**syncView()**](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
-* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/04-more.html#dependency-injection)
+* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-more.html#dependency-injection-basics)
 
- If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-code-review-checklist.html#shoom) should also come in handy as you get up to speed, or you bring your team up to speed.
+ If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-more.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 ### Comparison with MVI
- *(Disclosure: the author currently works in a large commercial team implementing MVI in a published app)*
+ *(Incidentally, the author currently works in a large commercial team implementing MVI in a published app)*
 
  The two architectures are very similar in that they both have a single method that updates the UI according to state.
 

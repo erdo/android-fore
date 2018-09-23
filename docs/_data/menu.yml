@@ -51,7 +51,7 @@
   subitems:
     - text: Presentation Slides
       url: "#presentations"
-    - text: Coding Excercise
+    - text: Coding Exercise
       url: "#coding-exercise"
     - text: State versus Events
       url: "#state-versus-events"

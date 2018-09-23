@@ -65,7 +65,7 @@ Writing model code gets easier with practice but as a starting point you could d
 
 For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model.
 
-(In **fore**, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/android-fore/05-more.html#dependency-injection) for more info)
+(In **fore**, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/android-fore/05-more.html#dependency-injection-basics) for more info)
 
 In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy to do - also c) at some point the designers will probably want to be able to print various things, from various parts of the app and there is no point in limiting ourselves here.
 
