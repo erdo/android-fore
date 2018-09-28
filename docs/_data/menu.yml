@@ -33,8 +33,8 @@
       url: "#syncview"
     - text: Observables
       url: "#fore-observables"
-- text: Extras
-  url: /04-extras.html
+- text: More fore
+  url: /04-more-fore.html
   subitems:
     - text: Retrofit and the CallProcesor
       url: "#retrofit-and-the-callprocessor"
@@ -46,8 +46,8 @@
       url: "#lifecycle-components"
     - text: SyncTrigger
       url: "#synctrigger"
-- text: More Help
-  url: /05-more.html
+- text: Extras
+  url: /05-extras.html
   subitems:
     - text: Presentation Slides
       url: "#presentations"

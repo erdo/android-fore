@@ -26,7 +26,7 @@ Another advantage of using the CallProcessor is that it can be mocked out during
 - [one](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) is to simply mock the callProcessor so that it returns successes or failures to the model
 - [the other](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
-As with testing any asynchronous code with **fore**, we use WorkMode.SYNCHRONOUS to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
+As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
 
 
@@ -48,14 +48,16 @@ public void syncView() {
 
 In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes).
 
-You could also add your adapter as an observer on the model directly, but doing it like that usually causes problems because you will also need to find a way to remove it correctly (see these items in the code review check list [here](https://erdo.github.io/android-fore/05-code-review-checklist.html#non-lifecycle-observers) and [here](https://erdo.github.io/android-fore/05-code-review-checklist.html#add-remove)).
+You could also add your adapter as an observer on the model directly, but doing it like that usually causes problems because you will also need to find a way to remove it correctly (see these items in the code review check list [here](https://erdo.github.io/android-fore/05-extras.html#non-lifecycle-observers) and [here](https://erdo.github.io/android-fore/05-extras.html#add-remove)).
 
-If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API)
+If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API).
+
+*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like taking coffee instead of tea because you're on a diet, and then adding whipped cream with marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something wrong (like re-inflating your cells' layout when you shouldn't)*
 
 
 ## RecyclerView Animations
 
-So onwards and upwards! if you want list animations on android, they make you work quite hard for it. In order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc. This is one case in particular that it was so tempting to just add a parameter to the **fore** observable. [It still wasn't worth it though](https://erdo.github.io/android-fore/05-more.html#somethingchanged-parameter).
+So onwards and upwards! if you want list animations on android, they make you work quite hard for it. In order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc.
 
 Happily by using the ChangeAware\* classes found in the fore-adapters library you can get **fore** to do most of the work for you.
 
@@ -79,11 +81,11 @@ See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/sr
 
 ## Database driven RecyclerView Animations
 
-For lists that are being driven by a database table, the only way we can get animated changes is by comparing the two lists (the new versus the old) and try to work out what changed. This is because the view layer will not be aware of how the list has been changed as it will often be changed in another part of the system at the database layer. Thankfully Android has a *DiffResult* class that does that for us, however it's a more heavy weight approach and isn't really useful once your lists gets larger than about 1000 items.
+For lists that are being driven by a database table, the only way we can get animated changes is by comparing the two lists (the new versus the old) and try to work out what changed. This is because the view layer will not be aware of how the list has been changed as it will often be changed in another part of the system at the database layer. Thankfully Android has a *DiffUtil* class that does that for us, however it's a more heavy weight approach and isn't really useful once your lists gets larger than about 1000 items - in any case you want to be calculating the DiffResult in a separate thread.
 
 **fore** wraps some of these Android classes and handles threading for you, so all you need to do is extend ChangeAwareAdapter but this time with a construction parameter that implements the Diffable interface, rather than the Updatable interface.
 
-The [**fore** 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
+The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
 
 ## Ensuring Robustness
 
@@ -93,8 +95,7 @@ More specifics regarding adapters and threading are in the source of [Observable
 
 The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asaf-full-app-example) demonstrates that quite well, it's deliberately challenging to implement in a regular fashion (multiple simultaneous network calls changing the same list; user removal of list items; and screen rotation - all at any time) it's still totally robust as a result of sticking to that rule above.
 
-
-
+*Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately, it's all to do with threads and ensuring that the notifyX method gets called quickly enough after the list has been changed (or swapped for another list)*
 
 
 # AsyncTasks with Lambdas
@@ -116,9 +117,9 @@ The quickest **fore** solution to all that is to use Async as an (almost) drop i
 [Asynchronous Example App Source Code](/android-fore/#fore-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
 ## Async
-Async (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask* with two exceptions detailed below.
+Async (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask with two exceptions detailed below.
 
-*Async uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
+Async uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
 
 Here's how you use Async:
 
@@ -230,11 +231,11 @@ Totally optional, but you can use them to remove the databinding boiler plate fr
 
 # SyncTrigger
 
-The [SyncTrigger](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/SyncTrigger.java) class lets you bridge the gap between syncView() (which is called at any time [an arbitrary number of times](https://erdo.github.io/android-fore/05-more.html#notification-counting)) and an event like an animation that must be fired only once.
+The [SyncTrigger](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/ui/SyncTrigger.java) class lets you bridge the gap between syncView() (which is called at any time [an arbitrary number of times](https://erdo.github.io/android-fore/05-extras.html#notification-counting)) and an event like an animation that must be fired only once.
 
 When using a SyncTrigger you need to implement the **triggered()** method which will be run when the SyncTrigger is fired (e.g. to run an animation), and also implement the **checkThreshold()** method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON). If the threshold is breached i.e. checkThreshold() returns **true**, then triggered() will be called.
 
-For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the [SyncTrigger source](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/SyncTrigger.java) for more details about this).
+For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the [SyncTrigger source](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/ui/SyncTrigger.java) for more details about this).
 
 
 By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.

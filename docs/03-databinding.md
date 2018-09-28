@@ -1,6 +1,6 @@
 # Data Binding
 
-For some reason data binding is not something that is discussed much in Android circles, so just in case, a basic definition of one way databinding could be: any changes of state that happen in your underlying model, get automatically represented in your view.
+A basic definition of one way databinding could be: any changes of state that happen in your underlying model, get automatically represented in your view.
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 
@@ -11,9 +11,9 @@ Lately it's been applied to other (non UI) areas of code very successfully under
 
 ## SyncView()
 
-MVO uses one the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method, but there are some important details to discuss. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
+MVO uses one the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method, compare MVO with MVI [here](https://erdo.github.io/android-fore/00-architecture.html#comparison-with-mvi))*. On the surface it looks very simple, but there are some important details to discuss, that can trip you up or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
 
-That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself to make it seem more profound...
+That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself so that you remember it...
 
 > "If a model being observed changes **in any way**, then the **entire** view is refreshed."
 
@@ -22,7 +22,7 @@ That doesn't mean that you can't subdivide your views and only refresh one of th
 
 ### Simple Example
 
-Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with. It should serve as a warning for those considering ["optimising"](https://erdo.github.io/android-fore/05-more.html#syncview) the syncView method.
+This is quite a long section, but it's worth following through to the end if you want to know **why** we refresh the entire view. Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with. It should serve as a warning for those considering ["optimising"](https://erdo.github.io/android-fore/05-extras.html#syncview) the syncView method.
 
 Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our simplistic view to this basket model.
 
@@ -30,6 +30,7 @@ Let's say you're developing a view for a very basic shopping basket. We need to 
 
 We're assuming here all the items **cost $1** and pressing **add** and **remove** will simply add or remove one of these $1 items to/from your basket.
 
+*Sorry the code is all in "long form" java at the moment, but the lesson is the same. Anyone know a way to show tabbed java/kotlin code samples driven from a markdown file and rendered in jekyll, send me a pull request!*
 
 **Step 1)** First we hook up the **add item button** so in the onclick listener we call basket.addItem(), and then we just call an updateTotalPriceView() method which updates the amount shown in the total field.
 
@@ -177,7 +178,7 @@ It's a class of bug related to UI consistency that crops up *all the time* in an
 
 I'm guessing you have gone back and tried to spot the bug by now? in case you haven't, you can recreate it in your brain by selecting the discount checkbox first and then adding or removing an item. It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call updateDiscountView() from the add and remove click listeners, so this value will be incorrect in the view until the discount checkbox is toggled again.
 
-Even simple views can very easily have subtle UI consistency bugs like this. And often they are hard to spot, for this one a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
+Even simple views can very easily have subtle UI consistency bugs like this. And often they are hard to spot, in this case, a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
 
 Remember what we said before? If a model being observed changes **in anyway**, then the **entire** view is refreshed.
 
@@ -244,11 +245,11 @@ private void syncView(){
 ### Writing an effective syncView() method
 
 
-The important thing about the syncView() method is that it must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
+As part of refreshing the entire view, the syncView() method must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
 
 > "Where there is an if, there must always be an else"
 
-It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be undeterministic (it will be whatever state it had previously).
+It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be undeterministic (it will be whatever state it had previously). That means that it might look fine upon first glance, but it's a sneaky kind of UI consistency bug that may only present itself in edge case circumstances, or after a seemingly unrelated refactor.
 
 So don't do this:
 
@@ -271,26 +272,27 @@ if (basket.isBelowMinimum()){
 }
 ```
 
-But you'll find that by focusing on the property first rather than the condition, you can get some extremely tight code using the elvis operator like so:
+But you'll find that by focusing on the property first rather than the condition, you can get some extremely tight code like so:
 
 ```
 checkoutButton.setEnabled(!basket.isBelowMinimum());
 totalPrice.setColour(basket.isBelowMinimum() ? red : black);
 ```
 
-
+*This advice also applies to writing MVI render() methods by the way, MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
 ## **fore** Observables
-In **fore**, the models are usually Observable, and the Views are mostly doing the Observing.
+In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
-Most of the models in the sample apps become observable by extending ObservableImp (or you can implement the Observable interface and proxy the methods through to an ObservableImp instance), the [code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
+Most of the models in the sample apps become observable by extending ObservableImp (you can also implement the Observable interface and proxy the methods through to an ObservableImp instance), the [code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp, the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
 - When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
 - For this to work, all a model must do is call **notifyObservers()** whenever it's own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
 - When the model is constructed in **ASYNCHRONOUS** mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
-- To avoid memory leaks, **observers are responsible for removing themselves** from the observable model once they are no longer interested in receiving notifications
-- Typically observers **add()** and **remove()** themselves in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
+- To avoid memory leaks, **views are responsible for removing their observable callback** from the observable model once they are no longer interested in receiving notifications
+- Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
+- The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observable is required.
 
 ## Hooking it all up
 
@@ -334,7 +336,9 @@ And in line with android lifecycle methods (of either the Activity, the Fragment
 
 ## Removing even more boiler plate
 
-To save yourself writing that databinding boiler plate, you can use the optional **fore-lifecycle** package which gives you access to classes that do the adding and removing for you ([SyncableAppCompatActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableAppCompatActivity.java), [SyncableActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableActivity.java), [SyncableSupportFragment](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/fragment/SyncableSupportFragment.java), [SyncableFragment](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/fragment/SyncableFragment.java)) At that point the code starts to become so sparse that it's almost hard to see what is going on, I'm on the fence about whether that's a good thing or not.
+To save yourself writing even that minimal databinding boiler plate, you can use the optional **fore-lifecycle** package which gives you access to classes that do the adding and removing for you ([SyncableAppCompatActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableAppCompatActivity.java), [SyncableActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableActivity.java), [SyncableSupportFragment](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/fragment/SyncableSupportFragment.java), [SyncableFragment](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/fragment/SyncableFragment.java)) At that point the code starts to become so sparse that it's almost hard to see what is going on, I'm on the fence about whether that's a good thing or not.
+
+[Example app 5](https://erdo.github.io/android-fore/#fore-5-ui-helpers-example-tic-tac-toe) does this, see the **getResourceIdForSyncableView()** and **getThingsToObserve()** implementations of the [TicTacToeActivity](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeActivity.java) then notice how the usual add()/remove() observable boiler plate is missing from the [TicTacToeView](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java)
 
 
 That's everything you need to do to get bullet proof data binding in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.

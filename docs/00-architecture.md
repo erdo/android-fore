@@ -10,7 +10,7 @@ This little library helps you implement an architecture we'll call **MVO (Model 
 
 That block diagram above is what MVO looks like (it's simplified of course, further details below).
 
-By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a ViewModel - it makes no difference from an MVO perspective.
+By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a View-Model - it makes no difference from an MVO perspective.
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing specifically to do with rxJava by the way, though you absolutely can implement an MVO architecture using rxJava if you wish).
 
@@ -43,17 +43,19 @@ In MVO, the state is kept inside in the models, typically accessible via getter 
 
 Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
 
-*Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course, but when I've used it, I've found it becomes a little heavy for anything more than a fairly trivial UI). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
+*Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course. I've used it, it can be a little heavy for anything more than a fairly trivial UI - by heavy I mean it needs a lot of boiler plate code to be written). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
 
-There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-more.html#state-versus-events)
+There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events)
 
 ## Comparisons with MV*
 
-A little bit of background if you are coming from a different architecture, definitely not required reading though. Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
+A little bit of background if you are coming from a different architecture, definitely not required reading though (you might want to head over to the discussion on [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom) at this point).
+
+Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
 
 ![simple basket](img/arch_mvc.png)
 
-This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android is going to be a mess. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#btw-whats-a-controller)).
+This is quite a common representation of **MVC**, however I don't think it's a particularly useful diagram - it depends entirely on the specifics of your controller which often isn't mentioned at all. If you are considering your Android Activity class to be the controller, then implementing something like this on Android can get a little messy. *(In the 8 years or so I've been a contract Android developer, I've learnt the hard way that it's usually best to remove as much code from activity/fragment classes as possible)*. If you are considering your controllers to be your click listeners then it's basically a nothing diagram that shows a View interacting with a Model. (See below for a discussion of [Controllers](#btw-whats-a-controller)).
 
 There is one important thing to note about about this diagram however. If we focus on the Model, all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can be tested independently, and needs to know nothing about the view layer. It can support any number of different Views which can come and go as they please (when an Android device is rotated for example, the Model is not affected - or even aware of it).
 
@@ -83,7 +85,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using something like LiveData on Android, but when you get into the details I don't think it's a particularly nice solution (related to [this](https://erdo.github.io/android-fore/05-more.html#somethingchanged-parameter) and inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention that exists in MVO) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
+You can implement this using something like LiveData on Android, but when you get into the details I think the solution has a few issues related to [this](https://erdo.github.io/android-fore/05-extras.html#somethingchanged-parameter) and the inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention that exists in MVO (or render() in MVI) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 ### Finally MVO
 
@@ -97,16 +99,16 @@ Well how does that work? you can't just remove boxes and call it better! (I hear
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
 
-As with all the architectures discussed so far, here the Model knows nothing about the View. In MVO, when the view is destroyed and recreated, the view re-attaches itself to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose (and it's also very testable and scalable).
+As with all the architectures discussed so far, here the Model knows nothing about the View. In MVO, when the view is destroyed and recreated, the view re-attaches itself to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
 * The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-databinding.html#fore-observables) that lets views attach themselves to any model they are interested in
 * The second is the [**syncView()**](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
-* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-more.html#dependency-injection-basics)
+* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
- If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-more.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
+ If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 ### Comparison with MVI
  *(Incidentally, the author currently works in a large commercial team implementing MVI in a published app)*
@@ -131,7 +133,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  ![testing with MVI and MO](img/test_mvo_mvi.png)
 
- In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object (including a field like ViewState.isLoggedIn = true), for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is immutable. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected RESULT.
+ In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object (including a field like ViewState.isLoggedIn = true), for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is *immutable*. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected RESULT.
 
  **MVO** simply tests that when you call accountModel.login() you a) receive a notification if you are observing that model and it changes and b) the accountModel.isLoggedIn() method subsequently returns the expected value.
 
@@ -143,7 +145,7 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  *Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.*
 
- It goes without saying that the boiler plate requirements of MVI are not insignificant compared with MVO (this is the cost for writing UI data-binding code in a functional style). The challenges with regard to MVI boilerplate get more significant when the UI complexity increases, for instance when a single view depends on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus).
+ It goes without saying that the amount of code that needs to be written to implement MVI is considerably more than with MVO (this is the price you pay for writing UI data-binding code in a functional style). The difference becomes more significant with views that depend on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus). Most of this additional code will be written in the Interactor class, so at least it remains testable.
 
 
 ### BTW, What's a Controller

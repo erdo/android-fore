@@ -17,7 +17,7 @@ In short they are no place to put business logic, any code placed in those class
 - maintaining UI consistency
 - guarding against memory leaks
 
-It seems obvious but still, those issues probably account for maybe half the bugs present in a typical android app.
+It seems obvious but still, those issues account for a fairly large chunk of the bugs present in a typical android app.
 
 
 ## Examples
@@ -41,7 +41,7 @@ Here are few examples:
 
 You'll notice in the sample apps, nearly every view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout.
 
-As much view related functionality gets put in these classes as possible, so unlike in many Android code bases you will have seen, the view elements like text fields and buttons also live here. (You can put them in the Activity or the Fragment classes if you insist on it - but take a moment to double check why you want to do that). Very occasionally, you need to get the Fragment or Activity involved because [Android gives you no choice](https://erdo.github.io/android-fore/05-more.html#androids-original-mistake) in the matter, but it's often unnecessary.
+As much view related functionality gets put in these classes as possible, so unlike in many Android code bases you will have seen, the view elements like text fields and buttons also live here. (You can put them in the Activity or the Fragment classes if you insist on it - but take a moment to double check why you want to do that). Very occasionally, you need to get the Fragment or Activity involved because [Android gives you no choice](https://erdo.github.io/android-fore/05-extras.html#androids-original-mistake) in the matter, but it's often unnecessary.
 
 This is part of the **fore** library philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View. This also frees up the Fragment and Activity classes to do as little as possible except manage their lifecycles (which are considerably more complex than those of custom views).*
 

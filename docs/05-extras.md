@@ -1,20 +1,20 @@
 
 # Presentations
 
-There are a couple of presentations hosted on surge that I occasionally use, they might be useful for you too. They don't really work on mobile though, (they are almost useable if you put your mobile browser in full screen mode and use left and right swipes to navigate).
+There are a couple of presentations hosted on surge that I occasionally use, they might be useful for you too. Ironically they don't work at all on mobile.
 
-They were written using [spectacle](https://github.com/FormidableLabs/spectacle) which is an awesome ReactJS presentation library.
+They were written using [spectacle](https://github.com/FormidableLabs/spectacle) which is a pretty good ReactJS presentation library.
 
 
 ### Android architecture basics
 
 ![android basics presentation](img/pres_screenshot_1.png)
 
-This spells out the main problem with the default android architecture and the motivation for using libraries like **fore** in the first place. I think many android developers don't realise this, even though with hindsight it kind of stares you in the face.
+This spells out the main problem with the default android architecture and the motivation for using libraries like **fore** in the first place.
 
-<strong>Presenter perspective including notes is [here](http://asaf-android.surge.sh/#/?presenter&timer)</strong>
+<strong>Presenter perspective including notes is [here](http://android-arch.surge.sh/#/?presenter&timer)</strong>
 
-<strong>Regular slides without notes is [here](http://asaf-android.surge.sh)</strong>
+<strong>Regular slides without notes is [here](http://android-arch.surge.sh)</strong>
 
 (if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
 
@@ -23,18 +23,18 @@ This spells out the main problem with the default android architecture and the m
 
 ![**fore** basics presentation](img/pres_screenshot_2.png)
 
-(NB this still has the old name of the library: ASAF)This one takes you though all the important points of **fore** together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
+This one takes you though all the main points of **fore** together with a lot of examples. I don't think it really adds anything that isn't already in these docs - it's like a quick summary version.
 
-<strong>Presenter perspective including notes is [here](http://asaf-asaf.surge.sh/#/?presenter&timer)</strong>
+<strong>Presenter perspective including notes is [here](http://android-fore.surge.sh/#/?presenter&timer)</strong>
 
-<strong>Regular slides without notes is [here](http://asaf-asaf.surge.sh)</strong>
+<strong>Regular slides without notes is [here](http://android-fore.surge.sh)</strong>
 
 (Again, if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
 
 
 # Coding Exercise
 
-In my day job I often take new developers through the basics of **fore** and I've found the most effective way of doing this (aside from pointing them in the direction of these docs) is to get them to do a basic two page android app. I give them as much time as they need as the focus should be on learning and understanding rather than producing code. They typically take between a few days and a week, although once they know what they are doing they could easily complete the whole thing in an hour or so.
+In my day job I sometimes take new developers through the basics of **MVO** style architectures and I've found the most effective way of doing this (aside from pointing them in the direction of these docs) is to get them to do a basic two page android app. I give them as much time as they need as the focus should be on learning and understanding rather than producing code. They typically take between a few days and a week, although once they know what they are doing they could easily complete the whole thing in an hour or so.
 
 What I find truly fascinating is that the feedback I give them once they have finished, tends to be around 75% identical. I could almost copy and paste my feedback from the last developer and just change the lines of code that I am referring to.
 
@@ -54,9 +54,11 @@ Now let's think about the UI that might represent that error. Maybe when you are
 
 Looks like choosing to store our error as state was the right move here.
 
-Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in **fore** you would use a syncTrigger that bridges the two worlds of state and events letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler. After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - that's where you need to make a decision about state versus event.
+Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in **fore** you would use a  [syncTrigger](https://erdo.github.io/android-fore/05-extras.html#synctrigger) that bridges the two worlds of state and events, letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler.
 
-This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/android-fore/05-more.html#observer-listener)
+After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - maybe you want to treat everything as state just for consistency. That's where you need to make a decision about state versus event.
+
+This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](/android-fore/05-extras.html#observer-listener)
 
 
 # Basic model tutorial
@@ -65,11 +67,11 @@ Writing model code gets easier with practice but as a starting point you could d
 
 For example if you have a printer attached to your android app that you need to use, you probably want a *Printer* class for a model.
 
-(In **fore**, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/android-fore/05-more.html#dependency-injection-basics) for more info)
+(In **fore**, most of the models end up having global scope, if you have a model that you want to restrict the scope of, you can use a Factory class to get a local instance, or use a library like Dagger. Remember if you call "new" in a View layer class, you won't be able to mock that object out for tests later, see [here](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics) for more info)
 
-In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy to do - also c) at some point the designers will probably want to be able to print various things, from various parts of the app and there is no point in limiting ourselves here.
+In this case it makes sense to give our *Printer* model global application scope because a) the real printer is right there by your application ready for printing no matter what part of the app you are in and b) it's easy and clear to do.
 
-There will also only be one instance of the *Printer* model, because: there is only one real printer.
+There will also only be one instance of the *Printer* model, because: there is only one real printer. (This model is written in pseudo Java, writing one in Kotlin makes no difference of course.)
 
 ```
 public class Printer {
@@ -138,7 +140,7 @@ public class Printer {
 }
 ```
 
-The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constructor arguments, and we are going to deliberately crash if some crazy dev mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
+The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constructor arguments, and we are going to deliberately crash if someone mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
 
 ```
 private final USBStuff usbStuff;
@@ -167,7 +169,7 @@ numPagesLeftToPrint++;
 notifyObservers();  //**fore** Observable will take care of the rest
 ```
 
-The asynchronous printing that we've glossed over so far could be implemented with an [AsyncBuilder](/04-extras.html#asyncbuilder) like so:
+The asynchronous printing that we've glossed over so far could be implemented with an [AsyncBuilder](/04-more-fore.html#asyncbuilder) like so:
 
 ```
 new AsyncBuilder<Void, Void>(workMode)
@@ -296,12 +298,12 @@ When you construct this *Printer* model for a test though, along with mocking th
 Take a look at how the [CounterWithLambdas](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java) for example.
 
 
-Take a look at the [Model Check List](/android-fore/02-models.html#model-checklist) to make sure you have everything down, and then head over to the [Data Binding](/android-fore/03-databinding.html#shoom) section where we tie it all together with the view layer.
+Take a look at the [Model Check List](/android-fore/02-models.html#model-checklist) to make sure you have everything down, and then maybe head over to the [Data Binding](/android-fore/03-databinding.html#shoom) section where we tie it all together with the view layer.
 
 
 # Android's Original Mistake
 
-Sometimes, us Android developers (especially if we have only developed using Android during our career) can have a hard time understanding **in practice** how to separate view code from everything else (despite universally declaring it to be a good thing).
+Separating view code from everything else widely considered a good thing, but despite that agreement, it's rare to come across an android app that actually does that.
 
 Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
 
@@ -331,10 +333,9 @@ Android apps that are written using **fore** have a certain *look* to them code-
 - **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/android-fore/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserFragment.kt), [here](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/ui/fruit/FruitFragment.java) and [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserActivity.kt)
 - **The View classes follow a very standard flow** which is: get a reference to UI components -> inject model dependencies -> setup click listeners/adapters etc -> setup any animations if needed -> implement databinding by adding and removing an observer and using a syncView method. Examples: [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java), [here](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) and [here](https://github.com/erdo/asaf-full-app-example-kotlin/blob/master/app/src/main/java/co/early/asaf/fullapp01/ui/fruitcollector/FruitCollectorView.kt)
 
-Given any app that is attempting to implement **fore**: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a View class to see if you recognise the flow mentioned above. Check the databinding especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any ui state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen from developers who have just been introduced to this library).
+Given any app that is attempting to implement **fore**: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a View class to see if you recognise the flow mentioned above. Check the databinding especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any ui state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen professional developers do).
 
-
-<a name="adhoc-state-setting"></a> 1) **Any code setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the data binding section where it talks about [syncView()](/android-fore/03-databinding.html#syncview).
+<a name="adhoc-state-setting"></a> 1) **Any code which is setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the data binding section where it talks about [syncView()](/android-fore/03-databinding.html#syncview).
 
 <a name="fat-activity"></a> 2) **Activities and Fragments that have more than a few lines of code in them**. Sometimes there are good reasons for putting code in Activities and Fragments, setting up bundles and intents for example, but you should be immediately suspicious of any errant code that gets into these classes. Often this code can be moved to a model class, safely away from tricky lifecycle issues and where it can also be more easily tested. (If you value your sanity and that of your team, you should make sure that there are absolutely **no** AsyncTask instances or networking code in any Activity or Fragment classes at all. Ever.)
 
@@ -346,23 +347,23 @@ Given any app that is attempting to implement **fore**: first check the package 
 
 <a name="missing-notifyobservers"></a> 6) **Any change of state (usually a setter method) in an observable model that doesn't end with a call to notifyObservers()**. Even if it's not necessary for the current implementation, by not notifying the observers here, we now have a model that only works in certain (undocumented) circumstances. If someone else comes along and wants to observe your model and does not get a notification as expected when some state changes, something will break.
 
-<a name="slow-getters"></a> 7) **Any getter method that does more than pass back an in-memory copy of the data asked for**. In order for the databinding to be performant, we want any getter methods to return fairly quickly. Try to front load any processing in the setters rather than the getters.
+<a name="slow-getters"></a> 7) **Any getter method that does more than pass back an in-memory copy of the data asked for**. In order for the databinding to be performant, we want any getter methods to return fairly quickly. Try to front load any processing rather than doing it in the getters.
 
-<a name="complicated-observers"></a> 8) **Any observers that do anything other than sync their entire view** are usually (but not always) incorrect. Generally the observer just does one thing (sync the view), and this means you can use the same instance of that observer to register with several different models in the same view (it's another reason for not doing what's discussed in FAQ 1).
+<a name="complicated-observers"></a> 8) **Any observers that do anything other than sync their entire view** are usually (but not always) incorrect. Generally the observer just does one thing (sync the view), and this means you can use the same instance of that observer to register with several different models in the same view.
 
-<a name="notification-counting"></a> 9) **Code or tests that makes assumptions about the number of times syncView() or somethingChanged() will be called** This is pretty important, you can't fire one off events based on syncView() being called (like starting an activity for example), because you are depending on being notified by the model an exact number of times. The deal is that whenever something (anything) changes in the model, you will be notified. But you maybe be notified more than you expect, especially if the model is refactored at a later date to add new features or in some way the internal implementation of the model changes. In order to be robust, your syncView must make no assumptions about the number of times it may or may not be called. If this is causing you problems, check [this](https://erdo.github.io/android-fore/05-more.html#observer-listener) and the [SyncTrigger](https://erdo.github.io/android-fore/04-extras.html#synctrigger) for some potential solutions.
+<a name="notification-counting"></a> 9) **Code or tests that makes assumptions about the number of times syncView() or somethingChanged() will be called** This is pretty important, you can't fire one off events based on syncView() being called (like starting an activity for example), because you are depending on being notified by the model an exact number of times. The deal is that whenever something (anything) changes in the model, you will be notified. But you maybe be notified more than you expect, especially if the model is refactored at a later date to add new features or in some way the internal implementation of the model changes. In order to be robust, your syncView must make no assumptions about the number of times it may or may not be called. If this is causing you problems, check [this](https://erdo.github.io/android-fore/05-extras.html#observer-listener) and the [SyncTrigger](https://erdo.github.io/android-fore/04-more-fore.html#synctrigger) for some potential solutions.
 
-<a name="complicated-syncview"></a> 10) **A syncView() that is more than 5-10 lines long and/or doesn't have one line to set an affirmative value for each property of each UI element you are concerned with**. Take a look at how to write a good [syncView()](https://erdo.github.io/android-fore/03-databinding.html#syncview) method under the data binding section.
+<a name="complicated-syncview"></a> 10) **A syncView() that is more than 5-10 lines long or so and/or doesn't have one line to set an affirmative value for each property of each UI element you are concerned with**. Take a look at how to write a good [syncView()](https://erdo.github.io/android-fore/03-databinding.html#syncview) method under the data binding section.
 
-<a name="redundant-click-routing"></a> 11) **Any click listeners or text change listeners should generally be talking directly to model classes, or asking for navigation operations** for example: MyActivity.startMe(getContext()). Occasionally it's useful for listeners to directly call syncView() to refresh the view (when an edit text field has changed for example). What they generally shouldn't be doing is accessing other view components like fragments or activities and checking their state in some way, if you follow this code it generally ends up calling a model class somewhere down the line, in which case the model class should just be called directly (you get your model references to any view class using [dependency injection](/05-more.html#dependency-injection)).
+<a name="redundant-click-routing"></a> 11) **Any click listeners or text change listeners should generally be talking directly to model classes, or asking for navigation operations** for example: MyActivity.startMe(getContext()). Occasionally it's useful for listeners to directly call syncView() to refresh the view (when an edit text field has changed for example). What they generally shouldn't be doing is accessing other view components like fragments or activities and checking their state in some way. Sometimes if you follow this code it ends up calling a model class somewhere down the line anyway, in which case the model class should just be called directly (you get your model references to any view class using [dependency injection](/05-extras.html#dependency-injection-basics))
 
-<a name="state-callbacks"></a> 12) **Public methods on models that return their state directly through a callback, and therefore short cut the Observable pattern**. More on that here: [When should I use an Observer, when should I use a callback listener?](/android-fore/05-more.html#observer-listener)
+<a name="state-callbacks"></a> 12) **Public methods on models that return their state directly through a callback, and therefore shortcut the MVO pattern**. Depending on what data is returned here, this may make it difficult to cleanly support rotation. It might be worth re-reading the [**MVO architecture page**](https://erdo.github.io/android-fore/00-architecture.html#overview) and the [databinding](https://erdo.github.io/android-fore/03-databinding.html#shoom) page.
 
-<a name="view-state"></a> 13) **Any state kept in view layer classes is at risk of being lost**. How does this view survive rotation, would loosing that state matter? if yes, then it might be better kept inside a model, away from the view layer.
+<a name="view-state"></a> 13) **Any state kept in view layer classes is at risk of being lost**. How does this view survive rotation, would loosing that state matter? if yes, then it might be better kept inside a model, away from the view layer. Take a glance at the [**state versus events**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events) discussion.
 
-<a name="view-logic"></a> 14) **Any logic kept in view layer classes is usually harder to test**. It can be hard to totally remove all the logic from the view layer (especially navigational logic once you factor in the back button) but be aware that the logic here is usually a lot harder to test and if you can move it away from the view layer reasonably easily, then you probably should. If there is some particularly complicated logic for a view state in the syncView() method for example, that logic is a prime candidate to be moved out of the view layer into a model/util class where it can more easily be tested and simply called from the syncView() method.
+<a name="view-logic"></a> 14) **Any logic kept in view layer classes is usually harder to test**. It can be hard to totally remove all the logic from the view layer (especially navigational logic once you factor in the back button) but be aware that the logic here is usually a lot harder to test and if you can move it away from the view layer reasonably easily, then you probably should. If there is some particularly complicated logic for a view state in the syncView() method for example, that logic is a prime candidate to be moved out of the view layer into a model or utility class where it can more easily be tested.
 
-<a name="syncview-name"></a> 15) **Having a syncView() method, but not calling it syncView()**. I'm not sure why people do that (it's probably just annoying to be told what to call your method). But this specific method is talked about a lot and it's very handy to call it the same thing so that everyone knows what everyone else is talking about. Making your View implement [SyncableView](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncableView.java) is probably a good idea anyway.
+<a name="syncview-name"></a> 15) **Having a syncView() method, but not calling it syncView()**. This specific method is talked about a lot and it's very handy to call it the same thing so that everyone knows what everyone else is talking about. Making your View implement [SyncableView](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncableView.java) is probably a good idea anyway, it's also a requirement to use the optional lifecycle classes.
 
 
 
@@ -419,7 +420,7 @@ Maybe you want to swap in a mock NetworkAccess for a test so that it doesn't act
 
 A quick way to check how your Java code is doing on this front is to look for the keyword ***new*** (it's slightly less obvious in Kotlin as there is no *new* keyword). If you are instantiating an object, then that is a dependency that won't be able to be swapped or mocked out at a later date (which may be fine, as long as you are aware of it).
 
-*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the **fore** sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (and if you have an app with more than 100 global scope dependencies then you're probably doing something wrong) Anyway, if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself. See [here](http://blog.ploeh.dk/2014/06/10/pure-di/) for more on this*
+*Incidentally don't let anyone tell you that you must use a dependency injection framework in your android app. In the fore sample apps, all the dependencies are managed in the ObjectGraph class and managing even 100 dependencies in there is no big deal (if you have an app with more than 100 global scope dependencies then you're probably doing something wrong anyway). Keeping them all in the same place also lets you see what your dependency graph actually looks like at a glance. So if you and your team dig dagger, then use it. But if you spent a few days stabbing yourself in the eye with it instead - feel free to manage those dependencies yourself. See [here](http://blog.ploeh.dk/2014/06/10/pure-di/) for more on this*
 
 
 ### Inversion of Control
@@ -442,13 +443,9 @@ This of course means that when a view is rotated, it makes no difference to the 
 
 **[We're not talking about data pojos here btw, if your view is just being driven by some data that has a fixed state, you can use techniques like fragments.setArguments(bundle), and rotation will work just fine.]**
 
-For models whose state sometimes changes and are observable, once a rotation is complete and a new activity & view created by Android, **fore** databinding ensures that this new view is synced with the latest state of the model (if the model is still performing network access, the view will show a swirly, for example). The re-hooked up observers take care of any changes from there on in.
+For locally scoped models however (regardless if you are using Pure DI or Dagger) the actual scope of the model is usually tied to a class in the UI layer (Activity class, or your custom View class). On rotation, these View layer classes disappear and the locally scoped model reference (and the state it holds) disappears with it.
 
-However we still have a problem with locally scoped models: for locally scoped models (regardless if you are using Pure DI or Dagger) the actual scope of the model is usually tied to a class in the UI layer (Activity class, or your custom View class). On rotation, these View layer classes disappear and the locally scoped model reference (and the state it holds) disappears with it.
-
-The solution is to extend the lifecycle of these models so that they survive beyond rotation, you can do that using something like Google's ViewModel, or use a home grown solution, for example storing a reference to them statically, or anywhere tied to the application lifecycle. *(If you are using Dagger2, it is your locally scoped Component class that you need to keep a reference to)*
-
-
+The solution is to extend the lifecycle of these models so that they survive beyond rotation. *(If you are using Dagger2, it is your locally scoped Component class that you need to keep a reference to).* You can do that by putting your models in something like Google's ViewModel, or use a home grown solution for example: storing a reference to them statically, or storing them in something attached to the application class. Deciding when exactly to null out the references to those locally scoped models is highly app specific.
 
 
 # ~~Frequently~~ Occasionally Asked Questions
@@ -461,17 +458,17 @@ There is a very good reason why we don't have a parameter here, but it is compli
 
 Adding a parameter here would let client code use the observer like some kind of messenger thing or an event bus. While that could be a perfectly valid thing to do for the specific situation you find yourself in, when it comes to binding data to an android view layer it almost always ends up destroying the long term maintainability of the code base.
 
-(Adding a parameter here has been tried by yours truly in many different projects over the years by the way, it always ends up being removed resulting in a considerably cleaner code base, so this has been the approach now for a number of years and it seems to work very well).
+(Adding a parameter here has been tried by yours truly in many different projects over the years by the way, it always ends up being removed resulting in a considerably cleaner code base, so this has been the MVO approach now for a number of years and it seems to work very well).
 
 One reason (but not the only one) is that often, different views or other Observers will want different things from the same model and as the code evolves, that model slowly ends up having to support many different flavoured observables all with different parameter requirements.
 
 Similarly there will often be views or other Observables that are interested in more than one model, and if those models all have different observable interfaces, all those interfaces will need to be implemented and managed by the view, rather than just using a single Observer implementation.
 
-It just balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/android-fore/03-databinding.html#shoom) section).
+It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/android-fore/03-databinding.html#shoom) section).
 
-[Quick example, [this view](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for **fore** by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
+[Quick example, [this view](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for MVO by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
 
-Passing a parameter here is also the "obvious" thing to do - which means, if it's an option, it will always be chosen by the less experienced developers in the team. Apart from giving you code review headaches, letting a new developer do that would prevent that developer from learning the more powerful way to use this framework - which, although extremely simple, can take a while to get your head around.
+Passing a parameter here is also the "obvious" thing to do - which means, if it's an option, it will always be chosen by the less experienced developers in the team. Apart from giving you code review headaches, letting a new developer do that would prevent that developer from learning the more powerful way to use MVO - which, although extremely simple, can take a while to get your head around.
 
 This is one case where **fore** is stopping you from making an easy but horrible architectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
 
@@ -479,14 +476,12 @@ This is one case where **fore** is stopping you from making an easy but horrible
 > "This library is as valuable for what you **can't** do with it, as it is for what you **can** do with it."
 
 
-Try to get comfortable using these observers to just notify observing client code of any (unspecified) changes to the model's state (once the observing client code has been told there are changes, it can use fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](/#observer-listener) discussion first). For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
-
-If you want a library that lets you send data in these observables, you should look at RxJava and LiveData. Both libraries are an implementation of the Observer pattern and let you subscribe to notifications from data sources. RxJava is of course much larger and is focussed on data streams. It's great for processing data from IoT devices, processing video streams etc, but for data binding it's not suitable IMHO (mainly because of it's huge and flexible API, none of which you will need to crack robust databinding, indeed a surprising number of RxJava tutorials have databinding implementations which are broken for device rotation, even the ones that are specifically demonstrating databinding!)
+Try to get comfortable using these observers to just notify observing client code of any (unspecified) changes to the model's state (once the observing client code has been told there are changes, it can use fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](https://erdo.github.io/android-fore/05-extras.html#observer-listener) discussion first). For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
 
 ## <a name="observer-listener"></a> 2) When should I use an Observer, when should I use a callback listener?
 
-The observer pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback will probably serve you better. In this case the success or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
+The observer / notify pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback will probably serve you better. In this case the success or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal.
 
 for example:
 
@@ -531,7 +526,7 @@ For consistency, and for the same reasons outlined [above](#somethingchanged-par
 
 ## <a name="syncview"></a> 3) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
 
-This seems to be the reaction of about 20% of the developers that come across this pattern for the first time. I think it might depend on what style of development experience they have have had in the past.
+This seems to be the reaction of about 20% of the developers that come across this pattern for the first time. I think it might depend on what style of development experience they have have had in the past (it obviously won't be a problem for anyone coming from MVI for example).
 
 The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
@@ -561,6 +556,6 @@ If you put some logs in the syncView() method you'll also see that it is in fact
 
 The syncView() also completes pretty quickly as all of your getters should be returning fast anyway, as recommended [here](/android-fore/02-models.html#model-checklist).
 
-In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not saying such bugs don't exist, but if you ever get any kind of performance issues with this technique, that's the time to measure and see what is happening, but if you follow the guidelines here correctly you will almost certainly  never have any problems at all even on low end devices, and what you get in return is unparalleled robustness).
+In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not saying such bugs don't exist, but if you ever get any kind of performance issues with this technique, that's the time to measure and see what is happening). But if you follow the guidelines here correctly you will almost certainly encounter no problems at all, and that includes running on very cheap low end devices. What you do get however is unparalleled robustness and clarity of code - which, because logic mistakes become fewer under those circumstances, sometimes results in even more performant code.
 
-If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unecessarily (but still not actually redrawing the screen): chillax and be happy with the knowledge that your UI is *definitely* consistent ;)
+If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unnecessarily (but still not actually redrawing the screen): chillax and be happy with the knowledge that your UI is *definitely* consistent ;)
