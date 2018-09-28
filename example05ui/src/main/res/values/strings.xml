@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">fore 5 ui helpers</string>
+    <string name="app_name">5 ui ex</string>
     <string name="title_syncable_activity">Syncbl Act</string>
     <string name="title_syncable_fragment">Syncbl Frag</string>
     <string name="title_syncable_view">Syncbl View</string>

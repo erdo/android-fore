@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">fore 4 retrofit ex</string>
+    <string name="app_name">4 retrofit ex</string>
 
     <!-- common error messages -->
     <string name="msg_empty_message"></string>
