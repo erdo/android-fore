@@ -75,12 +75,10 @@ For these sample apps, all the **View** components are located in the **ui/** pa
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
-Aside from the apps, there is also a lot of information in this guide that will take you through the detail of how and why **fore** works.
-
 
 ### **fore 1** Data Binding Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/android-fore/tree/master/example01databinding)
+[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code](https://github.com/erdo/android-fore/tree/master/example01databinding)
 
 ![fore databinding sample app](https://j.gifs.com/MQ33GB.gif)
 
@@ -92,7 +90,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 ### **fore 2** Asynchronous Code Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/android-fore/tree/master/example02threading)
+[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.forethreading) \| [source code](https://github.com/erdo/android-fore/tree/master/example02threading)
 
 ![fore threading sample app](https://j.gifs.com/32LLNn.gif)
 
@@ -103,7 +101,7 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 ### **fore 3** Adapter Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters) \| [source code](https://github.com/erdo/android-fore/tree/master/example03adapters)
+[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreadapters) \| [source code](https://github.com/erdo/android-fore/tree/master/example03adapters)
 
 ![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
 
@@ -120,7 +118,7 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 ### **fore 4** Retrofit Example
 
-[screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/android-fore/tree/master/example04retrofit)
+[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreretrofit) \| [source code](https://github.com/erdo/android-fore/tree/master/example04retrofit)
 
 ![fore retrofit sample app](https://j.gifs.com/qYzz3D.gif)
 
@@ -135,7 +133,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 ### **fore 5** UI Helpers Example (Tic Tac Toe)
 
-[screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example05ui/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) \| [source code](https://github.com/erdo/android-fore/tree/master/example05ui)
+[video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code](https://github.com/erdo/android-fore/tree/master/example05ui)
 
 ![fore tic-tac-toe sample app](https://j.gifs.com/zKMM35.gif)
 
@@ -152,7 +150,7 @@ No automated tests for this app (but you should be getting the idea by now - sam
 ### **fore 6** DB Example (Room db driven todo list)
 <div class="shoom" id="fore-6-db-example-room"/>
 
-[screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example06db/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters2) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
+[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
 
 ![fore room db sample app](https://j.gifs.com/Xo88J8.gif)
 
@@ -174,14 +172,9 @@ All the database changes are done off the UI thread, RecyclerView animations are
 
 ### Other Full App Examples
 
-- There is a full app example hosted in a separate repo: one branch for **pure DI**, one for **Dagger 2**
-**[here](https://github.com/erdo/asaf-full-app-example)**
-
-- The same app written in **Kotlin**
-**[here](https://github.com/erdo/asaf-full-app-example-kotlin)**
+- There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-01-kotlin)**
 
 ![fore full sample app](https://j.gifs.com/jqpprz.gif)
-
 
 - The **Password123** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
 
