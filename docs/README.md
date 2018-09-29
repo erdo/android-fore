@@ -96,7 +96,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 ![fore threading sample app](https://j.gifs.com/32LLNn.gif)
 
-This one demonstrates asynchronous programming, and importantly how to test it. It uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#asynctask) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
+This one demonstrates asynchronous programming, and importantly how to test it. It uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
 
@@ -169,7 +169,7 @@ It's obviously ridiculously contrived, but the idea is to implement something th
 
 It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
 
-All the database changes are done off the UI thread, RecyclerView animations are supported (for lists below 1000 rows) and the app is totally robust and supports rotation out of the box. For testing, please see example apps 1-4
+All the database changes are done off the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows) and the app is totally robust and supports rotation out of the box. For testing, please see example apps 1-4
 
 
 ### Other Full App Examples
