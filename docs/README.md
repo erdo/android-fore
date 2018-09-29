@@ -174,11 +174,7 @@ All the database changes are done off the UI thread, RecyclerView animations are
 
 - There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-01-kotlin)**
 
-![fore full sample app](https://j.gifs.com/jqpprz.gif)
-
 - The **Password123** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
-
-![Password123 app](https://j.gifs.com/0VGG6V.gif)
 
 
 ## License
