@@ -82,6 +82,7 @@ Aside from the apps, there is also a lot of information in this guide that will 
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example01databinding/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafdatabinding) \| [source code](https://github.com/erdo/android-fore/tree/master/example01databinding)
 
+![fore databinding sample app](https://j.gifs.com/MQ33GB.gif)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/4BjQbtQvP-4?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
@@ -95,6 +96,8 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example02threading/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafthreading) \| [source code](https://github.com/erdo/android-fore/tree/master/example02threading)
 
+![fore threading sample app](https://j.gifs.com/32LLNn.gif)
+
 This one demonstrates asynchronous programming, and importantly how to test it. It uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#asynctask) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
@@ -103,6 +106,8 @@ This app has a counter that you can increase by pressing a button (but it takes 
 ### **fore 3** Adapter Example
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example03adapters/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters) \| [source code](https://github.com/erdo/android-fore/tree/master/example03adapters)
+
+![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6M_bBZZIrCA?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
@@ -120,6 +125,8 @@ As usual it's a complete and tested app but contains just the minimum required t
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example04retrofit/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafretrofit) \| [source code](https://github.com/erdo/android-fore/tree/master/example04retrofit)
 
+![fore retrofit sample app](https://j.gifs.com/qYzz3D.gif)
+
 Clicking the buttons in this app will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The first button gets a successful response, the last two get failed responses which are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor) which is the main innovation in the fore-retrofit library.
 
 As you're using the app, please notice:
@@ -133,7 +140,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example05ui/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafui) \| [source code](https://github.com/erdo/android-fore/tree/master/example05ui)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2ooBCWzotmk?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+![fore tic-tac-toe sample app](https://j.gifs.com/zKMM35.gif)
 
 A regular Tic Tac Toe game that makes use of:
 
@@ -149,6 +156,9 @@ No automated tests for this app (but you should be getting the idea by now - sam
 <div class="shoom" id="fore-6-db-example-room"/>
 
 [screen shot](https://raw.githubusercontent.com/erdo/android-fore/master/example06db/screenshot.png) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.asafadapters2) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
+
+![fore room db sample app](https://j.gifs.com/Xo88J8.gif)
+
 
 A Todo list on steroids that lets you:
 
@@ -170,10 +180,15 @@ All the database changes are done off the UI thread, RecyclerView animations are
 - There is a full app example hosted in a separate repo: one branch for **pure DI**, one for **Dagger 2**
 **[here](https://github.com/erdo/asaf-full-app-example)**
 
-- The same app written in **Kotlin** (functional but probably a little more to do clean code wise)
+- The same app written in **Kotlin**
 **[here](https://github.com/erdo/asaf-full-app-example-kotlin)**
 
-- The **pwned4android** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
+![fore full sample app](https://j.gifs.com/jqpprz.gif)
+
+
+- The **Password123** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
+
+![Password123 app](https://j.gifs.com/0VGG6V.gif)
 
 
 ## License
