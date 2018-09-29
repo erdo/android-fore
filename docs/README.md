@@ -84,8 +84,6 @@ Aside from the apps, there is also a lot of information in this guide that will 
 
 ![fore databinding sample app](https://j.gifs.com/MQ33GB.gif)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/4BjQbtQvP-4?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
 This app is a bare bones implementation of **fore** databinding. No threading, no networking, no database access - just the minimum required to demonstrate [Data Binding](https://erdo.github.io/android-fore/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/android-fore/00-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
@@ -109,7 +107,6 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 ![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/6M_bBZZIrCA?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
 
