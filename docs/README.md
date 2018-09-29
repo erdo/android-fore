@@ -12,8 +12,6 @@ MVO addresses issues like **testability**; **lifecycle management**; **UI consis
 
 Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: the [**View layer**](https://erdo.github.io/android-fore/01-views.html#shoom) is extremely thin, typically more so than with other architectures.
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. Because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant, and the **fore** library implementation supports a number of commercial android applications.
-
 
 ## Quick Start
 Latest version: 0.11.1
@@ -32,16 +30,6 @@ implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '0.11.1
 
 See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
 
-### Method Counts
-![fore-core methods](https://img.shields.io/badge/fore--core-126-orange.svg){: .float-left}
-![fore-adapters methods](https://img.shields.io/badge/fore--adapters-84-orange.svg){: .float-left}
-![fore-retrofit methods](https://img.shields.io/badge/fore--retrofit-38-orange.svg){: .float-left}
-![fore-lifecycle methods](https://img.shields.io/badge/fore--lifecycle-59-orange.svg){: .float-left}
-
-<br/>
-
-**fore** (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & jcenter, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
-
 
 ## New to fore
 
@@ -52,6 +40,20 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
  3. While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
   [**MVO Overview**](https://erdo.github.io/android-fore/00-architecture.html#overview),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
+
+
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. Because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant, and the **fore** library implementation supports a number of commercial android applications.
+
+
+### Method Counts
+![fore-core methods](https://img.shields.io/badge/fore--core-126-orange.svg){: .float-left}
+![fore-adapters methods](https://img.shields.io/badge/fore--adapters-84-orange.svg){: .float-left}
+![fore-retrofit methods](https://img.shields.io/badge/fore--retrofit-38-orange.svg){: .float-left}
+![fore-lifecycle methods](https://img.shields.io/badge/fore--lifecycle-59-orange.svg){: .float-left}
+
+<br/>
+
+**fore** (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & jcenter, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
 
 In a nutshell, developing with MVO means:
 
