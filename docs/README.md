@@ -38,7 +38,7 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
  1. Cloning this git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
  3. While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
-  [**MVO Overview**](https://erdo.github.io/android-fore/00-architecture.html#overview),
+  [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#overview),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
 
 
@@ -51,6 +51,8 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 <br/><br/>
 
 **fore** (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & jcenter, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
+
+### Overview
 
 Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. and because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation supports a number of commercial android applications.
 
