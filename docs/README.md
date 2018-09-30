@@ -58,7 +58,7 @@ In a nutshell, developing with MVO means:
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
-In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs it's view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit sending them via a Presenter in this case). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit sending them via a Presenter in this case). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
