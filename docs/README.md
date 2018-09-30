@@ -4,7 +4,7 @@
 ![lines of code](https://img.shields.io/badge/lines%20of%20code-535-lightgrey.svg){: .float-left}
 <br/>
 
-[(if you're reading this on github click here)](https://erdo.github.io/android-fore/#shoom)
+[(if you're reading this on github --> click here)](https://erdo.github.io/android-fore/#shoom)
 
 A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
