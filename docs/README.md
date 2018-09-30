@@ -6,7 +6,7 @@
 
 [(if you're reading this on github --> click here)](https://erdo.github.io/android-fore/#shoom)
 
-A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
+A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
 
@@ -38,7 +38,7 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
  1. Cloning this git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
  3. While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
-  [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#overview),
+  [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
 
 
@@ -60,7 +60,7 @@ In a nutshell, developing with MVO means:
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
-In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit sending them via a Presenter in this case). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit sending them via a Presenter in this case). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
