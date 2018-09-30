@@ -5,6 +5,8 @@
       url: /#quick-start
     - text: Sample Apps
       url: /#sample-apps
+    - text: Contributing
+      url: /#contributing
     - text: License
       url: /#license
 - text: MVO

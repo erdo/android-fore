@@ -75,9 +75,6 @@ The **fore** library also includes some testable wrappers for AsyncTask: [**Asyn
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor).
 
-### Contributing
-Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
-
 
 ## Sample Apps
 
@@ -191,6 +188,9 @@ All the database changes are done off the UI thread, RecyclerView animations usi
 - There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-01-kotlin)**
 
 - The **Password123** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
+
+### Contributing
+Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
 
 
 ## License
