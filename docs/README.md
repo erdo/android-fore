@@ -50,11 +50,11 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 <br/><br/>
 
-**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on JCenter, or you work at a company that dislikes depending on *non-famous* repos, you are welcome to just copy and paste the code into your app should you so wish (it's small enough to be self-manageable, and the core code hasn't changed in a while anyway). There's also no reason you can't implement MVO yourself of course.
+**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small - so small in fact that you could just copy and paste the code into your app if you wanted (it's small enough to be self-manageable, and the core code hasn't changed in a while anyway). I'd recommend you just use the JCenter version, but each to their own ;) There's also no reason you can't implement MVO yourself of course.
 
 ### Overview
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. and because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation supports a number of commercial android applications.
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**, and because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation already supports a number of commercial android applications.
 
 In a nutshell, developing with MVO means:
 
