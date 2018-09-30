@@ -42,9 +42,6 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
 
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. Because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant, and the **fore** library implementation supports a number of commercial android applications.
-
-
 ### Method Counts
 ![fore-core methods](https://img.shields.io/badge/fore--core-126-orange.svg){: .float-left}
 ![fore-adapters methods](https://img.shields.io/badge/fore--adapters-84-orange.svg){: .float-left}
@@ -55,10 +52,22 @@ Due to the sparseness of the resulting view layer code, MVO is particularly **sc
 
 **fore** (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & jcenter, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
 
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**. and because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation supports a number of commercial android applications.
+
 In a nutshell, developing with MVO means:
 
 > "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
 
+In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#overview) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs it's view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit sending them via a Presenter in this case). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+
+**There are a few important things in MVO that allow you an architecture this simple:**
+
+* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-databinding.html#fore-observables) that lets views attach themselves to any model they are interested in
+* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention
+* The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
+* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
+
+If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 The **fore** library also includes some testable wrappers for AsyncTask: [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) (which lets you make use of lambdas)
 
