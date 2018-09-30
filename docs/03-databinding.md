@@ -281,6 +281,10 @@ totalPrice.setColour(basket.isBelowMinimum() ? red : black);
 
 *This advice also applies to writing MVI render() methods by the way, MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
+### Notification Counting
+You shouldn't rely on SyncView() being called an exact number of times by the way as it results in fragile code. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing SyncView() implementations that will survive code refactors. *As above, the same applies for writing robust render() methods in MVI*
+
+
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
