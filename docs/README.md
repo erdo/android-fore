@@ -50,7 +50,7 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 <br/><br/>
 
-**fore** (though now stable) has been going through iterations privately for years - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on this random github repo & jcenter, you can literally just copy and paste it into your app should you so wish (the core code hasn't changed in a while). There's also no reason you can't implement MVO yourself of course.
+**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small, so if you don't want to depend on JCenter, or you work at a company that dislikes depending on *non-famous* repos, you are welcome to just copy and paste the code into your app should you so wish (it's small enough to be self-manageable, and the core code hasn't changed in a while anyway). There's also no reason you can't implement MVO yourself of course.
 
 ### Overview
 
