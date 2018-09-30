@@ -190,7 +190,7 @@ All the database changes are done off the UI thread, RecyclerView animations usi
 - The **Password123** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
 
 ## Contributing
-Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
+Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html#shoom), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
 
 
 ## License
