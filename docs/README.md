@@ -73,6 +73,9 @@ The **fore** library also includes some testable wrappers for AsyncTask: [**Asyn
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor).
 
+### Contributing
+Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
+
 
 ## Sample Apps
 
