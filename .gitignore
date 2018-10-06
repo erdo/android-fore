@@ -46,6 +46,7 @@ google-services.json
 
 # Jekyll
 _site/
+.jekyll-metadata
 
 # Misc
 .DS_Store
