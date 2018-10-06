@@ -35,7 +35,7 @@ void addBottle();
 void removeBottle();
 void setIsDiscounted(boolean isDiscounted);
 
-int getTotalNumberOfBottles();
+int getTotalItems();
 int getTotalPrice();
 boolean getIsDiscounted();
 int getTotalSaving();
