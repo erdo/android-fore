@@ -11,7 +11,7 @@ Lately it's been applied to other (non UI) areas of code very successfully under
 
 ## SyncView()
 
-MVO uses one of the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method, compare MVO with MVI [here](https://erdo.github.io/android-fore/00-architecture.html#comparison-with-mvi))*. On the surface it looks very simple, but there are some important details to discuss, that can trip you up or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
+MVO uses one of the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method - compare MVO with MVI [here](https://erdo.github.io/android-fore/00-architecture.html#comparison-with-mvi))*. On the surface it looks very simple, but there are some important details to discuss, that can trip you up or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
 
 That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself so that you remember it...
 
@@ -20,87 +20,84 @@ That simplicity is surprisingly powerful so we're going to go into further detai
 That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want by the way - as long as both (sub)views have their own syncView() method and they are observing their respective models.
 
 
-### Simple Example
+### Quick Tutorial
 
-This is quite a long section, but it's worth following through to the end if you want to know **why** we refresh the entire view. Here's an example of what commonly happens in real world applications when you **don't** refresh the entire view using a syncView() method or similar, especially when you have lifecycle issues to deal with. It should serve as a warning for those considering ["optimising"](https://erdo.github.io/android-fore/05-extras.html#syncview) the syncView method.
+I've gone through this example with many developers over the last few years, and so far no one has spotted the **deliberate bug** that's coming up until it's too late. So I'm giving you a heads up! The fact that you probably still won't see it, should demonstrate the power of having a syncView() which simply refreshes the **entire** view whenever it's called.
 
-Let's say you're developing a view for a very basic shopping basket. We need to be able to **add** and **remove** items, and to apply (or not apply) a **10% discount**. The basket model has already been written and has already been nicely unit tested. All we need now is to hook up our simplistic view to this basket model.
+So, let's say we're developing a view for a very basic queue-busting app that lets roaming staff sell $1 bottles of water at a festival. The main UI should look something like this:
 
-![simple basket](img/simple-basket.png)
+![full basket](img/waterseller_full_small.png)
 
-We're assuming here all the items **cost $1** and pressing **add** and **remove** will simply add or remove one of these $1 items to/from your basket.
-
-*Sorry the code is all in "long form" java at the moment, but the lesson is the same. Anyone know a way to show tabbed java/kotlin code samples driven from a markdown file and rendered in jekyll, send me a pull request!*
-
-**Step 1)** First we hook up the **add item button** so in the onclick listener we call basket.addItem(), and then we just call an updateTotalPriceView() method which updates the amount shown in the total field.
-
-(dev thinks: no point in syncing the whole basket view here, right?).
+We'll assume that the [model](https://erdo.github.io/android-fore/02-models.html#shoom) to support this view has already been written and tested, and it has methods like this:
 
 ```
-addItemButton.setOnClickListener(new OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        basket.addItem();
-        updateTotalPriceView();
-    }
+void addBottle();
+void removeBottle();
+void setIsDiscounted(boolean isDiscounted);
+
+int getTotalNumberOfBottles();
+int getTotalPrice();
+boolean getIsDiscounted();
+int getTotalSaving();
+```
+
+**Step 1**
+Let's start with a basic version.
+
+![no basket](img/waterseller_nobasket_small.png)
+
+All we need to do is hook up the **add** and **remove** buttons in the UI and make sure we remember to update the **total price**. Something like this would be typical:
+
+```
+addButton.setOnClickListener(v -> {
+    basket.addBottle();
+    updateTotalPriceView();
+});
+
+removeButton.setOnClickListener(v -> {
+    basket.removeBottle();
+    updateTotalPriceView();
 });
 ```
 
-**Step 2)** Then when we hook up the **remove item button** we do something similar: call basket.removeItem() and call the updateTotalPriceView() method.
+**Step 2**
+Now let's get a bit smarter and an icon in the top right corner that will indicate how many bottles of water we have in the basket
 
-(again dev thinks: no point syncing the entire view here)
+![no discount](img/waterseller_nodiscounts_small.png)
+
+Code-wise this looks pretty similar, we just need to add a call to an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+
 
 ```
-removeItemButton.setOnClickListener(new OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        basket.removeItem();
-        updateTotalPriceView();
-    }
+addButton.setOnClickListener(v -> {
+    basket.addBottle();
+    updateTotalPriceView();
+    updateTotalNumberOfItemsView();
+});
+
+removeButton.setOnClickListener(v -> {
+    basket.removeBottle();
+    updateTotalPriceView();
+    updateTotalNumberOfItemsView();
 });
 ```
 
-**Step 3)** The designers want the view to display the **total number of items in the basket** (the little number in a circle by the basket icon) as well as the price, so now we add an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+**Step 3**
+Finally we get to the **discount** checkbox, if the box is checked: the discount is applied, if it's unchecked: the discount is removed.
 
+![full basket](img/waterseller_full_small.png)
+
+Remember the basket model calculations have already been written and tested so all we need in the onCheckChanged listener is: basket.setIsDiscounted(applyDiscount); then updateTotalSavingsView() which just shows the discount that has been applied. We also need to call updateTotalPriceView() as that will have changed, **but not updateTotalNumberOfItemsView()** because of course, discounts have no effect there. We end up with something like this:
 
 ```
-addItemButton.setOnClickListener(new OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        basket.addItem();
-        updateTotalPriceView();
-        updateTotalNumberOfItemsView();
-    }
-});
-
-removeItemButton.setOnClickListener(new OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        basket.removeItem();
-        updateTotalPriceView();
-        updateTotalNumberOfItemsView();
-    }
+apply10PercOff.setOnCheckedChangeListener( isChecked -> {
+    basket.setIsDiscounted(isChecked);
+    updateTotalPriceView();
+    updateTotalSavingsView();
 });
 ```
 
-Still with me? not far to go
-
-**Step 4)** Finally we get to the **apply discount** checkbox, if the box is checked: the discount is applied, if not: there is no discount applied. Remember the model calculations have already been written and tested so what we need in the click listener is: basket.setDiscount(applyDiscount); then updateDiscountView() which just shows the discount that has been applied. We also need to call updateTotalPriceView() as that will have changed, **but not updateTotalNumberOfItemsView()** because of course, discounts have no effect there.
-
-(dev thinks: great, we are only updating what we need to)
-
-```
-apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-    @Override
-    public void onCheckedChanged(boolean applyDiscount) {
-        basket.setDiscount(applyDiscount);
-        updateDiscountView();
-        updateTotalPriceView();
-    }
-});
-```
-
-Here is the psuedo code we end up with for this (very over simplified) case:
+Here is the pseudo code we end up with for this (very over simplified) case:
 
 ```
 Button addItemButton;
@@ -108,50 +105,41 @@ Button removeItemButton;
 CheckBox apply10PercOff;
 
 TextView totalItems;
-TextView totalDiscount;
 TextView totalPrice;
+TextView totalSaving;
 
 private void setupButtonListeners() {
 
-    addItemButton.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            basket.addItem();
-            updateTotalPriceView();
-            updateTotalNumberOfItemsView();
-        }
-    });
+  addButton.setOnClickListener(v -> {
+      basket.addBottle();
+      updateTotalPriceView();
+      updateTotalNumberOfItemsView();
+  });
 
-    removeItemButton.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            basket.removeItem();
-            updateTotalPriceView();
-            updateTotalNumberOfItemsView();
-        }
-    });
+  removeButton.setOnClickListener(v -> {
+      basket.removeBottle();
+      updateTotalPriceView();
+      updateTotalNumberOfItemsView();
+  });
 
-    apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(boolean applyDiscount) {
-            basket.setDiscount(applyDiscount);
-            updateDiscountView();
-            updateTotalPriceView();
-        }
-    });
+  apply10PercOff.setOnCheckedChangeListener(isChecked -> {
+      basket.setIsDiscounted(isChecked);
+      updateTotalSavingsView();
+      updateTotalPriceView();
+  });
 }
 
 
 private void updateTotalNumberOfItemsView(){
-    totalItems.setText(basket.getTotalItems);
-}
-
-private void updateDiscountView(){
-    totalDiscount.setText(basket.getTotalDiscount);
+    totalItems.setText(basket.getTotalItems());
 }
 
 private void updateTotalPriceView(){
-    totalPrice.setText(basket.getTotalPrice);
+    totalPrice.setText(basket.getTotalPrice());
+}
+
+private void updateTotalSavingsView(){
+    totalSaving.setText(basket.getTotalSaving());
 }
 
 ```
@@ -161,28 +149,34 @@ And don't forget if we need to rotate this view, all the fields will be out of s
 ```
 private void updatePostRotation(){
     updateTotalNumberOfItemsView();
-    updateDiscountView();
     updateTotalPriceView();
+    updateTotalSavingsView();
 }
 ```
 
-Well that looks kind of ok, and it would mostly work, the add and remove listeners look pretty similar so we can extract that out to another method - but what if we also want to add some more UI details like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minimum card transaction value of $1 or whatever.
+The code above leaves out a few details of course (the injection of the basket model, hooking up the view elements to the xml layout, formatting the currency displays), but apart from that it looks kind of ok, the add and remove listeners look pretty similar so maybe we could extract them out to another function, but this view would mostly work.
 
-It soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
+If we wanted to add some more UI details, however, like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minimum credit card transaction value of $10 or whatever, it soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
 
-### But that's not the worst problem....
-The worst problem with this code though, is that there is a **bug** in it. Did you spot it?
+### But what about that bug you mentioned?
+Well it's right there staring you in the face, see if you can spot it if you haven't already. Do those click listeners look ok to you? cover all the situations fine?
 
-It's a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that disable rotation.
+This is a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that disable rotation.
 
-I'm guessing you have gone back and tried to spot the bug by now? in case you haven't, you can recreate it in your brain by selecting the discount checkbox first and then adding or removing an item. It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call updateDiscountView() from the add and remove click listeners, so this value will be incorrect in the view until the discount checkbox is toggled again.
+In case you haven't worked out the bug yet, you can recreate it in your brain like this:
 
-Even simple views can very easily have subtle UI consistency bugs like this. And often they are hard to spot, in this case, a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
+* start with an empty basket
+* select the discount checkbox first
+* then add an item
 
-Remember what we said before? If a model being observed changes **in anyway**, then the **entire** view is refreshed.
+(what value would you expect to see in the savings total?)
 
-Using a syncView() to do this, we end up with something like this for the example above:
+It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call *updateDiscountView()* from the add and remove click listeners, so this value will be incorrect in the view until the discount checkbox is toggled again.
+
+Even simple views can very easily have subtle UI consistency bugs like this. And often they are **hard to spot**. In this case, a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
+
+Remember what we said before? If a model being observed changes **in anyway**, then the **entire** view is refreshed. Using the syncView() convention, we instead end up with something like this:
 
 ```
 Button addItemButton;
@@ -190,55 +184,50 @@ Button removeItemButton;
 CheckBox apply10PercOff;
 
 TextView totalItems;
-TextView totalDiscount;
 TextView totalPrice;
-
+TextView totalSaving;
 
 private void setupButtonListeners() {
 
-    addItemButton.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            basket.addItem();
-        }
-    });
+  addButton.setOnClickListener(v -> {
+      basket.addBottle();
+  });
 
-    removeItemButton.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            basket.removeItem();
-        }
-    });
+  removeButton.setOnClickListener(v -> {
+      basket.removeBottle();
+  });
 
-    apply10PercOff.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(boolean applyDiscount) {
-            basket.setDiscount(applyDiscount);
-        }
-    });
+  apply10PercOff.setOnCheckedChangeListener(isChecked -> {
+      basket.setIsDiscounted(isChecked);
+  });
 }
 
 public void syncView(){
-    totalItems.setText(basket.getTotalItems);
-    totalDiscount.setText(basket.getTotalDiscount);
-    totalPrice.setText(basket.getTotalPrice);
+    totalItems.setText(basket.getTotalItems());
+    totalPrice.setText(basket.getTotalPrice());
+    totalSaving.setText(basket.getTotalSaving());
 }
-
-
 ```
+What's surprising is that this is not only more robust - it's also less code. And because this technique supports almost all types of standard UI (including [adapters](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto)), the code becomes so familiar it makes it very easy to spot when something is wrong. And we get rotation support for free: all we need to do to is to call syncView() after rotating.
 
-The code above leaves out details that are required for both solutions of course (the injection of the basket model, hooking up the view elements to the xml layout etc). And we haven't discussed yet how syncView() actually gets called by the model (more on that in the [**fore** Observables](#fore-observables) section below). A full implementation is not that much larger though, see [here](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) for example views from the sample apps.
+We haven't discussed yet how syncView() actually gets called by the model, but more on that in the [**fore** Observables](#fore-observables) section below.
 
-For the moment all we need to know is that syncView() is triggered whenever **any** state of the basket model changes. It's also called when the view is created, say after rotation. If you want to add any more states it's easy and clean, and totally consistent if they are set inside the syncView() method:
+ A full implementation of a view is not that much larger with those details included though, see [here](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) for example views from the sample apps.
+
+For the moment all we need to know is that syncView() is triggered whenever **any** state of the basket model changes. It's also called when the view is created, including after rotation.
+
+> "It's not only more robust - it's also less code... and we get rotation support for free"
+
+If you want to add any more states it's also easy and clean, and totally consistent if they are set inside the syncView() method:
 
 ```
 private void syncView(){
     checkoutButton.setEnabled(basket.isAboveMinimum());
     totalPrice.setColour(basket.isAboveMinimum() ? black : red);
     removeButton.setEnabled(basket.getTotalItems>0);
-    totalItems.setText(basket.getTotalItems);
-    totalDiscount.setText(basket.getTotalDiscount);
-    totalPrice.setText(basket.getTotalPrice);
+    totalItems.setText(basket.getTotalItems());
+    totalPrice.setText(basket.getTotalPrice());
+    totalSaving.setText(basket.getTotalSaving());
 }
 ```
 
@@ -249,7 +238,7 @@ As part of refreshing the entire view, the syncView() method must set an **affir
 
 > "Where there is an if, there must always be an else"
 
-It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be undeterministic (it will be whatever state it had previously). That means that it might look fine upon first glance, but it's a sneaky kind of UI consistency bug that may only present itself in edge case circumstances, or after a seemingly unrelated refactor.
+It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be indeterministic (it will be whatever state it had previously). This is one of those sneaky edge case things that at first glance might look fine, but can reveal itself as a bug later.
 
 So don't do this:
 
@@ -279,12 +268,10 @@ checkoutButton.setEnabled(!basket.isBelowMinimum());
 totalPrice.setColour(basket.isBelowMinimum() ? red : black);
 ```
 
-*This advice also applies to writing MVI render() methods by the way, MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
+*A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
 ### Don't Count Notifications
-You shouldn't rely on SyncView() being called an exact number of times by the way, as it results in fragile code. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid SyncView() implementations that will survive code refactors.
-
-*Incidentally, the same applies for writing robust render() methods in MVI*
+One more thing about syncView(), be careful not to rely on it being called a certain number of times as it results in fragile code. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid SyncView() implementations that will survive code refactors.
 
 
 ## **fore** Observables
@@ -294,7 +281,7 @@ Most of the models in the sample apps become observable by extending ObservableI
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
 - When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
-- For this to work, all a model must do is call **notifyObservers()** whenever it's own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
+- For this to work, all a model must do is call **notifyObservers()** whenever its own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
 - When the model is constructed in **ASYNCHRONOUS** mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
 - To avoid memory leaks, **views are responsible for removing their observable callback** from the observable model once they are no longer interested in receiving notifications
 - Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
@@ -305,39 +292,38 @@ Most of the models in the sample apps become observable by extending ObservableI
 So basically, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
 
 ```
-    Observer observer = new Observer() {
-        @Override
-        public void somethingChanged() {
-            syncView();
-        }
-    };
+Observer observer = new Observer() {
+    @Override
+    public void somethingChanged() {
+        syncView();
+    }
+};
 ```
 
 Or with Java 8, the rather lovely:
 
 ```
-    Observer observer = this::syncView;
+Observer observer = this::syncView;
 ```
 
 And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using View lifecycle methods to do it)*:
 
 
 ```
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        wallet.addObserver(observer);
-        account.addObserver(observer);
-        syncView(); //  <- don't forget this
-    }
+@Override
+protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    wallet.addObserver(observer);
+    account.addObserver(observer);
+    syncView(); //  <- don't forget this
+}
 
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        wallet.removeObserver(observer);
-        account.removeObserver(observer);
-    }
+@Override
+protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    wallet.removeObserver(observer);
+    account.removeObserver(observer);
+}
 ```
 
 ## Removing even more boiler plate

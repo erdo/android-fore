@@ -45,7 +45,7 @@ Whatever drives the state of your models and the rest of your app can be as func
 
 There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events)
 
-## Comparisons with MV*
+## From MV* to MVO
 
 A little bit of background if you are coming from a different architecture, definitely not required reading though (you might want to head over to the discussion on [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom) at this point).
 

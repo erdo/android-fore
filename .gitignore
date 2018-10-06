@@ -44,6 +44,9 @@ captures/
 # Google Services
 google-services.json
 
+# Jekyll
+_site/
+
 # Misc
 .DS_Store
 *.db
