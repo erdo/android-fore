@@ -461,6 +461,7 @@ public class ObserverTest {
     }
 
 
+
     /**
      * The handling of threads and loopers in Robolectric is a bit basic unfortunately,
      * we are going to have a hard time testing the finer points of the notification
