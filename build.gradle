@@ -19,7 +19,7 @@ buildscript {
 apply plugin: 'idea'
 
 
-//read in passwords file
+//read in secrets file
 def secrets = new Properties()
 def secretsFile = new File('secrets.properties')
 if (secretsFile.canRead()) {
