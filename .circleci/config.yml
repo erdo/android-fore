@@ -1,0 +1,102 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "build/build.gradle" }}
+#      - run:
+#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+#         command: sudo chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "build/build.gradle" }}
+
+      - run:
+          name: Run Tests fore-core
+          command: ./gradlew fore-core:lint fore-core:test
+      - store_artifacts:
+          path: fore-core/build/reports
+      - store_test_results:
+          path: fore-core/build/test-results
+
+      - run:
+          name: Run Tests fore-adapters
+          command: ./gradlew fore-adapters:lint fore-adapters:test
+      - store_artifacts:
+          path: fore-adapters/build/reports
+      - store_test_results:
+          path: fore-adapters/build/test-results
+
+      - run:
+          name: Run Tests fore-retrofit
+          command: ./gradlew fore-retrofit:lint fore-retrofit:test
+      - store_artifacts:
+          path: fore-retrofit/build/reports
+      - store_test_results:
+          path: fore-retrofit/build/test-results
+
+      - run:
+          name: Run Tests fore-lifecycle
+          command: ./gradlew fore-lifecycle:lint fore-lifecycle:test
+      - store_artifacts:
+          path: fore-lifecycle/build/reports
+      - store_test_results:
+          path: fore-lifecycle/build/test-results
+
+      - run:
+          name: Run Tests example01databinding
+          command: ./gradlew example01databinding:lint example01databinding:test
+      - store_artifacts:
+          path: example01databinding/build/reports
+      - store_test_results:
+          path: example01databinding/build/test-results
+
+      - run:
+          name: Run Tests example02threading
+          command: ./gradlew example02threading:lint example02threading:test
+      - store_artifacts:
+          path: example02threading/build/reports
+      - store_test_results:
+          path: example02threading/build/test-results
+
+      - run:
+          name: Run Tests example03adapters
+          command: ./gradlew example03adapters:lint example03adapters:test
+      - store_artifacts:
+          path: example03adapters/build/reports
+      - store_test_results:
+          path: example03adapters/build/test-results
+
+      - run:
+          name: Run Tests example04retrofit
+          command: ./gradlew example04retrofit:lint example04retrofit:test
+      - store_artifacts:
+          path: example04retrofit/build/reports
+      - store_test_results:
+          path: example04retrofit/build/test-results
+
+      - run:
+          name: Run Tests example05ui
+          command: ./gradlew example05ui:lint example05ui:test
+      - store_artifacts:
+          path: example05ui/build/reports
+      - store_test_results:
+          path: example05ui/build/test-results
+
+      - run:
+          name: Run Tests example06db
+          command: ./gradlew example06db:lint example06db:test
+      - store_artifacts:
+          path: example06db/build/reports
+      - store_test_results:
+          path: example06db/build/test-results
