@@ -54,6 +54,9 @@ dependencies {
     // Set this dependency if you want to use Hamcrest matching
     testImplementation 'org.hamcrest:hamcrest-library:1.1'
     testImplementation 'com.google.code.gson:gson:2.7'
+    testImplementation("org.robolectric:robolectric:3.3.2") {
+        exclude module: 'maven-artifact'
+    }
 
 }
 
