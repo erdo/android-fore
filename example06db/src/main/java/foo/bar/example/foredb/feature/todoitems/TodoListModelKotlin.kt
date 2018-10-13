@@ -118,7 +118,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
      *      .subscribe(todoItem -> finalTodoItemsList.add(todoItem));
      * `
      *
-     * For our current purposes however, we can just relay on SQL doing the work for us
+     * For our current purposes however, we can just relly on SQL doing the work for us
      * and this works fine
      */
     @Volatile //notifyObservers() will get called at the end of the db fetch
