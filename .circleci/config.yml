@@ -10,11 +10,8 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-deps-{{
-                    checksum "build.gradle"
-                  }}-{{
-                    checksum  "fore-core/build.gradle"
-                  }}
+          # bump the cache version number if you want to wipe the gradle cache
+          key: v1-gradle-dependencies-cache
 #      - run:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
@@ -24,11 +21,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-deps-{{
-                    checksum "build.gradle"
-                  }}-{{
-                    checksum  "fore-core/build.gradle"
-                  }}
+          key: v1-gradle-dependencies-cache
       - run:
           name: Run Tests fore-core
           command: ./gradlew fore-core:lintRelease fore-core:testRelease
