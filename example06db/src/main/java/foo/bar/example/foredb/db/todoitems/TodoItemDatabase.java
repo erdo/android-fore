@@ -52,6 +52,10 @@ public abstract class TodoItemDatabase extends RoomDatabase {
         return builder.build();
     }
 
+    public static void destroyInstance() {
+        instance = null;
+    }
+
     public abstract TodoItemDao todoItemDao();
 
 }
