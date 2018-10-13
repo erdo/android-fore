@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +32,7 @@ import static co.early.fore.core.testhelpers.CountDownLatchWrapper.runInBatch;
  * always fires in a different thread
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public class TodoItemsModelTest {
 
     @Mock
