@@ -23,7 +23,7 @@ jobs:
 
       - run:
           name: Run Tests fore-core
-          command: ./gradlew fore-core:lint fore-core:test
+          command: ./gradlew fore-core:lintRelease fore-core:testRelease
       - store_artifacts:
           path: fore-core/build/reports
       - store_test_results:
@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: Run Tests fore-adapters
-          command: ./gradlew fore-adapters:lint fore-adapters:test
+          command: ./gradlew fore-adapters:lintRelease fore-adapters:testRelease
       - store_artifacts:
           path: fore-adapters/build/reports
       - store_test_results:
@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: Run Tests fore-retrofit
-          command: ./gradlew fore-retrofit:lint fore-retrofit:test
+          command: ./gradlew fore-retrofit:lintRelease fore-retrofit:testRelease
       - store_artifacts:
           path: fore-retrofit/build/reports
       - store_test_results:
@@ -47,7 +47,7 @@ jobs:
 
       - run:
           name: Run Tests fore-lifecycle
-          command: ./gradlew fore-lifecycle:lint fore-lifecycle:test
+          command: ./gradlew fore-lifecycle:lintRelease fore-lifecycle:testRelease
       - store_artifacts:
           path: fore-lifecycle/build/reports
       - store_test_results:
@@ -55,7 +55,7 @@ jobs:
 
       - run:
           name: Run Tests example01databinding
-          command: ./gradlew example01databinding:lint example01databinding:test
+          command: ./gradlew example01databinding:lintRelease example01databinding:testRelease
       - store_artifacts:
           path: example01databinding/build/reports
       - store_test_results:
@@ -63,7 +63,7 @@ jobs:
 
       - run:
           name: Run Tests example02threading
-          command: ./gradlew example02threading:lint example02threading:test
+          command: ./gradlew example02threading:lintRelease example02threading:testRelease
       - store_artifacts:
           path: example02threading/build/reports
       - store_test_results:
@@ -71,7 +71,7 @@ jobs:
 
       - run:
           name: Run Tests example03adapters
-          command: ./gradlew example03adapters:lint example03adapters:test
+          command: ./gradlew example03adapters:lintRelease example03adapters:testRelease
       - store_artifacts:
           path: example03adapters/build/reports
       - store_test_results:
@@ -79,7 +79,7 @@ jobs:
 
       - run:
           name: Run Tests example04retrofit
-          command: ./gradlew example04retrofit:lint example04retrofit:test
+          command: ./gradlew example04retrofit:lintRelease example04retrofit:testRelease
       - store_artifacts:
           path: example04retrofit/build/reports
       - store_test_results:
@@ -87,7 +87,7 @@ jobs:
 
       - run:
           name: Run Tests example05ui
-          command: ./gradlew example05ui:lint example05ui:test
+          command: ./gradlew example05ui:lintRelease example05ui:testRelease
       - store_artifacts:
           path: example05ui/build/reports
       - store_test_results:
@@ -95,7 +95,7 @@ jobs:
 
       - run:
           name: Run Tests example06db
-          command: ./gradlew example06db:lint example06db:test
+          command: ./gradlew example06db:lintRelease example06db:testRelease
       - store_artifacts:
           path: example06db/build/reports
       - store_test_results:
