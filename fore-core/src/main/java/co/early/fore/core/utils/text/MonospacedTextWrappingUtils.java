@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 import co.early.fore.core.Affirm;
 
-
+//TODO only using this for logging, simplify, but add tests, remove leftToRight
 public class MonospacedTextWrappingUtils {
 
     private static final String LINE_BREAK = "\n";

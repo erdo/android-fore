@@ -159,7 +159,7 @@ A regular Tic Tac Toe game that makes use of:
 No automated tests for this app (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included).
 
 
-### **fore 6** DB Example (Room db driven todo list)
+### **fore 6** DB Example (Room db driven to-do list)
 <div class="shoom" id="fore-6-db-example-room"/>
 
 [video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
@@ -167,7 +167,7 @@ No automated tests for this app (but you should be getting the idea by now - sam
 ![fore room db sample app](https://j.gifs.com/Xo88J8.gif)
 
 
-A Todo list on steroids that lets you:
+A To-do list on steroids that lets you:
 
 - manually add 50 random todos at a time
 - turn on a "boss mode" which randomly fills your list with even more todos over the following 10 seconds
