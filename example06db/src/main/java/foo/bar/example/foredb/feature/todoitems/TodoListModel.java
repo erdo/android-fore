@@ -121,7 +121,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
      * </code>
      *
      *
-     * For our current purposes however, we can just relay on SQL doing the work for us
+     * For our current purposes however, we can just relly on SQL doing the work for us
      * and this works fine
      */
     private volatile boolean showDone = false;

@@ -180,7 +180,9 @@ It's obviously ridiculously contrived, but the idea is to implement something th
 
 It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
 
-All the database changes are done off the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows) and the app is totally robust and supports rotation out of the box. For testing, please see example apps 1-4
+All the database changes are done off the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows) and the app is totally robust and supports rotation out of the box. There is a TodoListModel written in Java and one in Kotlin for convenience, in case you are looking to use these as starting points for your own code.
+
+There is only one test class included with this app which demonstrates how to test Models which are driven by a Room DB (using CountdownLatches etc). For other test examples, please see sample apps 1-4
 
 
 ### Other Full App Examples
