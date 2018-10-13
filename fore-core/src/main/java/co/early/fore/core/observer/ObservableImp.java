@@ -150,7 +150,7 @@ public class ObservableImp implements Observable{
             String errorMessage = "One of the observers has thrown an exception during it's somethingChanged() callback\n";
 
             if (Looper.myLooper() != Looper.getMainLooper()) {
-                errorMessage = errorMessage + "NOTE: this code is NOT currently on the UI thread,/n" +
+                errorMessage = errorMessage + "NOTE: this code is NOT currently on the UI thread,\n" +
                         "if you are trying to update any part of the android UI,\n" +
                         "this needs to happen on the UI thread.\n" +
                         "You can achieve this by either a) calling notifyObservers() on the UI thread,\n" +
