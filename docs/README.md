@@ -1,5 +1,6 @@
 # android fore
 
+[![CircleCI](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=svg)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
 ![methods](https://img.shields.io/badge/methods-126-orange.svg){: .float-left}
 ![lines of code](https://img.shields.io/badge/lines%20of%20code-535-lightgrey.svg){: .float-left}
 <br/>
