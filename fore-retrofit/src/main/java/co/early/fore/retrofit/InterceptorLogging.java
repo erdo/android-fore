@@ -9,7 +9,7 @@ import java.util.Random;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.logging.Logger;
-import co.early.fore.core.utils.text.MonospacedTextWrappingUtils;
+import co.early.fore.core.utils.text.BasicTextWrapper;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -96,7 +96,7 @@ public class InterceptorLogging implements Interceptor {
                     body = truncate(networkingLogSanitizer.sanitizeBody(buffer.clone().readString(charset)));
                 }
 
-                List<String> wrappedLines = MonospacedTextWrappingUtils.wrapMonospaceText(body.replace(",", ", "), 150);
+                List<String> wrappedLines = BasicTextWrapper.wrapMonospaceText(body.replace(",", ", "), 150);
                 synchronized (this) {
                     for (String line : wrappedLines) {
                         logger.i(TAG + randomPostTag, line);
@@ -139,7 +139,7 @@ public class InterceptorLogging implements Interceptor {
             }else {
                 if (contentLength != 0) {
                     String bodyJson = truncate(buffer.clone().readString(charset));
-                    List<String> wrappedLines = MonospacedTextWrappingUtils.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
+                    List<String> wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150);
                     synchronized (this) {
                         for (String line : wrappedLines) {
                             logger.i(TAG + randomPostTag, line);
