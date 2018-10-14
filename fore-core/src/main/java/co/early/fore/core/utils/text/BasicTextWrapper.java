@@ -1,6 +1,5 @@
 package co.early.fore.core.utils.text;
 
-import android.graphics.Paint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +7,10 @@ import java.util.StringTokenizer;
 
 import co.early.fore.core.Affirm;
 
-//TODO only using this for logging, simplify, but add tests, remove leftToRight
-public class MonospacedTextWrappingUtils {
+/**
+ * Basic class which only deals with Left to Right text and will work for Monospaced fonts only
+ */
+public class BasicTextWrapper {
 
     private static final String LINE_BREAK = "\n";
     public static final String SPACE = " ";
@@ -18,7 +19,7 @@ public class MonospacedTextWrappingUtils {
 
     /**
      * Wrap fullText so that it will fit in charactersAvailable,
-     * over however many lines it takes, suitable for monospaced fonts
+     * over however many lines it takes
      * <p>
      * Attempts to wrap on spaces between words if possible, if not will break mid-word
      * <p>
@@ -40,11 +41,9 @@ public class MonospacedTextWrappingUtils {
             throw new IllegalArgumentException("charactersAvailable needs to be larger than 0, charactersAvailable:" + charactersAvailable);
         }
 
-        boolean leftToRight = true; //TODO right to left languages, add tests and fix up (=false doesn't currently work)
-
         //separate any line breaks out
         List<String> linesWithExtractedLineBreaks = new ArrayList<>();
-        expandLineBreaks(linesWithExtractedLineBreaks, fullText, leftToRight);
+        expandLineBreaks(linesWithExtractedLineBreaks, fullText);
 
         List<String> finalLines = new ArrayList<>();
 
@@ -62,7 +61,7 @@ public class MonospacedTextWrappingUtils {
                     while (stringTokenizer.hasMoreTokens()) {
                         words.add(stringTokenizer.nextToken());
                     }
-                    extractWrappedLines(finalLines, words, -1, null, charactersAvailable, leftToRight);
+                    extractWrappedLines(finalLines, words, charactersAvailable);
                 }
             }
         }
@@ -75,18 +74,17 @@ public class MonospacedTextWrappingUtils {
      *
      * @param lines
      * @param lineWhichMayIncludeLineBreaks
-     * @param leftToRight
      */
 
-    private static void expandLineBreaks(List<String> lines, String lineWhichMayIncludeLineBreaks, boolean leftToRight) {
+    private static void expandLineBreaks(List<String> lines, String lineWhichMayIncludeLineBreaks) {
 
         int positionOfLineBreak = lineWhichMayIncludeLineBreaks.indexOf(LINE_BREAK);
 
         if (positionOfLineBreak < 0) { //no line breaks present
-            lines.add((leftToRight ? lines.size() : 0), lineWhichMayIncludeLineBreaks);
+            lines.add(lines.size(), lineWhichMayIncludeLineBreaks);
         } else { //has a line break in the word
-            lines.add((leftToRight ? lines.size() : 0), lineWhichMayIncludeLineBreaks.substring(0, positionOfLineBreak));
-            expandLineBreaks(lines, lineWhichMayIncludeLineBreaks.substring(positionOfLineBreak + 1, lineWhichMayIncludeLineBreaks.length()), leftToRight);
+            lines.add(lines.size(), lineWhichMayIncludeLineBreaks.substring(0, positionOfLineBreak));
+            expandLineBreaks(lines, lineWhichMayIncludeLineBreaks.substring(positionOfLineBreak + 1, lineWhichMayIncludeLineBreaks.length()));
         }
     }
 
@@ -96,25 +94,15 @@ public class MonospacedTextWrappingUtils {
      *
      * @param linesSoFar
      * @param wordsStillToWrap
-     * @param widthAvailable
-     * @param paint            if null we will wrap based on number of charactersAvailable
-     * @param leftToRight
      */
-    private static void extractWrappedLines(List<String> linesSoFar, List<String> wordsStillToWrap, float widthAvailable, Paint paint, int charactersAvailable, boolean leftToRight) {
+    private static void extractWrappedLines(List<String> linesSoFar, List<String> wordsStillToWrap, int charactersAvailable) {
 
         if (wordsStillToWrap.size() > 0) {
 
             //start by assuming all the words still to wrap will wrap into one line
             String nextLineAttempt = flattenWordsAddingSpaces(wordsStillToWrap);
 
-            int charactersThatFit;
-
-            if (paint == null) {
-                charactersThatFit = nextLineAttempt.length() < charactersAvailable ? nextLineAttempt.length() : charactersAvailable;
-            } else {
-                charactersThatFit = paint.breakText(nextLineAttempt, leftToRight, widthAvailable, null);
-            }
-
+            int charactersThatFit = nextLineAttempt.length() < charactersAvailable ? nextLineAttempt.length() : charactersAvailable;
 
             if (charactersThatFit == nextLineAttempt.length()) { //we're done
 
@@ -152,7 +140,7 @@ public class MonospacedTextWrappingUtils {
 
                 linesSoFar.add(flattenWordsAddingSpaces(wordsForNextLine));
 
-                extractWrappedLines(linesSoFar, wordsStillToWrap, widthAvailable, paint, charactersAvailable, leftToRight);
+                extractWrappedLines(linesSoFar, wordsStillToWrap, charactersAvailable);
 
             }
         }

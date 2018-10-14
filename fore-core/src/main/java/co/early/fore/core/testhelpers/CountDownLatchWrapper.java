@@ -39,8 +39,8 @@ public class CountDownLatchWrapper {
         }
     }
 
-    public void overrideInvalidationTrackerTimeout(int timeoutInSeconds){
-        this.timeoutInSeconds = timeoutInSeconds;
+    public static void overrideInvalidationTrackerTimeout(int timeoutInSeconds){
+        CountDownLatchWrapper.timeoutInSeconds = timeoutInSeconds;
     }
 
     public interface SurroundByCountdownLatch{

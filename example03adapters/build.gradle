@@ -41,10 +41,10 @@ repositories {
 
 dependencies {
 
-    implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    implementation (group: 'co.early.fore', name: 'fore-adapters', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation project(path: ':fore-core')
-    //implementation project(path: ':fore-adapters')
+    //implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    //implementation (group: 'co.early.fore', name: 'fore-adapters', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    implementation project(path: ':fore-core')
+    implementation project(path: ':fore-adapters')
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
