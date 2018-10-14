@@ -101,3 +101,8 @@ jobs:
           path: example06db/build/reports
       - store_test_results:
           path: example06db/build/test-results
+
+      - run:
+          name: Code Coverage Upload
+          command: |
+            bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
