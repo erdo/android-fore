@@ -1,7 +1,7 @@
 package co.early.fore.core.logging;
 
 
-import co.early.fore.core.utils.text.TextPaddingUtils;
+import co.early.fore.core.utils.text.TextPadder;
 
 public class SystemLogger implements Logger {
 
@@ -69,7 +69,7 @@ public class SystemLogger implements Logger {
         longestTagLength = Math.max(longestTagLength, tag.length() + 1);
 
         if (longestTagLength != tag.length()) {
-            return TextPaddingUtils.padText(tag, longestTagLength, TextPaddingUtils.Padding.END, ' ');
+            return TextPadder.padText(tag, longestTagLength, TextPadder.Pad.RIGHT, ' ');
         }else{
             return tag;
         }
