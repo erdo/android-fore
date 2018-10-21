@@ -28,7 +28,7 @@
   subitems:
     - text: Model Checklist
       url: "#model-checklist"
-- text: Data Binding
+- text: Reactive UIs
   url: /03-databinding.html
   subitems:
     - text: SyncView()

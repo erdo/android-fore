@@ -1,4 +1,4 @@
-# Data Binding
+# Reactive UIs AKA Data Binding
 
 A basic definition of one way databinding could be: any changes of state that happen in your underlying model, get automatically represented in your view.
 
