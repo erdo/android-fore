@@ -20,7 +20,8 @@ android {
     defaultConfig {
         applicationId "foo.bar.example.foredb"
         minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -58,45 +59,44 @@ dependencies {
 
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //networking stuff
     implementation('com.squareup.retrofit2:retrofit:2.1.0') {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
 
     //db stuff
-    implementation "android.arch.persistence.room:runtime:1.1.1-rc1" //db migration fails without rc version
-    kapt "android.arch.persistence.room:compiler:1.1.0"
-    testImplementation "android.arch.persistence.room:testing:1.1.0"
+    implementation "android.arch.persistence.room:runtime:1.1.1" //db migration fails without rc version
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+    testImplementation "android.arch.persistence.room:testing:1.1.1"
 
 
     // Unit testing dependencies
     testImplementation 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito
-    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
     // Set this dependency if you want to use Hamcrest matching
-    testImplementation 'org.hamcrest:hamcrest-library:1.1'
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
     testImplementation("org.robolectric:robolectric:3.3.2") {
         exclude module: 'maven-artifact'
     }
 
-    androidTestImplementation 'org.mockito:mockito-core:1.10.19'
-    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
-    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker}"
 
-    androidTestImplementation 'com.android.support.test:runner:0.3'
-    androidTestImplementation 'com.android.support.test:rules:0.3'
+    androidTestImplementation "com.android.support.test:runner:${rootProject.ext.androidSupportTest}"
+    androidTestImplementation "com.android.support.test:rules:${rootProject.ext.androidSupportTest}"
     androidTestImplementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
     androidTestImplementation "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
     androidTestImplementation "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:${rootProject.ext.espresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
