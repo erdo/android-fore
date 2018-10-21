@@ -219,7 +219,7 @@ Totally optional, but you can use them to remove the databinding boiler plate fr
 
 ## SyncableXXX Convenience Classes
 
-**fore** includes various SyncableXXX classes which will do the work of adding and removing observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activity / Fragment classes.
+**fore** includes various SyncableXXX classes which will do the work of **adding** and **removing** observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activity / Fragment classes.
 
 - [SyncableAppCompatActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableAppCompatActivity.java)
 - [SyncableActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableActivity.java)
