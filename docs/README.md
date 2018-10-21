@@ -5,7 +5,7 @@
 
 [(if you're reading this on github --> click here)](https://erdo.github.io/android-fore/#shoom)
 
-A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement very clean [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
+A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement a very clean [reactive UI](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
 
@@ -38,7 +38,7 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
  2. Getting the example apps running (you'll need at least Android Studio 3)
  3. While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
   [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
-  [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Data Binding**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
+  [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
 
 
 ### Method Counts
@@ -53,11 +53,11 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 ### Overview
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**, and because of the [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation already supports a number of commercial android applications.
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**, and because of the [reactive UI](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation already supports a number of commercial android applications.
 
 In a nutshell, developing with MVO means:
 
-> "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
+> "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
 In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit sending them via a Presenter in this case). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
@@ -88,13 +88,13 @@ For these sample apps, all the **View** components are located in the **ui/** pa
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
 
-### **fore 1** Data Binding Example
+### **fore 1** Reactive UI Example
 
 [video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code](https://github.com/erdo/android-fore/tree/master/example01databinding)
 
-![fore databinding sample app](https://j.gifs.com/MQ33GB.gif)
+![fore reactive UI sample app](https://j.gifs.com/MQ33GB.gif)
 
-This app is a bare bones implementation of **fore** databinding. No threading, no networking, no database access - just the minimum required to demonstrate [Data Binding](https://erdo.github.io/android-fore/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of **fore** reactive UIs. No threading, no networking, no database access - just the minimum required to demonstrate [Reactive UIs](https://erdo.github.io/android-fore/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/android-fore/00-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
@@ -188,7 +188,7 @@ There is only one test class included with this app which demonstrates how to te
 
 - There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-01-kotlin)**
 
-- The **Password123** sample app uses **fore** for databinding and the **[kotlin source](https://github.com/erdo/password123)** is available.
+- The **Password123** sample app uses **fore** for its reactive UI and the **[kotlin source](https://github.com/erdo/password123)** is available.
 
 ## Contributing
 Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html#shoom), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
