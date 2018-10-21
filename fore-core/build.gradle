@@ -50,10 +50,10 @@ dependencies {
     // Unit testing dependencies
     testImplementation 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito
-    testImplementation 'org.mockito:mockito-core:1.10.19'
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
     // Set this dependency if you want to use Hamcrest matching
-    testImplementation 'org.hamcrest:hamcrest-library:1.1'
-    testImplementation 'com.google.code.gson:gson:2.7'
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
+    testImplementation "com.google.code.gson:gson:${rootProject.ext.gson}"
     testImplementation("org.robolectric:robolectric:3.3.2") {
         exclude module: 'maven-artifact'
     }
