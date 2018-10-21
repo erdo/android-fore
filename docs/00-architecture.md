@@ -16,7 +16,7 @@ By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean t
 
 In a nutshell this is what we have with MVO:
 
-> "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
+> "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
 
 Another way to look at it is in *crap diagram* mode. So here's a crap diagram showing the flow of a button click from **step 1** to **3** with a single **observable model** and a **view** that observes it:
@@ -95,7 +95,7 @@ As we mentioned, here is what MVO looks like in a real app:
 Well how does that work? you can't just remove boxes and call it better! (I hear you say).
 
 
-> "Observable **Models**; **Views** doing the observing; and some **Data Binding** tricks to tie it all together"
+> "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
 
 As with all the architectures discussed so far, here the Model knows nothing about the View. In MVO, when the view is destroyed and recreated, the view re-attaches itself to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (no benefit here in sending them via a Presenter). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
