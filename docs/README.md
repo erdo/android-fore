@@ -190,6 +190,12 @@ There is only one test class included with this app which demonstrates how to te
 
 - The **Password123** sample app uses **fore** for its reactive UI and the **[kotlin source](https://github.com/erdo/password123)** is available.
 
+
+### Tutorials
+
+- There is a medium tutorial covering the basics of fore, complete with a small sample app written in Kotlin [here](https://medium.com/@erdo9000/tutorial-android-fore-basics-fb10788d388c)
+
+
 ## Contributing
 Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html#shoom), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
 
