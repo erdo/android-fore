@@ -140,13 +140,13 @@ public class PlaylistsView extends LinearLayout {
         adapterAdvanced = new PlaylistAdapterAdvanced(playlistAdvancedModel);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
-        linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
 
         playListSimpleRecyclerView.setLayoutManager(linearLayoutManager1);
         playListSimpleRecyclerView.setAdapter(adapterSimple);
 
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
-        linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager2.setOrientation(RecyclerView.VERTICAL);
 
         playListAdvancedRecyclerView.setLayoutManager(linearLayoutManager2);
         playListAdvancedRecyclerView.setAdapter(adapterAdvanced);
