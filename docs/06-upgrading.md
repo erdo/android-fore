@@ -3,7 +3,11 @@
 
 Since we've been publishing on jcenter the core functionality has remained the same, most version number bumps have been due to adding new classes to the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - but that means some version bumps have no effect for a particular package).
 
-There was one minor breaking change though (sorry):
+## androidx support from 1.0.0 onwards
+
+The latest version is **1.0.0** and supports **androidx**, if you are not using androidx yet you can continue to use 0.11.1
+
+There was one minor breaking change previous to 0.11.1 (sorry):
 
 * SuccessCallBack -> SuccessCallback (case change)
 
