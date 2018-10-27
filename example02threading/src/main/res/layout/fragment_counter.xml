@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="increase with AsafTask" />
+                android:text="increase with Async" />
 
             <ProgressBar
                 android:id="@+id/counterwprog_busy_progress"
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="increase with AsafTaskBuilder" />
+                android:text="increase with AsyncBuilder" />
 
             <ProgressBar
                 android:id="@+id/counterwlambda_busy_progress"

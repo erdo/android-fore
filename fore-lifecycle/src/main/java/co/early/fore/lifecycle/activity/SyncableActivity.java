@@ -20,7 +20,7 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  * <p>
  *      If your app architecture does not use fragments, and your activities extend
  *      {@link android.app.Activity}
- *      This is probably the right class to use to add ASAF behaviour to your app,
+ *      This is probably the right class to use to add fore behaviour to your app,
  *      start by extending this class instead of Activity
  * </p>
  *

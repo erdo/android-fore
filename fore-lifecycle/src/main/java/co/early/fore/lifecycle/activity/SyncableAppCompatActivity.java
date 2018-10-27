@@ -2,9 +2,9 @@ package co.early.fore.lifecycle.activity;
 
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
@@ -19,8 +19,8 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *
  * <p>
  *      If your app architecture does not use fragments, and your activities extend
- *      {@link android.support.v7.app.AppCompatActivity}
- *      This is probably the right class to use to add ASAF behaviour to your app,
+ *      {@link androidx.appcompat.app.AppCompatActivity}
+ *      This is probably the right class to use to add fore behaviour to your app,
  *      start by extending this class instead of AppCompatActivity
  * </p>
  *

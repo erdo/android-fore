@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 
 /**
  * To use this in a unit test, you need to put your data files in a folder called "resources"
- * see the unit tests for example retrofit app: "ASAF 4 retrofit ex"
+ * see the unit tests for example retrofit app: "fore 4 retrofit ex"
  */
 public class JunitFileIO {
 

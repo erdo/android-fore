@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofit.ui.widgets;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import foo.bar.example.foreretrofit.CustomApp;

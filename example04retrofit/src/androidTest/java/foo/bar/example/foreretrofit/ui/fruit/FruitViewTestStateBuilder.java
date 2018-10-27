@@ -1,7 +1,7 @@
 package foo.bar.example.foreretrofit.ui.fruit;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import foo.bar.example.foreretrofit.CustomApp;
 import foo.bar.example.foreretrofit.ProgressBarIdler;

@@ -1,7 +1,7 @@
 package foo.bar.example.forethreading.ui;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import foo.bar.example.forethreading.CustomApp;
 import foo.bar.example.forethreading.feature.counter.CounterWithLambdas;

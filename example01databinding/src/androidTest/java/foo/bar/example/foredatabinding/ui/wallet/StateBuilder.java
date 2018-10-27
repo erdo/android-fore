@@ -1,7 +1,7 @@
 package foo.bar.example.foredatabinding.ui.wallet;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import foo.bar.example.foredatabinding.CustomApp;
 import foo.bar.example.foredatabinding.feature.wallet.Wallet;

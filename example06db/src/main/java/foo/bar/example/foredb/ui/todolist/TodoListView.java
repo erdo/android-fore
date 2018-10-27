@@ -3,8 +3,6 @@ package foo.bar.example.foredb.ui.todolist;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.logging.Logger;
@@ -160,7 +160,7 @@ public class TodoListView extends RelativeLayout implements SyncableView{
         todoListAdapter = new TodoListAdapter(todoListModel, logger);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
-        linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
 
         todoListRecyclerView.setLayoutManager(linearLayoutManager1);
         todoListRecyclerView.setAdapter(todoListAdapter);
@@ -190,8 +190,8 @@ public class TodoListView extends RelativeLayout implements SyncableView{
     private void showAddDropDown(){
 
         // NB you might notice that the next line conflicts with the advice followed elsewhere in
-        // ASAF and explicitly mentioned here:
-        // https://erdo.github.io/android-fore/05-more.html#adhoc-state-setting
+        // fore and explicitly mentioned here:
+        // https://erdo.github.io/android-fore/05-extras.html#adhoc-state-setting
         //
         // By setting the enabled state of the addButton here in an *adhoc* way (rather than using
         // the syncview() method together with a boolean state which is stored in a model and

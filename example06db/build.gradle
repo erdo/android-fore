@@ -15,7 +15,6 @@ android {
     }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "foo.bar.example.foredb"
@@ -24,7 +23,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -52,14 +51,14 @@ dependencies {
     implementation project(path: ':fore-retrofit')
     implementation project(path: ':fore-adapters')
 
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
+    kapt "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:design:${rootProject.ext.supportLibVersion}"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidX}"
+    implementation "com.google.android.material:material:${rootProject.ext.androidX}"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
 
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -73,9 +72,9 @@ dependencies {
 
 
     //db stuff
-    implementation "android.arch.persistence.room:runtime:1.1.1" //db migration fails without rc version
-    kapt "android.arch.persistence.room:compiler:1.1.1"
-    testImplementation "android.arch.persistence.room:testing:1.1.1"
+    implementation "androidx.room:room-runtime:${rootProject.ext.androidXRoom}"
+    kapt "androidx.room:room-compiler:${rootProject.ext.androidXRoom}"
+    testImplementation "androidx.room:room-testing:${rootProject.ext.androidXRoom}"
 
 
     // Unit testing dependencies
@@ -91,12 +90,12 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker}"
 
-    androidTestImplementation "com.android.support.test:runner:${rootProject.ext.androidSupportTest}"
-    androidTestImplementation "com.android.support.test:rules:${rootProject.ext.androidSupportTest}"
-    androidTestImplementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
-    androidTestImplementation "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
-    androidTestImplementation "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:${rootProject.ext.espresso}", {
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidXTest}"
+    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidXTest}"
+    androidTestImplementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidX}"
+    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidX}"
+    androidTestImplementation "androidx.core:core:${rootProject.ext.androidX}"
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 

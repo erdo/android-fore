@@ -12,7 +12,6 @@ println "[${LIB_ARTIFACT_ID} build file]"
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     compileOptions {
         sourceCompatibility rootProject.ext.javaVersion
@@ -31,7 +30,7 @@ android {
         versionCode rootProject.ext.LIB_VERSION_CODE as Integer
         versionName rootProject.ext.LIB_VERSION_NAME
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -50,10 +49,10 @@ dependencies {
     //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
     implementation project(path: ':fore-core')
 
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidX}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidX}"
 
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:${rootProject.ext.espresso}", {
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -63,7 +62,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
     // Set this dependency if you want to use Hamcrest matching
     testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
-    testImplementation "com.google.code.gson:gson:${rootProject.ext.gson}"
 
 }
 

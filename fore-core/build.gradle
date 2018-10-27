@@ -12,7 +12,6 @@ println "[${LIB_ARTIFACT_ID} build file]"
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     compileOptions {
         sourceCompatibility rootProject.ext.javaVersion
@@ -31,7 +30,7 @@ android {
         versionCode rootProject.ext.LIB_VERSION_CODE as Integer
         versionName rootProject.ext.LIB_VERSION_NAME
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -53,8 +52,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
     // Set this dependency if you want to use Hamcrest matching
     testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
-    testImplementation "com.google.code.gson:gson:${rootProject.ext.gson}"
-    testImplementation("org.robolectric:robolectric:3.3.2") {
+    testImplementation("org.robolectric:robolectric:${rootProject.ext.robolectric}") {
         exclude module: 'maven-artifact'
     }
 

@@ -2,14 +2,14 @@ package foo.bar.example.foreadapters.ui.playlist;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.observer.Observer;
@@ -140,13 +140,13 @@ public class PlaylistsView extends LinearLayout {
         adapterAdvanced = new PlaylistAdapterAdvanced(playlistAdvancedModel);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
-        linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);
 
         playListSimpleRecyclerView.setLayoutManager(linearLayoutManager1);
         playListSimpleRecyclerView.setAdapter(adapterSimple);
 
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
-        linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager2.setOrientation(RecyclerView.VERTICAL);
 
         playListAdvancedRecyclerView.setLayoutManager(linearLayoutManager2);
         playListAdvancedRecyclerView.setAdapter(adapterAdvanced);

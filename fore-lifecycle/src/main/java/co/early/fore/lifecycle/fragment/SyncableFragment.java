@@ -20,7 +20,7 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *
  * <p>
  *      If your app architecture uses fragments, and your fragments extend
- *      {@link android.app.Fragment}, to add ASAF behaviour to your app you can keep
+ *      {@link android.app.Fragment}, to add fore behaviour to your app you can keep
  *      your activity code the same but in your fragments instead of extending Fragment,
  *      extend this class instead.
  * </p>
