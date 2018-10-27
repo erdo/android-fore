@@ -1,7 +1,7 @@
 package foo.bar.example.foredb.ui;
 
 import android.content.Context;
-import android.support.design.widget.NavigationView;
+import com.google.android.material.navigation.NavigationView;
 import android.util.AttributeSet;
 
 import co.early.fore.core.logging.Logger;

@@ -1,8 +1,8 @@
 package foo.bar.example.foredb.feature.todoitems
 
-import android.arch.persistence.room.InvalidationTracker
-import android.support.v4.util.Pair
-import android.support.v7.util.DiffUtil
+import androidx.room.InvalidationTracker
+import androidx.core.util.Pair
+import androidx.recyclerview.widget.DiffUtil
 import co.early.fore.adapters.DiffCalculator
 import co.early.fore.adapters.DiffSpec
 import co.early.fore.adapters.Diffable

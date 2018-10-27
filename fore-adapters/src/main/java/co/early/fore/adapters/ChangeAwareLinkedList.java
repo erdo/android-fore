@@ -1,7 +1,7 @@
 package co.early.fore.adapters;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.LinkedList;

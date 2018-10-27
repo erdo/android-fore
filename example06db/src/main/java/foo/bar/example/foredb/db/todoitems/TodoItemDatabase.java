@@ -1,9 +1,9 @@
 package foo.bar.example.foredb.db.todoitems;
 
 import android.app.Application;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;

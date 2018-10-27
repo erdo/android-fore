@@ -1,6 +1,6 @@
 package foo.bar.example.foreretrofit.api;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 

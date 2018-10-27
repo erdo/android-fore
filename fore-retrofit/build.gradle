@@ -12,7 +12,6 @@ println "[${LIB_ARTIFACT_ID} build file]"
 android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     compileOptions {
         sourceCompatibility rootProject.ext.javaVersion
@@ -31,7 +30,7 @@ android {
         versionCode rootProject.ext.LIB_VERSION_CODE as Integer
         versionName rootProject.ext.LIB_VERSION_NAME
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -64,7 +63,7 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
     testImplementation "com.google.code.gson:gson:${rootProject.ext.gson}"
     
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:${rootProject.ext.espresso}", {
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 

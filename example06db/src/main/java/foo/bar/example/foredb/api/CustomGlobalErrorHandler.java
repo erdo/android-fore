@@ -1,6 +1,6 @@
 package foo.bar.example.foredb.api;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 

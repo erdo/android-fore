@@ -1,11 +1,11 @@
 package co.early.fore.lifecycle.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
 import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
@@ -21,7 +21,7 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *
  * <p>
  *      If your app architecture uses fragments, and your fragments extend
- *      {@link android.support.v4.app.Fragment}, to add ASAF behaviour to your app you can keep
+ *      {@link Fragment}, to add fore behaviour to your app you can keep
  *      your activity code the same but in your fragments instead of extending Fragment,
  *      extend this class instead.
  * </p>

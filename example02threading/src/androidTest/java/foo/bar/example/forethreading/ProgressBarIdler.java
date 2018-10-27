@@ -4,16 +4,16 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Instrumentation;
 import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
-import android.support.v4.content.ContextCompat;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import java.util.Collection;
 
-import static android.support.test.runner.lifecycle.Stage.RESUMED;
+import static androidx.test.runner.lifecycle.Stage.RESUMED;
 
 /**
  * If you have any spinning progress bars in your UI it will mess

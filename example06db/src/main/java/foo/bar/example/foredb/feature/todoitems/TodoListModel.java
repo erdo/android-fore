@@ -1,9 +1,9 @@
 package foo.bar.example.foredb.feature.todoitems;
 
-import android.arch.persistence.room.InvalidationTracker;
-import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
-import android.support.v7.util.DiffUtil;
+import androidx.room.InvalidationTracker;
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
+import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.ArrayList;
 import java.util.List;

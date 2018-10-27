@@ -1,7 +1,7 @@
 package co.early.fore.adapters;
 
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import co.early.fore.core.Affirm;
 
@@ -48,12 +48,12 @@ import co.early.fore.core.Affirm;
  *
  * <p>The <strong>first method</strong>  is primarily for simple in memory lists, and uses
  * {@link ChangeAwareArrayList} and {@link ChangeAwareLinkedList} in conjunction with
- * {@link Updateable} interface. Please refer to the ASAF adapters source code for example useage.
+ * {@link Updateable} interface. Please refer to the fore adapters source code for example useage.
  *
  *  <p>The <strong>second method</strong> is primarily for lists which are driven by database changes, and is more
- *  computationally intensive, as it uses Android's {@link android.support.v7.util.DiffUtil.DiffResult}
+ *  computationally intensive, as it uses Android's {@link androidx.recyclerview.widget.DiffUtil.DiffResult}
  *  for list comparison in conjunction with the {@link Diffable} and {@link DiffComparator} classes.
- *  Please refer to the ASAF adapters source code for example useage.
+ *  Please refer to the fore adapters source code for example useage.
  * *
  */
 public abstract class ChangeAwareAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {

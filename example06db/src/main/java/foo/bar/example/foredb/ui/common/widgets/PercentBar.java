@@ -10,7 +10,7 @@ import foo.bar.example.foredb.R;
 
 
 
-public class PercentBar extends android.support.v7.widget.AppCompatImageView {
+public class PercentBar extends androidx.appcompat.widget.AppCompatImageView {
 
     private Paint paint;
 
