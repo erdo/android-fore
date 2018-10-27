@@ -25,7 +25,7 @@ Another way to look at it is in *crap diagram* mode. So here's a crap diagram sh
 
 ![data binding](img/data-binding.png)
 
-Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/android-fore/03-databinding.html#syncview), it's a fundamental part of why **fore** code looks so sparse.
+Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), it's a fundamental part of why **fore** code looks so sparse.
 
 That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) that does the observing.
 
@@ -84,7 +84,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using something like LiveData on Android, but when you get into the details I think the solution has a few issues related to [this](https://erdo.github.io/android-fore/05-extras.html#somethingchanged-parameter) and the inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention that exists in MVO (or render() in MVI) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
+You can implement this using something like LiveData on Android, but when you get into the details I think the solution has a few issues related to [this](https://erdo.github.io/android-fore/05-extras.html#somethingchanged-parameter) and the inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention that exists in MVO (or render() in MVI) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 ### Finally MVO
 
@@ -102,8 +102,8 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
-* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-databinding.html#fore-observables) that lets views attach themselves to any model they are interested in
-* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention
+* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) that lets views attach themselves to any model they are interested in
+* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
@@ -116,17 +116,38 @@ As with all the architectures discussed so far, here the Model knows nothing abo
 
  **MVO has syncView()** which takes no parameters. The method sets the UI according to whatever models it has, eg:
 
- ```
- loggedInStatus.setText(
-   accountModel.isLoggedIn() ? "IN" : "OUT")
- ```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+loggedInStatus.setText(accountModel.isLoggedIn() ? "IN" : "OUT")
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+loggedInStatus.text = if (accountModel.isLoggedIn) "IN" else "OUT"
+ </code></pre>
+
 
  **MVI has render()** which takes a ViewState parameter containing all the required state for the UI, eg:
 
- ```
- loggedInStatus.setText(
-   viewState.isLoggedIn ? "IN" : "OUT")
- ```
+
+ <!-- Tabbed code sample -->
+  <div class="tab">
+    <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+  </div>
+
+ <pre class="tabcontent tabbed java"><code>
+loggedInStatus.setText(viewState.isLoggedIn ? "IN" : "OUT")
+ </code></pre>
+
+ <pre class="tabcontent tabbed kotlin"><code>
+loggedInStatus.text = if (viewState.isLoggedIn) "IN" else "OUT"
+ </code></pre>
+
 
  Most testing takes place just below the UI layer for both architectures:
 

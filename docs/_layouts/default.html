@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  
+
   {% include head.html %}
 
-  <body>
+  <body onload="openLanguage('java')">
     {% include page-header.html %}
 
     <section class="main-content">
-    
+
     <h2>Contents</h2>
 
     {% include nav.html nav=site.data.menu %}
 
     <hr>
-      
+
       {{ content }}
 
       {% include page-footer.html %}

@@ -73,14 +73,33 @@ In this case it makes sense to give our *Printer* model global application scope
 
 There will also only be one instance of the *Printer* model, because: there is only one real printer. (This model is written in pseudo Java, writing one in Kotlin makes no difference of course.)
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public class Printer {
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class Printer {
+}
+ </code></pre>
+
 
 The *Printer* model might have a boolean that says if it's busy printing or not. It might have a boolean that says that is has run out of paper. It might have a number that tells you how many items it has in the queue at the moment. All of this state should be available via getters for any View or other Observer code to access.
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public class Printer {
 
     private boolean isBusy = false;
@@ -99,18 +118,38 @@ public class Printer {
         return thingsLeftToPrint;
     }
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class Printer {
+
+  var isBusy = false
+    private set
+  var hasPaper = true
+    private set
+  var thingsLeftToPrint = 0
+    private set
+
+}
+ </code></pre>
 
 
 The *Printer* class will have some public methods like *print(Page pageToPrint)* for example, and as this will take a while, that call will need to be asynchronous and that means you should probably have a listener callback that will get called when it is finished:
 
-```
+
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public class Printer {
 
     private boolean isBusy = false;
     private boolean hasPaper = true;
-    private int numPagesLeftToPrint;
-
+    private int thingsLeftToPrint;
 
     public void printThis(Page pageToPrint, CompleteCallBack completeCallBack){
 
@@ -125,7 +164,6 @@ public class Printer {
         completionCallBack.complete();
     }
 
-
     public boolean isBusy() {
         return isBusy;
     }
@@ -134,15 +172,49 @@ public class Printer {
         return hasPaper;
     }
 
-    public int getNumPagesLeftToPrint() {
-        return numPagesLeftToPrint;
+    public int getThingsLeftToPrint() {
+        return thingsLeftToPrint;
     }
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class Printer {
+
+  var isBusy = false
+    private set
+  var hasPaper = true
+    private set
+  var thingsLeftToPrint = 0
+    private set
+
+  fun printThis(pageToPrint: Page, completeCallBack: CompleteCallBack) {
+
+      isBusy = true
+      numPagesLeftToPrint++
+
+      //...do the printing asynchronously, then once back on the UI thread:
+
+      isBusy = false
+      numPagesLeftToPrint--
+
+      completionCallBack.complete()
+  }
+
+}
+ </code></pre>
+
 
 The *Printer* model will need USB connection stuff and maybe a Formatter that will let you format your page appropriately for the type of printer you have (or something). We'll add these dependencies as constructor arguments, and we are going to deliberately crash if someone mistakenly tries to send us null values here (nulls will never work here so we may as well crash immediately and obviously). Annotating parameters to not be null is not really enough because it's only a compile time check and can still let things slip through.
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 private final USBStuff usbStuff;
 private final Formatter formatter;
 
@@ -150,80 +222,124 @@ public Printer(USBStuff usbStuff, Formatter formatter) {
     this.usbStuff = Affirm.notNull(usbStuff);
     this.formatter = Affirm.notNull(formatter);
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class Printer constructor(val usbStuff: UsbStuff, val formatter: Formatter) {
+  ...
+}
+ </code></pre>
 
 
 We're nearly there. If we want to involve this *Printer* model in the view layer we will probably want it to be Observable so that any observing view will be notified whenever it changes (and therefore the view needs to be refreshed).
 
 The quickest way to do that is to extend ObservableImp:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public class Printer extends ObservableImp {
-```
+
+    public Printer(WorkMode workMode) {
+        super(workMode);
+    }
+
+    ...
+}
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class Printer(notificationMode: WorkMode) : ObservableImp(notificationMode) {
+  ...
+}
+ </code></pre>
+
 
 Next we need to make sure that the observers are notified each time the *Printer* model's state changes, and we do that by calling **notifyObservers()** whenever that happens:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 isBusy = true;
 numPagesLeftToPrint++;
-notifyObservers();  //**fore** Observable will take care of the rest
-```
+notifyObservers();  //fore Observable will take care of the rest
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+isBusy = true
+numPagesLeftToPrint++
+notifyObservers()  //fore Observable will take care of the rest
+ </code></pre>
+
 
 The asynchronous printing that we've glossed over so far could be implemented with an [AsyncBuilder](/04-more-fore.html#asyncbuilder) like so:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 new AsyncBuilder<Void, Void>(workMode)
-        .doInBackground(new DoInBackgroundCallback<Void, Void>() {
-            @Override
-            public Void doThisAndReturn(Void... input) {
+    .doInBackground(input -> {
 
-                //...do the printing
+        //...do the printing
 
-                return null;
-            }
-        })
-        .onPostExecute(new DoThisWithPayloadCallback<Void>() {
-            @Override
-            public void doThis(Void result) {
+        return null;
+    })
+    .onPostExecute(result -> {
 
-                //back on the UI thread
+        //back on the UI thread
 
-                isBusy = false;
-                numPagesLeftToPrint--;
-                notifyObservers();
+        isBusy = false;
+        numPagesLeftToPrint--;
+        notifyObservers();
 
-                completeCallBack.complete();
-            }
-        })
-        .execute((Void) null);
-```
+        completeCallBack.complete();
+    })
+    .execute((Void) null);
+ </code></pre>
 
-Taking advantage of lambda expressions this becomes:
+<pre class="tabcontent tabbed kotlin"><code>
+AsyncBuilder<Unit, Unit>(workMode)
+    .doInBackground {
 
-```
-new AsyncBuilder<Void, Void>(workMode)
-        .doInBackground(input -> {
+        //...do the printing
 
-            //...do the printing
+    }
+    .onPostExecute {
 
-            return null;
-        })
-        .onPostExecute(result -> {
+        //back on the UI thread
 
-            //back on the UI thread
+        isBusy = false
+        numPagesLeftToPrint--
+        notifyObservers()
 
-            isBusy = false;
-            numPagesLeftToPrint--;
-            notifyObservers();
+        completeCallBack.complete()
+    }
+    .execute()
+ </code></pre>
 
-            completeCallBack.complete();
-        })
-        .execute((Void) null);
-```
 
 Here's what we might end up with for a rough *Printer* model:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public class Printer extends ObservableImp {
 
     private final USBStuff usbStuff;
@@ -233,7 +349,6 @@ public class Printer extends ObservableImp {
     private boolean isBusy = false;
     private boolean hasPaper = true;
     private int numPagesLeftToPrint;
-
 
     public Printer(USBStuff usbStuff, Formatter formatter, WorkMode workMode) {
         super(workMode);
@@ -285,9 +400,54 @@ public class Printer extends ObservableImp {
     public int getNumPagesLeftToPrint() {
         return numPagesLeftToPrint;
     }
-
 }
-```
+</code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class Printer(
+  val usbStuff: USBStuff,
+  val formatter: Formatter,
+  val workMode: WorkMode) : ObservableImp(workMode) {
+
+    var isBusy = false
+        private set
+    val isHasPaper = true
+    var numPagesLeftToPrint: Int = 0
+        private set
+
+    fun printThis(pageToPrint: Page, completeCallBack: CompleteCallBack) {
+
+        if (isBusy) {
+            completeCallBack.fail()
+            return
+        }
+
+        isBusy = true
+        numPagesLeftToPrint++
+        notifyObservers()
+
+        AsyncBuilder<Unit, Unit>(workMode)
+            .doInBackground {
+              //do the printing
+            }
+            .onPostExecute { result ->
+
+                //back on the UI thread
+
+                isBusy = false
+                numPagesLeftToPrint--
+                notifyObservers()
+
+                completeCallBack.complete()
+            }
+            .execute()
+    }
+}
+ </code></pre>
+
+
+
+
 
 Obviously that doesn't work yet, we've ignored numPagesLeftToPrint and the printing details, but you get the idea.
 
@@ -298,7 +458,7 @@ When you construct this *Printer* model for a test though, along with mocking th
 Take a look at how the [CounterWithLambdas](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) model in sample app 2 is [tested](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java) for example.
 
 
-Take a look at the [Model Check List](/android-fore/02-models.html#model-checklist) to make sure you have everything down, and then maybe head over to the [Data Binding](/android-fore/03-databinding.html#shoom) section where we tie it all together with the view layer.
+Take a look at the [Model Check List](/android-fore/02-models.html#model-checklist) to make sure you have everything down, and then maybe head over to the [Data Binding](/android-fore/03-reactive-uis.html#shoom) section where we tie it all together with the view layer.
 
 
 # Android's Original Mistake
@@ -335,11 +495,11 @@ Android apps that are written using **fore** have a certain *look* to them code-
 
 Given any app that is attempting to implement **fore**: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a View class to see if you recognise the flow mentioned above. Check the databinding especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any ui state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen professional developers do).
 
-<a name="adhoc-state-setting"></a> 1) **Any code which is setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's a very common pattern in MVP (and it makes handling rotation hard), in MVO it's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the data binding section where it talks about [syncView()](/android-fore/03-databinding.html#syncview).
+<a name="adhoc-state-setting"></a> 1) **Any code which is setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's a very common pattern in MVP (and it makes handling rotation hard), in MVO it's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the data binding section where it talks about [syncView()](/android-fore/03-reactive-uis.html#syncview).
 
 <a name="fat-activity"></a> 2) **Activities and Fragments that have more than a few lines of code in them**. Sometimes there are good reasons for putting code in Activities and Fragments, setting up bundles and intents for example, but you should be immediately suspicious of any errant code that gets into these classes. Often this code can be moved to a model class, safely away from tricky lifecycle issues and where it can also be more easily tested. (If you value your sanity and that of your team, you should make sure that there are absolutely **no** AsyncTask instances or networking code in any Activity or Fragment classes at all. Ever.)
 
-<a name="activity-casting"></a> 3) **Code in a Fragment that casts it's parent activity and then calls that activity for further processing**. Again sometimes that is appropriate, but unfortunately it's a very common pattern that is often misused. The idea of course is to let a Fragment communicate with an Activity in a safe way. Generally if you have 2 **ephemeral** view layer components talking to each other, it's going to cause problems on Android. When this technique is used as a way to access functionality written in the parent activity which should really have been written in a model class in the first place, it just acts as a sticking plaster for a problem that should never have existed in the first place. The answer of course is to put that code in a model, inject that model into the fragment and let the fragment access it directly, that totally removes the dependence on the host Activity and removes a lot of boiler plate in the process.
+<a name="activity-casting"></a> 3) **Code in a Fragment that casts it's parent activity and then calls that activity for further processing**. Again sometimes that is appropriate, but unfortunately it's a very common pattern that is often misused. The idea of course is to let a Fragment communicate with an Activity in a safe way. Generally if you have 2 **ephemeral** view layer components talking to each other, it's going to cause problems on Android. When this technique is used as a way to access functionality written in the parent activity which should really have been written in a model class in the first place, it just acts as a sticking plaster for a problem that should never have existed anyway. The answer of course is to put that code in a model, inject that model into the fragment and let the fragment access it directly, that totally removes the dependence on the host Activity and removes a lot of boiler plate in the process.
 
 <a name="non-lifecycle-observers"></a> 4) **Adding or removing observers outside of android lifecycle methods**. I'm not saying there is never a good reason to do that (particularly if you want to set up one long living model to observe the state of another long living model). But it is a bit unusual and might warrant a rethink. It's usually a mistake (and a cause of memory leaks).
 
@@ -357,11 +517,11 @@ Given any app that is attempting to implement **fore**: first check the package 
 
 *The deal is that whenever something (anything) changes in a model, you will be notified. But you maybe be notified more than you expect. In order to be robust, your syncView() must make no assumptions about the number of times it may or may not be called. Sometimes you will of course need to bridge the world of syncing views and triggering one off events, and the way you do that in fore is to use [SyncTrigger](https://erdo.github.io/android-fore/04-more-fore.html#synctrigger). Also take a look at [this](https://erdo.github.io/android-fore/05-extras.html#observer-listener) in case what you really want is a callback anyway.*
 
-<a name="complicated-syncview"></a> 10) **A syncView() that is more than 5-10 lines long or so and/or doesn't have one line to set an affirmative value for each property of each UI element you are concerned with**. Take a look at how to write a good [syncView()](https://erdo.github.io/android-fore/03-databinding.html#syncview) method under the data binding section.
+<a name="complicated-syncview"></a> 10) **A syncView() that is more than 5-10 lines long or so and/or doesn't have one line to set an affirmative value for each property of each UI element you are concerned with**. Take a look at how to write a good [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) method under the data binding section.
 
 <a name="redundant-click-routing"></a> 11) **Any click listeners or text change listeners should generally be talking directly to model classes, or asking for navigation operations** for example: MyActivity.startMe(getContext()). Occasionally it's useful for listeners to directly call syncView() to refresh the view (when an edit text field has changed for example). What they generally shouldn't be doing is accessing other view components like fragments or activities and checking their state in some way. Sometimes if you follow this code it ends up calling a model class somewhere down the line anyway, in which case the model class should just be called directly (you get your model references to any view class using [dependency injection](/05-extras.html#dependency-injection-basics))
 
-<a name="state-callbacks"></a> 12) **Public methods on models that return their state directly through a callback, and therefore shortcut the MVO pattern**. Depending on what data is returned here, this may make it difficult to cleanly support rotation. It might be worth re-reading the [**MVO architecture page**](https://erdo.github.io/android-fore/00-architecture.html#shoom) and the [databinding](https://erdo.github.io/android-fore/03-databinding.html#shoom) page.
+<a name="state-callbacks"></a> 12) **Public methods on models that return their state directly through a callback, and therefore shortcut the MVO pattern**. Depending on what data is returned here, this may make it difficult to cleanly support rotation. It might be worth re-reading the [**MVO architecture page**](https://erdo.github.io/android-fore/00-architecture.html#shoom) and the [databinding](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) page.
 
 <a name="view-state"></a> 13) **Any state kept in view layer classes is at risk of being lost**. How does this view survive rotation, would loosing that state matter? if yes, then it might be better kept inside a model, away from the view layer. Take a glance at the [**state versus events**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events) discussion.
 
@@ -380,35 +540,88 @@ All it really means is instead of instantiating the things that you need to use 
 
 Don't do this:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public MessageSender() {
     networkAccess = new NetworkAccess();
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun MessageSender() {
+    networkAccess = NetworkAccess()
+}
+ </code></pre>
+
+
 
 Do this instead
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public MessageSender(NetworkAccess networkAccess) {
     this.networkAccess = networkAccess;
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun MessageSender(networkAccess: NetworkAccess) {
+    this.networkAccess = networkAccess
+}
+ </code></pre>
+
 
 If you don't have access to the constructor, you can do this (like we do in a lot of the **fore** sample apps):
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 MessageSender messageSender;
 
 protected void onFinishInflate() {
     super.onFinishInflate();
 
-    messageSender = CustomApp.get(MessageSender);
+    messageSender = CustomApp.get(MessageSender.class);
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+private lateinit var messageSender: MessageSender
+
+override fun onFinishInflate() {
+    super.onFinishInflate()
+
+    messageSender = CustomApp.get(MessageSender::class.java)
+}
+ </code></pre>
+
+
 
 In a commercial app, the number of dependencies you need to keep track of can sometimes get pretty large, so some people use a library like Dagger2 to manage this:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 @Inject MessageSender messageSender;
 
 protected void onFinishInflate() {
@@ -416,7 +629,18 @@ protected void onFinishInflate() {
 
     DaggerComponent.inject(this);
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+private lateinit var messageSender: MessageSender
+
+override fun onFinishInflate() {
+    super.onFinishInflate()
+
+    DaggerComponent.inject(this)
+}
+ </code></pre>
+
 
 The main reason for all of this is that dependency injection enables you to swap out that NetworkAccess dependency (or swap out MessageSender) in different situations.
 
@@ -468,7 +692,7 @@ One reason (but not the only one) is that often, different views or other Observ
 
 Similarly there will often be views or other Observables that are interested in more than one model, and if those models all have different observable interfaces, all those interfaces will need to be implemented and managed by the view, rather than just using a single Observer implementation.
 
-It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/android-fore/03-databinding.html#shoom) section).
+It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/android-fore/03-reactive-uis.html#shoom) section).
 
 [Quick example, [this view](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for MVO by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
 
@@ -489,7 +713,13 @@ The observer / notify pattern is not always going to be suitable for what you wa
 
 for example:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 model.doStuffOnAThread(new ResultListener{
     @Override
     public void success(){
@@ -500,12 +730,29 @@ model.doStuffOnAThread(new ResultListener{
         showMessage(reason);
     }
 });
-```
+ </code></pre>
+<pre class="tabcontent tabbed kotlin"><code>
+model.doStuffOnAThread(object : ResultListener {
+    override fun success() {
+      //do next thing
+    }
+    override fun fail(reason: UserMessage) {
+      showMessage(reason)
+    }
+})
+ </code></pre>
 
 
 You can use both patterns in the same model with no problem of course, in the example above the model could have a busy state that changes from false to true and back to false again during a network request so that view code can redraw itself as showing a busy swirly if appropriate. That would be better managed using an observer pattern as follows:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public void doStuffOnAThread(final ResultListener resultListener){
 
     busy = true;
@@ -520,12 +767,28 @@ public void doStuffOnAThread(final ResultListener resultListener){
         }
     });
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun doStuffOnAThread(resultListener: ResultListener) {
+
+    busy = true
+    notifyObservers()
+
+    startAsyncOperation(object : FinishedListener {
+        override fun finished() {
+            busy = false
+            resultListener.success()
+            notifyObservers()
+        }
+    })
+}
+ </code></pre>
 
 
 For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
 
-For consistency, and for the same reasons outlined [above](#somethingchanged-parameter), try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work, but it breaks the whole point of the Observer pattern and it leads any inexperienced developers who are trying to use your model for their own view down the wrong path - why would they bother to implement the observer pattern and syncView() properly in their view if they can just take a short cut here (hint: they won't). And then you will loose all the benefits of databinding, see [syncView()](/android-fore/03-databinding.html#syncview) for a refresher.
+For consistency, and for the same reasons outlined [above](#somethingchanged-parameter), try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work, but it breaks the whole point of the Observer pattern and it leads any inexperienced developers who are trying to use your model for their own view down the wrong path - why would they bother to implement the observer pattern and syncView() properly in their view if they can just take a short cut here (hint: they won't). And then you will loose all the benefits of databinding, see [syncView()](/android-fore/03-reactive-uis.html#syncview) for a refresher.
 
 
 ## <a name="syncview"></a> 3) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
@@ -534,7 +797,7 @@ This seems to be the reaction of about 20% of the developers that come across th
 
 The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
-The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/android-fore/03-databinding.html#syncview), particularly the example of how doing ad-hoc updates can go wrong.
+The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/android-fore/03-reactive-uis.html#syncview), particularly the example of how doing ad-hoc updates can go wrong.
 
 Everything in computing is a trade off, and when considering a trade off you need to understand two things: **the upsides** (in this case: being "efficient" and only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the syncView() link above).
 

@@ -46,4 +46,4 @@ As much view related functionality gets put in these classes as possible, so unl
 This is part of the **fore** library philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View*. This also frees up the Fragment and Activity classes to do as little as possible except manage their lifecycles (which are considerably more complex than those of custom views).
 
 
-The [data binding](https://erdo.github.io/android-fore/03-databinding.html#shoom) section has more details about how views and models communicate in **fore**.
+The [data binding](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) section has more details about how views and models communicate in **fore**.

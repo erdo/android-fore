@@ -30,7 +30,13 @@ So, let's say we're developing a view for a very basic queue-busting app that le
 
 We'll assume that the [model](https://erdo.github.io/android-fore/02-models.html#shoom) to support this view has already been written and tested, and it has methods like this:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 void addBottle();
 void removeBottle();
 void setIsDiscounted(boolean isDiscounted);
@@ -39,7 +45,19 @@ int getTotalItems();
 int getTotalPrice();
 boolean getIsDiscounted();
 int getTotalSaving();
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun addBottle()
+fun removeBottle()
+fun setIsDiscounted(isDiscounted: Boolean)
+
+fun getTotalItems(): Int
+fun getTotalPrice(): Int
+fun getIsDiscounted(): Boolean
+fun getTotalSaving(): Int
+ </code></pre>
+
 
 **Step 1**
 Let's start with a basic version.
@@ -48,7 +66,14 @@ Let's start with a basic version.
 
 All we need to do is hook up the **add** and **remove** buttons in the UI and make sure we remember to update the **total price**. Something like this would be typical:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 addButton.setOnClickListener(v -> {
     basket.addBottle();
     updateTotalPriceView();
@@ -58,7 +83,20 @@ removeButton.setOnClickListener(v -> {
     basket.removeBottle();
     updateTotalPriceView();
 });
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+addButton.setOnClickListener {
+    basket.addBottle()
+    updateTotalPriceView()
+}
+
+removeButton.setOnClickListener {
+    basket.removeBottle()
+    updateTotalPriceView()
+}
+ </code></pre>
+
 
 **Step 2**
 Now let's get a bit smarter and an icon in the top right corner that will indicate how many bottles of water we have in the basket
@@ -68,7 +106,14 @@ Now let's get a bit smarter and an icon in the top right corner that will indica
 Code-wise this looks pretty similar, we just need to add a call to an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
 
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 addButton.setOnClickListener(v -> {
     basket.addBottle();
     updateTotalPriceView();
@@ -80,7 +125,22 @@ removeButton.setOnClickListener(v -> {
     updateTotalPriceView();
     updateTotalNumberOfItemsView();
 });
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+addButton.setOnClickListener {
+    basket.addBottle()
+    updateTotalPriceView()
+    updateTotalNumberOfItemsView()
+}
+
+removeButton.setOnClickListener {
+    basket.removeBottle()
+    updateTotalPriceView()
+    updateTotalNumberOfItemsView()
+}
+ </code></pre>
+
 
 **Step 3**
 Finally we get to the **discount** checkbox, if the box is checked: the discount is applied, if it's unchecked: the discount is removed.
@@ -89,17 +149,40 @@ Finally we get to the **discount** checkbox, if the box is checked: the discount
 
 Remember the basket model calculations have already been written and tested so all we need in the onCheckChanged listener is: basket.setIsDiscounted(applyDiscount); then updateTotalSavingsView() which just shows the discount that has been applied. We also need to call updateTotalPriceView() as that will have changed, **but not updateTotalNumberOfItemsView()** because of course, discounts have no effect there. We end up with something like this:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 apply10PercOff.setOnCheckedChangeListener( isChecked -> {
     basket.setIsDiscounted(isChecked);
     updateTotalPriceView();
     updateTotalSavingsView();
 });
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+apply10PercOff.setOnCheckedChangeListener {
+    basket.setIsDiscounted(isChecked)
+    updateTotalPriceView()
+    updateTotalSavingsView()
+}
+ </code></pre>
+
 
 Here is the pseudo code we end up with for this (very over simplified) case:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 Button addItemButton;
 Button removeItemButton;
 CheckBox apply10PercOff;
@@ -141,18 +224,78 @@ private void updateTotalPriceView(){
 private void updateTotalSavingsView(){
     totalSaving.setText(basket.getTotalSaving());
 }
+ </code></pre>
 
-```
+<pre class="tabcontent tabbed kotlin"><code>
+lateinit var addItemButton: Button
+lateinit var removeItemButton: Button
+lateinit var apply10PercOff: CheckBox
+
+lateinit var totalItems: TextView
+lateinit var totalPrice: TextView
+lateinit var totalSaving: TextView
+
+private fun setupButtonListeners() {
+
+  addButton.setOnClickListener {
+      basket.addBottle()
+      updateTotalPriceView()
+      updateTotalNumberOfItemsView()
+  }
+
+  removeButton.setOnClickListener {
+      basket.removeBottle()
+      updateTotalPriceView()
+      updateTotalNumberOfItemsView()
+  }
+
+  apply10PercOff.setOnCheckedChangeListener { isChecked ->
+      basket.setIsDiscounted(isChecked)
+      updateTotalPriceView()
+      updateTotalSavingsView()
+  }
+}
+
+private fun updateTotalNumberOfItemsView() {
+    totalItems.text = basket.getTotalItems()
+}
+
+private fun updateTotalPriceView() {
+    totalPrice.text = basket.getTotalPrice()
+}
+
+private fun updateTotalSavingsView() {
+    totalSaving.text = basket.getTotalSaving()
+}
+ </code></pre>
+
 
 And don't forget if we need to rotate this view, all the fields will be out of sync with our model. Because we have been smart and separated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 private void updatePostRotation(){
     updateTotalNumberOfItemsView();
     updateTotalPriceView();
     updateTotalSavingsView();
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+private fun updatePostRotation(){
+    updateTotalNumberOfItemsView()
+    updateTotalPriceView()
+    updateTotalSavingsView()
+}
+ </code></pre>
+
+
 
 The code above leaves out a few details of course (the injection of the basket model, hooking up the view elements to the xml layout, formatting the currency displays), but apart from that it looks kind of ok, the add and remove listeners look pretty similar so maybe we could extract them out to another function, but this view would mostly work.
 
@@ -178,7 +321,14 @@ Even simple views can very easily have subtle UI consistency bugs like this. And
 
 Remember what we said before? If a model being observed changes **in anyway**, then the **entire** view is refreshed. Using the syncView() convention, we instead end up with something like this:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 Button addItemButton;
 Button removeItemButton;
 CheckBox apply10PercOff;
@@ -207,7 +357,40 @@ public void syncView(){
     totalPrice.setText(basket.getTotalPrice());
     totalSaving.setText(basket.getTotalSaving());
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+lateinit var addItemButton: Button
+lateinit var removeItemButton: Button
+lateinit var apply10PercOff: CheckBox
+
+lateinit var totalItems: TextView
+lateinit var totalPrice: TextView
+lateinit var totalSaving: TextView
+
+private fun setupButtonListeners() {
+
+  addButton.setOnClickListener {
+      basket.addBottle()
+  }
+
+  removeButton.setOnClickListener {
+      basket.removeBottle()
+  }
+
+  apply10PercOff.setOnCheckedChangeListener { isChecked ->
+      basket.setIsDiscounted(isChecked)
+  }
+}
+
+fun syncView() {
+    totalItems.text = basket.getTotalItems()
+    totalPrice.text = basket.getTotalPrice()
+    totalSaving.text = basket.getTotalSaving()
+}
+ </code></pre>
+
+
 What's surprising is that this is not only more robust - it's also less code. And because this technique supports almost all types of standard UI (including [adapters](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto)), the code becomes so familiar it makes it very easy to spot when something is wrong. And we get rotation support for free: all we need to do to is to call syncView() after rotating.
 
 We haven't discussed yet how syncView() actually gets called by the model, but more on that in the [**fore** Observables](#fore-observables) section below.
@@ -220,8 +403,15 @@ For the moment all we need to know is that syncView() is triggered whenever **an
 
 If you want to add any more states it's also easy and clean, and totally consistent if they are set inside the syncView() method:
 
-```
-private void syncView(){
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+public void syncView(){
     checkoutButton.setEnabled(basket.isAboveMinimum());
     totalPrice.setColour(basket.isAboveMinimum() ? black : red);
     removeButton.setEnabled(basket.getTotalItems>0);
@@ -229,7 +419,19 @@ private void syncView(){
     totalPrice.setText(basket.getTotalPrice());
     totalSaving.setText(basket.getTotalSaving());
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun syncView(){
+    checkoutButton.enabled = basket.isAboveMinimum()
+    totalPrice.color = if (basket.isAboveMinimum()) black else red
+    removeButton.enabled = basket.getTotalItems>0
+    totalItems.text = basket.getTotalItems()
+    totalPrice.text = basket.getTotalPrice()
+    totalSaving.text = basket.getTotalSaving()
+}
+ </code></pre>
+
 
 ### Writing an effective syncView() method
 
@@ -242,16 +444,38 @@ It's not good enough to just set a button as **disabled** if a total is 0 or les
 
 So don't do this:
 
-```
+
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 if (basket.isBelowMinimum()){
     checkoutButton.setEnabled(false);
     totalPrice.setColour(red);
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+if (basket.isBelowMinimum()){
+    checkoutButton.enabled = false
+    totalPrice.color = red
+}
+ </code></pre>
+
 
 At the very least you must do this:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 if (basket.isBelowMinimum()){
     checkoutButton.setEnabled(false);
     totalPrice.setColour(red);
@@ -259,14 +483,38 @@ if (basket.isBelowMinimum()){
     checkoutButton.setEnabled(true);
     totalPrice.setColour(black);
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+if (basket.isBelowMinimum()){
+    checkoutButton.enabled = false
+    totalPrice.color = red
+} else {
+    checkoutButton.enabled = true
+    totalPrice.color = black
+}
+ </code></pre>
 
 But you'll find that by focusing on the property first rather than the condition, you can get some extremely tight code like so:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 checkoutButton.setEnabled(!basket.isBelowMinimum());
 totalPrice.setColour(basket.isBelowMinimum() ? red : black);
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+checkoutButton.enabled = !basket.isBelowMinimum()
+totalPrice.color = if (basket.isBelowMinimum()) red else black
+ </code></pre>
+
+
 
 *A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
@@ -291,25 +539,56 @@ Most of the models in the sample apps become observable by extending ObservableI
 
 So basically, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 Observer observer = new Observer() {
-    @Override
     public void somethingChanged() {
         syncView();
     }
 };
-```
+ </code></pre>
 
-Or with Java 8, the rather lovely:
+<pre class="tabcontent tabbed kotlin"><code>
+var observer: Observer = object : Observer() {
+    fun somethingChanged() {
+        syncView()
+    }
+}
+ </code></pre>
 
-```
+
+Or a bit tighter with Java 8 or Kotlin, the rather lovely:
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java 8</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 Observer observer = this::syncView;
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+internal var observer = this::syncView
+ </code></pre>
+
 
 And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using View lifecycle methods to do it)*:
 
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
 
-```
+<pre class="tabcontent tabbed java"><code>
 @Override
 protected void onAttachedToWindow() {
     super.onAttachedToWindow();
@@ -324,7 +603,23 @@ protected void onDetachedFromWindow() {
     wallet.removeObserver(observer);
     account.removeObserver(observer);
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+override fun onAttachedToWindow() {
+    super.onAttachedToWindow()
+    wallet.addObserver(observer)
+    account.addObserver(observer)
+    syncView() //  <- don't forget this
+}
+
+override fun onDetachedFromWindow() {
+    super.onDetachedFromWindow()
+    wallet.removeObserver(observer)
+    account.removeObserver(observer)
+}
+ </code></pre>
+
 
 ## Removing even more boiler plate
 

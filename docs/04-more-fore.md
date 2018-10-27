@@ -3,14 +3,29 @@
 
 The [CallProcessor](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](/android-fore/#fore-4-retrofit-example). The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
-When taking advantage of lambda expressions, the code can become very tight indeed:
+When taking advantage of Java lambda expressions or in Kotlin, the code can become very tight indeed:
 
-```
-    callProcessor.processCall(service.getFruits("3s"), workMode,
-        successResponse -> handleSuccess(successResponse),
-        failureMessage -> handleFailure(failureMessage)
-    );
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+callProcessor.processCall(service.getFruits("3s"), workMode,
+    successResponse -> handleSuccess(successResponse),
+    failureMessage -> handleFailure(failureMessage)
+);
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+callProcessor.processCall(service.getFruits("3s"), workMode,
+    { successResponse -> handleSuccess(successResponse) },
+    { failureMessage -> handleFailure(failureMessage) }
+)
+ </code></pre>
+
 
 ## Custom APIs
 
@@ -36,7 +51,13 @@ As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONO
 
 Ahh adapters, I miss the good old days when all you had to do was call notifyDataSetChanged(). And the best place to call it is from inside the syncView() method:
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public void syncView() {
 
   // set enabled states and visibilities etc
@@ -44,7 +65,18 @@ public void syncView() {
 
   adapter.notifyDataSetChanged();
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun syncView() {
+
+  // set enabled states and visibilities etc
+  ...
+
+  adapter.notifyDataSetChanged()
+}
+ </code></pre>
+
 
 In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes).
 
@@ -52,7 +84,7 @@ You could also add your adapter as an observer on the model directly, but doing 
 
 If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API).
 
-*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like taking coffee instead of tea because you're on a diet, and then adding whipped cream with marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something wrong (like re-inflating your cells' layout when you shouldn't)*
+*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like choosing black tea instead of a latte because you're on a diet, but then taking your tea and adding whipped cream with marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something wrong (like re-inflating your cells' layout when you shouldn't)*
 
 
 ## RecyclerView Animations
@@ -66,7 +98,13 @@ As the name implies, the ChangeAware\*Lists are aware of how they have been chan
 When you call notifyDataSetChangedAuto() on the ChangeAwareAdapter, it will take care of calling the correct Android notify* method for you. The only thing you need to take care of is telling the list what happened when an item has *changed* (the list has no way of detecting that automatically itself). For that, you use the method **ChangeAware\*List.makeAwareOfDataChange(int index)** whenever an item is changed (rather than added or removed).
 
 
-```
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 public void syncView() {
 
   // set enabled states and visibilities etc
@@ -74,7 +112,17 @@ public void syncView() {
 
   adapter.notifyDataSetChangedAuto();
 }
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+fun syncView() {
+
+  // set enabled states and visibilities etc
+  ...
+
+  adapter.notifyDataSetChangedAuto()
+}
+ </code></pre>
 
 
 See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code. This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method.
@@ -100,12 +148,28 @@ The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asa
 
 # AsyncTasks with Lambdas
 
-```
+
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 new AsyncBuilder<Void, Integer>(workMode)
-    .doInBackground(input -> MyModel.this.doStuffInBackground(input))
+    .doInBackground(MyModel.this.doStuffInBackground())
     .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
     .execute((Void) null);
-```
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+AsyncBuilder<Unit, Int>(workMode)
+    .doInBackground { this@MyModel.doStuffInBackground() }
+    .onPostExecute { result -> this@MyModel.doThingsWithTheResult(result) }
+    .execute()
+ </code></pre>
+
 
 
 We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
@@ -124,7 +188,14 @@ Async uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You shou
 Here's how you use Async:
 
 
-```
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
 new Async<Void, Integer, Integer>(workMode) {
 
     @Override
@@ -153,8 +224,38 @@ new Async<Void, Integer, Integer>(workMode) {
         ...
     }
 
-}.executeTask((Void)null);
-```
+}.executeTask((Void) null);
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+object : Async<Unit, Int, Int>(workMode) {
+    override fun doInBackground(vararg empty: Unit?): Int {
+
+      //do some stuff in the background
+      ...
+
+      //publish progress if you want
+      publishProgressTask(progress);
+
+      //return results
+      return result;
+    }
+
+    override fun onProgressUpdate(vararg values: Int?) {
+
+      progress = values[0]!!;
+
+      //do something with the progress
+      ...
+    }
+
+    override fun onPostExecute(result: Int?) {
+      //do something with the results once back on the UI thread
+      ...
+    }
+
+}.executeTask()
+ </code></pre>
 
 
 ### WorkMode Parameter
@@ -176,32 +277,26 @@ For slightly more concise code, you can use AsyncBuilder. This class works in mu
 One restriction with AsyncBuilder is there is no way to publish progress, so if you want to use that feature during your asynchronous operation, just stick to a plain Async.
 
 
-```
-new AsyncBuilder<Void, Integer>(workMode)
-    .doInBackground(new DoInBackgroundCallback<Void, Integer>() {
-        @Override
-        public Integer doThisAndReturn(Void... input) {
-            return MyModel.this.doLongRunningStuff(input);
-        }
-    })
-    .onPostExecute(new DoThisWithPayloadCallback<Integer>() {
-        @Override
-        public void doThis(Integer result) {
-            MyModel.this.doThingsWithTheResult(result);
-        }
-    })
-    .execute((Void) null);
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
 
-```
-
-That might not look particularly clean, but it gets a lot cleaner once you are using lambda expressions.
-
-```
-new AsyncBuilder<Void, Integer>(workMode)
+<pre class="tabcontent tabbed java"><code>
+new AsyncBuilder<String, Integer>(workMode)
     .doInBackground(input -> MyModel.this.doStuffInBackground(input))
     .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
-    .execute((Void) null);
-```
+    .execute("input string");
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+AsyncBuilder<String, Int>(workMode)
+    .doInBackground { input -> this@MyModel.doLongRunningStuff(input) }
+    .onPostExecute { result -> this@MyModel.doThingsWithTheResult(result) }
+    .execute("input string")
+ </code></pre>
+
 
 
 ## Testing Asynchronous Code

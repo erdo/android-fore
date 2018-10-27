@@ -3,9 +3,9 @@
 [![CircleCI](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=svg)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
 <br/>
 
-[(if you're reading this on github --> click here)](https://erdo.github.io/android-fore/#shoom)
+[(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement a very clean [reactive UI](https://erdo.github.io/android-fore/03-databinding.html#shoom) while supporting rotation **by default** - no additional work is required.
+A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement a very clean [reactive UI](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) while supporting rotation **by default** - no additional work is required.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
 
@@ -38,7 +38,7 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
  2. Getting the example apps running (you'll need at least Android Studio 3)
  3. While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
   [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
-  [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-databinding.html#shoom)
+  [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom)
 
 
 ### Method Counts
@@ -53,7 +53,7 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 ### Overview
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**, and because of the [reactive UI](https://erdo.github.io/android-fore/03-databinding.html#shoom) strategy used, it's typically very performant. The **fore** library implementation already supports a number of commercial android applications.
+Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**, and because of the [reactive UI](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) strategy used, it's typically very performant. The **fore** library implementation already supports a number of commercial android applications.
 
 In a nutshell, developing with MVO means:
 
@@ -63,8 +63,8 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
-* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-databinding.html#fore-observables) that lets views attach themselves to any model they are interested in
-* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-databinding.html#syncview) convention
+* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) that lets views attach themselves to any model they are interested in
+* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
@@ -94,7 +94,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 
 ![fore reactive UI sample app](https://j.gifs.com/MQ33GB.gif)
 
-This app is a bare bones implementation of **fore** reactive UIs. No threading, no networking, no database access - just the minimum required to demonstrate [Reactive UIs](https://erdo.github.io/android-fore/03-databinding.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of **fore** reactive UIs. No threading, no networking, no database access - just the minimum required to demonstrate [Reactive UIs](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/android-fore/00-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
