@@ -99,7 +99,7 @@ removeButton.setOnClickListener {
 
 
 **Step 2**
-Now let's get a bit smarter and an icon in the top right corner that will indicate how many bottles of water we have in the basket
+Now let's get a bit smarter and add an icon in the top right corner that will indicate how many bottles of water we have in the basket
 
 ![no discount](img/waterseller_nodiscounts_small.png)
 

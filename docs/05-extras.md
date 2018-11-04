@@ -503,7 +503,7 @@ Given any app that is attempting to implement **fore**: first check the package 
 
 <a name="non-lifecycle-observers"></a> 4) **Adding or removing observers outside of android lifecycle methods**. I'm not saying there is never a good reason to do that (particularly if you want to set up one long living model to observe the state of another long living model). But it is a bit unusual and might warrant a rethink. It's usually a mistake (and a cause of memory leaks).
 
-<a name="add-remove"></a> 5) Wherever you see an **addObserver()** it's always worth checking that you can see the associated **removeObserver()** call to make sure references are being cleaned up and memory isn't being leaked.
+<a name="add-remove"></a> 5) Wherever you see an **addObserver()** it's always worth checking that you can see the associated **removeObserver()** call in the mirrored lifecycle method (eg. onStart()/onStop() or onResume()/onPause()) to make sure references are being cleaned up and memory isn't being leaked.
 
 <a name="missing-notifyobservers"></a> 6) **Any change of state in an observable model that doesn't end with a call to notifyObservers()**. Even if it's not necessary for the current implementation, by not notifying the observers here, we now have a model that only works in certain (undocumented) circumstances. If someone else comes along and wants to observe your model and does not get a notification as expected when some state changes, something will break.
 
