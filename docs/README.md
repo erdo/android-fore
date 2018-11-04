@@ -7,6 +7,12 @@
 
 A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement a very clean [reactive UI](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) while supporting rotation **by default** - no additional work is required.
 
+
+<span class="news">
+New tutorial available [here!](https://medium.com/@erdo9000/tutorial-android-fore-basics-fb10788d388c)
+</span>
+
+
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
 
 Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: the [**View layer**](https://erdo.github.io/android-fore/01-views.html#shoom) is extremely thin, typically more so than with other architectures.

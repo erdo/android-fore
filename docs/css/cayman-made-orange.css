@@ -259,3 +259,16 @@ a:hover { text-decoration: underline; }
 pre.tabbed {
   border-radius: 0 0 0.3rem 0.3rem; border-top: none;
 }
+
+/* news flash style */
+.news {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.3rem;
+    border-color: #ddd;
+    background-color: #fcf8db;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    padding-left: 1.8rem;
+    padding-right: 1.8rem;
+}
