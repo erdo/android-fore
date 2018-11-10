@@ -98,7 +98,7 @@ For these sample apps, all the **View** components are located in the **ui/** pa
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
-
+<div class="shoom" id="fore-1-reactive-ui-example"/>
 ### **fore 1** Reactive UI Example
 
 [video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code](https://github.com/erdo/android-fore/tree/master/example01databinding)
@@ -110,7 +110,7 @@ This app is a bare bones implementation of **fore** reactive UIs. No threading, 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. Its inspiration is the diagram in the [architecture](https://erdo.github.io/android-fore/00-architecture.html#bad-diagram) section, although it sadly doesn't look quite as awesome as that diagram does.
 
 
-
+<div class="shoom" id="fore-2-async-example"/>
 ### **fore 2** Asynchronous Code Example
 
 [video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.forethreading) \| [source code](https://github.com/erdo/android-fore/tree/master/example02threading)
@@ -121,7 +121,7 @@ This one demonstrates asynchronous programming, and importantly how to test it. 
 
 This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
 
-
+<div class="shoom" id="fore-3-adapter-example"/>
 ### **fore 3** Adapter Example
 
 [video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreadapters) \| [source code](https://github.com/erdo/android-fore/tree/master/example03adapters)
@@ -138,7 +138,7 @@ Two lists are displayed side to side so you can see the effect this has when add
 As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
 
 
-
+<div class="shoom" id="fore-4-retrofit-example"/>
 ### **fore 4** Retrofit Example
 
 [video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreretrofit) \| [source code](https://github.com/erdo/android-fore/tree/master/example04retrofit)
@@ -153,7 +153,7 @@ As you're using the app, please notice:
 
 As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using **fore**.
 
-
+<div class="shoom" id="fore-5-ui-example"/>
 ### **fore 5** UI Helpers Example (Tic Tac Toe)
 
 [video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code](https://github.com/erdo/android-fore/tree/master/example05ui)
@@ -169,9 +169,8 @@ A regular Tic Tac Toe game that makes use of:
 
 No automated tests for this app (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included).
 
-
-### **fore 6** DB Example (Room db driven to-do list)
 <div class="shoom" id="fore-6-db-example-room"/>
+### **fore 6** DB Example (Room db driven to-do list)
 
 [video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
 
