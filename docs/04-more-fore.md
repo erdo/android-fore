@@ -125,7 +125,9 @@ fun syncView() {
  </code></pre>
 
 
-See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code. This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method.
+See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code. This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method, rather than **notifyDataSetChanged()**.
+
+> "the only thing a view needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method, rather than **notifyDataSetChanged()**."
 
 ## Database driven RecyclerView Animations
 
