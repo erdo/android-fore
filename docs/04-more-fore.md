@@ -135,7 +135,7 @@ This radically simplifies any [view code](https://github.com/erdo/android-fore/b
 
 For lists that are being driven by a database table, the only way we can get animated changes is by comparing the two lists (the new versus the old) and try to work out what changed. This is because the view layer will not be aware of how the list has been changed as it will often be changed in another part of the system at the database layer. Thankfully Android has a *DiffUtil* class that does that for us, however it's a more heavy weight approach and isn't really useful once your lists gets larger than about 1000 items - in any case you want to be calculating the DiffResult in a separate thread.
 
-**fore** wraps some of these Android classes and handles threading for you, so all you need to do is extend ChangeAwareAdapter but this time with a construction parameter that implements the Diffable interface, rather than the Updatable interface.
+**fore** wraps some of these Android classes and handles threading for you, so all you need to do is extend ChangeAwareAdapter but this time with a construction parameter that implements the **Diffable** interface, rather than the **Updatable** interface.
 
 The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-example-room) shows all the code needed for this and also how to trigger view updates from a Room database using its InvalidationTracker (which is also how LiveData is notified of changes)
 
@@ -147,7 +147,7 @@ More specifics regarding adapters and threading are in the source of [Observable
 
 The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asaf-full-app-example) demonstrates that quite well, it's deliberately challenging to implement in a regular fashion (multiple simultaneous network calls changing the same list; user removal of list items; and screen rotation - all at any time) it's still totally robust as a result of sticking to that rule above.
 
-*Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately, it's all to do with threads and ensuring that the notifyX method gets called quickly enough after the list has been changed (or swapped for another list)*
+*Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately. When the list data changes, the notifyX method needs to be called immediately, and both things need to happen on the UI thread, that's it. It's a shame the android docs do a terrible job of explaining this.*
 
 
 # AsyncTasks with Lambdas
