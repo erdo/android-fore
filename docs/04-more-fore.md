@@ -78,13 +78,11 @@ fun syncView() {
  </code></pre>
 
 
-In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes).
-
-You could also add your adapter as an observer on the model directly, but doing it like that usually causes problems because you will also need to find a way to remove it correctly (see these items in the code review check list [here](https://erdo.github.io/android-fore/05-extras.html#non-lifecycle-observers) and [here](https://erdo.github.io/android-fore/05-extras.html#add-remove)).
+In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes). (Your adapter will have a reference to the model which is where it will get it's list data from - see the sample app linked to above).
 
 If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API).
 
-*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like choosing black tea instead of a latte because you're on a diet, but then taking your tea and adding whipped cream with marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something wrong (like re-inflating your cells' layout when you shouldn't)*
+*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like choosing black tea instead of a coffee because you're on a diet, but then taking your tea and adding whipped cream with marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something very wrong (like re-inflating your cells' layout when you shouldn't)*
 
 
 ## RecyclerView Animations
