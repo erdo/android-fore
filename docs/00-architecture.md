@@ -14,7 +14,7 @@ By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the st
 
 By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
 
-For the avoidance of doubt, most non-trivial apps will of course have more layers beneath the model layer, typically you'll have some kind of repository, a networking abstraction etc. [Sample app 6](https://erdo.github.io/android-fore/#fore-6-db-example-room") demonstrates one way to structure this for a larger commercial style app as it includes database work, networking etc.
+*For the avoidance of doubt, most non-trivial apps will of course have more layers beneath the model layer, typically you'll have some kind of repository, a networking abstraction etc. [Sample app 6](https://erdo.github.io/android-fore/#fore-6-db-example-room) demonstrates one way to structure this for a larger commercial style app*
 
 In a nutshell this is what we have with MVO:
 
