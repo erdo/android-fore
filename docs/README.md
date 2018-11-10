@@ -6,11 +6,15 @@
 
 [![circleci](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
 
-<br/> 
+<br/>
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-A tiny library that helps you write android code in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) style that is **simple**, **robust** and **performant**. MVO focusses on the boundary between the view layer the rest of your app, i.e. it helps you implement a very clean [reactive UI](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) while supporting rotation **by default** - no additional work is required.
+The **fore** library helps you move code out of the view layer. Because once you do that, magical things start to happen.
+
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style. Typically that means less code, rock-solid UI consistency, great testability, and support for rotation **by default**.
+
+From a UI complexity point of view, the resulting apps are highly scalable and **fore** works for small personal apps, right up to large commercial projects with 100K+ lines of code.
 
 <br/>
 <span class="news">
@@ -19,9 +23,7 @@ New tutorial available [here!](https://medium.com/@erdo9000/tutorial-android-for
 <br/>
 <br/>
 
-MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
-
-Though the resulting code is often very sparse and clear, there is a considerable amount of thought required to get it to that stage. MVO requires a slight mindset change: the [**View layer**](https://erdo.github.io/android-fore/01-views.html#shoom) is extremely thin, typically more so than with other architectures.
+MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation). All the code examples in these docs are written in both Java and Kotlin.
 
 
 ## Quick Start
@@ -61,13 +63,11 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 <br/><br/>
 
-**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small - so small in fact that you could just copy and paste the code into your app if you wanted (it's small enough to be self-manageable, and the core code hasn't changed in a while anyway). I'd recommend you just use the JCenter version, but each to their own ;) There's also no reason you can't implement MVO yourself of course.
+**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small - so small in fact that you could just copy and paste the code into your app if you wanted (it's small enough to be self-manageable, and the core code hasn't changed in a while anyway). I'd recommend you just use the jcenter version, but each to their own ;) There's also no reason you can't implement MVO yourself of course, it's a surprisingly powerful concept regardless of the implementation.
 
 ### Overview
 
-Due to the sparseness of the resulting view layer code, MVO is particularly **scalable with regards to UI complexity**, and because of the [reactive UI](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) strategy used, it's typically very performant. The **fore** library implementation already supports a number of commercial android applications.
-
-In a nutshell, developing with MVO means:
+In a nutshell, developing with **fore** means writing:
 
 > "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
@@ -80,16 +80,15 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
-If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
+If you totally grok those 4 things, that's pretty much all you need to use **fore** successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 The **fore** library also includes some testable wrappers for AsyncTask: [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) (which lets you make use of lambdas)
 
-There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor).
-
+There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor). **fore** works really well with RoomDB too, checkout the last sample app for details.
 
 ## Sample Apps
 
-![simple basket](img/screenshot_asaf_samples_phone_all_1000.png)
+![all samples](img/screenshot_asaf_samples_phone_all_1000.png)
 
 The apps here are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts or implement ripple effects - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
 

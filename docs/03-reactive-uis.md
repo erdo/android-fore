@@ -22,7 +22,7 @@ That doesn't mean that you can't subdivide your views and only refresh one of th
 
 ### Quick Tutorial
 
-I've gone through this example with many developers over the last few years, and so far no one has spotted the **deliberate bug** that's coming up until it's too late. So I'm giving you a heads up! The fact that you probably still won't see it, should demonstrate the power of having a syncView() which simply refreshes the **entire** view whenever it's called.
+I've gone through this example with many developers over the last few years, and so far no one has spotted the <span class="warning"> **deliberate bug** </span> that's coming up, until it's too late. So I'm giving you a heads up! The fact that you probably still won't see it, should demonstrate the power of having a syncView() which simply refreshes the **entire** view whenever it's called.
 
 So, let's say we're developing a view for a very basic queue-busting app that lets roaming staff sell $1 bottles of water at a festival. The main UI should look something like this:
 

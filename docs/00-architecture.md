@@ -2,7 +2,7 @@
 
 # MVO Architecture
 
-This little library helps you implement an architecture we'll call **MVO (Model View Observer)**.
+This little library helps you implement an architecture we call **MVO (Model View Observer)**.
 
 ![simple basket](img/arch_mvo.png)
 
@@ -10,7 +10,7 @@ That block diagram above is what MVO looks like (it's simplified of course, furt
 
 By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a View-Model - it makes no difference from an MVO perspective.
 
-By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing specifically to do with rxJava by the way, though you absolutely can implement an MVO architecture using rxJava if you wish).
+By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing specifically to do with rxJava by the way, though you could implement an MVO architecture using rxJava if you wanted to).
 
 By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
 
@@ -25,21 +25,19 @@ Another way to look at it is in *crap diagram* mode. So here's a crap diagram sh
 
 ![data binding](img/data-binding.png)
 
-Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), it's a fundamental part of why **fore** code looks so sparse.
+Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), it's a fundamental part of why **fore** code is so robust, but at the same time looks so sparse.
 
 That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) that does the observing.
 
-One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In all the examples above, the code just works if you rotate the screen - without you needing to do a single thing.
+One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In the code examples above, the code just works if you rotate the screen simply because of how it's structured - you don't need to do a single thing.
 
 > "the code works if you rotate the screen - without you needing to do a single thing"
 
-The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) [\[screen shot\]](https://raw.githubusercontent.com/erdo/android-fore/master/example03adapters/screenshot.png), or if you're doing [**threaded work in your model**](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/ui/fruitcollector/FruitCollectorView.java). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/android-fore/#fore-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) which is probably one of the most complicated view layers you will encounter with MVO due to all the animation code written in it.
+The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) [\[screen shot\]](https://raw.githubusercontent.com/erdo/android-fore/master/example03adapters/screenshot.png), or if you're doing [**asynchronous work in your model**](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java), or fetching data [**from a network**](https://github.com/erdo/asaf-full-app-example/blob/master/app/src/main/java/co/early/asaf/fullapp01/ui/fruitcollector/FruitCollectorView.java). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/android-fore/#fore-5-ui-helpers-example-tic-tac-toe) here's the [**view code**](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java) for that app. Here's a kotlin [**view**](https://github.com/erdo/password123/blob/master/app/src/main/java/co/early/password123/ui/passwordchooser/PwChooserView.kt) which is probably one of the most complicated view layers you will encounter with MVO due to all the animation code written in it.
 
 
 ## Handling State
-In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either) as developers we aim to select the best tool for the job.
-
-Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
+In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
 
 *Depending on how far you want to go down the functional route with your android app, you might want to look into [MVI](https://www.youtube.com/watch?v=PXBXcHQeDLE&t) as a functional architecture alternative (YMMV of course. I've used it, it can be a little heavy for anything more than a fairly trivial UI - by heavy I mean it needs a lot of boiler plate code to be written). If you're coming from MVI, MVO should be quite recognisable: MVO's syncView() is a very close equivalent to MVI's render(), comparison of the two architectures [here](#comparison-with-mvi)*
 
@@ -153,9 +151,9 @@ loggedInStatus.text = if (viewState.isLoggedIn) "IN" else "OUT"
 
  ![testing with MVI and MO](img/test_mvo_mvi.png)
 
- In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object (including a field like ViewState.isLoggedIn = true), for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is *immutable*. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected RESULT.
+ In **MVI** a typical test would be to make sure that an **Intention/Intent** made by a user results in the correct **ViewState** being returned to the UI layer. For example, test that the LOGIN_INTENTION is processed correctly (i.e. gets converted to a LOGIN_ACTION, is processed via an interactor to create a LOGIN_RESULT, which is then *reduced* and combined with previous view states to produce a ViewState object (including a field like ViewState.isLoggedIn = true), for passing back to the UI). The reason for the complication with MVI is that the whole thing is functionally written so that the resulting ViewState returned via the render() method is *immutable*. Luckily the tests don't need to know much about this and mostly just compare the INTENTION with an expected STATE.
 
- **MVO** simply tests that when you call accountModel.login() you a) receive a notification if you are observing that model and it changes and b) the accountModel.isLoggedIn() method subsequently returns the expected value.
+ **MVO** simply tests that when you call accountModel.login(): **a)** if you are observing that model and it changes, you receive a notification, and **b)** the accountModel.isLoggedIn() method subsequently returns the expected value.
 
  *Both architectures mock out dependencies and have strategies for dealing with asynchronous code which makes the tests small.*
 
@@ -165,7 +163,7 @@ loggedInStatus.text = if (viewState.isLoggedIn) "IN" else "OUT"
 
  *Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.*
 
- It goes without saying that the amount of code that needs to be written to implement MVI is considerably more than with MVO (this is the price you pay for writing UI data-binding code in a functional style). The difference becomes more significant with views that depend on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus). Most of this additional code will be written in the Interactor class, so at least it remains testable.
+ It goes without saying that the amount of code that needs to be written to implement MVI is considerably more than with MVO (this is the price you pay for writing UI data-binding code in a functional style). The difference becomes more significant with views that depend on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus). Most of this additional code will be written in the Interactor class, so at least it remains testable - but sheer lines of code can become a significant break on development speed and robustness for many teams, especially when code needs to be changed.
 
 
 ### BTW, What's a Controller
