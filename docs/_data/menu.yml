@@ -12,8 +12,6 @@
 - text: MVO
   url: /00-architecture.html
   subitems:
-    - text: Overview
-      url: "#overview"
     - text: Handling State
       url: "#handling-state"
     - text: Comparison with MV*
