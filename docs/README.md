@@ -58,10 +58,10 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 
 ### Method Counts
-![fore-core methods](https://img.shields.io/badge/fore--core-126-orange.svg){: .float-left}
-![fore-adapters methods](https://img.shields.io/badge/fore--adapters-84-orange.svg){: .float-left}
-![fore-retrofit methods](https://img.shields.io/badge/fore--retrofit-38-orange.svg){: .float-left}
-![fore-lifecycle methods](https://img.shields.io/badge/fore--lifecycle-59-orange.svg){: .float-left}
+![fore-core methods](https://img.shields.io/badge/fore.core-126-orange.svg){: .float-left}
+![fore-adapters methods](https://img.shields.io/badge/fore.adapters-84-orange.svg){: .float-left}
+![fore-retrofit methods](https://img.shields.io/badge/fore.retrofit-38-orange.svg){: .float-left}
+![fore-lifecycle methods](https://img.shields.io/badge/fore.lifecycle-59-orange.svg){: .float-left}
 
 <br/><br/>
 
