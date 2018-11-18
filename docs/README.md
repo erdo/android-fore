@@ -6,15 +6,17 @@
 
 [![circleci](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
 
+![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
+
 <br/>
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
 The **fore** library helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style. Typically that means less code, rock-solid UI consistency, great testability, and support for rotation **by default**.
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style. Typically that means much less code in the view layer than usual, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
-From a UI complexity point of view, the resulting apps are highly scalable and **fore** works for small personal apps, right up to large commercial projects with 100K+ lines of code.
+Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
 
 <br/>
 <span class="news">

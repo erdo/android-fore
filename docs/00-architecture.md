@@ -4,7 +4,7 @@
 
 This little library helps you implement an architecture we call **MVO (Model View Observer)**.
 
-![simple basket](img/arch_mvo.png)
+![mvo anotated](img/arch_mvo_anotated.png)
 
 That block diagram above is what MVO looks like (it's simplified of course, further details below).
 
