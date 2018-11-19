@@ -4,10 +4,13 @@
 
 ![jcenter-1.0.0](https://img.shields.io/badge/jcenter-1.0.0-green.svg){: .float-left}
 
-[![circleci](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
-
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
+[![circleci](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
+
+![year asafcore and forecore jcenter downloads 2018 Nov 18](https://img.shields.io/badge/downloads-3%2C369-red.svg){: .float-left}
+
+<br/>
 <br/>
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)

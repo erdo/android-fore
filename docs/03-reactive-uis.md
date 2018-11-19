@@ -1,4 +1,4 @@
-# Reactive UIs AKA Data Binding
+# Reactive UIs
 
 Data Binding is the old term for this, and its basic definition is: any changes of state that happen in your underlying model, get automatically represented in your view.
 
@@ -60,9 +60,9 @@ fun getTotalSaving(): Int
 
 
 **Step 1**
-Let's start with a basic version.
+Let's start with a basic view.
 
-![no basket](img/waterseller_nobasket_small.png)
+![no basket](img/waterseller_nobasket_small_hl.png)
 
 All we need to do is hook up the **add** and **remove** buttons in the UI and make sure we remember to update the **total price**. Something like this would be typical:
 
@@ -97,13 +97,14 @@ removeButton.setOnClickListener {
 }
  </code></pre>
 
+Inside the **updateTotalPriceView()** call we will just be setting the text in the UI to what the model tells us, essentially: totalPrice.setText(basket.getTotalPrice())
 
 **Step 2**
 Now let's get a bit smarter and add an icon in the top right corner that will indicate how many bottles of water we have in the basket
 
-![no discount](img/waterseller_nodiscounts_small.png)
+![no discount](img/waterseller_nodiscounts_small_hl.png)
 
-Code-wise this looks pretty similar, we just need to add a call to an updateTotalNumberOfItemsView() method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
+Code-wise this looks pretty similar, we just need to add a call to an **updateTotalNumberOfItemsView()** method, which does what you think it does. Of course, we need to hook that up with the Add and Remove buttons so that they now both call updateTotalPriceView(); and then updateTotalNumberOfItemsView();
 
 
 
@@ -145,9 +146,9 @@ removeButton.setOnClickListener {
 **Step 3**
 Finally we get to the **discount** checkbox, if the box is checked: the discount is applied, if it's unchecked: the discount is removed.
 
-![full basket](img/waterseller_full_small.png)
+![full basket](img/waterseller_full_small_hl.png)
 
-Remember the basket model calculations have already been written and tested so all we need in the onCheckChanged listener is: basket.setIsDiscounted(applyDiscount); then updateTotalSavingsView() which just shows the discount that has been applied. We also need to call updateTotalPriceView() as that will have changed, **but not updateTotalNumberOfItemsView()** because of course, discounts have no effect there. We end up with something like this:
+Remember the basket model calculations have already been written and tested so all we need in the onCheckChanged listener is: basket.setIsDiscounted(applyDiscount); then **updateTotalSavingsView()** which just shows the discount amount that has been applied. We also need to call **updateTotalPriceView()** as that will have changed, but **not updateTotalNumberOfItemsView()** because of course, discounts have no effect there. We end up with something like this:
 
 
 <!-- Tabbed code sample -->
@@ -224,6 +225,12 @@ private void updateTotalPriceView(){
 private void updateTotalSavingsView(){
     totalSaving.setText(basket.getTotalSaving());
 }
+
+private void updatePostRotation(){
+    updateTotalNumberOfItemsView();
+    updateTotalPriceView();
+    updateTotalSavingsView();
+}
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
@@ -267,27 +274,7 @@ private fun updateTotalPriceView() {
 private fun updateTotalSavingsView() {
     totalSaving.text = basket.getTotalSaving()
 }
- </code></pre>
 
-
-And don't forget if we need to rotate this view, all the fields will be out of sync with our model. Because we have been smart and separated our model from our view anyway, we don't care about such lifecycle trivialities and we can just re sync everything up like so:
-
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-private void updatePostRotation(){
-    updateTotalNumberOfItemsView();
-    updateTotalPriceView();
-    updateTotalSavingsView();
-}
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
 private fun updatePostRotation(){
     updateTotalNumberOfItemsView()
     updateTotalPriceView()
@@ -296,26 +283,25 @@ private fun updatePostRotation(){
  </code></pre>
 
 
+We have the **updatePostRotation()** method there because if we need to rotate this view all the fields will be out of sync with our model. If we hadn't properly separated our view code from our model, we would need to resort to using Android's onSaveInstanceState() style methods, but because we have been smart and separated our model from our view anyway, it's pretty easy and we can just call updatePostRotation().
 
 The code above leaves out a few details of course (the injection of the basket model, hooking up the view elements to the xml layout, formatting the currency displays), but apart from that it looks kind of ok, the add and remove listeners look pretty similar so maybe we could extract them out to another function, but this view would mostly work.
 
 If we wanted to add some more UI details, however, like: disabling a checkout button if there is nothing in the basket, or making the total colour red if it is under the minimum credit card transaction value of $10 or whatever, it soon starts to become untidy and complicated (which is not what you want in a view class which is not easy to test).
 
 
-### But what about that bug you mentioned?
+### But what about that **BUG** you mentioned?
 Well it's right there staring you in the face, see if you can spot it if you haven't already. Do those click listeners look ok to you? cover all the situations fine?
 
 This is a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that disable rotation.
 
-In case you haven't worked out the bug yet, you can recreate it in your brain like this:
+In case you haven't worked out the bug yet, you can recreate it in your brain like this (focus on the amount in the savings field):
 
 * start with an empty basket
 * select the discount checkbox first
 * then add an item
 
-(what value would you expect to see in the savings total?)
-
-It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call *updateDiscountView()* from the add and remove click listeners, so this value will be incorrect in the view until the discount checkbox is toggled again.
+It's that simple. The add and remove item click listeners will correctly talk to the model, so the model state is correct. However the developer forgot to call *updateDiscountView()* from the add and remove click listeners, so the savings value will be incorrect in the view until the discount checkbox is toggled again.
 
 Even simple views can very easily have subtle UI consistency bugs like this. And often they are **hard to spot**. In this case, a tester would have had to have performed specific actions **in the right sequence** even to see it. Luckily there is a simple solution and all you have to do is apply it everywhere you have a view.
 
@@ -391,7 +377,7 @@ fun syncView() {
  </code></pre>
 
 
-What's surprising is that this is not only more robust - it's also less code. And because this technique supports almost all types of standard UI (including [adapters](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto)), the code becomes so familiar it makes it very easy to spot when something is wrong. And we get rotation support for free: all we need to do to is to call syncView() after rotating.
+Surprisingly, this is not only **more robust**, it's also **less code**. And because this technique supports almost all types of standard UI (including [adapters](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto)), the code becomes so familiar, it makes it very easy to spot when something is wrong. **And we get rotation support for free: all we need to do to is to call syncView() after rotating.**
 
 We haven't discussed yet how syncView() actually gets called by the model, but more on that in the [**fore** Observables](#fore-observables) section below.
 
