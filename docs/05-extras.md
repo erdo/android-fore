@@ -686,13 +686,13 @@ There is a very good reason why we don't have a parameter here, but it is compli
 
 Adding a parameter here would let client code use the observer like some kind of messenger thing or an event bus. While that could be a perfectly valid thing to do for the specific situation you find yourself in, when it comes to binding data to an android view layer it almost always ends up destroying the long term maintainability of the code base.
 
-(Adding a parameter here has been tried by yours truly in many different projects over the years by the way, it always ends up being removed resulting in a considerably cleaner code base, so this has been the MVO approach now for a number of years and it seems to work very well).
+(Adding a parameter here has been tried by yours truly in many different projects over the years by the way, it always ends up being removed resulting in a considerably cleaner code base, so this has been the **fore** approach now for a number of years and it seems to work very well).
 
 One reason (but not the only one) is that often, different views or other Observers will want different things from the same model and as the code evolves, that model slowly ends up having to support many different flavoured observables all with different parameter requirements.
 
 Similarly there will often be views or other Observables that are interested in more than one model, and if those models all have different observable interfaces, all those interfaces will need to be implemented and managed by the view, rather than just using a single Observer implementation.
 
-It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [data binding](/android-fore/03-reactive-uis.html#shoom) section).
+It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc (see more on that in the [Reactive UIs](/android-fore/03-reactive-uis.html#shoom) section).
 
 [Quick example, [this view](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) is driven by [these](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdas.java) [two](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/feature/counter/CounterWithProgress.java) models. If each model had a different parameter in its somethingChanged() method, the view would need to implement two different observer callbacks - now what if the view was interested in 5 different models? (which would not be a problem at all for MVO by the way): The view would need to implement and manage a whole bunch of different observers, or you would need a super model that wrapped all that and presented one observable interface to the view, i.e. extra code, extra tests, no benefit]
 
@@ -797,7 +797,7 @@ This seems to be the reaction of about 20% of the developers that come across th
 
 The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
-The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/android-fore/03-reactive-uis.html#syncview), particularly the example of how doing ad-hoc updates can go wrong.
+The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/android-fore/03-reactive-uis.html#syncview), particularly the deliberate bug that shows how doing ad-hoc updates can go wrong.
 
 Everything in computing is a trade off, and when considering a trade off you need to understand two things: **the upsides** (in this case: the lure of only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the syncView() link above).
 

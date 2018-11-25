@@ -11,7 +11,7 @@ Lately it's been applied to other (non UI) areas of code very successfully under
 
 ## SyncView()
 
-MVO uses one of the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method - compare MVO with MVI [here](https://erdo.github.io/android-fore/00-architecture.html#comparison-with-mvi))*. On the surface it looks very simple, but there are some important details to discuss, that can trip you up or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
+MVO uses one of the most simple (but extremely reliable) data binding implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method - compare MVO with MVI [here](https://erdo.github.io/android-fore/00-architecture.html#comparison-with-mvi))*. On the surface it looks very simple, but there are some important details to discuss that can trip you up, or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
 
 That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself so that you remember it...
 
@@ -148,7 +148,7 @@ Finally we get to the **discount** checkbox, if the box is checked: the discount
 
 ![full basket](img/waterseller_full_small_hl.png)
 
-Remember the basket model calculations have already been written and tested so all we need in the onCheckChanged listener is: basket.setIsDiscounted(applyDiscount); then **updateTotalSavingsView()** which just shows the discount amount that has been applied. We also need to call **updateTotalPriceView()** as that will have changed, but **not updateTotalNumberOfItemsView()** because of course, discounts have no effect there. We end up with something like this:
+Remember the basket model calculations have already been written and tested so we only need to worry about the UI code. So for the discount checkbox, we 1) call the model: basket.setIsDiscounted(applyDiscount) and then 2) refresh the UI: **updateTotalSavingsView()** which shows the discount amount that has been applied, and also **updateTotalPriceView()** as that will have changed, but **not updateTotalNumberOfItemsView()** because of course, discounts have no effect there. We end up with something like this:
 
 
 <!-- Tabbed code sample -->
@@ -293,6 +293,55 @@ If we wanted to add some more UI details, however, like: disabling a checkout bu
 ### But what about that **BUG** you mentioned?
 Well it's right there staring you in the face, see if you can spot it if you haven't already. Do those click listeners look ok to you? cover all the situations fine?
 
+
+
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+  addButton.setOnClickListener(v -> {
+      basket.addBottle();
+      updateTotalPriceView();
+      updateTotalNumberOfItemsView();
+  });
+
+  removeButton.setOnClickListener(v -> {
+      basket.removeBottle();
+      updateTotalPriceView();
+      updateTotalNumberOfItemsView();
+  });
+
+  apply10PercOff.setOnCheckedChangeListener(isChecked -> {
+      basket.setIsDiscounted(isChecked);
+      updateTotalSavingsView();
+      updateTotalPriceView();
+  });</code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+  addButton.setOnClickListener {
+      basket.addBottle()
+      updateTotalPriceView()
+      updateTotalNumberOfItemsView()
+  }
+
+  removeButton.setOnClickListener {
+      basket.removeBottle()
+      updateTotalPriceView()
+      updateTotalNumberOfItemsView()
+  }
+
+  apply10PercOff.setOnCheckedChangeListener { isChecked ->
+      basket.setIsDiscounted(isChecked)
+      updateTotalPriceView()
+      updateTotalSavingsView()
+  }</code></pre>
+
+
+
 This is a class of bug related to UI consistency that crops up *all the time* in any code that doesn't have proper data binding, and that means it's a class of bugs that crops up *all the time* in android apps, even ones that disable rotation.
 
 In case you haven't worked out the bug yet, you can recreate it in your brain like this (focus on the amount in the savings field):
@@ -379,11 +428,10 @@ fun syncView() {
 
 Surprisingly, this is not only **more robust**, it's also **less code**. And because this technique supports almost all types of standard UI (including [adapters](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto)), the code becomes so familiar, it makes it very easy to spot when something is wrong. **And we get rotation support for free: all we need to do to is to call syncView() after rotating.**
 
-We haven't discussed yet how syncView() actually gets called by the model, but more on that in the [**fore** Observables](#fore-observables) section below.
+We haven't discussed yet how syncView() actually gets called by the model, see the [**hooking it all up**](#hooking-it-all-up) section below. For the moment all we need to know is that syncView() is triggered whenever **any** state of the basket model changes. It's also called when the view is created, including after rotation.
 
- A full implementation of a view is not that much larger with those details included though, see [here](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) for example views from the sample apps.
+ A full implementation of a view is not that much larger with those details included, see [here](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) and [here](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) for example views from the sample apps.
 
-For the moment all we need to know is that syncView() is triggered whenever **any** state of the basket model changes. It's also called when the view is created, including after rotation.
 
 > "It's not only more robust - it's also less code... and we get rotation support for free"
 
