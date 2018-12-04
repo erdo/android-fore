@@ -556,7 +556,7 @@ totalPrice.color = if (basket.isBelowMinimum()) red else black
 Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors.
 
 ### Beware infinite loops
-On final point to mention about syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like, after all.
+On final point to mention is about syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like, after all.
 
 However, you will usually be setting a state on that UI element during your syncView(), if that UI element then calls its "changed" listener, you will end up calling syncView() again and find yourself in an infinite loop.
 
