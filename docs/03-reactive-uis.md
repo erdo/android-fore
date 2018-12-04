@@ -553,10 +553,14 @@ totalPrice.color = if (basket.isBelowMinimum()) red else black
 *A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
 ### Don't Count Notifications
-One more thing about syncView(), be careful not to rely on it being called a certain number of times as it results in fragile code. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid SyncView() implementations that will survive code refactors.
+Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors.
 
 ### Infinite loops
-Be careful of syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like after all. However, if SyncView() results in setting a state on a UI element, and that UI element then calls its "changed" listener, you will end up calling SyncView() again in an infinite loop. Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing it's "changed" listeners anyway. But Android. And indeed EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy.
+On final point to mention about syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like after all.
+
+However, if you set a state on that UI element during your syncView() (which would be typical), and that UI element then calls its "changed" listener, you will end up calling SyncView() again and find yourself in an infinite loop.
+
+Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing it's "changed" listeners anyway. But Android. And indeed EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy.
 
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
