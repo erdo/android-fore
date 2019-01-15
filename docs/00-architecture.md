@@ -2,7 +2,7 @@
 
 # MVO Architecture
 
-This little library helps you implement an architecture we call **MVO (Model View Observer)**.
+This little library helps you implement an architecture we call **MVO (Model View Observer)**. (If you know your MV*s then you'll notice MVO has some similarity with both MVI and MVVM).
 
 ![mvo anotated](img/arch_mvo_anotated.png)
 
@@ -48,9 +48,11 @@ There is further discussion of state versus events [**here**](https://erdo.githu
 <a name="comparisons-with-mv"></a>
 ## From MV* to MVO
 
-A little bit of background if you are coming from a different architecture, definitely not required reading though (you might want to head over to the discussion on [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom) at this point).
+MVO is like a radically reduced version of MVVM, with the addition of a render() style function similar to the one you will find in MVI.
 
-Discussions of **MVC**, **MVP** and **MVVM** can get quite abstract, and specific implementations often differ considerably. For the purposes of our discussion the following flow diagrams will do:
+Discussions of **MVC**, **MVP**, **MVVM** and **MVI** can get quite abstract, and specific implementations often differ considerably. (If you want to continue learning about **MVO**, you might want to head over to the discussion on [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom) at this point).
+
+Anyway for the purposes of our MV* discussion, the following flow diagrams will do:
 
 ![simple basket](img/arch_mvc.png)
 
@@ -84,7 +86,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-You can implement this using something like LiveData on Android, but when you get into the details I think the solution has a few issues related to [this](https://erdo.github.io/android-fore/05-extras.html#somethingchanged-parameter) and the inability to use something equivalent to the surprisingly powerful [syncView](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention that exists in MVO (or render() in MVI) - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
+You can implement this using something like LiveData on Android, but the lack of a [syncView](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention (or render() in MVI), results in increasingly complex view code once you start tackling non trivial UIs - it's a considerable step forward none the less, and it may work for you. Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
 ### Finally MVO
 
@@ -110,8 +112,6 @@ As with all the architectures discussed so far, here the Model knows nothing abo
  If you totally grok those 4 things, that's pretty much all you need to use MVO successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
 ### Comparison with MVI
- *(Incidentally, the author currently works in a large commercial team implementing MVI in a published app)*
-
  The two architectures are very similar in that they both have a single method that updates the UI according to state.
 
  **MVO has syncView()** which takes no parameters. The method sets the UI according to whatever models it has, eg:
