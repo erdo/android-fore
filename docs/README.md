@@ -23,7 +23,7 @@ Because the view layer is so sparse when using **fore**, the apps are highly sca
 
 <br/>
 <span class="news">
-New tutorial available [here!](https://medium.com/@erdo9000/tutorial-android-fore-basics-fb10788d388c)
+New tutorial available [here!](https://dev.to/erdo/tutorial-android-fore-basics-1155)
 </span>
 <br/>
 <br/>
@@ -218,7 +218,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2017-2018 early.co
+    Copyright 2017-2019 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
