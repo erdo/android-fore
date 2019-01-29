@@ -58,7 +58,7 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.androidX}"
     implementation "com.google.android.material:material:${rootProject.ext.androidX}"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
 
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
