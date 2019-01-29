@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.3'
-        classpath 'com.android.tools.build:gradle:3.3.0'  //android gradle plugin
+        classpath 'com.android.tools.build:gradle:3.2.1'  //android gradle plugin
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -56,9 +56,14 @@ ext {
     compileSdkVersion = 28
     targetSdkVersion = 28
     javaVersion = JavaVersion.VERSION_1_8
-    androidX = "1.0.0"
+    androidXCore = "1.0.1"
+    androidXAnnotation = "1.0.0"
+    androidXRecycler = "1.0.0"
+    androidXMaterial = "1.0.0"
+    androidXAppCompat = "1.0.2"
+    androidXConstraint = "2.0.0-alpha3"
     androidXTest = "1.1.0-beta02"
-    androidXRoom = "2.1.0-alpha01"
+    androidXRoom = "2.1.0-alpha04"
     androidXEspresso = "3.1.0-beta02"
     butterknife = "9.0.0-rc1"
     mockito = "2.8.47"
