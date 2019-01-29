@@ -15,6 +15,7 @@ public class ObservableImp implements Observable{
 
     private final WorkMode notificationMode;
     private final Logger logger;
+    private final Handler handler;
 
 
     /**
@@ -41,6 +42,7 @@ public class ObservableImp implements Observable{
     public ObservableImp(WorkMode notificationMode) {
         this.notificationMode = Affirm.notNull(notificationMode);
         this.logger = null;
+        this.handler = handler(notificationMode);
     }
 
 
@@ -70,6 +72,7 @@ public class ObservableImp implements Observable{
     public ObservableImp(WorkMode notificationMode, Logger logger) {
         this.notificationMode = Affirm.notNull(notificationMode);
         this.logger = Affirm.notNull(logger);
+        this.handler = handler(notificationMode);
     }
 
 
@@ -132,7 +135,6 @@ public class ObservableImp implements Observable{
                 doNotification(observer);
             } else {
                 // post notifications to UI thread (so that no special work needs to be done by observers to update UI)
-                Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(() -> doNotification(observer));
             }
         }
@@ -167,6 +169,10 @@ public class ObservableImp implements Observable{
 
             throw e;
         }
+    }
+
+    private Handler handler(WorkMode workMode){
+        return (workMode == WorkMode.ASYNCHRONOUS) ? new Handler(Looper.getMainLooper()) : null;
     }
 
 }
