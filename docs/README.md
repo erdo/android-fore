@@ -208,7 +208,7 @@ There is only one test class included with this app which demonstrates how to te
 
 ### Tutorials
 
-- There is a medium tutorial covering the basics of fore, complete with a small sample app written in Kotlin [here](https://medium.com/@erdo9000/tutorial-android-fore-basics-fb10788d388c)
+- There is a short series of dev.to tutorials covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
 
 
 ## Contributing
