@@ -5,7 +5,7 @@ Since we've been publishing on jcenter the core functionality has remained the s
 
 ## androidx support from 1.0.0 onwards
 
-The latest version is **1.0.0** and supports **androidx**, if you are not using androidx yet you can continue to use 0.11.1
+Versions from **1.0.0** support **androidx**, if you are not using androidx yet you can continue to use 0.11.1
 
 There was one minor breaking change previous to 0.11.1 (sorry):
 
