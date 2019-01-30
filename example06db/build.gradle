@@ -56,9 +56,9 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidX}"
-    implementation "com.google.android.material:material:${rootProject.ext.androidX}"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompat}"
+    implementation "com.google.android.material:material:${rootProject.ext.androidXMaterial}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.androidXConstraint}"
 
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -92,9 +92,9 @@ dependencies {
 
     androidTestImplementation "androidx.test:runner:${rootProject.ext.androidXTest}"
     androidTestImplementation "androidx.test:rules:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidX}"
-    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidX}"
-    androidTestImplementation "androidx.core:core:${rootProject.ext.androidX}"
+    androidTestImplementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidXRecycler}"
+    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidXAnnotation}"
+    androidTestImplementation "androidx.core:core:${rootProject.ext.androidXCore}"
     androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

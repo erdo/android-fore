@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.0.0](https://img.shields.io/badge/jcenter-1.0.0-green.svg){: .float-left}
+![jcenter-1.0.1](https://img.shields.io/badge/jcenter-1.0.1-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -23,7 +23,7 @@ Because the view layer is so sparse when using **fore**, the apps are highly sca
 
 <br/>
 <span class="news">
-New tutorial available [here!](https://dev.to/erdo/tutorial-android-fore-basics-1155)
+Latest tutorial on dev.to [here!](https://dev.to/erdo/tutorial-android-state-v-event-3n31)
 </span>
 <br/>
 <br/>
@@ -32,18 +32,18 @@ MVO addresses issues like **testability**; **lifecycle management**; **UI consis
 
 
 ## Quick Start
-**Latest version: 1.0.0**  (pre-androidX use 0.11.1)
+**Latest version: 1.0.1**  (pre-androidX use 0.11.1)
 
 
 ```
-implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.0', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.1', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.0', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.0', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.0', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.1', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.1', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.1', ext: 'aar')
 ```
 
 See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.

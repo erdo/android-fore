@@ -49,8 +49,8 @@ dependencies {
     //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
     implementation project(path: ':fore-core')
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidX}"
-    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidX}"
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompat}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidXRecycler}"
 
     androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
         exclude group: 'com.android.support', module: 'support-annotations'
