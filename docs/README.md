@@ -208,7 +208,7 @@ There is only one test class included with this app which demonstrates how to te
 
 ### Tutorials
 
-- There is a short series of dev.to tutorials covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
+- There is a short series of **dev.to** tutorials covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
 
 
 ## Contributing
