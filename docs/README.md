@@ -15,11 +15,11 @@
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-This tiny **fore** library helps you move code out of the view layer. Because once you do that on android, magical things start to happen.
+**fore** helps you move code out of the view layer. Because once you do that on Android, magical things start to happen.
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style (like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI). That usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style (it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI). That usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
-Did we mention fore was tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
+Did we mention fore is tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
 
 Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
 
