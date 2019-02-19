@@ -15,9 +15,11 @@
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-The **fore** library helps you move code out of the view layer. Because once you do that, magical things start to happen.
+The tiny **fore** library helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style (like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI). Typically that means much less code in the view layer than usual, rock-solid UI consistency, great testability, and support for rotation **by default**.
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style (like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI). That usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+
+Did we mention fore was tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
 
 Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
 
@@ -68,7 +70,9 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
 <br/><br/>
 
-**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project. The result is an MVO implementation which is particularly small - so small in fact that you could just copy and paste the code into your app if you wanted (it's small enough to be self-manageable, and the core code hasn't changed in a while anyway). I'd recommend you just use the jcenter version, but each to their own ;) There's also no reason you can't implement MVO yourself of course, it's a surprisingly powerful concept regardless of the implementation.
+**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project.
+
+The result is an MVO implementation which is particularly small but surprisingly applicable (just 534 lines of code for the core package).
 
 ### Overview
 
