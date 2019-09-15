@@ -9,18 +9,26 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.observer.Observer;
 import co.early.fore.core.ui.SyncableView;
-import co.early.fore.lifecycle.activity.SyncableActivity;
-import co.early.fore.lifecycle.activity.SyncableAppCompatActivity;
-import co.early.fore.lifecycle.fragment.SyncableFragment;
-import co.early.fore.lifecycle.fragment.SyncableSupportFragment;
+import co.early.fore.lifecycle.activity.SyncActivity;
+import co.early.fore.lifecycle.activity.SyncXActivity;
+import co.early.fore.lifecycle.fragment.SyncFragment;
+import co.early.fore.lifecycle.fragment.SyncXFragment;
+import co.early.fore.lifecycle.view.SyncViewActivity;
+import co.early.fore.lifecycle.view.SyncViewFragment;
+import co.early.fore.lifecycle.view.SyncViewXActivity;
+import co.early.fore.lifecycle.view.SyncViewXFragment;
 
 /**
  * <p>
  *      Class used by
- *      {@link SyncableActivity},
- *      {@link SyncableAppCompatActivity},
- *      {@link SyncableFragment},
- *      {@link SyncableSupportFragment}
+ *      {@link SyncActivity},
+ *      {@link SyncXActivity},
+ *      {@link SyncFragment},
+ *      {@link SyncXFragment}
+ *      {@link SyncViewActivity},
+ *      {@link SyncViewXActivity},
+ *      {@link SyncViewFragment},
+ *      {@link SyncViewXFragment}
  *      to hold a reference to a list of {@link Observable} instances.
  *      A single {@link Observer} which calls {@link SyncableView#syncView()} when notified
  *      is added and removed in line with android lifecycle methods to prevent memory leaks

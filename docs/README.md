@@ -34,18 +34,18 @@ MVO addresses issues like **testability**; **lifecycle management**; **UI consis
 
 
 ## Quick Start
-**Latest version: 1.0.1**  (pre-androidX use 0.11.1)
+**Latest version: 1.0.2**  (pre-androidX use 0.11.1)
 
 
 ```
-implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.1', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.2', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.1', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.1', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.1', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.2', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.2', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.2', ext: 'aar')
 ```
 
 See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
