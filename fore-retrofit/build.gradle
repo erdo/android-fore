@@ -53,7 +53,7 @@ dependencies {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
-    api 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.12.1'
 
     // Unit testing dependencies
     testImplementation 'junit:junit:4.12'

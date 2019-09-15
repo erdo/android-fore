@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.3.11'
+    ext.kotlin_version = '1.3.41'
     repositories {
         jcenter()
         mavenCentral()
@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.3'
-        classpath 'com.android.tools.build:gradle:3.2.1'  //android gradle plugin
+        classpath 'com.android.tools.build:gradle:3.5.0'  //android gradle plugin
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -53,19 +53,19 @@ allprojects {
 
 ext {
     minSdkVersion = 16
-    compileSdkVersion = 28
-    targetSdkVersion = 28
+    compileSdkVersion = 29
+    targetSdkVersion = 29
     javaVersion = JavaVersion.VERSION_1_8
     androidXCore = "1.0.1"
     androidXAnnotation = "1.0.0"
     androidXRecycler = "1.0.0"
     androidXMaterial = "1.0.0"
-    androidXAppCompat = "1.0.2"
-    androidXConstraint = "2.0.0-alpha3"
+    androidXAppCompat = "1.1.0"
+    androidXConstraint = "2.0.0-beta2"
     androidXTest = "1.1.0-beta02"
-    androidXRoom = "2.1.0-alpha04"
+    androidXRoom = "2.2.0-rc01"
     androidXEspresso = "3.1.0-beta02"
-    butterknife = "9.0.0-rc1"
+    butterknife = "10.2.0"
     mockito = "2.8.47"
     androidSupportTest = "1.0.2"
     espresso = "3.0.2"
@@ -76,8 +76,8 @@ ext {
 
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    LIB_VERSION_NAME="1.0.1"
-    LIB_VERSION_CODE=32
+    LIB_VERSION_NAME="1.0.2"
+    LIB_VERSION_CODE=33
 
     REPO="fore"
     LIB_GROUP="co.early.fore"
@@ -95,7 +95,7 @@ ext {
     LICENCE_NAME="The Apache Software License, Version 2.0"
     LICENCE_URL="http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-    exampleForeLibVersion="1.0.1"
+    exampleForeLibVersion="1.0.2"
 
     BINTRAY_USER = System.getenv("BINTRAY_USER") ?: secrets.BINTRAY_USER
     BINTRAY_API_KEY = System.getenv("BINTRAY_API_KEY") ?: secrets.BINTRAY_API_KEY
