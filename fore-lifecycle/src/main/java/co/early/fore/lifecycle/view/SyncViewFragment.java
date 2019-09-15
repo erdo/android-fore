@@ -1,4 +1,4 @@
-package co.early.fore.lifecycle.fragment;
+package co.early.fore.lifecycle.view;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,15 +7,39 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import co.early.fore.core.Affirm;
+import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
 import co.early.fore.lifecycle.LifecycleSyncer;
-import co.early.fore.lifecycle.view.SyncViewFragment;
 
 /**
- * @deprecated use {@link SyncViewFragment} instead.
+ * <p>
+ *      Convenience class that uses a {@link LifecycleSyncer} instance to ensure that
+ *      {@link SyncableView#syncView()} is called whenever the relevant Observable models change.
+ *      Also uses android lifecycle hooks to tell {@link LifecycleSyncer} when to add and remove
+ *      observers to prevent memory leaks.</p>
+ *
+ * <p>
+ *      If your app architecture is view based, and your views are hosted inside
+ *      {@link Fragment}, to add fore behaviour to your app you can keep
+ *      your activity code the same but in your fragments instead of extending Fragment,
+ *      extend this class instead.
+ * </p>
+ *
+ * <p>
+ * To use this class, you need to:
+ * </p>
+ * <ul>
+ *      <li>Extend it</li>
+ *      <li>Implement {@link #getResourceIdForSyncableView()} by returning a
+ *      layoutId that refers to an xml layout whose top most element
+ *      is a custom view that implements {@link SyncableView}</li>
+ *      <li>Implement {@link #getThingsToObserve()} by returning a {@link LifecycleSyncer.Observables}
+ *      instance constructed with all the {@link Observable} models that the view is interested in</li>
+ *      <li>If you override onCreateView() in your own class, you must call super.onCreateView()</li>
+ * </ul>
+ *
  */
-@Deprecated
-public abstract class SyncableFragment extends Fragment {
+public abstract class SyncViewFragment extends Fragment {
 
     private LifecycleSyncer lifecycleSyncer;
 

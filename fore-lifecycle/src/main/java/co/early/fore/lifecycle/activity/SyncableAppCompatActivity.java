@@ -6,37 +6,14 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import co.early.fore.core.Affirm;
-import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
 import co.early.fore.lifecycle.LifecycleSyncer;
+import co.early.fore.lifecycle.view.SyncViewXActivity;
 
 /**
- * <p>
- *      Convenience class that uses a {@link LifecycleSyncer} instance to ensure that
- *      {@link SyncableView#syncView()} is called whenever the relevant Observable models change.
- *      Also uses android lifecycle hooks to tell {@link LifecycleSyncer} when to add and remove
- *      observers to prevent memory leaks.</p>
- *
- * <p>
- *      If your app architecture does not use fragments, and your activities extend
- *      {@link androidx.appcompat.app.AppCompatActivity}
- *      This is probably the right class to use to add fore behaviour to your app,
- *      start by extending this class instead of AppCompatActivity
- * </p>
- *
- * <p>
- * To use this class, you need to:
- * </p>
- * <ul>
- *      <li>Extend it</li>
- *      <li>Implement {@link #getResourceIdForSyncableView()} by returning a
- *      layoutId that refers to an xml layout whose top most element
- *      is a custom view that implements {@link SyncableView}</li>
- *      <li>Implement {@link #getThingsToObserve()} by returning a {@link LifecycleSyncer.Observables}
- *      instance constructed with all the {@link Observable} models that the view is interested in</li>
- * </ul>
- *
+ * @deprecated use {@link SyncViewXActivity} instead.
  */
+@Deprecated
 public abstract class SyncableAppCompatActivity extends AppCompatActivity {
 
 
