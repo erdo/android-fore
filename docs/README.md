@@ -25,7 +25,7 @@ Because the view layer is so sparse when using **fore**, the apps are highly sca
 
 <br/>
 <span class="news">
-New **spot the deliberate bug** tutorial on dev.to [here!](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
+Latest tutorial on dev.to [here!](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
 </span>
 <br/>
 <br/>
