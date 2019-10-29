@@ -34,9 +34,8 @@ captures/
 # Android Studio
 *.iml
 *.iws
-# exclude everything in the .idea folder except modules.xml
+# exclude everything in the .idea folder
 .idea/*
-!.idea/modules.xml
 
 # External native build folder
 .externalNativeBuild
