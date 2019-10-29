@@ -3,6 +3,12 @@
 
 Since we've been publishing on jcenter the core functionality has remained the same, most version number bumps have been due to adding new classes to the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - but that means some version bumps have no effect for a particular package).
 
+## android studio 3.5+
+
+It used to be convenient to put the .idea/modules.xml file into source control, but now it messes things up, so with commit a1766e17f80fdc1b43e4176cfc6d60094322c83d .idea/modules.xml is removed and the whole of the .idea folder is put in .gitignore.
+
+There's no need to do anything when you pull the latest code, but if you want to be sure your project is all setup nicely you just have to: close Android Studio; delete the .idea directory (it's a hidden directory by the way); restart Android Studio.
+
 ## androidx support from 1.0.0 onwards
 
 Versions from **1.0.0** support **androidx**, if you are not using androidx yet you can continue to use 0.11.1

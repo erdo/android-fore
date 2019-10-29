@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.0.1](https://img.shields.io/badge/jcenter-1.0.1-green.svg){: .float-left}
+![jcenter-1.0.2](https://img.shields.io/badge/jcenter-1.0.2-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -23,16 +23,6 @@ Did we mention fore is tiny? the core package has **126 methods** in it, and **a
 
 Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
 
-<br/>
-<span class="news">
-Latest tutorial on dev.to [here!](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
-</span>
-<br/>
-<br/>
-
-MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation). All the code examples in these docs are written in both Java and Kotlin.
-
-
 ## Quick Start
 **Latest version: 1.0.2**  (pre-androidX use 0.11.1)
 
@@ -48,7 +38,7 @@ implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.2',
 implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.2', ext: 'aar')
 ```
 
-See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
 
 
 ## New to fore
@@ -57,7 +47,14 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 
  1. Cloning this git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
- 3. While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
+
+Then either
+
+check out some of the tutorials on dev.to ([this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) demonstrates how the syncView() convention results in less, but more robust code by taking the reader through a simple example. ([this one](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) tackles are larger well known MVP Java app, explaining how and why to convert it into MVO.
+
+Or
+
+while referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
   [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom)
 
@@ -69,6 +66,10 @@ See the [upgrading guide](https://erdo.github.io/android-fore/06-upgrading.html#
 ![fore-lifecycle methods](https://img.shields.io/badge/fore.lifecycle-59-orange.svg){: .float-left}
 
 <br/><br/>
+
+
+MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
+
 
 **fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project.
 
