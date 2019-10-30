@@ -17,7 +17,9 @@
 
 **fore** helps you move code out of the view layer. Because once you do that on Android, magical things start to happen.
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style (it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI). That usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+
+If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that takes the user through the whys and the hows of converting the Android Architecture Blueprint sample app from MVP to MVO. (That one's in Java, but the same principles apply with Kotlin apps.)
 
 Did we mention fore is tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
 
@@ -48,13 +50,13 @@ See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#sh
  1. Cloning this git repo
  2. Getting the example apps running (you'll need at least Android Studio 3)
 
-Then either
+**Then either**
 
-check out some of the tutorials on dev.to ([this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) demonstrates how the syncView() convention results in less, but more robust code by taking the reader through a simple example. ([this one](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) tackles are larger well known MVP Java app, explaining how and why to convert it into MVO.
+Check out some of the tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention stops you from creating hard to spot bugs, leaving you with *less* code which is also more *robust*.
 
-Or
+**Or**
 
-while referring to the code of the [sample apps](#sample-apps), dip in to the following sections of the site:
+While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of this site:
   [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom)
 
@@ -67,13 +69,11 @@ while referring to the code of the [sample apps](#sample-apps), dip in to the fo
 
 <br/><br/>
 
-
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
-
 
 **fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project.
 
-The result is an MVO implementation which is particularly small but surprisingly applicable (just 534 lines of code for the core package).
+The result is an MVO implementation which is particularly small but surprisingly powerful (just 534 lines of code for the core package).
 
 ### Overview
 
@@ -206,7 +206,7 @@ There is only one test class included with this app which demonstrates how to te
 
 ### Other Full App Examples
 
-- There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-01-kotlin)**
+- There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-02-kotlin)**
 
 - The **Password123** sample app uses **fore** for its reactive UI and the **[kotlin source](https://github.com/erdo/password123)** is available.
 
