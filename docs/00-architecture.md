@@ -14,7 +14,7 @@ By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the st
 
 By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
 
-We mentioned **State** and the fore philosophy is to take state away from the UI layer, leaving the UI layer as dumb as possible. Fore puts state in the models where it can be comprehensively unit tested. For example, if you want to display a user's score, the place to manage that state is in a GameModel. The view is just synced each time the (Observable) GameModel changes, as follows:
+We mentioned **State** and the **fore** philosophy is to take state away from the UI layer, leaving the UI layer as dumb as possible. **fore** puts state in the models where it can be comprehensively unit tested. For example, if you want to display a game's score, the place to manage that state is in a GameModel. The view is just synced, whenever the (Observable) GameModel changes:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -22,17 +22,19 @@ We mentioned **State** and the fore philosophy is to take state away from the UI
    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
  </div>
 <pre class="tabcontent tabbed java"><code>
-public void syncView(){
+public void syncView() {
   pointsView.text = gameModel.getScore();
 }
+
 </code></pre>
 <pre class="tabcontent tabbed kotlin"><code>
-fun syncView(){
+fun syncView() {
   pointsView.text = gameModel.score
 }
+
 </code></pre>
 
-Notice the SyncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view binding is one of the reasons that fore is so tiny and easy to understand.
+Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view-state binding is _one_ of the reasons that fore is so tiny and the library so easy to understand.
 
 *For the avoidance of doubt, most non-trivial apps will of course have more layers beneath the model layer, typically you'll have some kind of repository, a networking abstraction, usecases etc. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 

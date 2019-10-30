@@ -18,9 +18,7 @@ Here's an example of a model that fetches a json list of fruit over a network co
 
 If you write a good model, using it in the rest of your app should be a piece of cake.
 
-You'll see that in all the sample apps, the models have been written with the assumption that all the methods are being accessed on a single thread (which for a live app would be the UI thread).
-
-Writing your app so that it operates on a single thread by default is a *very* helpful short cut to take by the way, it considerably simplifies your model code.
+You'll see that in all the sample apps, the models have been written with the assumption that all the methods are being accessed on a single thread (which for a live app would be the UI thread). Not having to worry about thread safety here is a *very* big win in terms of code complexity. The models can use threads internally of course.
 
 When you need to pop onto another thread, do it explicitly with something like an [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) for example, and then pop back on to the UI thread when you are done. The **WorkMode.ASYNCHRONOUS** parameter will make Observables notify on the UI thread [anyway](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java), so you don't need to do any extra work when you want to update the UI.
 
@@ -36,7 +34,7 @@ For reference here's a check list of recommendations for the model classes, as u
 
 - The model classes should **know nothing about android lifecycle methods**
 - In fact **the less the models knows about Android the better**
-- **Avoid referencing Contexts** from your model if you can, although sometimes the design of Android makes this awkward
+- **Avoid referencing Contexts** from your model if you can, although sometimes the design of Android makes this [awkward](https://erdo.github.io/android-fore/05-extras.html#androids-original-mistake)
 - **Prefer referencing Application over Context or Activity** if you have a choice, as that reduces the chance of a memory leak
 - Any **callback/listener** references passed to the model via methods need to be used and then cleared as quickly as possible within the model itself (callbacks may contain references to contexts and leak memory so you don't want to keep them around).
 - The model **shouldn't know anything about View classes**, Fragments or specific Activities.
@@ -45,6 +43,6 @@ For reference here's a check list of recommendations for the model classes, as u
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.
 - The models should make good use of [dependency injection](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics) (via constructor arguments or otherwise). Any dependency that is not being injected and will be difficult to mock for a test. Android's AsyncTask has this problem, but **fore**'s [Async](/android-fore/04-more-fore.html#async) goes a long way to working around this, as does [AsyncBuilder](/android-fore/04-more-fore.html#asyncbuilder)
 - Written in this way, the models will already be testable but it's worth highlighting **testability** as a specific goal. The ability to thoroughly test model logic is a key part of reducing unecessary app bugs.
-- If the models are to be observable, they can do this in one of 2 ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally.
+- If the models are to be observable, they can do this in one of 2 main ways. They may simply extend from **ObservalbleImp** or they can implement the **Observable interface** themselves, passing the addObservable() and removeObservable() method calls to an ObservableImp that they keep a reference to internally. Kotlin also lets you use a delegate [like this](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt).
 - Do check out [When should I use an Observer, when should I use a callback listener?](/android-fore/05-extras.html#observer-listener) in the FAQs to double check you're making the right choice for your model.
 - (For models written in Java specifically), it's very useful to immediately **crash in your model constructor if any caller tries to send you null objects**. Your constructor is your public interface and could be used by anyone. You can help other developers out by immediately crashing here rather than sometime later, when the cause might not be so obvious. In the sample apps, this is done with the **Affirm.notNull()** call.

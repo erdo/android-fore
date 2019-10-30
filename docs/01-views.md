@@ -36,14 +36,129 @@ Here are few examples:
 - [Counter View](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/res/layout/fragment_counter.xml)
 
 
-
 ## Custom Android Views
 
-You'll notice in the sample apps, nearly every view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout.
+You'll notice in the bundled sample apps, nearly every view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout. This is part of the **fore** library philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View*.
 
-As much view related functionality gets put in these classes as possible, so unlike in many Android code bases you will have seen, the view elements like text fields and buttons also live here. (You can put them in the Activity or the Fragment classes if you insist on it - but take a moment to double check why you want to do that). Very occasionally, you need to get the Fragment or Activity involved because [Android gives you no choice](https://erdo.github.io/android-fore/05-extras.html#androids-original-mistake) in the matter, but it's often unnecessary.
-
-This is part of the **fore** library philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View*. This also frees up the Fragment and Activity classes to do as little as possible except manage their lifecycles (which are considerably more complex than those of custom views).
+There is nothing about MVO that restricts you to using custom views however, if your app is written around Activities or Fragments, they will work just as well. Indeed some of the Sync... classes in the fore-lifecycle package make this extremely easy.
 
 
-The [reactive UI](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) section has more details about how views and models communicate in **fore**.
+## Code that belongs in the view layer
+
+Pretty much all views in fore do the same few things when they are created:
+
+- get a reference to all the view components like Buttons, TextViews etc.
+- get a reference to all models that the view needs to observe using some form of DI
+- set up all the click listeners, text changed listeners etc
+- set up any adapters
+- set up any SyncTriggers for things like animations
+
+In addition to that there will be:
+
+- the syncView() method which sets an affirmative state on each of the view components in line with what the models indicate, and also notifies any adapters of changes.
+
+_Often there will then be the add / remove observers methods where the view latches onto the models it is interested in - this is handled automatically in the Sync... classes, see below._
+
+
+## Sync... removing even more boiler plate
+
+If you don't want to have to bother with implementing the adding and removing of observers in your view code, you can let the Sync... classes do it for you.
+
+### SyncXActivity and SyncActivity
+By extending one of these classes (the first one is for androidx), you will just be left with having to state which observable models you want to observe, and then implementing the syncView() method:
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+<pre class="tabcontent tabbed java"><code>
+public class MySpeedoActivity extends SyncXActivity {
+
+  private SpeedoModel speedoModel; //inject these
+  private RoadInfoModel roadInfoModel; //inject these
+
+  @Override
+  public LifecycleSyncer.Observables getThingsToObserve() {
+    return new LifecycleSyncer.Observables(
+        speedoModel,
+        roadInfoModel
+    );
+  }
+
+  @Override
+  public void syncView() {
+    speedo_roadname_textview.text = roadInfoModel.getRoadName();
+    speedo_speed_textview.text = speedoModel.getSpeed();
+  }
+}
+ </code></pre>
+<pre class="tabcontent tabbed kotlin"><code>
+class MySpeedoActivity : SyncXActivity() {
+
+  private val speedoModel: SpeedoModel by inject()
+  private val roadInfoModel: RoadInfoModel by inject()
+
+  override fun getThingsToObserve(): LifecycleSyncer.Observables {
+    return LifecycleSyncer.Observables(
+        speedoModel,
+        roadInfoModel
+    )
+  }
+
+  override fun syncView() {
+    speedo_roadname_textview.text = roadInfoModel.roadName
+    speedo_speed_textview.text = speedoModel.speed
+  }
+}
+ </code></pre>
+
+
+### SyncXFragment and SyncFragment
+If you prefer to use Fragments for your view layer you can extend one of these (and again, the first one is for androidx).
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+<pre class="tabcontent tabbed java"><code>
+public class MySpeedoFragment extends SyncXFragment {
+
+  private SpeedoModel speedoModel; //inject these
+  private RoadInfoModel roadInfoModel; //inject these
+
+  @Override
+  public LifecycleSyncer.Observables getThingsToObserve() {
+    return new LifecycleSyncer.Observables(
+            speedoModel,
+            roadInfoModel
+    );
+  }
+
+  @Override
+  public void syncView() {
+    speedo_roadname_textview.text = roadInfoModel.getRoadName();
+    speedo_speed_textview.text = speedoModel.getSpeed();
+  }
+}
+ </code></pre>
+<pre class="tabcontent tabbed kotlin"><code>
+class MySpeedoFragment2 : SyncXFragment() {
+
+    private val speedoModel: SpeedoModel by inject()
+    private val roadInfoModel: RoadInfoModel by inject()
+
+    override fun getThingsToObserve(): LifecycleSyncer.Observables {
+        return LifecycleSyncer.Observables(
+            speedoModel,
+            roadInfoModel
+        )
+    }
+
+    override fun syncView() {
+        speedo_roadname_textview.text = roadInfoModel.roadName
+        speedo_speed_textview.text = speedoModel.speed
+    }
+}
+ </code></pre>

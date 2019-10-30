@@ -19,7 +19,7 @@
 
 Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
-If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that takes the user through the whys and the hows of converting the Android Architecture Blueprint sample app from MVP to MVO. (That one's in Java, but the same principles apply with Kotlin apps.)
+If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to MVO. (That app is in Java, but the same principles apply for Kotlin apps).
 
 Did we mention fore is tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
 
