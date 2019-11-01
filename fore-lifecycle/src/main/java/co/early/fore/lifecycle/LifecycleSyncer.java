@@ -46,7 +46,7 @@ public class LifecycleSyncer {
     private void checkObservables(){
         for (Observable observable: observablesList){
             if (observable == null){
-                throw new RuntimeException("One of the observables used to instantiate LifecycleSyncer.Observables is null");
+                throw new RuntimeException("LifecycleSyncer.Observables has been instantiated with at least one null observable");
             }
         }
     }

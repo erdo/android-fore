@@ -105,7 +105,10 @@ public class TodoListView extends SyncRelativeLayout {
     @Override
     protected void onFinishInflate() {
 
-        getModelReferences();//we need to get the model references before super.onFinishInflate() runs
+        //we need to get the model references before
+        //super.onFinishInflate() runs as that's
+        //where getThingsToObserve() is called from
+        getModelReferences();
 
         super.onFinishInflate();
 

@@ -69,7 +69,10 @@ public class TicTacToeView extends SyncScrollView {
     @Override
     public void onFinishInflate() {// grab a reference to all the view elements, setup buttons listeners
 
-        setupModelReferences();//we need to get the model references before super.onFinishInflate() runs
+        //we need to get the model references before
+        //super.onFinishInflate() runs as that's
+        //where getThingsToObserve() is called from
+        setupModelReferences();
 
         super.onFinishInflate();
 

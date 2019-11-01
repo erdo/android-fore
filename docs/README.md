@@ -26,18 +26,18 @@ Did we mention fore is tiny? the core package has **126 methods** in it, and **a
 Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
 
 ## Quick Start
-**Latest version: 1.0.2**  (pre-androidX use 0.11.1)
+**Latest version: 1.0.3**  (pre-androidX use 0.11.1)
 
 
 ```
-implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.2', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.3', ext: 'aar')
 ```
 optional:
 
 ```
-implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.2', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.2', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.2', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.3', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.3', ext: 'aar')
+implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.3', ext: 'aar')
 ```
 
 See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
