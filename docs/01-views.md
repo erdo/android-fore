@@ -177,6 +177,8 @@ class MySpeedoFragment : SyncFragmentX() {
    private SpeedoModel speedoModel; //inject these
    private RoadInfoModel roadInfoModel; //inject these
 
+   ...
+
    @Override
    public LifecycleSyncer.Observables getThingsToObserve() {
      return new LifecycleSyncer.Observables(
@@ -193,10 +195,17 @@ class MySpeedoFragment : SyncFragmentX() {
  }
   </code></pre>
  <pre class="tabcontent tabbed kotlin"><code>
- class MySpeedoView : SyncConstraintLayout() {
+ class MySpeedoView @JvmOverloads constructor(
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
+    SyncConstraintLayout(context, attrs, defStyleAttr) {
 
      private val speedoModel: SpeedoModel by inject()
      private val roadInfoModel: RoadInfoModel by inject()
+
+     ...
 
      override fun getThingsToObserve(): LifecycleSyncer.Observables {
          return LifecycleSyncer.Observables(
