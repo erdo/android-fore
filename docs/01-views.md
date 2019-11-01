@@ -177,7 +177,7 @@ class MySpeedoFragment : SyncFragmentX() {
    private SpeedoModel speedoModel; //inject these
    private RoadInfoModel roadInfoModel; //inject these
 
-   ...
+   //constructors
 
    @Override
    public LifecycleSyncer.Observables getThingsToObserve() {
@@ -204,8 +204,6 @@ class MySpeedoFragment : SyncFragmentX() {
 
      private val speedoModel: SpeedoModel by inject()
      private val roadInfoModel: RoadInfoModel by inject()
-
-     ...
 
      override fun getThingsToObserve(): LifecycleSyncer.Observables {
          return LifecycleSyncer.Observables(
