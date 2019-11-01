@@ -8,13 +8,13 @@ This little library helps you implement an architecture we call **MVO (Model Vie
 
 That block diagram above is what MVO looks like (it's simplified of course, further details below).
 
-By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a View-Model - it makes no difference from an MVO perspective. (But mostly with MVO we are talking about application level things like AccountModel, MsgInbox, TodoList, Favourites etc).
+By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it that it's changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a View-Model - it makes no difference from an MVO perspective. (But mostly with MVO we are talking about application level things like AccountModel, MessageInbox, TodoList, Favourites etc).
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing specifically to do with rxJava by the way, though you could implement an MVO architecture using rxJava if you wanted to).
 
 By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose. Most of the examples here however use custom view classes which ultimately extend from *android.view.View*.
 
-We mentioned **State** and the **fore** philosophy is to take state away from the UI layer, leaving the UI layer as dumb as possible. **fore** puts state in the models where it can be comprehensively unit tested. For example, if you want to display a game's score, the place to manage that state is in a GameModel. The view is just synced, whenever the (Observable) GameModel changes:
+We mentioned **State**. The **fore** philosophy is to take state away from the UI layer, leaving the UI layer as thin as possible. **fore** puts state in the models where it can be comprehensively unit tested. For example, if you want to display a game's score, the place to manage that state is in a GameModel. The view is just synced, whenever the (Observable) GameModel changes:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -34,7 +34,7 @@ fun syncView() {
 
 </code></pre>
 
-Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view-state binding is _one_ of the reasons that fore is so tiny and the library so easy to understand.
+Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view-state binding is _one_ of the reasons that fore is so tiny and the library so easy to understand.
 
 *For the avoidance of doubt, most non-trivial apps will of course have more layers beneath the model layer, typically you'll have some kind of repository, a networking abstraction, usecases etc. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
@@ -51,7 +51,7 @@ Another way to look at it is in *crap diagram* mode. So here's a crap diagram sh
 
 Importantly, during the syncView() stage, the view syncs [**all the view states**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), it's a fundamental part of why **fore** code is so robust, but at the same time looks so sparse.
 
-That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-data-binding-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) that does the observing.
+That diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/feature/wallet/Wallet.java) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) that does the observing.
 
 One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In the code examples above, the code just works if you rotate the screen simply because of how it's structured - you don't need to do a single thing.
 
@@ -80,7 +80,9 @@ This is quite a common representation of **MVC**, however I don't think it's a p
 
 There is one important thing to note about about this diagram however. If we focus on the Model, all the arrows (dependencies) point towards the Model. This tells us that while the View and Controller know about each other and the Model, the Model knows nothing about the View or the Controller. That's exactly the way we want it. This way a Model can be tested independently, and needs to know nothing about the view layer. It can support any number of different Views which can come and go as they please (when an Android device is rotated for example, the Model is not affected - or even aware of it).
 
-I did say that I thought the typical MVC diagram is not particularly useful, I think it's main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
+_(It's worth mentioning that many early Android apps had no discernible domain model at all, some still don't, essentially writing the entire app in the UI layer - so if you can't find it in the app you are working on, it might not exist)._
+
+Anyway I did say that I thought the typical MVC diagram is not particularly useful, I think it's main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
 
 ![simple basket](img/arch_mvp.png)
 
@@ -102,7 +104,7 @@ Here's the MVVM equivalent diagram:
 
 Again there are different ways of doing MVVM, even on Android, but the main difference here is that the View-Model is not aware of the View like the Presenter is. All the arrows go from the edge of the system where the UI is, towards the centre where things like business logic reside, down in the model layer.
 
-In MVVM you typically have a View-Model for each View, so even though there are no dependencies on the View from the View-Model (no arrow pointing from View-Model to View), it's still a specific implementation for that View, you can't use one View-Model for different Views. A slightly more realistic situation for a whole app with different views looks like this:
+In MVVM you typically have a View-Model for each View, so even though there are no dependencies on the View from the View-Model (no arrow pointing from View-Model to View), it's still a specific implementation for that View, you usually can't use one View-Model for different Views. A slightly more realistic situation for a whole app with different views looks like this:
 
 ![simple basket](img/arch_mvvm_reality.png)
 

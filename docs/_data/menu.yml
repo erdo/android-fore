@@ -21,8 +21,8 @@
 - text: Views
   url: /01-views.html
   subitems:
-    - text: Custom Android Views
-      url: "#custom-android-views"
+    - text: Self Syncing Views
+      url: "#removing-even-more-boiler-plate"
 - text: Models
   url: /02-models.html
   subitems:
@@ -35,6 +35,8 @@
       url: "#syncview"
     - text: Observables
       url: "#fore-observables"
+    - text: Connecting Views and Models
+      url: "#connecting-views-and-models"
 - text: More fore
   url: /04-more-fore.html
   subitems:
@@ -44,8 +46,6 @@
       url: "#adapters-notifydatasetchangedauto"
     - text: AsyncTask but with Lambdas
       url: "#asynctasks-with-lambdas"
-    - text: Lifecycle Components
-      url: "#lifecycle-components"
     - text: SyncTrigger
       url: "#synctrigger"
 - text: Extras

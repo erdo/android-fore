@@ -307,25 +307,6 @@ For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS
 A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
 
 
-
-
-
-# Lifecycle Components
-
-Totally optional, but you can use them to remove the databinding boiler plate from your views completely. For example usage please refer to the [UI Helpers Example App Source Code](/android-fore/#fore-5-ui-helpers-example-tic-tac-toe).
-
-## SyncableXXX Convenience Classes
-
-**fore** includes various SyncableXXX classes which will do the work of **adding** and **removing** observers inline with lifecycle methods and calling syncView() when required. They operate at the Activity or Fragment level and are completely optional, but to use these classes you will have to extend from them rather than extending from the usual Activity / Fragment classes.
-
-- [SyncableAppCompatActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableAppCompatActivity.java)
-- [SyncableActivity](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/activity/SyncableActivity.java)
-- [SyncableSupportFragment](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/fragment/SyncableSupportFragment.java)
-- [SyncableFragment](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/fragment/SyncableFragment.java)
-
-
-
-
 # SyncTrigger
 
 The [SyncTrigger](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncTrigger.java) class lets you bridge the gap between syncView() (which is called at any time [an arbitrary number of times](https://erdo.github.io/android-fore/05-extras.html#notification-counting)) and an event like an animation that must be fired only once.

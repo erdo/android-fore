@@ -52,7 +52,7 @@ See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#sh
 
 **Then either**
 
-Check out some of the tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention stops you from creating hard to spot bugs, leaving you with *less* code which is also more *robust*.
+Check out some of the tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention helps you to write less code, while removing a whole class of UI consistency bugs from the UI layer.
 
 **Or**
 

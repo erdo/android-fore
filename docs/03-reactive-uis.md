@@ -27,6 +27,8 @@ I'm going to refer to the [dev.to spot the bug tutorial](https://dev.to/erdo/tut
 
 ### Writing an effective syncView() method
 
+*A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
+
 As part of refreshing the entire view, the syncView() method must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
 
 > "Where there is an if, there must always be an else"
@@ -86,7 +88,7 @@ if (basket.isBelowMinimum()){
 }
  </code></pre>
 
-But you'll find that by focusing on the property first rather than the condition, you can get some extremely tight code like so:
+But you'll find that by focusing on the UI component first rather than the condition, you can get some extremely tight code like so:
 
 
 <!-- Tabbed code sample -->
@@ -105,9 +107,6 @@ checkoutButton.enabled = !basket.isBelowMinimum()
 totalPrice.color = if (basket.isBelowMinimum()) red else black
  </code></pre>
 
-
-
-*A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
 ### Don't count notifications
 Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors.
@@ -132,7 +131,7 @@ Most of the models in the sample apps become observable by extending ObservableI
 - Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
 - The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observable is required.
 
-## Hooking it all up
+## Connecting Views and Models
 
 So basically, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
 
@@ -217,6 +216,34 @@ override fun onDetachedFromWindow() {
 }
  </code></pre>
 
-If you're still not satisfied with that, you can [remove even more boiler plate](https://erdo.github.io/android-fore/01-views.html#Sync-removing-even-more-boiler-plate).
+If you're still not satisfied with that, you can [remove even more boiler plate](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate).
 
 That's everything you need to do to get bullet proof data binding in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.
+
+## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() method?
+
+If I had a dollar for everyone who asked me this question! (I would have, about $4). There are a couple of good (but subtle) reasons that we don't have a parameter here though.
+
+Adding a parameter would let client code use the observer like some kind of messenger thing or an event bus. That could be a perfectly valid thing to do for the specific situation you find yourself in, and sending data like that might at first seem like an easy and convenient thing to do here as well.
+
+When it comes to binding data to an android view layer however, doing so instantly couples a particular model to a particular view.
+
+Often with **fore**, different views will want different things from the same model and as the code evolves, that model slowly ends up having to support many different flavoured observables all with different parameter requirements.
+
+Similarly there will often be views that are interested in more than one model, and if those models all have different observable interfaces, each of those interfaces will need to be implemented and managed by the view, rather than just using a single Observer implementation.
+
+It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding data binding and ensuring consistency when your application is rotated etc as discussed above.
+
+_(The fact that the observable interface is the same for all models is also what enables fore to handle the adding and removing of observers automatically for us in the Sync... classes.)_
+
+Not having the ability to add a parameter here is one of the key reasons that fore UI code tends to be so compact compared with other architectures.
+
+This is one case where **fore** is stopping you from making an easy but horrible architectural mistake. The library is as valuable for what you can't do with it, as it is for what you can do with it.
+
+
+> "This library is as valuable for what you **can't** do with it, as it is for what you **can** do with it."
+
+
+Try to get comfortable using these observers to just notify observing view code of any (unspecified) changes to the model's state (once the observing view code has been told there are changes, it will call fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](https://erdo.github.io/android-fore/05-extras.html#observer-listener) discussion first).
+
+For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
