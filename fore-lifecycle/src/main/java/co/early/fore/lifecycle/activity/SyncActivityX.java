@@ -1,15 +1,12 @@
-package co.early.fore.lifecycle.fragment;
+package co.early.fore.lifecycle.activity;
 
-
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
 import co.early.fore.lifecycle.LifecycleSyncer;
+
 
 /**
  * <p>
@@ -19,10 +16,10 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *      observers to prevent memory leaks.</p>
  *
  * <p>
- *      If your app architecture uses fragments, and your fragments extend
- *      {@link android.app.Fragment}, to add fore behaviour to your app you can keep
- *      your activity code the same but in your fragments instead of extending Fragment,
- *      extend this class instead.
+ *      If your app architecture does not use fragments, and your activities extend
+ *      {@link androidx.appcompat.app.AppCompatActivity}
+ *      This is probably the right class to use to add fore behaviour to your app,
+ *      start by extending this class instead of AppCompatActivity
  * </p>
  *
  * <p>
@@ -33,27 +30,28 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *      <li>Implement {@link SyncableView#syncView()} </li>
  *      <li>Implement {@link #getThingsToObserve()} by returning a {@link LifecycleSyncer.Observables}
  *      instance constructed with all the {@link Observable} models that the view is interested in</li>
- *      <li>If you override onCreateView() in your own class, you must call super.onCreateView()</li>
+ *      <li>If you override onCreate() in your own class, you must call super.onCreate()</li>
  * </ul>
  *
  */
-public abstract class SyncFragment extends Fragment implements SyncableView{
+public abstract class SyncActivityX extends AppCompatActivity implements SyncableView{
 
 
     private LifecycleSyncer lifecycleSyncer;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         lifecycleSyncer = new LifecycleSyncer(this, getThingsToObserve());
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (lifecycleSyncer == null){
-            throw new RuntimeException("You must call super.onCreateView() from within your onCreateView() method");
+            throw new RuntimeException("You must call super.onCreate() from within your onCreate() method");
         }
         // add our observer to any models we want to observe
         lifecycleSyncer.addObserversAndSync();

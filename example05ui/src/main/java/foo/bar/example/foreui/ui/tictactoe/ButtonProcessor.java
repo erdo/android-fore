@@ -5,7 +5,8 @@ import android.widget.GridLayout;
 
 /**
  * some specific stuff related to this tic tac toe view that I wouldn't expect to be relevant
- * to any other situation
+ * to any other situation - we just have loads of buttons and we do the same thing to each of
+ * them, so we put it here
  */
 public class ButtonProcessor {
 

@@ -1,18 +1,20 @@
 package foo.bar.example.foreadapters.ui.playlist.advanced;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.adapters.ChangeAwareAdapter;
 import foo.bar.example.foreadapters.R;
 import foo.bar.example.foreadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.foreadapters.feature.playlist.Track;
+
+import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 /**
  *
@@ -42,26 +44,25 @@ public class PlaylistAdapterAdvanced extends ChangeAwareAdapter<PlaylistAdapterA
         final Track item = playlistAdvancedModel.getTrack(position);
 
         holder.increase.setOnClickListener(v -> {
+            //if you tap very fast on different rows removing them
+            //while you are using adapter animations you will crash unless
+            //you check for this
             int betterPosition = holder.getAdapterPosition();
-            if (betterPosition!=-1) {
+            if (betterPosition != NO_POSITION) {
                 playlistAdvancedModel.increasePlaysForTrack(betterPosition);
             }
         });
 
         holder.decrease.setOnClickListener(v -> {
             int betterPosition = holder.getAdapterPosition();
-            if (betterPosition!=-1) {
+            if (betterPosition != NO_POSITION) {
                 playlistAdvancedModel.decreasePlaysForTrack(betterPosition);
             }
         });
 
         holder.remove.setOnClickListener(v -> {
-            //yuk, can't find a way around this, without checking
-            //here you will occasionally get outofindex errors
-            //if you tap very fast on different rows removing them
-            //while you are using adapter animations
             int betterPosition = holder.getAdapterPosition();
-            if (betterPosition!=-1) {
+            if (betterPosition != NO_POSITION) {
                 playlistAdvancedModel.removeTrack(betterPosition);
             }
         });

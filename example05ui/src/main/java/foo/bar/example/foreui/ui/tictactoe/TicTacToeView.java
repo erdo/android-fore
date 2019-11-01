@@ -8,21 +8,24 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.ui.SyncTrigger;
-import co.early.fore.core.ui.SyncableView;
+import co.early.fore.lifecycle.LifecycleSyncer;
+import co.early.fore.lifecycle.view.SyncScrollView;
 import foo.bar.example.foreui.CustomApp;
 import foo.bar.example.foreui.R;
 import foo.bar.example.foreui.feature.tictactoe.Board;
 import foo.bar.example.foreui.feature.tictactoe.Player;
 
-
-public class TicTacToeView extends ScrollView implements SyncableView {
+/**
+ * In this example we are using one of the fore Sync... helper classes to handle
+ * the observer boiler plate for us
+ */
+public class TicTacToeView extends SyncScrollView {
 
     public static String TAG = TicTacToeView.class.getSimpleName();
 
@@ -65,9 +68,13 @@ public class TicTacToeView extends ScrollView implements SyncableView {
 
     @Override
     public void onFinishInflate() {// grab a reference to all the view elements, setup buttons listeners
-        super.onFinishInflate();
 
+        //we need to get the model references before
+        //super.onFinishInflate() runs as that's
+        //where getThingsToObserve() is called from
         setupModelReferences();
+
+        super.onFinishInflate();
 
         ButterKnife.bind(this, this);
 
@@ -107,12 +114,7 @@ public class TicTacToeView extends ScrollView implements SyncableView {
                     winAnimation.setDuration(500);
                     winAnimation.start();
                 },
-                new SyncTrigger.CheckTriggerThreshold() {
-                    @Override
-                    public boolean checkThreshold() {
-                        return board.getWinner() != Player.NOBODY;
-                    }
-                }) {
+                () -> board.getWinner() != Player.NOBODY) {
         };
 
         animateJiggleTrigger = new SyncTrigger(
@@ -124,12 +126,7 @@ public class TicTacToeView extends ScrollView implements SyncableView {
                     jiggleAnimation.setDuration(300);
                     jiggleAnimation.start();
                 },
-                new SyncTrigger.CheckTriggerThreshold() {
-                    @Override
-                    public boolean checkThreshold() {
-                        return board.timeSinceLastMove() > 5000;
-                    }
-                }) {
+                () -> board.timeSinceLastMove() > 5000) {
         };
 
         animateResetTrigger = new SyncTrigger(
@@ -137,44 +134,42 @@ public class TicTacToeView extends ScrollView implements SyncableView {
 
                     AnimatorSet resetAnimation = new AnimatorSet();
 
-                    ButtonProcessor.runThroughButtons(boardGrid, new ButtonProcessor.ButtonOperation() {
-                        @Override
-                        public void operate(Button button, int xPos, int yPos) {
-                            Animator anim = ObjectAnimator.ofFloat(button, "rotation", 0f, 90f);
-                            anim.setStartDelay(20*(xPos*1+yPos*3));
-                            anim.setDuration(200);
-                            anim.addListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animation) {
-                                }
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    button.setRotation(0f);
-                                }
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    button.setRotation(0f);
-                                }
-                                @Override
-                                public void onAnimationRepeat(Animator animation) {
-                                }
-                            });
-                            resetAnimation.play(anim);
-                        }
+                    ButtonProcessor.runThroughButtons(boardGrid, (button, xPos, yPos) -> {
+                        Animator anim = ObjectAnimator.ofFloat(button, "rotation", 0f, 90f);
+                        anim.setStartDelay(20*(xPos*1+yPos*3));
+                        anim.setDuration(200);
+                        anim.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                button.setRotation(0f);
+                            }
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                button.setRotation(0f);
+                            }
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+                            }
+                        });
+                        resetAnimation.play(anim);
                     });
 
                     resetAnimation.start();
                 },
-                new SyncTrigger.CheckTriggerThreshold() {
-                    @Override
-                    public boolean checkThreshold() {
-                        return board.getMovesMade() == 0;
-                    }
-                }) {
+                () -> board.getMovesMade() == 0) {
         };
 
     }
 
+    //data binding stuff below
+
+    @Override
+    public LifecycleSyncer.Observables getThingsToObserve() {
+        return new LifecycleSyncer.Observables(board);
+    }
 
     public void syncView() {
 
@@ -195,7 +190,4 @@ public class TicTacToeView extends ScrollView implements SyncableView {
         animateResetTrigger.checkLazy();
 
     }
-
-    //here we are using SyncableAppCompatActivity for the host activity so there is less databinding boilerplate
-
 }

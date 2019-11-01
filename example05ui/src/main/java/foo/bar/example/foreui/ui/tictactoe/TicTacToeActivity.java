@@ -2,25 +2,18 @@ package foo.bar.example.foreui.ui.tictactoe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import co.early.fore.lifecycle.LifecycleSyncer;
-import co.early.fore.lifecycle.activity.SyncableAppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import foo.bar.example.foreui.CustomApp;
 import foo.bar.example.foreui.R;
 import foo.bar.example.foreui.feature.tictactoe.Board;
 
-/**
- * This is an example of implementing fore at the <b>Activity</b> level, no fragments used here
- *
- * alternatively:
- * {@link co.early.fore.lifecycle.activity.SyncableActivity},
- * {@link co.early.fore.lifecycle.fragment.SyncableSupportFragment},
- * {@link co.early.fore.lifecycle.fragment.SyncableFragment}
- */
-public class TicTacToeActivity extends SyncableAppCompatActivity {
+
+public class TicTacToeActivity extends AppCompatActivity {
 
     public static void start(Context context) {
         Intent intent = build(context);
@@ -34,18 +27,10 @@ public class TicTacToeActivity extends SyncableAppCompatActivity {
     }
 
     @Override
-    public int getResourceIdForSyncableView() {
-        return R.layout.activity_tictactoe;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tictactoe);
     }
-
-    @Override
-    public LifecycleSyncer.Observables getThingsToObserve() {
-        return new LifecycleSyncer.Observables(CustomApp.get(Board.class));
-    }
-
-
-
-
 
     // some stuff to handle the options menu
 
@@ -65,6 +50,5 @@ public class TicTacToeActivity extends SyncableAppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 }

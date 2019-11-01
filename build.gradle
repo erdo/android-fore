@@ -76,8 +76,8 @@ ext {
 
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    LIB_VERSION_NAME="1.0.2"
-    LIB_VERSION_CODE=33
+    LIB_VERSION_NAME="1.0.3"
+    LIB_VERSION_CODE=34
 
     REPO="fore"
     LIB_GROUP="co.early.fore"
@@ -95,7 +95,7 @@ ext {
     LICENCE_NAME="The Apache Software License, Version 2.0"
     LICENCE_URL="http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-    exampleForeLibVersion="1.0.2"
+    exampleForeLibVersion="1.0.3"
 
     BINTRAY_USER = System.getenv("BINTRAY_USER") ?: secrets.BINTRAY_USER
     BINTRAY_API_KEY = System.getenv("BINTRAY_API_KEY") ?: secrets.BINTRAY_API_KEY

@@ -9,27 +9,10 @@ import co.early.fore.core.Affirm;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.observer.Observer;
 import co.early.fore.core.ui.SyncableView;
-import co.early.fore.lifecycle.activity.SyncActivity;
-import co.early.fore.lifecycle.activity.SyncXActivity;
-import co.early.fore.lifecycle.fragment.SyncFragment;
-import co.early.fore.lifecycle.fragment.SyncXFragment;
-import co.early.fore.lifecycle.view.SyncViewActivity;
-import co.early.fore.lifecycle.view.SyncViewFragment;
-import co.early.fore.lifecycle.view.SyncViewXActivity;
-import co.early.fore.lifecycle.view.SyncViewXFragment;
 
 /**
  * <p>
- *      Class used by
- *      {@link SyncActivity},
- *      {@link SyncXActivity},
- *      {@link SyncFragment},
- *      {@link SyncXFragment}
- *      {@link SyncViewActivity},
- *      {@link SyncViewXActivity},
- *      {@link SyncViewFragment},
- *      {@link SyncViewXFragment}
- *      to hold a reference to a list of {@link Observable} instances.
+ *      Holds a reference to a list of {@link Observable} instances.
  *      A single {@link Observer} which calls {@link SyncableView#syncView()} when notified
  *      is added and removed in line with android lifecycle methods to prevent memory leaks
  *      and ensure UI consistency.
@@ -51,11 +34,21 @@ public class LifecycleSyncer {
         Affirm.notNull(layoutInflater);
         this.observablesList = Affirm.notNull(observables).observablesList;
         this.syncableView = Affirm.notNull((SyncableView) layoutInflater.inflate(layoutResourceId, null));
+        checkObservables();
     }
 
     public LifecycleSyncer(SyncableView syncableView, Observables observables) {
         this.observablesList = Affirm.notNull(observables).observablesList;
         this.syncableView = Affirm.notNull(syncableView);
+        checkObservables();
+    }
+
+    private void checkObservables(){
+        for (Observable observable: observablesList){
+            if (observable == null){
+                throw new RuntimeException("LifecycleSyncer.Observables has been instantiated with at least one null observable");
+            }
+        }
     }
 
     public void addObserversAndSync() {

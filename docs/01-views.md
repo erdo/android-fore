@@ -64,7 +64,7 @@ _Often there will then be the add / remove observers methods where the view latc
 
 If you don't want to have to bother with implementing the adding and removing of observers in your view code, you can let the Sync... classes do it for you.
 
-### SyncXActivity and SyncActivity
+### SyncActivityX and SyncActivity
 By extending one of these classes (the first one is for androidx), you will just be left with having to state which observable models you want to observe, and then implementing the syncView() method:
 
 <!-- Tabbed code sample -->
@@ -73,7 +73,7 @@ By extending one of these classes (the first one is for androidx), you will just
    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
  </div>
 <pre class="tabcontent tabbed java"><code>
-public class MySpeedoActivity extends SyncXActivity {
+public class MySpeedoActivity extends SyncActivityX {
 
   private SpeedoModel speedoModel; //inject these
   private RoadInfoModel roadInfoModel; //inject these
@@ -94,7 +94,7 @@ public class MySpeedoActivity extends SyncXActivity {
 }
  </code></pre>
 <pre class="tabcontent tabbed kotlin"><code>
-class MySpeedoActivity : SyncXActivity() {
+class MySpeedoActivity : SyncActivityX() {
 
   private val speedoModel: SpeedoModel by inject()
   private val roadInfoModel: RoadInfoModel by inject()
@@ -114,7 +114,7 @@ class MySpeedoActivity : SyncXActivity() {
  </code></pre>
 
 
-### SyncXFragment and SyncFragment
+### SyncFragmentX and SyncFragment
 If you prefer to use Fragments for your view layer you can extend one of these (and again, the first one is for androidx).
 
 <!-- Tabbed code sample -->
@@ -123,7 +123,7 @@ If you prefer to use Fragments for your view layer you can extend one of these (
    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
  </div>
 <pre class="tabcontent tabbed java"><code>
-public class MySpeedoFragment extends SyncXFragment {
+public class MySpeedoFragment extends SyncFragmentX {
 
   private SpeedoModel speedoModel; //inject these
   private RoadInfoModel roadInfoModel; //inject these
@@ -144,7 +144,7 @@ public class MySpeedoFragment extends SyncXFragment {
 }
  </code></pre>
 <pre class="tabcontent tabbed kotlin"><code>
-class MySpeedoFragment2 : SyncXFragment() {
+class MySpeedoFragment : SyncFragmentX() {
 
     private val speedoModel: SpeedoModel by inject()
     private val roadInfoModel: RoadInfoModel by inject()
@@ -162,3 +162,52 @@ class MySpeedoFragment2 : SyncXFragment() {
     }
 }
  </code></pre>
+
+### Sync[ViewGroup]
+ There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes).
+
+ <!-- Tabbed code sample -->
+  <div class="tab">
+    <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+  </div>
+ <pre class="tabcontent tabbed java"><code>
+ public class MySpeedoView extends SyncConstraintLayout {
+
+   private SpeedoModel speedoModel; //inject these
+   private RoadInfoModel roadInfoModel; //inject these
+
+   @Override
+   public LifecycleSyncer.Observables getThingsToObserve() {
+     return new LifecycleSyncer.Observables(
+             speedoModel,
+             roadInfoModel
+     );
+   }
+
+   @Override
+   public void syncView() {
+     speedo_roadname_textview.text = roadInfoModel.getRoadName();
+     speedo_speed_textview.text = speedoModel.getSpeed();
+   }
+ }
+  </code></pre>
+ <pre class="tabcontent tabbed kotlin"><code>
+ class MySpeedoView : SyncConstraintLayout() {
+
+     private val speedoModel: SpeedoModel by inject()
+     private val roadInfoModel: RoadInfoModel by inject()
+
+     override fun getThingsToObserve(): LifecycleSyncer.Observables {
+         return LifecycleSyncer.Observables(
+             speedoModel,
+             roadInfoModel
+         )
+     }
+
+     override fun syncView() {
+         speedo_roadname_textview.text = roadInfoModel.roadName
+         speedo_speed_textview.text = speedoModel.speed
+     }
+ }
+  </code></pre>

@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -19,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.logging.Logger;
-import co.early.fore.core.observer.Observer;
-import co.early.fore.core.ui.SyncableView;
+import co.early.fore.lifecycle.LifecycleSyncer;
+import co.early.fore.lifecycle.view.SyncRelativeLayout;
 import foo.bar.example.foredb.App;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.remote.RemoteWorker;
@@ -31,10 +30,10 @@ import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
 
 
 /**
- * For these examples we are managing fore observers at the <b>Fragment</b>
- * level, {@link TodoListFragment}
+ * In this example we are using one of the fore Sync... helper classes to handle
+ * the observer boiler plate for us
  */
-public class TodoListView extends RelativeLayout implements SyncableView{
+public class TodoListView extends SyncRelativeLayout {
 
     //models that we need
     private TodoListModel todoListModel;
@@ -86,10 +85,6 @@ public class TodoListView extends RelativeLayout implements SyncableView{
 
 
 
-    //single observer reference
-    Observer observer = this::syncView;
-
-
     private TodoListAdapter todoListAdapter;
     private AnimatorSet animationSet;
 
@@ -109,11 +104,15 @@ public class TodoListView extends RelativeLayout implements SyncableView{
 
     @Override
     protected void onFinishInflate() {
+
+        //we need to get the model references before
+        //super.onFinishInflate() runs as that's
+        //where getThingsToObserve() is called from
+        getModelReferences();
+
         super.onFinishInflate();
 
         ButterKnife.bind(this, this);
-
-        getModelReferences();
 
         setupClickListeners();
 
@@ -234,6 +233,11 @@ public class TodoListView extends RelativeLayout implements SyncableView{
 
     //data binding stuff below
 
+    @Override
+    public LifecycleSyncer.Observables getThingsToObserve() {
+        return new LifecycleSyncer.Observables(todoListModel, remoteWorker);
+    }
+
     public void syncView(){
         createButton.setEnabled(todoListModel.isValidItemLabel(newDescription.getText().toString()));
         showDoneItems.setChecked(todoListModel.isShowDone());
@@ -241,23 +245,6 @@ public class TodoListView extends RelativeLayout implements SyncableView{
         numberTodos.setText("remaining todos: " + todoListModel.getTotalNumberOfRemainingTodos() + "/" + todoListModel.getTotalNumberOfTodos());
         networking.setVisibility(remoteWorker.isBusy() ? VISIBLE : INVISIBLE);
         todoListAdapter.notifyDataSetChangedAuto();
-    }
-
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        todoListModel.addObserver(observer);
-        remoteWorker.addObserver(observer);
-        syncView(); //  <- don't forget this
-    }
-
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        todoListModel.removeObserver(observer);
-        remoteWorker.removeObserver(observer);
     }
 
 }
