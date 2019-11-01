@@ -164,7 +164,7 @@ class MySpeedoFragment : SyncFragmentX() {
  </code></pre>
 
 ### Sync[ViewGroup]
- There are a few Sync View Group classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes).
+ There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes).
 
  <!-- Tabbed code sample -->
   <div class="tab">
