@@ -1,12 +1,10 @@
-package co.early.fore.lifecycle.fragment;
+package co.early.fore.lifecycle.view;
 
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.Context;
+import android.util.AttributeSet;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import co.early.fore.core.observer.Observable;
 import co.early.fore.core.ui.SyncableView;
 import co.early.fore.lifecycle.LifecycleSyncer;
@@ -19,10 +17,8 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *      observers to prevent memory leaks.</p>
  *
  * <p>
- *      If your app architecture uses fragments, and your fragments extend
- *      {@link android.app.Fragment}, to add fore behaviour to your app you can keep
- *      your activity code the same but in your fragments instead of extending Fragment,
- *      extend this class instead.
+ *      If your app architecture uses custom views, to add fore behaviour to your custom view
+ *      instead of extending androidx ConstraintLayout, extend this class instead.
  * </p>
  *
  * <p>
@@ -33,35 +29,45 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  *      <li>Implement {@link SyncableView#syncView()} </li>
  *      <li>Implement {@link #getThingsToObserve()} by returning a {@link LifecycleSyncer.Observables}
  *      instance constructed with all the {@link Observable} models that the view is interested in</li>
- *      <li>If you override onCreateView() in your own class, you must call super.onCreateView()</li>
+ *      <li>If you override onFinishInflate() in your own class, you must call super.onFinishInflate()</li>
  * </ul>
  *
  */
-public abstract class SyncFragment extends Fragment implements SyncableView{
-
+public abstract class SyncConstraintLayout extends ConstraintLayout implements SyncableView {
 
     private LifecycleSyncer lifecycleSyncer;
 
+    public SyncConstraintLayout(Context context) {
+        super(context);
+    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        lifecycleSyncer = new LifecycleSyncer(this, getThingsToObserve());
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public SyncConstraintLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public SyncConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        lifecycleSyncer = new LifecycleSyncer(this, getThingsToObserve());
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
         if (lifecycleSyncer == null){
-            throw new RuntimeException("You must call super.onCreateView() from within your onCreateView() method");
+            throw new RuntimeException("You must call super.onFinishInflate() from within your onFinishInflate() method");
         }
         // add our observer to any models we want to observe
         lifecycleSyncer.addObserversAndSync();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         // remove our observer from any models we are observing
         lifecycleSyncer.removeObservers();
     }
