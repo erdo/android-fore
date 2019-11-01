@@ -34,11 +34,21 @@ public class LifecycleSyncer {
         Affirm.notNull(layoutInflater);
         this.observablesList = Affirm.notNull(observables).observablesList;
         this.syncableView = Affirm.notNull((SyncableView) layoutInflater.inflate(layoutResourceId, null));
+        checkObservables();
     }
 
     public LifecycleSyncer(SyncableView syncableView, Observables observables) {
         this.observablesList = Affirm.notNull(observables).observablesList;
         this.syncableView = Affirm.notNull(syncableView);
+        checkObservables();
+    }
+
+    private void checkObservables(){
+        for (Observable observable: observablesList){
+            if (observable == null){
+                throw new RuntimeException("One of the observables used to instantiate LifecycleSyncer.Observables is null");
+            }
+        }
     }
 
     public void addObserversAndSync() {

@@ -1,12 +1,12 @@
 package foo.bar.example.foredb.ui.todolist;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.adapters.ChangeAwareAdapter;
@@ -15,6 +15,8 @@ import co.early.fore.core.logging.Logger;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.todoitems.TodoItem;
 import foo.bar.example.foredb.feature.todoitems.TodoListModel;
+
+import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 
 public class TodoListAdapter extends ChangeAwareAdapter<TodoListAdapter.ViewHolder> {
@@ -45,12 +47,11 @@ public class TodoListAdapter extends ChangeAwareAdapter<TodoListAdapter.ViewHold
 
         holder.done.setChecked(item.isDone());
         holder.done.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            //yuk, can't find a way around this, without checking
-            //here you will occasionally get outofindex errors
             //if you tap very fast on different rows removing them
-            //while you are using adapter animations
+            //while you are using adapter animations you will crash unless
+            //you check for this
             int betterPosition = holder.getAdapterPosition();
-            if (betterPosition!=-1) {
+            if (betterPosition != NO_POSITION) {
                 todoListModel.setDone(isChecked, betterPosition);
             }
         });

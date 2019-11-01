@@ -108,7 +108,7 @@
             <Button
                 android:id="@+id/ttt_cell22_btn"
                 style="@style/tictactoebutton"
-                android:backgroundTint="#BA6AA8"/>-
+                android:backgroundTint="#BA6AA8"/>
 
         </GridLayout>
 
