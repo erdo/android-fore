@@ -57,8 +57,6 @@
       url: "#coding-exercise"
     - text: State versus Events
       url: "#state-versus-events"
-    - text: Basic Model Tutorial
-      url: "#basic-model-tutorial"
     - text: Android's Original Mistake
       url: "#androids-original-mistake"
     - text: Troubleshooting and Code Reviews

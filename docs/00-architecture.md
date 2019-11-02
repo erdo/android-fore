@@ -34,7 +34,7 @@ fun syncView() {
 
 </code></pre>
 
-Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view-state binding is _one_ of the reasons that fore is so tiny and the library so easy to understand.
+Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view-state binding is _one_ of the reasons that fore is so tiny and the library so easy to understand - by all means make full use of immutable state within the models though.
 
 *For the avoidance of doubt, most non-trivial apps will of course have more layers beneath the model layer, typically you'll have some kind of repository, a networking abstraction, usecases etc. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
@@ -61,7 +61,7 @@ The code looks extremely simple and it is, but surprisingly the technique works 
 
 
 ## Handling State
-In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course.
+In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course. **(This means that you can have a Redux style reducer and immutable state for your models internally  - as long as that state is accessed by the UI layer using getters, you'll still be able to take full advantage of MVO architecture).**
 
 There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events)
 
