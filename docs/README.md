@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.0.2](https://img.shields.io/badge/jcenter-1.0.2-green.svg){: .float-left}
+![jcenter-1.0.3](https://img.shields.io/badge/jcenter-1.0.3-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -172,7 +172,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 A regular Tic Tac Toe game that makes use of:
 
-- The [SyncableXXX](https://erdo.github.io/android-fore/04-more-fore.html#lifecycle-components) lifecycle convenience classes which reduce boiler plate slightly and automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
+- The [SyncXXX](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) lifecycle convenience classes which reduce boiler plate slightly and automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
 
 - [SyncTrigger](https://erdo.github.io/android-fore/04-more-fore.html#synctrigger) which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 
