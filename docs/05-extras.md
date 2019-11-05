@@ -275,9 +275,9 @@ For locally scoped models Google's ViewModel offers a great [solution](https://g
 
 ## <a name="observer-listener"></a> 1) When should I use an Observer, when should I use a callback listener?
 
-The observer / notify pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback may serve you better. In this case the success or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal. More about how to treat state [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events).
+The observer / notify pattern is not always going to be suitable for what you want to do. In particular, if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback may serve you better. In this case the success or failure of the network call does not alter any fundamental state of the model, so a callback / listener is ideal. *This means that the success / fail callback may be lost if the device is rotated - if that's a problem, then you'll need to treat things as state and use the Observer pattern*. More about how to treat state [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events).
 
-for example:
+for example, calling model code from the UI layer:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -305,11 +305,11 @@ model.doStuffOnAThread(
     fail = { reason ->
       showMessage(reason)
     }
-})
+)
  </code></pre>
 
 
-You can use both patterns in the same model with no problem of course, in the example above the model could have a busy state that changes from false to true and back to false again during a network request so that view code can redraw itself as showing a busy swirly if appropriate. That would be better managed using an observer pattern as follows:
+You can use both patterns in the same model with no problem of course, in the example above, the model could have a busy state that changes from false to true and back to false again during a network request so that view code can redraw itself as showing a busy swirly if appropriate. That would be better managed using the observer pattern. The model could implement the method like this:
 
 
 <!-- Tabbed code sample -->
@@ -354,6 +354,7 @@ fun doStuffOnAThread(success: Success, fail: FailWithReason) {
 }
  </code></pre>
 
+*Note code like this is only robust because we have made an architectural decision to have our model's public functions called on a single thread (which for a live app would be the UI thread.*
 
 For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
 
