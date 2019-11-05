@@ -298,11 +298,11 @@ model.doStuffOnAThread(new ResultListener{
 });
  </code></pre>
 <pre class="tabcontent tabbed kotlin"><code>
-model.doStuffOnAThread(object : ResultListener {
-    override fun success() {
+model.doStuffOnAThread(
+    success = {
       //do next thing
     }
-    override fun fail(reason: UserMessage) {
+    fail = { reason ->
       showMessage(reason)
     }
 })
@@ -336,17 +336,20 @@ public void doStuffOnAThread(final ResultListener resultListener){
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-fun doStuffOnAThread(resultListener: ResultListener) {
+fun doStuffOnAThread(success: Success, fail: FailWithReason) {
+
+    if (busy) {
+        fail(Msg.BUSY)
+        return
+    }
 
     busy = true
     notifyObservers()
 
-    startAsyncOperation(object : FinishedListener {
-        override fun finished() {
-            busy = false
-            resultListener.success()
-            notifyObservers()
-        }
+    startAsyncOperation(finished = {
+       busy = false
+       success()
+       notifyObservers()
     })
 }
  </code></pre>
