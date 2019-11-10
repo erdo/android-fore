@@ -1,0 +1,79 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+//apply plugin: 'com.getkeepsafe.dexcount' //uncomment for library method stats
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+
+android {
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "foo.bar.example.foreretrofit"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    google()
+}
+
+dependencies {
+
+    //implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    //implementation (group: 'co.early.fore', name: 'fore-retrofit', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    implementation project(path: ':fore-core')
+    implementation project(path: ':fore-retrofit-coroutine')
+
+
+    implementation('com.squareup.retrofit2:retrofit:2.1.0') {
+        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
+        exclude module: 'okhttp'
+    }
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.androidXConstraint}"
+
+
+    // Unit testing dependencies
+    testImplementation 'junit:junit:4.12'
+    // Set this dependency if you want to use Mockito
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
+    // Set this dependency if you want to use Hamcrest matching
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
+
+    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker}"
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidXTest}"
+    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidXTest}"
+    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidXAnnotation}"
+    androidTestImplementation "androidx.core:core:${rootProject.ext.androidXCore}"
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}

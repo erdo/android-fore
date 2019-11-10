@@ -1,0 +1,80 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'com.android.library'
+
+ext {
+    LIB_ARTIFACT_ID="fore-retrofit-coroutine"
+    LIB_DESCRIPTION="android fore - retrofit coroutine helpers"
+}
+
+
+println "[${LIB_ARTIFACT_ID} build file]"
+
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionCode rootProject.ext.LIB_VERSION_CODE as Integer
+        versionName rootProject.ext.LIB_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+    //compile (group: 'co.early.fore', name: 'fore-retrofit', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
+    implementation project(path: ':fore-core')
+    api project(path: ':fore-retrofit')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.core:core-ktx:1.0.2'
+
+    // Unit testing dependencies
+    testImplementation 'junit:junit:4.12'
+    // Set this dependency if you want to use Mockito
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
+    // Set this dependency if you want to use Hamcrest matching
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
+    testImplementation "com.google.code.gson:gson:${rootProject.ext.gson}"
+
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+}
+
+
+apply from: '../install.gradle'
+apply from: '../bintray.gradle'
+//apply from: '../s3publish.gradle'

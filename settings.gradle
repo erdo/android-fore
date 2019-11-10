@@ -1,1 +1,1 @@
-include ':fore-core', ':example02threading', ':example01databinding', ':example03adapters', ':fore-adapters', ':example04retrofit', ':fore-retrofit', ':fore-lifecycle', ':example05ui', ':example06db'
+include ':fore-core', ':example02threading', ':example01databinding', ':example03adapters', ':fore-adapters', ':example04retrofit', ':example04retrofitcoroutine', ':fore-retrofit', ':fore-lifecycle', ':example05ui', ':example06db', ':fore-retrofit-coroutine'
