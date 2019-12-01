@@ -7,14 +7,18 @@ import co.early.fore.core.callbacks.SuccessWithPayload
 import co.early.fore.core.logging.Logger
 import co.early.fore.retrofit.ErrorHandler
 import co.early.fore.retrofit.MessageProvider
-import okhttp3.Request
-import retrofit2.Call
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.io.IOException
 
 /**
  * F - Globally applicable failure message class, like an enum for example
- * S - Success pojo you expect to be returned from the API
+ * S - Success pojo you expect to be returned from the API (or Unit for an empty response)
  * CE - Custom error class that you expect from the specific API in the event of an error
  *
  * CE needs to implement MessageProvider&lt;F&gt; (i.e. it needs to be able to give you a failure
@@ -27,89 +31,94 @@ class CallProcessor<F>(private val globalErrorHandler: ErrorHandler<F>, private 
 
     /**
      *
-     * @param call Retrofit call to be processed
      * @param workMode how to process the call (synchronously or asynchronously)
      * @param successWithPayload call back triggered in the event of a successful call
      * @param failureWithPayload call back triggered in the event of a failed call
+     * @param call Retrofit call to be processed
      * @param <S> Successful response body type
     </S> */
     fun <S> processCall(
-            call: Call<S>, workMode: WorkMode,
+            workMode: WorkMode,
             successWithPayload: SuccessWithPayload<S>,
-            failureWithPayload: FailureWithPayload<F>
+            failureWithPayload: FailureWithPayload<F>,
+            call: suspend () -> Response<S>
     ) {
         doProcessCall<S, MessageProvider<F>>(call, workMode, null, successWithPayload, failureWithPayload)
     }
 
     /**
      *
-     * @param call Retrofit call to be processed
      * @param workMode how to process the call (synchronously or asynchronously)
      * @param customErrorClazz custom error class expected from the server in the event of an error
      * @param successWithPayload call back triggered in the event of a successful call
      * @param failureWithPayload call back triggered in the event of a failed call
+     * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
     </CE></S> */
     fun <S, CE : MessageProvider<F>> processCall(
-            call: Call<S>, workMode: WorkMode, customErrorClazz: Class<CE>,
+            workMode: WorkMode, customErrorClazz: Class<CE>,
             successWithPayload: SuccessWithPayload<S>,
-            failureWithPayload: FailureWithPayload<F>
+            failureWithPayload: FailureWithPayload<F>,
+            call: suspend () -> Response<S>
     ) {
         doProcessCall(call, workMode, customErrorClazz, successWithPayload, failureWithPayload)
     }
 
 
     private fun <S, CE : MessageProvider<F>> doProcessCall(
-            call: Call<S>, workMode: WorkMode, customErrorClazz: Class<CE>?,
+            call: suspend () -> Response<S>, workMode: WorkMode, customErrorClazz: Class<CE>?,
             successWithPayload: SuccessWithPayload<S>,
             failureWithPayload: FailureWithPayload<F>
     ) {
 
         if (workMode == WorkMode.SYNCHRONOUS) {
 
-            val response: Response<S>?
+            val response: Response<S>
 
             try {
-                response = call.execute()
+                response = runBlocking {
+                    call()
+                }
             } catch (e: IOException) {
-                processFailResponse<CE, Any>(e, null, customErrorClazz, call.request(), failureWithPayload)
+                processFailResponse<CE, Any>(e, null, customErrorClazz, failureWithPayload)
                 return
             }
 
-            processSuccessResponse(response!!, customErrorClazz, call.request(), successWithPayload, failureWithPayload)
+            processSuccessResponse(response, customErrorClazz, successWithPayload, failureWithPayload)
 
         } else {
 
-            call.enqueue(object : retrofit2.Callback<S> {
+            val deferredResult: Deferred<Response<S>> = CoroutineScope(Dispatchers.IO).async {
+                call()
+            }
 
-                override fun onResponse(call: Call<S>, response: Response<S>) {
-                    processSuccessResponse(response, customErrorClazz, call.request(), successWithPayload, failureWithPayload)
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    processSuccessResponse(deferredResult.await(), customErrorClazz, successWithPayload, failureWithPayload)
+                } catch (t: Throwable) {
+                    processFailResponse<CE, Any>(t, null, customErrorClazz, failureWithPayload)
                 }
-
-                override fun onFailure(call: Call<S>, t: Throwable) {
-                    processFailResponse<CE, Any>(t, null, customErrorClazz, call.request(), failureWithPayload)
-                }
-            })
+            }
         }
     }
 
     private fun <CE : MessageProvider<F>, S> processSuccessResponse(
             response: Response<S>, customErrorClass: Class<CE>?,
-            originalRequest: Request,
             successWithPayload: SuccessWithPayload<S>,
             failureWithPayload: FailureWithPayload<F>
     ) {
-        if (response.isSuccessful) {
-            successWithPayload(response.body())
+        val resp: S? = response.body()
+
+        if (response.isSuccessful && resp != null) {
+            successWithPayload(resp)
         } else {
-            processFailResponse<CE, Any>(null, response, customErrorClass, originalRequest, failureWithPayload)
+            processFailResponse<CE, Any>(null, response, customErrorClass, failureWithPayload)
         }
     }
 
     private fun <CE : MessageProvider<F>, S> processFailResponse(
             t: Throwable?, errorResponse: Response<*>?, customErrorClass: Class<CE>?,
-            originalRequest: Request,
             failureWithPayload: FailureWithPayload<F>
     ) {
 
@@ -117,11 +126,10 @@ class CallProcessor<F>(private val globalErrorHandler: ErrorHandler<F>, private 
             logger.w(LOG_TAG, "processFailResponse()", t)
         }
 
-        failureWithPayload(globalErrorHandler.handleError(t, errorResponse, customErrorClass, originalRequest))
+        failureWithPayload(globalErrorHandler.handleError(t, errorResponse, customErrorClass, null))
     }
 
     companion object {
         val LOG_TAG = CallProcessor::class.java.simpleName
     }
-
 }

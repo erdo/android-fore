@@ -1,5 +1,6 @@
 package co.early.fore.retrofit;
 
+import androidx.annotation.Nullable;
 import okhttp3.Request;
 import retrofit2.Response;
 
@@ -10,12 +11,12 @@ import retrofit2.Response;
 public interface ErrorHandler<M> {
     /**
      *
-     * @param t throwable that caused the error
-     * @param errorResponse error response from the server, the body of which may represent a custom error
-     * @param customErrorClazz custom error class expected from the errorResponse
-     * @param originalRequest in case it's needed (if you need access to the headers for example)
-     * @param <CE> class type of the custom error
+     * @param t throwable that caused the error, may be null
+     * @param errorResponse error response from the server, the body of which may represent a custom error, may be null
+     * @param customErrorClazz custom error class expected from the errorResponse, may be null
+     * @param originalRequest in case it's needed (if you need access to the headers for example), may be null
+     * @param <CE> class type of the custom error, may be null
      * @return the parsed error from the server
      */
-    <CE extends MessageProvider<M>> M handleError(Throwable t, Response errorResponse, Class<CE> customErrorClazz, Request originalRequest);
+    <CE extends MessageProvider<M>> M handleError(@Nullable Throwable t, @Nullable Response errorResponse, @Nullable Class<CE> customErrorClazz, @Nullable Request originalRequest);
 }

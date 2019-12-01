@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import foo.bar.example.foreretrofit.R
-import foo.bar.example.foreretrofitcoroutine.CustomApp
+import foo.bar.example.foreretrofitcoroutine.App
 
 /**
  *
@@ -34,8 +34,8 @@ class AnimatedTastyRatingBar @JvmOverloads constructor(
     public override fun onFinishInflate() {
         super.onFinishInflate()
 
-        backgroundColour = CustomApp.inst.getResources().getColor(R.color.colorPrimary)
-        progressColour = CustomApp.inst.getResources().getColor(R.color.colorPrimaryDark)
+        backgroundColour = App.inst.getResources().getColor(R.color.colorPrimary)
+        progressColour = App.inst.getResources().getColor(R.color.colorPrimaryDark)
 
         paint = Paint()
         paint.flags = Paint.ANTI_ALIAS_FLAG
@@ -94,6 +94,5 @@ class AnimatedTastyRatingBar @JvmOverloads constructor(
             invalidate()
         }
     }
-
 
 }

@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofitcoroutine.message
 import android.os.Parcel
 import android.os.Parcelable
 import foo.bar.example.foreretrofit.R
-import foo.bar.example.foreretrofitcoroutine.CustomApp
+import foo.bar.example.foreretrofitcoroutine.App
 
 /**
  * As an enum, this value can be passed around the app to indicate various states.
@@ -32,7 +32,7 @@ enum class UserMessage constructor(private val messageResId: Int) : Parcelable {
 
     //this should only be called when a UserMessage is actually displayed to a user, so not during a JUnit test
     private fun getString(resId: Int): String {
-        return CustomApp.inst.resources.getString(resId)
+        return App.inst.resources.getString(resId)
     }
 
     override fun describeContents(): Int {

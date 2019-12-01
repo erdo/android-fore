@@ -66,6 +66,8 @@ ext {
     androidXEspresso = "3.1.0-beta02"
     butterknife = "10.2.0"
     mockito = "2.8.47"
+    mockitoInline = "2.21.0"
+    mockitoKotlin = "2.1.0"
     androidSupportTest = "1.0.2"
     espresso = "3.0.2"
     hamcrest = "1.3"

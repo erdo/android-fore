@@ -49,11 +49,7 @@ dependencies {
     //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
     implementation project(path: ':fore-core')
 
-    api('com.squareup.retrofit2:retrofit:2.1.0') {
-        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-        exclude module: 'okhttp'
-    }
-    api 'com.squareup.okhttp3:logging-interceptor:3.12.1'
+    api('com.squareup.retrofit2:retrofit:2.6.2')
 
     // Unit testing dependencies
     testImplementation 'junit:junit:4.12'

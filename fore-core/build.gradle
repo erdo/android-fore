@@ -46,6 +46,8 @@ android {
 
 dependencies {
 
+    api "androidx.annotation:annotation:${rootProject.ext.androidXAnnotation}"
+
     // Unit testing dependencies
     testImplementation 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito

@@ -12,10 +12,14 @@ import foo.bar.example.foreretrofitcoroutine.api.fruits.FruitService
 import foo.bar.example.foreretrofitcoroutine.feature.fruit.FruitFetcher
 import java.util.HashMap
 
+
 /**
- * This is the price you pay for not using Dagger, the payback is not having to write modules
+ *
+ * OG - Object Graph, pure DI implementation
+ *
+ * Copyright © 2019 early.co. All rights reserved.
  */
-internal class ObjectGraph {
+object OG {
 
     @Volatile
     private var initialized = false
@@ -25,6 +29,7 @@ internal class ObjectGraph {
     fun setApplication(application: Application, workMode: WorkMode = WorkMode.ASYNCHRONOUS) {
 
         // create dependency graph
+
         val logger = AndroidLogger()
 
         // networking classes common to all models
@@ -41,17 +46,16 @@ internal class ObjectGraph {
 
         // models
         val fruitFetcher = FruitFetcher(
-            retrofit.create(FruitService::class.java!!),
+            retrofit.create(FruitService::class.java),
             callProcessor,
             logger,
             workMode
         )
 
-
         // add models to the dependencies map if you will need them later
         dependencies[FruitFetcher::class.java] = fruitFetcher
-
     }
+
 
     fun init() {
         if (!initialized) {
@@ -62,10 +66,30 @@ internal class ObjectGraph {
         }
     }
 
-    operator fun <T> get(model: Class<T>): T = model.cast(dependencies[model]) as T
+
+    /**
+     * This is how dependencies get injected, typically an Activity/Fragment/View will call this
+     * during the onCreate()/onCreateView()/onFinishInflate() method respectively for each of the
+     * dependencies it needs.
+     *
+     * Can use a DI library for similar behaviour using annotations
+     *
+     * Will return mocks if they have been set previously in putMock()
+     *
+     *
+     * Call it like this:
+     *
+     * <code>
+     *     yourModel = OG[YourModel::class.java]
+     * </code>
+     *
+     * If you want to more tightly scoped object, one way is to pass a factory class here and create
+     * an instance where you need it
+     *
+     */
+    operator fun <T> get(model: Class<T>): T = dependencies[model] as T
 
     fun <T> putMock(clazz: Class<T>, instance: T) {
         dependencies[clazz] = instance as Any
     }
-
 }

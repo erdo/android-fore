@@ -15,7 +15,7 @@ import foo.bar.example.foreretrofitcoroutine.message.UserMessage.ERROR_MISC
  * "errorCode":"FRUIT_USER_LOCKED"
  * }
  *
- * </Code> *
+ * </Code>
  *
  *
  */

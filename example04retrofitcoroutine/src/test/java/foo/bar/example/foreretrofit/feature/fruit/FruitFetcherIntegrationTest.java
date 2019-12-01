@@ -71,7 +71,7 @@ public class FruitFetcherIntegrationTest {
 
     @Before
     public void setup(){
-        mockSuccessCallback = mock(SuccessCallback.class);
+        mockSuccessCallback = mockk(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
         interceptorLogging = new InterceptorLogging(logger);
         callProcessor = new CallProcessor<UserMessage>(new CustomGlobalErrorHandler(logger), logger);

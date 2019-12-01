@@ -26,7 +26,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
             t: Throwable?,
             errorResponse: Response<*>?,
             customErrorClazz: Class<CE>?,
-            originalRequest: Request
+            originalRequest: Request?
     ): UserMessage {
 
         var message = ERROR_MISC

@@ -8,12 +8,13 @@ import android.widget.Toast
 import co.early.fore.core.callbacks.FailureWithPayload
 import co.early.fore.core.callbacks.Success
 import foo.bar.example.foreretrofit.R
-import foo.bar.example.foreretrofitcoroutine.CustomApp
+import foo.bar.example.foreretrofitcoroutine.OG
 import foo.bar.example.foreretrofitcoroutine.feature.fruit.FruitFetcher
 import foo.bar.example.foreretrofitcoroutine.message.UserMessage
 import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_busy_progbar
 import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_citrus_img
 import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_detailcontainer_linearlayout
+import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_fetchchainsuccess_btn
 import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_fetchfailadvanced_btn
 import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_fetchfailbasic_btn
 import kotlinx.android.synthetic.main.fragment_fruit.view.fruit_fetchsuccess_btn
@@ -64,13 +65,14 @@ class FruitView @JvmOverloads constructor(
     }
 
     private fun getModelReferences() {
-        fruitFetcher = CustomApp.get(FruitFetcher::class.java)
+        fruitFetcher = OG[FruitFetcher::class.java]
     }
 
     private fun setupButtonClickListeners() {
-        fruit_fetchsuccess_btn.setOnClickListener { v -> fruitFetcher.fetchFruits(success, failureWithPayload) }
-        fruit_fetchfailbasic_btn.setOnClickListener { v -> fruitFetcher.fetchFruitsButFail(success, failureWithPayload) }
-        fruit_fetchfailadvanced_btn.setOnClickListener { v -> fruitFetcher.fetchFruitsButFailAdvanced(success, failureWithPayload) }
+        fruit_fetchsuccess_btn.setOnClickListener { fruitFetcher.fetchFruits(success, failureWithPayload) }
+        fruit_fetchchainsuccess_btn.setOnClickListener { fruitFetcher.fetchManyThings(success, failureWithPayload) }
+        fruit_fetchfailbasic_btn.setOnClickListener { fruitFetcher.fetchFruitsButFail(success, failureWithPayload) }
+        fruit_fetchfailadvanced_btn.setOnClickListener { fruitFetcher.fetchFruitsButFailAdvanced(success, failureWithPayload) }
     }
 
 
@@ -78,6 +80,7 @@ class FruitView @JvmOverloads constructor(
 
     fun syncView() {
         fruit_fetchsuccess_btn.isEnabled = !fruitFetcher.isBusy
+        fruit_fetchchainsuccess_btn.isEnabled = !fruitFetcher.isBusy
         fruit_fetchfailbasic_btn.isEnabled = !fruitFetcher.isBusy
         fruit_fetchfailadvanced_btn.isEnabled = !fruitFetcher.isBusy
         fruit_name_textview.text = fruitFetcher.currentFruit.name
