@@ -19,7 +19,7 @@ class PlaylistsActivity : FragmentActivity() {
         if (savedInstanceState == null) {
             setFragment(
                 PlaylistsFragment.newInstance(),
-                PlaylistsFragment::class.java!!.getSimpleName()
+                PlaylistsFragment::class.java.getSimpleName()
             )
         }
     }

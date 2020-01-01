@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.view.View
-import androidx.test.InstrumentationRegistry
 import androidx.test.InstrumentationRegistry.getInstrumentation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -18,7 +17,8 @@ import foo.bar.example.forecoroutine.ProgressBarIdler
 import foo.bar.example.forecoroutine.R
 import foo.bar.example.forecoroutine.feature.counter.Counter
 import foo.bar.example.forecoroutine.feature.counter.CounterWithProgress
-import io.mockk.mockk
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -35,18 +35,16 @@ import org.junit.runner.RunWith
 class CounterViewTest {
 
 
+    @MockK
     private lateinit var mockCounter: Counter
+    @MockK
     private lateinit var mockCounterWithProgress: CounterWithProgress
 
 
     @Before
     fun setup() {
 
-        //MockitoAnnotations.initMocks(CounterView.this);
-        System.setProperty("dexmaker.dexcache", InstrumentationRegistry.getTargetContext().cacheDir.path)
-
-        mockCounter = mockk()
-        mockCounterWithProgress = mockk()
+        MockKAnnotations.init(this, relaxed = true)
 
         val application = getInstrumentation().targetContext.applicationContext as Application
         application.registerActivityLifecycleCallbacks(ProgressBarIdler())
@@ -114,6 +112,7 @@ class CounterViewTest {
             .counterBasicIsBusy(false)
             .createRule()
             .launchActivity(null)
+
         //act
         onView(withId(R.id.counter_increase_btn)).perform(click())
 

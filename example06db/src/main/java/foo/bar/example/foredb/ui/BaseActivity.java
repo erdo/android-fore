@@ -1,11 +1,11 @@
 package foo.bar.example.foredb.ui;
 
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-
-import foo.bar.example.foredb.App;
+import foo.bar.example.foredb.OG;
 import foo.bar.example.foredb.R;
 
 
@@ -19,7 +19,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.init();
+        OG.init();
 
         overridePendingTransition(0, 0);
 

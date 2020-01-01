@@ -9,6 +9,7 @@ import foo.bar.example.foreretrofitkt.App
 import foo.bar.example.foreretrofitkt.R
 
 
+@Suppress("DEPRECATION")
 class AnimatedTastyRatingBar @JvmOverloads constructor(
         context: Context?,
         attrs: AttributeSet? = null,

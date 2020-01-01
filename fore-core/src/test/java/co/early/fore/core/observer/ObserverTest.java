@@ -456,7 +456,7 @@ public class ObserverTest {
 
 
         //assert
-        verify(mockLogger, times(1)).e(any(), any());
+        verify(mockLogger, times(2)).e(any(), any());
         Assert.assertEquals(true, observable.hasObservers());
     }
 

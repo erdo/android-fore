@@ -1,8 +1,8 @@
 package foo.bar.example.foredb.feature.todoitems
 
-import androidx.room.InvalidationTracker
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
+import androidx.room.InvalidationTracker
 import co.early.fore.adapters.DiffCalculator
 import co.early.fore.adapters.DiffSpec
 import co.early.fore.adapters.Diffable
@@ -14,10 +14,10 @@ import co.early.fore.core.time.SystemTimeWrapper
 import foo.bar.example.foredb.db.todoitems.TodoItemDatabase
 import foo.bar.example.foredb.db.todoitems.TodoItemEntity
 import foo.bar.example.foredb.db.todoitems.TodoItemEntity.TABLE_NAME
-import foo.bar.example.foredb.feature.todoitems.TodoListModel.RefreshStatus.ADDITIONAL_REFRESH_WAITING
-import foo.bar.example.foredb.feature.todoitems.TodoListModel.RefreshStatus.IDLE
-import foo.bar.example.foredb.feature.todoitems.TodoListModel.RefreshStatus.REQUESTED
-import foo.bar.example.foredb.feature.todoitems.TodoListModel.RefreshStatus.TAKEN_DB_LIST_SNAPSHOT
+import foo.bar.example.foredb.feature.todoitems.TodoListModelKotlin.RefreshStatus.ADDITIONAL_REFRESH_WAITING
+import foo.bar.example.foredb.feature.todoitems.TodoListModelKotlin.RefreshStatus.IDLE
+import foo.bar.example.foredb.feature.todoitems.TodoListModelKotlin.RefreshStatus.REQUESTED
+import foo.bar.example.foredb.feature.todoitems.TodoListModelKotlin.RefreshStatus.TAKEN_DB_LIST_SNAPSHOT
 import java.util.ArrayList
 
 
@@ -159,14 +159,14 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
 
 
             when (refreshStatus) {
-                TodoListModelKotlin.RefreshStatus.IDLE -> refreshStatus = REQUESTED
-                TodoListModelKotlin.RefreshStatus.TAKEN_DB_LIST_SNAPSHOT -> {
+                RefreshStatus.IDLE -> refreshStatus = REQUESTED
+                RefreshStatus.TAKEN_DB_LIST_SNAPSHOT -> {
                     //we are now committed and we need to leave this to finish before refreshing again
                     refreshStatus = ADDITIONAL_REFRESH_WAITING
                     //we can forget about this, it's already in hand
                     return
                 }
-                TodoListModelKotlin.RefreshStatus.REQUESTED, TodoListModelKotlin.RefreshStatus.ADDITIONAL_REFRESH_WAITING -> return
+                RefreshStatus.REQUESTED, RefreshStatus.ADDITIONAL_REFRESH_WAITING -> return
             }
 
 
@@ -184,14 +184,14 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
 
 
                     val newList = ArrayList<TodoItem>()
-                    var dbList: List<TodoItemEntity>? = null;
+                    var dbList: List<TodoItemEntity>
 
                     synchronized(dbMonitor) {
                         //dbList = logEntryDatabase.logEntryDao().allLogs
                         dbList = todoItemDatabase.todoItemDao().getTodoItems(isShowDone)
                     }
 
-                    for (todoItemEntity in dbList!!) {
+                    for (todoItemEntity in dbList) {
                         newList.add(TodoItem(todoItemEntity))
                     }
 
@@ -286,7 +286,7 @@ class TodoListModelKotlin(private val todoItemDatabase: TodoItemDatabase, privat
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
         AsyncBuilder<Void, Int>(workMode)
-            .doInBackground { voids ->
+            .doInBackground {
                 synchronized(dbMonitor) {
                     todoItemDatabase.todoItemDao().clear()
                 }

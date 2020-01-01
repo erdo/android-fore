@@ -37,7 +37,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles 'proguard-library.pro'
+            consumerProguardFiles 'proguard-library-consumer.pro'
         }
     }
 
@@ -46,25 +46,19 @@ android {
 
 dependencies {
 
-    //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
-    implementation project(path: ':fore-core')
+    //api "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
+    api project(path: ':fore-core')
 
-    api('com.squareup.retrofit2:retrofit:2.6.2')
+    api "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
 
-    // Unit testing dependencies
-    testImplementation 'junit:junit:4.12'
-    // Set this dependency if you want to use Mockito
-    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
-    // Set this dependency if you want to use Hamcrest matching
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
+    testImplementation "junit:junit:${rootProject.ext.junit}"
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest_library}"
     testImplementation "com.google.code.gson:gson:${rootProject.ext.gson}"
     
-    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.espresso_core}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
 }
 
-apply from: '../install.gradle'
-apply from: '../bintray.gradle'
-//apply from: '../s3publish.gradle'
+apply from: '../bintraypublish.gradle'

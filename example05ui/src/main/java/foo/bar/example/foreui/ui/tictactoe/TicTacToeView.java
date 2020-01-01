@@ -16,7 +16,7 @@ import co.early.fore.core.logging.Logger;
 import co.early.fore.core.ui.SyncTrigger;
 import co.early.fore.lifecycle.LifecycleSyncer;
 import co.early.fore.lifecycle.view.SyncScrollView;
-import foo.bar.example.foreui.CustomApp;
+import foo.bar.example.foreui.OG;
 import foo.bar.example.foreui.R;
 import foo.bar.example.foreui.feature.tictactoe.Board;
 import foo.bar.example.foreui.feature.tictactoe.Player;
@@ -87,8 +87,8 @@ public class TicTacToeView extends SyncScrollView {
 
 
     private void setupModelReferences() {
-        board = CustomApp.get(Board.class);
-        logger = CustomApp.get(Logger.class);
+        board = OG.get(Board.class);
+        logger = OG.get(Logger.class);
     }
 
 

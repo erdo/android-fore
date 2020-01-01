@@ -27,7 +27,7 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
 
         val item = playlistAdvancedModel.getTrack(position)
 
-        holder.itemView.track_increaseplays_button.setOnClickListener { v ->
+        holder.itemView.track_increaseplays_button.setOnClickListener {
             //if you tap very fast on different rows removing them
             //while you are using adapter animations you will crash unless
             //you check for this
@@ -37,14 +37,14 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
             }
         }
 
-        holder.itemView.track_decreaseplays_button.setOnClickListener { v ->
+        holder.itemView.track_decreaseplays_button.setOnClickListener {
             val betterPosition = holder.adapterPosition
             if (betterPosition != NO_POSITION) {
                 playlistAdvancedModel.decreasePlaysForTrack(betterPosition)
             }
         }
 
-        holder.itemView.track_remove_button.setOnClickListener { v ->
+        holder.itemView.track_remove_button.setOnClickListener {
             val betterPosition = holder.adapterPosition
             if (betterPosition != NO_POSITION) {
                 playlistAdvancedModel.removeTrack(betterPosition)

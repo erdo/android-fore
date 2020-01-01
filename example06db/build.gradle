@@ -42,61 +42,36 @@ repositories {
 
 dependencies {
 
-    //implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation (group: 'co.early.fore', name: 'fore-retrofit', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation (group: 'co.early.fore', name: 'fore-adapters', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    implementation project(path: ':fore-core')
-    implementation project(path: ':fore-lifecycle')
-    implementation project(path: ':fore-retrofit')
-    implementation project(path: ':fore-adapters')
-
-    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
+    kapt "androidx.room:room-compiler:${rootProject.ext.room_compiler}"
     kapt "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+ //   implementation "co.early.fore:fore-jv:${rootProject.ext.ForeLibVersion_ForExamples}"
+    implementation project(path: ':fore-jv')
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompat}"
-    implementation "com.google.android.material:material:${rootProject.ext.androidXMaterial}"
-    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.androidXConstraint}"
-
+    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    implementation "com.google.android.material:material:${rootProject.ext.material}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
+    implementation "com.squareup.retrofit2:converter-gson:${rootProject.ext.converter_gson}"
+    implementation "androidx.room:room-runtime:${rootProject.ext.room_runtime}"
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    //networking stuff
-    implementation('com.squareup.retrofit2:retrofit:2.1.0') {
-        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-        exclude module: 'okhttp'
-    }
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-
-
-    //db stuff
-    implementation "androidx.room:room-runtime:${rootProject.ext.androidXRoom}"
-    kapt "androidx.room:room-compiler:${rootProject.ext.androidXRoom}"
-    testImplementation "androidx.room:room-testing:${rootProject.ext.androidXRoom}"
-
-
-    // Unit testing dependencies
-    testImplementation 'junit:junit:4.12'
-    // Set this dependency if you want to use Mockito
-    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
-    // Set this dependency if you want to use Hamcrest matching
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
-    testImplementation("org.robolectric:robolectric:3.3.2") {
+    testImplementation "junit:junit:${rootProject.ext.junit}"
+    testImplementation "androidx.room:room-testing:${rootProject.ext.room_testing}"
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest_library}"
+    testImplementation("org.robolectric:robolectric:${rootProject.ext.robolectric}") {
         exclude module: 'maven-artifact'
     }
 
-    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
-    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker}"
-
-    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidXRecycler}"
-    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidXAnnotation}"
-    androidTestImplementation "androidx.core:core:${rootProject.ext.androidXCore}"
-    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
+    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker_mockito}"
+    androidTestImplementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidxtest}"
+    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidxtest}"
+    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.annotation}"
+    androidTestImplementation "androidx.core:core:${rootProject.ext.android_core}"
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.espresso_core}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
 }

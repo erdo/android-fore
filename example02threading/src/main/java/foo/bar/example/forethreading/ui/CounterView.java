@@ -10,7 +10,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.observer.Observer;
-import foo.bar.example.forethreading.CustomApp;
+import foo.bar.example.forethreading.OG;
 import foo.bar.example.forethreading.R;
 import foo.bar.example.forethreading.feature.counter.CounterWithLambdas;
 import foo.bar.example.forethreading.feature.counter.CounterWithProgress;
@@ -81,8 +81,8 @@ public class CounterView extends ScrollView {
 
 
     private void getModelReferences(){
-        counterWithProgress = CustomApp.get(CounterWithProgress.class);
-        counterWithLambdas = CustomApp.get(CounterWithLambdas.class);
+        counterWithProgress = OG.get(CounterWithProgress.class);
+        counterWithLambdas = OG.get(CounterWithLambdas.class);
     }
 
     private void setupButtonClickListeners() {

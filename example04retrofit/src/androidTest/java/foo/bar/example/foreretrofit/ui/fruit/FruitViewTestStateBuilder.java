@@ -2,8 +2,9 @@ package foo.bar.example.foreretrofit.ui.fruit;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-
-import foo.bar.example.foreretrofit.CustomApp;
+import co.early.fore.core.WorkMode;
+import foo.bar.example.foreretrofit.App;
+import foo.bar.example.foreretrofit.OG;
 import foo.bar.example.foreretrofit.ProgressBarIdler;
 import foo.bar.example.foreretrofit.api.fruits.FruitPojo;
 import foo.bar.example.foreretrofit.feature.fruit.FruitFetcher;
@@ -38,12 +39,13 @@ public class FruitViewTestStateBuilder {
             protected void beforeActivityLaunched() {
 
                 //get hold of the application
-                CustomApp customApp = (CustomApp) InstrumentationRegistry.getTargetContext().getApplicationContext();
-                customApp.injectSynchronousObjectGraph();
+                App app = (App) InstrumentationRegistry.getTargetContext().getApplicationContext();
+                OG.setApplication(app, WorkMode.SYNCHRONOUS);
 
                 //inject our mocks so our UI layer will pick them up
-                customApp.injectMockObject(FruitFetcher.class, mockFruitFetcher);
-                customApp.registerActivityLifecycleCallbacks(new ProgressBarIdler());
+                OG.putMock(FruitFetcher.class, mockFruitFetcher);
+
+                app.registerActivityLifecycleCallbacks(new ProgressBarIdler());
             }
 
         };

@@ -2,8 +2,9 @@ package foo.bar.example.forethreading.ui;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-
-import foo.bar.example.forethreading.CustomApp;
+import co.early.fore.core.WorkMode;
+import foo.bar.example.forethreading.App;
+import foo.bar.example.forethreading.OG;
 import foo.bar.example.forethreading.feature.counter.CounterWithLambdas;
 import foo.bar.example.forethreading.feature.counter.CounterWithProgress;
 
@@ -54,12 +55,12 @@ public class StateBuilder {
             protected void beforeActivityLaunched() {
 
                 //get hold of the application
-                CustomApp customApp = (CustomApp) InstrumentationRegistry.getTargetContext().getApplicationContext();
-                customApp.injectSynchronousObjectGraph();
+                App app = (App) InstrumentationRegistry.getTargetContext().getApplicationContext();
+                OG.setApplication(app, WorkMode.SYNCHRONOUS);
 
                 //inject our mocks so our UI layer will pick them up
-                customApp.injectMockObject(CounterWithLambdas.class, mockCounterWithLambdas);
-                customApp.injectMockObject(CounterWithProgress.class, mockCounterWithProgress);
+                OG.putMock(CounterWithLambdas.class, mockCounterWithLambdas);
+                OG.putMock(CounterWithProgress.class, mockCounterWithProgress);
             }
 
         };

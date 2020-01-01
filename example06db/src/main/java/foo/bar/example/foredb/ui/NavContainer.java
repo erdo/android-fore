@@ -1,12 +1,13 @@
 package foo.bar.example.foredb.ui;
 
 import android.content.Context;
-import com.google.android.material.navigation.NavigationView;
 import android.util.AttributeSet;
+
+import com.google.android.material.navigation.NavigationView;
 
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.ui.SyncableView;
-import foo.bar.example.foredb.App;
+import foo.bar.example.foredb.OG;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.bossmode.BossMode;
 
@@ -42,8 +43,8 @@ public class NavContainer extends NavigationView implements SyncableView{
     public void onFinishInflate() {
         super.onFinishInflate();
 
-        bossMode = App.get(BossMode.class);
-        logger = App.get(Logger.class);
+        bossMode = OG.get(BossMode.class);
+        logger = OG.get(Logger.class);
     }
 
 

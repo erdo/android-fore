@@ -3,7 +3,9 @@ package foo.bar.example.foredatabinding.ui.wallet;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import foo.bar.example.foredatabinding.CustomApp;
+import co.early.fore.core.WorkMode;
+import foo.bar.example.foredatabinding.App;
+import foo.bar.example.foredatabinding.OG;
 import foo.bar.example.foredatabinding.feature.wallet.Wallet;
 
 import static org.mockito.Mockito.when;
@@ -51,11 +53,11 @@ public class StateBuilder {
             protected void beforeActivityLaunched() {
 
                 //get hold of the application
-                CustomApp customApp = (CustomApp) InstrumentationRegistry.getTargetContext().getApplicationContext();
-                customApp.injectSynchronousObjectGraph();
+                App app = (App) InstrumentationRegistry.getTargetContext().getApplicationContext();
+                OG.setApplication(app, WorkMode.SYNCHRONOUS);
 
                 //inject our mocks so our UI layer will pick them up
-                customApp.injectMockObject(Wallet.class, mockWallet);
+                OG.putMock(Wallet.class, mockWallet);
             }
 
         };

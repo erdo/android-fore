@@ -149,22 +149,23 @@ public class ObservableImp implements Observable{
             observer.somethingChanged();
         } catch (Exception e) {
 
-            String errorMessage = "One of the observers has thrown an exception during its somethingChanged() callback\n";
-
-            if (Looper.myLooper() != Looper.getMainLooper()) {
-                errorMessage = errorMessage + "NOTE: this code is NOT currently on the UI thread,\n" +
-                        "if you are trying to update any part of the android UI,\n" +
-                        "this needs to happen on the UI thread.\n" +
-                        "You can achieve this by either a) calling notifyObservers() on the UI thread,\n" +
-                        "or by b) constructing this Observable with the ASYNCHRONOUS parameter which will\n" +
-                        "ensure that all notifications are run on the UI thread regardless.\n" +
-                        "\n" +
-                        "If you are updating list based data for an Android Adapter with these notifications,\n" +
-                        "then you need to use option a).\n";
-            }
-
             if (logger != null) {
+
+                String errorMessage = "One of the observers has thrown an exception during its somethingChanged() callback\n";
+
                 logger.e(TAG, errorMessage + e.getMessage());
+
+                if (Looper.myLooper() != Looper.getMainLooper()) {
+                    logger.e(TAG, "NOTE: this code is NOT currently on the UI thread,\n" +
+                            "if you are trying to update any part of the android UI,\n" +
+                            "this needs to happen on the UI thread.\n" +
+                            "You can achieve this by either a) calling notifyObservers() on the UI thread,\n" +
+                            "or by b) constructing this Observable with the ASYNCHRONOUS parameter which will\n" +
+                            "ensure that all notifications are run on the UI thread regardless.\n" +
+                            "\n" +
+                            "If you are updating list based data for an Android Adapter with these notifications,\n" +
+                            "then you need to use option a).\n");
+                }
             }
 
             throw e;

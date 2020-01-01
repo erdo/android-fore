@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.lifecycle.LifecycleSyncer;
 import co.early.fore.lifecycle.view.SyncRelativeLayout;
-import foo.bar.example.foredb.App;
+import foo.bar.example.foredb.OG;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.remote.RemoteWorker;
 import foo.bar.example.foredb.feature.todoitems.TodoListModel;
@@ -122,9 +122,9 @@ public class TodoListView extends SyncRelativeLayout {
     }
 
     private void getModelReferences(){
-        todoListModel = App.get(TodoListModel.class);
-        remoteWorker = App.get(RemoteWorker.class);
-        logger = App.get(Logger.class);
+        todoListModel = OG.get(TodoListModel.class);
+        remoteWorker = OG.get(RemoteWorker.class);
+        logger = OG.get(Logger.class);
         keyboard = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 

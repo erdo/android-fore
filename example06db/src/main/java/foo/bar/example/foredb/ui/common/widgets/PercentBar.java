@@ -40,8 +40,8 @@ public class PercentBar extends androidx.appcompat.widget.AppCompatImageView {
     public void onFinishInflate() {
         super.onFinishInflate();
 
-        backgroundColour = App.instance().getResources().getColor(R.color.progress_background);
-        progressColour = App.instance().getResources().getColor(R.color.progress_done);
+        backgroundColour = App.getInst().getResources().getColor(R.color.progress_background);
+        progressColour = App.getInst().getResources().getColor(R.color.progress_done);
 
         paint = new Paint();
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);

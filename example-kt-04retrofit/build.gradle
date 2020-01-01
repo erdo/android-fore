@@ -40,35 +40,27 @@ repositories {
 
 dependencies {
 
-    //implementation (group: 'co.early.fore', name: 'fore-core-kt', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    //implementation (group: 'co.early.fore', name: 'fore-retrofit-kt', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
-    implementation project(path: ':fore-core-kt')
+    //implementation "co.early.fore:fore-retrofit-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation project(path: ':fore-retrofit-kt')
 
+    implementation "com.squareup.retrofit2:converter-gson:${rootProject.ext.converter_gson}"
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
 
-    implementation('com.squareup.retrofit2:retrofit:2.1.0') {
-        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-        exclude module: 'okhttp'
-    }
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
-
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompat}"
-    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.androidXConstraint}"
-
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
-
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:${rootProject.ext.junit}"
     testImplementation "io.mockk:mockk:${rootProject.ext.mockk}"
 
-    androidTestImplementation "io.mockk:mockk-android:${rootProject.ext.mockk}"
-    androidTestImplementation "androidx.test.ext:junit:1.1.1"
-    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidXAnnotation}"
-    androidTestImplementation "androidx.core:core:${rootProject.ext.androidXCore}"
-    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
+    //These tests need to be run on at least Android P / 9 / 27 (https://github.com/mockk/mockk/issues/182)
+    androidTestImplementation("io.mockk:mockk-android:${rootProject.ext.mockk}") {
+        exclude module: 'objenesis'
+    }
+    androidTestImplementation "org.objenesis:objenesis:2.6" //work around for https://github.com/mockk/issues/281
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.ext.androidxjunit}"
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidxtest}"
+    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidxtest}"
+    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.annotation}"
+    androidTestImplementation "androidx.core:core:${rootProject.ext.android_core}"
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.espresso_core}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

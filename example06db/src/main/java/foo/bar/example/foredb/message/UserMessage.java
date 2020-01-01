@@ -40,7 +40,7 @@ public enum UserMessage implements Parcelable {
 
     //this should only be called when a UserMessage is actually displayed to a user, so not during a JUnit test
     private String getString(int resId) {
-        return App.instance().getResources().getString(resId);
+        return App.getInst().getResources().getString(resId);
     }
 
 

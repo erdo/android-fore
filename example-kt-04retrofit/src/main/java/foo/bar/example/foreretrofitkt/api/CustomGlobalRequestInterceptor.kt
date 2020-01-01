@@ -1,7 +1,7 @@
 package foo.bar.example.foreretrofitkt.api
 
 import co.early.fore.core.logging.Logger
-import co.early.fore.retrofit.BuildConfig
+import foo.bar.example.foreretrofitkt.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

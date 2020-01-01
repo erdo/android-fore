@@ -14,6 +14,7 @@ import java.util.HashMap
  *
  * Copyright © 2019 early.co. All rights reserved.
  */
+@Suppress("UNUSED_PARAMETER")
 object OG {
 
     @Volatile
@@ -71,6 +72,7 @@ object OG {
      * an instance where you need it
      *
      */
+    @Suppress("UNCHECKED_CAST")
     operator fun <T> get(model: Class<T>): T = dependencies[model] as T
 
     fun <T> putMock(clazz: Class<T>, instance: T) {
