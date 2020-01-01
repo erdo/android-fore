@@ -149,7 +149,7 @@ public class ObservableImp implements Observable{
             observer.somethingChanged();
         } catch (Exception e) {
 
-            String errorMessage = "One of the observers has thrown an exception during it's somethingChanged() callback\n";
+            String errorMessage = "One of the observers has thrown an exception during its somethingChanged() callback\n";
 
             if (Looper.myLooper() != Looper.getMainLooper()) {
                 errorMessage = errorMessage + "NOTE: this code is NOT currently on the UI thread,\n" +

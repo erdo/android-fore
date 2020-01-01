@@ -17,6 +17,7 @@ import static co.early.fore.core.Affirm.notNull;
 import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_CLIENT;
 import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_MISC;
 import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_NETWORK;
+import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_SECURITY_UNKNOWN;
 import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_SERVER;
 import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_SESSION_TIMED_OUT;
 
@@ -75,6 +76,8 @@ public class CustomGlobalErrorHandler implements ErrorHandler<UserMessage> {
 
                 if (t instanceof com.google.gson.stream.MalformedJsonException) {
                     message = ERROR_SERVER;
+                } else if (t instanceof java.net.UnknownServiceException) {
+                    message = ERROR_SECURITY_UNKNOWN;
                 } else {
                     message = ERROR_NETWORK;
                 }

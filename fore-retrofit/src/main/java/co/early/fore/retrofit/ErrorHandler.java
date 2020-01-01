@@ -6,9 +6,9 @@ import retrofit2.Response;
 
 /**
  *
- * @param <M> Error message class to be used throughout the app, such as an enum
+ * @param <F> Failure message class to be used throughout the app, such as an enum
  */
-public interface ErrorHandler<M> {
+public interface ErrorHandler<F> {
     /**
      *
      * @param t throwable that caused the error, may be null
@@ -18,5 +18,5 @@ public interface ErrorHandler<M> {
      * @param <CE> class type of the custom error, may be null
      * @return the parsed error from the server
      */
-    <CE extends MessageProvider<M>> M handleError(@Nullable Throwable t, @Nullable Response errorResponse, @Nullable Class<CE> customErrorClazz, @Nullable Request originalRequest);
+    <CE extends MessageProvider<F>> F handleError(@Nullable Throwable t, @Nullable Response errorResponse, @Nullable Class<CE> customErrorClazz, @Nullable Request originalRequest);
 }

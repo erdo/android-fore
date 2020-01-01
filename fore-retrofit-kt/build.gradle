@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.android.library'
 
@@ -50,11 +49,12 @@ dependencies {
 
     //compile (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
     //compile (group: 'co.early.fore', name: 'fore-retrofit', version: "${rootProject.ext.LIB_VERSION_NAME}", ext: 'aar')
-    implementation project(path: ':fore-core')
-    implementation project(path: ':fore-additions-kt')
+    implementation project(path: ':fore-core-kt')
     api project(path: ':fore-retrofit')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    api "io.arrow-kt:arrow-core:0.10.3"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
