@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.runner.AndroidJUnit4
+import arrow.core.Either
 import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.logging.SystemLogger
@@ -27,6 +28,7 @@ import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
 import foo.bar.example.foreretrofitkt.message.UserMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.CompletableDeferred
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
@@ -67,7 +69,7 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockFruitService: FruitService
 
-    private lateinit var cachedSuccess: SuccessWithPayload<ArrayList<FruitPojo>>
+    private lateinit var deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>
     private val countDownLatch = CountDownLatch(1)
 
     @Before
@@ -86,41 +88,41 @@ class FruitViewRotationTest {
         )
     }
 
-//    @Test
-//    @Throws(Exception::class)
-//    fun stateSurvivesRotation() {
-//
-//        logger.i(LOG_TAG, "stateSurvivesRotation()")
-//
-//        //arrange
-//        val activity = FruitViewRotationTestStateBuilder(this)
-//          //  .withDelayedCallProcessor()
-//            .createRule()
-//            .launchActivity(null)
-//
-//        checkUIBeforeClick(activity)
-//
-//        //act
-//        fruitFetcher.fetchFruitsAsync(mockSuccess, mockFailureWithPayload)
-//
-//        checkUIWhenFetching(activity)
-//
-//        swapOrientation(activity)
-//
-//        checkUIWhenFetching(activity)
-//
-//        callCachedSuccessCallback()
-//
-//        try {
-//            countDownLatch.await()
-//        } catch (e: InterruptedException) {
-//        }
-//
-//        checkUIOnceComplete(activity)
-//    }
+    @Test
+    @Throws(Exception::class)
+    fun stateSurvivesRotation() {
+
+        logger.i(LOG_TAG, "stateSurvivesRotation()")
+
+        //arrange
+        val activity = FruitViewRotationTestStateBuilder(this)
+            .withDelayedCallProcessor()
+            .createRule()
+            .launchActivity(null)
+
+        checkUIBeforeClick(activity)
+
+        //act
+        fruitFetcher.fetchFruitsAsync(mockSuccess, mockFailureWithPayload)
+
+        checkUIWhenFetching(activity)
+
+        swapOrientation(activity)
+
+        checkUIWhenFetching(activity)
+
+        completeDeferredResult()
+
+        try {
+            countDownLatch.await()
+        } catch (e: InterruptedException) {
+        }
+
+        checkUIOnceComplete(activity)
+    }
 
 
-    fun callCachedSuccessCallback() {
+    fun completeDeferredResult() {
 
         logger.i(LOG_TAG, "callSuccessOnCachedSuccessFailCallback()")
 
@@ -131,14 +133,14 @@ class FruitViewRotationTest {
         getInstrumentation().runOnMainSync {
             logger.i(LOG_TAG, "about to call success, id:" + Thread.currentThread().id)
 
-            cachedSuccess(fruitList)
+            deferredResult.complete(Either.right(fruitList))
             countDownLatch.countDown()
         }
     }
 
-    fun setCachedResult(success: SuccessWithPayload<ArrayList<FruitPojo>>) {
-        logger.i(LOG_TAG, "setCachedSuccessFailCallback()")
-        this.cachedSuccess = success
+    fun setDeferredResult(deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>) {
+        logger.i(LOG_TAG, "setDeferredResult()")
+        this.deferredResult = deferredResult
     }
 
 

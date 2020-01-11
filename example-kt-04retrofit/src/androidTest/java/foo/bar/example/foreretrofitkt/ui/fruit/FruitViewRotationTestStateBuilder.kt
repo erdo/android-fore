@@ -1,4 +1,3 @@
-
 package foo.bar.example.foreretrofitkt.ui.fruit
 
 import android.content.pm.ActivityInfo
@@ -9,33 +8,33 @@ import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.SuccessWithPayload
 import co.early.fore.retrofit.MessageProvider
-import foo.bar.example.foreretrofitkt.ProgressBarIdler
 import foo.bar.example.foreretrofitkt.App
 import foo.bar.example.foreretrofitkt.OG
+import foo.bar.example.foreretrofitkt.ProgressBarIdler
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
 import foo.bar.example.foreretrofitkt.message.UserMessage
-import foo.bar.example.foreretrofitkt.ui.fruit.FruitActivity
 import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.slot
 import kotlinx.coroutines.CompletableDeferred
 import retrofit2.Response
 
 
 class FruitViewRotationTestStateBuilder internal constructor(private val fruitViewRotationTest: FruitViewRotationTest) {
 
-//    internal fun withDelayedCallProcessor(): FruitViewRotationTestStateBuilder {
-//
-//        coEvery {
-//            fruitViewRotationTest.mockCallProcessor.processCallAsync(
-//                any() as suspend () -> Response<List<FruitPojo>>
-//            ) TODO how do we delay this mocked response until after the test device has been rotated?
-//        } returns CompletableDeferred(Either.right(listOf(fruitPojo)))
-//
-//
-//        return this
-//    }
+    internal fun withDelayedCallProcessor(): FruitViewRotationTestStateBuilder {
+
+        val deferred = CompletableDeferred<Either<UserMessage, List<FruitPojo>>>()
+
+        coEvery {
+            fruitViewRotationTest.mockCallProcessor.processCallAsync(
+                any() as suspend () -> Response<List<FruitPojo>>
+            )
+        } returns deferred
+
+        fruitViewRotationTest.setDeferredResult(deferred)
+
+        return this
+    }
 
     internal fun createRule(): ActivityTestRule<FruitActivity> {
 
