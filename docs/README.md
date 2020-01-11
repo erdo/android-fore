@@ -17,7 +17,7 @@
 
 **fore** helps you move code out of the view layer. Because once you do that on Android, magical things start to happen.
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
 If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to MVO. (That app is in Java, but the same principles apply for Kotlin apps).
 
@@ -26,21 +26,31 @@ Did we mention fore is tiny? the core package has **126 methods** in it, and **a
 Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
 
 ## Quick Start
-**Latest version: 1.0.3**  (pre-androidX use 0.11.1)
 
-
+for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation (group: 'co.early.fore', name: 'fore-core', version: '1.0.3', ext: 'aar')
-```
-optional:
-
-```
-implementation (group: 'co.early.fore', name: 'fore-adapters', version: '1.0.3', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-retrofit', version: '1.0.3', ext: 'aar')
-implementation (group: 'co.early.fore', name: 'fore-lifecycle', version: '1.0.3', ext: 'aar')
+implementation "co.early.fore:fore-kt:1.0.6"
 ```
 
-See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+the original **java**:
+```
+implementation "co.early.fore:fore-jv:1.0.6"
+```
+
+
+Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
+
+```
+implementation "co.early.fore:fore-core:1.0.6"
+implementation "co.early.fore:fore-core-kt:1.0.6"
+implementation "co.early.fore:fore-adapters:1.0.6"
+implementation "co.early.fore:fore-lifecycle:1.0.6"
+implementation "co.early.fore:fore-retrofit:1.0.6"
+implementation "co.early.fore:fore-retrofit-kt:1.0.6"
+```
+_(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
+
+If you want to check what versions of what dependencies each package pulls in, the definitive answer is found in the pom files hosted at [jcenter](https://jcenter.bintray.com/co/early/fore/). See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
 
 
 ## New to fore
