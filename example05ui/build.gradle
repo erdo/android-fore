@@ -52,18 +52,4 @@ dependencies {
     implementation "com.google.android.material:material:${rootProject.ext.material}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
 
-    testImplementation "junit:junit:${rootProject.ext.junit}"
-    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest_library}"
-
-    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
-    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker_mockito}"
-    androidTestImplementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
-    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidxtest}"
-    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidxtest}"
-    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.annotation}"
-    androidTestImplementation "androidx.core:core:${rootProject.ext.android_core}"
-    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.espresso_core}", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
 }

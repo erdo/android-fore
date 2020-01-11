@@ -21,7 +21,8 @@ bintray {
 	user = "${rootProject.ext.BINTRAY_USER}"
 	key = "${rootProject.ext.BINTRAY_API_KEY}"
 
-	configurations = ['archives']
+	publications = ['Production']
+
 	pkg {
 		repo = REPO
 		name = LIB_ARTIFACT_ID
@@ -32,6 +33,7 @@ bintray {
 		publish = true
 		publicDownloadNumbers = false
 	}
+
 }
 
 task androidSourcesJar(type: Jar) {
