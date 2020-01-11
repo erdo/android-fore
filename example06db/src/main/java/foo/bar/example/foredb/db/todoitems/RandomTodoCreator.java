@@ -12,7 +12,7 @@ public class RandomTodoCreator {
 
     private static final Random random = new Random();
     private static final String DASH = "-";
-    private static final String THE = App.instance().getString(R.string.todo_the);
+    private static final String THE = App.getInst().getString(R.string.todo_the);
     private static final String[] words = {"ask", "now", "use", "bus", "cool", "eye", "bean", "dial", "echo",
             "fan", "evil", "goat", "hat", "iron", "junk", "key", "lion", "medal", "oak",
             "pony", "raw", "sea", "tick"};

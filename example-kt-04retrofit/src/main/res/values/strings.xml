@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">kt 4 retrofit ex</string>
+
+    <!-- common error messages -->
+    <string name="msg_empty_message"></string>
+    <string name="msg_error_misc">Some kind of error, maybe check logs</string>
+    <string name="msg_error_network">Network error, check connection</string>
+    <string name="msg_error_server">Server down, try again soon</string>
+    <string name="msg_error_client">Client error</string>
+    <string name="msg_error_session_timeout">Unauthorized</string>
+    <string name="msg_error_busy">Busy</string>
+    <string name="msg_error_cancelled">Cancelled</string>
+
+    <!-- fruit related custom messages -->
+    <string name="msg_error_fruit_user_login_creds_incorrect">Your login details were incorrect, please check and try again</string>
+    <string name="msg_error_fruit_user_locked">Your fruit user account has been locked, please contact us</string>
+    <string name="msg_error_fruit_user_not_enabled">Your fruit user account has not been enabled yet, please contact us</string>
+
+    <string name="fruit_percent">(%s%% tasty)</string>
+
+</resources>

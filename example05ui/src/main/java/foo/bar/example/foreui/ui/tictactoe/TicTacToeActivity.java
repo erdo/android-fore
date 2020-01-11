@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-import foo.bar.example.foreui.CustomApp;
+import foo.bar.example.foreui.OG;
 import foo.bar.example.foreui.R;
 import foo.bar.example.foreui.feature.tictactoe.Board;
 
@@ -44,7 +44,7 @@ public class TicTacToeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.reset_board:
-                CustomApp.get(Board.class).restart();
+                OG.get(Board.class).restart();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

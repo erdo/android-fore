@@ -1,14 +1,13 @@
 package foo.bar.example.foredb.feature.todoitems;
 
-import androidx.room.InvalidationTracker;
-import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
-import androidx.recyclerview.widget.DiffUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.room.InvalidationTracker;
 import co.early.fore.adapters.DiffCalculator;
 import co.early.fore.adapters.DiffSpec;
 import co.early.fore.adapters.Diffable;
@@ -49,7 +48,7 @@ import static foo.bar.example.foredb.feature.todoitems.TodoListModel.RefreshStat
  */
 public class TodoListModel extends ObservableImp implements Diffable {
 
-    public static final String LOG_TAG = TodoListModel.class.getSimpleName();
+    private static final String LOG_TAG = TodoListModel.class.getSimpleName();
 
     private final TodoItemDatabase todoItemDatabase;
     private final Logger logger;
@@ -60,7 +59,7 @@ public class TodoListModel extends ObservableImp implements Diffable {
     private final Object dbMonitor = new Object();
 
     //we don't use a cursor here, so we do maintain an in memory list of the entire db
-    private List<TodoItem> todoItems = new ArrayList<>();
+    private final List<TodoItem> todoItems = new ArrayList<>();
 
     // after about 1000 rows, DiffResult begins to get way too slow, so we forget
     // about animating changes to the list after that
@@ -343,7 +342,6 @@ public class TodoListModel extends ObservableImp implements Diffable {
         logger.i(LOG_TAG, "addRandom():" + numberToAdd);
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        //noinspection unchecked
         new AsyncBuilder<Integer, Integer>(workMode)
                 .doInBackground(howMany -> {
                     synchronized (dbMonitor) {
@@ -363,7 +361,6 @@ public class TodoListModel extends ObservableImp implements Diffable {
         }
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        //noinspection unchecked
         new AsyncBuilder<Integer, Integer>(workMode)
                 .doInBackground(howMany -> {
                     synchronized (dbMonitor) {
@@ -383,7 +380,6 @@ public class TodoListModel extends ObservableImp implements Diffable {
         }
 
         //fire to the db and forget - the invalidation tracker will keep us informed of changes
-        //noinspection unchecked
         new AsyncBuilder<Integer, Integer>(workMode)
                 .doInBackground(howMany -> {
                     synchronized (dbMonitor) {

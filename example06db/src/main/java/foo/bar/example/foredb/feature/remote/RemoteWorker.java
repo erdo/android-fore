@@ -35,7 +35,7 @@ public class RemoteWorker extends ObservableImp{
     private final Logger logger;
 
     private int connections;
-    private static final String WEB = App.instance().getString(R.string.todo_web);
+    private static final String WEB = App.getInst().getString(R.string.todo_web);
 
     public RemoteWorker(TodoListModel todoListModel, TodoItemService service, CallProcessor<UserMessage> callProcessor,
                         SystemTimeWrapper systemTimeWrapper, Logger logger, WorkMode workMode) {

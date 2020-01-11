@@ -35,7 +35,7 @@ public class Board extends ObservableImp {
 
     private Handler tickHandler;
 
-    private enum GameState { IN_PROGRESS, FINISHED };
+    private enum GameState { IN_PROGRESS, FINISHED }
 
     public Board(WorkMode workMode, SystemTimeWrapper systemTimeWrapper) {
         super(WorkMode.SYNCHRONOUS);

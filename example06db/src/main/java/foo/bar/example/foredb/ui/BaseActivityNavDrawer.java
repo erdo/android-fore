@@ -1,22 +1,23 @@
 package foo.bar.example.foredb.ui;
 
 import android.os.Bundle;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.observer.Observer;
-import foo.bar.example.foredb.App;
+import foo.bar.example.foredb.OG;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.bossmode.BossMode;
 import foo.bar.example.foredb.feature.remote.RemoteWorker;
@@ -61,7 +62,7 @@ public abstract class BaseActivityNavDrawer extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.init();
+        OG.init();
 
         overridePendingTransition(0, 0);
 
@@ -69,9 +70,9 @@ public abstract class BaseActivityNavDrawer extends AppCompatActivity implements
 
         ButterKnife.bind(this, this);
 
-        bossMode = App.get(BossMode.class);
-        remoteWorker = App.get(RemoteWorker.class);
-        todoListModel = App.get(TodoListModel.class);
+        bossMode = OG.get(BossMode.class);
+        remoteWorker = OG.get(RemoteWorker.class);
+        todoListModel = OG.get(TodoListModel.class);
 
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);

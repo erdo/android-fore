@@ -3,10 +3,10 @@ package foo.bar.example.foreretrofit.ui.widgets;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-import foo.bar.example.foreretrofit.CustomApp;
+import androidx.appcompat.widget.AppCompatImageView;
+import foo.bar.example.foreretrofit.App;
 import foo.bar.example.foreretrofit.R;
 
 /**
@@ -44,8 +44,8 @@ public class AnimatedTastyRatingBar extends AppCompatImageView {
     public void onFinishInflate() {
         super.onFinishInflate();
 
-        backgroundColour = CustomApp.getInstance().getResources().getColor(R.color.colorPrimary);
-        progressColour = CustomApp.getInstance().getResources().getColor(R.color.colorPrimaryDark);
+        backgroundColour = App.getInst().getResources().getColor(R.color.colorPrimary);
+        progressColour = App.getInst().getResources().getColor(R.color.colorPrimaryDark);
 
         paint = new Paint();
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);

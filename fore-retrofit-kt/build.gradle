@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+apply plugin: 'com.android.library'
+
+ext {
+    LIB_ARTIFACT_ID="fore-retrofit-kt"
+    LIB_DESCRIPTION="android fore - retrofit coroutine helpers"
+}
+
+
+println "[${LIB_ARTIFACT_ID} build file]"
+
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionCode rootProject.ext.LIB_VERSION_CODE as Integer
+        versionName rootProject.ext.LIB_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-library-consumer.pro'
+        }
+    }
+}
+
+dependencies {
+
+    //api "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
+    //api "co.early.fore:fore-retrofit:${rootProject.ext.ForeLibVersion_ForExamples}"
+    api project(path: ':fore-core-kt')
+    api project(path: ':fore-retrofit')
+
+    api "io.arrow-kt:arrow-core-data:${rootProject.ext.arrow_core}"
+}
+
+
+apply from: '../bintraypublish.gradle'

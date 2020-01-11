@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.observer.Observer;
-import foo.bar.example.foredatabinding.CustomApp;
+import foo.bar.example.foredatabinding.OG;
 import foo.bar.example.foredatabinding.R;
 import foo.bar.example.foredatabinding.feature.wallet.Wallet;
 
@@ -68,7 +68,7 @@ public class WalletsView extends ScrollView {
     }
 
     private void getModelReferences(){
-        wallet = CustomApp.get(Wallet.class);
+        wallet = OG.get(Wallet.class);
     }
 
     private void setupButtonClickListeners() {

@@ -1,18 +1,19 @@
 package foo.bar.example.foredb.ui;
 
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.Observer;
 import co.early.fore.core.ui.SyncableView;
 import foo.bar.example.foredb.App;
+import foo.bar.example.foredb.OG;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.bossmode.BossMode;
 import foo.bar.example.foredb.feature.remote.RemoteWorker;
@@ -65,9 +66,9 @@ public class NavHeader extends RelativeLayout implements SyncableView{
         ButterKnife.bind(this, this);
 
         // inject models
-        bossMode = App.get(BossMode.class);
-        logger = App.get(Logger.class);
-        remoteWorker = App.get(RemoteWorker.class);
+        bossMode = OG.get(BossMode.class);
+        logger = OG.get(Logger.class);
+        remoteWorker = OG.get(RemoteWorker.class);
 
         //supporting coloured progress bar for some older devices
         busy.getIndeterminateDrawable().setColorFilter(
@@ -103,9 +104,9 @@ public class NavHeader extends RelativeLayout implements SyncableView{
         connectionsNumber.setText("" + remoteWorker.getConnections());
         bossmodeProgress.setVisibility(bossMode.isBossModeOn() ? VISIBLE : INVISIBLE);
         bossmodeProgress.setPercentDone(bossMode.getProgressPercent());
-        bossModeState.setText(App.instance().getString(bossMode.isBossModeOn() ?
+        bossModeState.setText(App.getInst().getString(bossMode.isBossModeOn() ?
                 R.string.common_on : R.string.common_off));
-        setBackground(App.instance().getResources().getDrawable(bossMode.isBossModeOn() ?
+        setBackground(App.getInst().getResources().getDrawable(bossMode.isBossModeOn() ?
                 R.drawable.nav_bg_bossmode_on : R.drawable.nav_bg_bossmode_off));
     }
 

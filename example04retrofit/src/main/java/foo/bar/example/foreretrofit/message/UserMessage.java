@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofit.message;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import foo.bar.example.foreretrofit.CustomApp;
+import foo.bar.example.foreretrofit.App;
 import foo.bar.example.foreretrofit.R;
 
 /**
@@ -16,6 +16,7 @@ public enum UserMessage implements Parcelable {
     ERROR_MISC(R.string.msg_error_misc),
     ERROR_NETWORK(R.string.msg_error_network),
     ERROR_SERVER(R.string.msg_error_server),
+    ERROR_SECURITY_UNKNOWN(R.string.msg_error_misc),
     ERROR_CLIENT(R.string.msg_error_client),
     ERROR_SESSION_TIMED_OUT(R.string.msg_error_session_timeout),
     ERROR_BUSY(R.string.msg_error_busy),
@@ -44,7 +45,7 @@ public enum UserMessage implements Parcelable {
 
     //this should only be called when a UserMessage is actually displayed to a user, so not during a JUnit test
     private String getString(int resId) {
-        return CustomApp.getInstance().getResources().getString(resId);
+        return App.getInst().getResources().getString(resId);
     }
 
 

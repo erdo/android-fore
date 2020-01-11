@@ -1,14 +1,16 @@
 package foo.bar.example.foreretrofit.ui.fruit;
 
 import android.content.pm.ActivityInfo;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 
 import org.mockito.ArgumentCaptor;
 
+import androidx.test.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+import co.early.fore.core.WorkMode;
 import co.early.fore.core.callbacks.SuccessCallbackWithPayload;
 import co.early.fore.core.logging.SystemLogger;
-import foo.bar.example.foreretrofit.CustomApp;
+import foo.bar.example.foreretrofit.App;
+import foo.bar.example.foreretrofit.OG;
 import foo.bar.example.foreretrofit.ProgressBarIdler;
 import foo.bar.example.foreretrofit.feature.fruit.FruitFetcher;
 
@@ -53,11 +55,12 @@ public class FruitViewRotationTestStateBuilder {
 
                 new SystemLogger().i("FruitViewRotationTestStateBuilder", "beforeActivityLaunched()");
 
-                CustomApp customApp = (CustomApp) InstrumentationRegistry.getTargetContext().getApplicationContext();
-                customApp.injectSynchronousObjectGraph();
+                App app = (App) InstrumentationRegistry.getTargetContext().getApplicationContext();
+                OG.setApplication(app, WorkMode.SYNCHRONOUS);
                 //inject our test model
-                customApp.injectMockObject(FruitFetcher.class, fruitViewRotationTest.fruitFetcher);
-                customApp.registerActivityLifecycleCallbacks(new ProgressBarIdler());
+                OG.putMock(FruitFetcher.class, fruitViewRotationTest.fruitFetcher);
+
+                app.registerActivityLifecycleCallbacks(new ProgressBarIdler());
 
             }
 

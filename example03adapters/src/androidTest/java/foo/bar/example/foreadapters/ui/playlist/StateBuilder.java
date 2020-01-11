@@ -2,10 +2,11 @@ package foo.bar.example.foreadapters.ui.playlist;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-
 import co.early.fore.adapters.UpdateSpec;
+import co.early.fore.core.WorkMode;
 import co.early.fore.core.time.SystemTimeWrapper;
-import foo.bar.example.foreadapters.CustomApp;
+import foo.bar.example.foreadapters.App;
+import foo.bar.example.foreadapters.OG;
 import foo.bar.example.foreadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.foreadapters.feature.playlist.PlaylistSimpleModel;
 import foo.bar.example.foreadapters.feature.playlist.Track;
@@ -54,12 +55,12 @@ public class StateBuilder {
             protected void beforeActivityLaunched() {
 
                 //get hold of the application
-                CustomApp customApp = (CustomApp) InstrumentationRegistry.getTargetContext().getApplicationContext();
-                customApp.injectSynchronousObjectGraph();
+                App app = (App) InstrumentationRegistry.getTargetContext().getApplicationContext();
+                OG.setApplication(app, WorkMode.SYNCHRONOUS);
 
                 //inject our mocks so our UI layer will pick them up
-                customApp.injectMockObject(PlaylistAdvancedModel.class, mockPlaylistAdvancedModel);
-                customApp.injectMockObject(PlaylistSimpleModel.class, mockPlaylistSimpleModel);
+                OG.putMock(PlaylistAdvancedModel.class, mockPlaylistAdvancedModel);
+                OG.putMock(PlaylistSimpleModel.class, mockPlaylistSimpleModel);
             }
 
         };

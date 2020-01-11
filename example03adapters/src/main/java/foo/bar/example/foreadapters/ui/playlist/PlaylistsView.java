@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.observer.Observer;
-import foo.bar.example.foreadapters.CustomApp;
+import foo.bar.example.foreadapters.OG;
 import foo.bar.example.foreadapters.R;
 import foo.bar.example.foreadapters.feature.playlist.PlaylistAdvancedModel;
 import foo.bar.example.foreadapters.feature.playlist.PlaylistSimpleModel;
@@ -110,8 +110,8 @@ public class PlaylistsView extends LinearLayout {
 
 
     private void getModelReferences(){
-        playlistAdvancedModel = CustomApp.get(PlaylistAdvancedModel.class);
-        playlistSimpleModel = CustomApp.get(PlaylistSimpleModel.class);
+        playlistAdvancedModel = OG.get(PlaylistAdvancedModel.class);
+        playlistSimpleModel = OG.get(PlaylistSimpleModel.class);
     }
 
     private void setupButtonClickListeners() {

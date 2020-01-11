@@ -1,0 +1,84 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+ext {
+    LIB_ARTIFACT_ID="fore-kt"
+    LIB_DESCRIPTION="android fore - everything in one aar for kotlin development"
+}
+
+
+println "[${LIB_ARTIFACT_ID} build file]"
+
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionCode rootProject.ext.LIB_VERSION_CODE as Integer
+        versionName rootProject.ext.LIB_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-library-consumer.pro'
+        }
+    }
+
+
+    sourceSets {
+        main {
+            java {
+                srcDir '../fore-core/src/main/java'
+                srcDir '../fore-core-kt/src/main/java'
+                srcDir '../fore-adapters/src/main/java'
+                srcDir '../fore-lifecycle/src/main/java'
+                srcDir '../fore-retrofit/src/main/java'
+                srcDir '../fore-retrofit-kt/src/main/java'
+
+                exclude 'co/early/fore/core/callbacks/**'
+                exclude 'co/early/fore/core/threading/**'
+                exclude 'co/early/fore/core/observer/ObservableImp.java'
+                exclude 'co/early/fore/retrofit/CallProcessor.java'
+            }
+        }
+    }
+}
+
+
+
+dependencies {
+    api "androidx.annotation:annotation:${rootProject.ext.annotation}"
+    api "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
+    api "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
+    api "io.arrow-kt:arrow-core:${rootProject.ext.arrow_core}"
+    api "androidx.core:core-ktx:${rootProject.ext.core_ktx}"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.ext.kotlinx_coroutines_core}"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:${rootProject.ext.kotlinx_coroutines_android}"
+
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:${rootProject.ext.coordinatorlayout}"
+    implementation "androidx.cardview:cardview:${rootProject.ext.cardview}"
+}
+
+apply from: '../bintraypublish.gradle'

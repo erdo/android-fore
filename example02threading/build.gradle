@@ -41,34 +41,26 @@ repositories {
 
 dependencies {
 
-    //implementation (group: 'co.early.fore', name: 'fore-core', version: "${rootProject.ext.exampleForeLibVersion}", ext: 'aar')
+    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
+
+    //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation project(path: ':fore-core')
 
     implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
-    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:${rootProject.ext.junit}"
+    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
+    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest_library}"
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompat}"
-    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.androidXConstraint}"
-
-
-    // Unit testing dependencies
-    testImplementation 'junit:junit:4.12'
-    // Set this dependency if you want to use Mockito
-    testImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
-    // Set this dependency if you want to use Hamcrest matching
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.ext.hamcrest}"
-
-    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito}"
-    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker}"
-
-    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidXTest}"
-    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.androidXAnnotation}"
-    androidTestImplementation "androidx.core:core:${rootProject.ext.androidXCore}"
-    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.androidXEspresso}", {
+    androidTestImplementation "org.mockito:mockito-core:${rootProject.ext.mockito_core}"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:${rootProject.ext.dexmaker_mockito}"
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.androidxtest}"
+    androidTestImplementation "androidx.test:rules:${rootProject.ext.androidxtest}"
+    androidTestImplementation "androidx.annotation:annotation:${rootProject.ext.annotation}"
+    androidTestImplementation "androidx.core:core:${rootProject.ext.android_core}"
+    androidTestImplementation("androidx.test.espresso:espresso-core:${rootProject.ext.espresso_core}", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
 }

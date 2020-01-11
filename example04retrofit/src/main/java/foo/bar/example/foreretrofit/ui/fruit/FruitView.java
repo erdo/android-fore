@@ -16,7 +16,7 @@ import co.early.fore.core.callbacks.FailureCallbackWithPayload;
 import co.early.fore.core.callbacks.SuccessCallback;
 import co.early.fore.core.observer.Observer;
 import co.early.fore.core.ui.SyncableView;
-import foo.bar.example.foreretrofit.CustomApp;
+import foo.bar.example.foreretrofit.OG;
 import foo.bar.example.foreretrofit.R;
 import foo.bar.example.foreretrofit.feature.fruit.FruitFetcher;
 import foo.bar.example.foreretrofit.message.UserMessage;
@@ -113,7 +113,7 @@ public class FruitView extends ScrollView implements SyncableView{
     }
 
     private void getModelReferences(){
-        fruitFetcher = CustomApp.get(FruitFetcher.class);
+        fruitFetcher = OG.get(FruitFetcher.class);
     }
 
     private void setupButtonClickListeners() {

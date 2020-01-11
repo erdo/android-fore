@@ -35,7 +35,7 @@ public class BossMode extends ObservableImp{
 
     private static final int STEPS = 100;
     private static final Random RANDOM = new Random();
-    private static final String BOSS = App.instance().getString(R.string.todo_boss);
+    private static final String BOSS = App.getInst().getString(R.string.todo_boss);
 
 
     public BossMode(TodoListModel todoListModel, SystemTimeWrapper systemTimeWrapper, WorkMode workMode, Logger logger) {
