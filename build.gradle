@@ -88,8 +88,8 @@ ext {
     kotlinx_coroutines_android = "1.2.1"
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    LIB_VERSION_NAME = "1.0.6"
-    LIB_VERSION_CODE = 37
+    LIB_VERSION_NAME = "1.1.0"
+    LIB_VERSION_CODE = 38
 
     REPO = "fore"
     LIB_GROUP = "co.early.fore"
