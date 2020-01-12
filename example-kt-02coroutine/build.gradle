@@ -43,8 +43,8 @@ repositories {
 
 dependencies {
 
-    //implementation "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
-    implementation project(path: ':fore-core-kt')
+    implementation "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
+    //implementation project(path: ':fore-core-kt')
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
