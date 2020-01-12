@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.0.3](https://img.shields.io/badge/jcenter-1.0.3-green.svg){: .float-left}
+![jcenter-1.1.0](https://img.shields.io/badge/jcenter-1.1.0-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -29,24 +29,24 @@ Because the view layer is so sparse when using **fore**, the apps are highly sca
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.0.6"
+implementation "co.early.fore:fore-kt:1.1.0"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.0.6"
+implementation "co.early.fore:fore-jv:1.1.0"
 ```
 
 
 Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
 
 ```
-implementation "co.early.fore:fore-core:1.0.6"
-implementation "co.early.fore:fore-core-kt:1.0.6"
-implementation "co.early.fore:fore-adapters:1.0.6"
-implementation "co.early.fore:fore-lifecycle:1.0.6"
-implementation "co.early.fore:fore-retrofit:1.0.6"
-implementation "co.early.fore:fore-retrofit-kt:1.0.6"
+implementation "co.early.fore:fore-core:1.1.0"
+implementation "co.early.fore:fore-core-kt:1.1.0"
+implementation "co.early.fore:fore-adapters:1.1.0"
+implementation "co.early.fore:fore-lifecycle:1.1.0"
+implementation "co.early.fore:fore-retrofit:1.1.0"
+implementation "co.early.fore:fore-retrofit-kt:1.1.0"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 
@@ -121,7 +121,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 <div class="shoom" id="fore-1-reactive-ui-example"/>
 ### **fore 1** Reactive UI Example
 
-[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code](https://github.com/erdo/android-fore/tree/master/example01databinding)
+[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example01databinding)
 
 ![fore reactive UI sample app](https://j.gifs.com/MQ33GB.gif)
 
@@ -133,18 +133,18 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 <div class="shoom" id="fore-2-async-example"/>
 ### **fore 2** Asynchronous Code Example
 
-[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.forethreading) \| [source code](https://github.com/erdo/android-fore/tree/master/example02threading)
+[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.forethreading) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine)
 
 ![fore threading sample app](https://j.gifs.com/32LLNn.gif)
 
-This one demonstrates asynchronous programming, and importantly how to test it. It uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
+This one demonstrates asynchronous programming, and importantly how to test it. The **java** version uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)), the **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that make the coroutines unit testable). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
-This app has a counter that you can increase by pressing a button (but it takes 20 seconds to do the increasing - during which time you can rotate the device, background the app etc). There are two methods demonstrated, one which allows you to publish progress, and one which lets you take advantage of lambda expressions.
+This app has a counter that you can increase by pressing a button (but it takes time to do the increasing - so you can rotate the device, background the app etc and see the effect). There are two methods demonstrated: one which uses lambda expressions (for java), and one which publishes progress.
 
 <div class="shoom" id="fore-3-adapter-example"/>
 ### **fore 3** Adapter Example
 
-[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreadapters) \| [source code](https://github.com/erdo/android-fore/tree/master/example03adapters)
+[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreadapters) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters)
 
 ![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
 
@@ -161,22 +161,22 @@ As usual it's a complete and tested app but contains just the minimum required t
 <div class="shoom" id="fore-4-retrofit-example"/>
 ### **fore 4** Retrofit Example
 
-[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreretrofit) \| [source code](https://github.com/erdo/android-fore/tree/master/example04retrofit)
+[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreretrofit) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit)
 
 ![fore retrofit sample app](https://j.gifs.com/qYzz3D.gif)
 
-Clicking the buttons in this app will perform a network request to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The first button gets a successful response, the last two get failed responses which are handled in two different ways. The first is a simple error, based on the HTTP code the app receives back from the server. The other is a more specific error based on parsing the body of the error response for an error object. That's managed by the [CallProcessor](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor) which is the main innovation in the fore-retrofit library.
+Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallProcessor](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor) class which is the main innovation in the fore-retrofit library, the kotlin implementation of CallProcessor is implemented with coroutines and has an API better suited to kotlin and functional programming.
 
 As you're using the app, please notice:
 
-- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a 3 second delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used **fore** to separate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent).
+- **how you can rotate the device with no loss of state or memory leaks**. I've used Mocky to add a delay to the network request so that you can rotate the app mid-request to clearly see how it behaves (because we have used **fore** to separate the view from everything else, rotating the app makes absolutely no difference to what the app is doing, and the network busy spinners remain totally consistent). Putting the device in airplane mode also gives you consistent behaviour when you attempt to make a network request.
 
 As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details when using **fore**.
 
 <div class="shoom" id="fore-5-ui-example"/>
 ### **fore 5** UI Helpers Example (Tic Tac Toe)
 
-[video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code](https://github.com/erdo/android-fore/tree/master/example05ui)
+[video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example05ui)
 
 ![fore tic-tac-toe sample app](https://j.gifs.com/zKMM35.gif)
 
@@ -192,7 +192,7 @@ No automated tests for this app (but you should be getting the idea by now - sam
 <div class="shoom" id="fore-6-db-example-room"/>
 ### **fore 6** DB Example (Room db driven to-do list)
 
-[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code](https://github.com/erdo/android-fore/tree/master/example06db)
+[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example06db)
 
 ![fore room db sample app](https://j.gifs.com/Xo88J8.gif)
 
@@ -214,16 +214,17 @@ All the database changes are done off the UI thread, RecyclerView animations usi
 There is only one test class included with this app which demonstrates how to test Models which are driven by a Room DB (using CountdownLatches etc). For other test examples, please see sample apps 1-4
 
 
+### Tutorials
+
+- There is a short series of **dev.to** tutorials which include more sample apps covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
+
+
 ### Other Full App Examples
 
 - There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-02-kotlin)**
 
 - The **Password123** sample app uses **fore** for its reactive UI and the **[kotlin source](https://github.com/erdo/password123)** is available.
 
-
-### Tutorials
-
-- There is a short series of **dev.to** tutorials covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
 
 
 ## Contributing
@@ -233,7 +234,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2017-2019 early.co
+    Copyright 2017-2020 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

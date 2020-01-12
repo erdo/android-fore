@@ -3,6 +3,10 @@
 
 Since we've been publishing on jcenter the core functionality has remained the same, most version number bumps have been due to adding new classes to the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - but that means some version bumps have no effect for a particular package).
 
+## removing deprecated sync views
+
+These were removed for **1.1.0** (in the unlikely event that you were using them, 1.0.6 is identical to 1.1.0 but still has those syncviews).
+
 ## kotlin support
 
 Of course, being java you can use any version of **fore** with kotlin, but **1.0.6** introduces explicit kotlin support with the packages **fore-core-kt** and **fore-retrofit-kt** (they're based on coroutines and fore-retrofit-kt's CallProcessor has a more functional API that uses suspend functions).
