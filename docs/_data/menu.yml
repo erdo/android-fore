@@ -44,7 +44,7 @@
       url: "#retrofit-and-the-callprocessor"
     - text: Adapters and notifyDataSetChangedAuto()
       url: "#adapters-notifydatasetchangedauto"
-    - text: AsyncTask but with Lambdas
+    - text: Async and Coroutines
       url: "#asynctasks-with-lambdas"
     - text: SyncTrigger
       url: "#synctrigger"
