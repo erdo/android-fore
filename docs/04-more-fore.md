@@ -1,10 +1,11 @@
 
 # Retrofit and the CallProcessor
 
-The [CallProcessor](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](/android-fore/#fore-4-retrofit-example). The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
+The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt), [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](https://erdo.github.io/android-fore/#fore-4-retrofit-example).
 
-When taking advantage of Java lambda expressions or in Kotlin, the code can become very tight indeed:
+The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
+The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/arrow-kt/arrow/blob/master/modules/core/arrow-core-data/src/main/kotlin/arrow/core/Either.kt) (from [arrow-kt](https://arrow-kt.io/) - we didn't want to add yet another implementation of Either).
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -20,10 +21,17 @@ callProcessor.processCall(service.getFruits("3s"), workMode,
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-callProcessor.processCall(service.getFruits("3s"), workMode,
-    { successResponse -> handleSuccess(successResponse) },
-    { failureMessage -> handleFailure(failureMessage) }
-)
+launchMain(workMode) {
+
+    val result = callProcessor.processCallAwait {
+        service.getFruits("3s")
+    }
+
+    when (result) {
+        is Left -> handleFailure(failureWithPayload, result.a)
+        is Right -> handleSuccess(success, result.b)
+    }
+}
  </code></pre>
 
 
@@ -38,8 +46,8 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 
 Another advantage of using the CallProcessor is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
 
-- [one](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) is to simply mock the callProcessor so that it returns successes or failures to the model
-- [the other](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
+- [one](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
+- [the other](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
 As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
@@ -150,7 +158,7 @@ The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asa
 
 # AsyncTasks with Lambdas
 
-
+(_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -300,12 +308,15 @@ AsyncBuilder<String, Int>(workMode)
  </code></pre>
 
 
-
 ## Testing Asynchronous Code
 For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
 A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
 
+# Kotlin Coroutines
+With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
+
+As you'll notice in the source code [comments](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) for the extension functions, there is a good reason we use the same workMode parameter here to test this asynchronous code, as we do with all the fore components.
 
 # SyncTrigger
 

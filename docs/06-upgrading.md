@@ -3,6 +3,16 @@
 
 Since we've been publishing on jcenter the core functionality has remained the same, most version number bumps have been due to adding new classes to the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - but that means some version bumps have no effect for a particular package).
 
+## removing deprecated sync views
+
+These were removed for **1.1.0** (in the unlikely event that you were using them, 1.0.6 is identical to 1.1.0 but still has those syncviews).
+
+## kotlin support
+
+Of course, being java you can use any version of **fore** with kotlin, but **1.0.6** introduces explicit kotlin support with the packages **fore-core-kt** and **fore-retrofit-kt** (they're based on coroutines and fore-retrofit-kt's CallProcessor has a more functional API that uses suspend functions).
+
+As a convenience, **1.0.6** also introduces the packages **fore-jv** and **fore-kt**, these contain all the classes from fore (suitable for java or kotlin as appropriate) in one aar file so you only have to add one line of dependency in your build file. Some classes are removed, for instance fore-kt does not contain the java based CallProcessor, only the kotlin one.
+
 ## android studio 3.5+
 
 It used to be convenient to put the .idea/modules.xml file into source control, but now it messes things up, so with commit a1766e17f80fdc1b43e4176cfc6d60094322c83d .idea/modules.xml is removed and the whole of the .idea folder is put in .gitignore.
