@@ -1,5 +1,7 @@
 /**
  *
+ * ./gradlew check
+ *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
  * ./gradlew bintrayUpload
