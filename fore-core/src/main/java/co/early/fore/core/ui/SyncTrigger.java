@@ -28,14 +28,7 @@ public class SyncTrigger {
     private boolean overThreshold = false;
     private boolean firstCheck = true;
 
-    // There is a reason we don't support ResetRule.NEVER here. SyncTriggers usually live in Views,
-    // and are destroyed and recreated on device rotation along with the View. We have no way of
-    // supporting ResetRule.NEVER across different SyncTrigger instances without getting involved
-    // in persistence or Activity methods.
-    //
-    // If the caller needs a trigger that once fired is never reset despite being rotated, this has
-    // to be done in the implementation of the checkThreshold() method - probably with reference to
-    // a long living model that knows if the trigger has been fired once already.
+
     public enum ResetRule{
         /*
             Trigger is reset after each successful check
@@ -45,7 +38,15 @@ public class SyncTrigger {
             Trigger is only reset after a successful check, once a subsequent check fails.
             This is the default.
          */
-        ONLY_AFTER_REVERSION
+        ONLY_AFTER_REVERSION,
+        /*
+            Trigger is never reset i.e. it fires once only _per instance_. NB: SyncTriggers usually
+            live in Views and are destroyed and recreated on device rotation along with the View,
+            which would give you a new instance - although checkLazy() might be enough to prevent
+            issues here. You might instead prefer to keep the SyncTrigger in a ViewModel to reduce
+            the likely-hood of getting a new instance of the SyncTrigger.
+         */
+        NEVER
     }
 
 
@@ -114,20 +115,30 @@ public class SyncTrigger {
 
         boolean reached = checkTriggerThreshold.checkThreshold();
 
-        if (overThreshold != reached) { //change of state
+        if (!overThreshold && reached) {
 
-            if(!(swallowTriggerForFirstCheck && firstCheck) && reached) {//not ignoring the first check AND threshold has been reached
+            overThreshold = true;
+
+            if(!(swallowTriggerForFirstCheck && firstCheck)) {//not ignoring the first check AND threshold has been reached
                 fireTrigger();
             }
-
-            overThreshold = reached;
-        }
-
-        if (resetRule == ResetRule.IMMEDIATELY){
-            overThreshold = false;
         }
 
         firstCheck = false;
+
+        switch (resetRule){
+            case IMMEDIATELY:
+                overThreshold = false;
+                break;
+            case ONLY_AFTER_REVERSION:
+                if (!reached){
+                    overThreshold = false;
+                }
+                break;
+            case NEVER:
+                break;
+        }
+
     }
 
     private void fireTrigger(){
