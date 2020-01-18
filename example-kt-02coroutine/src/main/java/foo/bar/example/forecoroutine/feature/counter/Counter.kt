@@ -8,7 +8,6 @@ import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.coroutine.withContextDefault
 import co.early.fore.kt.core.observer.ObservableImp
 import kotlinx.coroutines.delay
-import java.util.logging.Logger
 
 /**
  * Copyright © 2019 early.co. All rights reserved.
