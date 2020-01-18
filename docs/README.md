@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.1.1](https://img.shields.io/badge/jcenter-1.1.0-green.svg){: .float-left}
+![jcenter-1.1.1](https://img.shields.io/badge/jcenter-1.1.1-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -40,10 +40,12 @@ Those two packages above won't co-exist in the same app, so if you have an app t
 
 ```
 implementation "co.early.fore:fore-core:1.1.1"
-implementation "co.early.fore:fore-core-kt:1.1.1"
 implementation "co.early.fore:fore-adapters:1.1.1"
 implementation "co.early.fore:fore-lifecycle:1.1.1"
 implementation "co.early.fore:fore-retrofit:1.1.1"
+
+//backed by coroutines rather than threads, and slightly more kotliny
+implementation "co.early.fore:fore-core-kt:1.1.1"
 implementation "co.early.fore:fore-retrofit-kt:1.1.1"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
