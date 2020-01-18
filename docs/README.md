@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.1.0](https://img.shields.io/badge/jcenter-1.1.0-green.svg){: .float-left}
+![jcenter-1.1.1](https://img.shields.io/badge/jcenter-1.1.0-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -15,38 +15,36 @@
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-**fore** helps you move code out of the view layer. Because once you do that on Android, magical things start to happen.
+**fore** helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
-
-If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to MVO. (That app is in Java, but the same principles apply for Kotlin apps).
+If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom). (That app is in Java, but the same principles apply for [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) apps).
 
 Did we mention fore is tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
 
-Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works for small personal apps, right up to large complex commercial projects with 100K+ lines of code.
+Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
 
 ## Quick Start
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.1.0"
+implementation "co.early.fore:fore-kt:1.1.1"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.1.0"
+implementation "co.early.fore:fore-jv:1.1.1"
 ```
 
 
 Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
 
 ```
-implementation "co.early.fore:fore-core:1.1.0"
-implementation "co.early.fore:fore-core-kt:1.1.0"
-implementation "co.early.fore:fore-adapters:1.1.0"
-implementation "co.early.fore:fore-lifecycle:1.1.0"
-implementation "co.early.fore:fore-retrofit:1.1.0"
-implementation "co.early.fore:fore-retrofit-kt:1.1.0"
+implementation "co.early.fore:fore-core:1.1.1"
+implementation "co.early.fore:fore-core-kt:1.1.1"
+implementation "co.early.fore:fore-adapters:1.1.1"
+implementation "co.early.fore:fore-lifecycle:1.1.1"
+implementation "co.early.fore:fore-retrofit:1.1.1"
+implementation "co.early.fore:fore-retrofit-kt:1.1.1"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 
@@ -78,6 +76,8 @@ While referring to the code of the [sample apps](#sample-apps), dip in to the fo
 ![fore-lifecycle methods](https://img.shields.io/badge/fore.lifecycle-59-orange.svg){: .float-left}
 
 <br/><br/>
+
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
 
