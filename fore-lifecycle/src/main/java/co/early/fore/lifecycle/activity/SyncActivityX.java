@@ -48,8 +48,8 @@ public abstract class SyncActivityX extends AppCompatActivity implements Syncabl
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         if (lifecycleSyncer == null){
             throw new RuntimeException("You must call super.onCreate() from within your onCreate() method");
         }
@@ -58,8 +58,8 @@ public abstract class SyncActivityX extends AppCompatActivity implements Syncabl
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         // remove our observer from any models we are observing
         lifecycleSyncer.removeObservers();
     }

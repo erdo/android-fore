@@ -50,8 +50,8 @@ public abstract class SyncFragment extends Fragment implements SyncableView{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         if (lifecycleSyncer == null){
             throw new RuntimeException("You must call super.onCreateView() from within your onCreateView() method");
         }
@@ -60,8 +60,8 @@ public abstract class SyncFragment extends Fragment implements SyncableView{
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         // remove our observer from any models we are observing
         lifecycleSyncer.removeObservers();
     }
