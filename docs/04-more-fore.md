@@ -1,7 +1,7 @@
 
 # Retrofit and the CallProcessor
 
-The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt), [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](https://erdo.github.io/android-fore/#fore-4-retrofit-example).
+The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/CallProcessor.kt), [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](https://erdo.github.io/android-fore/#fore-4-retrofit-example).
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
