@@ -32,10 +32,10 @@ def AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.AWS_SECRET_KEY
 
 allprojects {
     repositories {
-        mavenLocal()
         jcenter()
         mavenCentral()
         google()
+        mavenLocal()
 
 //  used to test rc builds - you won't have my key, but you can do something similar with your own amazon bucket
 //        maven {
@@ -74,7 +74,7 @@ ext {
     espresso = "3.0.2"
     hamcrest_library = "1.3"
     dexmaker_mockito = "2.19.1"
-    robolectric = "3.3.2"
+    robolectric = "4.3"
     gson = "2.8.5"
     constraintlayout = "1.1.3"
     coordinatorlayout = "1.1.0"
