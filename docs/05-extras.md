@@ -6,6 +6,19 @@ There are a couple of presentations hosted on surge that I occasionally use, the
 They were written using [spectacle](https://github.com/FormidableLabs/spectacle) which is a pretty good ReactJS presentation library.
 
 
+### State versus Events at the UI layer
+
+![android basics presentation](img/pres_screenshot_3.png)
+
+Compares the two main strategies used when updating a view: using events (MVP, MVC) and using state (MVO, MVI, MvRx).
+
+<strong>Presenter perspective including notes is [here](http://fore-ui.surge.sh/#/?presenter&timer)</strong>
+
+<strong>Regular slides without notes is [here](http://fore-ui.surge.sh)</strong>
+
+(if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
+
+
 ### Android architecture basics
 
 ![android basics presentation](img/pres_screenshot_1.png)
@@ -30,17 +43,6 @@ This one takes you though all the main points of **fore** together with a lot of
 <strong>Regular slides without notes is [here](http://android-fore.surge.sh)</strong>
 
 (Again, if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
-
-
-# Coding Exercise
-
-In my day job I sometimes take new developers through the basics of **MVO** style architectures and I've found the most effective way of doing this (aside from pointing them in the direction of these docs) is to get them to do a basic two page android app. I give them as much time as they need as the focus should be on learning and understanding rather than producing code. They typically take between a few days and a week, although once they know what they are doing they could easily complete the whole thing in an hour or so.
-
-What I find truly fascinating is that the feedback I give them once they have finished, tends to be around 75% identical. I could almost copy and paste my feedback from the last developer and just change the lines of code that I am referring to.
-
-As the mistakes made are all so similar, I plan to add an equivalent exercise here together with the standard feedback, so that the reader can use it themselves, or with their team.
-
-Stay tuned....
 
 
 # State versus Events
