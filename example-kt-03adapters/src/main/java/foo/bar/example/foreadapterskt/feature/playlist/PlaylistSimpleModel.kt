@@ -2,8 +2,8 @@ package foo.bar.example.foreadapterskt.feature.playlist
 
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.Observable
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 import foo.bar.example.foreadapterskt.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource
 import java.util.ArrayList
@@ -23,13 +23,13 @@ class PlaylistSimpleModel(
 
 
     fun addNewTrack() {
-        logger.i(LOG_TAG, "addNewTrack()")
+        logger.i("addNewTrack()")
         trackList.add(Track(generateRandomColourResource()))
         notifyObservers()
     }
 
     fun removeTrack(index: Int) {
-        logger.i(LOG_TAG, "removeTrack() $index")
+        logger.i("removeTrack() $index")
         checkIndex(index)
         trackList.removeAt(index)
         notifyObservers()

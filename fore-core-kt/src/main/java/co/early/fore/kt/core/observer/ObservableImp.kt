@@ -49,7 +49,8 @@ class ObservableImp(
 
     /**
      * Take the observer and add it to the list of registered observers that
-     * want to be notified when the model data changes.
+     * want to be notified when the model data changes. Usually you will do this
+     * from android lifecycle methods like onStart() (and remove the observer in onStop())
      */
     @Synchronized
     override fun addObserver(observer: Observer) {
@@ -60,7 +61,7 @@ class ObservableImp(
             logger?.w(
                 LOG_TAG, "There are now:" + observerList.size + " Observers added to this Observable, that's quite a lot.\n" +
                         "It's sometimes indicative of code which is not removing observers when it should\n" +
-                        "(forgetting to remove observers in an onPause() or onDetachedFromWindow() method for example)\n" +
+                        "(forgetting to remove observers in an onStop() or onDetachedFromWindow() method for example)\n" +
                         "Failing to remove observers when you no longer need them will cause memory leaks"
             )
         }
@@ -68,14 +69,25 @@ class ObservableImp(
 
     /**
      * Remove the observer from the list of registered observers, you should do this
-     * from android lifecycle methods like onStop() to prevent memory leaks
+     * from android lifecycle methods like onStop() to prevent memory leaks.
      *
      * @param observer the observer that is no longer interested in receiving updates
      * from the model when its data changes
      */
     @Synchronized
     override fun removeObserver(observer: Observer) {
+
+        val beforeSize = observerList.size
         observerList.remove(observer)
+        if (observerList.size == beforeSize) {
+            logger?.w(
+                LOG_TAG, "You have tried to remove an observer that wasn't added in the first place. This is almost certainly an error and " +
+                        "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
+                        "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
+                        "references in Kotlin: val observer = Observer { doStuffOnChange } will work, val observer = ::doStuffOnChange() " +
+                        "will NOT work, but it will compile."
+            )
+        }
     }
 
 
