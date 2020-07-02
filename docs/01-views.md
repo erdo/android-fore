@@ -38,7 +38,7 @@ Here are few examples:
 
 ## Custom Android Views
 
-You'll notice in the bundled sample apps, nearly every view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout. This is part of the **fore** library philosophy of making things as clear as possible. If it's to do with the view, put it in a class called *View*.
+You'll notice in some of the bundled sample apps, the view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout.
 
 There is nothing about MVO that restricts you to using custom views however, if your app is written around Activities or Fragments, they will work just as well. (Indeed some of the Sync... classes in the **fore-lifecycle** package make this extremely easy).
 
@@ -50,12 +50,12 @@ Pretty much all views in **fore** do the same few things when they are created:
 - get a reference to all the view components like Buttons, TextViews etc.
 - get a reference to all models that the view needs to observe using some form of DI
 - set up all the click listeners, text changed listeners etc
-- set up any adapters
-- set up any SyncTriggers for things like animations
+- set up any adapters (optional)
+- set up any SyncTriggers for things like animations (optional)
 
 In addition to that there will be:
 
-- the syncView() function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) by calling adapter.notify... methods).
+- the syncView() function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) by calling adapter.notifyDataSetChangedAuto method).
 
 _Often there will then be the add / remove observers methods where the view latches onto the models it is interested in - this is handled automatically in the Sync... classes, see below._
 

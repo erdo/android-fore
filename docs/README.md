@@ -17,11 +17,15 @@
 
 **fore** helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
+The most important class in the fore library is the **observable implementation** [kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) | [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) This very simple class lets you make anything observable (usually its models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
+
+The fore observable behaves in two different ways **ASYNCHROUNOUS**: call notifyObservers() on any thread, the observers will always be notified on the UI thread (making it trivial to update UI elements) and **SYNCHRONOUS**: the observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
+
+The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer **reactive** and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went.
+
+Because the view layer is so sparse when using **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
+
 If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom). (That app is in Java, but the same principles apply for [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) apps).
-
-Did we mention fore is tiny? the core package has **126 methods** in it, and **about 500 lines of code**.
-
-Because the view layer is so sparse when using **fore**, the apps are highly scalable from a complexity standpoint, and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
 
 ## Quick Start
 
@@ -44,7 +48,7 @@ implementation "co.early.fore:fore-adapters:1.1.1"
 implementation "co.early.fore:fore-lifecycle:1.1.1"
 implementation "co.early.fore:fore-retrofit:1.1.1"
 
-//backed by coroutines rather than threads, and slightly more kotliny
+//backed by coroutines rather than threads (but just as testable), and slightly more kotliny
 implementation "co.early.fore:fore-core-kt:1.1.1"
 implementation "co.early.fore:fore-retrofit-kt:1.1.1"
 ```
@@ -79,7 +83,7 @@ While referring to the code of the [sample apps](#sample-apps), dip in to the fo
 
 <br/><br/>
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI/Redux, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
 MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering (especially if your current architecture struggles a little when it comes to supporting rotation).
 
@@ -104,7 +108,9 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 
 If you totally grok those 4 things, that's pretty much all you need to use **fore** successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
-The **fore** library also includes some testable wrappers for AsyncTask: [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) (which lets you make use of lambdas)
+The **fore** library also includes some testable wrappers for AsyncTask (that Google should have provided, but didn't): [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which supports lambdas making using them alot nicer to use.
+
+If you've moved over to using coroutines already, a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) are all you need to use coroutines in a way that is completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206) [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor). **fore** works really well with RoomDB too, checkout the last sample app for details.
 
@@ -153,7 +159,7 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
 
-It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work.
+It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s' notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
 
 Two lists are displayed side to side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right.
 
@@ -184,7 +190,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 A regular Tic Tac Toe game that makes use of:
 
-- The [SyncXXX](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) lifecycle convenience classes which reduce boiler plate slightly and automatically handle databinding (the adding and removing of observers in line with various lifecycle methods)
+- The [SyncXXX](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) lifecycle convenience classes which reduce boiler plate slightly and automatically handle the adding and removing of observers in line with various lifecycle methods
 
 - [SyncTrigger](https://erdo.github.io/android-fore/04-more-fore.html#synctrigger) which bridges the gap between the observer pattern and one off triggers that you want to fire (such as displaying a win animation at the end of a game)
 
@@ -211,7 +217,7 @@ It's obviously ridiculously contrived, but the idea is to implement something th
 
 It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
 
-All the database changes are done off the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows) and the app is totally robust and supports rotation out of the box. There is a TodoListModel written in Java and one in Kotlin for convenience, in case you are looking to use these as starting points for your own code.
+All the database changes are done off the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows), the app is totally robust and supports rotation out of the box. There is a TodoListModel written in Java and one in Kotlin for convenience, in case you are looking to use these as starting points for your own code.
 
 There is only one test class included with this app which demonstrates how to test Models which are driven by a Room DB (using CountdownLatches etc). For other test examples, please see sample apps 1-4
 
@@ -225,8 +231,6 @@ There is only one test class included with this app which demonstrates how to te
 
 - There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-02-kotlin)**
 
-- The **Password123** sample app uses **fore** for its reactive UI and the **[kotlin source](https://github.com/erdo/password123)** is available.
-
 
 
 ## Contributing
@@ -236,7 +240,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2017-2020 early.co
+    Copyright 2015-2020 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
