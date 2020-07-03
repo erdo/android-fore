@@ -31,7 +31,7 @@ public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterS
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_playlists_listitem, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_playlists_listitem, parent, false);
         ViewHolder holder = new ViewHolder(view);
         holder.itemView.setTag(holder);
         return holder;

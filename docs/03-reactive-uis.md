@@ -151,7 +151,7 @@ val observer = Observer { syncView() }
  </code></pre>
 
 
-**Be careful with Kotlin btw, val observer = ::syncView will NOT work (but will compile) Double-colon means something quite different in Kotlin, the observer will be triggered successfully but you will end up with a memory leak when you come to remove this observer as the reference will have changed.**
+**Be careful with Kotlin btw, val observer = this::syncView will NOT work, val observer =  { syncView() } will NOT work (but both will compile and run) these things mean something quite different in Kotlin, the observer will be triggered successfully but you will end up with a memory leak when you come to remove this observer as the reference will have changed.**
 
 
 And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using View lifecycle methods to do it)*:

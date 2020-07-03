@@ -44,7 +44,7 @@ public class WalletsActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_wallet);
 
-        ButterKnife.bind(this, this);
+        ButterKnife.bind(this);
 
         setupButtonClickListeners();
     }
