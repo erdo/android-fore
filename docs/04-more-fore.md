@@ -35,6 +35,38 @@ launchMain(workMode) {
  </code></pre>
 
 
+## carryOn
+
+The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
+
+
+```kotlin
+
+callProcessor.processCallAsync {
+
+    var ticketRef = ""
+    ticketSvc.createUser() //Response<UserPojo>
+    .carryOn {
+      ticketSvc.createTicket(it.userId) //Response<TicketPojo>
+    }
+    .carryOn {
+      ticketRef = it.ticketRef
+      ticketSvc.getEstWaitingTime(it.ticketRef) //Response<TimePojo>
+    }
+    .carryOn {
+      if (it.minutesWait > 10) {
+        ticketSvc.cancelTicket(ticketRef) //Response<ResultPojo>
+      } else {
+        ticketSvc.confirmTicket(ticketRef) //Response<ResultPojo>
+      }
+   }
+}
+
+```
+
+You can see it live in the kotlin version of [sample app 4](https://erdo.github.io/android-fore/#fore-4-retrofit-example)
+
+
 ## Custom APIs
 
 All APIs will be slightly different regarding what global headers they require, what HTTP response code they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api) of this customisation.
