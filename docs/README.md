@@ -51,7 +51,7 @@ The fore observable has two different WorkModes:
 - **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
 - **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
-The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer []**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
+The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
 Because the view layer is so sparse when implementing MVO with **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
 
