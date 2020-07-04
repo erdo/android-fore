@@ -40,6 +40,8 @@ repositories {
 dependencies {
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
+    //noinspection AnnotationProcessorOnCompilePath
+    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
 
     //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
     //implementation "co.early.fore:fore-retrofit:${rootProject.ext.ForeLibVersion_ForExamples}"
@@ -47,7 +49,6 @@ dependencies {
     implementation project(path: ':fore-retrofit')
 
     implementation "com.squareup.retrofit2:converter-gson:${rootProject.ext.converter_gson}"
-    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
 
