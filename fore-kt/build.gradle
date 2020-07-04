@@ -54,9 +54,9 @@ android {
                 srcDir '../fore-retrofit/src/main/java'
                 srcDir '../fore-retrofit-kt/src/main/java'
 
-                exclude 'co/early/fore/core/callbacks/**'
                 exclude 'co/early/fore/core/logging/**'
                 exclude 'co/early/fore/core/observer/ObservableImp.java'
+                exclude 'co/early/fore/retrofit/InterceptorLogging.java'
                 exclude 'co/early/fore/retrofit/CallProcessor.java'
             }
         }
