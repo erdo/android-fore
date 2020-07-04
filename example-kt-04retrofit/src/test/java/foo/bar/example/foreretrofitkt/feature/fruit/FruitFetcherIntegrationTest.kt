@@ -1,9 +1,9 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.retrofit.CallProcessor
 import co.early.fore.retrofit.InterceptorLogging
 import co.early.fore.retrofit.testhelpers.InterceptorStubbedService
@@ -46,6 +46,7 @@ class FruitFetcherIntegrationTest {
 
     @MockK
     private lateinit var mockSuccess: Success
+
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
 
@@ -174,7 +175,7 @@ class FruitFetcherIntegrationTest {
         for (stubbedServiceDefinition in CommonServiceFailures()) {
 
             logger.i(
-                TAG, "------- Common Service Failure: HTTP:"
+                "------- Common Service Failure: HTTP:"
                         + stubbedServiceDefinition.httpCode
                         + " res:" + stubbedServiceDefinition.resourceFileName
                         + " --------"
@@ -216,9 +217,6 @@ class FruitFetcherIntegrationTest {
     }
 
     companion object {
-
-        val TAG = FruitFetcherIntegrationTest::class.java.simpleName
-
 
         private val stubbedSuccess = StubbedServiceDefinition(
             200, //stubbed HTTP code

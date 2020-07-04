@@ -1,7 +1,7 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.SystemLogger
+import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
@@ -172,7 +172,6 @@ class FruitFetcherUnitTest {
     }
 
     companion object {
-        private val LOG_TAG = FruitFetcherUnitTest::class.java.simpleName
         private val logger = SystemLogger()
     }
 }

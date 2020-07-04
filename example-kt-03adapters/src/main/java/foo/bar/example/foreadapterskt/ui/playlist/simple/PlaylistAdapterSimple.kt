@@ -64,7 +64,4 @@ class PlaylistAdapterSimple(private val playlistSimpleModel: PlaylistSimpleModel
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    companion object {
-        private val LOG_TAG = PlaylistAdapterSimple::class.java.simpleName
-    }
 }

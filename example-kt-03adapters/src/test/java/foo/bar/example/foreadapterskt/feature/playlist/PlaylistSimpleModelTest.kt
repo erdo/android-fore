@@ -4,7 +4,6 @@ import org.junit.Assert
 import org.junit.Test
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import io.mockk.mockk

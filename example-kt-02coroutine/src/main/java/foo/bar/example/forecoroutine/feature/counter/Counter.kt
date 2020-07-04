@@ -2,7 +2,7 @@ package foo.bar.example.forecoroutine.feature.counter
 
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.coroutine.withContextDefault
@@ -25,7 +25,7 @@ class Counter(
 
     fun increaseBy20() {
 
-        logger.i(LOG_TAG, "increaseBy20() t:" + Thread.currentThread())
+        logger.i("increaseBy20() t:" + Thread.currentThread())
 
         if (isBusy) {
             return
@@ -48,7 +48,7 @@ class Counter(
 
     private suspend fun doStuffInBackground(countTo: Int): Int {
 
-        logger.i(LOG_TAG, "doStuffInBackground() t:" + Thread.currentThread())
+        logger.i("doStuffInBackground() t:" + Thread.currentThread())
 
         var totalIncrease = 0
 
@@ -58,7 +58,7 @@ class Counter(
 
             ++totalIncrease
 
-            logger.i(LOG_TAG, "-tick- t:" + Thread.currentThread())
+            logger.i("-tick- t:" + Thread.currentThread())
         }
 
         return totalIncrease
@@ -67,15 +67,11 @@ class Counter(
 
     private fun doThingsWithTheResult(result: Int) {
 
-        logger.i(LOG_TAG, "doThingsWithTheResult() t:" + Thread.currentThread())
+        logger.i("doThingsWithTheResult() t:" + Thread.currentThread())
 
         count += result
         isBusy = false
         notifyObservers()
-    }
-
-    companion object {
-        private val LOG_TAG = Counter::class.java.simpleName
     }
 
 }

@@ -1,6 +1,6 @@
 package foo.bar.example.foreretrofitkt.api
 
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreretrofitkt.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -33,10 +33,6 @@ class CustomGlobalRequestInterceptor(
         requestBuilder.method(original.method(), original.body())
 
         return chain.proceed(requestBuilder.build())
-    }
-
-    companion object {
-        private val LOG_TAG = CustomGlobalRequestInterceptor::class.java.simpleName
     }
 
 }

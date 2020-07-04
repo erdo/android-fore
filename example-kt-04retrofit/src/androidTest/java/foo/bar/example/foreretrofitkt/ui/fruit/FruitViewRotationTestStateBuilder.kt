@@ -5,9 +5,7 @@ import androidx.test.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import arrow.core.Either
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.SystemLogger
-import co.early.fore.kt.core.callbacks.SuccessWithPayload
-import co.early.fore.retrofit.MessageProvider
+import co.early.fore.kt.core.logging.SystemLogger
 import foo.bar.example.foreretrofitkt.App
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.ProgressBarIdler

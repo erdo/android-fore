@@ -63,8 +63,4 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    companion object {
-        private val LOG_TAG = PlaylistAdapterAdvanced::class.java.simpleName
-    }
-
 }

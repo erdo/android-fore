@@ -2,7 +2,7 @@ package foo.bar.example.forecoroutine
 
 import android.app.Application
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.AndroidLogger
 import foo.bar.example.forecoroutine.feature.counter.Counter
 import foo.bar.example.forecoroutine.feature.counter.CounterWithProgress
 import java.util.HashMap
