@@ -3,7 +3,7 @@ package co.early.fore.kt.retrofit
 
 import arrow.core.Either
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.withContextIO
 import co.early.fore.retrofit.ErrorHandler

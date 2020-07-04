@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofitkt.feature.fruit
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
@@ -38,7 +38,7 @@ class FruitFetcher(
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(LOG_TAG, "fetchFruitsAsync() t:" + Thread.currentThread())
+        logger.i("fetchFruitsAsync() t:" + Thread.currentThread())
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -50,11 +50,11 @@ class FruitFetcher(
 
         launchMain(workMode) {
 
-            logger.i(LOG_TAG, "about to use CallProcessor t:" + Thread.currentThread())
+            logger.i("about to use CallProcessor t:" + Thread.currentThread())
 
             val deferredResult = callProcessor.processCallAsync {
 
-                logger.i(LOG_TAG, "processing call t:" + Thread.currentThread())
+                logger.i("processing call t:" + Thread.currentThread())
 
                 fruitService.getFruitsSimulateOk()
             }
@@ -77,7 +77,7 @@ class FruitFetcher(
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(LOG_TAG, "fetchFruitsButFail()")
+        logger.i("fetchFruitsButFail()")
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -111,7 +111,7 @@ class FruitFetcher(
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(LOG_TAG, "fetchFruitsButFailAdvanced()")
+        logger.i("fetchFruitsButFailAdvanced()")
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -145,7 +145,7 @@ class FruitFetcher(
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i(LOG_TAG, "fetchManyThings()")
+        logger.i("fetchManyThings()")
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -161,28 +161,28 @@ class FruitFetcher(
                 FruitsCustomError::class.java
             ) {
                 var ticketRef = ""
-                logger.i(LOG_TAG, "...create user...")
+                logger.i("...create user...")
                 fruitService.createUser()
                     .carryOn {
-                        logger.i(LOG_TAG, "...create user ticket...")
+                        logger.i("...create user ticket...")
                         fruitService.createUserTicket(it.userId)
                     }
                     .carryOn {
                         ticketRef = it.ticketRef
-                        logger.i(LOG_TAG, "...get waiting time...")
+                        logger.i("...get waiting time...")
                         fruitService.getEstimatedWaitingTime(it.ticketRef)
                     }
                     .carryOn {
                         if (it.minutesWait > 10) {
-                            logger.i(LOG_TAG, "...cancel ticket...")
+                            logger.i("...cancel ticket...")
                             fruitService.cancelTicket(ticketRef)
                         } else {
-                            logger.i(LOG_TAG, "...confirm ticket...")
+                            logger.i("...confirm ticket...")
                             fruitService.confirmTicket(ticketRef)
                         }
                     }
                     .carryOn {
-                        logger.i(LOG_TAG, "...claim free fruit!...")
+                        logger.i("...claim free fruit!...")
                         fruitService.claimFreeFruit(it.ticketRef)
                     }
             }
@@ -201,7 +201,7 @@ class FruitFetcher(
             successResponse: List<FruitPojo>
     ) {
 
-        logger.i(LOG_TAG, "handleSuccess() t:" + Thread.currentThread())
+        logger.i("handleSuccess() t:" + Thread.currentThread())
 
         currentFruit = selectRandomFruit(successResponse)
         success()
@@ -213,7 +213,7 @@ class FruitFetcher(
             failureMessage: UserMessage
     ) {
 
-        logger.i(LOG_TAG, "handleFailure() t:" + Thread.currentThread())
+        logger.i("handleFailure() t:" + Thread.currentThread())
 
         failureWithPayload(failureMessage)
         complete()
@@ -221,7 +221,7 @@ class FruitFetcher(
 
     private fun complete() {
 
-        logger.i(LOG_TAG, "complete() t:" + Thread.currentThread())
+        logger.i("complete() t:" + Thread.currentThread())
 
         isBusy = false
         notifyObservers()
@@ -232,7 +232,6 @@ class FruitFetcher(
     }
 
     companion object {
-        private val LOG_TAG = FruitFetcher::class.java.simpleName
         private val random = Random()
     }
 }

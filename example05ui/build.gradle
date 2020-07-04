@@ -41,13 +41,14 @@ repositories {
 dependencies {
 
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
+    //noinspection AnnotationProcessorOnCompilePath
+    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
 
     //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
     //implementation "co.early.fore:fore-lifecycle:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation project(path: ':fore-core')
     implementation project(path: ':fore-lifecycle')
 
-    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "com.google.android.material:material:${rootProject.ext.material}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"

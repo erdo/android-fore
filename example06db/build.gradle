@@ -44,11 +44,12 @@ dependencies {
 
     kapt "androidx.room:room-compiler:${rootProject.ext.room_compiler}"
     kapt "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
+    //noinspection AnnotationProcessorOnCompilePath
+    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
 
  //   implementation "co.early.fore:fore-jv:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation project(path: ':fore-jv')
 
-    implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "com.google.android.material:material:${rootProject.ext.material}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"

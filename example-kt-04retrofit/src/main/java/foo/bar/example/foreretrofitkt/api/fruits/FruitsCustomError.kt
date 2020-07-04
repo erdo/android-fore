@@ -25,8 +25,10 @@ class FruitsCustomError(private val errorCode: ErrorCode?) : MessageProvider<Use
 
         @SerializedName("FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT")
         LOGIN_CREDENTIALS_INCORRECT(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT),
+
         @SerializedName("FRUIT_USER_LOCKED")
         USER_LOCKED(UserMessage.ERROR_FRUIT_USER_LOCKED),
+
         @SerializedName("FRUIT_USER_NOT_ENABLED")
         USER_NOT_ENABLED(UserMessage.ERROR_FRUIT_USER_NOT_ENABLED);
 

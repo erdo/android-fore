@@ -2,7 +2,7 @@ package foo.bar.example.foreadapterskt
 
 import android.app.Application
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.core.time.SystemTimeWrapper
 import foo.bar.example.foreadapterskt.feature.playlist.PlaylistAdvancedModel
 import foo.bar.example.foreadapterskt.feature.playlist.PlaylistSimpleModel

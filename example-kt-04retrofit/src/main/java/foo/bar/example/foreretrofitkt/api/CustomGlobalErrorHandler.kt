@@ -1,6 +1,6 @@
 package foo.bar.example.foreretrofitkt.api
 
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.retrofit.ErrorHandler
 import co.early.fore.retrofit.MessageProvider
 import com.google.gson.Gson
@@ -34,7 +34,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
 
         if (errorResponse != null) {
 
-            logWrapper.e(LOG_TAG, "handleError() HTTP:" + errorResponse.code())
+            logWrapper.e("handleError() HTTP:" + errorResponse.code())
 
             when (errorResponse.code()) {
 
@@ -53,7 +53,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
 
         } else {//non HTTP error, probably some connection problem, but might be JSON parsing related also
 
-            logWrapper.e(LOG_TAG, "handleError() throwable:$t")
+            logWrapper.e("handleError() throwable:$t")
 
             if (t != null) {
 
@@ -67,7 +67,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
         }
 
 
-        logWrapper.e(LOG_TAG, "handleError() returning:$message")
+        logWrapper.e("handleError() returning:$message")
 
         return message
     }
@@ -86,13 +86,13 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
         try {
             customError = gson.fromJson(InputStreamReader(errorResponse.errorBody()!!.byteStream(), "UTF-8"), customErrorClazz)
         } catch (e: UnsupportedEncodingException) {
-            logWrapper.e(LOG_TAG, "parseCustomError() No more error details", e)
+            logWrapper.e("parseCustomError() No more error details", e)
         } catch (e: IllegalStateException) {
-            logWrapper.e(LOG_TAG, "parseCustomError() No more error details", e)
+            logWrapper.e("parseCustomError() No more error details", e)
         } catch (e: NullPointerException) {
-            logWrapper.e(LOG_TAG, "parseCustomError() No more error details", e)
+            logWrapper.e("parseCustomError() No more error details", e)
         } catch (e: com.google.gson.JsonSyntaxException) {//the server probably gave us something that is not JSON
-            logWrapper.e(LOG_TAG, "parseCustomError() Problem parsing customServerError", e)
+            logWrapper.e("parseCustomError() Problem parsing customServerError", e)
             return ERROR_SERVER
         }
 
@@ -103,7 +103,4 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
         }
     }
 
-    companion object {
-        private val LOG_TAG = CustomGlobalErrorHandler::class.java.simpleName
-    }
 }

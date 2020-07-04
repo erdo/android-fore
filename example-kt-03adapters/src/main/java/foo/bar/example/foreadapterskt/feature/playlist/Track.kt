@@ -37,7 +37,7 @@ class Track(
     }
 
     companion object {
-        private val MIN_PLAYS_REQUESTED = 1
-        private val MAX_PLAYS_REQUESTED = 9
+        private const val MIN_PLAYS_REQUESTED = 1
+        private const val MAX_PLAYS_REQUESTED = 9
     }
 }

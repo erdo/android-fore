@@ -1,48 +1,85 @@
 package foo.bar.example.foredatabinding.ui.wallet;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
+import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import co.early.fore.core.observer.Observer;
+import foo.bar.example.foredatabinding.OG;
 import foo.bar.example.foredatabinding.R;
+import foo.bar.example.foredatabinding.feature.wallet.Wallet;
 
 
 public class WalletsActivity extends FragmentActivity {
 
-    public static void start(Context context) {
-        Intent intent = build(context);
-        context.startActivity(intent);
-    }
+    //models that we need to sync with
+    private Wallet wallet = OG.get(Wallet.class);
 
-    public static Intent build(Context context) {
-        Intent intent = new Intent(context, WalletsActivity.class);
-        return intent;
-    }
+
+    //UI elements that we care about
+    @BindView(R.id.wallet_increase_btn)
+    public Button increaseMobileWalletBtn;
+
+    @BindView(R.id.wallet_decrease_btn)
+    public Button decreaseMobileWalletBtn;
+
+    @BindView(R.id.wallet_mobileamount_txt)
+    public TextView mobileWalletAmount;
+
+    @BindView(R.id.wallet_savingsamount_txt)
+    public TextView savingsWalletAmount;
+
+
+    //single observer reference
+    Observer observer = this::syncView;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.common_activity_base);
+        setContentView(R.layout.activity_wallet);
 
-        if (savedInstanceState == null) {
-            setFragment(
-                    WalletsFragment.newInstance(),
-                    WalletsFragment.class.getSimpleName());
-        }
+        ButterKnife.bind(this);
+
+        setupButtonClickListeners();
     }
 
-    private void setFragment(Fragment fragment, String fragmentTag) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(
-                R.id.content_main,
-                fragment,
-                fragmentTag);
-        fragmentTransaction.commitAllowingStateLoss();
+    private void setupButtonClickListeners() {
+        increaseMobileWalletBtn.setOnClickListener(v -> {
+            wallet.increaseMobileWallet();//notice how the data binding takes care of updating the view for you
+        });
+        decreaseMobileWalletBtn.setOnClickListener(v -> {
+            wallet.decreaseMobileWallet();//notice how the data binding takes care of updating the view for you
+        });
+    }
+
+
+    //reactive UI stuff below
+
+    public void syncView(){
+        increaseMobileWalletBtn.setEnabled(wallet.canIncrease());
+        decreaseMobileWalletBtn.setEnabled(wallet.canDecrease());
+        mobileWalletAmount.setText("" + wallet.getMobileWalletAmount());
+        savingsWalletAmount.setText("" + wallet.getSavingsWalletAmount());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        wallet.addObserver(observer);
+        syncView(); //  <- don't forget this
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        wallet.removeObserver(observer);
     }
 
 }

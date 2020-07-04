@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foo.bar.example.foreretrofitkt.ui.fruit.FruitView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
@@ -78,7 +78,7 @@
 
                 </RelativeLayout>
 
-                <foo.bar.example.foreretrofitkt.ui.widgets.AnimatedTastyRatingBar
+                <foo.bar.example.foreretrofit.ui.widgets.AnimatedTastyRatingBar
                     android:id="@+id/fruit_tastyrating_tastybar"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
@@ -106,13 +106,6 @@
             android:text="fetch - (success result)" />
 
         <Button
-            android:id="@+id/fruit_fetchchainsuccess_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="chained fetch - (success result)" />
-
-        <Button
             android:id="@+id/fruit_fetchfailbasic_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -128,4 +121,4 @@
 
     </LinearLayout>
 
-</foo.bar.example.foreretrofitkt.ui.fruit.FruitView>
+</ScrollView>

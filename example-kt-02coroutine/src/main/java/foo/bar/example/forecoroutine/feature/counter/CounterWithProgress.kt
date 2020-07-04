@@ -2,7 +2,7 @@ package foo.bar.example.forecoroutine.feature.counter
 
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.coroutine.withContextDefault
@@ -28,7 +28,7 @@ class CounterWithProgress(
 
     fun increaseBy20() {
 
-        logger.i(LOG_TAG, "increaseBy20() t:" + Thread.currentThread())
+        logger.i("increaseBy20() t:" + Thread.currentThread())
 
         if (isBusy) {
             return
@@ -50,7 +50,7 @@ class CounterWithProgress(
 
     private suspend fun doStuffInBackground(countTo: Int): Int {
 
-        logger.i(LOG_TAG, "doStuffInBackground() t:" + Thread.currentThread())
+        logger.i("doStuffInBackground() t:" + Thread.currentThread())
 
         var totalIncrease = 0
 
@@ -64,7 +64,7 @@ class CounterWithProgress(
                 publishProgress(totalIncrease)
             }
 
-            logger.i(LOG_TAG, " ------tick------ t:" + Thread.currentThread())
+            logger.i(" ------tick------ t:" + Thread.currentThread())
         }
 
         return totalIncrease
@@ -73,7 +73,7 @@ class CounterWithProgress(
 
     private fun publishProgress(value: Int) {
 
-        logger.i(LOG_TAG, "publishProgress() t:" + Thread.currentThread())
+        logger.i("publishProgress() t:" + Thread.currentThread())
 
         progress = value
         notifyObservers()
@@ -82,15 +82,11 @@ class CounterWithProgress(
 
     private fun doThingsWithTheResult(result: Int) {
 
-        logger.i(LOG_TAG, "doThingsWithTheResult() t:" + Thread.currentThread())
+        logger.i("doThingsWithTheResult() t:" + Thread.currentThread())
 
         count += result
         progress = 0
         isBusy = false
         notifyObservers()
-    }
-
-    companion object {
-        private val LOG_TAG = CounterWithProgress::class.java.simpleName
     }
 }

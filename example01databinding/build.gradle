@@ -43,6 +43,7 @@ dependencies {
     //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation project(path: ':fore-core')
 
+    //noinspection AnnotationProcessorOnCompilePath
     implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"

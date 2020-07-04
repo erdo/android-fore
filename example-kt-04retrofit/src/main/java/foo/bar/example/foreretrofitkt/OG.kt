@@ -2,7 +2,7 @@ package foo.bar.example.foreretrofitkt
 
 import android.app.Application
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.retrofit.CallProcessor
 import co.early.fore.retrofit.InterceptorLogging
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler

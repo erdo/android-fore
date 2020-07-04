@@ -1,11 +1,15 @@
 package foo.bar.example.forecoroutine.ui
 
-import android.content.Context
-import android.content.Intent
+
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.View
 import androidx.fragment.app.FragmentActivity
+import co.early.fore.core.observer.Observer
+import foo.bar.example.forecoroutine.OG
 import foo.bar.example.forecoroutine.R
+import foo.bar.example.forecoroutine.feature.counter.Counter
+import foo.bar.example.forecoroutine.feature.counter.CounterWithProgress
+import kotlinx.android.synthetic.main.activity_counter.*
 
 /**
  * Copyright © 2019 early.co. All rights reserved.
@@ -13,39 +17,53 @@ import foo.bar.example.forecoroutine.R
 class CounterActivity : FragmentActivity() {
 
 
+    //models that we need to sync with
+    private val counterWithProgress: CounterWithProgress = OG[CounterWithProgress::class.java]
+    private val counter: Counter = OG[Counter::class.java]
+
+
+    //single observer reference
+    private var observer = Observer { syncView() }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.common_activity_base)
+        setContentView(R.layout.activity_counter)
 
-        if (savedInstanceState == null) {
-            setFragment(
-                CounterFragment.newInstance(),
-                CounterFragment::class.java.simpleName
-            )
-        }
+        setupButtonClickListeners()
     }
 
-    private fun setFragment(fragment: Fragment, fragmentTag: String) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(
-            R.id.content_main,
-            fragment,
-            fragmentTag
-        )
-        fragmentTransaction.commitAllowingStateLoss()
+    private fun setupButtonClickListeners() {
+        counter_increase_btn.setOnClickListener { counter.increaseBy20() }
+        counterwprog_increase_btn.setOnClickListener { counterWithProgress.increaseBy20() }
     }
 
-    companion object {
 
-        fun start(context: Context) {
-            val intent = build(context)
-            context.startActivity(intent)
-        }
+    //data binding stuff below
 
-        fun build(context: Context): Intent {
-            return Intent(context, CounterActivity::class.java)
-        }
+    fun syncView() {
+        counterwprog_increase_btn.isEnabled = !counterWithProgress.isBusy
+        counterwprog_busy_progress.visibility = if (counterWithProgress.isBusy) View.VISIBLE else View.INVISIBLE
+        counterwprog_progress_txt.text = "${counterWithProgress.progress}"
+        counterwprog_current_txt.text = "${counterWithProgress.count}"
+
+        counter_increase_btn.isEnabled = !counter.isBusy
+        counter_busy_progress.visibility = if (counter.isBusy) View.VISIBLE else View.INVISIBLE
+        counter_current_txt.text = "${counter.count}"
+    }
+
+    override fun onStart() {
+        super.onStart()
+        counter.addObserver(observer)
+        counterWithProgress.addObserver(observer)
+        syncView() //<-- don't forget this
+    }
+
+    override fun onStop() {
+        super.onStop()
+        counter.removeObserver(observer)
+        counterWithProgress.removeObserver(observer)
     }
 
 }

@@ -8,16 +8,16 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.early.fore.adapters.ChangeAwareAdapter
 import foo.bar.example.foreadapterskt.R
 import foo.bar.example.foreadapterskt.feature.playlist.PlaylistAdvancedModel
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_decreaseplays_button
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_increaseplays_button
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_playsrequested_text
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_remove_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_decreaseplays_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_increaseplays_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_playsrequested_text
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_remove_button
 
 
 class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvancedModel) : ChangeAwareAdapter<PlaylistAdapterAdvanced.ViewHolder>(playlistAdvancedModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_playlists_listitem, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_playlists_listitem, parent, false)
         val holder = ViewHolder(view)
         holder.itemView.tag = holder
         return holder
@@ -62,9 +62,5 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-    companion object {
-        private val LOG_TAG = PlaylistAdapterAdvanced::class.java.simpleName
-    }
 
 }

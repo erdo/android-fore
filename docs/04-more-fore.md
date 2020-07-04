@@ -1,7 +1,7 @@
 
 # Retrofit and the CallProcessor
 
-The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/CallProcessor.kt), [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the [Retrofit Example App Source Code](https://erdo.github.io/android-fore/#fore-4-retrofit-example).
+The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/CallProcessor.kt), [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the Retrofit Example App Source Code: [java](https://erdo.github.io/android-fore/#fore-4-retrofit-example) | [kotlin](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit).
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
@@ -35,9 +35,41 @@ launchMain(workMode) {
  </code></pre>
 
 
+## carryOn
+
+The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
+
+
+```kotlin
+
+callProcessor.processCallAsync {
+
+    var ticketRef = ""
+    ticketSvc.createUser() //Response<UserPojo>
+    .carryOn {
+      ticketSvc.createTicket(it.userId) //Response<TicketPojo>
+    }
+    .carryOn {
+      ticketRef = it.ticketRef
+      ticketSvc.getEstWaitingTime(it.ticketRef) //Response<TimePojo>
+    }
+    .carryOn {
+      if (it.minutesWait > 10) {
+        ticketSvc.cancelTicket(ticketRef) //Response<ResultPojo>
+      } else {
+        ticketSvc.confirmTicket(ticketRef) //Response<ResultPojo>
+      }
+   }
+}
+
+```
+
+You can see it live in the kotlin version of [sample app 4](https://erdo.github.io/android-fore/#fore-4-retrofit-example)
+
+
 ## Custom APIs
 
-All APIs will be slightly different regarding what global headers they require, what HTTP response code they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/api) of this customisation.
+All APIs will be slightly different regarding what global headers they require, what HTTP response code they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api) of this customisation.
 
 The sample apps all use JSON over HTTP, but there is no reason you can't use something like protobuf, for example.
 
@@ -55,7 +87,7 @@ As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONO
 
 # Adapters notifyDataSetChangedAuto()
 
-*For a clean implementation in a small sample app, please see the [Adapter Example App Source Code](/android-fore/#fore-3-adapter-example)*
+*For a clean implementation in a small sample app, please see the [Adapter Example App Source Code](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
 
 Ahh adapters, I miss the good old days when all you had to do was call notifyDataSetChanged(). And the best place to call it is from inside the syncView() method:
 
@@ -86,11 +118,11 @@ fun syncView() {
  </code></pre>
 
 
-In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes). (Your adapter will have a reference to the model which is where it will get it's list data from - see the sample app linked to above).
+In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes). (Your adapter will have a reference to the model which is where it will get its list data from - see the sample app linked to above).
 
 If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API).
 
-*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like choosing black tea instead of a coffee because you're on a diet, but then taking your tea and adding whipped cream with marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something very wrong (like re-inflating your cells' layout when you shouldn't)*
+*By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like choosing black tea instead of black coffee because you're on a diet, but then taking your tea and adding 5 teaspoons of sugar, whipped cream and marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something very wrong (like re-inflating your cells' layout when you shouldn't)*
 
 
 ## RecyclerView Animations
@@ -101,7 +133,7 @@ Happily by using the ChangeAware\* classes found in the fore-adapters library yo
 
 As the name implies, the ChangeAware\*Lists are aware of how they have been changed and they feed that information back to the ChangeAwareAdapter (for your own code, just extend ChangeAwareAdapter instead of RecyclerView.Adapter).
 
-When you call notifyDataSetChangedAuto() on the ChangeAwareAdapter, it will take care of calling the correct Android notify* method for you. The only thing you need to take care of is telling the list what happened when an item has *changed* (the list has no way of detecting that automatically itself). For that, you use the method **ChangeAware\*List.makeAwareOfDataChange(int index)** whenever an item is changed (rather than added or removed).
+When you call notifyDataSetChangedAuto() on the ChangeAwareAdapter, it will take care of calling the correct Android notify\* method for you. The only thing you need to take care of is telling the list what happened when an item has *changed* (the list has no way of detecting that automatically itself). For that, you use the method **ChangeAware\*List.makeAwareOfDataChange(int startRowIndex, int rowsAffected)** whenever an item is changed (rather than added or removed).
 
 
 <!-- Tabbed code sample -->
@@ -133,9 +165,9 @@ fun syncView() {
 
 See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code.
 
-This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** from the **syncView()** method, rather than **notifyDataSetChanged()**.
+This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** instead of **notifyDataSetChanged()** from the **syncView()** function.
 
-> "just call **notifyDataSetChangedAuto()** from the **syncView()** method, rather than **notifyDataSetChanged()**."
+> "just call **notifyDataSetChangedAuto()** instead of **notifyDataSetChanged()** from the **syncView()** function"
 
 ## Database driven RecyclerView Animations
 
@@ -151,9 +183,11 @@ More specifics regarding adapters and threading are in the source of [Observable
 
 > "the change to the list data MUST to be done on the UI thread AND notify*() MUST be called before the current thread yields"
 
-The "fruit fetcher" screen of the [full app example](https://github.com/erdo/asaf-full-app-example) demonstrates that quite well, it's deliberately challenging to implement in a regular fashion (multiple simultaneous network calls changing the same list; user removal of list items; and screen rotation - all at any time) it's still totally robust as a result of sticking to that rule above.
+The "fruit fetcher" screen of the [full app example](https://github.com/erdo/fore-full-example-02-kotlin) demonstrates that quite well, it's deliberately challenging to implement in a regular fashion (multiple simultaneous network calls changing the same list; user removal of list items; and screen rotation - all at any time) it's still totally robust as a result of sticking to that rule above.
 
-*Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately. When the list data changes, the notifyX method needs to be called immediately, and both things need to happen on the UI thread, that's it. It's a shame the android docs do a terrible job of explaining this.*
+This is because android will call **Adapter.count()** then **Adapter.get()** on the UI thread and *you must not change the adapter's size between these calls*. If after android calls Adapter.count(), you change the list but don't immediately let the adapter know that its count() call is out of date (by calling the notify... methods), when android next calls Adapter.get() you will have problems. Synchronizing any list updates is not enough. Even posting the notify... call to the end of the UI thread is not enough, it needs to be done immediately (before the UI thread yields) because once the UI thread yields it may let android in to call Adapter.get().
+
+*Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately. When the list data changes, the notify... method needs to be called immediately, and both things need to happen on the UI thread, that's it. It's a shame the android docs do such a terrible job of explaining this.*
 
 
 # AsyncTasks with Lambdas
@@ -184,11 +218,11 @@ AsyncBuilder<Unit, Int>(workMode)
 
 We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
 
-AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because of the "new" keyword.
+AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because it needs to be instanciated each time it's used.
 
 The quickest **fore** solution to all that is to use Async as an (almost) drop in solution.
 
-[Asynchronous Example App Source Code](/android-fore/#fore-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
+[Asynchronous Example App Source Code](https://erdo.github.io/android-fore/#fore-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
 ## Async
 Async (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask with two exceptions detailed below.

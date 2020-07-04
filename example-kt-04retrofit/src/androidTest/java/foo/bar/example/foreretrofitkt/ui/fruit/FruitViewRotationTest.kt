@@ -14,11 +14,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.runner.AndroidJUnit4
 import arrow.core.Either
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
-import co.early.fore.core.logging.SystemLogger
+import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.core.callbacks.SuccessWithPayload
 import co.early.fore.kt.retrofit.CallProcessor
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
@@ -75,7 +74,7 @@ class FruitViewRotationTest {
     @Before
     fun setUp() {
 
-        logger.i(LOG_TAG, "setup()")
+        logger.i("setup()")
 
         MockKAnnotations.init(this, relaxed = true)
 
@@ -92,7 +91,7 @@ class FruitViewRotationTest {
     @Throws(Exception::class)
     fun stateSurvivesRotation() {
 
-        logger.i(LOG_TAG, "stateSurvivesRotation()")
+        logger.i("stateSurvivesRotation()")
 
         //arrange
         val activity = FruitViewRotationTestStateBuilder(this)
@@ -124,14 +123,14 @@ class FruitViewRotationTest {
 
     fun completeDeferredResult() {
 
-        logger.i(LOG_TAG, "callSuccessOnCachedSuccessFailCallback()")
+        logger.i("callSuccessOnCachedSuccessFailCallback()")
 
         val fruitList = ArrayList<FruitPojo>()
         fruitList.add(fruitPojo)
 
         //we need to be back on the UI thread for this
         getInstrumentation().runOnMainSync {
-            logger.i(LOG_TAG, "about to call success, id:" + Thread.currentThread().id)
+            logger.i("about to call success, id:" + Thread.currentThread().id)
 
             deferredResult.complete(Either.right(fruitList))
             countDownLatch.countDown()
@@ -139,14 +138,14 @@ class FruitViewRotationTest {
     }
 
     fun setDeferredResult(deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>) {
-        logger.i(LOG_TAG, "setDeferredResult()")
+        logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }
 
 
     @Synchronized
     private fun checkUIBeforeClick(activity: Activity) {
-        logger.i(LOG_TAG, "checkUIBeforeClick()")
+        logger.i("checkUIBeforeClick()")
 
         //assert
         onView(withId(R.id.fruit_busy_progbar)).check(matches(not<View>(isDisplayed())))
@@ -166,7 +165,7 @@ class FruitViewRotationTest {
 
     @Synchronized
     private fun checkUIWhenFetching(activity: Activity) {
-        logger.i(LOG_TAG, "checkUIWhenFetching()")
+        logger.i("checkUIWhenFetching()")
 
         //assert
         onView(withId(R.id.fruit_busy_progbar)).check(matches(isDisplayed()))
@@ -186,7 +185,7 @@ class FruitViewRotationTest {
 
     @Synchronized
     private fun checkUIOnceComplete(activity: Activity) {
-        logger.i(LOG_TAG, "checkUIOnceComplete()")
+        logger.i("checkUIOnceComplete()")
 
         //assert
         onView(withId(R.id.fruit_busy_progbar)).check(matches(not<View>(isDisplayed())))
@@ -218,10 +217,6 @@ class FruitViewRotationTest {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         else
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
-    companion object {
-        val LOG_TAG = FruitViewRotationTest::class.java.simpleName
     }
 
 }

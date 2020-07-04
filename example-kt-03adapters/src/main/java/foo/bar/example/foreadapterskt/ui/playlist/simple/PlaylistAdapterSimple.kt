@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import foo.bar.example.foreadapterskt.R
 import foo.bar.example.foreadapterskt.feature.playlist.PlaylistSimpleModel
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_decreaseplays_button
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_increaseplays_button
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_playsrequested_text
-import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_remove_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_decreaseplays_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_increaseplays_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_playsrequested_text
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_remove_button
 
 /**
  *
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_playlists_listitem.view.track_rem
 class PlaylistAdapterSimple(private val playlistSimpleModel: PlaylistSimpleModel) : RecyclerView.Adapter<PlaylistAdapterSimple.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_playlists_listitem, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_playlists_listitem, parent, false)
         val holder = ViewHolder(view)
         holder.itemView.tag = holder
         return holder
@@ -64,7 +64,4 @@ class PlaylistAdapterSimple(private val playlistSimpleModel: PlaylistSimpleModel
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    companion object {
-        private val LOG_TAG = PlaylistAdapterSimple::class.java.simpleName
-    }
 }
