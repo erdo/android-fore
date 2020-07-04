@@ -1,9 +1,9 @@
 
 # Retrofit and the CallProcessor
 
-The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/CallProcessor.kt), [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the Retrofit Example App Source Code: [java](https://erdo.github.io/android-fore/#fore-4-retrofit-example) | [kotlin](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit).
+The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/CallProcessor.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the Retrofit [Example App](https://erdo.github.io/android-fore/#fore-4-retrofit-example).
 
-The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain model error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
+The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
 The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/arrow-kt/arrow/blob/master/modules/core/arrow-core-data/src/main/kotlin/arrow/core/Either.kt) (from [arrow-kt](https://arrow-kt.io/) - we didn't want to add yet another implementation of Either).
 
@@ -165,7 +165,7 @@ fun syncView() {
 
 See [here](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/advanced/PlaylistAdapterAdvanced.java) for an example adapter, the list for which is held in [this](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/feature/playlist/PlaylistAdvancedModel.java) model, see if you can spot the occasional call to makeAwareOfDataChange() in the model code.
 
-This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsView.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** instead of **notifyDataSetChanged()** from the **syncView()** function.
+This radically simplifies any [view code](https://github.com/erdo/android-fore/blob/master/example03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsActivity.java) that needs to use an adapter and wants recycler view animations, the only thing that it needs to do is call **notifyDataSetChangedAuto()** instead of **notifyDataSetChanged()** from the **syncView()** function.
 
 > "just call **notifyDataSetChangedAuto()** instead of **notifyDataSetChanged()** from the **syncView()** function"
 
@@ -185,7 +185,7 @@ More specifics regarding adapters and threading are in the source of [Observable
 
 The "fruit fetcher" screen of the [full app example](https://github.com/erdo/fore-full-example-02-kotlin) demonstrates that quite well, it's deliberately challenging to implement in a regular fashion (multiple simultaneous network calls changing the same list; user removal of list items; and screen rotation - all at any time) it's still totally robust as a result of sticking to that rule above.
 
-This is because android will call **Adapter.count()** then **Adapter.get()** on the UI thread and *you must not change the adapter's size between these calls*. If after android calls Adapter.count(), you change the list but don't immediately let the adapter know that its count() call is out of date (by calling the notify... methods), when android next calls Adapter.get() you will have problems. Synchronizing any list updates is not enough. Even posting the notify... call to the end of the UI thread is not enough, it needs to be done immediately (before the UI thread yields) because once the UI thread yields it may let android in to call Adapter.get().
+This is because android will call **Adapter.count()** then **Adapter.get()** on the UI thread and *you must NOT change the adapter's size between these calls*. If after android calls Adapter.count(), you change the list but don't immediately let the adapter know that its count() call is out of date (by calling the notify... methods), when android next calls Adapter.get() you will have problems. Synchronizing any list updates is not enough. Even posting the notify... call to the end of the UI thread is not enough, it needs to be done immediately (before the UI thread yields) because once the UI thread yields it may let android in to call Adapter.get().
 
 *Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately. When the list data changes, the notify... method needs to be called immediately, and both things need to happen on the UI thread, that's it. It's a shame the android docs do such a terrible job of explaining this.*
 

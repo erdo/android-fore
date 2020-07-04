@@ -17,9 +17,45 @@
 
 **fore** helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
-The most important class in the fore library is the **observable implementation** [kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) | [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) This very simple class lets you make anything observable (usually its models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
+The most important class in the fore library is the **observable implementation** [kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) This very simple class lets you make anything observable (usually its models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
 
-The fore observable behaves in two different ways **ASYNCHROUNOUS**: call notifyObservers() on any thread, the observers will always be notified on the UI thread (making it trivial to update UI elements) and **SYNCHRONOUS**: the observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+public class AccountRepository extends ObservableImp {
+
+  private final AccountService accountService
+
+  public AccountRepository(AccountService accountService, WorkMode workMode) {
+    super(workMode);
+    this.accountService = Affirm.notNull(accountService);
+  }
+
+  ...
+
+}
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+class AccountRepository(
+        private val accountService: AccountService,
+        private val workMode: WorkMode
+) : Observable by ObservableImp(workMode) {
+
+  ...
+
+}
+ </code></pre>
+
+
+The fore observable behaves in two different ways
+- **ASYNCHROUNOUS**: call notifyObservers() on any thread, the observers will always be notified on the UI thread (making it trivial to update UI elements)
+- **SYNCHRONOUS**: the observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
 The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer **reactive** and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went.
 

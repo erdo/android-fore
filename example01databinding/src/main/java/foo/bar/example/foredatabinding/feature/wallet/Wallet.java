@@ -9,7 +9,7 @@ import co.early.fore.core.observer.ObservableImp;
 /**
  *
  */
-public class Wallet extends ObservableImp{
+public class Wallet extends ObservableImp {
 
     private static final String TAG = Wallet.class.getSimpleName();
 

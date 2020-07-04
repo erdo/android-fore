@@ -31,16 +31,9 @@ All the view classes (Activity/Fragment/View) for the sample apps are found in t
 
 Here are few examples:
 
-- [Wallets View](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/res/layout/fragment_wallet.xml)
+- [Wallets View](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsActivity.java)
 
-- [Counter View](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterView.java) which is referenced in [this XML](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/res/layout/fragment_counter.xml)
-
-
-## Custom Android Views
-
-You'll notice in some of the bundled sample apps, the view is explicitly called out as such by being named **LoginView** or similar, and those classes all extend an Android Layout class like **LinearLayout** (which itself extends from View). This means that they can be referenced directly in an XML Layout.
-
-There is nothing about MVO that restricts you to using custom views however, if your app is written around Activities or Fragments, they will work just as well. (Indeed some of the Sync... classes in the **fore-lifecycle** package make this extremely easy).
+- [Counter View](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java)
 
 
 ## Code that belongs in the view layer
@@ -164,7 +157,7 @@ class MySpeedoFragment : SyncFragmentX() {
  </code></pre>
 
 ### Sync[ViewGroup]
- There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes).
+ There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes. For example here's the one for [ScrollView](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/view/SyncScrollView.java)).
 
  <!-- Tabbed code sample -->
   <div class="tab">
