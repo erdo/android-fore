@@ -47,13 +47,13 @@ class AccountRepository(workMode: WorkMode) : Observable by ObservableImp(workMo
  </code></pre>
 
 
-The fore observable behaves in two different ways
-- **ASYNCHROUNOUS**: the observers will always be notified on the UI thread (making it trivial to update UI elements)
-- **SYNCHRONOUS**: the observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
+The fore observable have two different WorkModes:
+- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
+- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
 The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer **reactive** and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
-Because the view layer is so sparse when using **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
+Because the view layer is so sparse when implementing MVO with **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
 
 If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom). (That app is in Java, but the same principles apply for [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) apps).
 
