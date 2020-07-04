@@ -47,8 +47,8 @@ dependencies {
     //noinspection AnnotationProcessorOnCompilePath
     implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
 
- //   implementation "co.early.fore:fore-jv:${rootProject.ext.ForeLibVersion_ForExamples}"
-    implementation project(path: ':fore-jv')
+    implementation "co.early.fore:fore-jv:${rootProject.ext.ForeLibVersion_ForExamples}"
+    //implementation project(path: ':fore-jv')
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "com.google.android.material:material:${rootProject.ext.material}"

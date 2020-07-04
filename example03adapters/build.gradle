@@ -44,10 +44,10 @@ dependencies {
     //noinspection AnnotationProcessorOnCompilePath
     implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"
 
-    //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
-    //implementation "co.early.fore:fore-adapters:${rootProject.ext.ForeLibVersion_ForExamples}"
-    implementation project(path: ':fore-core')
-    implementation project(path: ':fore-adapters')
+    implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
+    implementation "co.early.fore:fore-adapters:${rootProject.ext.ForeLibVersion_ForExamples}"
+    //implementation project(path: ':fore-core')
+    //implementation project(path: ':fore-adapters')
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"

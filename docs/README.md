@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.1.1](https://img.shields.io/badge/jcenter-1.1.1-green.svg){: .float-left}
+![jcenter-1.1.3](https://img.shields.io/badge/jcenter-1.1.3-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -47,13 +47,13 @@ class AccountRepository(workMode: WorkMode) : Observable by ObservableImp(workMo
  </code></pre>
 
 
-The fore observable behaves in two different ways
-- **ASYNCHROUNOUS**: the observers will always be notified on the UI thread (making it trivial to update UI elements)
-- **SYNCHRONOUS**: the observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
+The fore observable have two different WorkModes:
+- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
+- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
 The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer **reactive** and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
-Because the view layer is so sparse when using **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
+Because the view layer is so sparse when implementing MVO with **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
 
 If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom). (That app is in Java, but the same principles apply for [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) apps).
 
@@ -61,26 +61,26 @@ If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tuto
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.1.1"
+implementation "co.early.fore:fore-kt:1.1.3"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.1.1"
+implementation "co.early.fore:fore-jv:1.1.3"
 ```
 
 
 Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
 
 ```
-implementation "co.early.fore:fore-core:1.1.1"
-implementation "co.early.fore:fore-adapters:1.1.1"
-implementation "co.early.fore:fore-lifecycle:1.1.1"
-implementation "co.early.fore:fore-retrofit:1.1.1"
+implementation "co.early.fore:fore-core:1.1.3"
+implementation "co.early.fore:fore-adapters:1.1.3"
+implementation "co.early.fore:fore-lifecycle:1.1.3"
+implementation "co.early.fore:fore-retrofit:1.1.3"
 
 //backed by coroutines rather than threads (but just as testable), and slightly more kotliny
-implementation "co.early.fore:fore-core-kt:1.1.1"
-implementation "co.early.fore:fore-retrofit-kt:1.1.1"
+implementation "co.early.fore:fore-core-kt:1.1.3"
+implementation "co.early.fore:fore-retrofit-kt:1.1.3"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 

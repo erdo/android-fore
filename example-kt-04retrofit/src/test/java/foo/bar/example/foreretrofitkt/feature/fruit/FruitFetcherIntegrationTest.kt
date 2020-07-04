@@ -5,7 +5,7 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.retrofit.InterceptorLogging
+import co.early.fore.kt.retrofit.InterceptorLogging
 import co.early.fore.retrofit.testhelpers.InterceptorStubbedService
 import co.early.fore.retrofit.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreretrofitkt.api.CommonServiceFailures
