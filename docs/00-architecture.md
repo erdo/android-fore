@@ -34,7 +34,7 @@ fun syncView() {
 
 </code></pre>
 
-Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. The use of an immutable view-state here is a key driver of complexity in architectures like MvRx and MVI - supporting the android lifecycle during rotations becomes very complex for instance. Dispensing entirely with this style of view-state binding is _one_ of the reasons that fore is so tiny and the library so easy to understand - by all means make full use of immutable state within the models though (e.g. myAccountViewModel.getViewState()).
+Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. This style of view state binding is deceptively simple, and is _one_ of the reasons that fore is so tiny and the library so easy to understand - by all means make full use of immutable state within the models though (e.g. myAccountViewModel.getViewState()).
 
 *For the avoidance of doubt, most non-trivial apps will of course have more layers beneath the model layer, typically you'll have some kind of repository, a networking abstraction, usecases etc. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
@@ -61,7 +61,7 @@ The code looks extremely simple and it is, but surprisingly the technique works 
 
 
 ## Handling State
-In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course, MVO just tends to keep the functional code out of ephemeral view layers. **(This means that you can have a Redux style reducer and immutable state for your models internally  - as long as that state is accessed by the UI layer using getters, you'll still be able to take full advantage of MVO architecture).**
+In MVO, the state is kept inside in the models, typically accessible via getter methods. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course, MVO just tends to keep the functional code out of ephemeral view layers. This means that you can have a Redux style reducer, and immutable state for your models internally  - as long as that state is accessed by the UI layer using getters, you'll still be able to take full advantage of MVO architecture.
 
 There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events)
 
@@ -108,7 +108,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-By the way, you can make these Views reactive by making the [ViewModels observable](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt) using *fore* (we did mention fore can make anything observable). But if you are following Google's typical ViewModel implementation, you would use LiveData for this purpose. The lack of a [syncView](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention (or render() in MVI), does result in increasingly complex view code once you start tackling non trivial UIs with lots of bits of state though - so even here, adding a *fore* Observable would be a quick win over using LiveData.
+By the way, you can make these Views reactive by making the ViewModels [observable]](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt) using *fore* (we did mention fore can make anything observable). But if you are following Google's typical ViewModel implementation, you would use LiveData for this purpose. The lack of a [syncView](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention (or render() in MVI), does result in increasingly complex view code once you start tackling non trivial UIs with lots of bits of state though - so even here, adding a *fore* Observable would be a quick win over using LiveData.
 
 Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
@@ -191,7 +191,7 @@ loggedInStatus.text = if (viewState.isLoggedIn) "IN" else "OUT"
 
  *Both architectures support rotation on Android although it's not quite so trivial in MVI, mostly due to its functional/immutable nature.*
 
- It goes without saying that the amount of code that needs to be written to implement MVI is considerably more than with MVO (this is the price you pay for writing UI data-binding code in a functional style). The difference becomes more significant with views that depend on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatus). Most of this additional code will be written in the Interactor class, so at least it remains testable - but sheer amount of (often complex RxJava) code can become a significant break on development speed and robustness for many teams, especially when code needs to be changed.
+ It goes without saying that the amount of code that needs to be written to implement MVI is considerably more than with MVO (this is the price you pay for writing UI data-binding code in a functional style). The difference becomes more significant with views that depend on a number of different data sources, each of which may need reacting to (such as an AccountModel, EmailInbox and NetworkStatusRepository). Most of this additional code will be written in the Interactor class, so at least it remains testable - but sheer amount of (often complex RxJava) code can become a significant break on development speed and robustness for many teams, especially when code needs to be changed.
 
 
 ### BTW, What's a Controller

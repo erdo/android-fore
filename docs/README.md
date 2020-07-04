@@ -39,7 +39,8 @@ public class AccountRepository extends ObservableImp {
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-class AccountRepository(workMode: WorkMode) : Observable by ObservableImp(workMode) {
+class AccountRepository(workMode: WorkMode) :
+          Observable by ObservableImp(workMode) {
 
   ...
 
@@ -131,7 +132,7 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
-* The first is a very robust but simple [**Observer implementation**](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) that lets views attach themselves to any model they are interested in
+* The first is a very robust but simple [**Observer API**](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) that lets views attach themselves to any model they are interested in
 * The second is the [**syncView()**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
