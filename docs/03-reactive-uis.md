@@ -121,7 +121,7 @@ Of course, if you're setting a state on a UI element which is the same as the st
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
-Most of the models in the sample apps become observable by extending ObservableImp (you can also implement the Observable interface and proxy the methods through to an ObservableImp instance), the [code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) is pretty light weight and you can probably work out what it's doing. By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt), the models gain the following characteristics:
+By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt), the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
 - When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)

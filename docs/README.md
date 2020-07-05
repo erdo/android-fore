@@ -17,7 +17,7 @@
 
 **fore** helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
-The most important class in the fore library is the observable implementation [kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java). This very simple class lets you **make anything observable** (usually its models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
+The most important class in the fore library is the observable implementation [kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java). This very simple class lets you **make anything observable** (usually it's models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
 
 
 <!-- Tabbed code sample -->
@@ -54,7 +54,7 @@ The fore observable has two different WorkModes:
 
 The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
-Because the view layer is so sparse when implementing MVO with **fore** the apps are highly scalable from a complexity standpoint and **fore** works from quick prototypes, right up to large complex commercial projects with 100K+ lines of code.
+Because the view layer is so sparse when implementing MVO with **fore** the apps are highly scalable from a complexity standpoint and **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
 If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to MVO. (That app is in Java, but the same principles apply for [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) apps).
 
@@ -79,7 +79,8 @@ implementation "co.early.fore:fore-adapters:1.1.3"
 implementation "co.early.fore:fore-lifecycle:1.1.3"
 implementation "co.early.fore:fore-retrofit:1.1.3"
 
-//backed by coroutines rather than threads (but just as testable), and slightly more kotliny
+//backed by coroutines rather than threads
+//but just as testable, and slightly more kotliny
 implementation "co.early.fore:fore-core-kt:1.1.3"
 implementation "co.early.fore:fore-retrofit-kt:1.1.3"
 ```
