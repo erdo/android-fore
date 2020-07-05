@@ -220,7 +220,7 @@ fun getAccountStatus(): Account.Status
 
 All those states may change (potentially as a result of a network request completing in the background, or a notification arriving on the device etc). And if they change, the views need to update themselves immediately without us needing to do it (that's the whole point of reactive UIs after all!).
 
-If we make all these things individually observable, we might choose something like RxJava observables, or LiveData and the views will need to observe each piece of state individually. Taking LiveData as an example, the view layer will have to contain something like this:
+If we make all these things individually observable, we might choose something like RxJava observables, or LiveData, and the views will need to observe each piece of state individually. Taking LiveData as an example, the view layer will have to contain something like this:
 
 
 ``` kotlin
@@ -237,13 +237,13 @@ accountModel.accountStateLiveData.observer(this, Observer { status ->
 })
 ```
 
-We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical boiler plate. The same would be the case if we had a parameter in the somethingChanged() method. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually.
+We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. The same would be the case if we had a parameter in the somethingChanged() method. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually.
 
-(We can improve this situation by using LiveData to observe a single immutable state class which contains all the states - but you have to enforce that yourself, it doesn't come automatically as a result of the framework design). It also won't help if a view is observing more than one model...
+(We can improve this situation by using LiveData to observe a single immutable state class which contains all the states - but you have to enforce that yourself, it doesn't come automatically as a result of the api design). It also won't help if a view is observing more than one model...
 
 
 ### Views want things from more than one model
-Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like MVVM or MVP would have you write a Presenter or a ViewModel that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just got moved to the Presenter or the ViewModel.
+Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like MVVM or MVP would have you write a Presenter or a ViewModel that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter or the ViewModel.
 
 Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's:
 

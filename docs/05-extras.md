@@ -398,3 +398,8 @@ The syncView() also completes pretty quickly as all of your getters should be re
 In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not guaranteeing such bugs don't exist, in fact EditText does something slightly stupid: it calls afterTextChanged() even when the text is identical to what it had before, but it's easy to [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java). In any case, if you ever did get any kind of performance issues here, that's the time to measure and see what is happening, not before). If you follow the guidelines here correctly you will almost certainly encounter no problems at all, and that includes running on very cheap, low end devices. What you do get however is unparalleled robustness and clarity of code - which, because logic mistakes become fewer under those circumstances, sometimes results in even more performant code.
 
 If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unnecessarily (but still not actually redrawing the screen): chillax and be happy with the knowledge that your UI is *definitely* consistent ;)
+
+
+## <a name="somethingchangedparam"></a> 3) Why not put a parameter in the somethingChanged() function
+
+Head over [here](https://erdo.github.io/android-fore/03-reactive-uis.html#why-not-put-a-parameter-in-the-observersomethingchanged-method) for a discusion of that.
