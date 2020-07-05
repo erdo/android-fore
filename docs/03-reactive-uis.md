@@ -203,7 +203,7 @@ If you're still not satisfied with that, you can [remove even more boiler plate]
 
 That's everything you need to do to get bullet proof reactive UIs in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.
 
-## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() method?
+## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
 
 If I had a dollar for everyone who asked me this question! (I would have, about $4). It is the obvious question for anyone not familiar with this style of reactive view implementation, indeed in the distant past the Observable class did have a generic on it which supported this behaviour. But it was finally removed when we realised that doing so *significantly* reduced the amount of view code that had to be written.
 
