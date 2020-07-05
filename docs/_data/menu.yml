@@ -37,6 +37,8 @@
       url: "#fore-observables"
     - text: Connecting Views and Models
       url: "#connecting-views-and-models"
+    - text: SomethingChanged()'s missing parameter
+      url: "#why-not-put-a-parameter-in-the-observersomethingchanged-method"
 - text: More fore
   url: /04-more-fore.html
   subitems:
@@ -53,8 +55,6 @@
   subitems:
     - text: Presentation Slides
       url: "#presentations"
-    - text: Coding Exercise
-      url: "#coding-exercise"
     - text: State versus Events
       url: "#state-versus-events"
     - text: Android's Original Mistake

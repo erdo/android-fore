@@ -316,6 +316,8 @@ The other difference with Async is that to run it, you need to call executeTask(
 
 ## AsyncBuilder
 
+(_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
+
 For slightly more concise code, you can use AsyncBuilder. This class works in much the same way as Async, it just uses the build pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
 
 One restriction with AsyncBuilder is there is no way to publish progress, so if you want to use that feature during your asynchronous operation, just stick to a plain Async.
