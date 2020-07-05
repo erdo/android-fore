@@ -243,7 +243,7 @@ We already learnt about how updating views in this way introduces very [hard to 
 
 
 ### Views want things from more than one model
-Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like MVVM or MVP would have you write a Presenter or a ViewModel that would aggregate that data for you, but as we discovered, it's often not necessary and can cause [pointless code to be written](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o).
+Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like MVVM or MVP would have you write a Presenter or a ViewModel that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just got moved to the Presenter or the ViewModel.
 
 Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's:
 
@@ -279,7 +279,7 @@ weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
 
 ```
 
-Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with nearly no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), and it's what lets us write:
+Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), and it's what lets us write:
 
 ``` kotlin
 //single observer reference
@@ -338,14 +338,12 @@ fun syncView() {
 
 ```
 
-[This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is worth a read, but the upshot is that adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer. It would also lead developers down the wrong path regarding how to move data about in the UI layer whilst ensuring consistency when your application is rotated etc.
+[This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is worth a read, but the upshot is that adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer.
 
-Not having the ability to add a parameter here is one of the key reasons that fore UI code tends to be so compact compared with other architectures.
-
-This is one case where **fore** is preventing you from making an easy but horrible architectural mistake. **fore** is as valuable for what you can't do with it, as it is for what you can do with it.
+It would also lead developers down the wrong path regarding how to move data about in the UI layer whilst ensuring consistency when the application is rotated etc. It sounds a little strange, but part of the benefit of using **fore** in a team is that it automatically discourages developers from making that mistake. It's almost like an automatic, invisible code review. Not having the ability to send data via the somethingChanged() function is one of the key reasons that fore UI code tends to be so compact compared with other architectures.
 
 
-> "fore is as valuable for what you **can't** do with it, as it is for what you **can** do with it."
+> "adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer"
 
 
 Try to get comfortable using these observers to just notify observing view code of any (unspecified) changes to the model's state (once the observing view code has been told there are changes, it will call fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](https://erdo.github.io/android-fore/05-extras.html#observer-listener) discussion first).
