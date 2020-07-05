@@ -402,4 +402,4 @@ If you have a model that is changing in some way that an observer just so happen
 
 ## <a name="somethingchangedparam"></a> 3) Why not put a parameter in the somethingChanged() function
 
-Head over [here](https://erdo.github.io/android-fore/03-reactive-uis.html#why-not-put-a-parameter-in-the-observersomethingchanged-method) for a discusion of that.
+Head over [here](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) for a discusion of that.

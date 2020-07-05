@@ -38,7 +38,7 @@
     - text: Connecting Views and Models
       url: "#connecting-views-and-models"
     - text: SomethingChanged()'s missing parameter
-      url: "#why-not-put-a-parameter-in-the-observersomethingchanged-method"
+      url: "#somethingchanged-parameter"
 - text: More fore
   url: /04-more-fore.html
   subitems:
