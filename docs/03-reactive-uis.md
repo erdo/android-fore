@@ -205,23 +205,144 @@ That's everything you need to do to get bullet proof reactive UIs in your app, e
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() method?
 
-If I had a dollar for everyone who asked me this question! (I would have, about $4). There are a couple of good (but subtle) reasons that we don't have a parameter here though.
+If I had a dollar for everyone who asked me this question! (I would have, about $4). It is the obvious question for anyone not familiar with this style of reactive view implementation, indeed in the distant past the Observable class did have a generic on it which supported this behaviour. But it was finally removed when we realised that doing so *significantly* reduced the amount of view code that had to be written.
 
-Adding a parameter would let client code use the observer like some kind of messenger thing or an event bus. That could be a perfectly valid thing to do for the specific situation you find yourself in, and sending data like that might at first seem like an easy and convenient thing to do here as well.
+### Views want different things from the same model
+Usually, view layer components are going to want different things from the same model. Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
 
-When it comes to writing reactive android view layers however, doing so instantly couples a particular model to a particular view. (It's one of the reasons implementing MVO using a powerful framework like RxJava is a lot worse than you might expect).
+Regardless, our example model will be managing these three pieces of state:
 
-Often with **fore**, different views will want different things from the same model and as the code evolves, that model slowly ends up having to support many different flavoured observables all with different parameter requirements.
+``` kotlin
+fun hasSessionToken(): Boolean
+fun getLastLoggedInTimeStampMs(): Long
+fun getAccountStatus(): Account.Status
+```
 
-Similarly there will often be views that are interested in more than one model, and if those models all have different observable interfaces, each of those interfaces will need to be implemented and managed by the view, rather than just using a single Observer implementation.
+All those states may change (potentially as a result of a network request completing in the background, or a notification arriving on the device etc). And if they change, the views need to update themselves immediately without us needing to do it (that's the whole point of reactive UIs after all!).
 
-It balloons the amount of code that needs to be written. It also leads developers down the wrong path regarding how to move data about in the UI layer whilst ensuring consistency when your application is rotated etc (as discussed above).
+If we make all these things individually observable, we might choose something like RxJava observables, or LiveData and the views will need to observe each piece of state individually. Taking LiveData as an example, the view layer will have to contain something like this:
 
-_(The fact that the observable interface is the same for all models is also what enables fore to handle the adding and removing of observers automatically for us in the Sync... classes.)_
+
+``` kotlin
+accountModel.sessionTokenLiveData.observer(this, Observer { hasToken ->
+  //update the view based on the hasToken Boolean
+})
+
+accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp ->
+  //update the view based on the timeStamp Long
+})
+
+accountModel.accountStateLiveData.observer(this, Observer { status ->
+  //update the view based on the status class
+})
+```
+
+We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical boiler plate. The same would be the case if we had a parameter in the somethingChanged() method. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually.
+
+(We can improve this situation by using LiveData to observe a single immutable state class which contains all the states - but you have to enforce that yourself, it doesn't come automatically as a result of the framework design). It also won't help if a view is observing more than one model...
+
+
+### Views want things from more than one model
+Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like MVVM or MVP would have you write a Presenter or a ViewModel that would aggregate that data for you, but as we discovered, it's often not necessary and can cause [pointless code to be written](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o).
+
+Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's:
+
+
+``` kotlin
+emailInbox.unreadCountLiveData.observer(this, Observer { unread ->
+  //update the view based on the unread Int
+})
+
+accountModel.sessionTokenLiveData.observer(this, Observer { hasToken ->
+  //update the view based on the hasToken Boolean
+})
+
+accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp ->
+  //update the view based on the timeStamp Long
+})
+
+accountModel.accountStateLiveData.observer(this, Observer { status ->
+  //update the view based on the status enum
+})
+
+weatherModel.weatherForecastLiveData.observer(this, Observer { forecast ->
+  //update the view based on the forecast String
+})
+
+weatherModel.temperatureLiveData.observer(this, Observer { temperature ->
+  //update the view based on the temperature int
+})
+
+weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
+  //update the view based on the windSpeed int
+})
+
+```
+
+Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with nearly no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), and it's what lets us write:
+
+``` kotlin
+//single observer reference
+private var observer = Observer { syncView() }
+
+
+fun syncView() {
+    homepage_unreademails.text = "${emailInbox.getUnreadCount()}"
+    homepage_loggedin.text = if (accountModel.hasSessionToken()) "IN" else "OUT"
+    homepage_lastloggedin.text = LAST_LOGGED_IN_FORMATTER.format(accountModel.getLastLoggedInTimeStampMs())
+    homepage_accountstatus.text = accountModel.getStatus().name
+    homepage_weatherforecast.text = weatherModel.getForecast()
+    homepage_temperature.text = "${weatherModel.getTemperature()}"
+    homepage_windspeed.text = "${weatherModel.getWindSpeed()}"
+}
+
+
+override fun onStart() {
+    super.onStart()
+    emailInbox.addObserver(observer)
+    accountModel.addObserver(observer)
+    weatherModel.addObserver(observer)
+    syncView() //<-- don't forget this
+}
+
+override fun onStop() {
+    super.onStop()
+    emailInbox.removeObserver(observer)
+    accountModel.removeObserver(observer)
+    weatherModel.removeObserver(observer)
+}
+
+```
+
+With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with the self-syncing [SyncXXX](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) classes:
+
+``` kotlin
+
+override fun getThingsToObserve(): LifecycleSyncer.Observables {
+  return LifecycleSyncer.Observables(
+      emailInbox,
+      accountModel,
+      weatherModel
+  )
+}
+
+fun syncView() {
+    homepage_unreademails.text = "${emailInbox.getUnreadCount()}"
+    homepage_loggedin.text = if (accountModel.hasSessionToken()) "IN" else "OUT"
+    homepage_lastloggedin.text = LAST_LOGGED_IN_FORMATTER.format(accountModel.getLastLoggedInTimeStampMs())
+    homepage_accountstatus.text = accountModel.getStatus().name
+    homepage_weatherforecast.text = weatherModel.getForecast()
+    homepage_temperature.text = "${weatherModel.getTemperature()}"
+    homepage_windspeed.text = "${weatherModel.getWindSpeed()}"
+}
+
+```
+
+[This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is worth a read, but the upshot is that adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer. It would also lead developers down the wrong path regarding how to move data about in the UI layer whilst ensuring consistency when your application is rotated etc.
 
 Not having the ability to add a parameter here is one of the key reasons that fore UI code tends to be so compact compared with other architectures.
 
-This is one case where **fore** is stopping you from making an easy but horrible architectural mistake. **fore** is as valuable for what you can't do with it, as it is for what you can do with it.
+This is one case where **fore** is preventing you from making an easy but horrible architectural mistake. **fore** is as valuable for what you can't do with it, as it is for what you can do with it.
 
 
 > "fore is as valuable for what you **can't** do with it, as it is for what you **can** do with it."
