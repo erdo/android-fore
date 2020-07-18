@@ -17,7 +17,7 @@
 
 **fore** helps you move code out of the view layer. Because once you do that, magical things start to happen.
 
-The most important class in the fore library is the observable implementation [kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java). This very simple class lets you **make anything observable** (usually it's models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
+The most important class in the fore library is the observable implementation. This very simple class lets you **make anything observable** (usually it's models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
 
 
 <!-- Tabbed code sample -->
@@ -52,11 +52,11 @@ The fore observable has two different WorkModes:
 - **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
 - **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
-The core package is so small (**126 methods** and about **500 lines of code**), you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
+The core package is tiny (**126 methods** and about **500 lines of code**), so you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
-Because the view layer is so sparse when implementing MVO with **fore** the apps are highly scalable from a complexity standpoint and **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
+The view layer is particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
-If you're interested, there is a dev.to tutorial [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) that explains the whys and the hows of converting the Android Architecture Blueprint sample app, from MVP to MVO. (That app is in Java, but the same principles apply for [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) apps).
+Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This dev.to [article](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to MVO (and in doing so drops the code line count by about half). This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) also gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app. But these are subtle, advanced topics that are not really necessary to use fore at all - most of the actual code in the fore library is quite simple.
 
 ## Quick Start
 
@@ -94,7 +94,7 @@ If you want to check what versions of what dependencies each package pulls in, t
 **If you're new to fore, Welcome! might I suggest:**
 
  1. Cloning this git repo
- 2. Getting the example apps running (you'll need at least Android Studio 3)
+ 2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 if you're still on AS3*)
 
 **Then either**
 
