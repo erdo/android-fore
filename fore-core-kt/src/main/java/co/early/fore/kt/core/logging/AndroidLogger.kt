@@ -1,9 +1,10 @@
 package co.early.fore.kt.core.logging
 
 import android.util.Log
-import java.util.regex.Pattern
 
-class AndroidLogger(private val tagPrefix: String? = null) : Logger {
+class AndroidLogger(private val tagPrefix: String? = null) :
+        Logger,
+        TagInferer by TagInfererImpl() {
 
     override fun e(message: String) {
         e(inferTag(), message)
@@ -85,38 +86,9 @@ class AndroidLogger(private val tagPrefix: String? = null) : Logger {
         Log.e(addTagPrefixIfPresent(tag), message, throwable)
     }
 
-    private fun inferTag(): String {
-        val trace = Throwable().stackTrace
-        return if (trace.size > 2) {
-            extractClassName(trace[2])
-        } else "missing"
-    }
-
-    /**
-     * inspired by Timber (also Apache 2) -->
-     */
-    private fun extractClassName(element: StackTraceElement): String {
-        var tag = element.className.substringAfterLast('.')
-        val m = ANONYMOUS_CLASS.matcher(tag)
-        if (m.find()) {
-            tag = m.replaceAll("")
-        }
-        return if (tag.length <= MAX_TAG_LENGTH) {
-            tag
-        } else {
-            tag.substring(0, BOOK_END_LENGTH) + ".." + tag.substring(tag.length - BOOK_END_LENGTH, tag.length)
-        }
-    }
-
     private fun addTagPrefixIfPresent(message: String): String {
         return tagPrefix?.let {
             it + message
         } ?: message
-    }
-
-    companion object {
-        private const val MAX_TAG_LENGTH = 20 //below API 24 is limited to 23 characters anyway
-        private const val BOOK_END_LENGTH = (MAX_TAG_LENGTH / 2) - 1
-        private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
     }
 }
