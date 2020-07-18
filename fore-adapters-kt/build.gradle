@@ -47,10 +47,10 @@ android {
 
 dependencies {
 
-    implementation "co.early.fore:fore-adapters:${rootProject.ext.ForeLibVersion_ForExamples}"
-    implementation "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
-    //implementation project(path: ':fore-adapters')
-    //implementation project(path: ':fore-core-kt')
+    //api "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
+    //api "co.early.fore:fore-adapters:${rootProject.ext.ForeLibVersion_ForExamples}"
+    api project(path: ':fore-core-kt')
+    api project(path: ':fore-adapters')
 
     api "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
     api "androidx.core:core-ktx:${rootProject.ext.core_ktx}"
