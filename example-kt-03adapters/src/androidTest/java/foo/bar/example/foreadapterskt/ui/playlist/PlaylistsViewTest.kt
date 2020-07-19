@@ -11,8 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.runner.AndroidJUnit4
 import foo.bar.example.foreadapterskt.R
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistAdvancedModel
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistSimpleModel
+import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.Track
 import foo.bar.example.foreadapterskt.ui.EspressoTestMatchers
 import io.mockk.MockKAnnotations
@@ -32,9 +32,9 @@ class PlaylistsViewTest {
 
 
     @MockK
-    private lateinit var mockPlaylistSimpleModel: PlaylistSimpleModel
+    private lateinit var mockDiffablePlaylistModel: DiffablePlaylistModel
     @MockK
-    private lateinit var mockPlaylistAdvancedModel: PlaylistAdvancedModel
+    private lateinit var mockUpdatablePlaylistModel: UpdatablePlaylistModel
 
 
     @Before
@@ -46,7 +46,7 @@ class PlaylistsViewTest {
     fun emptyPlaylists() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withAdvancedPlaylistHavingTracks(0)
             .withSimplePlaylistHavingTracks(0)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -80,7 +80,7 @@ class PlaylistsViewTest {
     fun with3ItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withAdvancedPlaylistHavingTracks(3)
             .withSimplePlaylistHavingTracks(3)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -114,7 +114,7 @@ class PlaylistsViewTest {
     fun with5ItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withAdvancedPlaylistHavingTracks(5)
             .withSimplePlaylistHavingTracks(5)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -148,7 +148,7 @@ class PlaylistsViewTest {
     fun withDifferentItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withSimplePlaylistHavingTracks(0)
             .withAdvancedPlaylistHavingTracks(5)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -178,7 +178,7 @@ class PlaylistsViewTest {
     fun stateMaintainedAfterRotation() {
 
         //arrange
-        val activity = StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        val activity = StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withAdvancedPlaylistHavingTracks(3)
             .withSimplePlaylistHavingTracks(3)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -204,7 +204,7 @@ class PlaylistsViewTest {
     @Throws(Exception::class)
     fun clickAddTrackAdvancedCallsModel() {
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withAdvancedPlaylistHavingTracks(0)
             .withSimplePlaylistHavingTracks(0)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -216,7 +216,7 @@ class PlaylistsViewTest {
 
         //assert
         verify(exactly = 1) {
-            mockPlaylistAdvancedModel.addNewTrack()
+            mockUpdatablePlaylistModel.addNewTrack()
         }
     }
 
@@ -225,7 +225,7 @@ class PlaylistsViewTest {
     @Throws(Exception::class)
     fun clickAddTrackSimpleCallsModel() {
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
             .withAdvancedPlaylistHavingTracks(0)
             .withSimplePlaylistHavingTracks(0)
             .withPlaylistsContainingTracks(Track(R.color.pastel1))
@@ -237,7 +237,7 @@ class PlaylistsViewTest {
 
         //assert
         verify(exactly = 1) {
-            mockPlaylistSimpleModel.addNewTrack()
+            mockDiffablePlaylistModel.addNewTrack()
         }
     }
 

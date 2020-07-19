@@ -1,12 +1,12 @@
 package co.early.fore.kt.adapters
 
-import co.early.fore.adapters.*
 import co.early.fore.core.WorkMode
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.coroutine.withContextDefault
 import co.early.fore.kt.core.logging.Logger
+import co.early.fore.adapters.*
 
-class DiffableImp<T : DiffComparator<T>>(
+class DiffableImp<T : DiffComparatorCopyable<T>>(
         private val systemTimeWrapper: SystemTimeWrapper,
         private val workMode: WorkMode,
         private val maxSizeForDiffUtil: Int = 1000,
@@ -23,22 +23,29 @@ class DiffableImp<T : DiffComparator<T>>(
      *
      * The caller should then immediately set the newList and notify the adapter
      */
-    suspend fun setDiffSpec(oldList: List<T>, newList: List<T>, callback: (diffSpec: DiffSpec) -> Unit) {
+    suspend fun setDiffSpec(oldList: List<T>, newList: List<T>, callback: (result: Pair<List<T>, DiffSpec>) -> Unit) {
 
         logger?.d("calculateDiffSpec() - thread.id: ${Thread.currentThread().id}")
 
         val result = withContextDefault(workMode) {
-            if (oldList.size < maxSizeForDiffUtil && newList.size < maxSizeForDiffUtil) {
+
+            val newListCopy = newList.map { it.copy() } //deep copy
+            val spentList = newList
+            val comparingList = oldList
+
+            logger?.d(" ...list copied  - thread.id: ${Thread.currentThread().id}")
+
+            if (oldList.size < maxSizeForDiffUtil && newListCopy.size < maxSizeForDiffUtil) {
                 logger?.d(" ...calculating DiffSpec between old and new list - thread.id: ${Thread.currentThread().id}")
-                DiffSpec(DiffCalculator<T>().createDiffResult(oldList, newList), systemTimeWrapper)
+                newListCopy to DiffSpec(DiffCalculator<T>().createDiffResult(oldList, newListCopy), systemTimeWrapper)
             } else {
                 logger?.d(" ...skipping DiffSpec, lists(s) too large - thread.id: ${Thread.currentThread().id}")
-                fullDiffSpec
+                newListCopy to fullDiffSpec
             }
         }
 
         logger?.d(" ...setting DiffSpec - thread.id: ${Thread.currentThread().id}")
-        latestDiffSpec = result
+        latestDiffSpec = result.second
         logger?.d(" ...returning DiffSpec - thread.id: ${Thread.currentThread().id}")
         callback(result)
     }

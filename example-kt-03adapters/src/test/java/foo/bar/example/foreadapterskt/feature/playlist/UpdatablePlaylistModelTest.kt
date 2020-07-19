@@ -9,6 +9,7 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.time.SystemTimeWrapper
+import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -18,7 +19,7 @@ import io.mockk.mockk
 /**
  *
  */
-class PlaylistAdvancedModelTest {
+class UpdatablePlaylistModelTest {
 
     private val logger = SystemLogger()
 
@@ -35,7 +36,7 @@ class PlaylistAdvancedModelTest {
     fun initialConditions() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
 
         //act
 
@@ -53,7 +54,7 @@ class PlaylistAdvancedModelTest {
     fun addNewTrack() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
 
         //act
         playlistAdvancedModel.addNewTrack()
@@ -69,7 +70,7 @@ class PlaylistAdvancedModelTest {
     fun removeTrack() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.addNewTrack()
 
         //act
@@ -85,7 +86,7 @@ class PlaylistAdvancedModelTest {
     fun add5NewTracks() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
 
         //act
         playlistAdvancedModel.add5NewTracks()
@@ -101,7 +102,7 @@ class PlaylistAdvancedModelTest {
     fun remove5Tracks() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.add5NewTracks()
 
         //act
@@ -117,7 +118,7 @@ class PlaylistAdvancedModelTest {
     fun increasePlays() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.addNewTrack()
 
         //act
@@ -133,7 +134,7 @@ class PlaylistAdvancedModelTest {
     fun decreasePlays() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.addNewTrack()
         playlistAdvancedModel.increasePlaysForTrack(0)
 
@@ -150,7 +151,7 @@ class PlaylistAdvancedModelTest {
     fun removeAllTracks() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.add5NewTracks()
         playlistAdvancedModel.addNewTrack()
         playlistAdvancedModel.addNewTrack()
@@ -184,7 +185,7 @@ class PlaylistAdvancedModelTest {
     fun observersNotifiedAtLeastOnceForAddTrack() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         val mockObserver: Observer = mockk(relaxed = true)
         playlistAdvancedModel.addObserver(mockObserver)
 
@@ -203,7 +204,7 @@ class PlaylistAdvancedModelTest {
     fun observersNotifiedAtLeastOnceForIncreasePlays() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.addNewTrack()
         val mockObserver: Observer = mockk(relaxed = true)
         playlistAdvancedModel.addObserver(mockObserver)
@@ -230,7 +231,7 @@ class PlaylistAdvancedModelTest {
     fun updateSpecCorrectForAddTrack() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
 
         //act
         playlistAdvancedModel.addNewTrack()
@@ -248,7 +249,7 @@ class PlaylistAdvancedModelTest {
     fun updateSpecCorrectForIncreasePlays() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.addNewTrack()
         playlistAdvancedModel.add5NewTracks()
 
@@ -268,7 +269,7 @@ class PlaylistAdvancedModelTest {
     fun updateSpecCorrectForRemove5Tracks() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.add5NewTracks()
         playlistAdvancedModel.addNewTrack()
 
@@ -287,7 +288,7 @@ class PlaylistAdvancedModelTest {
     fun updateSpecCorrectForClearAllTracks() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.add5NewTracks()
         playlistAdvancedModel.addNewTrack()
 
@@ -307,7 +308,7 @@ class PlaylistAdvancedModelTest {
     fun updateSpecCorrectPastMaxAge() {
 
         //arrange
-        val playlistAdvancedModel = PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        val playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
         playlistAdvancedModel.add5NewTracks()
         playlistAdvancedModel.addNewTrack()
 

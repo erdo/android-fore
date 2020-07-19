@@ -44,8 +44,10 @@ dependencies {
 
     implementation "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation "co.early.fore:fore-adapters:${rootProject.ext.ForeLibVersion_ForExamples}"
+    implementation "co.early.fore:fore-adapters-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
     //implementation project(path: ':fore-core-kt')
     //implementation project(path: ':fore-adapters')
+    //implementation project(path: ':fore-adapters-kt')
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"

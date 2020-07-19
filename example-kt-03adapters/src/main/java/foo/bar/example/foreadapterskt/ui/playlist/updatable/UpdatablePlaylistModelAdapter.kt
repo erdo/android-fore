@@ -1,4 +1,4 @@
-package foo.bar.example.foreadapterskt.ui.playlist.advanced
+package foo.bar.example.foreadapterskt.ui.playlist.updatable
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import co.early.fore.adapters.ChangeAwareAdapter
 import foo.bar.example.foreadapterskt.R
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistAdvancedModel
+import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_decreaseplays_button
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_increaseplays_button
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_playsrequested_text
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_remove_button
 
 
-class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvancedModel) : ChangeAwareAdapter<PlaylistAdapterAdvanced.ViewHolder>(playlistAdvancedModel) {
+class UpdatablePlaylistModelAdapter(private val updatablePlaylistModel: UpdatablePlaylistModel) : ChangeAwareAdapter<UpdatablePlaylistModelAdapter.ViewHolder>(updatablePlaylistModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_playlists_listitem, parent, false)
@@ -25,7 +25,7 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val item = playlistAdvancedModel.getTrack(position)
+        val item = updatablePlaylistModel.getTrack(position)
 
         holder.itemView.track_increaseplays_button.setOnClickListener {
             //if you tap very fast on different rows removing them
@@ -33,21 +33,21 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
             //you check for this
             val betterPosition = holder.adapterPosition
             if (betterPosition != NO_POSITION) {
-                playlistAdvancedModel.increasePlaysForTrack(betterPosition)
+                updatablePlaylistModel.increasePlaysForTrack(betterPosition)
             }
         }
 
         holder.itemView.track_decreaseplays_button.setOnClickListener {
             val betterPosition = holder.adapterPosition
             if (betterPosition != NO_POSITION) {
-                playlistAdvancedModel.decreasePlaysForTrack(betterPosition)
+                updatablePlaylistModel.decreasePlaysForTrack(betterPosition)
             }
         }
 
         holder.itemView.track_remove_button.setOnClickListener {
             val betterPosition = holder.adapterPosition
             if (betterPosition != NO_POSITION) {
-                playlistAdvancedModel.removeTrack(betterPosition)
+                updatablePlaylistModel.removeTrack(betterPosition)
             }
         }
 
@@ -58,7 +58,7 @@ class PlaylistAdapterAdvanced(private val playlistAdvancedModel: PlaylistAdvance
     }
 
     override fun getItemCount(): Int {
-        return playlistAdvancedModel.trackListSize
+        return updatablePlaylistModel.trackListSize
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

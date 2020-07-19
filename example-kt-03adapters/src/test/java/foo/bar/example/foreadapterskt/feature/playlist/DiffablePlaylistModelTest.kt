@@ -6,6 +6,7 @@ import org.junit.Test
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
+import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -13,7 +14,7 @@ import io.mockk.verify
 /**
  *
  */
-class PlaylistSimpleModelTest {
+class DiffablePlaylistModelTest {
 
     private val logger = SystemLogger()
 
@@ -22,7 +23,7 @@ class PlaylistSimpleModelTest {
     fun initialConditions() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
 
         //act
 
@@ -37,7 +38,7 @@ class PlaylistSimpleModelTest {
     fun addNewTrack() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
 
         //act
         playlistSimpleModel.addNewTrack()
@@ -53,7 +54,7 @@ class PlaylistSimpleModelTest {
     fun removeTrack() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         playlistSimpleModel.addNewTrack()
 
         //act
@@ -69,7 +70,7 @@ class PlaylistSimpleModelTest {
     fun add5NewTracks() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
 
         //act
         playlistSimpleModel.add5NewTracks()
@@ -85,7 +86,7 @@ class PlaylistSimpleModelTest {
     fun remove5Tracks() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         playlistSimpleModel.add5NewTracks()
 
         //act
@@ -101,7 +102,7 @@ class PlaylistSimpleModelTest {
     fun increasePlays() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         playlistSimpleModel.addNewTrack()
 
         //act
@@ -117,7 +118,7 @@ class PlaylistSimpleModelTest {
     fun decreasePlays() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         playlistSimpleModel.addNewTrack()
         playlistSimpleModel.increasePlaysForTrack(0)
 
@@ -134,7 +135,7 @@ class PlaylistSimpleModelTest {
     fun removeAllTracks() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         playlistSimpleModel.add5NewTracks()
         playlistSimpleModel.addNewTrack()
         playlistSimpleModel.addNewTrack()
@@ -168,7 +169,7 @@ class PlaylistSimpleModelTest {
     fun observersNotifiedAtLeastOnceForAddTrack() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         val mockObserver: Observer = mockk(relaxed = true)
         playlistSimpleModel.addObserver(mockObserver)
 
@@ -187,7 +188,7 @@ class PlaylistSimpleModelTest {
     fun observersNotifiedAtLeastOnceForIncreasePlays() {
 
         //arrange
-        val playlistSimpleModel = PlaylistSimpleModel(WorkMode.SYNCHRONOUS, logger)
+        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         playlistSimpleModel.addNewTrack()
         val mockObserver: Observer = mockk(relaxed = true)
         playlistSimpleModel.addObserver(mockObserver)

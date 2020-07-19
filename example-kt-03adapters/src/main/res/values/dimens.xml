@@ -1,0 +1,14 @@
+<resources>
+
+    <dimen name="common_textsize_small">10sp</dimen>
+    <dimen name="common_textsize_medium">15sp</dimen>
+
+    <dimen name="common_space_tiny">2dp</dimen>
+    <dimen name="common_space_small">5dp</dimen>
+    <dimen name="common_space_medium">10dp</dimen>
+    <dimen name="common_space_medium_large">40dp</dimen>
+    <dimen name="common_space_large">100dp</dimen>
+
+    <dimen name="button_min_width">30dp</dimen>
+
+</resources>
