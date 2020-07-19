@@ -87,7 +87,7 @@ As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONO
 
 # Adapters notifyDataSetChangedAuto()
 
-*For a clean implementation in a small sample app, please see the [Adapter Example App Source Code](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
+*Note: this section is under review at the moment, we have better options now in the form of AsyncListDiffer and androidx ListAdapter. If it looks like we don't need the fore classes for this, they will be deprecated. For a clean implementation of the current fore solution, please see the [Adapter Example App Source Code](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
 
 Ahh adapters, I miss the good old days when all you had to do was call notifyDataSetChanged(). And the best place to call it is from inside the syncView() method:
 
@@ -120,7 +120,6 @@ fun syncView() {
 
 In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes). (Your adapter will have a reference to the model which is where it will get its list data from - see the sample app linked to above).
 
-If you're not overly concerned with list animations I would continue to call notifyDataSetChanged anyway (yes it is marked as deprecated, but the alternative methods that android is offering are so difficult to implement correctly that I strongly suspect they will never be able to remove the original adapter.notifyDataSetChanged() method from the API).
 
 *By the way, I've noticed people bizarrely claiming that notifyDataSetChanged() is "inefficient" but then replacing it with code that calls DiffUtil. Nothing wrong with DiffUtil, but that's like choosing black tea instead of black coffee because you're on a diet, but then taking your tea and adding 5 teaspoons of sugar, whipped cream and marsh mallows on top. If you ever see a lag using notifyDataSetChanged() then you're probably doing something very wrong (like re-inflating your cells' layout when you shouldn't)*
 
