@@ -88,7 +88,7 @@ if (basket.isBelowMinimum()){
 }
  </code></pre>
 
-But you'll find that by focusing on the UI component first rather than the condition, you can get some extremely tight code like so:
+But you'll find that by **focusing on the UI component** first rather than the condition, you can get some extremely tight code like so:
 
 
 <!-- Tabbed code sample -->
@@ -128,7 +128,7 @@ By extending ObservableImp / implementing Observable in the case of java, or del
 - For this to work, all a model must do is call **notifyObservers()** whenever its own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
 - When the model is constructed in **ASYNCHRONOUS** mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
 - To avoid memory leaks, **views are responsible for removing their observer callback** from the observable model once they are no longer interested in receiving notifications
-- Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as View.onAttachedToWindow() and View.onDetachedFromWindow()
+- Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as Activity.onStart() / Activity.onStop or View.onAttachedToWindow() / View.onDetachedFromWindow()
 - The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observable is required.
 
 ## Connecting Views and Models
@@ -159,7 +159,7 @@ val observer = Observer { syncView() }
 Both will compile and run though and the observer will be triggered successfully **but you will end up with a memory leak when you come to remove this observer as the reference will have changed.**
 
 
-And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using View lifecycle methods to do it)*:
+And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using Fragment lifecycle methods to do it)*:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -169,31 +169,31 @@ And in line with android lifecycle methods (of either the Activity, the Fragment
 
 <pre class="tabcontent tabbed java"><code>
 @Override
-protected void onAttachedToWindow() {
-    super.onAttachedToWindow();
+protected void onStart() {
+    super.onStart();
     wallet.addObserver(observer);
     account.addObserver(observer);
     syncView(); //  <- don't forget this
 }
 
 @Override
-protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
+protected void onStop() {
+    super.onStop();
     wallet.removeObserver(observer);
     account.removeObserver(observer);
 }
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-override fun onAttachedToWindow() {
-    super.onAttachedToWindow()
+override fun onStart() {
+    super.onStart()
     wallet.addObserver(observer)
     account.addObserver(observer)
     syncView() //  <- don't forget this
 }
 
-override fun onDetachedFromWindow() {
-    super.onDetachedFromWindow()
+override fun onStop() {
+    super.onStop()
     wallet.removeObserver(observer)
     account.removeObserver(observer)
 }
@@ -243,38 +243,38 @@ We already learnt about how updating views in this way introduces very [hard to 
 
 
 ### Views want things from more than one model
-Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like MVVM or MVP would have you write a Presenter or a ViewModel that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter or the ViewModel.
+Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
 
 Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's):
 
 
 ``` kotlin
 emailInbox.unreadCountLiveData.observer(this, Observer { unread ->
-  //update the view based on the unread Int
+  //update the [view / presenter / viewmodel / viewState] based on the unread Int
 })
 
 accountModel.sessionTokenLiveData.observer(this, Observer { hasToken ->
-  //update the view based on the hasToken Boolean
+  //update the [view / presenter / viewmodel / viewState] based on the hasToken Boolean
 })
 
 accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp ->
-  //update the view based on the timeStamp Long
+  //update the [view / presenter / viewmodel / viewState] based on the timeStamp Long
 })
 
 accountModel.accountStateLiveData.observer(this, Observer { status ->
-  //update the view based on the status enum
+  //update the [view / presenter / viewmodel / viewState] based on the status enum
 })
 
 weatherModel.weatherForecastLiveData.observer(this, Observer { forecast ->
-  //update the view based on the forecast String
+  //update the [view / presenter / viewmodel / viewState] based on the forecast String
 })
 
 weatherModel.temperatureLiveData.observer(this, Observer { temperature ->
-  //update the view based on the temperature int
+  //update the [view / presenter / viewmodel / viewState] based on the temperature int
 })
 
 weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
-  //update the view based on the windSpeed int
+  //update the [view / presenter / viewmodel / viewState] based on the windSpeed int
 })
 
 ```
