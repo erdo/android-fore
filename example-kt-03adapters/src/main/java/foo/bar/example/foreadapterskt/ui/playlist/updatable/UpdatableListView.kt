@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreadapterskt.OG
-import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
-import kotlinx.android.synthetic.main.view_playlists_diffable.view.*
 import kotlinx.android.synthetic.main.view_playlists_updateable.view.*
 
 /**
