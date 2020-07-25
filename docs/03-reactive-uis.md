@@ -285,18 +285,6 @@ Doing away with a parameter in somethingChanged() is the key innovation in **for
 //single observer reference
 private var observer = Observer { syncView() }
 
-
-fun syncView() {
-    homepage_unreademails.text = "${emailInbox.getUnreadCount()}"
-    homepage_loggedin.text = if (accountModel.hasSessionToken()) "IN" else "OUT"
-    homepage_lastloggedin.text = LAST_LOGGED_IN_FORMATTER.format(accountModel.getLastLoggedInTimeStampMs())
-    homepage_accountstatus.text = accountModel.getStatus().name
-    homepage_weatherforecast.text = weatherModel.getForecast()
-    homepage_temperature.text = "${weatherModel.getTemperature()}"
-    homepage_windspeed.text = "${weatherModel.getWindSpeed()}"
-}
-
-
 override fun onStart() {
     super.onStart()
     emailInbox.addObserver(observer)
@@ -325,6 +313,14 @@ override fun getThingsToObserve(): LifecycleSyncer.Observables {
       weatherModel
   )
 }
+
+```
+
+> "reduce view layer code to its absolute fundamentals: what things look like"
+
+This lets you reduce view layer code to its absolute fundamentals: what things look like. Imagine a fairly complex reactive UI that displays if the user is logged in or not, shows the last time the user logged in, the number of unread emails, what the account status is, a weather forecast, and the current wind speed and temperature. With appropriately written and observable models, the syncView implementation for that screen would be:
+
+``` kotlin
 
 fun syncView() {
     homepage_unreademails.text = "${emailInbox.getUnreadCount()}"
