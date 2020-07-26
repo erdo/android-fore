@@ -44,8 +44,8 @@
   subitems:
     - text: Retrofit and the CallProcesor
       url: "#retrofit-and-the-callprocessor"
-    - text: Adapters and notifyDataSetChangedAuto()
-      url: "#adapters-notifydatasetchangedauto"
+    - text: Adapter animations
+      url: "#adapter-animations"
     - text: Async and Coroutines
       url: "#asynctasks-with-lambdas"
     - text: SyncTrigger

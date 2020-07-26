@@ -85,11 +85,11 @@ As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONO
 
 
 
-# Adapters notifyDataSetChangedAuto()
+# Adapter animations
 
 *For some robust and testable implementations, please see the [Adapter Example App Source Code](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
 
-Firstly, if you don't care about adapter animations, just call notifyDataSetChanged() from inside the syncView() function (this assumes you have setup your adapter to be driven by an observable model that contains the logic as the sample apps do):
+Firstly, if you _don't_ care about adapter animations, just call notifyDataSetChanged() from inside the syncView() function:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -118,20 +118,20 @@ fun syncView() {
  </code></pre>
 
 
-In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes). (Your adapter will have a reference to the model which is where it will get its list data from - see the sample app linked to above).
+In this way you let your adapters piggy back on the observer which you have already setup for your view (it's the observer that calls syncView() whenever the model changes). Your adapter needs to be setup as in the examples, i.e. most of the logic will be moved to the model, and the adapter will have a reference to the model which is where it will get its list data from - see the sample app linked to above.
 
 
 ## RecyclerView Animations
 
-Changing list animations is probably one of the most complicated parts of android to understand as it's heavily timing and threading dependent. To be fair, getting android list animations to work 99% of the time is not too difficult (especially if your list changes are small and infrequent). But if you'd rather not depend on luck and timing for your apps robustness, it can require some very carefully written code.
+Adapter animations are probably one of the most complicated parts of android to get completely right as they are extremely timing and threading dependent. To be fair, getting adapters animations to work "99% of the time" is not too difficult (especially if your list changes are small and infrequent). But if you're chasing 100% robustness and you'd rather not depend on luck and timing for your apps performance (because your app has a lot of users for instance) it can require some very carefully written code.
 
-Basically in order to get animations, you need to tell the adapter what kind of change actually happened, what rows were added or removed etc. There are two ways to do this on android:
+As most android developers know, in order to get animations you need to tell the adapter what kind of change actually happened, what rows were added or changed etc. There are two ways to do this on android:
 
-- Tell the adapter by calling the appropriate notifyItem... methods, that is how fore's **Updatable** classes work under the hood, in order to use these you need to be in a position to know what changes were made to the list of course. For example if you are maintaining the list inside a model, and your public addItem(newItem: Item) function is called, you know that the list has had an item added. Similarly if your model's public changeTextForItem(index:Int, text:String) function, for example, is called, then you know that the item at that index has been changed. You'll find example code for this [here](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/updatable/UpdatableListView.kt)
+- Tell the adapter by calling the appropriate notifyItem... methods, that is how fore's **Updatable** classes work under the hood, in order to use these you need to be in a position to know what changes were made to the list of course. For example if you are maintaining the list inside a model, and a public `addItem(newItem: Item)` function is called, you know that the list has had an item added. Similarly if a model's public `changeTextForItem(index:Int, text:String)` function, is called, then you know that the item at that index has been changed. Mostly fore works this out for you, with the exception of when an item is changed (in which case you need to manually call `list.makeAwareOfDataChange(index)`) You'll find example code for this here [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/updatable/UpdatableListView.kt) [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/updatable/UpdatablePlaylistModel.kt)
 
-- Tell the adapter by using android's DiffUtil, that is how fore's **Diffable** classes work under the hood. This method is ideal if you aren't in a position to know ahead of time what changes have been made to the list, for example if your list is driven by a database. DiffUtil is a little more resource intensive (so you will want to run the DiffUtil in a coroutine), you'll find example code for this [here](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/diffable/DiffableListView.kt)
+- Tell the adapter by using android's DiffUtil, that is how fore's **Diffable** classes work under the hood. This method is ideal if you aren't in a position to know ahead of time what changes have been made to the list, for example if your list changes come via an API (i.e. you only get the new list, you don't get the new list and information about what changed). DiffUtil is a little more resource intensive (so you will want to run the DiffUtil in a coroutine), you'll find example code for this here [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/diffable/DiffableListView.kt) [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/diffable/DiffablePlaylistModel.kt)
 
-- Android also provides us with **AsyncListDiffer / ListAdapter** (which also use DiffUtil under the hood). Depending on your situtation you might find these useful (one disadvantage is that it moves management of your list out of a model class and into an adapter, which necessarily becomes more complicated). You'll find example code for this [here](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/diffable/DiffableListView.kt).
+Android also provides us with **AsyncListDiffer / ListAdapter** (which also use DiffUtil under the hood). Depending on your situtation you might find these useful (one disadvantage is that it moves management of your list out of a model class and into an adapter, short-cutting some of the benefits of MVO). You'll find example code for this here for comparison anyway, please see the guidance in the view source code [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferListView.kt) (there is no model).
 
 Once things have been setup correctly with fore, the only thing you'll need to do in the view layer is call notifyDataSetChangedAuto() instead of notifyDataSetChanged() from the syncView() function.
 
@@ -143,7 +143,7 @@ The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-examp
 
 ## Ensuring Robustness
 
-More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) where it talks about the notificationMode. The subtle gotcha with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must to be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
+More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must to be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
 
 > "the change to the list data MUST to be done on the UI thread AND the adapter MUST be told before the current thread yields"
 

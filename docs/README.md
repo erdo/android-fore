@@ -144,7 +144,7 @@ The **fore** library also includes some testable wrappers for AsyncTask (that Go
 
 If you've moved over to using coroutines already, a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) are all you need to use coroutines in a way that is completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206) [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
-There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor). **fore** works really well with RoomDB too, checkout the last sample app for details.
+There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit-and-the-callprocessor). **fore** works really well with RoomDB too, checkout the last sample app for details.
 
 ## Sample Apps
 
@@ -189,7 +189,7 @@ This app has a counter that you can increase by pressing a button (but it takes 
 ![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
 
 
-This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
+This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
 
 It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s' notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
 

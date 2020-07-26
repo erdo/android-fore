@@ -48,7 +48,7 @@ Pretty much all views in **fore** do the same few things when they are created:
 
 In addition to that there will be:
 
-- the syncView() function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) by calling adapter.notifyDataSetChangedAuto method).
+- the syncView() function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) by calling adapter.notifyDataSetChangedAuto method).
 
 _Often there will then be the add / remove observers methods where the view latches onto the models it is interested in - this is handled automatically in the Sync... classes, see below._
 
