@@ -85,7 +85,7 @@ class ListDifferPlaylistAdapter(private val syncableView: SyncableView, private 
             newTracks.add(Track(RandomStuffGeneratorUtil.generateRandomColourResource(), randomLong()))
         }
         val mutableList = getListCopy()
-        mutableList.addAll(0, newTracks)
+        mutableList.addAll(newTracks)
         differ.submitList(mutableList) {
             logger.i("addNTracks() updated")
             syncableView.syncView()

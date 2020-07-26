@@ -21,18 +21,12 @@ class Track(
 
     }
 
-    // these aren't full observable models,
-    // we want the playlist to manage any changes
-    // so we don't make this method public
     fun increasePlaysRequested() {
         if (canIncreasePlays()) {
             numberOfPlaysRequested++
         }
     }
 
-    // these aren't full observable models,
-    // we want the playlist to manage any changes
-    // so we don't make this method public
     fun decreasePlaysRequested() {
         if (canDecreasePlays()) {
             numberOfPlaysRequested--
@@ -60,6 +54,10 @@ class Track(
 
     override fun contentsTheSame(other: Track?): Boolean {
         return if (other != null) {
+
+            this.colourResource.toString() + "kjhkjhkhkhkhjhkjh" == other.colourResource.toString() + "kjhkjhkhkhkhjhkjh"
+                    &&
+
             this.numberOfPlaysRequested == other.numberOfPlaysRequested
                     && this.colourResource == other.colourResource
         } else false

@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.view_playlists_updateable.view.*
 /**
  * Demonstrating list animations with [AsyncListDiffer]
  *
- * This is google's wrapper or DiffUtil (this discussion of AsyncListDiffer applies similarly for
+ * This is google's wrapper for DiffUtil (this discussion of AsyncListDiffer applies similarly for
  * ListAdapter which uses AsyncListDiffer internally). The main thing to be aware of regarding
  * AsyncListDiffer is that the source of truth for the list is maintained inside
  * AsyncListDiffer itself. This has three important ramifications:
@@ -33,12 +33,12 @@ import kotlinx.android.synthetic.main.view_playlists_updateable.view.*
  * copy the list, any changes you make to the items will be made to both the items in the new list
  * and the items in the old list that is maintained by asyncListDiffer, when it then compares the
  * two lists with DiffUtil it will not detect any changes and your list will be incorrectly updated.
- * If your architecture is database or viewState driven along the lines of MVI, this should be less
- * of a problem because each time your list changes, you should be receiving a brand new list (the
- * deep copy should be done by MVI in the interactor - however if your implementation of MVI is not
- * deep copying the list items when they change, then the same problem will present - and I suspect
- * will be almost impossible to diagnose unless you happen to know that that is how AsyncListDiffer
- * works)
+ * If your architecture is database driven (or viewState driven along the lines of MVI), this
+ * should be less of a problem because each time your list changes, you should be receiving a
+ * brand new list
+ * (the deep copy should be done by MVI in the interactor - however if your implementation of MVI
+ * is not deep copying the list items when they change, then the same problem will present - and
+ * unless you happen to know that this is how AsyncListDiffer, you're not going to have a fun day)
  *
  * 3) Because AsyncListDiffer manages the truth, you loose the ability to keep the true list
  * inside something like a view model where you can add associated logic. In this case the logic
@@ -64,6 +64,10 @@ class ListDifferListView @JvmOverloads constructor(
         setupClickListeners()
 
         setupAdapters()
+
+        // Note: we are only doing this because this example is demonstrating google's AsyncListDiffer
+        // usually in MVO we would have a model that we would be observing that would call this for us
+        syncView()
     }
 
     private fun setupClickListeners() {
@@ -82,6 +86,7 @@ class ListDifferListView @JvmOverloads constructor(
     }
 
     override fun syncView() {
+        logger.i("syncView()")
         listdiffer_totaltracks_textview.text = listDifferAdapter.itemCount.toString()
         listdiffer_clear_button.isEnabled = !listDifferAdapter.isEmpty()
         listdiffer_remove5_button.isEnabled = listDifferAdapter.hasAtLeastNItems(5)

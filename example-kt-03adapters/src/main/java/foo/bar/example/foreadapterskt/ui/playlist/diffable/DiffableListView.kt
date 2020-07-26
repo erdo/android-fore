@@ -8,10 +8,23 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreadapterskt.OG
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import kotlinx.android.synthetic.main.view_playlists_diffable.view.*
 
 /**
  * Demonstrating list animations with [Diffable]
+ *
+ * fore's [Diffable] classes use android's DiffUitil behind the scenes.
+ *
+ * In this example you'll see the adapter is much less verbose than if we were using google's
+ * [AsyncListDiffer] method (you'll find most of the code in [DiffablePlaylistModel])
+ *
+ * As with the ListDiffer example, we need to be careful to deep copy our list before changing it
+ * so that DiffUtil can pick up the change (if the model was driven by a db then there would be
+ * no need to do this)
+ *
+ * Diffable is run using coroutines as DiffUtil is a lot more resource intensive than Updatable
+ *
  */
 class DiffableListView @JvmOverloads constructor(
         context: Context,
@@ -52,7 +65,8 @@ class DiffableListView @JvmOverloads constructor(
     }
 
     fun syncView() {
-        diffable_totaltracks_textview.text = diffablePlaylistModel.trackListSize.toString()
+        logger.i("syncView()")
+        diffable_totaltracks_textview.text = diffablePlaylistModel.size().toString()
         diffable_clear_button.isEnabled = !diffablePlaylistModel.isEmpty()
         diffable_remove5_button.isEnabled = diffablePlaylistModel.hasAtLeastNItems(5)
         diffable_remove100_button.isEnabled = diffablePlaylistModel.hasAtLeastNItems(100)

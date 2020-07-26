@@ -6,9 +6,13 @@ import org.junit.Test
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
+import co.early.fore.core.time.SystemTimeWrapper
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Before
 
 
 /**
@@ -16,52 +20,58 @@ import io.mockk.verify
  */
 class DiffablePlaylistModelTest {
 
+    @MockK
+    private lateinit var mockSystemTimeWrapper: SystemTimeWrapper
     private val logger = SystemLogger()
+    private lateinit var diffablePlaylistModel: DiffablePlaylistModel
 
+    @Before
+    fun setup() {
+        MockKAnnotations.init(this, relaxed = true)
+        diffablePlaylistModel = DiffablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+    }
+    
     @Test
     @Throws(Exception::class)
     fun initialConditions() {
-
+        
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-
+        
         //act
 
         //assert
-        Assert.assertEquals(0, playlistSimpleModel.trackListSize.toLong())
-        Assert.assertEquals(false, playlistSimpleModel.hasObservers())
+        Assert.assertEquals(0, diffablePlaylistModel.size())
+        Assert.assertEquals(false, diffablePlaylistModel.hasObservers())
     }
 
 
     @Test
     @Throws(Exception::class)
     fun addNewTrack() {
-
+        
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
 
         //act
-        playlistSimpleModel.addNewTrack()
+        diffablePlaylistModel.addNTracks(1)
 
         //assert
-        Assert.assertEquals(1, playlistSimpleModel.trackListSize.toLong())
-        Assert.assertEquals(1, playlistSimpleModel.getTrack(0).numberOfPlaysRequested.toLong())
+        Assert.assertEquals(1, diffablePlaylistModel.size())
+        Assert.assertEquals(1, diffablePlaylistModel.getTrack(0).numberOfPlaysRequested.toLong())
     }
 
 
     @Test
     @Throws(Exception::class)
     fun removeTrack() {
-
+        
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-        playlistSimpleModel.addNewTrack()
+        diffablePlaylistModel.addNTracks(1)
 
         //act
-        playlistSimpleModel.removeTrack(0)
+        diffablePlaylistModel.removeTrack(0)
 
         //assert
-        Assert.assertEquals(0, playlistSimpleModel.trackListSize.toLong())
+        Assert.assertEquals(0, diffablePlaylistModel.size())
     }
 
 
@@ -70,14 +80,13 @@ class DiffablePlaylistModelTest {
     fun add5NewTracks() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
 
         //act
-        playlistSimpleModel.add5NewTracks()
+        diffablePlaylistModel.addNTracks(5)
 
         //assert
-        Assert.assertEquals(5, playlistSimpleModel.trackListSize.toLong())
-        Assert.assertEquals(1, playlistSimpleModel.getTrack(4).numberOfPlaysRequested.toLong())
+        Assert.assertEquals(5, diffablePlaylistModel.size())
+        Assert.assertEquals(1, diffablePlaylistModel.getTrack(4).numberOfPlaysRequested.toLong())
     }
 
 
@@ -86,14 +95,13 @@ class DiffablePlaylistModelTest {
     fun remove5Tracks() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-        playlistSimpleModel.add5NewTracks()
+        diffablePlaylistModel.addNTracks(5)
 
         //act
-        playlistSimpleModel.remove5Tracks()
+        diffablePlaylistModel.removeNTracks(5)
 
         //assert
-        Assert.assertEquals(0, playlistSimpleModel.trackListSize.toLong())
+        Assert.assertEquals(0, diffablePlaylistModel.size())
     }
 
 
@@ -102,14 +110,13 @@ class DiffablePlaylistModelTest {
     fun increasePlays() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-        playlistSimpleModel.addNewTrack()
+        diffablePlaylistModel.addNTracks(1)
 
         //act
-        playlistSimpleModel.increasePlaysForTrack(0)
+        diffablePlaylistModel.increasePlaysForTrack(0)
 
         //assert
-        Assert.assertEquals(2, playlistSimpleModel.getTrack(0).numberOfPlaysRequested.toLong())
+        Assert.assertEquals(2, diffablePlaylistModel.getTrack(0).numberOfPlaysRequested.toLong())
     }
 
 
@@ -118,15 +125,14 @@ class DiffablePlaylistModelTest {
     fun decreasePlays() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-        playlistSimpleModel.addNewTrack()
-        playlistSimpleModel.increasePlaysForTrack(0)
+        diffablePlaylistModel.addNTracks(1)
+        diffablePlaylistModel.increasePlaysForTrack(0)
 
         //act
-        playlistSimpleModel.decreasePlaysForTrack(0)
+        diffablePlaylistModel.decreasePlaysForTrack(0)
 
         //assert
-        Assert.assertEquals(1, playlistSimpleModel.getTrack(0).numberOfPlaysRequested.toLong())
+        Assert.assertEquals(1, diffablePlaylistModel.getTrack(0).numberOfPlaysRequested.toLong())
     }
 
 
@@ -135,16 +141,15 @@ class DiffablePlaylistModelTest {
     fun removeAllTracks() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-        playlistSimpleModel.add5NewTracks()
-        playlistSimpleModel.addNewTrack()
-        playlistSimpleModel.addNewTrack()
+        diffablePlaylistModel.addNTracks(5)
+        diffablePlaylistModel.addNTracks(1)
+        diffablePlaylistModel.addNTracks(1)
 
         //act
-        playlistSimpleModel.removeAllTracks()
+        diffablePlaylistModel.removeAllTracks()
 
         //assert
-        Assert.assertEquals(0, playlistSimpleModel.trackListSize.toLong())
+        Assert.assertEquals(0, diffablePlaylistModel.size())
     }
 
 
@@ -169,12 +174,11 @@ class DiffablePlaylistModelTest {
     fun observersNotifiedAtLeastOnceForAddTrack() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
         val mockObserver: Observer = mockk(relaxed = true)
-        playlistSimpleModel.addObserver(mockObserver)
+        diffablePlaylistModel.addObserver(mockObserver)
 
         //act
-        playlistSimpleModel.addNewTrack()
+        diffablePlaylistModel.addNTracks(1)
 
         //assert
         verify(atLeast = 1) {
@@ -188,13 +192,12 @@ class DiffablePlaylistModelTest {
     fun observersNotifiedAtLeastOnceForIncreasePlays() {
 
         //arrange
-        val playlistSimpleModel = DiffablePlaylistModel(WorkMode.SYNCHRONOUS, logger)
-        playlistSimpleModel.addNewTrack()
+        diffablePlaylistModel.addNTracks(1)
         val mockObserver: Observer = mockk(relaxed = true)
-        playlistSimpleModel.addObserver(mockObserver)
+        diffablePlaylistModel.addObserver(mockObserver)
 
         //act
-        playlistSimpleModel.increasePlaysForTrack(0)
+        diffablePlaylistModel.increasePlaysForTrack(0)
 
         //assert
         verify(atLeast = 1) {

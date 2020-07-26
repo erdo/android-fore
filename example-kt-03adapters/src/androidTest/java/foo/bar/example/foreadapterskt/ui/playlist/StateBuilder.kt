@@ -10,8 +10,10 @@ import foo.bar.example.foreadapterskt.OG
 import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.Track
+import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 
 
 /**
@@ -29,25 +31,43 @@ class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: 
 
     }
 
-    internal fun withAdvancedPlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
+    internal fun withUpdatablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
             mockUpdatablePlaylistModel.trackListSize
         } returns numberOfTracks
 
+        every {
+            mockUpdatablePlaylistModel.isEmpty()
+        } returns (numberOfTracks == 0)
+
+        var slot = CapturingSlot<Int>()
+        every {
+            mockUpdatablePlaylistModel.hasAtLeastNItems(capture(slot))
+        } answers { numberOfTracks >= slot.captured }
+
         return this
     }
 
-    internal fun withSimplePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
+    internal fun withDiffablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
-            mockDiffablePlaylistModel.trackListSize
+            mockDiffablePlaylistModel.size()
         } returns numberOfTracks
+
+        every {
+            mockDiffablePlaylistModel.isEmpty()
+        } returns (numberOfTracks == 0)
+
+        var slot = CapturingSlot<Int>()
+        every {
+            mockDiffablePlaylistModel.hasAtLeastNItems(capture(slot))
+        } answers { numberOfTracks >= slot.captured }
 
         return this
     }
 
-    internal fun withPlaylistsContainingTracks(track: Track): StateBuilder {
+    internal fun withPlaylistsContainingTrack(track: Track): StateBuilder {
 
         every {
             mockUpdatablePlaylistModel.getTrack(any())

@@ -70,7 +70,8 @@ class UpdatablePlaylistModel(
         for (ii in 0 until n) {
             newTracks.add(Track(generateRandomColourResource(), randomLong()))
         }
-        trackList.addAll(0, newTracks)
+        trackList.addAll(newTracks)
+        logger.i("addNTracks() updated")
         notifyObservers()
     }
 

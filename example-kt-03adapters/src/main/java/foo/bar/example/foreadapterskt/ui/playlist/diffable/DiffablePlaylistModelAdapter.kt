@@ -59,7 +59,7 @@ class DiffablePlaylistModelAdapter(private val diffablePlaylistModel: DiffablePl
     }
 
     override fun getItemCount(): Int {
-        return diffablePlaylistModel.trackListSize
+        return diffablePlaylistModel.size()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

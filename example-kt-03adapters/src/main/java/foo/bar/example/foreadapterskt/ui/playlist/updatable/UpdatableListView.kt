@@ -6,12 +6,26 @@ import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.time.measureNanos
 import foo.bar.example.foreadapterskt.OG
 import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import kotlinx.android.synthetic.main.view_playlists_updateable.view.*
+import kotlin.system.measureNanoTime
 
 /**
  * Demonstrating list animations with [Updatable]
+ *
+ * fore's [Updatable] classes use android's notifyItem... methods behind the scenes. This is
+ * quite a lot more efficient than using DiffUtil but you can only use this method when you know
+ * what changes have been made to the list. There are other situations when this information is
+ * not available and all you have is an old list and a new list: in that case, DiffUtil is required
+ * (fore uses the [Diffable] classes for that)
+ *
+ * In this example you'll see the adapter is much less verbose than if we were using google's
+ * [AsyncListDiffer] method (you'll find most of the code in [UpdatablePlaylistModel])
+ *
+ * Because using Updatable is a lot less resource intensive than using DiffUtil, here it's not
+ * necessary to use coroutines in the Model (unlike the Diffable example)
  */
 class UpdatableListView @JvmOverloads constructor(
         context: Context,
@@ -52,6 +66,7 @@ class UpdatableListView @JvmOverloads constructor(
     }
 
     fun syncView() {
+        logger.i("syncView()")
         updatable_totaltracks_textview.text = updatablePlaylistModel.trackListSize.toString()
         updatable_clear_button.isEnabled = !updatablePlaylistModel.isEmpty()
         updatable_remove5_button.isEnabled = updatablePlaylistModel.hasAtLeastNItems(5)
