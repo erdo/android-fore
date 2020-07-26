@@ -93,7 +93,7 @@ If you want to check what versions of what dependencies each package pulls in, t
 
 **If you're new to fore, Welcome! might I suggest:**
 
- 1. Cloning this git repo
+ 1. Cloning this git repo (run ./gradlew publishToMavenLocal after cloning if AS gives you red squiggles)
  2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 if you're still on AS3*)
 
 **Then either**
