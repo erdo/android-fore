@@ -4,7 +4,7 @@ import foo.bar.example.foreadapterskt.R
 import java.util.Random
 
 
-object RandomTrackGeneratorUtil {
+object RandomStuffGeneratorUtil {
 
     private val random = Random()
 
@@ -16,6 +16,10 @@ object RandomTrackGeneratorUtil {
 
     fun randomInt(intArray: IntArray): Int {
         return intArray[random.nextInt(intArray.size - 1)]
+    }
+
+    fun randomLong(): Long {
+        return random.nextLong()
     }
 
 }

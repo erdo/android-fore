@@ -1,4 +1,4 @@
-package foo.bar.example.foreadapterskt.feature.playlist
+package foo.bar.example.foreadapterskt.feature.playlist.updatable
 
 
 import co.early.fore.adapters.ChangeAwareArrayList
@@ -10,34 +10,27 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.observer.ObservableImp
-import foo.bar.example.foreadapterskt.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource
+import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil
+import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.generateRandomColourResource
+import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.randomLong
+import foo.bar.example.foreadapterskt.feature.playlist.Track
 import java.util.ArrayList
 
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
-class PlaylistAdvancedModel(
+class UpdatablePlaylistModel(
         systemTimeWrapper: SystemTimeWrapper,
         workMode: WorkMode,
         private val logger: Logger
 ) : Observable by ObservableImp(workMode, logger),
-    Updateable {
+        Updateable {
 
-    private val trackList: ChangeAwareList<Track>
+    private val trackList: ChangeAwareList<Track> = ChangeAwareArrayList(systemTimeWrapper)
 
     val trackListSize: Int
         get() = trackList.size
 
-
-    init {
-        trackList = ChangeAwareArrayList(systemTimeWrapper)
-    }
-
-    fun addNewTrack() {
-        logger.i("addNewTrack()")
-        trackList.add(Track(generateRandomColourResource()))
-        notifyObservers()
-    }
 
     fun removeTrack(index: Int) {
         logger.i("removeTrack() $index")
@@ -71,22 +64,31 @@ class PlaylistAdvancedModel(
         return trackList[index]
     }
 
-    fun add5NewTracks() {
-        logger.i("add5NewTracks()")
+    fun addNTracks(n: Int) {
+        logger.i("addNTracks() n:$n")
         val newTracks = ArrayList<Track>()
-        for (ii in 0..4) {
-            newTracks.add(Track(generateRandomColourResource()))
+        for (ii in 0 until n) {
+            newTracks.add(Track(generateRandomColourResource(), randomLong()))
         }
-        trackList.addAll(0, newTracks)
+        trackList.addAll(newTracks)
+        logger.i("addNTracks() updated")
         notifyObservers()
     }
 
-    fun remove5Tracks() {
-        logger.i("remove5Tracks()")
-        if (trackListSize > 4) {
-            trackList.removeRange(0, 5)
+    fun removeNTracks(n: Int) {
+        logger.i("removeNTracks() n:$n")
+        if (trackListSize > n - 1) {
+            trackList.removeRange(0, n)
             notifyObservers()
         }
+    }
+
+    fun isEmpty(): Boolean {
+        return trackList.isEmpty()
+    }
+
+    fun hasAtLeastNItems(n: Int): Boolean {
+        return trackList.size >= n
     }
 
     private fun checkIndex(index: Int) {

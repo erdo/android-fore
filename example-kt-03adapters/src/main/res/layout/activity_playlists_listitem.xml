@@ -8,27 +8,24 @@
         android:id="@+id/track_increaseplays_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text=" (+) " />
+        android:text="+" />
 
     <TextView
         android:id="@+id/track_playsrequested_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"/>
+        android:padding="@dimen/common_space_tiny"/>
 
     <Button
         android:id="@+id/track_decreaseplays_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text=" (-) " />
+        android:text="-" />
 
     <Button
         android:id="@+id/track_remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="clear" />
+        android:text="x" />
 
 </LinearLayout>

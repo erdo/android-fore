@@ -93,7 +93,7 @@ If you want to check what versions of what dependencies each package pulls in, t
 
 **If you're new to fore, Welcome! might I suggest:**
 
- 1. Cloning this git repo
+ 1. Cloning this git repo (run ./gradlew publishToMavenLocal after cloning if AS gives you red squiggles)
  2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 if you're still on AS3*)
 
 **Then either**
@@ -193,9 +193,9 @@ This one demonstrates how to use [**adapters**](https://erdo.github.io/android-f
 
 It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s' notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
 
-Two lists are displayed side to side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right.
+The **java** sample has two lists side by side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right. As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
 
-As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
+The **kotlin** version has three lists, all of which use adapter animations. The first list uses google's **AsyncListDiffer** (which is what drives ListAdapter), the second list uses fore's **Updatable** (which uses android's notifyItem... methods for a very efficient animated adapter implementation), the third list uses fore's **Diffable** (which relies on DiffUtil under the hood). All three implementations have slightly different characteristics, check the source code for further infomation.
 
 
 <div class="shoom" id="fore-4-retrofit-example"/>

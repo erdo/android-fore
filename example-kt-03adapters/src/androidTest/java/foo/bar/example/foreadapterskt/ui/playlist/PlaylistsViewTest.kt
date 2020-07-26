@@ -11,8 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.runner.AndroidJUnit4
 import foo.bar.example.foreadapterskt.R
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistAdvancedModel
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistSimpleModel
+import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.Track
 import foo.bar.example.foreadapterskt.ui.EspressoTestMatchers
 import io.mockk.MockKAnnotations
@@ -32,9 +32,9 @@ class PlaylistsViewTest {
 
 
     @MockK
-    private lateinit var mockPlaylistSimpleModel: PlaylistSimpleModel
+    private lateinit var mockDiffablePlaylistModel: DiffablePlaylistModel
     @MockK
-    private lateinit var mockPlaylistAdvancedModel: PlaylistAdvancedModel
+    private lateinit var mockUpdatablePlaylistModel: UpdatablePlaylistModel
 
 
     @Before
@@ -46,31 +46,29 @@ class PlaylistsViewTest {
     fun emptyPlaylists() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withAdvancedPlaylistHavingTracks(0)
-            .withSimplePlaylistHavingTracks(0)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withUpdatablePlaylistHavingTracks(0)
+            .withDiffablePlaylistHavingTracks(0)
             .createRule()
             .launchActivity(null)
 
         //act
 
         //assert
-        onView(withId(R.id.playlist_add1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_add2_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_clear1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_clear2_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_add_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_remove5_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_clear_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_totaltracks_textview)).check(matches(withText("0")))
+        
+        onView(withId(R.id.diffable_add_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_remove5_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.diffable_clear_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.diffable_totaltracks_textview)).check(matches(withText("0")))
 
-        onView(withId(R.id.playlist_addMany1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_addMany2_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_removeMany1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_removeMany2_button)).check(matches(not<View>(isEnabled())))
-
-        onView(withId(R.id.playlist_totaltracks1_textview)).check(matches(withText("[0]")))
-        onView(withId(R.id.playlist_totaltracks2_textview)).check(matches(withText("[0]")))
-
-        onView(withId(R.id.playlist_list1_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(0)))
-        onView(withId(R.id.playlist_list2_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(0)))
+        onView(withId(R.id.updatable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(0)))
+        onView(withId(R.id.diffable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(0)))
 
     }
 
@@ -80,31 +78,31 @@ class PlaylistsViewTest {
     fun with3ItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withAdvancedPlaylistHavingTracks(3)
-            .withSimplePlaylistHavingTracks(3)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withUpdatablePlaylistHavingTracks(3)
+            .withDiffablePlaylistHavingTracks(3)
+            .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
             .createRule()
             .launchActivity(null)
 
         //act
 
         //assert
-        onView(withId(R.id.playlist_add1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_add2_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_clear1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_clear2_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_add_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_add_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_clear_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_clear_button)).check(matches(isEnabled()))
 
-        onView(withId(R.id.playlist_addMany1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_addMany2_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_removeMany1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_removeMany2_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_remove5_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.diffable_remove5_button)).check(matches(not<View>(isEnabled())))
 
-        onView(withId(R.id.playlist_totaltracks1_textview)).check(matches(withText("[3]")))
-        onView(withId(R.id.playlist_totaltracks2_textview)).check(matches(withText("[3]")))
+        onView(withId(R.id.updatable_totaltracks_textview)).check(matches(withText("3")))
+        onView(withId(R.id.diffable_totaltracks_textview)).check(matches(withText("3")))
 
-        onView(withId(R.id.playlist_list1_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(3)))
-        onView(withId(R.id.playlist_list2_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(3)))
+        onView(withId(R.id.updatable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(3)))
+        onView(withId(R.id.diffable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(3)))
 
     }
 
@@ -114,31 +112,31 @@ class PlaylistsViewTest {
     fun with5ItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withAdvancedPlaylistHavingTracks(5)
-            .withSimplePlaylistHavingTracks(5)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withUpdatablePlaylistHavingTracks(5)
+            .withDiffablePlaylistHavingTracks(5)
+            .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
             .createRule()
             .launchActivity(null)
 
         //act
 
         //assert
-        onView(withId(R.id.playlist_add1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_add2_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_clear1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_clear2_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_add_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_add_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_clear_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_clear_button)).check(matches(isEnabled()))
 
-        onView(withId(R.id.playlist_addMany1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_addMany2_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_removeMany1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_removeMany2_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_remove5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_remove5_button)).check(matches(isEnabled()))
 
-        onView(withId(R.id.playlist_totaltracks1_textview)).check(matches(withText("[5]")))
-        onView(withId(R.id.playlist_totaltracks2_textview)).check(matches(withText("[5]")))
+        onView(withId(R.id.updatable_totaltracks_textview)).check(matches(withText("5")))
+        onView(withId(R.id.diffable_totaltracks_textview)).check(matches(withText("5")))
 
-        onView(withId(R.id.playlist_list1_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(5)))
-        onView(withId(R.id.playlist_list2_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(5)))
+        onView(withId(R.id.updatable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(5)))
+        onView(withId(R.id.diffable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(5)))
 
     }
 
@@ -148,27 +146,27 @@ class PlaylistsViewTest {
     fun withDifferentItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withSimplePlaylistHavingTracks(0)
-            .withAdvancedPlaylistHavingTracks(5)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withDiffablePlaylistHavingTracks(0)
+            .withUpdatablePlaylistHavingTracks(5)
+            .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
             .createRule()
             .launchActivity(null)
 
         //act
 
         //assert
-        onView(withId(R.id.playlist_clear1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_clear2_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_clear_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_clear_button)).check(matches(isEnabled()))
 
-        onView(withId(R.id.playlist_removeMany1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_removeMany2_button)).check(matches(isEnabled()))
+        onView(withId(R.id.diffable_remove5_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_remove5_button)).check(matches(isEnabled()))
 
-        onView(withId(R.id.playlist_totaltracks1_textview)).check(matches(withText("[0]")))
-        onView(withId(R.id.playlist_totaltracks2_textview)).check(matches(withText("[5]")))
+        onView(withId(R.id.diffable_totaltracks_textview)).check(matches(withText("0")))
+        onView(withId(R.id.updatable_totaltracks_textview)).check(matches(withText("5")))
 
-        onView(withId(R.id.playlist_list1_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(0)))
-        onView(withId(R.id.playlist_list2_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(5)))
+        onView(withId(R.id.diffable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(0)))
+        onView(withId(R.id.updatable_list_recycleview)).check(matches(EspressoTestMatchers.withRecyclerViewItems(5)))
 
     }
 
@@ -178,66 +176,64 @@ class PlaylistsViewTest {
     fun stateMaintainedAfterRotation() {
 
         //arrange
-        val activity = StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withAdvancedPlaylistHavingTracks(3)
-            .withSimplePlaylistHavingTracks(3)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        val activity = StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withUpdatablePlaylistHavingTracks(3)
+            .withDiffablePlaylistHavingTracks(3)
+            .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
             .createRule()
             .launchActivity(null)
         activity.requestedOrientation = SCREEN_ORIENTATION_LANDSCAPE
 
-        onView(withId(R.id.playlist_addMany1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_removeMany1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_totaltracks1_textview)).check(matches(withText("[3]")))
+        onView(withId(R.id.updatable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_remove5_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_totaltracks_textview)).check(matches(withText("3")))
 
         //act
         activity.requestedOrientation = SCREEN_ORIENTATION_PORTRAIT
 
         //assert
-        onView(withId(R.id.playlist_addMany1_button)).check(matches(isEnabled()))
-        onView(withId(R.id.playlist_removeMany1_button)).check(matches(not<View>(isEnabled())))
-        onView(withId(R.id.playlist_totaltracks1_textview)).check(matches(withText("[3]")))
+        onView(withId(R.id.updatable_add5_button)).check(matches(isEnabled()))
+        onView(withId(R.id.updatable_remove5_button)).check(matches(not<View>(isEnabled())))
+        onView(withId(R.id.updatable_totaltracks_textview)).check(matches(withText("3")))
     }
 
 
     @Test
     @Throws(Exception::class)
-    fun clickAddTrackAdvancedCallsModel() {
+    fun clickAddTrackDiffableCallsModel() {
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withAdvancedPlaylistHavingTracks(0)
-            .withSimplePlaylistHavingTracks(0)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withUpdatablePlaylistHavingTracks(0)
+            .withDiffablePlaylistHavingTracks(0)
             .createRule()
             .launchActivity(null)
 
         //act
-        onView(withId(R.id.playlist_add2_button)).perform(click())
+        onView(withId(R.id.diffable_add_button)).perform(click())
 
         //assert
         verify(exactly = 1) {
-            mockPlaylistAdvancedModel.addNewTrack()
+            mockDiffablePlaylistModel.addNTracks(1)
         }
     }
 
 
     @Test
     @Throws(Exception::class)
-    fun clickAddTrackSimpleCallsModel() {
+    fun clickAddTrackUpdatableCallsModel() {
         //arrange
-        StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-            .withAdvancedPlaylistHavingTracks(0)
-            .withSimplePlaylistHavingTracks(0)
-            .withPlaylistsContainingTracks(Track(R.color.pastel1))
+        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+            .withUpdatablePlaylistHavingTracks(0)
+            .withDiffablePlaylistHavingTracks(0)
             .createRule()
             .launchActivity(null)
 
         //act
-        onView(withId(R.id.playlist_add1_button)).perform(click())
+        onView(withId(R.id.updatable_add_button)).perform(click())
 
         //assert
         verify(exactly = 1) {
-            mockPlaylistSimpleModel.addNewTrack()
+            mockUpdatablePlaylistModel.addNTracks(1)
         }
     }
 

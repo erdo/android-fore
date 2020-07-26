@@ -7,54 +7,74 @@ import co.early.fore.core.WorkMode
 import co.early.fore.core.time.SystemTimeWrapper
 import foo.bar.example.foreadapterskt.App
 import foo.bar.example.foreadapterskt.OG
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistAdvancedModel
-import foo.bar.example.foreadapterskt.feature.playlist.PlaylistSimpleModel
+import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.Track
+import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 
 
 /**
  *
  */
-class StateBuilder internal constructor(private val mockPlaylistAdvancedModel: PlaylistAdvancedModel, private val mockPlaylistSimpleModel: PlaylistSimpleModel) {
+class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: UpdatablePlaylistModel, private val mockDiffablePlaylistModel: DiffablePlaylistModel) {
 
     init {
 
         val updateSpec = UpdateSpec(UpdateSpec.UpdateType.FULL_UPDATE, 0, 0, mockk<SystemTimeWrapper>(relaxed = true))
 
         every {
-            mockPlaylistAdvancedModel.getAndClearLatestUpdateSpec(any())
+            mockUpdatablePlaylistModel.getAndClearLatestUpdateSpec(any())
         } returns updateSpec
 
     }
 
-    internal fun withAdvancedPlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
+    internal fun withUpdatablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
-            mockPlaylistAdvancedModel.trackListSize
+            mockUpdatablePlaylistModel.trackListSize
         } returns numberOfTracks
+
+        every {
+            mockUpdatablePlaylistModel.isEmpty()
+        } returns (numberOfTracks == 0)
+
+        var slot = CapturingSlot<Int>()
+        every {
+            mockUpdatablePlaylistModel.hasAtLeastNItems(capture(slot))
+        } answers { numberOfTracks >= slot.captured }
 
         return this
     }
 
-    internal fun withSimplePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
+    internal fun withDiffablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
-            mockPlaylistSimpleModel.trackListSize
+            mockDiffablePlaylistModel.size()
         } returns numberOfTracks
+
+        every {
+            mockDiffablePlaylistModel.isEmpty()
+        } returns (numberOfTracks == 0)
+
+        var slot = CapturingSlot<Int>()
+        every {
+            mockDiffablePlaylistModel.hasAtLeastNItems(capture(slot))
+        } answers { numberOfTracks >= slot.captured }
 
         return this
     }
 
-    internal fun withPlaylistsContainingTracks(track: Track): StateBuilder {
+    internal fun withPlaylistsContainingTrack(track: Track): StateBuilder {
 
         every {
-            mockPlaylistAdvancedModel.getTrack(any())
+            mockUpdatablePlaylistModel.getTrack(any())
         } returns track
 
         every {
-            mockPlaylistSimpleModel.getTrack(any())
+            mockDiffablePlaylistModel.getTrack(any())
         } returns track
 
         return this
@@ -69,8 +89,8 @@ class StateBuilder internal constructor(private val mockPlaylistAdvancedModel: P
                 OG.setApplication(InstrumentationRegistry.getTargetContext().applicationContext as App, WorkMode.SYNCHRONOUS)
 
                 //inject our mocks so our UI layer will pick them up
-                OG.putMock(PlaylistAdvancedModel::class.java, mockPlaylistAdvancedModel)
-                OG.putMock(PlaylistSimpleModel::class.java, mockPlaylistSimpleModel)
+                OG.putMock(UpdatablePlaylistModel::class.java, mockUpdatablePlaylistModel)
+                OG.putMock(DiffablePlaylistModel::class.java, mockDiffablePlaylistModel)
             }
         }
     }
