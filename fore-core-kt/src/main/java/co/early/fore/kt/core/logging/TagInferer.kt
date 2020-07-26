@@ -10,8 +10,8 @@ class TagInfererImpl() : TagInferer {
 
     override fun inferTag(): String {
         val trace = Throwable().stackTrace
-        return if (trace.size > 2) {
-            extractClassName(trace[2])
+        return if (trace.size > 3) {
+            extractClassName(trace[3])
         } else "missing"
     }
 
