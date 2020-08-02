@@ -444,8 +444,10 @@ public class TodoListModel extends ObservableImp implements Diffable {
 
     public void setDone(boolean done, int index) {
         TodoItem item = get(index);
-        item.setDone(done);
-        update(item);
+        if (done != item.isDone()) {
+            item.setDone(done);
+            update(item);
+        }
     }
 
     private void checkIndex(int index) {
