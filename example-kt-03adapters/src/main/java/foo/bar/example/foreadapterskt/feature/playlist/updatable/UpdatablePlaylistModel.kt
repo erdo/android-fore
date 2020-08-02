@@ -22,15 +22,13 @@ import java.util.ArrayList
 class UpdatablePlaylistModel(
         systemTimeWrapper: SystemTimeWrapper,
         workMode: WorkMode,
-        private val logger: Logger
+        private val logger: Logger,
+        private val trackList: ChangeAwareList<Track> = ChangeAwareArrayList<Track>(systemTimeWrapper)
 ) : Observable by ObservableImp(workMode, logger),
-        Updateable {
-
-    private val trackList: ChangeAwareList<Track> = ChangeAwareArrayList(systemTimeWrapper)
-
+    Updateable by trackList {
+    
     val trackListSize: Int
         get() = trackList.size
-
 
     fun removeTrack(index: Int) {
         logger.i("removeTrack() $index")
@@ -98,9 +96,4 @@ class UpdatablePlaylistModel(
             throw IndexOutOfBoundsException("tracklist index needs to be between 0 and " + (trackList.size - 1) + " not:" + index)
         }
     }
-
-    override fun getAndClearLatestUpdateSpec(maxAgeMs: Long): UpdateSpec {
-        return trackList.getAndClearLatestUpdateSpec(maxAgeMs)
-    }
-
 }

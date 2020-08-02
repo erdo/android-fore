@@ -2,7 +2,6 @@ package foo.bar.example.foreadapterskt.feature.playlist.diffable
 
 
 import androidx.core.util.Pair
-import androidx.recyclerview.widget.DiffUtil
 import co.early.fore.adapters.DiffCalculator
 import co.early.fore.adapters.DiffSpec
 import co.early.fore.adapters.Diffable
@@ -24,47 +23,45 @@ import java.util.ArrayList
 class DiffablePlaylistModel(
         private val systemTimeWrapper: SystemTimeWrapper,
         private val workMode: WorkMode,
-        private val logger: Logger
-) : Observable by ObservableImp(workMode, logger), Diffable {
-
-    private var currentTrackList = listOf<Track>()
-    private var latestDiffSpec: DiffSpec? = createFullDiffSpec()
-
+        private val logger: Logger,
+        private val diffable = DiffableImpl<Track>(systemTimeWrapper, workMode, logger)
+) : Observable by diffable,
+    Diffable by diffable {
 
     fun removeTrack(index: Int) {
         logger.i("removeTrack() $index")
         checkIndex(index)
-        val trackList = getListCopy()
+        val trackList = diffable.getListCopy()
         trackList.removeAt(index)
-        updateList(trackList)
+        diffable.updateList(trackList)
     }
 
     fun removeAllTracks() {
         logger.i("removeAllTracks()")
-        val trackList = getListCopy()
+        val trackList = diffable.getListCopy()
         trackList.clear()
-        updateList(trackList)
+        diffable.updateList(trackList)
     }
 
     fun increasePlaysForTrack(index: Int) {
         logger.i("increasePlaysForTrack() $index")
         checkIndex(index)
-        val trackList = getListCopy()
+        val trackList = diffable.getListCopy()
         trackList[index].increasePlaysRequested()
-        updateList(trackList)
+        diffable.updateList(trackList)
     }
 
     fun decreasePlaysForTrack(index: Int) {
         logger.i("decreasePlaysForTrack() $index")
         checkIndex(index)
-        val trackList = getListCopy()
+        val trackList = diffable.getListCopy()
         trackList[index].decreasePlaysRequested()
-        updateList(trackList)
+        diffable.updateList(trackList)
     }
 
     fun getTrack(index: Int): Track {
         checkIndex(index)
-        return currentTrackList[index]
+        return diffable.getItem[index]
     }
 
     fun addNTracks(n: Int) {
@@ -73,92 +70,37 @@ class DiffablePlaylistModel(
         for (ii in 0 until n) {
             newTracks.add(Track(generateRandomColourResource(), randomLong()))
         }
-        val trackList = getListCopy()
+        val trackList = diffable.getListCopy()
         trackList.addAll(newTracks)
-        updateList(trackList)
+        diffable.updateList(trackList)
     }
 
     fun removeNTracks(n: Int) {
         logger.i("removeNTracks() n:$n")
         if (size() > n - 1) {
-            val trackList = getListCopy()
+            val trackList = diffable.getListCopy()
             trackList.subList(0, n).clear()
-            updateList(trackList)
+            diffable.updateList(trackList)
         }
-    }
-
-    fun size(): Int {
-        return currentTrackList.size
     }
 
     fun isEmpty(): Boolean {
-        return currentTrackList.isEmpty()
+        return !hasAtLeastNItems(1)
     }
 
     fun hasAtLeastNItems(n: Int): Boolean {
-        return currentTrackList.size >= n
+        return size() >= n
+    }
+
+    fun size(): Int {
+        return diffable.size
     }
 
     private fun checkIndex(index: Int) {
-        if (currentTrackList.isEmpty()) {
+        if (isEmpty()) {
             throw IndexOutOfBoundsException("tracklist has no items in it, can not get index:$index")
-        } else if (index < 0 || index > currentTrackList.size - 1) {
-            throw IndexOutOfBoundsException("tracklist index needs to be between 0 and " + (currentTrackList.size - 1) + " not:" + index)
+        } else if (index < 0 || index > size() - 1) {
+            throw IndexOutOfBoundsException("tracklist index needs to be between 0 and " + (size() - 1) + " not:" + index)
         }
     }
-
-
-    private fun updateList(newList: List<Track>){
-
-        launchMain(workMode) {
-
-            val result = withContextDefault(workMode) {
-
-                // work out the differences in the lists
-                val diffResult = DiffCalculator<Track>().createDiffResult(currentTrackList, newList)
-
-                //return to the UI thread
-                Pair(newList, DiffSpec(diffResult, systemTimeWrapper))
-            }
-
-            currentTrackList = result.first ?: emptyList()
-            latestDiffSpec = result.second ?: createFullDiffSpec()
-            logger.i("list updated")
-            notifyObservers()
-        }
-
-    }
-
-    private fun getListCopy(): MutableList<Track> {
-        val listCopy = currentTrackList.map { it.copy() } //deep copy
-        return listCopy.toMutableList()
-    }
-
-    /**
-     * If the DiffResult is old, then we assume that whatever changes
-     * were made to the list last time were never picked up by a
-     * recyclerView (maybe because the list was not visible at the time).
-     * In this case we clear the DiffResult and create a fresh one with a
-     * full diff spec.
-     *
-     * @return the latest DiffResult for the list
-     */
-    override fun getAndClearLatestDiffSpec(maxAgeMs: Long): DiffSpec {
-
-        val latestDiffSpecAvailable = latestDiffSpec
-        val fullDiffSpec = createFullDiffSpec()
-
-        latestDiffSpec = fullDiffSpec
-
-        return if (systemTimeWrapper.currentTimeMillis() - latestDiffSpecAvailable!!.timeStamp < maxAgeMs) {
-            latestDiffSpecAvailable
-        } else {
-            fullDiffSpec
-        }
-    }
-
-    private fun createFullDiffSpec(): DiffSpec {
-        return DiffSpec(null, systemTimeWrapper)
-    }
-
 }
