@@ -47,7 +47,7 @@ public class OG {
 
 
         // create dependency graph
-        AndroidLogger logger = new AndroidLogger();
+        AndroidLogger logger = new AndroidLogger("fore_");
         SystemTimeWrapper systemTimeWrapper = new SystemTimeWrapper();
         TodoItemDatabase todoItemDatabase = TodoItemDatabase.getInstance(
                 application,
@@ -93,7 +93,7 @@ public class OG {
             initialized = true;
 
             // run any necessary initialization code once object graph has been created here
-
+            get(TodoListModel.class).fetchLatestFromDb();
         }
     }
 
