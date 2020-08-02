@@ -143,9 +143,9 @@ The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-examp
 
 ## Ensuring Robustness
 
-More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must to be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
+More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
 
-> "the change to the list data MUST to be done on the UI thread AND the adapter MUST be told before the current thread yields"
+> "the change to the list data MUST be done on the UI thread AND the adapter MUST be told before the current thread yields"
 
 The "fruit fetcher" screen of the [full app example](https://github.com/erdo/fore-full-example-02-kotlin) demonstrates that quite well, it's deliberately challenging to implement in a regular fashion (multiple simultaneous network calls changing the same list; user removal of list items; and screen rotation - all at any time) it's still totally robust as a result of sticking to that rule above.
 
@@ -178,23 +178,58 @@ AsyncBuilder<Unit, Int>(workMode)
     .execute()
  </code></pre>
 
-
-
 We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
 
-AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because it needs to be instanciated each time it's used.
+Android's AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because it needs to be instanciated each time it's used.
 
-The quickest **fore** solution to all that is to use Async as an (almost) drop in solution.
+The quickest **fore** solution to all that is to use AsyncBuilder
 
 [Asynchronous Example App Source Code](https://erdo.github.io/android-fore/#fore-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
-## Async
-Async (which is basically a wrapper over AsyncTask) looks and behaves very similarly to an AsyncTask with two exceptions detailed below.
+## AsyncBuilder
 
-Async uses a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android. You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
+(_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
+
+This class uses the builder pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
+
+One restriction with AsyncBuilder is there is no way to publish progress as you can with android's AsyncTask. If you want to use that feature during your asynchronous operation, see the Async class below.
+
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+new AsyncBuilder<String, Integer>(workMode)
+    .doInBackground(input -> MyModel.this.doStuffInBackground(input))
+    .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
+    .execute("input string");
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+AsyncBuilder<String, Int>(workMode)
+    .doInBackground { input -> this@MyModel.doLongRunningStuff(input) }
+    .onPostExecute { result -> this@MyModel.doThingsWithTheResult(result) }
+    .execute("input string")
+ </code></pre>
+
+*AsyncBuilder (and Async) use a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android.*
+
+### WorkMode Parameter
+AsyncBuilder takes a constructor argument: WorkMode (in the same way that **fore** Observable does). The WorkMode parameter tells AsyncBuilder to operate in one of two modes (Asynchronous or Synchronous).
+
+Passing WorkMode.ASYNCHRONOUS in the constructor makes the AsyncBuilder operate with the same behaviour as a normal AsyncTask.
+
+Passing WorkMode.SYNCHRONOUS here on the other hand makes the whole AsyncBuilder run in one thread, blocking until it's complete. This makes testing it very easy as you remove the need to use any CountdownLatches or similar.
+
+## Async
+Async (which is basically a wrapper over AsyncTask that makes it testable) looks and behaves very similarly to android's AsyncTask and is an (almost) drop in replacement for it.
+
+You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
 
 Here's how you use Async:
-
 
 
 <!-- Tabbed code sample -->
@@ -266,46 +301,8 @@ object : Async<Unit, Int, Int>(workMode) {
  </code></pre>
 
 
-### WorkMode Parameter
-Async takes a constructor argument: WorkMode (in the same way that **fore** Observable does). The WorkMode parameter tells Async to operate in one of two modes (Asynchronous or Synchronous).
-
-Passing WorkMode.ASYNCHRONOUS in the constructor makes the Async operate with the same behaviour as a normal AsyncTask.
-
-Passing WorkMode.SYNCHRONOUS here on the other hand makes the whole Async run in one thread, blocking until it's complete. This makes testing it very easy as you remove the need to use any CountdownLatches or similar.
-
-
 ### ExecuteTask
-The other difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).
-
-
-## AsyncBuilder
-
-(_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
-
-For slightly more concise code, you can use AsyncBuilder. This class works in much the same way as Async, it just uses the build pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
-
-One restriction with AsyncBuilder is there is no way to publish progress, so if you want to use that feature during your asynchronous operation, just stick to a plain Async.
-
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-new AsyncBuilder<String, Integer>(workMode)
-    .doInBackground(input -> MyModel.this.doStuffInBackground(input))
-    .onPostExecute(result -> MyModel.this.doThingsWithTheResult(result))
-    .execute("input string");
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-AsyncBuilder<String, Int>(workMode)
-    .doInBackground { input -> this@MyModel.doLongRunningStuff(input) }
-    .onPostExecute { result -> this@MyModel.doThingsWithTheResult(result) }
-    .execute("input string")
- </code></pre>
+One difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).
 
 
 ## Testing Asynchronous Code
