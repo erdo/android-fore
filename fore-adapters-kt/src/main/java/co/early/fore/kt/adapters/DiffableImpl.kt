@@ -44,7 +44,7 @@ class DiffableImpl<T>(
                 val diffResult = DiffCalculator<T>().createDiffResult(currentList, newList)
 
                 //create a mutable copy of the new list, ready for when client wants to change it
-                val newListCopy = currentList.map { it.deepCopy() }
+                val newListCopy = newList.map { it.deepCopy() }
 
                 //return to the UI thread
                 Triple(newList, newListCopy.toMutableList(), DiffSpec(diffResult, systemTimeWrapper))
