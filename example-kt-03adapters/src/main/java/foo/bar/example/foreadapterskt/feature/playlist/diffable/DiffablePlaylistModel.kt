@@ -60,7 +60,7 @@ class DiffablePlaylistModel(
 
     fun getTrack(index: Int): Track {
         checkIndex(index)
-        return diffable.getItem[index]
+        return diffable.getItem(index)
     }
 
     fun addNTracks(n: Int) {
@@ -92,7 +92,7 @@ class DiffablePlaylistModel(
     }
 
     fun size(): Int {
-        return diffable.size
+        return diffable.size()
     }
 
     private fun checkIndex(index: Int) {
