@@ -19,9 +19,7 @@ class DiffablePlaylistModelAdapter(private val diffablePlaylistModel: DiffablePl
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_playlists_listitem, parent, false)
-        val holder = ViewHolder(view)
-        holder.itemView.tag = holder
-        return holder
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

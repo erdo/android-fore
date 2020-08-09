@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_counter.*
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
-class CounterActivity : FragmentActivity() {
+class CounterActivity : FragmentActivity(R.layout.activity_counter) {
 
 
     //models that we need to sync with
@@ -28,8 +28,6 @@ class CounterActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_counter)
 
         setupButtonClickListeners()
     }

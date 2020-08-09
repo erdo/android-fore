@@ -15,7 +15,7 @@ import foo.bar.example.foreretrofitkt.message.UserMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
 
-class FruitActivity : FragmentActivity() {
+class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
 
 
     //models that we need to sync with
@@ -44,8 +44,6 @@ class FruitActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_fruit)
 
         setupButtonClickListeners()
     }
