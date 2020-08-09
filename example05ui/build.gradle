@@ -46,8 +46,8 @@ dependencies {
 
     implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation "co.early.fore:fore-lifecycle:${rootProject.ext.ForeLibVersion_ForExamples}"
-    //implementation project(path: ':fore-core')
-    //implementation project(path: ':fore-lifecycle')
+    //// implementation project(':fore-core')
+    //implementation project(':fore-lifecycle')
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "com.google.android.material:material:${rootProject.ext.material}"

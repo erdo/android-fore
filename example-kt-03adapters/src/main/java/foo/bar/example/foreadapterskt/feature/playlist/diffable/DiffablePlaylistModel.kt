@@ -1,7 +1,5 @@
 package foo.bar.example.foreadapterskt.feature.playlist.diffable
 
-
-import androidx.core.util.Pair
 import co.early.fore.adapters.DiffCalculator
 import co.early.fore.adapters.DiffSpec
 import co.early.fore.adapters.Diffable
@@ -24,7 +22,7 @@ class DiffablePlaylistModel(
         private val systemTimeWrapper: SystemTimeWrapper,
         private val workMode: WorkMode,
         private val logger: Logger,
-        private val diffable = DiffableImpl<Track>(systemTimeWrapper, workMode, logger)
+        private val diffable: DiffableImpl<Track> = DiffableImpl<Track>(systemTimeWrapper, workMode, logger)
 ) : Observable by diffable,
     Diffable by diffable {
 

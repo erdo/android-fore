@@ -1,16 +1,17 @@
 package co.early.fore.kt.adapters
 
 import androidx.core.util.Pair
-import co.early.fore.adapters.Diffable
-import co.early.fore.adapters.DiffSpec
 import co.early.fore.adapters.DiffCalculator
 import co.early.fore.adapters.DiffComparator
-import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.adapters.DiffSpec
+import co.early.fore.adapters.Diffable
 import co.early.fore.core.WorkMode
+import co.early.fore.core.Affirm
+import co.early.fore.core.observer.Observable
+import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.coroutine.withContextDefault
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.observer.ObservableImp
 
 class DiffableImpl<T>(
@@ -24,6 +25,7 @@ class DiffableImpl<T>(
     private var currentList = listOf<T>()
 
     fun getItem(index: Int): T {
+        Affirm.notNull(index)
         return currentList[index]
     }
 

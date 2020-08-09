@@ -113,7 +113,7 @@ class ListDifferPlaylistAdapter(private val syncableView: SyncableView, private 
     }
 
     private fun getListCopy(): MutableList<Track> {
-        val listCopy = differ.currentList.map { it.copy() } //deep copy
+        val listCopy = differ.currentList.map { it.deepCopy() } //deep copy
         return listCopy.toMutableList()
     }
 
