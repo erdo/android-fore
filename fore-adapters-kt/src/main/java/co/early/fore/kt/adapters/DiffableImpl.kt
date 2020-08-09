@@ -22,14 +22,14 @@ class DiffableImpl<T>(
 
     private var latestDiffSpec: DiffSpec? = createFullDiffSpec()
     private var currentList = listOf<T>()
+    private var currentListMutableCopy = mutableListOf<T>()
 
     fun getItem(index: Int): T {
         return currentList[index]
     }
 
     fun getListCopy(): MutableList<T> {
-        val listCopy = currentList.map { it.deepCopy() }
-        return listCopy.toMutableList()
+        return currentListMutableCopy
     }
 
     fun size(): Int = currentList.size
@@ -43,12 +43,16 @@ class DiffableImpl<T>(
                 // work out the differences in the lists
                 val diffResult = DiffCalculator<T>().createDiffResult(currentList, newList)
 
+                //create a mutable copy of the new list, ready for when client wants to change it
+                val newListCopy = currentList.map { it.deepCopy() }
+
                 //return to the UI thread
-                Pair(newList, DiffSpec(diffResult, systemTimeWrapper))
+                Triple(newList, newListCopy.toMutableList(), DiffSpec(diffResult, systemTimeWrapper))
             }
 
             currentList = result.first ?: emptyList()
-            latestDiffSpec = result.second ?: createFullDiffSpec()
+            currentListMutableCopy = result.second
+            latestDiffSpec = result.third ?: createFullDiffSpec()
             logger?.i("list updated")
             notifyObservers()
         }
