@@ -6,6 +6,7 @@ import co.early.fore.adapters.Diffable
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.kt.adapters.DiffableImpl
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.coroutine.withContextDefault
 import co.early.fore.kt.core.logging.Logger
