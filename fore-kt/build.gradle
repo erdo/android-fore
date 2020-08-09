@@ -68,15 +68,16 @@ android {
 
 dependencies {
     api "androidx.annotation:annotation:${rootProject.ext.annotation}"
-    api "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
-    api "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
+    implementation "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
     api "io.arrow-kt:arrow-core:${rootProject.ext.arrow_core}"
+
     api "androidx.core:core-ktx:${rootProject.ext.core_ktx}"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.ext.kotlinx_coroutines_core}"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:${rootProject.ext.kotlinx_coroutines_android}"
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    api "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
     implementation "androidx.coordinatorlayout:coordinatorlayout:${rootProject.ext.coordinatorlayout}"
     implementation "androidx.cardview:cardview:${rootProject.ext.cardview}"

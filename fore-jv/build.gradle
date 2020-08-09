@@ -56,9 +56,10 @@ android {
 
 dependencies {
     api "androidx.annotation:annotation:${rootProject.ext.annotation}"
-    api "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
-    api "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
+    implementation "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
+
+    api "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
     implementation "androidx.coordinatorlayout:coordinatorlayout:${rootProject.ext.coordinatorlayout}"
     implementation "androidx.cardview:cardview:${rootProject.ext.cardview}"

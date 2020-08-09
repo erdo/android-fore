@@ -42,8 +42,8 @@ dependencies {
 
     implementation "co.early.fore:fore-core-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
     implementation "co.early.fore:fore-retrofit-kt:${rootProject.ext.ForeLibVersion_ForExamples}"
-    //implementation project(path: ':fore-core-kt')
-    //implementation project(path: ':fore-retrofit-kt')
+    //// implementation project(':fore-core-kt')
+    //implementation project(':fore-retrofit-kt')
 
     implementation "com.squareup.retrofit2:converter-gson:${rootProject.ext.converter_gson}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"

@@ -47,9 +47,9 @@ android {
 dependencies {
 
     //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
-    implementation project(path: ':fore-core')
+    api project(':fore-core')
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
+    api "androidx.appcompat:appcompat:${rootProject.ext.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayout}"
     implementation "androidx.coordinatorlayout:coordinatorlayout:${rootProject.ext.coordinatorlayout}"
     implementation "androidx.cardview:cardview:${rootProject.ext.cardview}"

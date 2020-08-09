@@ -2,6 +2,7 @@ package foo.bar.example.foreadapterskt.feature.playlist
 
 import androidx.annotation.ColorRes
 import co.early.fore.adapters.DiffComparator
+import co.early.fore.kt.adapters.DeepCopyable
 
 
 class Track(
@@ -9,7 +10,7 @@ class Track(
         val colourResource: Int,
         val id: Long,
         playsRequested: Int? = null
-) : DiffComparator<Track> {
+) : DiffComparator<Track>, DeepCopyable<Track> {
 
     var numberOfPlaysRequested: Int
         private set
@@ -18,7 +19,6 @@ class Track(
         numberOfPlaysRequested = playsRequested?.let {
             it
         } ?: MIN_PLAYS_REQUESTED
-
     }
 
     fun increasePlaysRequested() {
@@ -59,7 +59,7 @@ class Track(
         } else false
     }
 
-    fun copy(): Track {
+    override fun deepCopy(): Track {
         return Track(
                 colourResource,
                 id,

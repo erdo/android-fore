@@ -41,7 +41,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.butterknife}"
 
     implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
-    //implementation project(path: ':fore-core')
+    //implementation project(':fore-core')
 
     //noinspection AnnotationProcessorOnCompilePath
     implementation "com.jakewharton:butterknife:${rootProject.ext.butterknife}"

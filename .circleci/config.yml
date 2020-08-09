@@ -1,4 +1,4 @@
-version: 2
+version: 2 #circleci yml api version
 jobs:
   build:
     working_directory: ~/code
@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:
           # bump the cache version number if you want to wipe the gradle cache
-          key: v2-gradle-dependencies-cache
+          key: v3-gradle-dependencies-cache
 #      - run:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
@@ -21,7 +21,8 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v2-gradle-dependencies-cache
+          key: v3-gradle-dependencies-cache
+
       - run:
           name: Run Tests fore-core
           command: ./gradlew fore-core:lintRelease fore-core:testRelease
@@ -29,6 +30,14 @@ jobs:
           path: fore-core/build/reports
       - store_test_results:
           path: fore-core/build/test-results
+
+      - run:
+          name: Run Tests fore-core-kt
+          command: ./gradlew fore-core-kt:lintRelease fore-core-kt:testRelease
+      - store_artifacts:
+          path: fore-core-kt/build/reports
+      - store_test_results:
+          path: fore-core-kt/build/test-results
 
       - run:
           name: Run Tests fore-adapters
@@ -39,12 +48,28 @@ jobs:
           path: fore-adapters/build/test-results
 
       - run:
+          name: Run Tests fore-adapters-kt
+          command: ./gradlew fore-adapters-kt:lintRelease fore-adapters-kt:testRelease
+      - store_artifacts:
+          path: fore-adapters-kt/build/reports
+      - store_test_results:
+          path: fore-adapters-kt/build/test-results
+
+      - run:
           name: Run Tests fore-retrofit
           command: ./gradlew fore-retrofit:lintRelease fore-retrofit:testRelease
       - store_artifacts:
           path: fore-retrofit/build/reports
       - store_test_results:
           path: fore-retrofit/build/test-results
+
+      - run:
+          name: Run Tests fore-retrofit-kt
+          command: ./gradlew fore-retrofit-kt:lintRelease fore-retrofit-kt:testRelease
+      - store_artifacts:
+          path: fore-retrofit-kt/build/reports
+      - store_test_results:
+          path: fore-retrofit-kt/build/test-results
 
       - run:
           name: Run Tests fore-lifecycle
@@ -101,3 +126,27 @@ jobs:
           path: example06db/build/reports
       - store_test_results:
           path: example06db/build/test-results
+
+      - run:
+          name: Run Tests example-kt-02coroutine
+          command: ./gradlew example-kt-02coroutine:lintRelease example-kt-02coroutine:testRelease
+      - store_artifacts:
+          path: example-kt-02coroutine/build/reports
+      - store_test_results:
+          path: example-kt-02coroutine/build/test-results
+
+      - run:
+          name: Run Tests example-kt-03adapters
+          command: ./gradlew example-kt-03adapters:lintRelease example-kt-03adapters:testRelease
+      - store_artifacts:
+          path: example-kt-03adapters/build/reports
+      - store_test_results:
+          path: example-kt-03adapters/build/test-results
+
+      - run:
+          name: Run Tests example-kt-04retrofit
+          command: ./gradlew example-kt-04retrofit:lintRelease example-kt-04retrofit:testRelease
+      - store_artifacts:
+          path: example-kt-04retrofit/build/reports
+      - store_test_results:
+          path: example-kt-04retrofit/build/test-results

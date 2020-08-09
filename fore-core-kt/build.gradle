@@ -48,7 +48,7 @@ android {
 dependencies {
 
     //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
-    api project(path: ':fore-core')
+    api project(':fore-core')
 
     api "androidx.core:core-ktx:${rootProject.ext.core_ktx}"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -47,7 +47,7 @@ android {
 dependencies {
 
     //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
-    implementation project(path: ':fore-core')
+    api project(':fore-core')
 
     api "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerview}"
 

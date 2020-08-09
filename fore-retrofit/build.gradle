@@ -46,8 +46,8 @@ android {
 
 dependencies {
 
-    //api "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
-    api project(path: ':fore-core')
+    //implementation "co.early.fore:fore-core:${rootProject.ext.ForeLibVersion_ForExamples}"
+    api project(':fore-core')
 
     api "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofit}"
 
