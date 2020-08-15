@@ -16,6 +16,11 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
+    lintOptions {
+       isAbortOnError = true
+       lintConfig = File(project.rootDir, "lint-examples.xml")
+    }
+
     defaultConfig {
         applicationId = "foo.bar.example.foreadapters"
         minSdkVersion(Shared.Android.minSdkVersion)

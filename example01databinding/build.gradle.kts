@@ -16,6 +16,11 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
+    lintOptions {
+       isAbortOnError = true
+       lintConfig = File(project.rootDir, "lint-examples.xml")
+    }
+
     defaultConfig {
         applicationId = "foo.bar.example.foredatabinding"
         minSdkVersion(Shared.Android.minSdkVersion)
@@ -37,7 +42,7 @@ repositories {
     mavenCentral()
     google()
 }
-        
+
 dependencies {
 
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")

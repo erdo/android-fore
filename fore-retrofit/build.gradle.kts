@@ -21,7 +21,8 @@ android {
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
     lintOptions {
-        isAbortOnError = false
+        isAbortOnError = true
+        lintConfig = File(project.rootDir, "lint-library.xml")
     }
 
     defaultConfig {
