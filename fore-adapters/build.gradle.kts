@@ -45,7 +45,7 @@ android {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-core:${Shared.Versions.ForeLibVersion_ForExamples}")
+    //implementation("co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
