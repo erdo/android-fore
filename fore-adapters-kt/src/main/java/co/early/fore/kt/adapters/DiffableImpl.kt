@@ -1,6 +1,5 @@
 package co.early.fore.kt.adapters
 
-import androidx.core.util.Pair
 import co.early.fore.adapters.DiffCalculator
 import co.early.fore.adapters.DiffComparator
 import co.early.fore.adapters.DiffSpec
