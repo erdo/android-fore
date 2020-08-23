@@ -19,10 +19,14 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
-    lintOptions {
-       isAbortOnError = true
-       lintConfig = File(project.rootDir, "lint-examples.xml")
-    }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("../../keystore/debug.keystore")
+//            storePassword = "android"
+//            keyAlias = "android"
+//            keyPassword = "android"
+//        }
+//    }
 
     defaultConfig {
         applicationId = "foo.bar.example.foreretrofitkt"
@@ -34,9 +38,14 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"))
+//          signingConfig = signingConfigs.getByName("release")
         }
+    }
+    lintOptions {
+        isAbortOnError = true
+        lintConfig = File(project.rootDir, "lint-examples.xml")
     }
 }
 
@@ -48,10 +57,8 @@ repositories {
 
 dependencies {
 
-    implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
-    implementation("co.early.fore:fore-retrofit-kt:${Shared.Versions.fore_version_for_examples}")
-    //// implementation(project(":fore-core-kt"))
-    //implementation(project(":fore-retrofit-kt"))
+    //implementation("co.early.fore:fore-retrofit-kt:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-retrofit-kt"))
 
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

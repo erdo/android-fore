@@ -19,10 +19,14 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
-    lintOptions {
-       isAbortOnError = true
-       lintConfig = File(project.rootDir, "lint-examples.xml")
-    }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("../../keystore/debug.keystore")
+//            storePassword = "android"
+//            keyAlias = "android"
+//            keyPassword = "android"
+//        }
+//    }
 
     defaultConfig {
         applicationId = "foo.bar.example.foredb"
@@ -34,9 +38,14 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"))
+//          signingConfig = signingConfigs.getByName("release")
         }
+    }
+    lintOptions {
+        isAbortOnError = true
+        lintConfig = File(project.rootDir, "lint-examples.xml")
     }
 }
 
@@ -53,8 +62,8 @@ dependencies {
     //noinspection AnnotationProcessorOnCompilePath
     implementation("com.jakewharton:butterknife:${Shared.Versions.butterknife}")
 
-    implementation("co.early.fore:fore-jv:${Shared.Versions.fore_version_for_examples}")
-    //implementation(project(":fore-jv")
+    //implementation("co.early.fore:fore-jv:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-jv"))
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("com.google.android.material:material:${Shared.Versions.material}")

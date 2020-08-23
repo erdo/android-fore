@@ -19,10 +19,14 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
-    lintOptions {
-       isAbortOnError = true
-       lintConfig = File(project.rootDir, "lint-examples.xml")
-    }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("../../keystore/debug.keystore")
+//            storePassword = "android"
+//            keyAlias = "android"
+//            keyPassword = "android"
+//        }
+//    }
 
     defaultConfig {
         applicationId = "foo.bar.example.forecoroutine"
@@ -34,9 +38,14 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"))
+//          signingConfig = signingConfigs.getByName("release")
         }
+    }
+    lintOptions {
+        isAbortOnError = true
+        lintConfig = File(project.rootDir, "lint-examples.xml")
     }
 }
 
@@ -48,8 +57,8 @@ repositories {
 
 dependencies {
 
-    implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
-    //implementation(project(":fore-core-kt"))
+    //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-core-kt"))
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")

@@ -49,9 +49,9 @@ class DiffableImpl<T>(
                 Triple(newList, newListCopy.toMutableList(), DiffSpec(diffResult, systemTimeWrapper))
             }
 
-            currentList = result.first ?: emptyList()
+            currentList = result.first
             currentListMutableCopy = result.second
-            latestDiffSpec = result.third ?: createFullDiffSpec()
+            latestDiffSpec = result.third
             logger?.i("list updated")
             notifyObservers()
         }
