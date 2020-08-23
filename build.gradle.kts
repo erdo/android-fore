@@ -1,5 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-//import co.early.fore.Config_gradle.Shared
+//import co.early.fore.Shared
 import java.util.Properties
 import java.io.File
 
@@ -10,11 +9,14 @@ buildscript {
         google()
     }
     dependencies {
+        //classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:${Shared.Versions.dexcount_gradle_plugin}")
         classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.3")
-        classpath("com.android.tools.build:gradle:4.0.1")  //android gradle plugin
+        //classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${Shared.Versions.gradle_bintray_plugin}")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
+        //classpath("com.android.tools.build:gradle:${Shared.Versions.android_gradle_plugin}")
+        classpath("com.android.tools.build:gradle:4.0.1")
         //classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Shared.Versions.kotlin_version}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
     }
 }
 

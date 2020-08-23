@@ -1,4 +1,4 @@
-import co.early.fore.Config_gradle.Shared
+import co.early.fore.Shared
 
 plugins {
     id("com.android.application")
