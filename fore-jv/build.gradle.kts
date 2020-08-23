@@ -39,7 +39,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles("proguard-library-consumer.pro")
+            consumerProguardFiles("../proguard-library-consumer.pro")
         }
     }
 

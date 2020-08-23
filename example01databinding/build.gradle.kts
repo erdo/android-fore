@@ -16,10 +16,14 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
-    lintOptions {
-       isAbortOnError = true
-       lintConfig = File(project.rootDir, "lint-examples.xml")
-    }
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("../../keystore/debug.keystore")
+//            storePassword = "android"
+//            keyAlias = "android"
+//            keyPassword = "android"
+//        }
+//    }
 
     defaultConfig {
         applicationId = "foo.bar.example.foredatabinding"
@@ -31,9 +35,14 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"))
+  //          signingConfig = signingConfigs.getByName("release")
         }
+    }
+    lintOptions {
+        isAbortOnError = true
+        lintConfig = File(project.rootDir, "lint-examples.xml")
     }
 }
 
