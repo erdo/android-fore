@@ -1,5 +1,7 @@
 package co.early.fore
 
+import org.gradle.api.JavaVersion
+
 object Shared {
 
     object Android {
@@ -10,7 +12,10 @@ object Shared {
     }
 
     object Versions {
-        const val kotlin_version = "1.3.72"
+        const val android_gradle_plugin = "4.0.1"
+        const val kotlin_version = "1.4.0"
+        const val dexcount_gradle_plugin = "0.8.3"
+        const val gradle_bintray_plugin = "1.8.4"
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
         const val recyclerview = "1.1.0"

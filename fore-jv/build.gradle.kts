@@ -1,7 +1,7 @@
-import co.early.fore.Config_gradle.Shared
+import co.early.fore.Shared
 
 plugins {
-    id("com.android.library")
+    id("fore-plugin")
 }
 
 ext.apply {
@@ -12,36 +12,6 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-
-    compileOptions {
-        sourceCompatibility = Shared.Android.javaVersion
-        targetCompatibility = Shared.Android.javaVersion
-    }
-
-    compileSdkVersion(Shared.Android.compileSdkVersion)
-
-    lintOptions {
-        isAbortOnError = true
-        lintConfig = File(project.rootDir, "lint-library.xml")
-    }
-
-    defaultConfig {
-
-        minSdkVersion(Shared.Android.minSdkVersion)
-        targetSdkVersion(Shared.Android.targetSdkVersion)
-
-        versionCode = Shared.Publish.LIB_VERSION_CODE
-        versionName = Shared.Publish.LIB_VERSION_NAME
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            consumerProguardFiles("../proguard-library-consumer.pro")
-        }
-    }
 
     sourceSets["main"].java.srcDirs(
             "../fore-core/src/main/java",
