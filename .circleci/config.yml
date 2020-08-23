@@ -6,12 +6,12 @@ jobs:
       - image: circleci/android:api-29
     environment:
       JVM_OPTS: -Xmx3200m
-      GRADLE_OPTS: -Dorg.gradle.daemon=false
+      GRADLE_OPTS: -Dorg.gradle.daemon=true
     steps:
       - checkout
       - restore_cache:
           # bump the cache version number if you want to wipe the gradle cache
-          key: v3-gradle-dependencies-cache
+          key: v4-gradle-dependencies-cache
 #      - run:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
@@ -21,7 +21,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v3-gradle-dependencies-cache
+          key: v4-gradle-dependencies-cache
 
       - run:
           name: Run Tests fore-core
