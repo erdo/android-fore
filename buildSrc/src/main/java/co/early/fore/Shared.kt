@@ -22,6 +22,7 @@ object Shared {
         const val material = "1.1.0"
         const val appcompat = "1.1.0"
         const val androidxtest = "1.1.0-beta02"
+        const val androidxtestcore = "1.2.0"
         const val androidxjunit = "1.1.1"
         const val room_runtime = "2.2.5"
         const val room_compiler = "2.2.0-rc01"

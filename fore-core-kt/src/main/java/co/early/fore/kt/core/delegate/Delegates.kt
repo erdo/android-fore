@@ -23,20 +23,20 @@ interface Delegate {
     val systemTimeWrapper: SystemTimeWrapper
 }
 
-class DefaultReleaseDelegate (
+class ReleaseDelegateDefault (
     override val workMode: WorkMode = ASYNCHRONOUS,
     override val logger: Logger = SilentLogger(),
     override val systemTimeWrapper: SystemTimeWrapper = SystemTimeWrapper()
 ) : Delegate
 
-class DefaultDebugDelegate (
+class DebugDelegateDefault (
         tagPrefix: String? = null,
         override val workMode: WorkMode = ASYNCHRONOUS,
         override val logger: Logger = AndroidLogger(tagPrefix),
         override val systemTimeWrapper: SystemTimeWrapper = SystemTimeWrapper()
 ) : Delegate
 
-class DefaultTestDelegate (
+class TestDelegateDefault (
         override val workMode: WorkMode = SYNCHRONOUS,
         override val logger: Logger = SystemLogger(),
         override val systemTimeWrapper: SystemTimeWrapper = SystemTimeWrapper()
@@ -47,7 +47,7 @@ class ForeDelegateHolder {
 
     companion object {
 
-        private var delegate: Delegate = DefaultReleaseDelegate()
+        private var delegate: Delegate = ReleaseDelegateDefault()
 
         fun setDelegate(delegate: Delegate){
             this.delegate = delegate
