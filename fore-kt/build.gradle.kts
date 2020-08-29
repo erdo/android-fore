@@ -14,13 +14,6 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
 
-    sourceSets["main"].java.srcDirs(
-            "../fore-core/src/main/java",
-            "../fore-adapters/src/main/java",
-            "../fore-lifecycle/src/main/java",
-            "../fore-retrofit/src/main/java"
-    )
-
     sourceSets["main"].java.exclude(
             "co/early/fore/core/logging/**",
             "co/early/fore/core/observer/ObservableImp.java",
@@ -30,6 +23,12 @@ android {
 }
 
 dependencies {
+
+    api(project(":fore-core-kt"))
+    api(project(":fore-adapters-kt"))
+    api(project(":fore-retrofit-kt"))
+    api(project(":fore-lifecycle"))
+
     api("androidx.annotation:annotation:${Shared.Versions.annotation}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")

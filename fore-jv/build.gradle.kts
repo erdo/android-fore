@@ -11,17 +11,13 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-android {
-
-    sourceSets["main"].java.srcDirs(
-            "../fore-core/src/main/java",
-            "../fore-adapters/src/main/java",
-            "../fore-lifecycle/src/main/java",
-            "../fore-retrofit/src/main/java"
-    )
-}
-
 dependencies {
+
+    api(project(":fore-core"))
+    api(project(":fore-adapters"))
+    api(project(":fore-retrofit"))
+    api(project(":fore-lifecycle"))
+
     api("androidx.annotation:annotation:${Shared.Versions.annotation}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")

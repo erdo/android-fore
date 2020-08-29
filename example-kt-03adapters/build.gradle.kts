@@ -7,7 +7,6 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    //id("com.getkeepsafe.dexcount") //uncomment for library method stats)
 }
 
 android {

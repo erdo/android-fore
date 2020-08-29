@@ -4,7 +4,6 @@ plugins {
     id("com.android.application")
     id("maven")
     id("idea")
-    //id("com.getkeepsafe.dexcount") //uncomment for library method stats)
 }
 
 android {

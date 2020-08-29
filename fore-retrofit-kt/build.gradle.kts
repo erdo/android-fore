@@ -16,7 +16,6 @@ dependencies {
 
     //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     //implementation("co.early.fore:fore-retrofit:${Shared.Versions.fore_version_for_examples}")
-    api(project(":fore-core"))
     api(project(":fore-core-kt"))
     api(project(":fore-retrofit"))
 

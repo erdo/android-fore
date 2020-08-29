@@ -14,11 +14,8 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
 
-    //api("co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}")
-    //api("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
+    //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     //api("co.early.fore:fore-adapters:${Shared.Versions.fore_version_for_examples}")
-
-    api(project(":fore-core"))
     api(project(":fore-core-kt"))
     api(project(":fore-adapters"))
 

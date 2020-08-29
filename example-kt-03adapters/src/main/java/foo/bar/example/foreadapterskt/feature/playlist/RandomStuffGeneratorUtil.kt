@@ -21,5 +21,4 @@ object RandomStuffGeneratorUtil {
     fun randomLong(): Long {
         return random.nextLong()
     }
-
 }

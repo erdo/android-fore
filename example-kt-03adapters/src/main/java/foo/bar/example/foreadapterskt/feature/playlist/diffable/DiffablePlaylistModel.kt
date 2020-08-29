@@ -1,16 +1,11 @@
 package foo.bar.example.foreadapterskt.feature.playlist.diffable
 
-import co.early.fore.adapters.DiffCalculator
-import co.early.fore.adapters.DiffSpec
 import co.early.fore.adapters.Diffable
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.adapters.DiffableImpl
-import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.coroutine.withContextDefault
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.observer.ObservableImp
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.generateRandomColourResource
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.randomLong
 import foo.bar.example.foreadapterskt.feature.playlist.Track

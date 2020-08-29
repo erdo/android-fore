@@ -9,8 +9,6 @@ buildscript {
         google()
     }
     dependencies {
-        //classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:${Shared.Versions.dexcount_gradle_plugin}")
-        classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.3")
         //classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${Shared.Versions.gradle_bintray_plugin}")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
         //classpath("com.android.tools.build:gradle:${Shared.Versions.android_gradle_plugin}")
