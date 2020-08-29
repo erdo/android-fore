@@ -12,6 +12,14 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
+android {
+
+    sourceSets["main"].java.exclude(
+            "co/early/fore/adapters/ChangeAwareArrayList.java",
+            "co/early/fore/adapters/ChangeAwareLinkedList.java"
+    )
+}
+
 dependencies {
 
     //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")

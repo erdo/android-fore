@@ -18,7 +18,9 @@ android {
             "co/early/fore/core/logging/**",
             "co/early/fore/core/observer/ObservableImp.java",
             "co/early/fore/retrofit/InterceptorLogging.java",
-            "co/early/fore/retrofit/CallProcessor.java"
+            "co/early/fore/retrofit/CallProcessor.java",
+            "co/early/fore/adapters/ChangeAwareArrayList.java",
+            "co/early/fore/adapters/ChangeAwareLinkedList.java"
     )
 }
 

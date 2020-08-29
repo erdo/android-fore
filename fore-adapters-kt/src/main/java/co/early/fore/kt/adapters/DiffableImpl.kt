@@ -9,13 +9,14 @@ import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.coroutine.withContextDefault
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 
 class DiffableImpl<T>(
-        private val systemTimeWrapper: SystemTimeWrapper,
-        private val workMode: WorkMode,
-        private val logger: Logger?
+        private val systemTimeWrapper: SystemTimeWrapper? = null,
+        private val workMode: WorkMode? = null,
+        private val logger: Logger? = null
 ) : Diffable, Observable by ObservableImp(workMode, logger)
         where T : DeepCopyable<T>, T : DiffComparator<T> {
 
@@ -46,13 +47,13 @@ class DiffableImpl<T>(
                 val newListCopy = newList.map { it.deepCopy() }
 
                 //return to the UI thread
-                Triple(newList, newListCopy.toMutableList(), DiffSpec(diffResult, systemTimeWrapper))
+                Triple(newList, newListCopy.toMutableList(), DiffSpec(diffResult, ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)))
             }
 
             currentList = result.first
             currentListMutableCopy = result.second
             latestDiffSpec = result.third
-            logger?.i("list updated")
+            ForeDelegateHolder.getLogger(logger).i("list updated, thread:" + Thread.currentThread().id)
             notifyObservers()
         }
 
@@ -74,7 +75,7 @@ class DiffableImpl<T>(
 
         latestDiffSpec = fullDiffSpec
 
-        return if (systemTimeWrapper.currentTimeMillis() - latestDiffSpecAvailable!!.timeStamp < maxAgeMs) {
+        return if (ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper).currentTimeMillis() - latestDiffSpecAvailable!!.timeStamp < maxAgeMs) {
             latestDiffSpecAvailable
         } else {
             fullDiffSpec
@@ -82,6 +83,6 @@ class DiffableImpl<T>(
     }
 
     private fun createFullDiffSpec(): DiffSpec {
-        return DiffSpec(null, systemTimeWrapper)
+        return DiffSpec(null, ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper))
     }
 }
