@@ -28,21 +28,15 @@ object OG {
 
         // create dependency graph
         val logger = AndroidLogger("fore_")
-        val systemTimeWrapper = SystemTimeWrapper()
         val playlistAdvancedModel = UpdatablePlaylistModel(
-                systemTimeWrapper,
-                workMode,
                 logger
         )
         val playlistSimpleModel = DiffablePlaylistModel(
-                systemTimeWrapper,
-                workMode,
                 logger
         )
 
 
         // add models to the dependencies map if you will need them later
-        dependencies[SystemTimeWrapper::class.java] = systemTimeWrapper
         dependencies[UpdatablePlaylistModel::class.java] = playlistAdvancedModel
         dependencies[DiffablePlaylistModel::class.java] = playlistSimpleModel
         dependencies[Logger::class.java] = logger

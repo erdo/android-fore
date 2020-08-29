@@ -8,6 +8,7 @@ import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
+import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.retrofit.CallProcessor
 import co.early.fore.kt.retrofit.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
@@ -25,7 +26,7 @@ class FruitFetcher(
         private val callProcessor: CallProcessor<UserMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
-) : Observable by co.early.fore.kt.core.observer.ObservableImp(workMode, logger) {
+) : Observable by ObservableImp(workMode, logger) {
 
     var isBusy: Boolean = false
         private set

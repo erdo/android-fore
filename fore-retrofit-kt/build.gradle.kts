@@ -12,11 +12,18 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
+android {
+
+    sourceSets["main"].java.exclude(
+            "co/early/fore/retrofit/InterceptorLogging.java",
+            "co/early/fore/retrofit/CallProcessor.java"
+    )
+}
+
 dependencies {
 
     //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     //implementation("co.early.fore:fore-retrofit:${Shared.Versions.fore_version_for_examples}")
-    api(project(":fore-core"))
     api(project(":fore-core-kt"))
     api(project(":fore-retrofit"))
 

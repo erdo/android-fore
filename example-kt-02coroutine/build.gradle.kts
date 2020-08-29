@@ -7,7 +7,6 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    //id("com.getkeepsafe.dexcount") //uncomment for library method stats)
 }
 
 android {
@@ -72,10 +71,11 @@ dependencies {
     }
     androidTestImplementation("org.objenesis:objenesis:2.6")
     //work around for https://github.com/mockk/issues/281
+    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtestcore}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:rules:${Shared.Versions.androidxtest}")
+    androidTestImplementation("androidx.test.ext:junit:${Shared.Versions.androidxjunit}")
     androidTestImplementation("androidx.annotation:annotation:${Shared.Versions.annotation}")
-    androidTestImplementation("androidx.core:core:${Shared.Versions.android_core}")
     androidTestImplementation("androidx.test.espresso:espresso-core:${Shared.Versions.espresso_core}") {
         exclude(group = "com.android.support", module = "support-annotations")
     }

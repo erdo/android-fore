@@ -8,8 +8,8 @@ include(":fore-lifecycle")
 include(":fore-jv")
 include(":fore-kt")
 
-include(":example-kt-02coroutine", ":example-kt-03adapters", ":example-kt-04retrofit",
-        ":example01databinding", ":example02threading", ":example03adapters",
-        ":example04retrofit", ":example05ui", ":example06db")
+include(":example-kt-01reactiveui", ":example-kt-02coroutine", "example-kt-03adapters",
+        ":example-kt-04retrofit", ":example-jv-01reactiveui", ":example-jv-02threading", ":example-jv-03adapters",
+        ":example-jv-04retrofit", ":example-jv-05ui", ":example-jv-06db")
 
 rootProject.name = "android-fore"

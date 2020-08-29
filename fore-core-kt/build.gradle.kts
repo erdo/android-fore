@@ -12,10 +12,20 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
+android {
+
+    sourceSets["main"].java.exclude(
+            "co/early/fore/core/logging/**",
+            "co/early/fore/core/observer/ObservableImp.java"
+    )
+}
+
 dependencies {
 
     //implementation("co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core"))
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${Shared.Versions.kotlin_version}")
 
     api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")

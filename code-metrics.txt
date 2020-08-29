@@ -1,0 +1,27 @@
+1.2.0
+------
+
+maven package metrics (pre-obfuscation).
+
+Values are inclusive of the package specified, plus any
+other required fore packages which will be pulled in
+automatically
+
+
+--------------------------------------------------------
+package                  referenced methods      size  
+--------------------------------------------------------
+(java API)
+fore-core                       128             12.5KB  
+fore-retrofit                   165             19.3KB  
+fore-adapters                   217             24.6KB  
+fore-lifecycle                  222             50.4KB  
+
+(kotlin API)
+fore-core-kt                    391             44.4KB  
+fore-retrofit-kt                480             63.2KB  
+fore-adapters-kt                566             69.4KB
+
+(all packages)
+fore-jv                         357             101.2KB
+fore-kt                         775             158.2KB

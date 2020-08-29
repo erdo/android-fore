@@ -1,15 +1,8 @@
 package co.early.fore.kt.core.coroutine
 
 import co.early.fore.core.WorkMode
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
 
@@ -36,32 +29,32 @@ import kotlin.coroutines.coroutineContext
  * Copyright © 2019 early.co. All rights reserved.
  */
 
-fun launchMainImm(workMode: WorkMode, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main.immediate).launch { block() }
     }
 }
 
-fun launchMain(workMode: WorkMode, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main).launch { block() }
     }
 }
 
-fun launchIO(workMode: WorkMode, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.IO).launch { block() }
     }
 }
 
-fun launchDefault(workMode: WorkMode, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Default).launch { block() }
@@ -69,64 +62,64 @@ fun launchDefault(workMode: WorkMode, block: suspend CoroutineScope.() -> Unit):
 }
 
 
-fun <T> asyncMainImm(workMode: WorkMode, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main.immediate).async { block() }
     }
 }
 
-fun <T> asyncMain(workMode: WorkMode, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main).async { block() }
     }
 }
 
-fun <T> asyncIO(workMode: WorkMode, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.IO).async { block() }
     }
 }
 
-fun <T> asyncDefault(workMode: WorkMode, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+fun <T> asyncDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Default).async { block() }
     }
 }
 
-suspend fun <T> withContextMainImm(workMode: WorkMode, block: suspend CoroutineScope.() -> T): T {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+suspend fun <T> withContextMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Main.immediate) { block() }
     }
 }
 
-suspend fun <T> withContextMain(workMode: WorkMode, block: suspend CoroutineScope.() -> T): T {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+suspend fun <T> withContextMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Main) { block() }
     }
 }
 
-suspend fun <T> withContextIO(workMode: WorkMode, block: suspend CoroutineScope.() -> T): T {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+suspend fun <T> withContextIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.IO) { block() }
     }
 }
 
-suspend fun <T> withContextDefault(workMode: WorkMode, block: suspend CoroutineScope.() -> T): T {
-    return if (workMode == WorkMode.SYNCHRONOUS) {
+suspend fun <T> withContextDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Default) { block() }

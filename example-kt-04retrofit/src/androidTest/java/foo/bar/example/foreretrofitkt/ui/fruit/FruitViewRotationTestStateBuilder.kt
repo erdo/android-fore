@@ -1,7 +1,7 @@
 package foo.bar.example.foreretrofitkt.ui.fruit
 
 import android.content.pm.ActivityInfo
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
 import arrow.core.Either
 import co.early.fore.core.WorkMode
@@ -43,11 +43,11 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
                 SystemLogger().i("FruitViewRotationTestStateBuilder", "beforeActivityLaunched()")
 
                 //get hold of the application
-                val application = InstrumentationRegistry.getTargetContext().applicationContext as App
-                application.registerActivityLifecycleCallbacks(ProgressBarIdler())
+                val app = ApplicationProvider.getApplicationContext() as App
+                app.registerActivityLifecycleCallbacks(ProgressBarIdler())
 
                 //inject our mocks so our UI layer will pick them up
-                OG.setApplication(application, WorkMode.SYNCHRONOUS)
+                OG.setApplication(app, WorkMode.SYNCHRONOUS)
                 OG.putMock(FruitFetcher::class.java, fruitViewRotationTest.fruitFetcher)
             }
 

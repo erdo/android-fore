@@ -31,9 +31,9 @@ All the view classes (Activity/Fragment/View) for the sample apps are found in t
 
 Here are few examples:
 
-- [Wallets View](https://github.com/erdo/android-fore/blob/master/example01databinding/src/main/java/foo/bar/example/foredatabinding/ui/wallet/WalletsActivity.java)
+- [Wallets View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt)
 
-- [Counter View](https://github.com/erdo/android-fore/blob/master/example02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java)
+- [Counter View](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java)
 
 
 ## Code that belongs in the view layer

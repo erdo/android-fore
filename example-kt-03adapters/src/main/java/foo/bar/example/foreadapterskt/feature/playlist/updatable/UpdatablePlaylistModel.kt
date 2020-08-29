@@ -1,16 +1,11 @@
 package foo.bar.example.foreadapterskt.feature.playlist.updatable
 
-
-import co.early.fore.adapters.ChangeAwareArrayList
 import co.early.fore.adapters.ChangeAwareList
-import co.early.fore.adapters.UpdateSpec
 import co.early.fore.adapters.Updateable
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.kt.adapters.ChangeAwareArrayList
 import co.early.fore.kt.core.observer.ObservableImp
-import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.generateRandomColourResource
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.randomLong
 import foo.bar.example.foreadapterskt.feature.playlist.Track
@@ -20,11 +15,9 @@ import java.util.ArrayList
  * Copyright © 2019 early.co. All rights reserved.
  */
 class UpdatablePlaylistModel(
-        systemTimeWrapper: SystemTimeWrapper,
-        workMode: WorkMode,
         private val logger: Logger,
-        private val trackList: ChangeAwareList<Track> = ChangeAwareArrayList<Track>(systemTimeWrapper)
-) : Observable by ObservableImp(workMode, logger),
+        private val trackList: ChangeAwareList<Track> = ChangeAwareArrayList()
+) : Observable by ObservableImp(),
     Updateable by trackList {
     
     val trackListSize: Int

@@ -1,4 +1,3 @@
-//import co.early.fore.Shared
 import java.util.Properties
 import java.io.File
 
@@ -9,14 +8,9 @@ buildscript {
         google()
     }
     dependencies {
-        //classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:${Shared.Versions.dexcount_gradle_plugin}")
-        classpath("com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.3")
-        //classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${Shared.Versions.gradle_bintray_plugin}")
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
-        //classpath("com.android.tools.build:gradle:${Shared.Versions.android_gradle_plugin}")
-        classpath("com.android.tools.build:gradle:4.0.1")
-        //classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Shared.Versions.kotlin_version}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${co.early.fore.Shared.Versions.gradle_bintray_plugin}")
+        classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
     }
 }
 
@@ -56,8 +50,8 @@ ext.apply {
     // TODO remove these once we migrate bintraypublish.gradle to kts
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    set("LIB_VERSION_NAME", "1.1.3")
-    set("LIB_VERSION_CODE", 41)
+    set("LIB_VERSION_NAME", "1.2.0")
+    set("LIB_VERSION_CODE", 42)
 
     set("REPO", "fore")
     set("LIB_GROUP", "co.early.fore")

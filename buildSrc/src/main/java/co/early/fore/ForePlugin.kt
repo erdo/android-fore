@@ -39,6 +39,8 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
         versionCode = Shared.Publish.LIB_VERSION_CODE
         versionName = Shared.Publish.LIB_VERSION_NAME
 
+        multiDexEnabled = true
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

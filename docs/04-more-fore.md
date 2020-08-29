@@ -78,8 +78,8 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 
 Another advantage of using the CallProcessor is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
 
-- [one](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
-- [the other](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
+- [one](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
+- [the other](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
 As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
@@ -152,6 +152,17 @@ The "fruit fetcher" screen of the [full app example](https://github.com/erdo/for
 This is because android will call **Adapter.count()** then **Adapter.get()** on the UI thread and *you must NOT change the adapter's size between these calls*. If after android calls Adapter.count(), you change the list but don't immediately let the adapter know that its count() call is out of date (by calling the notify... methods for example), when android next calls Adapter.get() you will have problems. Synchronizing any list updates is not enough. Even posting the notify... call to the end of the UI thread is not enough, it needs to be done immediately (before the UI thread yields) because once the UI thread yields it may let android in to call Adapter.get().
 
 *Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately. When the list data changes, the adapter needs to be notified immediately, and both things need to happen on the UI thread, that's it. It's a shame the android docs do such a terrible job of explaining this.*
+
+<a name="default-params"></a>
+# Default parameters for WorkMode, Logger and SystemTimeWrapper
+
+A lot of *fore* classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a SystemLogger() rather then an AndroidLogger() when you want to see logging output during testing). It's simple and clear but potentially annoying to see these parameters crop up all the time.
+
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
+
+By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
+
+All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt).
 
 
 # AsyncTasks with Lambdas
@@ -308,12 +319,12 @@ One difference with Async is that to run it, you need to call executeTask() inst
 ## Testing Asynchronous Code
 For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
-A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
+A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
 
 # Kotlin Coroutines
 With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
 
-As you'll notice in the source code [comments](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) for the extension functions, there is a good reason we use the same workMode parameter here to test this asynchronous code, as we do with all the fore components.
+When using the **fore** coroutine classes, specifying the WorkMode parameter is now optional, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more)
 
 # SyncTrigger
 
@@ -328,4 +339,4 @@ For this to work you will need to call **check()** on the SyncTrigger each time 
 
 By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
 
-Please see [here](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java) for example usage of the SyncTrigger.
+Please see [here](https://github.com/erdo/android-fore/blob/master/example-jv-05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java) for example usage of the SyncTrigger.

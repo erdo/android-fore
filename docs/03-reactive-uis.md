@@ -121,6 +121,12 @@ Of course, if you're setting a state on a UI element which is the same as the st
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
+The fore observable has two different WorkModes:
+- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
+- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
+
+With kotlin you no longer need to specify the WorkMode in the constructor, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more
+
 By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt), the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
@@ -205,7 +211,7 @@ That's everything you need to do to get bullet proof reactive UIs in your app, e
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
 
-If I had a dollar for everyone who asked me this question! (I would have, about $4). It is the obvious question for anyone not familiar with this style of reactive view implementation, indeed in the distant past the Observable class did have a generic on it which supported this behaviour. But it was finally removed when we realised that doing so *significantly* reduced the amount of view code that had to be written.
+If I had a dollar for everyone who asked me this question! (I would have, about $4). It is the obvious question for anyone not familiar with this style of reactive view implementation, indeed in the distant past the Observer interface did have a generic on it which supported this behaviour. But it was finally removed when we realised that doing so *significantly* reduced the amount of view code that had to be written.
 
 ### Views want different things from the same model
 Usually, view layer components are going to want different things from the same model. Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.

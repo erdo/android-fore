@@ -9,6 +9,8 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -22,16 +24,19 @@ import io.mockk.mockk
 class UpdatablePlaylistModelTest {
 
     private val logger = SystemLogger()
-    private lateinit var playlistAdvancedModel : UpdatablePlaylistModel
+    private lateinit var playlistAdvancedModel: UpdatablePlaylistModel
 
     @MockK
     private lateinit var mockSystemTimeWrapper: SystemTimeWrapper
 
+    private val RELAXED_AGE_LIMIT_FOR_UPDATE_SPEC: Long = 500
+    private val ACTUAL_AGE_LIMIT_FOR_UPDATE_SPEC: Long = 50
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        playlistAdvancedModel = UpdatablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+        playlistAdvancedModel = UpdatablePlaylistModel(logger)
     }
 
 
@@ -46,8 +51,6 @@ class UpdatablePlaylistModelTest {
         //assert
         Assert.assertEquals(0, playlistAdvancedModel.trackListSize.toLong())
         Assert.assertEquals(false, playlistAdvancedModel.hasObservers())
-        // 50ms won't have any effect here as the mocked systemTimeWrapper will always give the current
-        // time as 0 anyway, so we will never have the chance to be over maxAgeMs
         Assert.assertEquals(UpdateSpec.UpdateType.FULL_UPDATE, playlistAdvancedModel.getAndClearLatestUpdateSpec(50).type)
     }
 
@@ -230,7 +233,7 @@ class UpdatablePlaylistModelTest {
         playlistAdvancedModel.addNTracks(1)
 
         //assert
-        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50)
+        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(RELAXED_AGE_LIMIT_FOR_UPDATE_SPEC)
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_INSERTED, updateSpec.type)
         Assert.assertEquals(0, updateSpec.rowPosition.toLong())
         Assert.assertEquals(1, updateSpec.rowsEffected.toLong())
@@ -249,7 +252,7 @@ class UpdatablePlaylistModelTest {
         playlistAdvancedModel.increasePlaysForTrack(3)
 
         //assert
-        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50)
+        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(RELAXED_AGE_LIMIT_FOR_UPDATE_SPEC)
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_CHANGED, updateSpec.type)
         Assert.assertEquals(3, updateSpec.rowPosition.toLong())
         Assert.assertEquals(1, updateSpec.rowsEffected.toLong())
@@ -268,7 +271,7 @@ class UpdatablePlaylistModelTest {
         playlistAdvancedModel.removeNTracks(5)
 
         //assert
-        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50)
+        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(RELAXED_AGE_LIMIT_FOR_UPDATE_SPEC)
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_REMOVED, updateSpec.type)
         Assert.assertEquals(0, updateSpec.rowPosition.toLong())
         Assert.assertEquals(5, updateSpec.rowsEffected.toLong())
@@ -286,18 +289,18 @@ class UpdatablePlaylistModelTest {
         playlistAdvancedModel.removeAllTracks()
 
         //assert
-        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50)
+        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(RELAXED_AGE_LIMIT_FOR_UPDATE_SPEC)
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_REMOVED, updateSpec.type)
         Assert.assertEquals(0, updateSpec.rowPosition.toLong())
         Assert.assertEquals(6, updateSpec.rowsEffected.toLong())
     }
 
-
     @Test
     @Throws(Exception::class)
-    fun updateSpecCorrectPastMaxAge() {
+    fun updateSpecCorrectWithinMaxAge() {
 
         //arrange
+        ForeDelegateHolder.setDelegate(TestDelegateDefault(systemTimeWrapper = mockSystemTimeWrapper))
         playlistAdvancedModel.addNTracks(5)
         playlistAdvancedModel.addNTracks(1)
 
@@ -306,10 +309,33 @@ class UpdatablePlaylistModelTest {
 
         every {
             mockSystemTimeWrapper.currentTimeMillis()
-        } returns 51.toLong()
+        } returns (ACTUAL_AGE_LIMIT_FOR_UPDATE_SPEC - 1)
 
         //assert
-        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50)
+        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(ACTUAL_AGE_LIMIT_FOR_UPDATE_SPEC)
+        Assert.assertEquals(UpdateSpec.UpdateType.ITEM_CHANGED, updateSpec.type)
+        Assert.assertEquals(3, updateSpec.rowPosition.toLong())
+        Assert.assertEquals(1, updateSpec.rowsEffected.toLong())
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updateSpecCorrectPastMaxAge() {
+
+        //arrange
+        ForeDelegateHolder.setDelegate(TestDelegateDefault(systemTimeWrapper = mockSystemTimeWrapper))
+        playlistAdvancedModel.addNTracks(5)
+        playlistAdvancedModel.addNTracks(1)
+
+        //act
+        playlistAdvancedModel.increasePlaysForTrack(3)
+
+        every {
+            mockSystemTimeWrapper.currentTimeMillis()
+        } returns (ACTUAL_AGE_LIMIT_FOR_UPDATE_SPEC + 1)
+
+        //assert
+        val updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(ACTUAL_AGE_LIMIT_FOR_UPDATE_SPEC)
         Assert.assertEquals(UpdateSpec.UpdateType.FULL_UPDATE, updateSpec.type)
         Assert.assertEquals(0, updateSpec.rowPosition.toLong())
         Assert.assertEquals(0, updateSpec.rowsEffected.toLong())

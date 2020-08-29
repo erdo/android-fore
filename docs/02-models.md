@@ -25,7 +25,7 @@ If you need to pop onto another thread, do it explicitly with something like an 
 
 > ASYNCHRONOUS notifications from an Observable in **fore** are always sent on the UI thread, no need to do any thread hopping to update the UI
 
-Check out a [[few]](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [[examples]](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice applies to writing ViewModels too, so this is all fairly obvious if you are coming from MVVM)_, feel free to skim over the checklist below for a refresher and you should be good to go.
+Check out a [[few]](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [[examples]](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice applies to writing ViewModels too, so this is all fairly obvious if you are coming from MVVM)_, feel free to skim over the checklist below for a refresher and you should be good to go.
 
 ## Model Checklist
 

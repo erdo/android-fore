@@ -37,7 +37,7 @@
       url: "#fore-observables"
     - text: Connecting Views and Models
       url: "#connecting-views-and-models"
-    - text: fore's Observable API
+    - text: fore's Observer API
       url: "#somethingchanged-parameter"
 - text: More fore
   url: /04-more-fore.html
@@ -46,6 +46,8 @@
       url: "#retrofit-and-the-callprocessor"
     - text: Adapter animations
       url: "#adapter-animations"
+    - text: Default WorkMode
+      url: "#default-params"
     - text: Async and Coroutines
       url: "#asynctasks-with-lambdas"
     - text: SyncTrigger
