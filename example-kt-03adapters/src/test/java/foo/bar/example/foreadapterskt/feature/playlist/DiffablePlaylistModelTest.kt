@@ -3,10 +3,10 @@ package foo.bar.example.foreadapterskt.feature.playlist
 import org.junit.Assert
 import org.junit.Test
 
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -20,15 +20,14 @@ import org.junit.Before
  */
 class DiffablePlaylistModelTest {
 
-    @MockK
-    private lateinit var mockSystemTimeWrapper: SystemTimeWrapper
     private val logger = SystemLogger()
     private lateinit var diffablePlaylistModel: DiffablePlaylistModel
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
-        diffablePlaylistModel = DiffablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger)
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+        diffablePlaylistModel = DiffablePlaylistModel(logger)
     }
     
     @Test

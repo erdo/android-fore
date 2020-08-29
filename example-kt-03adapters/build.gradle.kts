@@ -56,7 +56,7 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-adapters-kt:${Shared.Versions.ext.fore_version_for_examples}")
+    //implementation("co.early.fore:fore-adapters-kt:${Shared.Versions.fore_version_for_examples}")
     implementation(project(":fore-adapters-kt"))
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

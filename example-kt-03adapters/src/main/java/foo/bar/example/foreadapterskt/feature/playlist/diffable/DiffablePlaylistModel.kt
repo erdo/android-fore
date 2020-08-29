@@ -1,9 +1,7 @@
 package foo.bar.example.foreadapterskt.feature.playlist.diffable
 
 import co.early.fore.adapters.Diffable
-import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
-import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.adapters.DiffableImpl
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.generateRandomColourResource
@@ -15,10 +13,8 @@ import java.util.ArrayList
  * Copyright © 2019 early.co. All rights reserved.
  */
 class DiffablePlaylistModel(
-        private val systemTimeWrapper: SystemTimeWrapper,
-        private val workMode: WorkMode,
         private val logger: Logger,
-        private val diffable: DiffableImpl<Track> = DiffableImpl<Track>(systemTimeWrapper, workMode, logger)
+        private val diffable: DiffableImpl<Track> = DiffableImpl()
 ) : Observable by diffable,
     Diffable by diffable {
 
