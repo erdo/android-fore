@@ -80,52 +80,60 @@ jobs:
           path: fore-lifecycle/build/test-results
 
       - run:
-          name: Run Tests example01databinding
-          command: ./gradlew example01databinding:lintRelease example01databinding:testRelease
+          name: Run Tests example-jv-01reactiveui
+          command: ./gradlew example-jv-01reactiveui:lintRelease example-jv-01reactiveui:testRelease
       - store_artifacts:
-          path: example01databinding/build/reports
+          path: example-jv-01reactiveui/build/reports
       - store_test_results:
-          path: example01databinding/build/test-results
+          path: example-jv-01reactiveui/build/test-results
 
       - run:
-          name: Run Tests example02threading
-          command: ./gradlew example02threading:lintRelease example02threading:testRelease
+          name: Run Tests example-jv-02threading
+          command: ./gradlew example-jv-02threading:lintRelease example-jv-02threading:testRelease
       - store_artifacts:
-          path: example02threading/build/reports
+          path: example-jv-02threading/build/reports
       - store_test_results:
-          path: example02threading/build/test-results
+          path: example-jv-02threading/build/test-results
 
       - run:
-          name: Run Tests example03adapters
-          command: ./gradlew example03adapters:lintRelease example03adapters:testRelease
+          name: Run Tests example-jv-03adapters
+          command: ./gradlew example-jv-03adapters:lintRelease example-jv-03adapters:testRelease
       - store_artifacts:
-          path: example03adapters/build/reports
+          path: example-jv-03adapters/build/reports
       - store_test_results:
-          path: example03adapters/build/test-results
+          path: example-jv-03adapters/build/test-results
 
       - run:
-          name: Run Tests example04retrofit
-          command: ./gradlew example04retrofit:lintRelease example04retrofit:testRelease
+          name: Run Tests example-jv-04retrofit
+          command: ./gradlew example-jv-04retrofit:lintRelease example-jv-04retrofit:testRelease
       - store_artifacts:
-          path: example04retrofit/build/reports
+          path: example-jv-04retrofit/build/reports
       - store_test_results:
-          path: example04retrofit/build/test-results
+          path: example-jv-04retrofit/build/test-results
 
       - run:
-          name: Run Tests example05ui
-          command: ./gradlew example05ui:lintRelease example05ui:testRelease
+          name: Run Tests example-jv-05ui
+          command: ./gradlew example-jv-05ui:lintRelease example-jv-05ui:testRelease
       - store_artifacts:
-          path: example05ui/build/reports
+          path: example-jv-05ui/build/reports
       - store_test_results:
-          path: example05ui/build/test-results
+          path: example-jv-05ui/build/test-results
 
       - run:
-          name: Run Tests example06db
-          command: ./gradlew example06db:lintRelease example06db:testRelease
+          name: Run Tests example-jv-06db
+          command: ./gradlew example-jv-06db:lintRelease example-jv-06db:testRelease
       - store_artifacts:
-          path: example06db/build/reports
+          path: example-jv-06db/build/reports
       - store_test_results:
-          path: example06db/build/test-results
+          path: example-jv-06db/build/test-results
+
+      - run:
+          name: Run Tests example-kt-01reactiveui
+          command: ./gradlew example-kt-01reactiveui:lintRelease example-kt-01reactiveui:testRelease
+      - store_artifacts:
+          path: example-kt-01reactiveui/build/reports
+      - store_test_results:
+          path: example-kt-01reactiveui/build/test-results
 
       - run:
           name: Run Tests example-kt-02coroutine
