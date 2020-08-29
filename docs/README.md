@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.1.4](https://img.shields.io/badge/jcenter-1.1.4-green.svg){: .float-left}
+![jcenter-1.2.0](https://img.shields.io/badge/jcenter-1.2.0-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -54,28 +54,28 @@ Specifically _why_ it is that apps written this way are both sparse _and_ scalab
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.1.4"
+implementation "co.early.fore:fore-kt:1.2.0"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.1.4"
+implementation "co.early.fore:fore-jv:1.2.0"
 ```
 
 
 Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
 
 ```
-implementation "co.early.fore:fore-core:1.1.4"
-implementation "co.early.fore:fore-adapters:1.1.4"
-implementation "co.early.fore:fore-lifecycle:1.1.4"
-implementation "co.early.fore:fore-retrofit:1.1.4"
+implementation "co.early.fore:fore-core:1.2.0"
+implementation "co.early.fore:fore-adapters:1.2.0"
+implementation "co.early.fore:fore-lifecycle:1.2.0"
+implementation "co.early.fore:fore-retrofit:1.2.0"
 
 //backed by coroutines rather than threads
 //but just as testable, and slightly more kotliny
-implementation "co.early.fore:fore-core-kt:1.1.4"
-implementation "co.early.fore:fore-adapters-kt:1.1.4"
-implementation "co.early.fore:fore-retrofit-kt:1.1.4"
+implementation "co.early.fore:fore-core-kt:1.2.0"
+implementation "co.early.fore:fore-adapters-kt:1.2.0"
+implementation "co.early.fore:fore-retrofit-kt:1.2.0"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 
@@ -88,6 +88,8 @@ If you want to check what versions of what dependencies each package pulls in, t
 
  1. Cloning this git repo
  2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 for AS3*)
+
+(The repo contains a tested bare bones example app for just about any situation you might find yourself in, any updates to fore are immediately reflected in the sample apps and all their tests need to pass before new versions of fore are released)
 
 **Then either**
 
@@ -107,12 +109,6 @@ While referring to the code of the [sample apps](#sample-apps), dip in to the fo
 ![fore-lifecycle methods](https://img.shields.io/badge/fore.lifecycle-59-orange.svg){: .float-left}
 
 <br/><br/>
-
-The fore observable has two different WorkModes:
-- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
-- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
-
-(In Kotlin, the WorkMode defaults to **ASYNCHROUNOUS** and during tests this is swapped out for **SYNCHRONOUS** mode using a TestDelegateDefault during [setup](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt))
 
 Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI/Redux, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 

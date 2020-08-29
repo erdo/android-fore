@@ -153,6 +153,17 @@ This is because android will call **Adapter.count()** then **Adapter.get()** on 
 
 *Occasionally you may encounter people who believe that the key to robust adapter implementations is to have the adapter driven by an immutable list - I don't know where this advice comes from but it's nonsense unfortunately. When the list data changes, the adapter needs to be notified immediately, and both things need to happen on the UI thread, that's it. It's a shame the android docs do such a terrible job of explaining this.*
 
+<a name="default-params"></a>
+# Default parameters for WorkMode, Logger and SystemTimeWrapper
+
+A lot of *fore* classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a SystemLogger() rather then an AndroidLogger() when you want to see logging output during testing). It's simple and clear but potentially annoying to see these parameters crop up all the time.
+
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
+
+By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
+
+All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt).
+
 
 # AsyncTasks with Lambdas
 
@@ -313,7 +324,7 @@ A convenient way to make this happen is to inject the WorkMode into the enclosin
 # Kotlin Coroutines
 With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
 
-As you'll notice in the source code [comments](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) for the extension functions, there is a good reason we use the same workMode parameter here to test this asynchronous code, as we do with all the fore components.
+When using the **fore** coroutine classes, specifying the WorkMode parameter is now optional, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more)
 
 # SyncTrigger
 
