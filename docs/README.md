@@ -44,7 +44,7 @@ class AccountRepository : Observable by ObservableImp() {
 }
  </code></pre>
 
-The core package is tiny (**126 methods** and about **500 lines of code**), so you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
+The core package is tiny (the java version references only **128 methods** and adds **12.5KB** to your apk), so you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
 The view layer is particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
@@ -100,15 +100,7 @@ Check out some of the tutorials on dev.to [like this one](https://dev.to/erdo/tu
 While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of this site:
   [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom)
-
-
-### Method Counts
-![fore-core methods](https://img.shields.io/badge/fore.core-126-orange.svg){: .float-left}
-![fore-adapters methods](https://img.shields.io/badge/fore.adapters-84-orange.svg){: .float-left}
-![fore-retrofit methods](https://img.shields.io/badge/fore.retrofit-38-orange.svg){: .float-left}
-![fore-lifecycle methods](https://img.shields.io/badge/fore.lifecycle-59-orange.svg){: .float-left}
-
-<br/><br/>
+  
 
 Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI/Redux, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
