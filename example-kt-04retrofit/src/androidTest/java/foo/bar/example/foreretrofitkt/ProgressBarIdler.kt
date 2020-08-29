@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage.RESUMED
 
@@ -67,7 +67,7 @@ class ProgressBarIdler : Application.ActivityLifecycleCallbacks {
                 }
             } else if (view is ProgressBar) {
                 if (view.isIndeterminate) {
-                    view.indeterminateDrawable = ContextCompat.getDrawable(InstrumentationRegistry.getTargetContext(), android.R.drawable.ic_lock_lock)
+                    view.indeterminateDrawable = ContextCompat.getDrawable(InstrumentationRegistry.getInstrumentation().targetContext, android.R.drawable.ic_lock_lock)
                 }
             }
         }

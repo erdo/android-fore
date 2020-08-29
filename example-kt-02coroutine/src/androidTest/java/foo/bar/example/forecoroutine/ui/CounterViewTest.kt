@@ -1,10 +1,9 @@
 package foo.bar.example.forecoroutine.ui
 
-import android.app.Application
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.view.View
-import androidx.test.InstrumentationRegistry.getInstrumentation
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -12,7 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import foo.bar.example.forecoroutine.App
 import foo.bar.example.forecoroutine.ProgressBarIdler
 import foo.bar.example.forecoroutine.R
 import foo.bar.example.forecoroutine.feature.counter.Counter
@@ -46,8 +46,8 @@ class CounterViewTest {
 
         MockKAnnotations.init(this, relaxed = true)
 
-        val application = getInstrumentation().targetContext.applicationContext as Application
-        application.registerActivityLifecycleCallbacks(ProgressBarIdler())
+        val app: App = ApplicationProvider.getApplicationContext() as App
+        app.registerActivityLifecycleCallbacks(ProgressBarIdler())
     }
 
     @Test

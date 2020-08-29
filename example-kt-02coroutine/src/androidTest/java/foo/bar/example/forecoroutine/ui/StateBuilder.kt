@@ -1,8 +1,6 @@
 package foo.bar.example.forecoroutine.ui
 
-import androidx.test.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import foo.bar.example.forecoroutine.App
 import foo.bar.example.forecoroutine.OG
 import foo.bar.example.forecoroutine.feature.counter.Counter
 import foo.bar.example.forecoroutine.feature.counter.CounterWithProgress
@@ -53,10 +51,6 @@ class StateBuilder internal constructor(private val mockCounter: Counter, privat
 
         return object : ActivityTestRule<CounterActivity>(CounterActivity::class.java) {
             override fun beforeActivityLaunched() {
-
-                //get hold of the application
-                val customApp = InstrumentationRegistry.getTargetContext().applicationContext as App
-                // customApp.injectSynchronousObjectGraph()
 
                 //inject our mocks so our UI layer will pick them up
                 OG.putMock(Counter::class.java, mockCounter)

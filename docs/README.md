@@ -2,13 +2,11 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.1.3](https://img.shields.io/badge/jcenter-1.1.3-green.svg){: .float-left}
+![jcenter-1.1.4](https://img.shields.io/badge/jcenter-1.1.4-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
 [![circleci](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
-
-![year asafcore and forecore jcenter downloads 2018 Nov 18](https://img.shields.io/badge/downloads-3%2C369-red.svg){: .float-left}
 
 <br/>
 <br/>
@@ -39,18 +37,12 @@ public class AccountRepository extends ObservableImp {
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-class AccountRepository(workMode: WorkMode) :
-          Observable by ObservableImp(workMode) {
+class AccountRepository : Observable by ObservableImp() {
 
   ...
 
 }
  </code></pre>
-
-
-The fore observable has two different WorkModes:
-- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
-- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
 The core package is tiny (**126 methods** and about **500 lines of code**), so you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
@@ -62,27 +54,28 @@ Specifically _why_ it is that apps written this way are both sparse _and_ scalab
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.1.3"
+implementation "co.early.fore:fore-kt:1.1.4"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.1.3"
+implementation "co.early.fore:fore-jv:1.1.4"
 ```
 
 
 Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
 
 ```
-implementation "co.early.fore:fore-core:1.1.3"
-implementation "co.early.fore:fore-adapters:1.1.3"
-implementation "co.early.fore:fore-lifecycle:1.1.3"
-implementation "co.early.fore:fore-retrofit:1.1.3"
+implementation "co.early.fore:fore-core:1.1.4"
+implementation "co.early.fore:fore-adapters:1.1.4"
+implementation "co.early.fore:fore-lifecycle:1.1.4"
+implementation "co.early.fore:fore-retrofit:1.1.4"
 
 //backed by coroutines rather than threads
 //but just as testable, and slightly more kotliny
-implementation "co.early.fore:fore-core-kt:1.1.3"
-implementation "co.early.fore:fore-retrofit-kt:1.1.3"
+implementation "co.early.fore:fore-core-kt:1.1.4"
+implementation "co.early.fore:fore-adapters-kt:1.1.4"
+implementation "co.early.fore:fore-retrofit-kt:1.1.4"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 
@@ -94,7 +87,7 @@ If you want to check what versions of what dependencies each package pulls in, t
 **If you're new to fore, Welcome! might I suggest:**
 
  1. Cloning this git repo
- 2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 if you're still on AS3*)
+ 2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 for AS3*)
 
 **Then either**
 
@@ -114,6 +107,12 @@ While referring to the code of the [sample apps](#sample-apps), dip in to the fo
 ![fore-lifecycle methods](https://img.shields.io/badge/fore.lifecycle-59-orange.svg){: .float-left}
 
 <br/><br/>
+
+The fore observable has two different WorkModes:
+- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
+- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
+
+(In Kotlin, the WorkMode defaults to **ASYNCHROUNOUS** and during tests this is swapped out for **SYNCHRONOUS** mode using a TestDelegateDefault during [setup](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt))
 
 Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI/Redux, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
@@ -161,7 +160,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 <div class="shoom" id="fore-1-reactive-ui-example"/>
 ### **fore 1** Reactive UI Example
 
-[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-01reactiveui)
+[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-01reactiveui)
 
 ![fore reactive UI sample app](https://j.gifs.com/MQ33GB.gif)
 
@@ -173,7 +172,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 <div class="shoom" id="fore-2-async-example"/>
 ### **fore 2** Asynchronous Code Example
 
-[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.forethreading) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine)
+[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.forethreading) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine)
 
 ![fore threading sample app](https://j.gifs.com/32LLNn.gif)
 
@@ -184,7 +183,7 @@ This app has a counter that you can increase by pressing a button (but it takes 
 <div class="shoom" id="fore-3-adapter-example"/>
 ### **fore 3** Adapter Example
 
-[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreadapters) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters)
+[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreadapters) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters)
 
 ![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
 
@@ -201,7 +200,7 @@ The **kotlin** version has three lists, all of which use adapter animations. The
 <div class="shoom" id="fore-4-retrofit-example"/>
 ### **fore 4** Retrofit Example
 
-[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreretrofit) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit)
+[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreretrofit) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit)
 
 ![fore retrofit sample app](https://j.gifs.com/qYzz3D.gif)
 
@@ -216,7 +215,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 <div class="shoom" id="fore-5-ui-example"/>
 ### **fore 5** UI Helpers Example (Tic Tac Toe)
 
-[video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example05ui)
+[video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-05ui)
 
 ![fore tic-tac-toe sample app](https://j.gifs.com/zKMM35.gif)
 
@@ -232,7 +231,7 @@ No automated tests for this app (but you should be getting the idea by now - sam
 <div class="shoom" id="fore-6-db-example-room"/>
 ### **fore 6** DB Example (Room db driven to-do list)
 
-[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example06db)
+[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredb) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-06db)
 
 ![fore room db sample app](https://j.gifs.com/Xo88J8.gif)
 

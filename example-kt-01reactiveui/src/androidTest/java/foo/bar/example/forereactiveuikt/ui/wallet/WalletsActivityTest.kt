@@ -8,6 +8,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.forereactiveuikt.R
 import foo.bar.example.forereactiveuikt.feature.wallet.Wallet
 import io.mockk.MockKAnnotations
@@ -30,6 +32,9 @@ class WalletsActivityTest {
 
     @Before
     fun setup() {
+
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+
         MockKAnnotations.init(this, relaxed = true)
     }
 

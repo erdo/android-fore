@@ -78,8 +78,8 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 
 Another advantage of using the CallProcessor is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
 
-- [one](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
-- [the other](https://github.com/erdo/android-fore/blob/master/example04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
+- [one](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
+- [the other](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
 As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
@@ -308,7 +308,7 @@ One difference with Async is that to run it, you need to call executeTask() inst
 ## Testing Asynchronous Code
 For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
-A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
+A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
 
 # Kotlin Coroutines
 With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
@@ -328,4 +328,4 @@ For this to work you will need to call **check()** on the SyncTrigger each time 
 
 By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
 
-Please see [here](https://github.com/erdo/android-fore/blob/master/example05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java) for example usage of the SyncTrigger.
+Please see [here](https://github.com/erdo/android-fore/blob/master/example-jv-05ui/src/main/java/foo/bar/example/foreui/ui/tictactoe/TicTacToeView.java) for example usage of the SyncTrigger.

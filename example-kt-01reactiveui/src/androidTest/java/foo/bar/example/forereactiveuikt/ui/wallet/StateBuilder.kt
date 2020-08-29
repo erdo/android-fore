@@ -81,12 +81,6 @@ class StateBuilder internal constructor(private val mockWallet: Wallet) {
         return object : ActivityTestRule<WalletsActivity>(WalletsActivity::class.java) {
             override fun beforeActivityLaunched() {
 
-                //get hold of the application
-                val app: App = ApplicationProvider.getApplicationContext<App>() as App
-                OG.setApplication(app)
-
-                ForeDelegateHolder.setDelegate(TestDelegateDefault())
-
                 //inject our mocks so our UI layer will pick them up
                 OG.putMock(Wallet::class.java, mockWallet)
             }

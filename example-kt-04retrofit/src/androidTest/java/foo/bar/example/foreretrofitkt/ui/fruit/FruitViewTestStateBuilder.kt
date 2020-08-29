@@ -1,7 +1,7 @@
 
 package foo.bar.example.foreretrofitkt.ui.fruit
 
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.core.WorkMode
 import foo.bar.example.foreretrofitkt.ProgressBarIdler
@@ -30,11 +30,11 @@ class FruitViewTestStateBuilder internal constructor(private val mockFruitFetche
             override fun beforeActivityLaunched() {
 
                 //get hold of the application
-                val application = InstrumentationRegistry.getTargetContext().applicationContext as App
-                application.registerActivityLifecycleCallbacks(ProgressBarIdler())
+                val app = ApplicationProvider.getApplicationContext() as App
+                app.registerActivityLifecycleCallbacks(ProgressBarIdler())
 
                 //inject our mocks so our UI layer will pick them up
-                OG.setApplication(application, WorkMode.SYNCHRONOUS)
+                OG.setApplication(app, WorkMode.SYNCHRONOUS)
                 OG.putMock(FruitFetcher::class.java, mockFruitFetcher)
             }
         }

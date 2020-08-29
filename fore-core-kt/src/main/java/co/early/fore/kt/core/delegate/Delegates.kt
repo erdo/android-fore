@@ -49,6 +49,28 @@ class ForeDelegateHolder {
 
         private var delegate: Delegate = ReleaseDelegateDefault()
 
+        /**
+         * For release builds you will generally not need to call this function -
+         * (ReleaseDelegateDefault() is the default delegate)
+         *
+         * For debug builds you may optionally set the DebugDelegateDefault() here - this will
+         * give you debug information, which the ReleaseDelegateDefault won't
+         *
+         * For running tests you will most likely want to set the TestDelegateDefault() here -
+         * this will give you logging output to the console rather than Android Logs, and also uses
+         * WorkMode.SYNCHRONOUS rather than the WorkMode.ASYNCHRONOUS provided by the Release
+         * and Debug versions
+         *
+         * These defaults are just a convenience and the if you pass WorkMode/Logger/SystemTimeWrapper
+         * parameters manually to any fore component via the constructor, they will be used in
+         * preference to the defaults specified here
+         *
+         * Keep in mind that this is a global operation, so if you are using it with tests that
+         * run in parallel they will need to be running in separate JVMs to avoid synchronization
+         * issues. If this is a problem for your set up, you can revert to passing the parameters
+         * to the fore component via the constructor - this is the technique used by the majority
+         * of the sample apps in the fore repo
+         */
         fun setDelegate(delegate: Delegate){
             this.delegate = delegate
         }

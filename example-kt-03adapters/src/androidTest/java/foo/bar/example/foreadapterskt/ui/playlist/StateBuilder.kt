@@ -1,11 +1,8 @@
 package foo.bar.example.foreadapterskt.ui.playlist
 
-import androidx.test.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.adapters.UpdateSpec
-import co.early.fore.core.WorkMode
 import co.early.fore.core.time.SystemTimeWrapper
-import foo.bar.example.foreadapterskt.App
 import foo.bar.example.foreadapterskt.OG
 import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
@@ -13,7 +10,6 @@ import foo.bar.example.foreadapterskt.feature.playlist.Track
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 
 
 /**
@@ -84,9 +80,6 @@ class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: 
 
         return object : ActivityTestRule<PlaylistsActivity>(PlaylistsActivity::class.java) {
             override fun beforeActivityLaunched() {
-
-                //get hold of the application
-                OG.setApplication(InstrumentationRegistry.getTargetContext().applicationContext as App, WorkMode.SYNCHRONOUS)
 
                 //inject our mocks so our UI layer will pick them up
                 OG.putMock(UpdatablePlaylistModel::class.java, mockUpdatablePlaylistModel)

@@ -9,7 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import foo.bar.example.foreadapterskt.R
 import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
