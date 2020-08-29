@@ -93,7 +93,7 @@ If you want to check what versions of what dependencies each package pulls in, t
 
 **If you're new to fore, Welcome! might I suggest:**
 
- 1. Cloning this git repo (run ./gradlew publishToMavenLocal after cloning if AS gives you red squiggles)
+ 1. Cloning this git repo
  2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 if you're still on AS3*)
 
 **Then either**
@@ -161,7 +161,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 <div class="shoom" id="fore-1-reactive-ui-example"/>
 ### **fore 1** Reactive UI Example
 
-[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example01databinding)
+[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foredatabinding) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-01reactiveui)
 
 ![fore reactive UI sample app](https://j.gifs.com/MQ33GB.gif)
 
