@@ -1,4 +1,3 @@
-//import co.early.fore.Shared
 import java.util.Properties
 import java.io.File
 
@@ -9,12 +8,9 @@ buildscript {
         google()
     }
     dependencies {
-        //classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${Shared.Versions.gradle_bintray_plugin}")
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4")
-        //classpath("com.android.tools.build:gradle:${Shared.Versions.android_gradle_plugin}")
-        classpath("com.android.tools.build:gradle:4.0.1")
-        //classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Shared.Versions.kotlin_version}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${co.early.fore.Shared.Versions.gradle_bintray_plugin}")
+        classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
     }
 }
 

@@ -43,7 +43,7 @@ object Shared {
         const val retrofit = "2.6.2"
         const val logging_interceptor = "3.12.0"
         const val converter_gson = "2.6.0"
-        const val arrow_core = "0.10.3"
+        const val arrow_core = "0.10.5"
         const val core_ktx = "1.3.0"
         const val kotlinx_coroutines_core = "1.3.2"
         const val kotlinx_coroutines_android = "1.2.1"
