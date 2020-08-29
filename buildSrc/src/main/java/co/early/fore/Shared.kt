@@ -47,13 +47,13 @@ object Shared {
         const val core_ktx = "1.3.0"
         const val kotlinx_coroutines_core = "1.3.2"
         const val kotlinx_coroutines_android = "1.2.1"
-        const val fore_version_for_examples = "1.1.3"
+        const val fore_version_for_examples = "1.2.0"
     }
 
     object Publish {
         //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "1.1.3"
-        const val LIB_VERSION_CODE = 41
+        const val LIB_VERSION_NAME = "1.2.0"
+        const val LIB_VERSION_CODE = 42
         const val REPO = "fore"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
