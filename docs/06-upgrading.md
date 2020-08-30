@@ -1,7 +1,7 @@
 
 # Upgrading from previous versions
 
-Since we've been publishing on jcenter the core functionality has remained the same, most version number bumps have been due to adding new classes to the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - but that means some version bumps have no effect for a particular package).
+In the 3 years we've been publishing on jcenter, the core code has remained almost identical. Most version number bumps have been due to adding new classes to the optional packages or tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - so some version bumps have no effect for a particular package).
 
 ## default parameters for WorkMode, Logger and SystemTimeWrapper
 
@@ -11,9 +11,13 @@ From **1.2.0** the kotlin APIs will set default values for these parameters if y
 
 These were removed for **1.1.0** (1.0.6 is identical to 1.1.0 but still has those syncviews).
 
+## AS4
+
+**1.1.0** is also the last version to support AS3
+
 ## kotlin support
 
-Of course, being java you can use any version of **fore** with kotlin, but **1.0.6** introduces explicit kotlin support with the packages **fore-core-kt** and **fore-retrofit-kt** (they're based on coroutines and fore-retrofit-kt's CallProcessor has a more functional API that uses suspend functions).
+**1.0.6** introduced explicit kotlin support with the packages **fore-core-kt** and **fore-retrofit-kt** (they're based on coroutines and fore-retrofit-kt's CallProcessor has a more functional API that uses suspend functions).
 
 As a convenience, **1.0.6** also introduces the packages **fore-jv** and **fore-kt**, these contain all the classes from fore (suitable for java or kotlin as appropriate) in one aar file so you only have to add one line of dependency in your build file. Some classes are removed, for instance fore-kt does not contain the java based CallProcessor, only the kotlin one.
 

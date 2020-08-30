@@ -44,11 +44,11 @@ class AccountRepository : Observable by ObservableImp() {
 }
  </code></pre>
 
-The core package is tiny (the java version references only **128 methods** and adds **12.5KB** to your apk), so you can just use the observer to immediately make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
+The core package is tiny (the java version references **128 methods** in all and adds just **12.5KB** to your apk). You can simply use the observer to make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
 The view layer is particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
-Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This dev.to [article](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to MVO (and in doing so drops the lines of code count by about half). This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) also gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app. But these are subtle, advanced topics that are not really necessary to use fore at all - most of the actual code in the fore library is quite simple.
+Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This dev.to [article](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to MVO (and in doing so drops the lines of code count by about half). This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) also gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
 
 ## Quick Start
 
@@ -84,12 +84,12 @@ If you want to check what versions of what dependencies each package pulls in, t
 
 ## New to fore
 
-**If you're new to fore, Welcome! might I suggest:**
+**If you're new to fore, Welcome! might I suggest to:**
 
- 1. Cloning this git repo
- 2. Getting the example apps running (you'll need AS4 - *git checkout tags/v1.1.0 for AS3*)
+ 1. Clone this git repo
+ 2. Get the example apps running (you'll need AS4)
 
-(The repo contains a tested bare bones example app for just about any situation you might find yourself in, any updates to fore are immediately reflected in the sample apps and all their tests need to pass before new versions of fore are released)
+(The repo contains 10 tiny example apps, any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current)
 
 **Then either**
 
@@ -100,7 +100,7 @@ Check out some of the tutorials on dev.to [like this one](https://dev.to/erdo/tu
 While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of this site:
   [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
   [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom)
-  
+
 
 Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI/Redux, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
 
@@ -108,7 +108,7 @@ MVO addresses issues like **testability**; **lifecycle management**; **UI consis
 
 **fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project.
 
-The result is an MVO implementation which is particularly small but surprisingly powerful (just 534 lines of code for the core package).
+The result is an MVO implementation which is particularly small but surprisingly powerful (just over 500 lines of code for the core package).
 
 ### Overview
 
@@ -127,7 +127,7 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 
 If you totally grok those 4 things, that's pretty much all you need to use **fore** successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
-The **fore** library also includes some testable wrappers for AsyncTask (that Google should have provided, but didn't): [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which supports lambdas making using them alot nicer to use.
+The **fore** library also includes some testable wrappers for AsyncTask (that Google should have provided, but didn't): [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which support lambdas, making using them alot nicer to use.
 
 If you've moved over to using coroutines already, a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) are all you need to use coroutines in a way that is completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206) [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
@@ -141,7 +141,7 @@ The apps here are deliberately sparse and ugly so that you can see exactly what 
 
 These apps are however, totally robust and comprehensively tested (and properly support rotation). And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
-For these sample apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
+For these example apps, all the **View** components are located in the **ui/** package and the **Models** are in the **feature/** package. This package structure gives the app code good glanceability and should let you find what you want easily.
 
 For the sample apps there is a one-to-one relationship between the sub-packages within **ui/**, and the sub-packages within **feature/** but it needn't be like that and for larger apps it often isn't. You might have one BasketModel but it will be serving both a main BasketView and a BasketIconView located in a toolbar for instance. A more complex view may use data from several different models at the same time eg a BasketModel and an AccountModel.
 
@@ -178,7 +178,7 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
 
-It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s' notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
+It also demonstrates how to take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you just call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
 
 The **java** sample has two lists side by side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right. As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
 

@@ -12,7 +12,7 @@ import foo.bar.example.foreadapterskt.feature.playlist.Track
 import java.util.ArrayList
 
 /**
- * Copyright © 2019 early.co. All rights reserved.
+ * Copyright © 2015-2020 early.co. All rights reserved.
  */
 class UpdatablePlaylistModel(
         private val logger: Logger,

@@ -13,7 +13,21 @@ import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_inc
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_playsrequested_text
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_remove_button
 
-
+/**
+ * Demonstrating list animations with [Updatable]
+ *
+ * fore's [Updatable] classes use android's notifyItem... methods behind the scenes. This is
+ * quite a lot more efficient than using DiffUtil but you can only use this method when you know
+ * what changes have been made to the list. There are other situations when this information is
+ * not available and all you have is an old list and a new list: in that case, DiffUtil is required
+ * (fore uses the [Diffable] classes for that)
+ *
+ * In this example you'll see the adapter is much less verbose than if we were using google's
+ * [AsyncListDiffer] method (you'll find most of the code in [UpdatablePlaylistModel])
+ *
+ * Because using Updatable is a lot less resource intensive than using DiffUtil, here it's not
+ * necessary to use coroutines in the Model (unlike the Diffable example)
+ */
 class UpdatablePlaylistModelAdapter(private val updatablePlaylistModel: UpdatablePlaylistModel) : ChangeAwareAdapter<UpdatablePlaylistModelAdapter.ViewHolder>(updatablePlaylistModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

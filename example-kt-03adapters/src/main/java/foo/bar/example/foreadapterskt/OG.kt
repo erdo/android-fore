@@ -11,11 +11,10 @@ import java.util.HashMap
 
 
 /**
- *
  * OG - Object Graph, pure DI implementation
  *
- * Copyright © 2019 early.co. All rights reserved.
- */
+ * Copyright © 2015-2020 early.co. All rights reserved.
+*/
 @Suppress("UNUSED_PARAMETER")
 object OG {
 

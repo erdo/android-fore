@@ -13,7 +13,17 @@ import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_inc
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_playsrequested_text
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_remove_button
 
-
+/**
+ * Demonstrating list animations with [Diffable]
+ *
+ * fore's [Diffable] classes use android's DiffUtil behind the scenes.
+ *
+ * In this example you'll see the adapter is much less verbose than if we were using google's
+ * [AsyncListDiffer] method (you'll find most of the code in [DiffablePlaylistModel])
+ *
+ * Diffable is run using coroutines as DiffUtil is a lot more resource intensive than Updatable
+ *
+ */
 class DiffablePlaylistModelAdapter(private val diffablePlaylistModel: DiffablePlaylistModel) :
         ChangeAwareAdapter<DiffablePlaylistModelAdapter.ViewHolder>(diffablePlaylistModel) {
 

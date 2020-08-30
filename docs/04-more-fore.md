@@ -127,11 +127,11 @@ Adapter animations are probably one of the most complicated parts of android to 
 
 As most android developers know, in order to get animations you need to tell the adapter what kind of change actually happened i.e. what rows were added or changed etc. There are two ways to do this on android:
 
-- Tell the adapter by calling the appropriate notifyItem... methods. This is how fore's **Updatable** classes work under the hood, in order to use these you need to be in a position to know what changes were made to the list, of course. For example if you are maintaining the list inside a model, and a public `addItem(newItem: Item)` function is called, the model knows that the list has had an item added. Similarly if a model's public `changeTextForItem(index:Int, text:String)` function, is called, then the model knows that the item at that index has been changed. Mostly fore works this out for you, with the exception of when an item is changed (in which case you need to manually call `list.makeAwareOfDataChange(index)`) You'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/updatable/UpdatableListView.kt), [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/updatable/UpdatablePlaylistModel.kt)
+- Tell the adapter by calling the appropriate notifyItem... methods. This is how fore's **Updatable** classes work under the hood, in order to use these you need to be in a position to know what changes were made to the list, of course. For example if you are maintaining the list inside a model, and a public `addItem(newItem: Item)` function is called, the model knows that the list has had an item added. Similarly if a model's public `changeTextForItem(index:Int, text:String)` function, is called, then the model knows that the item at that index has been changed. Mostly fore works this out for you, with the exception of when an item is changed (in which case you need to manually call `list.makeAwareOfDataChange(index)`) You'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/updatable/UpdatableListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/updatable/UpdatablePlaylistModelAdapter.kt), [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/updatable/UpdatablePlaylistModel.kt)
 
-- Tell the adapter by using android's DiffUtil. This is how fore's **Diffable** classes work under the hood. This method is ideal if you aren't in a position to know ahead of time what changes have been made to the list, for example if your list changes come via an API (i.e. you only get the new list, you don't get the new list and information about what changed since the old list). DiffUtil is a little more resource intensive (so you will usually want to run the DiffUtil in a coroutine or a seperate thread), you'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/diffable/DiffableListView.kt), [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/diffable/DiffablePlaylistModel.kt)
+- Tell the adapter by using android's DiffUtil. This is how fore's **Diffable** classes work under the hood. This method is ideal if you aren't in a position to know ahead of time what changes have been made to the list, for example if your list changes come via an API (i.e. you only get the new list, you don't get the new list and information about what changed since the old list). DiffUtil is a little more resource intensive (so fore's Diffable classes run DiffUtil using coroutines), you'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/diffable/DiffableListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/diffable/DiffablePlaylistModelAdapter.kt), [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/diffable/DiffablePlaylistModel.kt)
 
-Android also provides us with **AsyncListDiffer / ListAdapter** (which also use DiffUtil under the hood). Depending on your situtation you might find these useful (one disadvantage is that it moves management of your list out of a model class and into an adapter, short-cutting some of the benefits of MVO). You'll find example code for this in the kotlin sample for comparison anyway, please see the guidance in the view source code: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferListView.kt), (there is no model).
+Android also provides us with **AsyncListDiffer / ListAdapter** (which also use DiffUtil under the hood). Depending on your situtation you might find these useful (one disadvantage is that it moves management of your list out of a model class and into an adapter, short-cutting some of the benefits of MVO). You'll find example code for this in the kotlin sample for comparison anyway, please see the guidance in the view source code: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferListView.kt), [apapter](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferPlaylistAdapter.kt), (there is no model).
 
 Once things have been setup correctly with fore, the only thing you'll need to do in the view layer is call notifyDataSetChangedAuto() instead of notifyDataSetChanged() from the syncView() function.
 
@@ -156,7 +156,7 @@ This is because android will call **Adapter.count()** then **Adapter.get()** on 
 <a name="default-params"></a>
 # Default parameters for WorkMode, Logger and SystemTimeWrapper
 
-A lot of *fore* classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a SystemLogger() rather then an AndroidLogger() when you want to see logging output during testing). It's simple and clear but potentially annoying to see these parameters crop up all the time.
+A lot of **fore** classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a mock SystemTimeWrapper rather than a real one, when you want to test various time based behaviour). It's simple and clear but potentially annoying to see these parameters crop up all the time.
 
 From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
 
@@ -226,7 +226,7 @@ AsyncBuilder<String, Int>(workMode)
     .execute("input string")
  </code></pre>
 
-*AsyncBuilder (and Async) use a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android.*
+**AsyncBuilder (and Async) use a AsyncTask.THREAD_POOL_EXECUTOR in all versions of Android.**
 
 ### WorkMode Parameter
 AsyncBuilder takes a constructor argument: WorkMode (in the same way that **fore** Observable does). The WorkMode parameter tells AsyncBuilder to operate in one of two modes (Asynchronous or Synchronous).
@@ -313,7 +313,7 @@ object : Async<Unit, Int, Int>(workMode) {
 
 
 ### ExecuteTask
-One difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).
+**One difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).**
 
 
 ## Testing Asynchronous Code
@@ -321,10 +321,12 @@ For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS
 
 A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
 
+From **1.2.0**, kotlin code can use default parameters in production code and then during tests can use the ForeDegelateHolder to substitue WorkMode.ASYNCHRONOUS with WorkMode.SYNCHRONOUS as follows: `ForeDelegateHolder.setDelegate(TestDelegateDefault())`.
+
 # Kotlin Coroutines
 With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
 
-When using the **fore** coroutine classes, specifying the WorkMode parameter is now optional, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more)
+When using the **fore** coroutine classes, specifying the WorkMode parameter is now optional, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more
 
 # SyncTrigger
 
