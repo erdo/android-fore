@@ -61,6 +61,14 @@ fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
     }
 }
 
+fun launchCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        runBlocking { CompletableDeferred(block()) }
+    } else {
+        CoroutineScope(dispatcher).launch { block() }
+    }
+}
+
 
 fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
@@ -94,7 +102,16 @@ fun <T> asyncDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.(
     }
 }
 
-suspend fun <T> withContextMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+fun <T> asyncCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        runBlocking { CompletableDeferred(block()) }
+    } else {
+        CoroutineScope(dispatcher).async { block() }
+    }
+}
+
+
+suspend fun <T> awaitMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
@@ -102,7 +119,7 @@ suspend fun <T> withContextMainImm(workMode: WorkMode? = null, block: suspend Co
     }
 }
 
-suspend fun <T> withContextMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
@@ -110,7 +127,7 @@ suspend fun <T> withContextMain(workMode: WorkMode? = null, block: suspend Corou
     }
 }
 
-suspend fun <T> withContextIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
@@ -118,10 +135,44 @@ suspend fun <T> withContextIO(workMode: WorkMode? = null, block: suspend Corouti
     }
 }
 
-suspend fun <T> withContextDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Default) { block() }
     }
+}
+
+suspend fun <T> awaitCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        block(CoroutineScope(coroutineContext))
+    } else {
+        withContext(dispatcher) { block() }
+    }
+}
+
+
+@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitMainImm(workMode, block)"))
+suspend fun <T> withContextMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return awaitMainImm(workMode, block)
+}
+
+@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitMain(workMode, block)"))
+suspend fun <T> withContextMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return awaitMain(workMode, block)
+}
+
+@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitIO(workMode, block)"))
+suspend fun <T> withContextIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return awaitIO(workMode, block)
+}
+
+@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitDefault(workMode, block)"))
+suspend fun <T> withContextDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return awaitDefault(workMode, block)
+}
+
+@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitCustom(workMode, block)"))
+suspend fun <T> withContextCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return awaitCustom(dispatcher, workMode, block)
 }
