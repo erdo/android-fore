@@ -44,7 +44,7 @@ android {
     }
     lintOptions {
         isAbortOnError = true
-        lintConfig = File(project.rootDir, "lint-examples.xml")
+        lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
 }
 
