@@ -37,6 +37,7 @@ import co.early.fore.lifecycle.LifecycleSyncer;
  * </ul>
  *
  */
+@SuppressWarnings("deprecation")
 public abstract class SyncFragment extends Fragment implements SyncableView{
 
 

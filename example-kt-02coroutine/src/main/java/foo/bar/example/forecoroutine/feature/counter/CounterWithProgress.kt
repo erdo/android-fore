@@ -4,8 +4,7 @@ package foo.bar.example.forecoroutine.feature.counter
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.coroutine.withContextDefault
+import co.early.fore.kt.core.coroutine.*
 import co.early.fore.kt.core.coroutine.withContextMain
 import co.early.fore.kt.core.observer.ObservableImp
 import kotlinx.coroutines.delay
@@ -39,7 +38,7 @@ class CounterWithProgress(
 
         launchMain(workMode) {
 
-            val result = withContextDefault(workMode) {
+            val result = awaitDefault(workMode) {
                 doStuffInBackground(20)
             }
 
@@ -60,7 +59,7 @@ class CounterWithProgress(
 
             ++totalIncrease
 
-            withContextMain(workMode) {
+            launchMain(workMode) {
                 publishProgress(totalIncrease)
             }
 

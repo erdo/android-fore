@@ -7,7 +7,7 @@ import java.util.List;
 /**
  *
  */
-public class DiffCalculator<T extends DiffComparator> {
+public class DiffCalculator<T extends DiffComparator<T>> {
 
     /**
      * It's the callers' responsibility to ensure that these lists and the items within them do not
