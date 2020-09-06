@@ -15,11 +15,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 android {
     sourceSets["main"].java.apply {
         srcDirs(
-                "../fore-core/src/main/java"
-        )
-        exclude(
-                "co/early/fore/core/logging/**",
-                "co/early/fore/core/observer/ObservableImp.java"
+                "../fore-lifecycle/src/main/java"
         )
     }
 }
