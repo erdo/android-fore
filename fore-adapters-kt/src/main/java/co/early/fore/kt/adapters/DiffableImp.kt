@@ -13,8 +13,7 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 
-@Deprecated("rename for consistency", ReplaceWith("DiffableImp()"))
-class DiffableImpl<T>(
+class DiffableImp<T>(
         private val systemTimeWrapper: SystemTimeWrapper? = null,
         private val workMode: WorkMode? = null,
         private val logger: Logger? = null

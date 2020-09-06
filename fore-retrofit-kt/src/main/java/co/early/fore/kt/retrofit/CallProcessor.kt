@@ -5,7 +5,8 @@ import arrow.core.Either
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
-import co.early.fore.kt.core.coroutine.withContextIO
+import co.early.fore.kt.core.coroutine.awaitIO
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.retrofit.ErrorHandler
 import co.early.fore.retrofit.MessageProvider
 import kotlinx.coroutines.Deferred
@@ -40,7 +41,7 @@ import retrofit2.Response
  */
 class CallProcessor<F>(
         private val globalErrorHandler: ErrorHandler<F>,
-        private val workMode: WorkMode,
+        private val workMode: WorkMode? = null,
         private val logger: Logger?
 ) {
 
@@ -48,9 +49,7 @@ class CallProcessor<F>(
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S> processCallAwait(
-            call: suspend () -> Response<S>
-    ): Either<F, S> {
+    suspend fun <S> processCallAwait(call: suspend () -> Response<S>): Either<F, S> {
         return processCallAsync(call).await()
     }
 
@@ -71,9 +70,7 @@ class CallProcessor<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S> processCallAsync(
-            call: suspend () -> Response<S>
-    ): Deferred<Either<F, S>> {
+    suspend fun <S> processCallAsync(call: suspend () -> Response<S>): Deferred<Either<F, S>> {
         return doCallAsync<S, MessageProvider<F>>(null, call)
     }
 
@@ -94,19 +91,19 @@ class CallProcessor<F>(
             call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
 
-        logger?.d(LOG_TAG, "doCallAsync() t:" + Thread.currentThread())
+        ForeDelegateHolder.getLogger(logger).d("doCallAsync() t:" + Thread.currentThread())
 
         return asyncMain(workMode) {
             try {
 
-                val result: Response<S> = withContextIO(workMode) {
+                val result: Response<S> = awaitIO(workMode) {
 
-                    logger?.d(LOG_TAG, "about to make call from io dispatcher, t:" + Thread.currentThread())
+                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
 
                     call()
                 }
 
-                logger?.d(LOG_TAG, "continuing back on main dispatcher t:" + Thread.currentThread())
+                ForeDelegateHolder.getLogger(logger).d("continuing back on main dispatcher t:" + Thread.currentThread())
 
                 processSuccessResponse(result, customErrorClazz)
             } catch (t: Throwable) {
@@ -132,13 +129,9 @@ class CallProcessor<F>(
     ): Either<F, S> {
 
         if (t != null) {
-            logger?.w(LOG_TAG, "processFailResponse() t:" + Thread.currentThread(), t)
+            ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
         return Either.left(globalErrorHandler.handleError(t, errorResponse, customErrorClass, null))
-    }
-
-    companion object {
-        val LOG_TAG = CallProcessor::class.java.simpleName
     }
 }

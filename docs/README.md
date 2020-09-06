@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.2.0](https://img.shields.io/badge/jcenter-1.2.0-green.svg){: .float-left}
+![jcenter-1.2.1](https://img.shields.io/badge/jcenter-1.2.1-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -54,28 +54,28 @@ Specifically _why_ it is that apps written this way are both sparse _and_ scalab
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.2.0"
+implementation "co.early.fore:fore-kt:1.2.1"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.2.0"
+implementation "co.early.fore:fore-jv:1.2.1"
 ```
 
 
 Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
 
 ```
-implementation "co.early.fore:fore-core:1.2.0"
-implementation "co.early.fore:fore-adapters:1.2.0"
-implementation "co.early.fore:fore-lifecycle:1.2.0"
-implementation "co.early.fore:fore-retrofit:1.2.0"
+implementation "co.early.fore:fore-core:1.2.1"
+implementation "co.early.fore:fore-adapters:1.2.1"
+implementation "co.early.fore:fore-retrofit:1.2.1"
+implementation "co.early.fore:fore-lifecycle:1.2.1"
 
 //backed by coroutines rather than threads
 //but just as testable, and slightly more kotliny
-implementation "co.early.fore:fore-core-kt:1.2.0"
-implementation "co.early.fore:fore-adapters-kt:1.2.0"
-implementation "co.early.fore:fore-retrofit-kt:1.2.0"
+implementation "co.early.fore:fore-core-kt:1.2.1"
+implementation "co.early.fore:fore-adapters-kt:1.2.1"
+implementation "co.early.fore:fore-retrofit-kt:1.2.1"
 ```
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 

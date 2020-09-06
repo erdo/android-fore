@@ -44,7 +44,7 @@ android {
     }
     lintOptions {
         isAbortOnError = true
-        lintConfig = File(project.rootDir, "lint-examples.xml")
+        lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
 }
 
@@ -56,13 +56,13 @@ repositories {
 
 dependencies {
 
+    //implementation("co.early.fore:fore-jv:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-jv"))
+
     kapt("androidx.room:room-compiler:${Shared.Versions.room_compiler}")
     kapt("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
     //noinspection AnnotationProcessorOnCompilePath
     implementation("com.jakewharton:butterknife:${Shared.Versions.butterknife}")
-
-    //implementation("co.early.fore:fore-jv:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-jv"))
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("com.google.android.material:material:${Shared.Versions.material}")
