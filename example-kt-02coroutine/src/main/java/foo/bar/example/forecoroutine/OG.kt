@@ -17,7 +17,6 @@ import java.util.HashMap
 @Suppress("UNUSED_PARAMETER")
 object OG {
 
-    @Volatile
     private var initialized = false
     private val dependencies = HashMap<Class<*>, Any>()
 

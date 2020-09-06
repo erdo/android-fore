@@ -21,7 +21,7 @@ import static co.early.fore.core.Affirm.notNull;
  */
 public class OG {
 
-    private static volatile boolean initialized = false;
+    private static boolean initialized = false;
     private static final Map<Class<?>, Object> dependencies = new HashMap<>();
 
 
