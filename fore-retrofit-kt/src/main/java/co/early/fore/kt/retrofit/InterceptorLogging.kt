@@ -125,7 +125,7 @@ class InterceptorLogging @JvmOverloads constructor(
         try {
             logLinesLock.lock()
             for (line in wrappedLines) {
-                ForeDelegateHolder.getLogger(logger).i(TAG + rndmPostTag, line!!)
+                ForeDelegateHolder.getLogger(logger).i(TAG + rndmPostTag, line)
             }
         } finally {
             logLinesLock.unlock()

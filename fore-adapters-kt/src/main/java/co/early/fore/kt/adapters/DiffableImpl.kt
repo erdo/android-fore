@@ -7,8 +7,8 @@ import co.early.fore.adapters.Diffable
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.kt.core.coroutine.awaitDefault
 import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.coroutine.withContextDefault
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
@@ -39,7 +39,7 @@ class DiffableImpl<T>(
 
         launchMain(workMode) {
 
-            val result = withContextDefault(workMode) {
+            val result = awaitDefault(workMode) {
 
                 // work out the differences in the lists
                 val diffResult = DiffCalculator<T>().createDiffResult(currentList, newList)

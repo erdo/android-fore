@@ -13,15 +13,15 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-
-    sourceSets["main"].java.exclude(
-            "co/early/fore/core/logging/**",
-            "co/early/fore/core/observer/ObservableImp.java",
-            "co/early/fore/retrofit/InterceptorLogging.java",
-            "co/early/fore/retrofit/CallProcessor.java",
-            "co/early/fore/adapters/ChangeAwareArrayList.java",
-            "co/early/fore/adapters/ChangeAwareLinkedList.java"
-    )
+    sourceSets["main"].java.apply {
+        srcDirs(
+                "../fore-core/src/main/java"
+        )
+        exclude(
+                "co/early/fore/core/logging/**",
+                "co/early/fore/core/observer/ObservableImp.java"
+        )
+    }
 }
 
 dependencies {
@@ -29,7 +29,6 @@ dependencies {
     api(project(":fore-core-kt"))
     api(project(":fore-adapters-kt"))
     api(project(":fore-retrofit-kt"))
-    api(project(":fore-lifecycle"))
 
     api("androidx.annotation:annotation:${Shared.Versions.annotation}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

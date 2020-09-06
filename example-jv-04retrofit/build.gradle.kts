@@ -53,12 +53,12 @@ repositories {
 
 dependencies {
 
+    //implementation("co.early.fore:fore-retrofit:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-retrofit"))
+
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
     //noinspection AnnotationProcessorOnCompilePath
     implementation("com.jakewharton:butterknife:${Shared.Versions.butterknife}")
-
-    //implementation("co.early.fore:fore-retrofit:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-retrofit"))
 
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

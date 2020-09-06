@@ -53,12 +53,12 @@ repositories {
 
 dependencies {
 
+    //implementation("co.early.fore:fore-adapters:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-adapters"))
+
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
     //noinspection AnnotationProcessorOnCompilePath
     implementation("com.jakewharton:butterknife:${Shared.Versions.butterknife}")
-
-    //implementation("co.early.fore:fore-adapters:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-adapters"))
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

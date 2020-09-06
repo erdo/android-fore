@@ -13,19 +13,21 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-
-    sourceSets["main"].java.exclude(
+    sourceSets["main"].java.apply {
+        srcDirs(
+            "../fore-adapters/src/main/java"
+        )
+        exclude(
             "co/early/fore/adapters/ChangeAwareArrayList.java",
             "co/early/fore/adapters/ChangeAwareLinkedList.java"
-    )
+        )
+    }
 }
 
 dependencies {
 
     //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
-    //api("co.early.fore:fore-adapters:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core-kt"))
-    api(project(":fore-adapters"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
     api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
