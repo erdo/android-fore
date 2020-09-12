@@ -13,7 +13,7 @@ object Shared {
 
     object Versions {
         const val android_gradle_plugin = "4.0.1"
-        const val kotlin_version = "1.4.0"
+        const val kotlin_version = "1.3.72"
         const val gradle_bintray_plugin = "1.8.4"
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
@@ -42,7 +42,7 @@ object Shared {
         const val retrofit = "2.6.2"
         const val logging_interceptor = "3.12.0"
         const val converter_gson = "2.6.0"
-        const val arrow_core = "0.10.5"
+        const val arrow_core = "0.10.3"
         const val core_ktx = "1.3.0"
         const val kotlinx_coroutines_core = "1.3.2"
         const val kotlinx_coroutines_android = "1.2.1"
@@ -51,8 +51,8 @@ object Shared {
 
     object Publish {
         //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "1.2.1"
-        const val LIB_VERSION_CODE = 43
+        const val LIB_VERSION_NAME = "1.2.1-legacy-KOTLIN-1.3.x"
+        const val LIB_VERSION_CODE = 46
         const val REPO = "fore"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"

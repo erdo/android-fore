@@ -16,7 +16,7 @@ dependencies {
   //implementation("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
   implementation("com.android.tools.build:gradle:4.0.1")
   //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${Shared.Versions.kotlin_version}")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
 
   //for custom plugins
   implementation(gradleApi())
