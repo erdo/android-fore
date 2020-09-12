@@ -5,7 +5,7 @@ In the 3 years we've been publishing on jcenter, the core code has remained almo
 
 ## default parameters for WorkMode, Logger and SystemTimeWrapper
 
-From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. See more [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params)
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. See more [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params). 1.2.1 is built with Kotlin 1.4, if you haven't upgraded yet, you can use **1.2.1-legacy-KOTLIN-1.3.x** see [this issue](https://github.com/erdo/android-fore/issues/72)
 
 ## removing deprecated sync views
 

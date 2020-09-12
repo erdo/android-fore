@@ -77,6 +77,7 @@ implementation "co.early.fore:fore-core-kt:1.2.1"
 implementation "co.early.fore:fore-adapters-kt:1.2.1"
 implementation "co.early.fore:fore-retrofit-kt:1.2.1"
 ```
+_(**pre-kotlin 1.4** use version **1.2.1-legacy-KOTLIN-1.3.x** see [this issue](https://github.com/erdo/android-fore/issues/72))_
 _(**pre-androidX** use version **0.11.1** fore-core, fore-adapters, fore-lifecycle, fore-retrofit)_
 
 If you want to check what versions of what dependencies each package pulls in, the definitive answer is found in the pom files hosted at [jcenter](https://jcenter.bintray.com/co/early/fore/). See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
