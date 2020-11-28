@@ -1,6 +1,7 @@
 /**
  *
  * ./gradlew check
+ * ./gradlew testDebugUnitTest (quick version)
  *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
