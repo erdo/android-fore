@@ -30,7 +30,6 @@ dependencies {
     api(project(":fore-core-kt"))
 
     api("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
-    api("io.arrow-kt:arrow-core-data:${Shared.Versions.arrow_core}")
 }
 
 

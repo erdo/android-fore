@@ -1,7 +1,6 @@
 package co.early.fore.kt.retrofit
 
 
-import arrow.core.Either
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain

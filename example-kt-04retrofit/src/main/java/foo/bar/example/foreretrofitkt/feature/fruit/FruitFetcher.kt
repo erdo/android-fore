@@ -1,7 +1,5 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
-import arrow.core.Either.Left
-import arrow.core.Either.Right
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
@@ -10,6 +8,8 @@ import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.retrofit.Either.Left
+import co.early.fore.kt.retrofit.Either.Right
 import co.early.fore.kt.retrofit.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService

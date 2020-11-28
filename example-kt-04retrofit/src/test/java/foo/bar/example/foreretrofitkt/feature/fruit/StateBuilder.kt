@@ -1,7 +1,7 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
-import arrow.core.Either
 import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.retrofit.Either
 import co.early.fore.retrofit.MessageProvider
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.message.UserMessage
