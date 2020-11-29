@@ -1,4 +1,4 @@
-package foo.bar.example.foreretrofitkt.feature.fruit
+package foo.bar.example.foreapollokt.feature.fruit
 
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
@@ -11,10 +11,10 @@ import co.early.fore.kt.retrofit.CallProcessor
 import co.early.fore.kt.retrofit.Either.Left
 import co.early.fore.kt.retrofit.Either.Right
 import co.early.fore.kt.retrofit.carryOn
-import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
-import foo.bar.example.foreretrofitkt.api.fruits.FruitService
-import foo.bar.example.foreretrofitkt.api.fruits.FruitsCustomError
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreapollokt.api.fruits.FruitPojo
+import foo.bar.example.foreapollokt.api.fruits.FruitService
+import foo.bar.example.foreapollokt.api.fruits.FruitsCustomError
+import foo.bar.example.foreapollokt.message.UserMessage
 import java.util.Random
 
 
@@ -193,6 +193,7 @@ class FruitFetcher(
                 is Right -> handleSuccess(success, result.b)
             }
         }
+
     }
 
     private fun handleSuccess(
