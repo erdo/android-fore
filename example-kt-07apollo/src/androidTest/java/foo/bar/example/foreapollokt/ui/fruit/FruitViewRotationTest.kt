@@ -12,13 +12,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import arrow.core.Either
+
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.retrofit.Either
 import foo.bar.example.foreapollokt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollokt.api.fruits.FruitPojo
