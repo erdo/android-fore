@@ -5,11 +5,10 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.apollo.CallProcessor
 import co.early.fore.kt.apollo.InterceptorLogging
+import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomGlobalRequestInterceptor
-import foo.bar.example.foreapollokt.api.CustomRetrofitBuilder
-import foo.bar.example.foreapollokt.api.fruits.FruitService
-import foo.bar.example.foreapollokt.feature.fruit.FruitFetcher
+import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import java.util.HashMap
 
 
@@ -33,10 +32,12 @@ object OG {
         val logger = AndroidLogger("fore_")
 
         // networking classes common to all models
-        val retrofit = CustomRetrofitBuilder.create(
-            CustomGlobalRequestInterceptor(logger),
-            InterceptorLogging(logger)
+        val apolloClient = CustomApolloBuilder.create(
+                CustomGlobalRequestInterceptor(logger),
+                InterceptorLogging(logger)
         )//logging interceptor should be the last one
+
+        val response = apolloClient.query(LaunchListQuery())
 
         val callProcessor = CallProcessor(
             CustomGlobalErrorHandler(logger),
@@ -45,15 +46,15 @@ object OG {
         )
 
         // models
-        val fruitFetcher = FruitFetcher(
-            retrofit.create(FruitService::class.java),
-            callProcessor,
-            logger,
-            workMode
-        )
+//        val fruitFetcher = FruitFetcher(
+//            retrofit.create(FruitService::class.java),
+//            callProcessor,
+//            logger,
+//            workMode
+//        )
 
         // add models to the dependencies map if you will need them later
-        dependencies[FruitFetcher::class.java] = fruitFetcher
+//        dependencies[FruitFetcher::class.java] = fruitFetcher
     }
 
 

@@ -1,10 +1,8 @@
 package foo.bar.example.foreapollokt.api
 
-import com.google.gson.GsonBuilder
+import com.apollographql.apollo.ApolloClient
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Most of this will all be specific to your application, when customising for your own case
@@ -14,21 +12,20 @@ import retrofit2.converter.gson.GsonConverterFactory
  * see @[co.early.fore.retrofit.testhelpers.InterceptorStubbedService]
  *
  */
-object CustomRetrofitBuilder {
+object CustomApolloBuilder {
 
     /**
      *
      * @param interceptors list of interceptors NB if you add a logging interceptor, it has to be
      * the last one in the list
-     * @return Retrofit object suitable for instantiating service interfaces
+     * @return ApolloClient object suitable for instantiating service interfaces
      */
-    fun create(vararg interceptors: Interceptor): Retrofit {
+    fun create(vararg interceptors: Interceptor): ApolloClient {
 
-        return Retrofit.Builder()
-            .baseUrl("http://www.mocky.io/v2/")
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .client(createOkHttpClient(*interceptors))
-            .build()
+        return ApolloClient.builder()
+                .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+                .okHttpClient(createOkHttpClient(*interceptors))
+                .build()
     }
 
     private fun createOkHttpClient(vararg interceptors: Interceptor): OkHttpClient {
@@ -41,5 +38,4 @@ object CustomRetrofitBuilder {
 
         return builder.build()
     }
-
 }

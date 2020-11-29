@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("maven")
     id("idea")
+    id("com.apollographql.apollo").version("2.4.5")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -46,7 +47,16 @@ android {
         isAbortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
+
 }
+
+apollo {
+    generateKotlinModels.set(true)
+}
+
+//configure<com.apollographql.apollo.gradle.api.ApolloExtension> {
+//    generateKotlinModels.set(true)
+//}
 
 repositories {
     jcenter()
@@ -58,6 +68,10 @@ dependencies {
 
     //implementation("co.early.fore:fore-apollo-kt:${Shared.Versions.fore_version_for_examples}")
     implementation(project(":fore-apollo-kt"))
+
+    implementation("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
+    //implementation("com.apollographql.apollo:apollo-android-support:${Shared.Versions.apollo}")
+    //implementation("com.apollographql.apollo:apollo-coroutines-support:${Shared.Versions.apollo}")
 
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
@@ -82,3 +96,6 @@ dependencies {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 }
+
+// fetch the graphql schema:
+//./gradlew :example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'

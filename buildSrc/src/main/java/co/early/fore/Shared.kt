@@ -40,6 +40,7 @@ object Shared {
         const val coordinatorlayout = "1.1.0"
         const val cardview = "1.0.0"
         const val retrofit = "2.6.2"
+        const val apollo = "2.4.5"
         const val converter_gson = "2.6.0"
         const val core_ktx = "1.3.0"
         const val kotlinx_coroutines_core = "1.3.2"
