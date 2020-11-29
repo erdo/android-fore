@@ -25,7 +25,7 @@ import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollokt.api.fruits.Launch
 import foo.bar.example.foreapollokt.api.fruits.FruitService
 import foo.bar.example.foreapollokt.feature.launch.FruitFetcher
-import foo.bar.example.foreapollokt.message.UserMessage
+import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.CompletableDeferred
@@ -63,13 +63,13 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockSuccess: Success
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
+    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
     @MockK
-    lateinit var mockCallProcessor: CallProcessor<UserMessage>
+    lateinit var mockCallProcessor: CallProcessor<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
 
-    private lateinit var deferredResult: CompletableDeferred<Either<UserMessage, List<Launch>>>
+    private lateinit var deferredResult: CompletableDeferred<Either<ErrorMessage, List<Launch>>>
     private val countDownLatch = CountDownLatch(1)
 
     @Before
@@ -138,7 +138,7 @@ class FruitViewRotationTest {
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<Either<UserMessage, List<Launch>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, List<Launch>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

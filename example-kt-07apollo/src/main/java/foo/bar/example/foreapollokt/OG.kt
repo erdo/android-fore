@@ -39,18 +39,19 @@ object OG {
                 InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
+        //apolloClient.idleCallback()
+
         val callProcessor = CallProcessor(
                 CustomGlobalErrorHandler(logger),
-                workMode,
                 logger
         )
 
         // models
         val launchFetcher = LaunchFetcher(
                 launchService = LaunchService(
-                        getLaunchList = apolloClient.query(LaunchListQuery()),
-                        getLaunchListFailGeneric = apolloClient.query(LaunchListQuery()),
-                        getLaunchListFailSpecific = apolloClient.query(LaunchListQuery())
+                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
+                        getLaunchListFailGeneric = { apolloClient.query(LaunchListQuery()) },
+                        getLaunchListFailSpecific = { apolloClient.query(LaunchListQuery()) }
                 ),
                 callProcessor,
                 logger,

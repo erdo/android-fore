@@ -9,7 +9,7 @@ import retrofit2.Response
  *
  * Copyright © 2019 early.co. All rights reserved.
  */
-suspend fun <T, R> Response<T>.carryOn(
+suspend fun <T, R> Response<T>.carryOn( here, then join with retrofit kt, look at logging FATAL for exceptions
         next: suspend (T) -> Response<R>
 ): Response<R> {
     return body()?.let {

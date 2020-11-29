@@ -11,7 +11,7 @@ import co.early.fore.kt.core.callbacks.Success
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollokt.feature.launch.LaunchFetcher
-import foo.bar.example.foreapollokt.message.UserMessage
+import foo.bar.example.foreapollokt.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
 
@@ -20,7 +20,6 @@ class LaunchActivity : FragmentActivity(R.layout.activity_fruit) {
 
     //models that we need to sync with
     private val launchFetcher: LaunchFetcher = OG[LaunchFetcher::class.java]
-
 
     //single observer reference
     private var observer = Observer { syncView() }
@@ -35,7 +34,7 @@ class LaunchActivity : FragmentActivity(R.layout.activity_fruit) {
                     "something", Toast.LENGTH_SHORT
         ).show()
     }
-    private val failureWithPayload: FailureWithPayload<UserMessage> = { userMessage ->
+    private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
         Toast.makeText(
             this, "Fail - maybe tell the user to try again, message:" + userMessage.localisedMessage,
             Toast.LENGTH_SHORT

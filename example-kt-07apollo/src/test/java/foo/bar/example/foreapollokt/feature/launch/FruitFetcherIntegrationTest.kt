@@ -13,7 +13,7 @@ import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomRetrofitBuilder
 import foo.bar.example.foreapollokt.api.fruits.Launch
 import foo.bar.example.foreapollokt.api.fruits.FruitService
-import foo.bar.example.foreapollokt.message.UserMessage
+import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.impl.annotations.MockK
@@ -48,7 +48,7 @@ class FruitFetcherIntegrationTest {
     private lateinit var mockSuccess: Success
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
+    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
 
 
     @Before
@@ -227,13 +227,13 @@ class FruitFetcherIntegrationTest {
         private val stubbedFailUserLocked = StubbedServiceDefinition(
             401, //stubbed HTTP code
             "common/error_user_locked.json", //stubbed body response
-            UserMessage.ERROR_FRUIT_USER_LOCKED
+            ErrorMessage.ERROR_FRUIT_USER_LOCKED
         ) //expected result
 
         private val stubbedFailureUserNotEnabled = StubbedServiceDefinition(
             401, //stubbed HTTP code
             "common/error_user_not_enabled.json", //stubbed body response
-            UserMessage.ERROR_FRUIT_USER_NOT_ENABLED
+            ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED
         ) //expected result
     }
 

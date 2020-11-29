@@ -23,7 +23,9 @@ object CustomApolloBuilder {
     fun create(vararg interceptors: Interceptor): ApolloClient {
 
         return ApolloClient.builder()
-                .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+               // .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+               // .serverUrl("http://www.mocky.io/v2/59ef2a6c2e00002a1a1c5dea") // HTTP 401
+                .serverUrl("http://www.mocky.io/v2/59efa0132e0000ef331c5f9b") // HTTP 200 but not formatted GraphQL response
                 .okHttpClient(createOkHttpClient(*interceptors))
                 .build()
     }

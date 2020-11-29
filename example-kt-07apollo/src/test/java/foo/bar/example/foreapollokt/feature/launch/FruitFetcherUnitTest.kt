@@ -8,7 +8,7 @@ import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.apollo.CallProcessor
 import foo.bar.example.foreapollokt.api.fruits.Launch
 import foo.bar.example.foreapollokt.api.fruits.FruitService
-import foo.bar.example.foreapollokt.message.UserMessage
+import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -33,9 +33,9 @@ class FruitFetcherUnitTest {
     @MockK
     private lateinit var mockSuccess: Success
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
+    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
     @MockK
-    private lateinit var mockCallProcessor: CallProcessor<UserMessage>
+    private lateinit var mockCallProcessor: CallProcessor<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
     @MockK
@@ -104,7 +104,7 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockFailure() {
 
         //arrange
-        StateBuilder(mockCallProcessor).getFruitFail(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
+        StateBuilder(mockCallProcessor).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
             mockCallProcessor,
@@ -122,7 +122,7 @@ class FruitFetcherUnitTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT))
+            mockFailureWithPayload(eq(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT))
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(false, fruitFetcher.currentFruit.isCitrus)

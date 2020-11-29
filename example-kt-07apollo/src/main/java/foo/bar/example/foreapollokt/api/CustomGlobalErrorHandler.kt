@@ -2,100 +2,62 @@ package foo.bar.example.foreapollokt.api
 
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.apollo.ErrorHandler
-import co.early.fore.apollo.MessageProvider
-import com.google.gson.Gson
-import foo.bar.example.foreapollokt.message.UserMessage
-import foo.bar.example.foreapollokt.message.UserMessage.*
-import okhttp3.Request
-import retrofit2.Response
-import java.io.InputStreamReader
-import java.io.UnsupportedEncodingException
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.exception.ApolloHttpException
+import foo.bar.example.foreapollokt.message.ErrorMessage
+import foo.bar.example.foreapollokt.message.ErrorMessage.*
 
 /**
  * You can probably use this class almost as it is for your own app, but you might want to
  * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
  */
-class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<UserMessage> {
+class CustomGlobalErrorHandler(private val logger: Logger?) : ErrorHandler<ErrorMessage> {
 
-
-    override fun <CE : MessageProvider<UserMessage>> handleError(
+    override fun handleError(
             t: Throwable?,
-            errorResponse: Response<*>?,
-            customErrorClazz: Class<CE>?,
-            originalRequest: Request?
-    ): UserMessage {
+            errorResponse: Response<*>?
+    ): ErrorMessage {
 
-        var message = ERROR_MISC
+        val message = parseSpecificErrors(errorResponse) ?: parseGeneralErrors(t)
 
-        if (errorResponse != null) {
-
-            logWrapper.e("handleError() HTTP:" + errorResponse.code())
-
-            when (errorResponse.code()) {
-
-                401 -> message = ERROR_SESSION_TIMED_OUT
-
-                400, 405 -> message = ERROR_CLIENT
-
-                //realise 404 is officially a "client" error, but in my experience if it happens in prod it is usually the fault of the server ;)
-                404, 500, 503 -> message = ERROR_SERVER
-            }
-
-            if (customErrorClazz != null) {
-                //let's see if we can get more specifics about the error
-                message = parseCustomError(message, errorResponse, customErrorClazz)
-            }
-
-        } else {//non HTTP error, probably some connection problem, but might be JSON parsing related also
-
-            logWrapper.e("handleError() throwable:$t")
-
-            if (t != null) {
-
-                message = when (t) {
-                    is java.lang.IllegalStateException -> ERROR_ALREADY_EXECUTED
-                    is com.google.gson.stream.MalformedJsonException -> ERROR_SERVER
-                    is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
-                    else -> ERROR_NETWORK
-                }
-                t.printStackTrace()
-            }
-        }
-
-
-        logWrapper.e("handleError() returning:$message")
-
+        ForeDelegateHolder.getLogger(logger).e("handleError() returning:$message")
         return message
     }
 
+    private fun parseGeneralErrors(t: Throwable?) : ErrorMessage {
+        return t?.let {
+            when (it) {
+                is ApolloHttpException -> {
 
-    private fun <CE : MessageProvider<UserMessage>> parseCustomError(
-            provisionalErrorMessage: UserMessage,
-            errorResponse: Response<*>,
-            customErrorClazz: Class<CE>
-    ): UserMessage {
+                    ForeDelegateHolder.getLogger(logger).e("handleError() HTTP:" + it.code() + " " + it.message())
 
-        val gson = Gson()
+                    when (it.code()) {
+                        401 -> ERROR_SESSION_TIMED_OUT
+                        400, 405 -> ERROR_CLIENT
+                        429 -> ERROR_RATE_LIMITED
+                        //realise 404 is officially a "client" error, but in my experience if it happens in prod it is usually the fault of the server ;)
+                        404, 500, 503 -> ERROR_SERVER
+                        else -> ERROR_MISC
+                    }
+                }
+                is java.lang.IllegalStateException -> ERROR_ALREADY_EXECUTED
+                is com.apollographql.apollo.exception.ApolloParseException -> ERROR_SERVER
+                is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
+                is java.net.SocketTimeoutException -> ERROR_NETWORK
+                else -> ERROR_MISC
+            }
+        } ?: ERROR_MISC
+    }
 
-        var customError: CE? = null
-
-        try {
-            customError = gson.fromJson(InputStreamReader(errorResponse.errorBody()!!.byteStream(), "UTF-8"), customErrorClazz)
-        } catch (e: UnsupportedEncodingException) {
-            logWrapper.e("parseCustomError() No more error details", e)
-        } catch (e: IllegalStateException) {
-            logWrapper.e("parseCustomError() No more error details", e)
-        } catch (e: NullPointerException) {
-            logWrapper.e("parseCustomError() No more error details", e)
-        } catch (e: com.google.gson.JsonSyntaxException) {//the server probably gave us something that is not JSON
-            logWrapper.e("parseCustomError() Problem parsing customServerError", e)
-            return ERROR_SERVER
-        }
-
-        return if (customError == null) {
-            provisionalErrorMessage
-        } else {
-            customError.message
+    private fun parseSpecificErrors(errorResponse: Response<*>?) :  ErrorMessage? {
+        return errorResponse?.let {
+            // amazingly GraphQL never had an error code in its standard error
+            // block so it usually gets put under the extensions block like this:
+            // https://spec.graphql.org/draft/#example-fce18
+            it.errors?.first()?.customAttributes?.get("code")?.let { code ->
+                ErrorMessage.createFromName(code as? String)
+            }
         }
     }
 

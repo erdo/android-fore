@@ -11,15 +11,14 @@ import co.early.fore.kt.apollo.CallProcessor
 import co.early.fore.kt.apollo.Either.Left
 import co.early.fore.kt.apollo.Either.Right
 import com.apollographql.apollo.ApolloQueryCall
-import foo.bar.example.foreapollokt.api.fruits.FruitsCustomError
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
-import foo.bar.example.foreapollokt.message.UserMessage
+import foo.bar.example.foreapollokt.message.ErrorMessage
 import java.util.Random
 
 data class LaunchService (
-    val getLaunchList: ApolloQueryCall<LaunchListQuery.Data>,
-    val getLaunchListFailGeneric: ApolloQueryCall<LaunchListQuery.Data>,
-    val getLaunchListFailSpecific: ApolloQueryCall<LaunchListQuery.Data>,
+    val getLaunchList: () -> ApolloQueryCall<LaunchListQuery.Data>,
+    val getLaunchListFailGeneric: () -> ApolloQueryCall<LaunchListQuery.Data>,
+    val getLaunchListFailSpecific: () -> ApolloQueryCall<LaunchListQuery.Data>,
 )
 
 /**
@@ -29,7 +28,7 @@ data class LaunchService (
 
 class LaunchFetcher(
         private val launchService: LaunchService,
-        private val callProcessor: CallProcessor<UserMessage>,
+        private val callProcessor: CallProcessor<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {
@@ -42,13 +41,13 @@ class LaunchFetcher(
 
     fun fetchLaunchesAsync(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
-        logger.i("fetchLaunchesAsync() t:" + Thread.currentThread())
+        logger.i("fetchLaunchesAsync()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -57,18 +56,13 @@ class LaunchFetcher(
 
         launchMain(workMode) {
 
-            logger.i("about to use CallProcessor t:" + Thread.currentThread())
-
             val deferredResult = callProcessor.processCallAsync {
-
-                logger.i("processing call t:" + Thread.currentThread())
-
-                launchService.getLaunchList
+                launchService.getLaunchList()
             }
 
             when (val result = deferredResult.await()) {
+                is Right -> handleSuccess(success, result.b.data.launches)
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b.launches)
             }
         }
 
@@ -81,13 +75,13 @@ class LaunchFetcher(
      */
     fun fetchLaunchesButFail(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchLaunchesButFail()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -97,31 +91,32 @@ class LaunchFetcher(
 
         launchMain(workMode) {
 
+           // val result: Either<UserMessage, SuccessResult<LaunchListQuery.Data>> = callProcessor.processCallAwait {
             val result = callProcessor.processCallAwait {
-                launchService.getLaunchListFailGeneric
+                launchService.getLaunchListFailGeneric()
             }
 
             when (result) {
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b.launches)
+                is Right -> handleSuccess(success, result.b.data.launches)
             }
         }
     }
 
 
     /**
-     * identical to fetchLaunchesAsync() but for demo purposes the URL we point to will give us an error,
-     * here we specify a custom error class for more detail about the error than just an HTTP code can give us
+     * identical to fetchLaunchesAsync() but for demo purposes the URL we point to will give us a
+     * more specific error using a field called "code" in the extras map of the error object
      */
     fun fetchLaunchesButFailAdvanced(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchLaunchesButFailAdvanced()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -130,13 +125,13 @@ class LaunchFetcher(
 
         launchMain(workMode) {
 
-            val result = callProcessor.processCallAwait(FruitsCustomError::class.java) {
-                launchService.getLaunchListFailSpecific
+            val result = callProcessor.processCallAwait {
+                launchService.getLaunchListFailSpecific()
             }
 
             when (result) {
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b.launches)
+                is Right -> handleSuccess(success, result.b.data.launches)
             }
         }
     }
@@ -149,13 +144,13 @@ class LaunchFetcher(
      */
     fun fetchManyThings(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchManyThings()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -207,7 +202,7 @@ class LaunchFetcher(
             successResponse: LaunchListQuery.Launches
     ) {
 
-        logger.i("handleSuccess() t:" + Thread.currentThread())
+        logger.i("handleSuccess() t:" + Thread.currentThread().id)
 
         currentLaunch = selectRandomLaunch(successResponse)
         success()
@@ -215,11 +210,11 @@ class LaunchFetcher(
     }
 
     private fun handleFailure(
-            failureWithPayload: FailureWithPayload<UserMessage>,
-            failureMessage: UserMessage
+            failureWithPayload: FailureWithPayload<ErrorMessage>,
+            failureMessage: ErrorMessage
     ) {
 
-        logger.i("handleFailure() t:" + Thread.currentThread())
+        logger.i("handleFailure() t:" + Thread.currentThread().id)
 
         failureWithPayload(failureMessage)
         complete()
@@ -227,7 +222,7 @@ class LaunchFetcher(
 
     private fun complete() {
 
-        logger.i("complete() t:" + Thread.currentThread())
+        logger.i("complete() t:" + Thread.currentThread().id)
 
         isBusy = false
         notifyObservers()

@@ -29,8 +29,8 @@ dependencies {
     //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core-kt"))
 
-    api("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
-    api("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
+    compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
+    compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }
 
 

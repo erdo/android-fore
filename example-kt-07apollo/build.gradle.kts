@@ -72,14 +72,11 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-apollo-kt:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-apollo-kt"))
+    implementation(project(":fore-network-kt"))
+    //implementation("co.early.fore:fore-network-kt:${Shared.Versions.fore_version_for_examples}")
 
     implementation("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
-    //implementation("com.apollographql.apollo:apollo-android-support:${Shared.Versions.apollo}")
-    //implementation("com.apollographql.apollo:apollo-coroutines-support:${Shared.Versions.apollo}")
 
-    implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
 
