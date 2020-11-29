@@ -1,5 +1,5 @@
 
-package foo.bar.example.foreapollokt.ui.fruit
+package foo.bar.example.foreapollokt.ui.launch
 
 import android.view.View
 import androidx.test.espresso.Espresso.onView
@@ -12,8 +12,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import foo.bar.example.foreapollokt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreapollokt.R
-import foo.bar.example.foreapollokt.api.fruits.FruitPojo
-import foo.bar.example.foreapollokt.feature.fruit.FruitFetcher
+import foo.bar.example.foreapollokt.api.fruits.Launch
+import foo.bar.example.foreapollokt.feature.launch.FruitFetcher
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -45,7 +45,7 @@ class FruitViewTest {
         //arrange
         val activity = FruitViewTestStateBuilder(mockFruitFetcher)
             .isBusy(false)
-            .hasFruit(FruitPojo("testFruit1", true, 45))
+            .hasFruit(Launch("testFruit1", true, 45))
             .createRule()
             .launchActivity(null)
 
@@ -77,7 +77,7 @@ class FruitViewTest {
         //arrange
         val activity = FruitViewTestStateBuilder(mockFruitFetcher)
             .isBusy(false)
-            .hasFruit(FruitPojo("testFruit2", false, 75))
+            .hasFruit(Launch("testFruit2", false, 75))
             .createRule()
             .launchActivity(null)
 
@@ -109,7 +109,7 @@ class FruitViewTest {
         //arrange
         FruitViewTestStateBuilder(mockFruitFetcher)
             .isBusy(true)
-            .hasFruit(FruitPojo("testFruit1", true, 45))
+            .hasFruit(Launch("testFruit1", true, 45))
             .createRule()
             .launchActivity(null)
 
@@ -134,7 +134,7 @@ class FruitViewTest {
         //arrange
         FruitViewTestStateBuilder(mockFruitFetcher)
             .isBusy(false)
-            .hasFruit(FruitPojo("testFruit2", false, 75))
+            .hasFruit(Launch("testFruit2", false, 75))
             .createRule()
             .launchActivity(null)
 
@@ -156,7 +156,7 @@ class FruitViewTest {
         //arrange
         FruitViewTestStateBuilder(mockFruitFetcher)
             .isBusy(false)
-            .hasFruit(FruitPojo("testFruit2", false, 75))
+            .hasFruit(Launch("testFruit2", false, 75))
             .createRule()
             .launchActivity(null)
 
@@ -178,7 +178,7 @@ class FruitViewTest {
         //arrange
         FruitViewTestStateBuilder(mockFruitFetcher)
             .isBusy(false)
-            .hasFruit(FruitPojo("testFruit2", false, 75))
+            .hasFruit(Launch("testFruit2", false, 75))
             .createRule()
             .launchActivity(null)
 

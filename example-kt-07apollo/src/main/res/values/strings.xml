@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">kt 4 retrofit ex</string>
+    <string name="app_name">kt 7 apollo ex</string>
 
     <!-- common error messages -->
     <string name="msg_empty_message"></string>
     <string name="msg_error_misc">Some kind of error, maybe check logs</string>
     <string name="msg_error_network">Network error, check connection</string>
     <string name="msg_error_server">Server down, try again soon</string>
+    <string name="msg_error_already_executed">Call has already been executed, check code</string>
     <string name="msg_error_client">Client error</string>
     <string name="msg_error_session_timeout">Unauthorized</string>
     <string name="msg_error_busy">Busy</string>

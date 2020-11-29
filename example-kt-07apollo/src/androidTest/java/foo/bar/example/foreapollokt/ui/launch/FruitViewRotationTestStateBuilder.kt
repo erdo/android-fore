@@ -1,4 +1,4 @@
-package foo.bar.example.foreapollokt.ui.fruit
+package foo.bar.example.foreapollokt.ui.launch
 
 import android.content.pm.ActivityInfo
 import androidx.test.core.app.ApplicationProvider
@@ -9,8 +9,8 @@ import co.early.fore.kt.apollo.Either
 import foo.bar.example.foreapollokt.App
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.ProgressBarIdler
-import foo.bar.example.foreapollokt.api.fruits.FruitPojo
-import foo.bar.example.foreapollokt.feature.fruit.FruitFetcher
+import foo.bar.example.foreapollokt.api.fruits.Launch
+import foo.bar.example.foreapollokt.feature.launch.FruitFetcher
 import foo.bar.example.foreapollokt.message.UserMessage
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
@@ -21,11 +21,11 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
 
     internal fun withDelayedCallProcessor(): FruitViewRotationTestStateBuilder {
 
-        val deferred = CompletableDeferred<Either<UserMessage, List<FruitPojo>>>()
+        val deferred = CompletableDeferred<Either<UserMessage, List<Launch>>>()
 
         coEvery {
             fruitViewRotationTest.mockCallProcessor.processCallAsync(
-                any() as suspend () -> Response<List<FruitPojo>>
+                any() as suspend () -> Response<List<Launch>>
             )
         } returns deferred
 
@@ -34,9 +34,9 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
         return this
     }
 
-    internal fun createRule(): ActivityTestRule<FruitActivity> {
+    internal fun createRule(): ActivityTestRule<LaunchActivity> {
 
-        return object : ActivityTestRule<FruitActivity>(FruitActivity::class.java) {
+        return object : ActivityTestRule<LaunchActivity>(LaunchActivity::class.java) {
 
             override fun beforeActivityLaunched() {
 

@@ -8,8 +8,10 @@ import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.apollo.ErrorHandler
 import co.early.fore.apollo.MessageProvider
+import com.apollographql.apollo.ApolloCall
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.exception.ApolloException
 import kotlinx.coroutines.Deferred
-import retrofit2.Response
 
 /**
  * F - Globally applicable failure message class, like an enum for example
@@ -48,7 +50,7 @@ class CallProcessor<F>(
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S> processCallAwait(call: suspend () -> Response<S>): Either<F, S> {
+    suspend fun <S> processCallAwait(call: suspend () -> ApolloCall<S>): Either<F, S> {
         return processCallAsync(call).await()
     }
 
@@ -59,7 +61,7 @@ class CallProcessor<F>(
      */
     suspend fun <S, CE : MessageProvider<F>> processCallAwait(
             customErrorClazz: Class<CE>,
-            call: suspend () -> Response<S>
+            call: suspend () -> ApolloCall<S>
     ): Either<F, S> {
         return processCallAsync(customErrorClazz, call).await()
     }
@@ -69,7 +71,7 @@ class CallProcessor<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S> processCallAsync(call: suspend () -> Response<S>): Deferred<Either<F, S>> {
+    suspend fun <S> processCallAsync(call: suspend () -> ApolloCall<S>): Deferred<Either<F, S>> {
         return doCallAsync<S, MessageProvider<F>>(null, call)
     }
 
@@ -80,57 +82,94 @@ class CallProcessor<F>(
      */
     suspend fun <S, CE : MessageProvider<F>> processCallAsync(
             customErrorClazz: Class<CE>,
-            call: suspend () -> Response<S>
+            call: suspend () -> ApolloCall<S>
     ): Deferred<Either<F, S>> {
         return doCallAsync(customErrorClazz, call)
     }
 
     private suspend fun <S, CE : MessageProvider<F>> doCallAsync(
             customErrorClazz: Class<CE>?,
-            call: suspend () -> Response<S>
+            call: suspend () -> ApolloCall<S>
     ): Deferred<Either<F, S>> {
 
-        ForeDelegateHolder.getLogger(logger).d("doCallAsync() t:" + Thread.currentThread())
+        ForeDelegateHolder.getLogger(logger).d("erdo 1 t:" + Thread.currentThread().id)
 
         return asyncMain(workMode) {
+
             try {
 
-                val result: Response<S> = awaitIO(workMode) {
+                ForeDelegateHolder.getLogger(logger).d("erdo 2 t:" + Thread.currentThread().id)
 
-                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
+                call().enqueue(object : ApolloCall.Callback<S>() {
+                    override fun onResponse(response: com.apollographql.apollo.api.Response<S>) {
+                        ForeDelegateHolder.getLogger(logger).i("onResponse t:" + Thread.currentThread().id + " " + response)
 
-                    call()
-                }
+                        //TODO
+                        ForeDelegateHolder.getLogger(logger).d("erdo 3 t:" + Thread.currentThread().id)
 
-                ForeDelegateHolder.getLogger(logger).d("continuing back on main dispatcher t:" + Thread.currentThread())
+                        // return processSuccessResponse(result, customErrorClazz)
+                    }
 
-                processSuccessResponse(result, customErrorClazz)
+                    override fun onFailure(e: ApolloException) {
+
+                        ForeDelegateHolder.getLogger(logger).d("erdo 4 t:" + Thread.currentThread().id)
+
+                        // ForeDelegateHolder.getLogger(logger).i("fail t:"+ Thread.currentThread() + " " + e)
+                        //return processFailResponse<CE, S>(t, null, customErrorClazz)
+                    }
+
+                })
+
+                ForeDelegateHolder.getLogger(logger).d("erdo 5 t:" + Thread.currentThread().id)
+
+                Either.left(globalErrorHandler.handleError(null, null, customErrorClazz, null))
+
             } catch (t: Throwable) {
+                ForeDelegateHolder.getLogger(logger).e("fail already processed ?  t:" + Thread.currentThread().id + " " + t)
                 processFailResponse<CE, S>(t, null, customErrorClazz)
             }
         }
+//
+//
+//                val result: Response<S> = awaitIO(workMode) {
+//
+//                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
+//
+//                    call()
+//                }
+
+        //   ForeDelegateHolder.getLogger(logger).d("continuing back on main dispatcher t:" + Thread.currentThread())
+
+
     }
 
     private fun <CE : MessageProvider<F>, S> processSuccessResponse(
             response: Response<S>, customErrorClass: Class<CE>?
     ): Either<F, S> {
-        val resp: S? = response.body()
 
-        return if (response.isSuccessful && resp != null) {
-            Either.right(resp)
-        } else {
-            processFailResponse(null, response, customErrorClass)
-        }
+        return Either.left(globalErrorHandler.handleError(null, null, customErrorClass, null))
+
+
+//        val resp: S? = response.body()
+//
+//        return if (response.isSuccessful && resp != null) {
+//            Either.right(resp)
+//        } else {
+//            processFailResponse(null, response, customErrorClass)
+//        }
     }
 
     private fun <CE : MessageProvider<F>, S> processFailResponse(
             t: Throwable?, errorResponse: Response<*>?, customErrorClass: Class<CE>?
     ): Either<F, S> {
 
-        if (t != null) {
-            ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
-        }
+        return Either.left(globalErrorHandler.handleError(null, null, customErrorClass, null))
 
-        return Either.left(globalErrorHandler.handleError(t, errorResponse, customErrorClass, null))
+
+//        if (t != null) {
+//            ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
+//        }
+//
+//        return Either.left(globalErrorHandler.handleError(t, errorResponse, customErrorClass, null))
     }
 }

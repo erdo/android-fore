@@ -16,6 +16,7 @@ dependencies {
     //implementation "co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}"
     api(project(":fore-core"))
 
+    api("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     api("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 
     testImplementation("junit:junit:${Shared.Versions.junit}")

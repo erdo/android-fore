@@ -1,5 +1,5 @@
 
-package foo.bar.example.foreapollokt.ui.fruit
+package foo.bar.example.foreapollokt.ui.launch
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
@@ -22,9 +22,9 @@ import co.early.fore.kt.apollo.CallProcessor
 import co.early.fore.kt.apollo.Either
 import foo.bar.example.foreapollokt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreapollokt.R
-import foo.bar.example.foreapollokt.api.fruits.FruitPojo
+import foo.bar.example.foreapollokt.api.fruits.Launch
 import foo.bar.example.foreapollokt.api.fruits.FruitService
-import foo.bar.example.foreapollokt.feature.fruit.FruitFetcher
+import foo.bar.example.foreapollokt.feature.launch.FruitFetcher
 import foo.bar.example.foreapollokt.message.UserMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -58,7 +58,7 @@ class FruitViewRotationTest {
 
     lateinit var fruitFetcher: FruitFetcher
     private var logger: Logger = SystemLogger()
-    private var fruitPojo = FruitPojo("testFruit1", true, 45)
+    private var fruitPojo = Launch("testFruit1", true, 45)
 
     @MockK
     private lateinit var mockSuccess: Success
@@ -69,7 +69,7 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockFruitService: FruitService
 
-    private lateinit var deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>
+    private lateinit var deferredResult: CompletableDeferred<Either<UserMessage, List<Launch>>>
     private val countDownLatch = CountDownLatch(1)
 
     @Before
@@ -126,7 +126,7 @@ class FruitViewRotationTest {
 
         logger.i("callSuccessOnCachedSuccessFailCallback()")
 
-        val fruitList = ArrayList<FruitPojo>()
+        val fruitList = ArrayList<Launch>()
         fruitList.add(fruitPojo)
 
         //we need to be back on the UI thread for this
@@ -138,7 +138,7 @@ class FruitViewRotationTest {
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<Either<UserMessage, List<Launch>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

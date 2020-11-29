@@ -1,4 +1,4 @@
-package foo.bar.example.foreapollokt.feature.fruit
+package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
@@ -6,7 +6,7 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.apollo.CallProcessor
-import foo.bar.example.foreapollokt.api.fruits.FruitPojo
+import foo.bar.example.foreapollokt.api.fruits.Launch
 import foo.bar.example.foreapollokt.api.fruits.FruitService
 import foo.bar.example.foreapollokt.message.UserMessage
 import io.mockk.MockKAnnotations
@@ -28,7 +28,7 @@ import org.junit.Test
  */
 class FruitFetcherUnitTest {
 
-    private val fruitPojo = FruitPojo("strawberry", false, 71)
+    private val fruitPojo = Launch("strawberry", false, 71)
 
     @MockK
     private lateinit var mockSuccess: Success

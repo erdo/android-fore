@@ -1,4 +1,4 @@
-package foo.bar.example.foreapollokt.ui.fruit
+package foo.bar.example.foreapollokt.ui.launch
 
 
 import android.os.Bundle
@@ -10,16 +10,16 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.R
-import foo.bar.example.foreapollokt.feature.fruit.FruitFetcher
+import foo.bar.example.foreapollokt.feature.launch.LaunchFetcher
 import foo.bar.example.foreapollokt.message.UserMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
 
-class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
+class LaunchActivity : FragmentActivity(R.layout.activity_fruit) {
 
 
     //models that we need to sync with
-    private val fruitFetcher: FruitFetcher = OG[FruitFetcher::class.java]
+    private val launchFetcher: LaunchFetcher = OG[LaunchFetcher::class.java]
 
 
     //single observer reference
@@ -50,45 +50,45 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
 
 
     private fun setupButtonClickListeners() {
-        fruit_fetchsuccess_btn.setOnClickListener { fruitFetcher.fetchFruitsAsync(success, failureWithPayload) }
-        fruit_fetchchainsuccess_btn.setOnClickListener { fruitFetcher.fetchManyThings(success, failureWithPayload) }
-        fruit_fetchfailbasic_btn.setOnClickListener { fruitFetcher.fetchFruitsButFail(success, failureWithPayload) }
-        fruit_fetchfailadvanced_btn.setOnClickListener { fruitFetcher.fetchFruitsButFailAdvanced(success, failureWithPayload) }
+        fruit_fetchsuccess_btn.setOnClickListener { launchFetcher.fetchLaunchesAsync(success, failureWithPayload) }
+        fruit_fetchchainsuccess_btn.setOnClickListener { launchFetcher.fetchManyThings(success, failureWithPayload) }
+        fruit_fetchfailbasic_btn.setOnClickListener { launchFetcher.fetchLaunchesButFail(success, failureWithPayload) }
+        fruit_fetchfailadvanced_btn.setOnClickListener { launchFetcher.fetchLaunchesButFailAdvanced(success, failureWithPayload) }
     }
 
 
     //data binding stuff below
 
     fun syncView() {
-        fruit_fetchsuccess_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_fetchchainsuccess_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_fetchfailbasic_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_fetchfailadvanced_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_name_textview.text = fruitFetcher.currentFruit.name
+        fruit_fetchsuccess_btn.isEnabled = !launchFetcher.isBusy
+        fruit_fetchchainsuccess_btn.isEnabled = !launchFetcher.isBusy
+        fruit_fetchfailbasic_btn.isEnabled = !launchFetcher.isBusy
+        fruit_fetchfailadvanced_btn.isEnabled = !launchFetcher.isBusy
+        fruit_name_textview.text = launchFetcher.currentLaunch.site
         fruit_citrus_img.setImageResource(
-            if (fruitFetcher.currentFruit.isCitrus)
+            if (launchFetcher.currentLaunch.isCitrus)
                 R.drawable.lemon_positive else R.drawable.lemon_negative
         )
-        fruit_tastyrating_tastybar.setTastyPercent(fruitFetcher.currentFruit.tastyPercentScore.toFloat())
+        fruit_tastyrating_tastybar.setTastyPercent(launchFetcher.currentLaunch.tastyPercentScore.toFloat())
         fruit_tastyrating_textview.text = String.format(
-            this.getString(R.string.fruit_percent), fruitFetcher.currentFruit.tastyPercentScore.toString()
+            this.getString(R.string.fruit_percent), launchFetcher.currentLaunch.tastyPercentScore.toString()
         )
-        fruit_busy_progbar.visibility = if (fruitFetcher.isBusy)
+        fruit_busy_progbar.visibility = if (launchFetcher.isBusy)
             View.VISIBLE else View.INVISIBLE
-        fruit_detailcontainer_linearlayout.visibility = if (fruitFetcher.isBusy)
+        fruit_detailcontainer_linearlayout.visibility = if (launchFetcher.isBusy)
             View.GONE else View.VISIBLE
     }
 
 
     override fun onStart() {
         super.onStart()
-        fruitFetcher.addObserver(observer)
+        launchFetcher.addObserver(observer)
         syncView() //  <- don't forget this
     }
 
 
     override fun onStop() {
         super.onStop()
-        fruitFetcher.removeObserver(observer)
+        launchFetcher.removeObserver(observer)
     }
 }

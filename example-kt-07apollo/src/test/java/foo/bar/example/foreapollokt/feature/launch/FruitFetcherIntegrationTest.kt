@@ -1,4 +1,4 @@
-package foo.bar.example.foreapollokt.feature.fruit
+package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.callbacks.FailureWithPayload
@@ -11,7 +11,7 @@ import co.early.fore.apollo.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreapollokt.api.CommonServiceFailures
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomRetrofitBuilder
-import foo.bar.example.foreapollokt.api.fruits.FruitPojo
+import foo.bar.example.foreapollokt.api.fruits.Launch
 import foo.bar.example.foreapollokt.api.fruits.FruitService
 import foo.bar.example.foreapollokt.message.UserMessage
 import io.mockk.MockKAnnotations
@@ -221,7 +221,7 @@ class FruitFetcherIntegrationTest {
         private val stubbedSuccess = StubbedServiceDefinition(
             200, //stubbed HTTP code
             "fruit/success.json", //stubbed body response
-            FruitPojo("orange", true, 43)
+            Launch("orange", true, 43)
         ) //expected result
 
         private val stubbedFailUserLocked = StubbedServiceDefinition(

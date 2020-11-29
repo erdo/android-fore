@@ -10,6 +10,8 @@ plugins {
     kotlin("kapt")
 }
 
+
+
 android {
 
     compileOptions {
@@ -53,10 +55,14 @@ android {
 apollo {
     generateKotlinModels.set(true)
 }
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+}
+// fetch the graphql schema:
+//./gradlew :example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'
 
-//configure<com.apollographql.apollo.gradle.api.ApolloExtension> {
-//    generateKotlinModels.set(true)
-//}
 
 repositories {
     jcenter()
@@ -96,6 +102,3 @@ dependencies {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 }
-
-// fetch the graphql schema:
-//./gradlew :example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'

@@ -8,6 +8,8 @@ import co.early.fore.kt.apollo.InterceptorLogging
 import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomGlobalRequestInterceptor
+import foo.bar.example.foreapollokt.feature.launch.LaunchFetcher
+import foo.bar.example.foreapollokt.feature.launch.LaunchService
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import java.util.HashMap
 
@@ -37,24 +39,26 @@ object OG {
                 InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val response = apolloClient.query(LaunchListQuery())
-
         val callProcessor = CallProcessor(
-            CustomGlobalErrorHandler(logger),
-            workMode,
-            logger
+                CustomGlobalErrorHandler(logger),
+                workMode,
+                logger
         )
 
         // models
-//        val fruitFetcher = FruitFetcher(
-//            retrofit.create(FruitService::class.java),
-//            callProcessor,
-//            logger,
-//            workMode
-//        )
+        val launchFetcher = LaunchFetcher(
+                launchService = LaunchService(
+                        getLaunchList = apolloClient.query(LaunchListQuery()),
+                        getLaunchListFailGeneric = apolloClient.query(LaunchListQuery()),
+                        getLaunchListFailSpecific = apolloClient.query(LaunchListQuery())
+                ),
+                callProcessor,
+                logger,
+                workMode
+        )
 
         // add models to the dependencies map if you will need them later
-//        dependencies[FruitFetcher::class.java] = fruitFetcher
+        dependencies[LaunchFetcher::class.java] = launchFetcher
     }
 
 

@@ -106,7 +106,7 @@ class InterceptorLogging @JvmOverloads constructor(
                 if (!isPlaintext(buffer)) {
                     ForeDelegateHolder.getLogger(logger).i(
                             TAG + randomPostTag,
-                            " (binary " + buffer.size() + " byte body omitted)")
+                            " (binary " + buffer.size + " byte body omitted)")
                 } else {
                     if (contentLength != 0L) {
                         val bodyJson = truncate(buffer.clone().readString(charset))
@@ -162,7 +162,7 @@ class InterceptorLogging @JvmOverloads constructor(
         fun isPlaintext(buffer: Buffer): Boolean {
             return try {
                 val prefix = Buffer()
-                val byteCount = if (buffer.size() < 64) buffer.size() else 64
+                val byteCount = if (buffer.size < 64) buffer.size else 64
                 buffer.copyTo(prefix, 0, byteCount)
                 for (i in 0..15) {
                     if (prefix.exhausted()) {

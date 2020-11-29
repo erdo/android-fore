@@ -1,4 +1,4 @@
-package foo.bar.example.foreapollokt.feature.fruit
+package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
@@ -10,19 +10,25 @@ import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.apollo.CallProcessor
 import co.early.fore.kt.apollo.Either.Left
 import co.early.fore.kt.apollo.Either.Right
-import co.early.fore.kt.apollo.carryOn
-import foo.bar.example.foreapollokt.api.fruits.FruitPojo
-import foo.bar.example.foreapollokt.api.fruits.FruitService
+import com.apollographql.apollo.ApolloQueryCall
 import foo.bar.example.foreapollokt.api.fruits.FruitsCustomError
+import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.UserMessage
 import java.util.Random
 
+data class LaunchService (
+    val getLaunchList: ApolloQueryCall<LaunchListQuery.Data>,
+    val getLaunchListFailGeneric: ApolloQueryCall<LaunchListQuery.Data>,
+    val getLaunchListFailSpecific: ApolloQueryCall<LaunchListQuery.Data>,
+)
 
 /**
- * gets a list of fruit from the network, selects one at random to be currentFruit
+ * gets a list of launches from the network, selects one at random to be currentLaunch
  */
-class FruitFetcher(
-        private val fruitService: FruitService,
+
+
+class LaunchFetcher(
+        private val launchService: LaunchService,
         private val callProcessor: CallProcessor<UserMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
@@ -30,16 +36,16 @@ class FruitFetcher(
 
     var isBusy: Boolean = false
         private set
-    var currentFruit = FruitPojo("(fruitless)", false, 0)
+    var currentLaunch = NO_LAUNCH
         private set
 
 
-    fun fetchFruitsAsync(
+    fun fetchLaunchesAsync(
             success: Success,
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i("fetchFruitsAsync() t:" + Thread.currentThread())
+        logger.i("fetchLaunchesAsync() t:" + Thread.currentThread())
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -57,12 +63,12 @@ class FruitFetcher(
 
                 logger.i("processing call t:" + Thread.currentThread())
 
-                fruitService.getFruitsSimulateOk()
+                launchService.getLaunchList
             }
 
             when (val result = deferredResult.await()) {
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+                is Right -> handleSuccess(success, result.b.launches)
             }
         }
 
@@ -70,15 +76,15 @@ class FruitFetcher(
 
 
     /**
-     * identical to fetchFruitsAsync() but for demo purposes the URL we point to will give us an error,
+     * identical to fetchLaunchesAsync() but for demo purposes the URL we point to will give us an error,
      * we also don't specify a custom error class here
      */
-    fun fetchFruitsButFail(
+    fun fetchLaunchesButFail(
             success: Success,
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i("fetchFruitsButFail()")
+        logger.i("fetchLaunchesButFail()")
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -92,27 +98,27 @@ class FruitFetcher(
         launchMain(workMode) {
 
             val result = callProcessor.processCallAwait {
-                fruitService.getFruitsSimulateNotAuthorised()
+                launchService.getLaunchListFailGeneric
             }
 
             when (result) {
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+                is Right -> handleSuccess(success, result.b.launches)
             }
         }
     }
 
 
     /**
-     * identical to fetchFruitsAsync() but for demo purposes the URL we point to will give us an error,
+     * identical to fetchLaunchesAsync() but for demo purposes the URL we point to will give us an error,
      * here we specify a custom error class for more detail about the error than just an HTTP code can give us
      */
-    fun fetchFruitsButFailAdvanced(
+    fun fetchLaunchesButFailAdvanced(
             success: Success,
             failureWithPayload: FailureWithPayload<UserMessage>
     ) {
 
-        logger.i("fetchFruitsButFailAdvanced()")
+        logger.i("fetchLaunchesButFailAdvanced()")
 
         if (isBusy) {
             failureWithPayload(UserMessage.ERROR_BUSY)
@@ -125,12 +131,12 @@ class FruitFetcher(
         launchMain(workMode) {
 
             val result = callProcessor.processCallAwait(FruitsCustomError::class.java) {
-                fruitService.getFruitsSimulateNotAuthorised()
+                launchService.getLaunchListFailSpecific
             }
 
             when (result) {
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+                is Right -> handleSuccess(success, result.b.launches)
             }
         }
     }
@@ -153,57 +159,57 @@ class FruitFetcher(
             return
         }
 
-        isBusy = true
-        notifyObservers()
-
-        launchMain(workMode) {
-
-            val result = callProcessor.processCallAwait(
-                FruitsCustomError::class.java
-            ) {
-                var ticketRef = ""
-                logger.i("...create user...")
-                fruitService.createUser()
-                    .carryOn {
-                        logger.i("...create user ticket...")
-                        fruitService.createUserTicket(it.userId)
-                    }
-                    .carryOn {
-                        ticketRef = it.ticketRef
-                        logger.i("...get waiting time...")
-                        fruitService.getEstimatedWaitingTime(it.ticketRef)
-                    }
-                    .carryOn {
-                        if (it.minutesWait > 10) {
-                            logger.i("...cancel ticket...")
-                            fruitService.cancelTicket(ticketRef)
-                        } else {
-                            logger.i("...confirm ticket...")
-                            fruitService.confirmTicket(ticketRef)
-                        }
-                    }
-                    .carryOn {
-                        logger.i("...claim free fruit!...")
-                        fruitService.claimFreeFruit(it.ticketRef)
-                    }
-            }
-
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
-            }
-        }
+//        isBusy = true
+//        notifyObservers()
+//
+//        launchMain(workMode) {
+//
+//            val result = callProcessor.processCallAwait(
+//                FruitsCustomError::class.java
+//            ) {
+//                var ticketRef = ""
+//                logger.i("...create user...")
+//                fruitService.getLaunchList
+//                    .carryOn {
+//                        logger.i("...create user ticket...")
+//                        fruitService.createUserTicket(it.userId)
+//                    }
+//                    .carryOn {
+//                        ticketRef = it.ticketRef
+//                        logger.i("...get waiting time...")
+//                        fruitService.getEstimatedWaitingTime(it.ticketRef)
+//                    }
+//                    .carryOn {
+//                        if (it.minutesWait > 10) {
+//                            logger.i("...cancel ticket...")
+//                            fruitService.cancelTicket(ticketRef)
+//                        } else {
+//                            logger.i("...confirm ticket...")
+//                            fruitService.confirmTicket(ticketRef)
+//                        }
+//                    }
+//                    .carryOn {
+//                        logger.i("...claim free fruit!...")
+//                        fruitService.claimFreeFruit(it.ticketRef)
+//                    }
+//            }
+//
+//            when (result) {
+//                is Left -> handleFailure(failureWithPayload, result.a)
+//                is Right -> handleSuccess(success, result.b)
+//            }
+//        }
 
     }
 
     private fun handleSuccess(
             success: Success,
-            successResponse: List<FruitPojo>
+            successResponse: LaunchListQuery.Launches
     ) {
 
         logger.i("handleSuccess() t:" + Thread.currentThread())
 
-        currentFruit = selectRandomFruit(successResponse)
+        currentLaunch = selectRandomLaunch(successResponse)
         success()
         complete()
     }
@@ -227,8 +233,13 @@ class FruitFetcher(
         notifyObservers()
     }
 
-    private fun selectRandomFruit(listOfFruits: List<FruitPojo>): FruitPojo {
-        return listOfFruits[if (listOfFruits.size == 1) 0 else random.nextInt(listOfFruits.size - 1)]
+    private fun selectRandomLaunch(launches: LaunchListQuery.Launches): Launch {
+        val listOfLaunches = launches.launches.filterNotNull()
+        return when {
+            listOfLaunches.isEmpty() -> NO_LAUNCH
+            listOfLaunches.size == 1 -> listOfLaunches[0].toApp()
+            else -> listOfLaunches[random.nextInt(listOfLaunches.size - 1)].toApp()
+        }
     }
 
     companion object {

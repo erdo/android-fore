@@ -5,12 +5,7 @@ import co.early.fore.apollo.ErrorHandler
 import co.early.fore.apollo.MessageProvider
 import com.google.gson.Gson
 import foo.bar.example.foreapollokt.message.UserMessage
-import foo.bar.example.foreapollokt.message.UserMessage.ERROR_CLIENT
-import foo.bar.example.foreapollokt.message.UserMessage.ERROR_MISC
-import foo.bar.example.foreapollokt.message.UserMessage.ERROR_NETWORK
-import foo.bar.example.foreapollokt.message.UserMessage.ERROR_SECURITY_UNKNOWN
-import foo.bar.example.foreapollokt.message.UserMessage.ERROR_SERVER
-import foo.bar.example.foreapollokt.message.UserMessage.ERROR_SESSION_TIMED_OUT
+import foo.bar.example.foreapollokt.message.UserMessage.*
 import okhttp3.Request
 import retrofit2.Response
 import java.io.InputStreamReader
@@ -58,6 +53,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Us
             if (t != null) {
 
                 message = when (t) {
+                    is java.lang.IllegalStateException -> ERROR_ALREADY_EXECUTED
                     is com.google.gson.stream.MalformedJsonException -> ERROR_SERVER
                     is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
                     else -> ERROR_NETWORK
