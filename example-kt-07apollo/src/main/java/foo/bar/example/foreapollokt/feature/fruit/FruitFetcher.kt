@@ -7,10 +7,10 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.kt.retrofit.Either.Left
-import co.early.fore.kt.retrofit.Either.Right
-import co.early.fore.kt.retrofit.carryOn
+import co.early.fore.kt.apollo.CallProcessor
+import co.early.fore.kt.apollo.Either.Left
+import co.early.fore.kt.apollo.Either.Right
+import co.early.fore.kt.apollo.carryOn
 import foo.bar.example.foreapollokt.api.fruits.FruitPojo
 import foo.bar.example.foreapollokt.api.fruits.FruitService
 import foo.bar.example.foreapollokt.api.fruits.FruitsCustomError

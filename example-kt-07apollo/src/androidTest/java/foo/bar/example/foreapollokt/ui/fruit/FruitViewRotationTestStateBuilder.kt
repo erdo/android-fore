@@ -5,7 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.retrofit.Either
+import co.early.fore.kt.apollo.Either
 import foo.bar.example.foreapollokt.App
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.ProgressBarIdler

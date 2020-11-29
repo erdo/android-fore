@@ -56,8 +56,8 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-retrofit-kt:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-retrofit-kt"))
+    //implementation("co.early.fore:fore-apollo-kt:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-apollo-kt"))
 
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

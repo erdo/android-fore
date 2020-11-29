@@ -5,7 +5,7 @@ import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.apollo.CallProcessor
 import foo.bar.example.foreapollokt.api.fruits.FruitPojo
 import foo.bar.example.foreapollokt.api.fruits.FruitService
 import foo.bar.example.foreapollokt.message.UserMessage

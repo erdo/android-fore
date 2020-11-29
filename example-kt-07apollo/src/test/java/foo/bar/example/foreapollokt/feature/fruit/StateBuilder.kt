@@ -1,7 +1,7 @@
 package foo.bar.example.foreapollokt.feature.fruit
 
-import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.kt.retrofit.Either
+import co.early.fore.kt.apollo.CallProcessor
+import co.early.fore.kt.apollo.Either
 import co.early.fore.retrofit.MessageProvider
 import foo.bar.example.foreapollokt.api.fruits.FruitPojo
 import foo.bar.example.foreapollokt.message.UserMessage

@@ -3,8 +3,8 @@ package foo.bar.example.foreapollokt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.kt.retrofit.InterceptorLogging
+import co.early.fore.kt.apollo.CallProcessor
+import co.early.fore.kt.apollo.InterceptorLogging
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomGlobalRequestInterceptor
 import foo.bar.example.foreapollokt.api.CustomRetrofitBuilder
