@@ -3,9 +3,9 @@ package foo.bar.example.foreretrofitkt.ui.fruit
 import android.content.pm.ActivityInfo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import arrow.core.Either
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.retrofit.Either
 import foo.bar.example.foreretrofitkt.App
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.ProgressBarIdler
