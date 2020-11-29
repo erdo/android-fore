@@ -2,9 +2,8 @@ package co.early.fore.kt.core.logging
 
 class SystemLogger :
         Logger,
-        TagInferer by TagInfererImpl() {
-
-    private var longestTagLength = 0
+        TagInferer by TagInfererImpl(),
+        TagFormatter by TagFormatterImpl() {
 
     override fun e(message: String) {
         e(inferTag(), message)
@@ -89,14 +88,5 @@ class SystemLogger :
     override fun v(tag: String, message: String, throwable: Throwable) {
         v(tag, message)
         println(throwable)
-    }
-
-    private fun padTagWithSpace(tag: String): String? {
-        longestTagLength = Math.max(longestTagLength, tag.length + 1)
-        return if (longestTagLength != tag.length) {
-            co.early.fore.core.utils.text.TextPadder.padText(tag, longestTagLength, co.early.fore.core.utils.text.TextPadder.Pad.RIGHT, ' ')
-        } else {
-            tag
-        }
     }
 }

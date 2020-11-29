@@ -1,6 +1,6 @@
 package co.early.fore.kt.core.logging
 
-class SilentLogger() : Logger {
+class SilentLogger : Logger {
 
     override fun e(message: String) {}
 
