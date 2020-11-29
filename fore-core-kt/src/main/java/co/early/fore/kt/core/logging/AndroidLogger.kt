@@ -2,9 +2,12 @@ package co.early.fore.kt.core.logging
 
 import android.util.Log
 
-class AndroidLogger(private val tagPrefix: String? = null) :
+class AndroidLogger(private val tagPrefix: String? = null,
+                    private val stableTagLength: Boolean = false,
+                    overrideMaxTagLength: Int? = null) :
         Logger,
-        TagInferer by TagInfererImpl() {
+        TagInferer by TagInfererImpl(),
+        TagFormatter by TagFormatterImpl(overrideMaxTagLength) {
 
     override fun e(message: String) {
         e(inferTag(), message)
@@ -47,43 +50,83 @@ class AndroidLogger(private val tagPrefix: String? = null) :
     }
 
     override fun e(tag: String, message: String) {
-        Log.e(addTagPrefixIfPresent(tag), message)
+        if (stableTagLength) {
+            Log.e(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message)
+        } else {
+            Log.e(limitTagLength(addTagPrefixIfPresent(tag)), message)
+        }
     }
 
     override fun w(tag: String, message: String) {
-        Log.w(addTagPrefixIfPresent(tag), message)
+        if (stableTagLength) {
+            Log.w(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message)
+        } else {
+            Log.w(limitTagLength(addTagPrefixIfPresent(tag)), message)
+        }
     }
 
     override fun i(tag: String, message: String) {
-        Log.i(addTagPrefixIfPresent(tag), message)
+        if (stableTagLength) {
+            Log.i(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message)
+        } else {
+            Log.i(limitTagLength(addTagPrefixIfPresent(tag)), message)
+        }
     }
 
     override fun d(tag: String, message: String) {
-        Log.d(addTagPrefixIfPresent(tag), message)
+        if (stableTagLength) {
+            Log.d(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message)
+        } else {
+            Log.d(limitTagLength(addTagPrefixIfPresent(tag)), message)
+        }
     }
 
     override fun v(tag: String, message: String) {
-        Log.v(addTagPrefixIfPresent(tag), message)
+        if (stableTagLength) {
+            Log.v(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message)
+        } else {
+            Log.v(limitTagLength(addTagPrefixIfPresent(tag)), message)
+        }
     }
 
     override fun e(tag: String, message: String, throwable: Throwable) {
-        Log.e(addTagPrefixIfPresent(tag), message, throwable)
+        if (stableTagLength) {
+            Log.e(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
+        } else {
+            Log.e(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
+        }
     }
 
     override fun w(tag: String, message: String, throwable: Throwable) {
-        Log.w(addTagPrefixIfPresent(tag), message, throwable)
+        if (stableTagLength) {
+            Log.w(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
+        } else {
+            Log.w(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
+        }
     }
 
     override fun i(tag: String, message: String, throwable: Throwable) {
-        Log.i(addTagPrefixIfPresent(tag), message, throwable)
+        if (stableTagLength) {
+            Log.i(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
+        } else {
+            Log.i(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
+        }
     }
 
     override fun d(tag: String, message: String, throwable: Throwable) {
-        Log.d(addTagPrefixIfPresent(tag), message, throwable)
+        if (stableTagLength) {
+            Log.d(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
+        } else {
+            Log.d(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
+        }
     }
 
     override fun v(tag: String, message: String, throwable: Throwable) {
-        Log.e(addTagPrefixIfPresent(tag), message, throwable)
+        if (stableTagLength) {
+            Log.e(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
+        } else {
+            Log.e(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
+        }
     }
 
     private fun addTagPrefixIfPresent(message: String): String {
