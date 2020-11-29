@@ -6,8 +6,8 @@ import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.apollo.CallProcessor
 import co.early.fore.kt.apollo.InterceptorLogging
-import co.early.fore.retrofit.testhelpers.InterceptorStubbedService
-import co.early.fore.retrofit.testhelpers.StubbedServiceDefinition
+import co.early.fore.apollo.testhelpers.InterceptorStubbedService
+import co.early.fore.apollo.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreapollokt.api.CommonServiceFailures
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomRetrofitBuilder

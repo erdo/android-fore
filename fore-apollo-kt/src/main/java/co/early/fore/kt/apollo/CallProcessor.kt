@@ -6,8 +6,8 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
-import co.early.fore.retrofit.ErrorHandler
-import co.early.fore.retrofit.MessageProvider
+import co.early.fore.apollo.ErrorHandler
+import co.early.fore.apollo.MessageProvider
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 

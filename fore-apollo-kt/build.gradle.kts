@@ -15,11 +15,11 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 android {
     sourceSets["main"].java.apply {
         srcDirs(
-            "../fore-retrofit/src/main/java"
+            "../fore-apollo/src/main/java"
         )
         exclude(
-            "co/early/fore/retrofit/InterceptorLogging.java",
-            "co/early/fore/retrofit/CallProcessor.java"
+            "co/early/fore/apollo/InterceptorLogging.java",
+            "co/early/fore/apollo/CallProcessor.java"
         )
     }
 }

@@ -2,7 +2,7 @@ package foo.bar.example.foreapollokt.feature.fruit
 
 import co.early.fore.kt.apollo.CallProcessor
 import co.early.fore.kt.apollo.Either
-import co.early.fore.retrofit.MessageProvider
+import co.early.fore.apollo.MessageProvider
 import foo.bar.example.foreapollokt.api.fruits.FruitPojo
 import foo.bar.example.foreapollokt.message.UserMessage
 import io.mockk.coEvery

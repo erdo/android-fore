@@ -5,7 +5,7 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.time.measureNanos
 import co.early.fore.kt.core.time.nanosFormat
-import co.early.fore.retrofit.NetworkingLogSanitizer
+import co.early.fore.apollo.NetworkingLogSanitizer
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.MediaType

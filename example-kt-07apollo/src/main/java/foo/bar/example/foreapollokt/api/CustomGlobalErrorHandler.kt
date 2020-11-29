@@ -1,8 +1,8 @@
 package foo.bar.example.foreapollokt.api
 
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.retrofit.ErrorHandler
-import co.early.fore.retrofit.MessageProvider
+import co.early.fore.apollo.ErrorHandler
+import co.early.fore.apollo.MessageProvider
 import com.google.gson.Gson
 import foo.bar.example.foreapollokt.message.UserMessage
 import foo.bar.example.foreapollokt.message.UserMessage.ERROR_CLIENT

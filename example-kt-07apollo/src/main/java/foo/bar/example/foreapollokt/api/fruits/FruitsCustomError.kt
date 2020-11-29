@@ -1,6 +1,6 @@
 package foo.bar.example.foreapollokt.api.fruits
 
-import co.early.fore.retrofit.MessageProvider
+import co.early.fore.apollo.MessageProvider
 import com.google.gson.annotations.SerializedName
 import foo.bar.example.foreapollokt.message.UserMessage
 import foo.bar.example.foreapollokt.message.UserMessage.ERROR_MISC
