@@ -3,8 +3,8 @@ package foo.bar.example.foreapollokt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.kt.apollo.CallProcessor
-import co.early.fore.kt.apollo.InterceptorLogging
+import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.net.InterceptorLogging
 import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomGlobalRequestInterceptor
@@ -41,7 +41,7 @@ object OG {
 
         //apolloClient.idleCallback()
 
-        val callProcessor = CallProcessor(
+        val callProcessor = ApolloCallProcessor(
                 CustomGlobalErrorHandler(logger),
                 logger
         )

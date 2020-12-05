@@ -18,8 +18,8 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.apollo.CallProcessor
-import co.early.fore.kt.apollo.Either
+import co.early.fore.kt.net.apollo.CallProcessor
+import co.early.fore.kt.Either
 import foo.bar.example.foreapollokt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollokt.api.fruits.Launch

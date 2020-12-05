@@ -1,6 +1,6 @@
 package foo.bar.example.foreretrofitkt.api.fruits
 
-import co.early.fore.retrofit.MessageProvider
+import co.early.fore.net.retrofit2.MessageProvider
 import com.google.gson.annotations.SerializedName
 import foo.bar.example.foreretrofitkt.message.UserMessage
 import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_MISC
@@ -19,7 +19,7 @@ import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_MISC
  *
  *
  */
-class FruitsCustomError(private val errorCode: ErrorCode?) : MessageProvider<UserMessage> {
+class FruitsCustomError(private val errorCode: ErrorCode?) : co.early.fore.net.retrofit2.MessageProvider<UserMessage> {
 
     enum class ErrorCode constructor(val userMessage: UserMessage) {
 

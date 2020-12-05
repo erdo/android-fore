@@ -24,7 +24,7 @@ dependencies {
 
     api(project(":fore-core-kt"))
     api(project(":fore-adapters-kt"))
-    api(project(":fore-retrofit-kt"))
+    api(project(":fore-network-kt"))
 
     api("androidx.annotation:annotation:${Shared.Versions.annotation}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

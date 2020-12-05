@@ -7,7 +7,7 @@ import java.util.List;
 
 import co.early.fore.core.callbacks.FailureCallbackWithPayload;
 import co.early.fore.core.callbacks.SuccessCallbackWithPayload;
-import co.early.fore.retrofit.CallProcessor;
+import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
 import foo.bar.example.foreretrofit.api.fruits.FruitPojo;
 import foo.bar.example.foreretrofit.message.UserMessage;
 
@@ -19,9 +19,9 @@ import static org.mockito.Mockito.doAnswer;
  */
 public class StateBuilder {
 
-    private CallProcessor<UserMessage> mockCallProcessor;
+    private Retrofit2CallProcessor<UserMessage> mockCallProcessor;
 
-    StateBuilder(CallProcessor<UserMessage> mockCallProcessor) {
+    StateBuilder(Retrofit2CallProcessor<UserMessage> mockCallProcessor) {
         this.mockCallProcessor = mockCallProcessor;
     }
 

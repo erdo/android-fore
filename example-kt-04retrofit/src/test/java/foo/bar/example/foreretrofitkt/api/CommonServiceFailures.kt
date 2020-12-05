@@ -1,6 +1,6 @@
 package foo.bar.example.foreretrofitkt.api
 
-import co.early.fore.retrofit.testhelpers.StubbedServiceDefinition
+import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreretrofitkt.message.UserMessage
 import java.io.IOException
 import java.util.ArrayList

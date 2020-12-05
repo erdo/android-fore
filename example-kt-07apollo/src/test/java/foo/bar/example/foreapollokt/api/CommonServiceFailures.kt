@@ -1,6 +1,6 @@
 package foo.bar.example.foreapollokt.api
 
-import co.early.fore.apollo.testhelpers.StubbedServiceDefinition
+import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import java.io.IOException
 import java.util.ArrayList

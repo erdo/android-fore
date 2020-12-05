@@ -1,8 +1,5 @@
 package foo.bar.example.foreapollokt.api.fruits
 
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 /**
  * These stubs are hosted at https://www.mocky.io/

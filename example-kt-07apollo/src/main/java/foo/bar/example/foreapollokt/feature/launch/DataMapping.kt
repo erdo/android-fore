@@ -6,7 +6,7 @@ import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 //so we convert them here to app level items, nothing bellow the feature level
 //knows anything about the API
 
-val NO_LAUNCH = Launch("(no launch)", "no site")
+val NO_LAUNCH = Launch("(no launch)", "no site", false, 0)
 
 data class Launch (
     val id: String,

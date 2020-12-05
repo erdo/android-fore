@@ -1,7 +1,7 @@
 package foo.bar.example.foreapollokt.api
 
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.apollo.ErrorHandler
+import co.early.fore.net.apollo.ErrorHandler
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloHttpException

@@ -6,8 +6,8 @@ plugins {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-apollo-kt")
-    set("LIB_DESCRIPTION", "android fore - apollo helpers")
+    set("LIB_ARTIFACT_ID", "fore-network-kt")
+    set("LIB_DESCRIPTION", "android fore - network helpers")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
@@ -15,11 +15,12 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 android {
     sourceSets["main"].java.apply {
         srcDirs(
-            "../fore-apollo/src/main/java"
+                "../fore-network/src/main/java"
         )
         exclude(
-            "co/early/fore/apollo/InterceptorLogging.java",
-            "co/early/fore/apollo/CallProcessor.java"
+                "co/early/fore/net/InterceptorLogging.java",
+                "co/early/fore/net/apollo/ApolloCallProcessor.java",
+                "co/early/fore/net/retrofit2/Retrofit2CallProcessor.java"
         )
     }
 }
@@ -32,6 +33,5 @@ dependencies {
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }
-
 
 apply(from = "../bintraypublish.gradle")

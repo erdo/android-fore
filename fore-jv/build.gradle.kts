@@ -15,7 +15,7 @@ dependencies {
 
     api(project(":fore-core"))
     api(project(":fore-adapters"))
-    api(project(":fore-retrofit"))
+    api(project(":fore-network"))
     api(project(":fore-lifecycle"))
 
     api("androidx.annotation:annotation:${Shared.Versions.annotation}")

@@ -17,7 +17,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.retrofit.CallProcessor
+import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
 import co.early.fore.kt.retrofit.Either
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
@@ -64,7 +64,7 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
     @MockK
-    lateinit var mockCallProcessor: CallProcessor<UserMessage>
+    lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<UserMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
 
@@ -81,7 +81,7 @@ class FruitViewRotationTest {
         //construct a real model with mock dependencies
         fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessor,
+            mockRetrofit2CallProcessor,
             logger,
             WorkMode.ASYNCHRONOUS
         )

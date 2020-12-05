@@ -5,12 +5,13 @@ import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.apollo.CallProcessor
-import foo.bar.example.foreapollokt.api.fruits.Launch
-import foo.bar.example.foreapollokt.api.fruits.FruitService
+import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
@@ -28,16 +29,20 @@ import org.junit.Test
  */
 class FruitFetcherUnitTest {
 
-    private val fruitPojo = Launch("strawberry", false, 71)
+    private val launch = Launch("123", "site", true, 50)
 
     @MockK
     private lateinit var mockSuccess: Success
+
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+
     @MockK
-    private lateinit var mockCallProcessor: CallProcessor<ErrorMessage>
+    private lateinit var mockCallProcessor: ApolloCallProcessor<ErrorMessage>
+
     @MockK
-    private lateinit var mockFruitService: FruitService
+    private lateinit var mockLaunchService: LaunchService
+
     @MockK
     private lateinit var mockObserver: Observer
 
@@ -51,19 +56,19 @@ class FruitFetcherUnitTest {
     fun initialConditions() {
 
         //arrange
-        val fruitFetcher = FruitFetcher(
-            mockFruitService,
-            mockCallProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+        val launchFetcher = LaunchFetcher(
+                mockLaunchService,
+                mockCallProcessor,
+                logger,
+                WorkMode.SYNCHRONOUS
         )
 
         //act
 
         //assert
-        Assert.assertEquals(false, fruitFetcher.isBusy)
-        Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())
-        Assert.assertEquals(false, fruitFetcher.currentFruit.isCitrus)
+        Assert.assertEquals(false, launchFetcher.isBusy)
+        Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchFetcher.currentLaunch.isCitrus)
     }
 
 
@@ -71,18 +76,20 @@ class FruitFetcherUnitTest {
     @Throws(Exception::class)
     fun fetchFruit_MockSuccess() {
 
+        val mockLaunchesData = createMockLaunchesResponse("123", "site")
+
         //arrange
-        StateBuilder(mockCallProcessor).getFruitSuccess(fruitPojo)
-        val fruitFetcher = FruitFetcher(
-            mockFruitService,
-            mockCallProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+        val callProcessor = StateBuilder2().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
+        val launchFetcher = LaunchFetcher(
+                mockLaunchService,
+                callProcessor,
+                logger,
+                WorkMode.SYNCHRONOUS
         )
 
 
         //act
-        fruitFetcher.fetchFruitsAsync(mockSuccess, mockFailureWithPayload)
+        launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -92,10 +99,10 @@ class FruitFetcherUnitTest {
         verify(exactly = 0) {
             mockFailureWithPayload(any())
         }
-        Assert.assertEquals(false, fruitFetcher.isBusy)
-        Assert.assertEquals(fruitPojo.name, fruitFetcher.currentFruit.name)
-        Assert.assertEquals(fruitPojo.isCitrus, fruitFetcher.currentFruit.isCitrus)
-        Assert.assertEquals(fruitPojo.tastyPercentScore.toLong(), fruitFetcher.currentFruit.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchFetcher.isBusy)
+        Assert.assertEquals(launch.site, launchFetcher.currentLaunch.site)
+        Assert.assertEquals(launch.isCitrus, launchFetcher.currentLaunch.isCitrus)
+        Assert.assertEquals(launch.tastyPercentScore.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
     }
 
 
@@ -104,17 +111,18 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockFailure() {
 
         //arrange
-        StateBuilder(mockCallProcessor).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
-        val fruitFetcher = FruitFetcher(
-            mockFruitService,
-            mockCallProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+
+        val callProcessor = StateBuilder2().getLaunchFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT).mockApolloCallProcessor
+        val launchFetcher = LaunchFetcher(
+                mockLaunchService,
+                callProcessor,
+                logger,
+                WorkMode.SYNCHRONOUS
         )
 
 
         //act
-        fruitFetcher.fetchFruitsButFailAdvanced(mockSuccess, mockFailureWithPayload)
+        launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -124,9 +132,9 @@ class FruitFetcherUnitTest {
         verify(exactly = 1) {
             mockFailureWithPayload(eq(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT))
         }
-        Assert.assertEquals(false, fruitFetcher.isBusy)
-        Assert.assertEquals(false, fruitFetcher.currentFruit.isCitrus)
-        Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchFetcher.isBusy)
+        Assert.assertEquals(false, launchFetcher.currentLaunch.isCitrus)
+        Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
     }
 
 
@@ -150,19 +158,21 @@ class FruitFetcherUnitTest {
     @Throws(Exception::class)
     fun observersNotifiedAtLeastOnce() {
 
+        val mockLaunchesData = createMockLaunchesResponse("123", "site")
+
         //arrange
-        StateBuilder(mockCallProcessor).getFruitSuccess(fruitPojo)
-        val fruitFetcher = FruitFetcher(
-            mockFruitService,
-            mockCallProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+        val callProcessor = StateBuilder2().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
+        val launchFetcher = LaunchFetcher(
+                mockLaunchService,
+                callProcessor,
+                logger,
+                WorkMode.SYNCHRONOUS
         )
-        fruitFetcher.addObserver(mockObserver)
+        launchFetcher.addObserver(mockObserver)
 
 
         //act
-        fruitFetcher.fetchFruitsAsync(mockSuccess, mockFailureWithPayload)
+        launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -173,5 +183,27 @@ class FruitFetcherUnitTest {
 
     companion object {
         private val logger = SystemLogger()
+
+        private fun createMockLaunchesResponse (id: String, site: String) : LaunchListQuery.Data{
+
+            val mockLaunchesData =  mockk<LaunchListQuery.Data>()
+            val mockLaunches =  mockk<LaunchListQuery.Launches>()
+            val mockLaunch =  mockk<LaunchListQuery.Launch>()
+
+            every {
+                mockLaunchesData.launches
+            } returns mockLaunches
+            every {
+                mockLaunches.launches
+            } returns listOf(mockLaunch)
+            every {
+                mockLaunch.id
+            } returns id
+            every {
+                mockLaunch.site
+            } returns site
+
+            return mockLaunchesData
+        }
     }
 }

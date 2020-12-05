@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofit.api;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import co.early.fore.retrofit.testhelpers.StubbedServiceDefinition;
+import co.early.fore.net.testhelpers.StubbedServiceDefinition;
 import foo.bar.example.foreretrofit.message.UserMessage;
 
 /**

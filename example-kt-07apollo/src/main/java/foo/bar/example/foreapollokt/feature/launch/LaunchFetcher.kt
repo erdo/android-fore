@@ -7,9 +7,9 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.apollo.CallProcessor
-import co.early.fore.kt.apollo.Either.Left
-import co.early.fore.kt.apollo.Either.Right
+import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.Either.Left
+import co.early.fore.kt.Either.Right
 import com.apollographql.apollo.ApolloQueryCall
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage
@@ -26,9 +26,9 @@ data class LaunchService (
  */
 
 
-class LaunchFetcher(
+class LaunchFetcher (
         private val launchService: LaunchService,
-        private val callProcessor: CallProcessor<ErrorMessage>,
+        private val callProcessor: ApolloCallProcessor<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {

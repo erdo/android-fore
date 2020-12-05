@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.logging.Logger;
-import co.early.fore.retrofit.BuildConfig;
+import foo.bar.example.foreretrofit.BuildConfig;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
