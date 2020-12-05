@@ -41,8 +41,8 @@ import retrofit2.Retrofit
 class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
-    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
-    private val callProcessor = co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
+    private val interceptorLogging = InterceptorLogging(logger)
+    private val callProcessor = Retrofit2CallProcessor(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
 
     @MockK
     private lateinit var mockSuccess: Success

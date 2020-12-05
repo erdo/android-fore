@@ -22,6 +22,10 @@ import kotlin.coroutines.suspendCoroutine
  * case a separate ApolloCallProcessor instance (and ErrorHandler) will be required for each micro
  * service.
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
+ * @param workMode (optional: ForeDelegateHolder will choose a sensible default) Testing: Apollo
+ * library is NOT setup to be able to run calls in a synchronous manner (unlike Retrofit), for this
+ * reason when testing the fore ApolloCallProcessor we still need to use count down latches even with
+ * workMode = SYNCHRONOUS
  * @param allowPartialSuccesses (defaults to false) The GraphQL spec allows for success responses
  * with qualified errors, like this: https://spec.graphql.org/draft/#example-90475 if true, you will
  * receive these responses as successes, together with the list of partial errors that were attached
@@ -30,18 +34,13 @@ import kotlin.coroutines.suspendCoroutine
  * make keeping your domain layer and api layers separate a lot harder, and apart from in some highly
  * optimised situations I'd recommend you keep it set to false.
  *
- * Testing: Apollo library is NOT setup to be able to run calls in a synchronous manner (unlike
- * Retrofit), for this reason the fore ApolloCallProcessor does not accept a WorkMode parameter to
- * switch the operation to Synchronous mode for unit tests. The correct way to test Apollo calls
- * is to make use of the ApolloClient.idleCallback() function (see the sample app in the fore
- * repo for example test strategies)
- *
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
 class ApolloCallProcessor<F>(
         private val globalErrorHandler: ErrorHandler<F>,
         private val logger: Logger?,
+        private val workMode: WorkMode? = null,
         private val allowPartialSuccesses: Boolean = false
 ) {
 
@@ -70,7 +69,7 @@ class ApolloCallProcessor<F>(
      */
     suspend fun <S> processCallAsync(call: () -> ApolloCall<S>): Deferred<Either<F, SuccessResult<S>>> {
 
-        return asyncMain(WorkMode.ASYNCHRONOUS) {
+        return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
             try {
                 suspendCoroutine { continuation ->
                     call().enqueue(object : ApolloCall.Callback<S>() {

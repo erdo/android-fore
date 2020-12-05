@@ -7,6 +7,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.net.retrofit2.MessageProvider
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 
@@ -28,11 +29,12 @@ import retrofit2.Response
  * the APIs all have different error behaviours (say when the service APIs have been developed
  * at different times, or by different companies, or even teams). In this case a separate CallProcessor
  * instance (and ErrorHandler) will be required for each micro service.
- * @param workMode SYNCHRONOUS means everything is run sequentially in a blocking manner
+ * @param workMode (optional: ForeDelegateHolder will choose a sensible default)  SYNCHRONOUS means
+ * everything is run sequentially in a blocking manner
  * and on whatever thread the caller is on (suitable for running unit tests for example).
  * ASYNCHRONOUS gives you the co-routine behaviour you would expect - for this class that
  * means network requests are run on Dispatchers.IO
- * @param logger
+ * @param logger (optional: ForeDelegateHolder will choose a sensible default)
  *
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
@@ -56,7 +58,7 @@ class Retrofit2CallProcessor<F>(
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S, CE : co.early.fore.net.retrofit2.MessageProvider<F>> processCallAwait(
+    suspend fun <S, CE : MessageProvider<F>> processCallAwait(
             customErrorClazz: Class<CE>,
             call: suspend () -> Response<S>
     ): Either<F, S> {
@@ -69,7 +71,7 @@ class Retrofit2CallProcessor<F>(
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
     suspend fun <S> processCallAsync(call: suspend () -> Response<S>): Deferred<Either<F, S>> {
-        return doCallAsync<S, co.early.fore.net.retrofit2.MessageProvider<F>>(null, call)
+        return doCallAsync<S, MessageProvider<F>>(null, call)
     }
 
     /**
@@ -77,24 +79,24 @@ class Retrofit2CallProcessor<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S, CE : co.early.fore.net.retrofit2.MessageProvider<F>> processCallAsync(
+    suspend fun <S, CE : MessageProvider<F>> processCallAsync(
             customErrorClazz: Class<CE>,
             call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
         return doCallAsync(customErrorClazz, call)
     }
 
-    private suspend fun <S, CE : co.early.fore.net.retrofit2.MessageProvider<F>> doCallAsync(
+    private suspend fun <S, CE : MessageProvider<F>> doCallAsync(
             customErrorClazz: Class<CE>?,
             call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
 
         ForeDelegateHolder.getLogger(logger).d("doCallAsync() t:" + Thread.currentThread())
 
-        return asyncMain(workMode) {
+        return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
             try {
 
-                val result: Response<S> = awaitIO(workMode) {
+                val result: Response<S> = awaitIO(ForeDelegateHolder.getWorkMode(workMode)) {
 
                     ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
 
@@ -110,7 +112,7 @@ class Retrofit2CallProcessor<F>(
         }
     }
 
-    private fun <CE : co.early.fore.net.retrofit2.MessageProvider<F>, S> processSuccessResponse(
+    private fun <CE : MessageProvider<F>, S> processSuccessResponse(
             response: Response<S>, customErrorClass: Class<CE>?
     ): Either<F, S> {
         val resp: S? = response.body()
@@ -122,7 +124,7 @@ class Retrofit2CallProcessor<F>(
         }
     }
 
-    private fun <CE : co.early.fore.net.retrofit2.MessageProvider<F>, S> processFailResponse(
+    private fun <CE : MessageProvider<F>, S> processFailResponse(
             t: Throwable?, errorResponse: Response<*>?, customErrorClass: Class<CE>?
     ): Either<F, S> {
 

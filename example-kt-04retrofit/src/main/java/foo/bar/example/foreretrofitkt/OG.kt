@@ -35,10 +35,10 @@ object OG {
         // networking classes common to all models
         val retrofit = CustomRetrofitBuilder.create(
             CustomGlobalRequestInterceptor(logger),
-                co.early.fore.kt.net.InterceptorLogging(logger)
+                InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor(
+        val callProcessor = Retrofit2CallProcessor(
                 CustomGlobalErrorHandler(logger),
                 workMode,
                 logger

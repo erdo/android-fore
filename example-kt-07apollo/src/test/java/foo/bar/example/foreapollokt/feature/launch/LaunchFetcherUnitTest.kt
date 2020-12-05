@@ -27,7 +27,7 @@ import org.junit.Test
  * 3) Observers and State: we check that the model updates its observers correctly and presents its current state accurately
  *
  */
-class FruitFetcherUnitTest {
+class LaunchFetcherUnitTest {
 
     private val launch = Launch("123", "site", true, 50)
 
@@ -79,7 +79,7 @@ class FruitFetcherUnitTest {
         val mockLaunchesData = createMockLaunchesResponse("123", "site")
 
         //arrange
-        val callProcessor = StateBuilder2().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
         val launchFetcher = LaunchFetcher(
                 mockLaunchService,
                 callProcessor,
@@ -112,7 +112,7 @@ class FruitFetcherUnitTest {
 
         //arrange
 
-        val callProcessor = StateBuilder2().getLaunchFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT).mockApolloCallProcessor
         val launchFetcher = LaunchFetcher(
                 mockLaunchService,
                 callProcessor,
@@ -161,7 +161,7 @@ class FruitFetcherUnitTest {
         val mockLaunchesData = createMockLaunchesResponse("123", "site")
 
         //arrange
-        val callProcessor = StateBuilder2().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
         val launchFetcher = LaunchFetcher(
                 mockLaunchService,
                 callProcessor,
