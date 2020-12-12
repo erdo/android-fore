@@ -22,7 +22,9 @@ enum class ErrorMessage constructor(private val messageResId: Int) : Parcelable 
     ERROR_SESSION_TIMED_OUT(R.string.msg_error_session_timeout),
     ERROR_BUSY(R.string.msg_error_busy),
     ERROR_CANCELLED(R.string.msg_error_cancelled),
+    ERROR_NO_LAUNCH(R.string.msg_error_no_launch),
 
+    ERROR_BLANK_EMAIL(R.string.msg_error_blank_email),
     LAUNCH_SERVICE_SAYS_NO_ERROR(R.string.msg_error_launch_server_says_no),
     INTERNAL_SERVER_ERROR(R.string.msg_error_launch_internal_server);
 

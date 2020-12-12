@@ -3,15 +3,18 @@ package foo.bar.example.foreapollokt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.kt.net.apollo.ApolloCallProcessor
 import co.early.fore.kt.net.InterceptorLogging
+import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import com.apollographql.apollo.api.Input
 import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollokt.api.CustomGlobalRequestInterceptor
-import foo.bar.example.foreapollokt.feature.launch.LaunchFetcher
+import foo.bar.example.foreapollokt.feature.authentication.AuthService
+import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.feature.launch.LaunchService
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
-import java.util.HashMap
+import foo.bar.example.foreapollokt.feature.launch.LaunchesModel
+import foo.bar.example.foreapollokt.graphql.*
+import java.util.*
 
 
 /**
@@ -34,12 +37,11 @@ object OG {
         val logger = AndroidLogger("fore_")
 
         // networking classes common to all models
+        val globalRequestInterceptor = CustomGlobalRequestInterceptor(logger)
         val apolloClient = CustomApolloBuilder.create(
-                CustomGlobalRequestInterceptor(logger),
+                globalRequestInterceptor,
                 InterceptorLogging(logger)
         )//logging interceptor should be the last one
-
-        //apolloClient.idleCallback()
 
         val callProcessor = ApolloCallProcessor(
                 CustomGlobalErrorHandler(logger),
@@ -47,19 +49,32 @@ object OG {
         )
 
         // models
-        val launchFetcher = LaunchFetcher(
-                launchService = LaunchService(
-                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailGeneric = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailSpecific = { apolloClient.query(LaunchListQuery()) }
+        val authenticator = Authenticator(
+                authService = AuthService(
+                        login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) }
                 ),
                 callProcessor,
                 logger,
                 workMode
         )
+        globalRequestInterceptor.setAuthenticator(authenticator)
+        val launchesModel = LaunchesModel(
+                launchService = LaunchService(
+                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
+                        login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) },
+                        refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
+                        bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
+                        cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
+                ),
+                callProcessor,
+                authenticator,
+                logger,
+                workMode
+        )
 
         // add models to the dependencies map if you will need them later
-        dependencies[LaunchFetcher::class.java] = launchFetcher
+        dependencies[Authenticator::class.java] = authenticator
+        dependencies[LaunchesModel::class.java] = launchesModel
     }
 
 

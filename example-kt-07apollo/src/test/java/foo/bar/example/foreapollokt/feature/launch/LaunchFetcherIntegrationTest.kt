@@ -74,8 +74,8 @@ class LaunchFetcherIntegrationTest {
         val launchFetcher = LaunchFetcher(
                 launchService = LaunchService(
                         getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailGeneric = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailSpecific = { apolloClient.query(LaunchListQuery()) }
+                        login = { apolloClient.query(LaunchListQuery()) },
+                        bookLaunch = { apolloClient.query(LaunchListQuery()) }
                 ),
                 callProcessor,
                 logger,
@@ -89,7 +89,7 @@ class LaunchFetcherIntegrationTest {
         // it's the best we can do for junit testing Apollo though
         runInBatch(2, launchFetcher) {
             //act
-            launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
+            launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
 
 
@@ -101,8 +101,8 @@ class LaunchFetcherIntegrationTest {
             mockFailureWithPayload(any())
         }
         Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(stubbedSuccess.expectedResult.isCitrus, launchFetcher.currentLaunch.isCitrus)
-        Assert.assertEquals(stubbedSuccess.expectedResult.tastyPercentScore.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(stubbedSuccess.expectedResult.isBooked, launchFetcher.currentLaunch.isCitrus)
+        Assert.assertEquals(stubbedSuccess.expectedResult.patchImgUrl.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
     }
 
     /**
@@ -120,8 +120,8 @@ class LaunchFetcherIntegrationTest {
         val launchFetcher = LaunchFetcher(
                 launchService = LaunchService(
                         getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailGeneric = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailSpecific = { apolloClient.query(LaunchListQuery()) }
+                        login = { apolloClient.query(LaunchListQuery()) },
+                        bookLaunch = { apolloClient.query(LaunchListQuery()) }
                 ),
                 callProcessor,
                 logger,
@@ -161,8 +161,8 @@ class LaunchFetcherIntegrationTest {
         val launchFetcher = LaunchFetcher(
                 launchService = LaunchService(
                         getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailGeneric = { apolloClient.query(LaunchListQuery()) },
-                        getLaunchListFailSpecific = { apolloClient.query(LaunchListQuery()) }
+                        login = { apolloClient.query(LaunchListQuery()) },
+                        bookLaunch = { apolloClient.query(LaunchListQuery()) }
                 ),
                 callProcessor,
                 logger,
@@ -213,8 +213,8 @@ class LaunchFetcherIntegrationTest {
             val launchFetcher = LaunchFetcher(
                     launchService = LaunchService(
                             getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                            getLaunchListFailGeneric = { apolloClient.query(LaunchListQuery()) },
-                            getLaunchListFailSpecific = { apolloClient.query(LaunchListQuery()) }
+                            login = { apolloClient.query(LaunchListQuery()) },
+                            bookLaunch = { apolloClient.query(LaunchListQuery()) }
                     ),
                     callProcessor,
                     logger,
@@ -224,7 +224,7 @@ class LaunchFetcherIntegrationTest {
 
             //act
             runInBatch(2, launchFetcher) {
-                launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
+                launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
             }
 
             //assert

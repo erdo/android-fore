@@ -10,27 +10,28 @@ import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.net.apollo.ApolloCallProcessor
 import co.early.fore.kt.Either.Left
 import co.early.fore.kt.Either.Right
+import com.apollographql.apollo.ApolloMutationCall
 import com.apollographql.apollo.ApolloQueryCall
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
+import foo.bar.example.foreapollokt.feature.authentication.Authenticator
+import foo.bar.example.foreapollokt.graphql.*
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import java.util.Random
 
 data class LaunchService (
     val getLaunchList: () -> ApolloQueryCall<LaunchListQuery.Data>,
-    val getLaunchListFailGeneric: () -> ApolloQueryCall<LaunchListQuery.Data>,
-    val getLaunchListFailSpecific: () -> ApolloQueryCall<LaunchListQuery.Data>,
+    val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>,
+    val refreshLaunchDetail: (id: String) -> ApolloQueryCall<LaunchDetailsQuery.Data>,
+    val bookTrip: (id: String) -> ApolloMutationCall<BookTripMutation.Data>,
+    val cancelTrip: (id: String) -> ApolloMutationCall<CancelTripMutation.Data>
 )
 
-/**
- * gets a list of launches from the network, selects one at random to be currentLaunch
- */
 
-
-class LaunchFetcher (
-        private val launchService: LaunchService,
-        private val callProcessor: ApolloCallProcessor<ErrorMessage>,
-        private val logger: Logger,
-        private val workMode: WorkMode
+class LaunchesModel (
+    private val launchService: LaunchService,
+    private val callProcessor: ApolloCallProcessor<ErrorMessage>,
+    private val authenticator: Authenticator,
+    private val logger: Logger,
+    private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {
 
     var isBusy: Boolean = false
@@ -38,13 +39,15 @@ class LaunchFetcher (
     var currentLaunch = NO_LAUNCH
         private set
 
-
-    fun fetchLaunchesAsync(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+    /**
+     * fetch the list of launches using a GraphQl Query, select one at random for the UI
+     */
+    fun fetchLaunches(
+        success: Success,
+        failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
-        logger.i("fetchLaunchesAsync()")
+        logger.i("fetchLaunches()")
 
         if (isBusy) {
             failureWithPayload(ErrorMessage.ERROR_BUSY)
@@ -61,7 +64,7 @@ class LaunchFetcher (
             }
 
             when (val result = deferredResult.await()) {
-                is Right -> handleSuccess(success, result.b.data.launches)
+                is Right -> handleSuccess(success, selectRandomLaunch(result.b.data.launches))
                 is Left -> handleFailure(failureWithPayload, result.a)
             }
         }
@@ -70,89 +73,143 @@ class LaunchFetcher (
 
 
     /**
-     * identical to fetchLaunchesAsync() but for demo purposes the URL we point to will give us an error,
-     * we also don't specify a custom error class here
+     * log in, fetch random launch, toggle booking status
+     * chained call demo
      */
-    fun fetchLaunchesButFail(
+    fun chainedCall(
             success: Success,
             failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
-        logger.i("fetchLaunchesButFail()")
+        logger.i("chainedCall()")
 
         if (isBusy) {
             failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
-
-        isBusy = true
-        notifyObservers()
-
-
-        launchMain(workMode) {
-
-           // val result: Either<UserMessage, SuccessResult<LaunchListQuery.Data>> = callProcessor.processCallAwait {
-            val result = callProcessor.processCallAwait {
-                launchService.getLaunchListFailGeneric()
-            }
-
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b.data.launches)
-            }
-        }
-    }
-
-
-    /**
-     * identical to fetchLaunchesAsync() but for demo purposes the URL we point to will give us a
-     * more specific error using a field called "code" in the extras map of the error object
-     */
-    fun fetchLaunchesButFailAdvanced(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
-    ) {
-
-        logger.i("fetchLaunchesButFailAdvanced()")
-
-        if (isBusy) {
-            failureWithPayload(ErrorMessage.ERROR_BUSY)
-            return
-        }
-
-        isBusy = true
-        notifyObservers()
 
         launchMain(workMode) {
 
             val result = callProcessor.processCallAwait {
-                launchService.getLaunchListFailSpecific()
+                launchService.login("example@test.com")
             }
 
             when (result) {
                 is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b.data.launches)
+                is Right -> {
+                    // don't log things like this out in the real world!
+                    logger.i("new session token:" + result.b.data.login)
+                    authenticator.setSessionDirectly(result.b.data.login)
+                    success()
+                    complete()
+                }
             }
         }
     }
 
 
-    /**
-     * Demonstration of how to use carryOn to chain multiple connection requests together in a
-     * simple way - don't overuse it! if it's starting to get hard to test, a little restructuring
-     * might be in order
-     */
-    fun fetchManyThings(
+    fun bookTripOnCurrentLaunch(
             success: Success,
             failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
-        logger.i("fetchManyThings()")
+        logger.i("bookCurrentTrip()")
 
         if (isBusy) {
             failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
+
+        if (currentLaunch == NO_LAUNCH) {
+            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
+            return
+        }
+
+        launchMain(workMode) {
+
+            val result = callProcessor.processCallAwait {
+                launchService.bookTrip(currentLaunch.id)
+            }
+
+            when (result) {
+                is Left -> handleFailure(failureWithPayload, result.a)
+                is Right -> {
+                    logger.i("just booked:" + result.b.data.bookTrips.launches?.get(0)?.id)
+                    success()
+                    complete()
+                }
+            }
+        }
+    }
+
+
+    fun cancelTripOnCurrentLaunch(
+            success: Success,
+            failureWithPayload: FailureWithPayload<ErrorMessage>
+    ) {
+
+        logger.i("cancelCurrentTrip()")
+
+        if (isBusy) {
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
+            return
+        }
+
+        if (currentLaunch == NO_LAUNCH) {
+            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
+            return
+        }
+
+        launchMain(workMode) {
+
+            val result = callProcessor.processCallAwait {
+                launchService.cancelTrip(currentLaunch.id)
+            }
+
+            when (result) {
+                is Left -> handleFailure(failureWithPayload, result.a)
+                is Right -> {
+                    logger.i("just cancelled:" + result.b.data.cancelTrip.launches?.get(0)?.id)
+                    success()
+                    complete()
+                }
+            }
+        }
+    }
+
+
+    fun refreshLaunchDetails(
+            success: Success,
+            failureWithPayload: FailureWithPayload<ErrorMessage>
+    ) {
+
+        logger.i("refreshLaunchDetails()")
+
+        if (isBusy) {
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
+            return
+        }
+
+        if (currentLaunch == NO_LAUNCH) {
+            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
+            return
+        }
+
+        launchMain(workMode) {
+
+            val result = callProcessor.processCallAwait {
+                launchService.refreshLaunchDetail(currentLaunch.id)
+            }
+
+            when (result) {
+                is Left -> handleFailure(failureWithPayload, result.a)
+                is Right -> handleSuccess(success, result.b.data.launch?.toApp() ?: NO_LAUNCH)
+            }
+        }
+    }
+
+
+
 
 //        isBusy = true
 //        notifyObservers()
@@ -194,17 +251,16 @@ class LaunchFetcher (
 //                is Right -> handleSuccess(success, result.b)
 //            }
 //        }
-
-    }
+// }
 
     private fun handleSuccess(
             success: Success,
-            successResponse: LaunchListQuery.Launches
+            launch: Launch
     ) {
 
         logger.i("handleSuccess() t:" + Thread.currentThread().id)
 
-        currentLaunch = selectRandomLaunch(successResponse)
+        currentLaunch = launch
         success()
         complete()
     }

@@ -77,6 +77,7 @@ dependencies {
 
     implementation("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
 
+    implementation("io.coil-kt:coil:${Shared.Versions.coil}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
 

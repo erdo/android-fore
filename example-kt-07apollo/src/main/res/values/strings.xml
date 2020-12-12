@@ -14,6 +14,8 @@
     <string name="msg_error_cancelled">Cancelled</string>
 
     <!-- launch related custom messages -->
+    <string name="msg_error_blank_email">Email is blank</string>
+    <string name="msg_error_no_launch">No launch to book</string>
     <string name="msg_error_launch_server_says_no">Sorry, please contact us</string>
     <string name="msg_error_launch_internal_server">Server error, please try again</string>
 

@@ -8,18 +8,21 @@ import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import coil.load
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.R
-import foo.bar.example.foreapollokt.feature.launch.LaunchFetcher
+import foo.bar.example.foreapollokt.feature.authentication.Authenticator
+import foo.bar.example.foreapollokt.feature.launch.LaunchesModel
 import foo.bar.example.foreapollokt.message.ErrorMessage
-import kotlinx.android.synthetic.main.activity_fruit.*
+import kotlinx.android.synthetic.main.activity_launches.*
 
 
-class LaunchActivity : FragmentActivity(R.layout.activity_fruit) {
+class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
 
 
     //models that we need to sync with
-    private val launchFetcher: LaunchFetcher = OG[LaunchFetcher::class.java]
+    private val launchesModel: LaunchesModel = OG[LaunchesModel::class.java]
+    private val authenticator: Authenticator = OG[Authenticator::class.java]
 
     //single observer reference
     private var observer = Observer { syncView() }
@@ -49,45 +52,38 @@ class LaunchActivity : FragmentActivity(R.layout.activity_fruit) {
 
 
     private fun setupButtonClickListeners() {
-        fruit_fetchsuccess_btn.setOnClickListener { launchFetcher.fetchLaunchesAsync(success, failureWithPayload) }
-        fruit_fetchchainsuccess_btn.setOnClickListener { launchFetcher.fetchManyThings(success, failureWithPayload) }
-        fruit_fetchfailbasic_btn.setOnClickListener { launchFetcher.fetchLaunchesButFail(success, failureWithPayload) }
-        fruit_fetchfailadvanced_btn.setOnClickListener { launchFetcher.fetchLaunchesButFailAdvanced(success, failureWithPayload) }
+        fruit_fetchsuccess_btn.setOnClickListener { launchesModel.fetchLaunches(success, failureWithPayload) }
+        launch_login_btn.setOnClickListener { authenticator.login("example@test.com", success, failureWithPayload) }
+        launch_fetchchainsuccess_btn.setOnClickListener { launchesModel.refreshLaunchDetails(success, failureWithPayload) }
     }
 
 
     //data binding stuff below
 
     fun syncView() {
-        fruit_fetchsuccess_btn.isEnabled = !launchFetcher.isBusy
-        fruit_fetchchainsuccess_btn.isEnabled = !launchFetcher.isBusy
-        fruit_fetchfailbasic_btn.isEnabled = !launchFetcher.isBusy
-        fruit_fetchfailadvanced_btn.isEnabled = !launchFetcher.isBusy
-        fruit_name_textview.text = launchFetcher.currentLaunch.site
-        fruit_citrus_img.setImageResource(
-            if (launchFetcher.currentLaunch.isCitrus)
-                R.drawable.lemon_positive else R.drawable.lemon_negative
-        )
-        fruit_tastyrating_tastybar.setTastyPercent(launchFetcher.currentLaunch.tastyPercentScore.toFloat())
-        fruit_tastyrating_textview.text = String.format(
-            this.getString(R.string.fruit_percent), launchFetcher.currentLaunch.tastyPercentScore.toString()
-        )
-        fruit_busy_progbar.visibility = if (launchFetcher.isBusy)
+        fruit_fetchsuccess_btn.isEnabled = !launchesModel.isBusy
+        launch_fetchchainsuccess_btn.isEnabled = !launchesModel.isBusy
+        fruit_name_textview.text = launchesModel.currentLaunch.site
+        fruit_citrus_img.load(launchesModel.currentLaunch.patchImgUrl) {
+            crossfade(true)
+            placeholder(R.drawable.lemon_negative)
+        }
+        fruit_busy_progbar.visibility = if (launchesModel.isBusy)
             View.VISIBLE else View.INVISIBLE
-        fruit_detailcontainer_linearlayout.visibility = if (launchFetcher.isBusy)
+        fruit_detailcontainer_linearlayout.visibility = if (launchesModel.isBusy)
             View.GONE else View.VISIBLE
     }
 
 
     override fun onStart() {
         super.onStart()
-        launchFetcher.addObserver(observer)
+        launchesModel.addObserver(observer)
         syncView() //  <- don't forget this
     }
 
 
     override fun onStop() {
         super.onStop()
-        launchFetcher.removeObserver(observer)
+        launchesModel.removeObserver(observer)
     }
 }

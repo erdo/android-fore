@@ -89,7 +89,7 @@ class LaunchFetcherUnitTest {
 
 
         //act
-        launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
+        launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -101,8 +101,8 @@ class LaunchFetcherUnitTest {
         }
         Assert.assertEquals(false, launchFetcher.isBusy)
         Assert.assertEquals(launch.site, launchFetcher.currentLaunch.site)
-        Assert.assertEquals(launch.isCitrus, launchFetcher.currentLaunch.isCitrus)
-        Assert.assertEquals(launch.tastyPercentScore.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(launch.isBooked, launchFetcher.currentLaunch.isCitrus)
+        Assert.assertEquals(launch.patchImgUrl.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
     }
 
 
@@ -172,7 +172,7 @@ class LaunchFetcherUnitTest {
 
 
         //act
-        launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
+        launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
