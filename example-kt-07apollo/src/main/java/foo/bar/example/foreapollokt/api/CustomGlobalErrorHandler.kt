@@ -25,7 +25,7 @@ class CustomGlobalErrorHandler(private val logger: Logger?) : ErrorHandler<Error
         return message
     }
 
-    private fun parseGeneralErrors(t: Throwable?) : ErrorMessage {
+    private fun parseGeneralErrors(t: Throwable?): ErrorMessage {
         return t?.let {
             when (it) {
                 is ApolloHttpException -> {
@@ -50,13 +50,15 @@ class CustomGlobalErrorHandler(private val logger: Logger?) : ErrorHandler<Error
         } ?: ERROR_MISC
     }
 
-    private fun parseSpecificErrors(errorResponse: Response<*>?) :  ErrorMessage? {
+    private fun parseSpecificErrors(errorResponse: Response<*>?): ErrorMessage? {
         return errorResponse?.let {
             // amazingly GraphQL never had an error code in its standard error
             // block so it usually gets put under the extensions block like this:
             // https://spec.graphql.org/draft/#example-fce18
-            it.errors?.first()?.customAttributes?.get("code")?.let { code ->
-                ErrorMessage.createFromName(code as? String)
+            it.errors?.first()?.customAttributes?.get("extensions")?.let { extensions ->
+                (extensions as? Map<*, *>)?.get("code")?.let { code ->
+                    ErrorMessage.createFromName(code as? String)
+                }
             }
         }
     }

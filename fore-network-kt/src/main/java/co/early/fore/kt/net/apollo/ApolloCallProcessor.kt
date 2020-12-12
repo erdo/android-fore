@@ -39,7 +39,7 @@ import kotlin.coroutines.suspendCoroutine
  */
 class ApolloCallProcessor<F>(
         private val globalErrorHandler: ErrorHandler<F>,
-        private val logger: Logger?,
+        private val logger: Logger? = null,
         private val workMode: WorkMode? = null,
         private val allowPartialSuccesses: Boolean = false
 ) {
