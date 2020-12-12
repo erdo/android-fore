@@ -13,7 +13,7 @@ import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreretrofitkt.api.CustomRetrofitBuilder
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.impl.annotations.MockK
@@ -48,7 +48,7 @@ class FruitFetcherIntegrationTest {
     private lateinit var mockSuccess: Success
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
+    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
 
 
     @Before
@@ -178,6 +178,7 @@ class FruitFetcherIntegrationTest {
                 "------- Common Service Failure: HTTP:"
                         + stubbedServiceDefinition.httpCode
                         + " res:" + stubbedServiceDefinition.resourceFileName
+                        + " expect:" + stubbedServiceDefinition.expectedResult
                         + " --------"
             )
 
@@ -221,20 +222,20 @@ class FruitFetcherIntegrationTest {
         private val stubbedSuccess = StubbedServiceDefinition(
             200, //stubbed HTTP code
             "fruit/success.json", //stubbed body response
-            FruitPojo("orange", true, 43)
-        ) //expected result
+            FruitPojo("orange", true, 43) //expected result
+        )
 
         private val stubbedFailUserLocked = StubbedServiceDefinition(
             401, //stubbed HTTP code
             "common/error_user_locked.json", //stubbed body response
-            UserMessage.ERROR_FRUIT_USER_LOCKED
-        ) //expected result
+            ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
+        )
 
         private val stubbedFailureUserNotEnabled = StubbedServiceDefinition(
             401, //stubbed HTTP code
             "common/error_user_not_enabled.json", //stubbed body response
-            UserMessage.ERROR_FRUIT_USER_NOT_ENABLED
-        ) //expected result
+            ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
+        )
     }
 
 }

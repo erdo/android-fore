@@ -1,0 +1,16 @@
+{
+  "data":{
+    "launches":{
+      "__typename":"LaunchConnection",
+      "cursor":"1581951955",
+      "hasMore":true,
+      "launches":[
+        {
+          "__typename":"Launch",
+          "id":"109",
+          "site":"Site 40"
+        }
+      ]
+    }
+  }
+}

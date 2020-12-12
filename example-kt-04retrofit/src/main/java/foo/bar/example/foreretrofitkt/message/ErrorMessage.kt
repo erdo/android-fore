@@ -10,7 +10,7 @@ import foo.bar.example.foreretrofitkt.R
  * If you want to display it to the user you can put it inside a dialog (it implements
  * parcelable). Call getString() for the human readable text.
  */
-enum class UserMessage constructor(private val messageResId: Int) : Parcelable {
+enum class ErrorMessage constructor(private val messageResId: Int) : Parcelable {
 
     ERROR_MISC(R.string.msg_error_misc),
     ERROR_NETWORK(R.string.msg_error_network),
@@ -44,12 +44,12 @@ enum class UserMessage constructor(private val messageResId: Int) : Parcelable {
         dest.writeInt(ordinal)
     }
 
-    companion object CREATOR : Parcelable.Creator<UserMessage> {
-        override fun createFromParcel(parcel: Parcel): UserMessage {
+    companion object CREATOR : Parcelable.Creator<ErrorMessage> {
+        override fun createFromParcel(parcel: Parcel): ErrorMessage {
             return values()[parcel.readInt()]
         }
 
-        override fun newArray(size: Int): Array<UserMessage?> {
+        override fun newArray(size: Int): Array<ErrorMessage?> {
             return arrayOfNulls(size)
         }
     }

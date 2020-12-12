@@ -1,7 +1,7 @@
 package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.observer.Observer
+import co.early.fore.core.testhelpers.CountDownLatchWrapper.runInBatch
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
@@ -24,7 +24,6 @@ import io.mockk.verify
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.CountDownLatch
 
 
 /**
@@ -36,7 +35,8 @@ import java.util.concurrent.CountDownLatch
  * difference.
  *
  * Apollo doesn't let us work in single thread mode for tests, so we need to use count down
- * latches unfortunately
+ * latches unfortunately (we use fore's CountDownLatchWrapper class to get rid of some of the
+ * boiler plate)
  *
  */
 class LaunchFetcherIntegrationTest {
@@ -61,13 +61,13 @@ class LaunchFetcherIntegrationTest {
 
     /**
      * Here we are making sure that the model correctly handles a successful server response
-     * containing a list of launches
+     * containing launches
      *
      * @throws Exception
      */
     @Test
     @Throws(Exception::class)
-    fun fetchFruit_Success() {
+    fun fetchLaunch_Success() {
 
         //arrange
         val apolloClient = stubbedApolloClient(stubbedSuccess)
@@ -81,17 +81,16 @@ class LaunchFetcherIntegrationTest {
                 logger,
                 WorkMode.SYNCHRONOUS
         )
-        val latchForApolloCalls = CountDownLatch(2)
+
+
         // we're expecting two observer notifications during this process so we'll use that
         // to count down the latch, that makes our test code brittle unfortunately:
         // https://erdo.github.io/android-fore/05-extras.html#notification-counting
         // it's the best we can do for junit testing Apollo though
-        launchFetcher.addObserver(Observer { latchForApolloCalls.countDown() })
-
-
-        //act
-        launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
-        latchForApolloCalls.await()
+        runInBatch(2, launchFetcher) {
+            //act
+            launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
+        }
 
 
         //assert
@@ -107,17 +106,17 @@ class LaunchFetcherIntegrationTest {
     }
 
     /**
-     * Here we are making sure that the model correctly handles a server response indicating
-     * that the user account has been locked
+     * Here we are making sure that the model correctly handles a custom server response indicating
+     * "server says no"
      *
      * @throws Exception
      */
     @Test
     @Throws(Exception::class)
-    fun fetchFruit_Fail_UserLocked() {
+    fun fetchLaunch_Fail_SaysNo() {
 
         //arrange
-        val apolloClient = stubbedApolloClient(stubbedFailUserLocked)
+        val apolloClient = stubbedApolloClient(stubbedFailSaysNo)
         val launchFetcher = LaunchFetcher(
                 launchService = LaunchService(
                         getLaunchList = { apolloClient.query(LaunchListQuery()) },
@@ -128,17 +127,12 @@ class LaunchFetcherIntegrationTest {
                 logger,
                 WorkMode.SYNCHRONOUS
         )
-        val latchForApolloCalls = CountDownLatch(2)
-        // we're expecting two observer notifications during this process so we'll use that
-        // to count down the latch, that makes our test code brittle unfortunately:
-        // https://erdo.github.io/android-fore/05-extras.html#notification-counting
-        // it's the best we can do for junit testing Apollo though
-        launchFetcher.addObserver(Observer { latchForApolloCalls.countDown() })
 
 
         //act
-        launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
-        latchForApolloCalls.await()
+        runInBatch(2, launchFetcher) {
+            launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
+        }
 
 
         //assert
@@ -146,7 +140,7 @@ class LaunchFetcherIntegrationTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailUserLocked.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailSaysNo.expectedResult))
         }
         Assert.assertEquals(false, launchFetcher.isBusy)
         Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
@@ -154,16 +148,16 @@ class LaunchFetcherIntegrationTest {
 
     /**
      * Here we are making sure that the model correctly handles a server response indicating
-     * that the user account has not been enabled
+     * that the server has had an internal server error
      *
      * @throws Exception
      */
     @Test
     @Throws(Exception::class)
-    fun fetchFruit_Fail_UserNotEnabled() {
+    fun fetchLaunch_Fail_InternalServer() {
 
         //arrange
-        val apolloClient = stubbedApolloClient(stubbedFailureUserNotEnabled)
+        val apolloClient = stubbedApolloClient(stubbedFailureInternalServerError)
         val launchFetcher = LaunchFetcher(
                 launchService = LaunchService(
                         getLaunchList = { apolloClient.query(LaunchListQuery()) },
@@ -174,17 +168,12 @@ class LaunchFetcherIntegrationTest {
                 logger,
                 WorkMode.SYNCHRONOUS
         )
-        val latchForApolloCalls = CountDownLatch(2)
-        // we're expecting two observer notifications during this process so we'll use that
-        // to count down the latch, that makes our test code brittle unfortunately:
-        // https://erdo.github.io/android-fore/05-extras.html#notification-counting
-        // it's the best we can do for junit testing Apollo though
-        launchFetcher.addObserver(Observer { latchForApolloCalls.countDown() })
 
 
         //act
-        launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
-        latchForApolloCalls.await()
+        runInBatch(2, launchFetcher) {
+            launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
+        }
 
 
         //assert
@@ -192,7 +181,7 @@ class LaunchFetcherIntegrationTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailureUserNotEnabled.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailureInternalServerError.expectedResult))
         }
         Assert.assertEquals(false, launchFetcher.isBusy)
         Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
@@ -206,7 +195,7 @@ class LaunchFetcherIntegrationTest {
      */
     @Test
     @Throws(Exception::class)
-    fun fetchFruit_CommonFailures() {
+    fun fetchLaunch_CommonFailures() {
 
         for (stubbedServiceDefinition in CommonServiceFailures()) {
 
@@ -214,12 +203,13 @@ class LaunchFetcherIntegrationTest {
                 "------- Common Service Failure: HTTP:"
                         + stubbedServiceDefinition.httpCode
                         + " res:" + stubbedServiceDefinition.resourceFileName
+                        + " expect:" + stubbedServiceDefinition.expectedResult
                         + " --------"
             )
 
             //arrange
             clearMocks(mockSuccess, mockFailureWithPayload)
-            val apolloClient = stubbedApolloClient(stubbedFailureUserNotEnabled)
+            val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
             val launchFetcher = LaunchFetcher(
                     launchService = LaunchService(
                             getLaunchList = { apolloClient.query(LaunchListQuery()) },
@@ -230,16 +220,12 @@ class LaunchFetcherIntegrationTest {
                     logger,
                     WorkMode.SYNCHRONOUS
             )
-            val latchForApolloCalls = CountDownLatch(2)
-            // we're expecting two observer notifications during this process so we'll use that
-            // to count down the latch, that makes our test code brittle unfortunately:
-            // https://erdo.github.io/android-fore/05-extras.html#notification-counting
-            // it's the best we can do for junit testing Apollo though
-            launchFetcher.addObserver(Observer { latchForApolloCalls.countDown() })
+
 
             //act
-            launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
-            latchForApolloCalls.await()
+            runInBatch(2, launchFetcher) {
+                launchFetcher.fetchLaunchesAsync(mockSuccess, mockFailureWithPayload)
+            }
 
             //assert
             verify(exactly = 0) {
@@ -265,21 +251,22 @@ class LaunchFetcherIntegrationTest {
 
         private val stubbedSuccess = StubbedServiceDefinition(
                 200, //stubbed HTTP code
-                "fruit/success.json", //stubbed body response
-                Launch("123", "orange", true, 43)
-        ) //expected result
+                "launches/success.json", //stubbed body response
+                Launch("109", "Site 40") //expected result
+        )
 
-        private val stubbedFailUserLocked = StubbedServiceDefinition(
-                401, //stubbed HTTP code
-                "common/error_user_locked.json", //stubbed body response
-                ErrorMessage.ERROR_FRUIT_USER_LOCKED
-        ) //expected result
 
-        private val stubbedFailureUserNotEnabled = StubbedServiceDefinition(
-                401, //stubbed HTTP code
-                "common/error_user_not_enabled.json", //stubbed body response
-                ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED
-        ) //expected result
+        private val stubbedFailSaysNo = StubbedServiceDefinition(
+                200, //stubbed HTTP code
+                "launches/error_launch_service_says_no.json", //stubbed body response
+                ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
+        )
+
+        private val stubbedFailureInternalServerError = StubbedServiceDefinition(
+                200, //stubbed HTTP code - all 200 because GraphQL
+                "common/error_internal_server.json", //stubbed body response
+                ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
+        )
     }
 
 }

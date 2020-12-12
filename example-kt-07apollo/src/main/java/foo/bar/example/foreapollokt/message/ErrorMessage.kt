@@ -23,9 +23,8 @@ enum class ErrorMessage constructor(private val messageResId: Int) : Parcelable 
     ERROR_BUSY(R.string.msg_error_busy),
     ERROR_CANCELLED(R.string.msg_error_cancelled),
 
-    ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT(R.string.msg_error_fruit_user_login_creds_incorrect),
-    ERROR_FRUIT_USER_LOCKED(R.string.msg_error_fruit_user_locked),
-    ERROR_FRUIT_USER_NOT_ENABLED(R.string.msg_error_fruit_user_locked);
+    LAUNCH_SERVICE_SAYS_NO_ERROR(R.string.msg_error_launch_server_says_no),
+    INTERNAL_SERVER_ERROR(R.string.msg_error_launch_internal_server);
 
     val localisedMessage: String by lazy {
         getString(messageResId)
@@ -33,7 +32,7 @@ enum class ErrorMessage constructor(private val messageResId: Int) : Parcelable 
 
     constructor(parcel: Parcel) : this(parcel.readInt())
 
-    //this should only be called when a UserMessage is actually displayed to a user, so not during a JUnit test
+    //this should only be called when an ErrorMessage is actually displayed to a user, so not during a JUnit test
     private fun getString(resId: Int): String {
         return App.inst.resources.getString(resId)
     }

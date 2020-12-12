@@ -11,7 +11,7 @@ import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.ProgressBarIdler
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 import retrofit2.Response
@@ -21,7 +21,7 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
 
     internal fun withDelayedCallProcessor(): FruitViewRotationTestStateBuilder {
 
-        val deferred = CompletableDeferred<Either<UserMessage, List<FruitPojo>>>()
+        val deferred = CompletableDeferred<Either<ErrorMessage, List<FruitPojo>>>()
 
         coEvery {
             fruitViewRotationTest.mockRetrofit2CallProcessor.processCallAsync(

@@ -13,7 +13,7 @@ import co.early.fore.kt.net.retrofit2.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.api.fruits.FruitsCustomError
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import java.util.Random
 
 
@@ -22,7 +22,7 @@ import java.util.Random
  */
 class FruitFetcher(
         private val fruitService: FruitService,
-        private val retrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<UserMessage>,
+        private val retrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {
@@ -35,13 +35,13 @@ class FruitFetcher(
 
     fun fetchFruitsAsync(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsAsync() t:" + Thread.currentThread())
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -74,13 +74,13 @@ class FruitFetcher(
      */
     fun fetchFruitsButFail(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFail()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -108,13 +108,13 @@ class FruitFetcher(
      */
     fun fetchFruitsButFailAdvanced(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFailAdvanced()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -142,13 +142,13 @@ class FruitFetcher(
      */
     fun fetchManyThings(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchManyThings()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -207,8 +207,8 @@ class FruitFetcher(
     }
 
     private fun handleFailure(
-            failureWithPayload: FailureWithPayload<UserMessage>,
-            failureMessage: UserMessage
+            failureWithPayload: FailureWithPayload<ErrorMessage>,
+            failureMessage: ErrorMessage
     ) {
 
         logger.i("handleFailure() t:" + Thread.currentThread())

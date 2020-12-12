@@ -74,7 +74,7 @@ class LaunchFetcherUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun fetchFruit_MockSuccess() {
+    fun fetchLaunch_MockSuccess() {
 
         val mockLaunchesData = createMockLaunchesResponse("123", "site")
 
@@ -108,11 +108,11 @@ class LaunchFetcherUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun fetchFruit_MockFailure() {
+    fun fetchLaunch_MockFailure() {
 
         //arrange
 
-        val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockApolloCallProcessor
         val launchFetcher = LaunchFetcher(
                 mockLaunchService,
                 callProcessor,
@@ -130,7 +130,7 @@ class LaunchFetcherUnitTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT))
+            mockFailureWithPayload(eq(ErrorMessage.INTERNAL_SERVER_ERROR))
         }
         Assert.assertEquals(false, launchFetcher.isBusy)
         Assert.assertEquals(false, launchFetcher.currentLaunch.isCitrus)

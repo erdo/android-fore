@@ -28,10 +28,13 @@ class CustomGlobalErrorHandler(private val logger: Logger?) : ErrorHandler<Error
     private fun parseGeneralErrors(t: Throwable?): ErrorMessage {
         return t?.let {
             when (it) {
+                is java.lang.IllegalStateException -> ERROR_ALREADY_EXECUTED
+                is com.apollographql.apollo.exception.ApolloParseException -> ERROR_SERVER
+                is com.apollographql.apollo.exception.ApolloNetworkException -> ERROR_NETWORK
+                is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
+                is java.net.SocketTimeoutException -> ERROR_NETWORK
                 is ApolloHttpException -> {
-
                     ForeDelegateHolder.getLogger(logger).e("handleError() HTTP:" + it.code() + " " + it.message())
-
                     when (it.code()) {
                         401 -> ERROR_SESSION_TIMED_OUT
                         400, 405 -> ERROR_CLIENT
@@ -41,10 +44,6 @@ class CustomGlobalErrorHandler(private val logger: Logger?) : ErrorHandler<Error
                         else -> ERROR_MISC
                     }
                 }
-                is java.lang.IllegalStateException -> ERROR_ALREADY_EXECUTED
-                is com.apollographql.apollo.exception.ApolloParseException -> ERROR_SERVER
-                is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
-                is java.net.SocketTimeoutException -> ERROR_NETWORK
                 else -> ERROR_MISC
             }
         } ?: ERROR_MISC

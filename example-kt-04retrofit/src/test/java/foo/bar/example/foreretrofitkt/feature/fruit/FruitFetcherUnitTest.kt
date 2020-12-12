@@ -5,10 +5,9 @@ import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -33,9 +32,9 @@ class FruitFetcherUnitTest {
     @MockK
     private lateinit var mockSuccess: Success
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
+    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
     @MockK
-    private lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<UserMessage>
+    private lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
     @MockK
@@ -104,7 +103,7 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockFailure() {
 
         //arrange
-        StateBuilder(mockRetrofit2CallProcessor).getFruitFail(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
+        StateBuilder(mockRetrofit2CallProcessor).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
             mockRetrofit2CallProcessor,
@@ -122,7 +121,7 @@ class FruitFetcherUnitTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT))
+            mockFailureWithPayload(eq(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT))
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(false, fruitFetcher.currentFruit.isCitrus)

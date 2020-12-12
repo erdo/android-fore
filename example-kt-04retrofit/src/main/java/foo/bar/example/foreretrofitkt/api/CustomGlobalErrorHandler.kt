@@ -1,16 +1,14 @@
 package foo.bar.example.foreretrofitkt.api
 
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.net.retrofit2.ErrorHandler
-import co.early.fore.net.retrofit2.MessageProvider
 import com.google.gson.Gson
-import foo.bar.example.foreretrofitkt.message.UserMessage
-import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_CLIENT
-import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_MISC
-import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_NETWORK
-import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_SECURITY_UNKNOWN
-import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_SERVER
-import foo.bar.example.foreretrofitkt.message.UserMessage.ERROR_SESSION_TIMED_OUT
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_CLIENT
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_MISC
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_NETWORK
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_SECURITY_UNKNOWN
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_SERVER
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_SESSION_TIMED_OUT
 import okhttp3.Request
 import retrofit2.Response
 import java.io.InputStreamReader
@@ -20,15 +18,15 @@ import java.io.UnsupportedEncodingException
  * You can probably use this class almost as it is for your own app, but you might want to
  * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
  */
-class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.net.retrofit2.ErrorHandler<UserMessage> {
+class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.net.retrofit2.ErrorHandler<ErrorMessage> {
 
 
-    override fun <CE : co.early.fore.net.retrofit2.MessageProvider<UserMessage>> handleError(
+    override fun <CE : co.early.fore.net.retrofit2.MessageProvider<ErrorMessage>> handleError(
             t: Throwable?,
             errorResponse: Response<*>?,
             customErrorClazz: Class<CE>?,
             originalRequest: Request?
-    ): UserMessage {
+    ): ErrorMessage {
 
         var message = ERROR_MISC
 
@@ -73,11 +71,11 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.n
     }
 
 
-    private fun <CE : co.early.fore.net.retrofit2.MessageProvider<UserMessage>> parseCustomError(
-            provisionalErrorMessage: UserMessage,
+    private fun <CE : co.early.fore.net.retrofit2.MessageProvider<ErrorMessage>> parseCustomError(
+            provisionalErrorMessage: ErrorMessage,
             errorResponse: Response<*>,
             customErrorClazz: Class<CE>
-    ): UserMessage {
+    ): ErrorMessage {
 
         val gson = Gson()
 

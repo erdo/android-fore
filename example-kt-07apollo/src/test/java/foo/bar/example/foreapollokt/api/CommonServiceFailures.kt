@@ -3,6 +3,7 @@ package foo.bar.example.foreapollokt.api
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import java.io.IOException
+import java.net.SocketTimeoutException
 import java.util.ArrayList
 
 /**
@@ -11,8 +12,11 @@ import java.util.ArrayList
 class CommonServiceFailures : ArrayList<StubbedServiceDefinition<ErrorMessage>>() {
     init {
 
-        //network down
+        //network down / airplane mode
         add(StubbedServiceDefinition(IOException("fake io exception for testing purposes"), ErrorMessage.ERROR_NETWORK))
+
+        //network timeout
+        add(StubbedServiceDefinition(SocketTimeoutException("fake timeout exception for testing purposes"), ErrorMessage.ERROR_NETWORK))
 
         //bad request
         add(StubbedServiceDefinition(400, "common/empty.json", ErrorMessage.ERROR_CLIENT))
@@ -21,7 +25,7 @@ class CommonServiceFailures : ArrayList<StubbedServiceDefinition<ErrorMessage>>(
         add(StubbedServiceDefinition(401, "common/empty.json", ErrorMessage.ERROR_SESSION_TIMED_OUT))
 
         //missing resource
-        add(StubbedServiceDefinition(404, "common/empty.json", ErrorMessage.ERROR_SERVER))//realise this is officially a "client" error, but in our experience this is usually the fault of the server
+        add(StubbedServiceDefinition(404, "common/empty.json", ErrorMessage.ERROR_SERVER))//realise this is officially a "client" error, but when this happens in prod, this is usually the fault of the server
 
         //missing resource (html page)
         add(StubbedServiceDefinition(404, "common/html.json", "text/html", ErrorMessage.ERROR_SERVER))

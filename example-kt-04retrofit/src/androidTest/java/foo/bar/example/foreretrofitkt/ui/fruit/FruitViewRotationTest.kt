@@ -17,14 +17,13 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
 import co.early.fore.kt.retrofit.Either
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.CompletableDeferred
@@ -62,13 +61,13 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockSuccess: Success
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<UserMessage>
+    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
     @MockK
-    lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<UserMessage>
+    lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
 
-    private lateinit var deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>
+    private lateinit var deferredResult: CompletableDeferred<Either<ErrorMessage, List<FruitPojo>>>
     private val countDownLatch = CountDownLatch(1)
 
     @Before
@@ -137,7 +136,7 @@ class FruitViewRotationTest {
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<Either<UserMessage, List<FruitPojo>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, List<FruitPojo>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

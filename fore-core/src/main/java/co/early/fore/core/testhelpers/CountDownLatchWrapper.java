@@ -7,39 +7,37 @@ import co.early.fore.core.observer.Observable;
 
 
 /**
- * Removing countdownlatch boiler plate from tests which are focused on Room db updates
+ * Removing countdownlatch boiler plate from tests which require latches
  */
 public class CountDownLatchWrapper {
 
-    public static final int DEFAULT_INVALIDATION_TRACKER_TIMEOUT_SECONDS = 2;
-    private static int timeoutInSeconds = DEFAULT_INVALIDATION_TRACKER_TIMEOUT_SECONDS;
+    public static final int DEFAULT_TIMEOUT_SECONDS = 2;
+    private static int timeoutInSeconds = DEFAULT_TIMEOUT_SECONDS;
 
     /**
-     * @param updatesExpected how many changes to the db you are making in this batch - and therefore
-     *                          how many invalidation trackers you expect to be triggered from the db
-     * @param observableModel observable model that is responding to a Room db invalidation tracker
+     * @param updatesExpected how many notifications (countdowns) you expect from the observable
+     * @param observableModel observable model to be used for counting down the latch
      * @param surroundByCountdownLatch code to be surrounded by the countdown latch
      */
     public static void runInBatch(int updatesExpected, Observable observableModel, SurroundByCountdownLatch surroundByCountdownLatch){
 
-        // the Room invalidation tracker fires in a different thread (we only get updated by our observers
-        // once the in memory list is updated, but its a reasonable proxy for invalidation tracker updates)
-        CountDownLatch latchForInvalidationTracker = new CountDownLatch(updatesExpected);
-        observableModel.addObserver(() -> latchForInvalidationTracker.countDown());
+        CountDownLatch latch = new CountDownLatch(updatesExpected);
+        observableModel.addObserver(() -> latch.countDown());
 
         surroundByCountdownLatch.run();
 
-        //Try to ensure all the invalidation trackers have been fired before we continue.
-        //In reality, Room batches up the invalidation trackers so we can't be deterministic
-        //about how many we will receive, hence the timeout
+        // Try to ensure all the invalidation trackers have been fired before we continue.
+        // In reality, there are some things we can't be deterministic about (Room batches up
+        // its invalidation trackers for example, so we can't tell how many we will receive)
+        // hence the timeout
         try {
-            latchForInvalidationTracker.await(timeoutInSeconds, TimeUnit.SECONDS);
+            latch.await(timeoutInSeconds, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public static void overrideInvalidationTrackerTimeout(int timeoutInSeconds){
+    public static void overrideLatchTimeout(int timeoutInSeconds){
         CountDownLatchWrapper.timeoutInSeconds = timeoutInSeconds;
     }
 

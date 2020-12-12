@@ -11,7 +11,7 @@ import co.early.fore.kt.core.callbacks.Success
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
 
@@ -35,7 +35,7 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
                     "something", Toast.LENGTH_SHORT
         ).show()
     }
-    private val failureWithPayload: FailureWithPayload<UserMessage> = { userMessage ->
+    private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
         Toast.makeText(
             this, "Fail - maybe tell the user to try again, message:" + userMessage.localisedMessage,
             Toast.LENGTH_SHORT
