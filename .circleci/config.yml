@@ -56,20 +56,20 @@ jobs:
           path: fore-adapters-kt/build/test-results
 
       - run:
-          name: Run Tests fore-retrofit
-          command: ./gradlew fore-retrofit:lintRelease fore-retrofit:testRelease
+          name: Run Tests fore-network
+          command: ./gradlew fore-network:lintRelease fore-network:testRelease
       - store_artifacts:
-          path: fore-retrofit/build/reports
+          path: fore-network/build/reports
       - store_test_results:
-          path: fore-retrofit/build/test-results
+          path: fore-network/build/test-results
 
       - run:
-          name: Run Tests fore-retrofit-kt
-          command: ./gradlew fore-retrofit-kt:lintRelease fore-retrofit-kt:testRelease
+          name: Run Tests fore-network-kt
+          command: ./gradlew fore-network-kt:lintRelease fore-network-kt:testRelease
       - store_artifacts:
-          path: fore-retrofit-kt/build/reports
+          path: fore-network-kt/build/reports
       - store_test_results:
-          path: fore-retrofit-kt/build/test-results
+          path: fore-network-kt/build/test-results
 
       - run:
           name: Run Tests fore-lifecycle
