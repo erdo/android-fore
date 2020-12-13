@@ -10,7 +10,7 @@ import co.early.fore.core.callbacks.SuccessCallback;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.logging.SystemLogger;
 import co.early.fore.core.observer.Observer;
-import co.early.fore.retrofit.CallProcessor;
+import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
 import foo.bar.example.foreretrofit.api.fruits.FruitPojo;
 import foo.bar.example.foreretrofit.api.fruits.FruitService;
 import foo.bar.example.foreretrofit.message.UserMessage;
@@ -33,30 +33,28 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
  */
 public class FruitFetcherUnitTest {
 
-    public static final String TAG = FruitFetcherUnitTest.class.getSimpleName();
-
     private static Logger logger = new SystemLogger();
     private FruitPojo fruitPojo = new FruitPojo("strawberry", false, 71);
 
     private SuccessCallback mockSuccessCallback;
     private FailureCallbackWithPayload mockFailureCallbackWithPayload;
-    private CallProcessor<UserMessage> mockCallProcessor;
+    private Retrofit2CallProcessor<UserMessage> mockCallProcessor;
     private FruitService mockFruitService;
     private Observer mockObserver;
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mockSuccessCallback = mock(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
-        mockCallProcessor = mock(CallProcessor.class);
+        mockCallProcessor = mock(Retrofit2CallProcessor.class);
         mockFruitService = mock(FruitService.class);
         mockObserver = mock(Observer.class);
     }
 
 
     @Test
-    public void initialConditions() throws Exception {
+    public void initialConditions() {
 
         //arrange
         FruitFetcher fruitFetcher = new FruitFetcher(
@@ -75,7 +73,7 @@ public class FruitFetcherUnitTest {
 
 
     @Test
-    public void fetchFruit_MockSuccess() throws Exception {
+    public void fetchFruit_MockSuccess() {
 
         //arrange
         new StateBuilder(mockCallProcessor).getFruitSuccess(fruitPojo);
@@ -102,7 +100,7 @@ public class FruitFetcherUnitTest {
 
 
     @Test
-    public void fetchFruit_MockFailure() throws Exception {
+    public void fetchFruit_MockFailure() {
 
         //arrange
         new StateBuilder(mockCallProcessor).getFruitFail(UserMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT);
@@ -139,12 +137,11 @@ public class FruitFetcherUnitTest {
      * only that they will be called if something changes ("something" is not defined
      * and can change between implementations).
      *
-     * See the databinding docs for more information about this
+     * See the reactive UI docs for more information about this
      *
-     * @throws Exception
      */
     @Test
-    public void observersNotifiedAtLeastOnce() throws Exception {
+    public void observersNotifiedAtLeastOnce() {
 
         //arrange
         new StateBuilder(mockCallProcessor).getFruitSuccess(fruitPojo);

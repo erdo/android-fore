@@ -8,10 +8,12 @@ import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.ui.showOrGone
+import co.early.fore.kt.core.ui.showOrInvisible
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
 
@@ -35,7 +37,7 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
                     "something", Toast.LENGTH_SHORT
         ).show()
     }
-    private val failureWithPayload: FailureWithPayload<UserMessage> = { userMessage ->
+    private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
         Toast.makeText(
             this, "Fail - maybe tell the user to try again, message:" + userMessage.localisedMessage,
             Toast.LENGTH_SHORT
@@ -51,7 +53,7 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
 
     private fun setupButtonClickListeners() {
         fruit_fetchsuccess_btn.setOnClickListener { fruitFetcher.fetchFruitsAsync(success, failureWithPayload) }
-        fruit_fetchchainsuccess_btn.setOnClickListener { fruitFetcher.fetchManyThings(success, failureWithPayload) }
+        fruit_fetchchainsuccess_btn.setOnClickListener { fruitFetcher.chainedCall(success, failureWithPayload) }
         fruit_fetchfailbasic_btn.setOnClickListener { fruitFetcher.fetchFruitsButFail(success, failureWithPayload) }
         fruit_fetchfailadvanced_btn.setOnClickListener { fruitFetcher.fetchFruitsButFailAdvanced(success, failureWithPayload) }
     }
@@ -73,10 +75,8 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
         fruit_tastyrating_textview.text = String.format(
             this.getString(R.string.fruit_percent), fruitFetcher.currentFruit.tastyPercentScore.toString()
         )
-        fruit_busy_progbar.visibility = if (fruitFetcher.isBusy)
-            View.VISIBLE else View.INVISIBLE
-        fruit_detailcontainer_linearlayout.visibility = if (fruitFetcher.isBusy)
-            View.GONE else View.VISIBLE
+        fruit_busy_progbar.showOrInvisible(fruitFetcher.isBusy)
+        fruit_detailcontainer_linearlayout.showOrGone(!fruitFetcher.isBusy)
     }
 
 

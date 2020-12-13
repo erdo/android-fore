@@ -1,0 +1,15 @@
+query LaunchList {
+ launches {
+  cursor
+  hasMore
+  launches {
+    id
+    site
+    mission {
+      name
+      missionPatch(size: SMALL)
+    }
+    isBooked
+  }
+ }
+}

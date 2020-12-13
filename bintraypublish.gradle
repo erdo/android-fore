@@ -2,6 +2,9 @@
  *
  * ./gradlew check
  *
+ * ./gradlew connectedDebugAndroidTest
+ * ./gradlew testDebugUnitTest
+ *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
  * ./gradlew bintrayUpload

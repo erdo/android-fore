@@ -1,7 +1,5 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
-import arrow.core.Either.Left
-import arrow.core.Either.Right
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
@@ -9,12 +7,14 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.kt.retrofit.carryOn
+import co.early.fore.kt.core.Either.Left
+import co.early.fore.kt.core.Either.Right
+import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
+import co.early.fore.kt.net.retrofit2.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.api.fruits.FruitsCustomError
-import foo.bar.example.foreretrofitkt.message.UserMessage
+import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import java.util.Random
 
 
@@ -23,7 +23,7 @@ import java.util.Random
  */
 class FruitFetcher(
         private val fruitService: FruitService,
-        private val callProcessor: CallProcessor<UserMessage>,
+        private val retrofit2CallProcessor: Retrofit2CallProcessor<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {
@@ -36,13 +36,13 @@ class FruitFetcher(
 
     fun fetchFruitsAsync(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsAsync() t:" + Thread.currentThread())
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -53,7 +53,7 @@ class FruitFetcher(
 
             logger.i("about to use CallProcessor t:" + Thread.currentThread())
 
-            val deferredResult = callProcessor.processCallAsync {
+            val deferredResult = retrofit2CallProcessor.processCallAsync {
 
                 logger.i("processing call t:" + Thread.currentThread())
 
@@ -75,13 +75,13 @@ class FruitFetcher(
      */
     fun fetchFruitsButFail(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFail()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -91,7 +91,7 @@ class FruitFetcher(
 
         launchMain(workMode) {
 
-            val result = callProcessor.processCallAwait {
+            val result = retrofit2CallProcessor.processCallAwait {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
@@ -109,13 +109,13 @@ class FruitFetcher(
      */
     fun fetchFruitsButFailAdvanced(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFailAdvanced()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -124,7 +124,7 @@ class FruitFetcher(
 
         launchMain(workMode) {
 
-            val result = callProcessor.processCallAwait(FruitsCustomError::class.java) {
+            val result = retrofit2CallProcessor.processCallAwait(FruitsCustomError::class.java) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
@@ -138,18 +138,17 @@ class FruitFetcher(
 
     /**
      * Demonstration of how to use carryOn to chain multiple connection requests together in a
-     * simple way - don't overuse it! if it's starting to get hard to test, a little restructuring
-     * might be in order
+     * simple way
      */
-    fun fetchManyThings(
+    fun chainedCall(
             success: Success,
-            failureWithPayload: FailureWithPayload<UserMessage>
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
-        logger.i("fetchManyThings()")
+        logger.i("chainedCall()")
 
         if (isBusy) {
-            failureWithPayload(UserMessage.ERROR_BUSY)
+            failureWithPayload(ErrorMessage.ERROR_BUSY)
             return
         }
 
@@ -158,7 +157,7 @@ class FruitFetcher(
 
         launchMain(workMode) {
 
-            val result = callProcessor.processCallAwait(
+            val result = retrofit2CallProcessor.processCallAwait(
                 FruitsCustomError::class.java
             ) {
                 var ticketRef = ""
@@ -193,9 +192,7 @@ class FruitFetcher(
                 is Right -> handleSuccess(success, result.b)
             }
         }
-
     }
-
 
     private fun handleSuccess(
             success: Success,
@@ -210,8 +207,8 @@ class FruitFetcher(
     }
 
     private fun handleFailure(
-            failureWithPayload: FailureWithPayload<UserMessage>,
-            failureMessage: UserMessage
+            failureWithPayload: FailureWithPayload<ErrorMessage>,
+            failureMessage: ErrorMessage
     ) {
 
         logger.i("handleFailure() t:" + Thread.currentThread())

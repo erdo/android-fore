@@ -3,8 +3,8 @@ package foo.bar.example.foreretrofitkt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.kt.retrofit.CallProcessor
-import co.early.fore.kt.retrofit.InterceptorLogging
+import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
+import co.early.fore.kt.net.InterceptorLogging
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreretrofitkt.api.CustomGlobalRequestInterceptor
 import foo.bar.example.foreretrofitkt.api.CustomRetrofitBuilder
@@ -35,13 +35,13 @@ object OG {
         // networking classes common to all models
         val retrofit = CustomRetrofitBuilder.create(
             CustomGlobalRequestInterceptor(logger),
-            InterceptorLogging(logger)
+                InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = CallProcessor(
-            CustomGlobalErrorHandler(logger),
-            workMode,
-            logger
+        val callProcessor = Retrofit2CallProcessor(
+                CustomGlobalErrorHandler(logger),
+                workMode,
+                logger
         )
 
         // models

@@ -21,7 +21,7 @@
             android:paddingBottom="10dp"
             android:textSize="15sp"
             android:textColor="@color/colorAccent"
-            android:text="Fruit Fetcher" />
+            android:text="Fruit Fetcher (Retrofit)" />
 
         <RelativeLayout
             android:layout_width="200dp"

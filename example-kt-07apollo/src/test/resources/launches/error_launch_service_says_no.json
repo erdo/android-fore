@@ -1,0 +1,39 @@
+{
+  "errors": [
+    {
+      "message": "computer says no",
+      "locations": [
+        {
+          "line": 1,
+          "column": 10
+        }
+      ],
+      "path": [
+        "launches"
+      ],
+      "extensions": {
+        "code": "LAUNCH_SERVICE_SAYS_NO_ERROR"
+      }
+    }
+  ]
+}
+
+
+
+
+
+]{
+"launches": {
+"__typename": "LaunchConnection",
+"cursor":"1581951955",
+"hasMore": true,
+"launches":[
+{
+"__typename": "Launch",
+"id": "109",
+"site": "CCAFS SLC 40"
+}
+]
+}
+}
+}

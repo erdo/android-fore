@@ -63,6 +63,8 @@ Thumbs.db
 # Keystore files
 *.jks
 *.keystore
+*.key
+*.pub
 
 # passwords
 secrets.properties

@@ -8,8 +8,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import co.early.fore.core.logging.Logger;
-import co.early.fore.retrofit.ErrorHandler;
-import co.early.fore.retrofit.MessageProvider;
+import co.early.fore.net.retrofit2.ErrorHandler;
+import co.early.fore.net.retrofit2.MessageProvider;
 import foo.bar.example.foredb.message.UserMessage;
 import okhttp3.Request;
 import retrofit2.Response;

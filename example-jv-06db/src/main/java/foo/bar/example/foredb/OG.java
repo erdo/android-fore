@@ -9,8 +9,8 @@ import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.AndroidLogger;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.time.SystemTimeWrapper;
-import co.early.fore.retrofit.CallProcessor;
-import co.early.fore.retrofit.InterceptorLogging;
+import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
+import co.early.fore.net.InterceptorLogging;
 import foo.bar.example.foredb.api.CustomGlobalErrorHandler;
 import foo.bar.example.foredb.api.CustomGlobalRequestInterceptor;
 import foo.bar.example.foredb.api.CustomRetrofitBuilder;
@@ -67,7 +67,7 @@ public class OG {
         Retrofit retrofit = CustomRetrofitBuilder.create(
                 new CustomGlobalRequestInterceptor(logger),
                 new InterceptorLogging(logger));//logging interceptor should be the last one
-        CallProcessor<UserMessage> callProcessor = new CallProcessor<UserMessage>(
+        Retrofit2CallProcessor<UserMessage> callProcessor = new Retrofit2CallProcessor<UserMessage>(
                 new CustomGlobalErrorHandler(logger),
                 logger);
 

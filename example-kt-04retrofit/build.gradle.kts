@@ -56,12 +56,14 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-retrofit-kt:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-retrofit-kt"))
+    //implementation("co.early.fore:fore-network-kt:${Shared.Versions.fore_version_for_examples}")
+    implementation(project(":fore-network-kt"))
 
+    implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
+
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")

@@ -6,7 +6,7 @@ interface TagInferer {
     fun inferTag(): String
 }
 
-class TagInfererImpl() : TagInferer {
+class TagInfererImpl : TagInferer {
 
     override fun inferTag(): String {
         val trace = Throwable().stackTrace
@@ -24,16 +24,10 @@ class TagInfererImpl() : TagInferer {
         if (m.find()) {
             tag = m.replaceAll("")
         }
-        return if (tag.length <= MAX_TAG_LENGTH) {
-            tag
-        } else {
-            tag.substring(0, BOOK_END_LENGTH) + ".." + tag.substring(tag.length - BOOK_END_LENGTH, tag.length)
-        }
+        return tag
     }
 
     companion object {
-        private const val MAX_TAG_LENGTH = 20 //below API 24 is limited to 23 characters anyway
-        private const val BOOK_END_LENGTH = (MAX_TAG_LENGTH / 2) - 1
         private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
     }
 }

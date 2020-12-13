@@ -20,7 +20,7 @@ import co.early.fore.core.callbacks.SuccessCallbackWithPayload;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.logging.SystemLogger;
 import co.early.fore.core.observer.Observer;
-import co.early.fore.retrofit.CallProcessor;
+import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
 import foo.bar.example.foreretrofit.R;
 import foo.bar.example.foreretrofit.api.fruits.FruitPojo;
 import foo.bar.example.foreretrofit.api.fruits.FruitService;
@@ -63,7 +63,7 @@ public class FruitViewRotationTest {
 
     SuccessCallback mockSuccessCallback;
     FailureCallbackWithPayload mockFailureCallbackWithPayload;
-    CallProcessor<UserMessage> mockCallProcessor;
+    Retrofit2CallProcessor<UserMessage> mockCallProcessor;
     FruitService mockFruitService;
     Observer mockObserver;
 
@@ -80,7 +80,7 @@ public class FruitViewRotationTest {
 
         mockSuccessCallback = mock(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
-        mockCallProcessor = mock(CallProcessor.class);
+        mockCallProcessor = mock(Retrofit2CallProcessor.class);
         mockFruitService = mock(FruitService.class);
 
         //construct a real model with mock dependencies

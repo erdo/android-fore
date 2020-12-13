@@ -5,7 +5,7 @@ The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
-The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/arrow-kt/arrow/blob/master/modules/core/arrow-core-data/src/main/kotlin/arrow/core/Either.kt) (from [arrow-kt](https://arrow-kt.io/) - we didn't want to add yet another implementation of Either).
+The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/Either.kt).
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -34,6 +34,23 @@ launchMain(workMode) {
 }
  </code></pre>
 
+## Either either
+
+I didn't really want to add yet another implementation of Either, but in the end it was preferrable to forcing people to use Arrow's Either (the feeling on Reddit semed to be that it was a bit rude to force it on to clients). Arrow's Either comes as part of the arrow-core-data package and that adds around 700KB to the overall apk size of a client app. That might not sound like a huge amount, but the whole point of fore is to be tiny / simple and 700KB is an order of magnitude larger than fore itself! For just one class it wasn't worth it.
+
+So fore 1.2.1 is the last version that uses Arrow's Either by default. If you still want to use Arrow after that, it's no problem, simply add an extension function like this somewhere in your app code:
+
+```kotlin
+
+fun <L, R> Either<L, R>.toArrow(): arrow.core.Either<L, R> {
+    return when(this){
+        is Either.Left ->  arrow.core.Either.left(this.a)
+        is Either.Right -> arrow.core.Either.right(this.b)
+    }
+}
+```
+
+And then you can convert any CallProcessor results from Fore Eithers to Arrow Eithers by doing: `result.toArrow()`. (You can of course use the same technique to convert Fore Eithers to whatever flavour of Either you prefer).
 
 ## carryOn
 

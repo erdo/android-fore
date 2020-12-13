@@ -7,26 +7,19 @@ import co.early.fore.core.observer.Observable
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.coroutine.launchMainImm
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
-import java.util.ArrayList
+
 
 
 /**
- * @param notificationMode If notifications should be run to the UI thread (appropriate for most app code) then use ASYNCHRONOUS.
- *
- * For tests, you will want to inject SYNCHRONOUS here which will force
- * all the notifications to come through on the same thread that notifyObservers()
+ * @param notificationMode If notifications should be run to the UI thread (appropriate for most
+ * app code) then use ASYNCHRONOUS. For tests, you will want to inject SYNCHRONOUS here which will
+ * force all the notifications to come through on the same thread that notifyObservers()
  * is called on.
  *
- *
- * For application code, you probably want ASYNCHRONOUS - this will ensure
- * all the notifications are delivered on the UI thread (posting to the UI thread only if
- * necessary) regardless of what thread called the notifyObservers() method
- * (this is handy if you will be updating the UI from
- * somethingChanged()).
- *
+ * @param logger If you want to be told about warnings, pass an implementation of Logger
+ * here (recommended)
  *
  * If you don't specify any construction parameters, they will be taken from ForeDelegateHolder
- *
  *
  * NB: If there are any Android Adapters depending on your model for their list data, you will
  * want to make sure that you only update this list based data on the UI thread (i.e. for use
@@ -36,7 +29,6 @@ import java.util.ArrayList
  * Synchronizing any list updates is not enough, Android will call Adapter.count() and
  * Adapter.get() on the UI thread and you cannot change the adapter's size between these calls.
  *
- * @param logger           If you want to be told about warnings, pass an implementation of Logger here (recommended)
  */
 class ObservableImp(
         private val notificationMode: WorkMode? = null,
@@ -58,9 +50,9 @@ class ObservableImp(
         if (observerList.size > 2) {
             ForeDelegateHolder.getLogger(logger).w(
                     "There are now:" + observerList.size + " Observers added to this Observable, that's quite a lot.\n" +
-                            "It's sometimes indicative of code which is not removing observers when it should\n" +
-                            "(forgetting to remove observers in an onStop() or onDetachedFromWindow() method for example)\n" +
-                            "Failing to remove observers when you no longer need them will cause memory leaks"
+                    "It's sometimes indicative of code which is not removing observers when it should\n" +
+                    "(forgetting to remove observers in an onStop() or onDetachedFromWindow() method for example)\n" +
+                    "Failing to remove observers when you no longer need them will cause memory leaks"
             )
         }
     }
@@ -80,10 +72,10 @@ class ObservableImp(
         if (observerList.size == beforeSize) {
             ForeDelegateHolder.getLogger(logger).w(
                     "You have tried to remove an observer that wasn't added in the first place. This is almost certainly an error and " +
-                            "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
-                            "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
-                            "references in Kotlin: val observer = Observer { doStuffOnChange } will work, val observer = ::doStuffOnChange() " +
-                            "will NOT work, but it will compile."
+                    "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
+                    "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
+                    "references in Kotlin: val observer = Observer { doStuffOnChange } will work, val observer = ::doStuffOnChange() " +
+                    "will NOT work, but it will compile."
             )
         }
     }
@@ -93,16 +85,13 @@ class ObservableImp(
      * Extending classes should call this method, whenever the model data is
      * updated. somethingChanged() will be called on each registered observer.
      *
-     *
      * If the Observable has been constructed with the SYNCHRONOUS method parameter
      * then the notifications will be called on the same thread that this method is
      * called on.
      *
-     *
      * If the Observable has been constructed with the ASYNCHRONOUS method parameter
      * then the notifications will be posted to the UI thread if necessary (if notifyObservers
      * is already on the UI thread then the observers will be called immediately with no posting done)
-     *
      *
      * NB: If there are any Android Adapters depending on your model for their list data, you will
      * want to make sure that you only update this list based data on the UI thread (i.e. for use
@@ -116,7 +105,7 @@ class ObservableImp(
     override fun notifyObservers() {
 
         //don't post to UI thread if we are already on it as this can cause problems with android adapters
-        launchMainImm(notificationMode) {
+        launchMainImm(ForeDelegateHolder.getWorkMode(notificationMode)) {
             for (observer in observerList) {
                 doNotification(observer)
             }

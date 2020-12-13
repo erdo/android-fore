@@ -24,12 +24,11 @@ dependencies {
 
     api(project(":fore-core-kt"))
     api(project(":fore-adapters-kt"))
-    api(project(":fore-retrofit-kt"))
+    api(project(":fore-network-kt"))
 
     api("androidx.annotation:annotation:${Shared.Versions.annotation}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
-    api("io.arrow-kt:arrow-core:${Shared.Versions.arrow_core}")
 
     api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")
