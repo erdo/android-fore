@@ -2,7 +2,7 @@ package co.early.fore.kt.net.retrofit2
 
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.Either
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO

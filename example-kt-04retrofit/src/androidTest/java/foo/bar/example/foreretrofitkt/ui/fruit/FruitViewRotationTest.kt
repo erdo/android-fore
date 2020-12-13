@@ -17,7 +17,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.retrofit.Either
+import co.early.fore.kt.core.Either
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo

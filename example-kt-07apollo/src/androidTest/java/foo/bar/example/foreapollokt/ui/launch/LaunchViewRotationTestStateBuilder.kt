@@ -5,31 +5,36 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.Either
+import co.early.fore.kt.core.Either
+import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import com.apollographql.apollo.ApolloCall
 import foo.bar.example.foreapollokt.App
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.ProgressBarIdler
-import foo.bar.example.foreapollokt.api.fruits.Launch
-import foo.bar.example.foreapollokt.feature.launch.FruitFetcher
+import foo.bar.example.foreapollokt.feature.launch.Launch
+import foo.bar.example.foreapollokt.feature.launch.LaunchesModel
+import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
-import retrofit2.Response
+import kotlinx.coroutines.Deferred
 
 
-class FruitViewRotationTestStateBuilder internal constructor(private val fruitViewRotationTest: FruitViewRotationTest) {
+class LaunchViewRotationTestStateBuilder internal constructor(private val launchViewRotationTest: LaunchViewRotationTest) {
 
-    internal fun withDelayedCallProcessor(): FruitViewRotationTestStateBuilder {
+    internal fun withDelayedCallProcessor(): LaunchViewRotationTestStateBuilder {
 
-        val deferred = CompletableDeferred<Either<ErrorMessage, List<Launch>>>()
+        val deferred = CompletableDeferred<Either<ErrorMessage, ApolloCallProcessor.SuccessResult<LaunchListQuery.Data>>>()
 
         coEvery {
-            fruitViewRotationTest.mockCallProcessor.processCallAsync(
-                any() as suspend () -> Response<List<Launch>>
+            launchViewRotationTest.mockCallProcessor.processCallAsync(
+                any() as () -> ApolloCall<LaunchListQuery.Data>
             )
         } returns deferred
 
-        fruitViewRotationTest.setDeferredResult(deferred)
+        launchViewRotationTest.setDeferredResult(deferred)
 
         return this
     }
@@ -48,7 +53,7 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
 
                 //inject our mocks so our UI layer will pick them up
                 OG.setApplication(app, WorkMode.SYNCHRONOUS)
-                OG.putMock(FruitFetcher::class.java, fruitViewRotationTest.fruitFetcher)
+                OG.putMock(LaunchesModel::class.java, launchViewRotationTest.launchesModel)
             }
 
             override fun afterActivityFinished() {
@@ -58,5 +63,4 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
             }
         }
     }
-
 }

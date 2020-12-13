@@ -8,82 +8,91 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:background="@color/colorPrimary"
-        android:layout_margin="15dp"
-        android:padding="15dp"
+        android:layout_margin="10dp"
+        android:padding="5dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="5dp"
             android:textSize="15sp"
             android:textColor="@color/colorAccent"
             android:text="Launch Fetcher (Apollo)" />
 
+        <TextView
+            android:id="@+id/launch_session_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorAccent"
+            android:text="session token:" />
+
+        <ProgressBar
+            android:id="@+id/launch_authbusy_progbar"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"/>
+
         <RelativeLayout
             android:layout_width="200dp"
-            android:layout_height="180dp"
+            android:layout_height="150dp"
             android:layout_margin="10dp"
+            android:padding="5dp"
             android:background="@color/colorLightGrey">
 
             <ProgressBar
-                android:id="@+id/fruit_busy_progbar"
+                android:id="@+id/launch_busy_progbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
             <LinearLayout
-                android:id="@+id/fruit_detailcontainer_linearlayout"
+                android:id="@+id/launch_detailcontainer_linearlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/fruit_name_textview"
+                    android:id="@+id/launch_id_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="fruit name"
-                    android:padding="10dp"
+                    android:text="launch id"
+                    android:paddingTop="10dp"
                     android:textStyle="bold"
                     android:textSize="25sp"
                     android:textColor="@color/colorAccent" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="isCitrus"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:textColor="@color/colorAccent"/>
-
-                    <ImageView
-                        android:id="@+id/fruit_citrus_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"/>
-
-                </RelativeLayout>
-
+                <ImageView
+                    android:id="@+id/launch_patch_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/launch_booked_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="booked:"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/colorAccent"/>
 
         </RelativeLayout>
 
         <Button
-            android:id="@+id/fruit_fetchsuccess_btn"
+            android:id="@+id/launch_fetch_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -97,7 +106,14 @@
             android:text="login" />
 
         <Button
-            android:id="@+id/launch_fetchchainsuccess_btn"
+            android:id="@+id/launch_logout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="logout" />
+
+        <Button
+            android:id="@+id/launch_chain_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"

@@ -12,10 +12,12 @@ import co.early.fore.kt.net.apollo.ApolloCallProcessor
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Input
 import foo.bar.example.foreapollokt.api.CommonServiceFailures
 import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
+import foo.bar.example.foreapollokt.feature.authentication.Authenticator
+import foo.bar.example.foreapollokt.graphql.*
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
@@ -41,12 +43,15 @@ import org.junit.Test
  */
 class LaunchFetcherIntegrationTest {
 
+    private val interceptorLogging = InterceptorLogging()
     private val logger = SystemLogger()
-    private val interceptorLogging = InterceptorLogging(logger)
-    private val callProcessor = ApolloCallProcessor(CustomGlobalErrorHandler(logger), logger)
+    private val callProcessor = ApolloCallProcessor(CustomGlobalErrorHandler(logger))
 
     @MockK
     private lateinit var mockSuccess: Success
+
+    @MockK
+    private lateinit var mockAuthenticator: Authenticator
 
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
@@ -71,13 +76,10 @@ class LaunchFetcherIntegrationTest {
 
         //arrange
         val apolloClient = stubbedApolloClient(stubbedSuccess)
-        val launchFetcher = LaunchFetcher(
-                launchService = LaunchService(
-                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        login = { apolloClient.query(LaunchListQuery()) },
-                        bookLaunch = { apolloClient.query(LaunchListQuery()) }
-                ),
+        val launchesModel = LaunchesModel(
+                createLaunchService(apolloClient),
                 callProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
@@ -87,9 +89,9 @@ class LaunchFetcherIntegrationTest {
         // to count down the latch, that makes our test code brittle unfortunately:
         // https://erdo.github.io/android-fore/05-extras.html#notification-counting
         // it's the best we can do for junit testing Apollo though
-        runInBatch(2, launchFetcher) {
+        runInBatch(2, launchesModel) {
             //act
-            launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
+            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
 
 
@@ -100,9 +102,9 @@ class LaunchFetcherIntegrationTest {
         verify(exactly = 0) {
             mockFailureWithPayload(any())
         }
-        Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(stubbedSuccess.expectedResult.isBooked, launchFetcher.currentLaunch.isCitrus)
-        Assert.assertEquals(stubbedSuccess.expectedResult.patchImgUrl.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchesModel.isBusy)
+        Assert.assertEquals(stubbedSuccess.expectedResult.isBooked, launchesModel.currentLaunch.isBooked)
+        Assert.assertEquals(stubbedSuccess.expectedResult.id, launchesModel.currentLaunch.id)
     }
 
     /**
@@ -117,21 +119,18 @@ class LaunchFetcherIntegrationTest {
 
         //arrange
         val apolloClient = stubbedApolloClient(stubbedFailSaysNo)
-        val launchFetcher = LaunchFetcher(
-                launchService = LaunchService(
-                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        login = { apolloClient.query(LaunchListQuery()) },
-                        bookLaunch = { apolloClient.query(LaunchListQuery()) }
-                ),
+        val launchesModel = LaunchesModel(
+                createLaunchService(apolloClient),
                 callProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
 
 
         //act
-        runInBatch(2, launchFetcher) {
-            launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
+        runInBatch(2, launchesModel) {
+            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
 
 
@@ -142,8 +141,8 @@ class LaunchFetcherIntegrationTest {
         verify(exactly = 1) {
             mockFailureWithPayload(eq(stubbedFailSaysNo.expectedResult))
         }
-        Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchesModel.isBusy)
+        Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
     }
 
     /**
@@ -158,21 +157,18 @@ class LaunchFetcherIntegrationTest {
 
         //arrange
         val apolloClient = stubbedApolloClient(stubbedFailureInternalServerError)
-        val launchFetcher = LaunchFetcher(
-                launchService = LaunchService(
-                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        login = { apolloClient.query(LaunchListQuery()) },
-                        bookLaunch = { apolloClient.query(LaunchListQuery()) }
-                ),
+        val launchesModel = LaunchesModel(
+                createLaunchService(apolloClient),
                 callProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
 
 
         //act
-        runInBatch(2, launchFetcher) {
-            launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
+        runInBatch(2, launchesModel) {
+            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
 
 
@@ -183,8 +179,8 @@ class LaunchFetcherIntegrationTest {
         verify(exactly = 1) {
             mockFailureWithPayload(eq(stubbedFailureInternalServerError.expectedResult))
         }
-        Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchesModel.isBusy)
+        Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
     }
 
 
@@ -210,21 +206,18 @@ class LaunchFetcherIntegrationTest {
             //arrange
             clearMocks(mockSuccess, mockFailureWithPayload)
             val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
-            val launchFetcher = LaunchFetcher(
-                    launchService = LaunchService(
-                            getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                            login = { apolloClient.query(LaunchListQuery()) },
-                            bookLaunch = { apolloClient.query(LaunchListQuery()) }
-                    ),
+            val launchesModel = LaunchesModel(
+                    createLaunchService(apolloClient),
                     callProcessor,
+                    mockAuthenticator,
                     logger,
                     WorkMode.SYNCHRONOUS
             )
 
 
             //act
-            runInBatch(2, launchFetcher) {
-                launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
+            runInBatch(2, launchesModel) {
+                launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
             }
 
             //assert
@@ -234,8 +227,8 @@ class LaunchFetcherIntegrationTest {
             verify(exactly = 1) {
                 mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult))
             }
-            Assert.assertEquals(false, launchFetcher.isBusy)
-            Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
+            Assert.assertEquals(false, launchesModel.isBusy)
+            Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
         }
     }
 
@@ -244,6 +237,16 @@ class LaunchFetcherIntegrationTest {
         return CustomApolloBuilder.create(
                 InterceptorStubbedService(stubbedServiceDefinition),
                 interceptorLogging
+        )
+    }
+
+    private fun createLaunchService(apolloClient: ApolloClient): LaunchService {
+        return LaunchService(
+                getLaunchList = { apolloClient.query(LaunchListQuery()) },
+                login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) },
+                refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
+                bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
+                cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
         )
     }
 

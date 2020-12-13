@@ -1,7 +1,7 @@
 package co.early.fore.kt.net.apollo
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.Either
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
@@ -46,9 +46,9 @@ class ApolloCallProcessor<F>(
 
     data class SuccessResult<S>(
             val data: S,
-            val partialErrors: List<Error>,
-            val extensions: Map<String, Any?>,
-            val isFromCache: Boolean
+            val partialErrors: List<Error> = listOf(),
+            val extensions: Map<String, Any?> = hashMapOf(),
+            val isFromCache: Boolean = false
     )
 
     /**

@@ -8,8 +8,9 @@ import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.net.apollo.ApolloCallProcessor
-import co.early.fore.kt.Either.Left
-import co.early.fore.kt.Either.Right
+import co.early.fore.kt.core.Either.Left
+import co.early.fore.kt.core.Either.Right
+import co.early.fore.kt.core.carryOn
 import com.apollographql.apollo.ApolloMutationCall
 import com.apollographql.apollo.ApolloQueryCall
 import foo.bar.example.foreapollokt.feature.authentication.Authenticator
@@ -17,21 +18,21 @@ import foo.bar.example.foreapollokt.graphql.*
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import java.util.Random
 
-data class LaunchService (
-    val getLaunchList: () -> ApolloQueryCall<LaunchListQuery.Data>,
-    val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>,
-    val refreshLaunchDetail: (id: String) -> ApolloQueryCall<LaunchDetailsQuery.Data>,
-    val bookTrip: (id: String) -> ApolloMutationCall<BookTripMutation.Data>,
-    val cancelTrip: (id: String) -> ApolloMutationCall<CancelTripMutation.Data>
+data class LaunchService(
+        val getLaunchList: () -> ApolloQueryCall<LaunchListQuery.Data>,
+        val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>,
+        val refreshLaunchDetail: (id: String) -> ApolloQueryCall<LaunchDetailsQuery.Data>,
+        val bookTrip: (id: String) -> ApolloMutationCall<BookTripMutation.Data>,
+        val cancelTrip: (id: String) -> ApolloMutationCall<CancelTripMutation.Data>
 )
 
 
-class LaunchesModel (
-    private val launchService: LaunchService,
-    private val callProcessor: ApolloCallProcessor<ErrorMessage>,
-    private val authenticator: Authenticator,
-    private val logger: Logger,
-    private val workMode: WorkMode
+class LaunchesModel(
+        private val launchService: LaunchService,
+        private val callProcessor: ApolloCallProcessor<ErrorMessage>,
+        private val authenticator: Authenticator,
+        private val logger: Logger,
+        private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {
 
     var isBusy: Boolean = false
@@ -43,8 +44,8 @@ class LaunchesModel (
      * fetch the list of launches using a GraphQl Query, select one at random for the UI
      */
     fun fetchLaunches(
-        success: Success,
-        failureWithPayload: FailureWithPayload<ErrorMessage>
+            success: Success,
+            failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchLaunches()")
@@ -71,10 +72,14 @@ class LaunchesModel (
 
     }
 
-
     /**
-     * log in, fetch random launch, toggle booking status
-     * chained call demo
+     * here we perform multiple network calls, all chained together:
+     * login (if we aren't already) > re-fetch current launch to check the
+     * booking status > toggle the booking status to the opposite of what
+     * it was > re-fetch the launch detail again
+     *
+     * Slightly more clunky than the retrofit equivalent,
+     * but not too bad
      */
     fun chainedCall(
             success: Success,
@@ -88,170 +93,46 @@ class LaunchesModel (
             return
         }
 
+        if (currentLaunch == NO_LAUNCH) {
+            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
+            return
+        }
+
+        isBusy = true
+        notifyObservers()
+
         launchMain(workMode) {
 
-            val result = callProcessor.processCallAwait {
+            // log in
+            val response = callProcessor.processCallAwait {
                 launchService.login("example@test.com")
-            }
-
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> {
-                    // don't log things like this out in the real world!
-                    logger.i("new session token:" + result.b.data.login)
-                    authenticator.setSessionDirectly(result.b.data.login)
-                    success()
-                    complete()
+            }.carryOn { // refresh launch details now we have session token to see the real booking status
+                authenticator.setSessionDirectly(it.data.login)
+                callProcessor.processCallAwait {
+                    launchService.refreshLaunchDetail(currentLaunch.id)
+                }
+            }.carryOn { // toggle the booking status
+                if (it.data.launch?.isBooked == true) {
+                    callProcessor.processCallAwait {
+                        launchService.cancelTrip(currentLaunch.id)
+                    }
+                } else {
+                    callProcessor.processCallAwait {
+                        launchService.bookTrip(currentLaunch.id)
+                    }
+                }
+            }.carryOn { // refresh the launch detail again
+                callProcessor.processCallAwait {
+                    launchService.refreshLaunchDetail(currentLaunch.id)
                 }
             }
-        }
-    }
 
-
-    fun bookTripOnCurrentLaunch(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
-    ) {
-
-        logger.i("bookCurrentTrip()")
-
-        if (isBusy) {
-            failureWithPayload(ErrorMessage.ERROR_BUSY)
-            return
-        }
-
-        if (currentLaunch == NO_LAUNCH) {
-            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
-            return
-        }
-
-        launchMain(workMode) {
-
-            val result = callProcessor.processCallAwait {
-                launchService.bookTrip(currentLaunch.id)
-            }
-
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> {
-                    logger.i("just booked:" + result.b.data.bookTrips.launches?.get(0)?.id)
-                    success()
-                    complete()
-                }
+            when (response) {
+                is Left -> handleFailure(failureWithPayload, response.a)
+                is Right -> handleSuccess(success, response.b.data.launch?.toApp() ?: NO_LAUNCH)
             }
         }
     }
-
-
-    fun cancelTripOnCurrentLaunch(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
-    ) {
-
-        logger.i("cancelCurrentTrip()")
-
-        if (isBusy) {
-            failureWithPayload(ErrorMessage.ERROR_BUSY)
-            return
-        }
-
-        if (currentLaunch == NO_LAUNCH) {
-            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
-            return
-        }
-
-        launchMain(workMode) {
-
-            val result = callProcessor.processCallAwait {
-                launchService.cancelTrip(currentLaunch.id)
-            }
-
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> {
-                    logger.i("just cancelled:" + result.b.data.cancelTrip.launches?.get(0)?.id)
-                    success()
-                    complete()
-                }
-            }
-        }
-    }
-
-
-    fun refreshLaunchDetails(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
-    ) {
-
-        logger.i("refreshLaunchDetails()")
-
-        if (isBusy) {
-            failureWithPayload(ErrorMessage.ERROR_BUSY)
-            return
-        }
-
-        if (currentLaunch == NO_LAUNCH) {
-            failureWithPayload(ErrorMessage.ERROR_NO_LAUNCH)
-            return
-        }
-
-        launchMain(workMode) {
-
-            val result = callProcessor.processCallAwait {
-                launchService.refreshLaunchDetail(currentLaunch.id)
-            }
-
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b.data.launch?.toApp() ?: NO_LAUNCH)
-            }
-        }
-    }
-
-
-
-
-//        isBusy = true
-//        notifyObservers()
-//
-//        launchMain(workMode) {
-//
-//            val result = callProcessor.processCallAwait(
-//                FruitsCustomError::class.java
-//            ) {
-//                var ticketRef = ""
-//                logger.i("...create user...")
-//                fruitService.getLaunchList
-//                    .carryOn {
-//                        logger.i("...create user ticket...")
-//                        fruitService.createUserTicket(it.userId)
-//                    }
-//                    .carryOn {
-//                        ticketRef = it.ticketRef
-//                        logger.i("...get waiting time...")
-//                        fruitService.getEstimatedWaitingTime(it.ticketRef)
-//                    }
-//                    .carryOn {
-//                        if (it.minutesWait > 10) {
-//                            logger.i("...cancel ticket...")
-//                            fruitService.cancelTicket(ticketRef)
-//                        } else {
-//                            logger.i("...confirm ticket...")
-//                            fruitService.confirmTicket(ticketRef)
-//                        }
-//                    }
-//                    .carryOn {
-//                        logger.i("...claim free fruit!...")
-//                        fruitService.claimFreeFruit(it.ticketRef)
-//                    }
-//            }
-//
-//            when (result) {
-//                is Left -> handleFailure(failureWithPayload, result.a)
-//                is Right -> handleSuccess(success, result.b)
-//            }
-//        }
-// }
 
     private fun handleSuccess(
             success: Success,

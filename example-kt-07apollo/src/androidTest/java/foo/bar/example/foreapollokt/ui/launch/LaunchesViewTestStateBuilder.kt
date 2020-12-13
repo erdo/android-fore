@@ -7,20 +7,20 @@ import co.early.fore.core.WorkMode
 import foo.bar.example.foreapollokt.ProgressBarIdler
 import foo.bar.example.foreapollokt.App
 import foo.bar.example.foreapollokt.OG
-import foo.bar.example.foreapollokt.api.fruits.Launch
-import foo.bar.example.foreapollokt.feature.launch.FruitFetcher
+import foo.bar.example.foreapollokt.feature.launch.Launch
+import foo.bar.example.foreapollokt.feature.launch.LaunchesModel
 import io.mockk.every
 
 
-class FruitViewTestStateBuilder internal constructor(private val mockFruitFetcher: FruitFetcher) {
+class LaunchesViewTestStateBuilder internal constructor(private val mockLaunchesModel: LaunchesModel) {
 
-    internal fun isBusy(busy: Boolean): FruitViewTestStateBuilder {
-        every { mockFruitFetcher.isBusy } returns (busy)
+    internal fun isBusy(busy: Boolean): LaunchesViewTestStateBuilder {
+        every { mockLaunchesModel.isBusy } returns (busy)
         return this
     }
 
-    internal fun hasFruit(launch: Launch): FruitViewTestStateBuilder {
-        every { mockFruitFetcher.currentFruit } returns (launch)
+    internal fun hasLaunch(launch: Launch): LaunchesViewTestStateBuilder {
+        every { mockLaunchesModel.currentLaunch } returns (launch)
         return this
     }
 
@@ -35,7 +35,7 @@ class FruitViewTestStateBuilder internal constructor(private val mockFruitFetche
 
                 //inject our mocks so our UI layer will pick them up
                 OG.setApplication(app, WorkMode.SYNCHRONOUS)
-                OG.putMock(FruitFetcher::class.java, mockFruitFetcher)
+                OG.putMock(LaunchesModel::class.java, mockLaunchesModel)
             }
         }
     }

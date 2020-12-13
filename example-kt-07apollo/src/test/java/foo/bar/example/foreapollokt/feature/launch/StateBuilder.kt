@@ -1,6 +1,6 @@
 package foo.bar.example.foreapollokt.feature.launch
 
-import co.early.fore.kt.Either
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.net.apollo.ApolloCallProcessor
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage

@@ -2,17 +2,19 @@ package foo.bar.example.foreapollokt.ui.launch
 
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.ui.showOrGone
+import co.early.fore.kt.core.ui.showOrInvisible
 import coil.load
 import foo.bar.example.foreapollokt.OG
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.feature.launch.LaunchesModel
+import foo.bar.example.foreapollokt.feature.launch.NO_LAUNCH
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_launches.*
 
@@ -27,9 +29,6 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
     //single observer reference
     private var observer = Observer { syncView() }
 
-
-    //just because we re-use these in 3 different button clicks
-    //in this example we define them here
     private val success: Success = {
         Toast.makeText(
             this, "Success - you can use this trigger to " +
@@ -50,40 +49,43 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
         setupButtonClickListeners()
     }
 
-
     private fun setupButtonClickListeners() {
-        fruit_fetchsuccess_btn.setOnClickListener { launchesModel.fetchLaunches(success, failureWithPayload) }
+        launch_fetch_btn.setOnClickListener { launchesModel.fetchLaunches(success, failureWithPayload) }
         launch_login_btn.setOnClickListener { authenticator.login("example@test.com", success, failureWithPayload) }
-        launch_fetchchainsuccess_btn.setOnClickListener { launchesModel.refreshLaunchDetails(success, failureWithPayload) }
+        launch_logout_btn.setOnClickListener { authenticator.logout() }
+        launch_chain_btn.setOnClickListener { launchesModel.chainedCall(success, failureWithPayload) }
     }
-
 
     //data binding stuff below
 
     fun syncView() {
-        fruit_fetchsuccess_btn.isEnabled = !launchesModel.isBusy
-        launch_fetchchainsuccess_btn.isEnabled = !launchesModel.isBusy
-        fruit_name_textview.text = launchesModel.currentLaunch.site
-        fruit_citrus_img.load(launchesModel.currentLaunch.patchImgUrl) {
-            crossfade(true)
-            placeholder(R.drawable.lemon_negative)
-        }
-        fruit_busy_progbar.visibility = if (launchesModel.isBusy)
-            View.VISIBLE else View.INVISIBLE
-        fruit_detailcontainer_linearlayout.visibility = if (launchesModel.isBusy)
-            View.GONE else View.VISIBLE
+        launch_login_btn.showOrGone(!authenticator.hasSessionToken())
+        launch_logout_btn.showOrGone(authenticator.hasSessionToken())
+        launch_login_btn.isEnabled = !authenticator.isBusy
+        launch_logout_btn.isEnabled = !authenticator.isBusy
+        launch_fetch_btn.isEnabled = !launchesModel.isBusy
+        launch_chain_btn.isEnabled = !launchesModel.isBusy && launchesModel.currentLaunch != NO_LAUNCH
+        launch_session_txt.text = "session token:${authenticator.sessionToken}"
+        launch_authbusy_progbar.showOrGone(authenticator.isBusy)
+        launch_session_txt.showOrGone(!authenticator.isBusy)
+        launch_id_textview.text = "id:" + launchesModel.currentLaunch.id
+        launch_patch_img.load(launchesModel.currentLaunch.patchImgUrl)
+        launch_busy_progbar.showOrInvisible(launchesModel.isBusy)
+        launch_detailcontainer_linearlayout.showOrGone(!launchesModel.isBusy)
+        launch_booked_txt.showOrGone(!launchesModel.isBusy && authenticator.hasSessionToken())
+        launch_booked_txt.text = "booked:${launchesModel.currentLaunch.isBooked}"
     }
-
 
     override fun onStart() {
         super.onStart()
         launchesModel.addObserver(observer)
+        authenticator.addObserver(observer)
         syncView() //  <- don't forget this
     }
-
 
     override fun onStop() {
         super.onStop()
         launchesModel.removeObserver(observer)
+        authenticator.removeObserver(observer)
     }
 }

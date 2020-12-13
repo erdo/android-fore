@@ -1,7 +1,9 @@
 /**
  *
  * ./gradlew check
- * ./gradlew testDebugUnitTest (quick version)
+ *
+ * ./gradlew connectedDebugAndroidTest
+ * ./gradlew testDebugUnitTest
  *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal

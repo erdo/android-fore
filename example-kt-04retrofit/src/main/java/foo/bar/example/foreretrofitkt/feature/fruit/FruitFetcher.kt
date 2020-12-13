@@ -7,8 +7,9 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.Either.Left
-import co.early.fore.kt.Either.Right
+import co.early.fore.kt.core.Either.Left
+import co.early.fore.kt.core.Either.Right
+import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
 import co.early.fore.kt.net.retrofit2.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
@@ -22,7 +23,7 @@ import java.util.Random
  */
 class FruitFetcher(
         private val fruitService: FruitService,
-        private val retrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<ErrorMessage>,
+        private val retrofit2CallProcessor: Retrofit2CallProcessor<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {
@@ -137,15 +138,14 @@ class FruitFetcher(
 
     /**
      * Demonstration of how to use carryOn to chain multiple connection requests together in a
-     * simple way - don't overuse it! if it's starting to get hard to test, a little restructuring
-     * might be in order
+     * simple way
      */
-    fun fetchManyThings(
+    fun chainedCall(
             success: Success,
             failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
-        logger.i("fetchManyThings()")
+        logger.i("chainedCall()")
 
         if (isBusy) {
             failureWithPayload(ErrorMessage.ERROR_BUSY)

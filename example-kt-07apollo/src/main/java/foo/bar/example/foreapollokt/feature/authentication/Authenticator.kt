@@ -2,8 +2,8 @@ package foo.bar.example.foreapollokt.feature.authentication
 
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.Either.Left
-import co.early.fore.kt.Either.Right
+import co.early.fore.kt.core.Either.Left
+import co.early.fore.kt.core.Either.Right
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
@@ -90,6 +90,10 @@ class Authenticator(
 
         this.sessionToken = sessionToken ?: NO_SESSION
         complete()
+    }
+
+    fun hasSessionToken() : Boolean {
+        return sessionToken != NO_SESSION
     }
 
     private fun handleSuccess(

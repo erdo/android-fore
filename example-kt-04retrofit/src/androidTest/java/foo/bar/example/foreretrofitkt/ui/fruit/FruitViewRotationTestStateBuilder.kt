@@ -5,7 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.retrofit.Either
+import co.early.fore.kt.core.Either
 import foo.bar.example.foreretrofitkt.App
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.ProgressBarIdler
@@ -58,5 +58,4 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
             }
         }
     }
-
 }

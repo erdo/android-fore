@@ -6,6 +6,7 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage
 import io.mockk.MockKAnnotations
@@ -27,9 +28,9 @@ import org.junit.Test
  * 3) Observers and State: we check that the model updates its observers correctly and presents its current state accurately
  *
  */
-class LaunchFetcherUnitTest {
+class LaunchesModelUnitTest {
 
-    private val launch = Launch("123", "site", true, 50)
+    private val launch = Launch("123", "site", true, "http://www.test.com/someimage.png")
 
     @MockK
     private lateinit var mockSuccess: Success
@@ -44,6 +45,9 @@ class LaunchFetcherUnitTest {
     private lateinit var mockLaunchService: LaunchService
 
     @MockK
+    private lateinit var mockAuthenticator: Authenticator
+
+    @MockK
     private lateinit var mockObserver: Observer
 
 
@@ -56,9 +60,10 @@ class LaunchFetcherUnitTest {
     fun initialConditions() {
 
         //arrange
-        val launchFetcher = LaunchFetcher(
+        val launchesModel = LaunchesModel(
                 mockLaunchService,
                 mockCallProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
@@ -66,9 +71,9 @@ class LaunchFetcherUnitTest {
         //act
 
         //assert
-        Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
-        Assert.assertEquals(false, launchFetcher.currentLaunch.isCitrus)
+        Assert.assertEquals(false, launchesModel.isBusy)
+        Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
+        Assert.assertEquals(false, launchesModel.currentLaunch.isBooked)
     }
 
 
@@ -76,20 +81,21 @@ class LaunchFetcherUnitTest {
     @Throws(Exception::class)
     fun fetchLaunch_MockSuccess() {
 
-        val mockLaunchesData = createMockLaunchesResponse("123", "site")
+        val mockLaunchesData = createMockLaunchesResponse(launch)
 
         //arrange
         val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
-        val launchFetcher = LaunchFetcher(
+        val launchesModel = LaunchesModel(
                 mockLaunchService,
                 callProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
 
 
         //act
-        launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
+        launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -99,10 +105,10 @@ class LaunchFetcherUnitTest {
         verify(exactly = 0) {
             mockFailureWithPayload(any())
         }
-        Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(launch.site, launchFetcher.currentLaunch.site)
-        Assert.assertEquals(launch.isBooked, launchFetcher.currentLaunch.isCitrus)
-        Assert.assertEquals(launch.patchImgUrl.toLong(), launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchesModel.isBusy)
+        Assert.assertEquals(launch.site, launchesModel.currentLaunch.site)
+        Assert.assertEquals(launch.isBooked, launchesModel.currentLaunch.isBooked)
+        Assert.assertEquals(launch.id, launchesModel.currentLaunch.id)
     }
 
 
@@ -113,16 +119,17 @@ class LaunchFetcherUnitTest {
         //arrange
 
         val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockApolloCallProcessor
-        val launchFetcher = LaunchFetcher(
+        val launchesModel = LaunchesModel(
                 mockLaunchService,
                 callProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
 
 
         //act
-        launchFetcher.fetchLaunchesButFailAdvanced(mockSuccess, mockFailureWithPayload)
+        launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -132,9 +139,9 @@ class LaunchFetcherUnitTest {
         verify(exactly = 1) {
             mockFailureWithPayload(eq(ErrorMessage.INTERNAL_SERVER_ERROR))
         }
-        Assert.assertEquals(false, launchFetcher.isBusy)
-        Assert.assertEquals(false, launchFetcher.currentLaunch.isCitrus)
-        Assert.assertEquals(0, launchFetcher.currentLaunch.tastyPercentScore.toLong())
+        Assert.assertEquals(false, launchesModel.isBusy)
+        Assert.assertEquals(false, launchesModel.currentLaunch.isBooked)
+        Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
     }
 
 
@@ -158,21 +165,22 @@ class LaunchFetcherUnitTest {
     @Throws(Exception::class)
     fun observersNotifiedAtLeastOnce() {
 
-        val mockLaunchesData = createMockLaunchesResponse("123", "site")
+        val mockLaunchesData = createMockLaunchesResponse(launch)
 
         //arrange
         val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
-        val launchFetcher = LaunchFetcher(
+        val launchesModel = LaunchesModel(
                 mockLaunchService,
                 callProcessor,
+                mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
         )
-        launchFetcher.addObserver(mockObserver)
+        launchesModel.addObserver(mockObserver)
 
 
         //act
-        launchFetcher.fetchLaunches(mockSuccess, mockFailureWithPayload)
+        launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -184,24 +192,20 @@ class LaunchFetcherUnitTest {
     companion object {
         private val logger = SystemLogger()
 
-        private fun createMockLaunchesResponse (id: String, site: String) : LaunchListQuery.Data{
+        private fun createMockLaunchesResponse (launch: Launch) : LaunchListQuery.Data {
 
             val mockLaunchesData =  mockk<LaunchListQuery.Data>()
             val mockLaunches =  mockk<LaunchListQuery.Launches>()
-            val mockLaunch =  mockk<LaunchListQuery.Launch>()
+
+            val missionQuery = LaunchListQuery.Mission(name ="mission name", missionPatch = launch.patchImgUrl)
+            val launchQuery = LaunchListQuery.Launch(id = launch.id, site = launch.site, mission = missionQuery, isBooked = launch.isBooked)
 
             every {
                 mockLaunchesData.launches
             } returns mockLaunches
             every {
                 mockLaunches.launches
-            } returns listOf(mockLaunch)
-            every {
-                mockLaunch.id
-            } returns id
-            every {
-                mockLaunch.site
-            } returns site
+            } returns listOf(launchQuery)
 
             return mockLaunchesData
         }
