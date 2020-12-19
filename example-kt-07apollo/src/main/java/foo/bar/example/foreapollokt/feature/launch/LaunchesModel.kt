@@ -7,7 +7,7 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.kt.core.Either.Left
 import co.early.fore.kt.core.Either.Right
 import co.early.fore.kt.core.carryOn
@@ -29,7 +29,7 @@ data class LaunchService(
 
 class LaunchesModel(
         private val launchService: LaunchService,
-        private val callProcessor: ApolloCallProcessor<ErrorMessage>,
+        private val callProcessor: CallProcessorApollo<ErrorMessage>,
         private val authenticator: Authenticator,
         private val logger: Logger,
         private val workMode: WorkMode

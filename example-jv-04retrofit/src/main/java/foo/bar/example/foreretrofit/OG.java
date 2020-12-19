@@ -7,7 +7,7 @@ import java.util.Map;
 
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.AndroidLogger;
-import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
+import co.early.fore.net.retrofit2.CallProcessorRetrofit2;
 import co.early.fore.net.InterceptorLogging;
 import foo.bar.example.foreretrofit.api.CustomGlobalErrorHandler;
 import foo.bar.example.foreretrofit.api.CustomGlobalRequestInterceptor;
@@ -49,7 +49,7 @@ public class OG {
                 new CustomGlobalRequestInterceptor(logger),
                 new InterceptorLogging(logger));//logging interceptor should be the last one
 
-        Retrofit2CallProcessor<UserMessage> callProcessor = new Retrofit2CallProcessor<UserMessage>(
+        CallProcessorRetrofit2<UserMessage> callProcessor = new CallProcessorRetrofit2<UserMessage>(
                 new CustomGlobalErrorHandler(logger),
                 logger);
 

@@ -1,6 +1,8 @@
 package co.early.fore.core.threading;
 
 
+import android.annotation.SuppressLint;
+
 import co.early.fore.core.callbacks.DoThisWithPayloadCallback;
 import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;
@@ -39,10 +41,11 @@ public class AsyncBuilder<Input, Result>{
         return this;
     }
 
+    @SuppressLint("StaticFieldLeak")
     public Async<Input, Void, Result> execute(Input... inputs){
 
         if (async != null){
-            throw new IllegalStateException("Please construct a new AsafTaskBuilder, as with AsyncTask these instances can only be executed once");
+            throw new IllegalStateException("Please construct a new AsyncBuilder, as with Async these instances can only be executed once");
         }
 
         if (doInBackground == null) {

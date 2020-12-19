@@ -1,6 +1,7 @@
 package co.early.fore.net.retrofit2;
 
-import androidx.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
+
 import okhttp3.Request;
 import retrofit2.Response;
 

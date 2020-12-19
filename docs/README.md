@@ -44,11 +44,11 @@ class AccountRepository : Observable by ObservableImp() {
 }
  </code></pre>
 
-The core package is tiny (the java version references **128 methods** in all and adds just **12.5KB** to your apk). You can simply use the observer to make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
+The core package is tiny (the java version references **128 methods** in all and adds just **12.5KB** to your apk _before_ obfuscation, it's only a few KB post obfuscation). You can simply use the observer to make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
 The view layer is particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
-Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This dev.to [article](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to MVO (and in doing so drops the lines of code count by about half). This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) also gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
+Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This dev.to [article](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to MVO (and in doing so drops the lines-of-code count by about half). This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) also gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
 
 ## Quick Start
 
@@ -62,8 +62,7 @@ the original **java**:
 implementation "co.early.fore:fore-jv:1.2.1"
 ```
 
-
-Those two packages above won't co-exist in the same app, so if you have an app that is half-java and half-kotlin, or if you just want a subset of the features, you can use any of these packages in any combination you like:
+You can use the individual packages too if you want (although they are so small anyway, it's hardly worth bothering):
 
 ```
 implementation "co.early.fore:fore-core:1.2.1"

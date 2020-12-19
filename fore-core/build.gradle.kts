@@ -13,8 +13,6 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
 
-    api("androidx.annotation:annotation:${Shared.Versions.annotation}")
-
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
     testImplementation("org.hamcrest:hamcrest-library:${Shared.Versions.hamcrest_library}")

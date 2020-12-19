@@ -123,9 +123,9 @@ class AndroidLogger(private val tagPrefix: String? = null,
 
     override fun v(tag: String, message: String, throwable: Throwable) {
         if (stableTagLength) {
-            Log.e(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
+            Log.v(padTagWithSpace(limitTagLength(addTagPrefixIfPresent(tag))) + "|", message, throwable)
         } else {
-            Log.e(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
+            Log.v(limitTagLength(addTagPrefixIfPresent(tag)), message, throwable)
         }
     }
 

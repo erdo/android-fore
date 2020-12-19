@@ -54,8 +54,10 @@ import java.util.ArrayList
  * the advantages of using MVO style models which are shared across different views).
  *
  */
-class ListDifferPlaylistAdapter(private val syncableView: SyncableView, private val logger: Logger) :
-        RecyclerView.Adapter<ListDifferPlaylistAdapter.ViewHolder>() {
+class ListDifferPlaylistAdapter(
+        private val syncableView: SyncableView,
+        private val logger: Logger
+) : RecyclerView.Adapter<ListDifferPlaylistAdapter.ViewHolder>() {
 
     val itemCallback: DiffUtil.ItemCallback<Track> = object : DiffUtil.ItemCallback<Track>() {
         override fun areItemsTheSame(oldItem: Track, newItem: Track): Boolean {

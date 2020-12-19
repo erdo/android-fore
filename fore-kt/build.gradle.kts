@@ -26,19 +26,11 @@ dependencies {
     api(project(":fore-adapters-kt"))
     api(project(":fore-network-kt"))
 
-    api("androidx.annotation:annotation:${Shared.Versions.annotation}")
-    implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
-    implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
-
-    api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Shared.Versions.kotlinx_coroutines_core}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Shared.Versions.kotlinx_coroutines_android}")
-
+    //for the fore-lifecycle package
     api("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
-    implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
-    implementation("androidx.coordinatorlayout:coordinatorlayout:${Shared.Versions.coordinatorlayout}")
-    implementation("androidx.cardview:cardview:${Shared.Versions.cardview}")
+    compileOnly("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
+    compileOnly("androidx.coordinatorlayout:coordinatorlayout:${Shared.Versions.coordinatorlayout}")
+    compileOnly("androidx.cardview:cardview:${Shared.Versions.cardview}")
 }
 
 apply(from = "../bintraypublish.gradle")

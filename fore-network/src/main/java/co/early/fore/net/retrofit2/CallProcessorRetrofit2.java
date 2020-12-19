@@ -23,15 +23,15 @@ import retrofit2.Response;
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  *           failure message class, like an enum for example
  */
-public class Retrofit2CallProcessor<F> {
+public class CallProcessorRetrofit2<F> {
 
-    public static final String TAG = Retrofit2CallProcessor.class.getSimpleName();
+    public static final String TAG = CallProcessorRetrofit2.class.getSimpleName();
 
     private final ErrorHandler<F> globalErrorHandler;
     private final Logger logger;
 
 
-    public Retrofit2CallProcessor(ErrorHandler<F> globalErrorHandler, Logger logger) {
+    public CallProcessorRetrofit2(ErrorHandler<F> globalErrorHandler, Logger logger) {
         this.globalErrorHandler = Affirm.notNull(globalErrorHandler);
         this.logger = Affirm.notNull(logger);
     }

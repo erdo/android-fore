@@ -9,7 +9,7 @@ import co.early.fore.core.callbacks.FailureCallbackWithPayload;
 import co.early.fore.core.callbacks.SuccessCallback;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.ObservableImp;
-import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
+import co.early.fore.net.retrofit2.CallProcessorRetrofit2;
 import foo.bar.example.foreretrofit.api.fruits.FruitPojo;
 import foo.bar.example.foreretrofit.api.fruits.FruitService;
 import foo.bar.example.foreretrofit.api.fruits.FruitsCustomError;
@@ -23,7 +23,7 @@ public class FruitFetcher extends ObservableImp{
     public static final String TAG = FruitFetcher.class.getSimpleName();
 
     private final FruitService fruitService;
-    private final Retrofit2CallProcessor<UserMessage> callProcessor;
+    private final CallProcessorRetrofit2<UserMessage> callProcessor;
     private final WorkMode workMode;
     private final Logger logger;
     private static Random random = new Random();
@@ -31,7 +31,7 @@ public class FruitFetcher extends ObservableImp{
     private boolean busy;
     private FruitPojo currentFruit = new FruitPojo("(fruitless)", false, 0);
 
-    public FruitFetcher(FruitService fruitService, Retrofit2CallProcessor<UserMessage> callProcessor, Logger logger, WorkMode workMode) {
+    public FruitFetcher(FruitService fruitService, CallProcessorRetrofit2<UserMessage> callProcessor, Logger logger, WorkMode workMode) {
         super(workMode);
         this.fruitService = Affirm.notNull(fruitService);
         this.callProcessor = Affirm.notNull(callProcessor);

@@ -53,8 +53,11 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-lifecycle:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-lifecycle"))
+    if (Shared.Publish.use_published_version) {
+        implementation("co.early.fore:fore-lifecycle:${Shared.Publish.published_fore_version_for_examples}")
+    } else {
+        implementation(project(":fore-lifecycle"))
+    }
 
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
     //noinspection AnnotationProcessorOnCompilePath

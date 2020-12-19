@@ -9,7 +9,7 @@ import co.early.fore.core.callbacks.FailureCallbackWithPayload;
 import co.early.fore.core.callbacks.SuccessCallback;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.logging.SystemLogger;
-import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
+import co.early.fore.net.retrofit2.CallProcessorRetrofit2;
 import co.early.fore.net.InterceptorLogging;
 import co.early.fore.net.testhelpers.InterceptorStubbedService;
 import co.early.fore.net.testhelpers.StubbedServiceDefinition;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
  * in /resources. This all happens in OkHttp land so the model under test is not aware of any
  * difference.
  * <p>
- * As usual for tests, we setup the {@link Retrofit2CallProcessor} with {@link WorkMode#SYNCHRONOUS} so
+ * As usual for tests, we setup the {@link CallProcessorRetrofit2} with {@link WorkMode#SYNCHRONOUS} so
  * that everything plays out in a single thread.
  *
  */
@@ -49,7 +49,7 @@ public class FruitFetcherIntegrationTest {
     private SuccessCallback mockSuccessCallback;
     private FailureCallbackWithPayload mockFailureCallbackWithPayload;
     private InterceptorLogging interceptorLogging;
-    private Retrofit2CallProcessor<UserMessage> callProcessor;
+    private CallProcessorRetrofit2<UserMessage> callProcessor;
 
 
     private static StubbedServiceDefinition<FruitPojo> stubbedSuccess = new StubbedServiceDefinition<>(
@@ -73,7 +73,7 @@ public class FruitFetcherIntegrationTest {
         mockSuccessCallback = mock(SuccessCallback.class);
         mockFailureCallbackWithPayload = mock(FailureCallbackWithPayload.class);
         interceptorLogging = new InterceptorLogging(logger);
-        callProcessor = new Retrofit2CallProcessor<>(new CustomGlobalErrorHandler(logger), logger);
+        callProcessor = new CallProcessorRetrofit2<>(new CustomGlobalErrorHandler(logger), logger);
     }
 
 

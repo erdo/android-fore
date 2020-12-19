@@ -24,8 +24,9 @@ import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_rem
  * Diffable is run using coroutines as DiffUtil is a lot more resource intensive than Updatable
  *
  */
-class DiffablePlaylistModelAdapter(private val diffablePlaylistModel: DiffablePlaylistModel) :
-        ChangeAwareAdapter<DiffablePlaylistModelAdapter.ViewHolder>(diffablePlaylistModel) {
+class DiffablePlaylistModelAdapter(
+        private val diffablePlaylistModel: DiffablePlaylistModel
+) : ChangeAwareAdapter<DiffablePlaylistModelAdapter.ViewHolder>(diffablePlaylistModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_playlists_listitem, parent, false)

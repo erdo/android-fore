@@ -8,7 +8,7 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import com.apollographql.apollo.ApolloClient
@@ -45,7 +45,7 @@ class LaunchFetcherIntegrationTest {
 
     private val interceptorLogging = InterceptorLogging()
     private val logger = SystemLogger()
-    private val callProcessor = ApolloCallProcessor(CustomGlobalErrorHandler(logger))
+    private val callProcessor = CallProcessorApollo(CustomGlobalErrorHandler(logger))
 
     @MockK
     private lateinit var mockSuccess: Success

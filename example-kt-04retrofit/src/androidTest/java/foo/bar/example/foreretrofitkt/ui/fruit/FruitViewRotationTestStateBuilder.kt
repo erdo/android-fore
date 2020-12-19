@@ -24,7 +24,7 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
         val deferred = CompletableDeferred<Either<ErrorMessage, List<FruitPojo>>>()
 
         coEvery {
-            fruitViewRotationTest.mockRetrofit2CallProcessor.processCallAsync(
+            fruitViewRotationTest.mockCallProcessorRetrofit2.processCallAsync(
                 any() as suspend () -> Response<List<FruitPojo>>
             )
         } returns deferred

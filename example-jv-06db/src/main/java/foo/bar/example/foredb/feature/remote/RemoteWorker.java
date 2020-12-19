@@ -10,7 +10,7 @@ import co.early.fore.core.callbacks.SuccessCallback;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.ObservableImp;
 import co.early.fore.core.time.SystemTimeWrapper;
-import co.early.fore.net.retrofit2.Retrofit2CallProcessor;
+import co.early.fore.net.retrofit2.CallProcessorRetrofit2;
 import foo.bar.example.foredb.App;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.api.todoitems.TodoItemPojo;
@@ -29,7 +29,7 @@ public class RemoteWorker extends ObservableImp{
     //notice how we use the TodoListModel, we don't go directly to the db layer
     private final TodoListModel todoListModel;
     private final TodoItemService service;
-    private final Retrofit2CallProcessor<UserMessage> callProcessor;
+    private final CallProcessorRetrofit2<UserMessage> callProcessor;
     private final SystemTimeWrapper systemTimeWrapper;
     private final WorkMode workMode;
     private final Logger logger;
@@ -37,7 +37,7 @@ public class RemoteWorker extends ObservableImp{
     private int connections;
     private static final String WEB = App.getInst().getString(R.string.todo_web);
 
-    public RemoteWorker(TodoListModel todoListModel, TodoItemService service, Retrofit2CallProcessor<UserMessage> callProcessor,
+    public RemoteWorker(TodoListModel todoListModel, TodoItemService service, CallProcessorRetrofit2<UserMessage> callProcessor,
                         SystemTimeWrapper systemTimeWrapper, Logger logger, WorkMode workMode) {
         super(workMode);
         this.todoListModel = Affirm.notNull(todoListModel);

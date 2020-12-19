@@ -46,13 +46,12 @@ object Shared {
         const val core_ktx = "1.3.0"
         const val kotlinx_coroutines_core = "1.3.2"
         const val kotlinx_coroutines_android = "1.2.1"
-        const val fore_version_for_examples = "1.2.1"
     }
 
     object Publish {
         //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "1.2.1"
-        const val LIB_VERSION_CODE = 43
+        const val LIB_VERSION_NAME = "1.3.0"
+        const val LIB_VERSION_CODE = 44
         const val REPO = "fore"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
@@ -67,5 +66,8 @@ object Shared {
         const val LICENCE_SHORT_NAME = "Apache-2.0"
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+
+        const val published_fore_version_for_examples = "1.3.0"
+        const val use_published_version = false
     }
 }

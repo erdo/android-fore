@@ -34,7 +34,7 @@ class FruitFetcherUnitTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
     @MockK
-    private lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<ErrorMessage>
+    private lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
     @MockK
@@ -52,7 +52,7 @@ class FruitFetcherUnitTest {
         //arrange
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockRetrofit2CallProcessor,
+            mockCallProcessorRetrofit2,
             logger,
             WorkMode.SYNCHRONOUS
         )
@@ -71,10 +71,10 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockSuccess() {
 
         //arrange
-        StateBuilder(mockRetrofit2CallProcessor).getFruitSuccess(fruitPojo)
+        StateBuilder(mockCallProcessorRetrofit2).getFruitSuccess(fruitPojo)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockRetrofit2CallProcessor,
+            mockCallProcessorRetrofit2,
             logger,
             WorkMode.SYNCHRONOUS
         )
@@ -103,10 +103,10 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockFailure() {
 
         //arrange
-        StateBuilder(mockRetrofit2CallProcessor).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
+        StateBuilder(mockCallProcessorRetrofit2).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockRetrofit2CallProcessor,
+            mockCallProcessorRetrofit2,
             logger,
             WorkMode.SYNCHRONOUS
         )
@@ -150,10 +150,10 @@ class FruitFetcherUnitTest {
     fun observersNotifiedAtLeastOnce() {
 
         //arrange
-        StateBuilder(mockRetrofit2CallProcessor).getFruitSuccess(fruitPojo)
+        StateBuilder(mockCallProcessorRetrofit2).getFruitSuccess(fruitPojo)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockRetrofit2CallProcessor,
+            mockCallProcessorRetrofit2,
             logger,
             WorkMode.SYNCHRONOUS
         )

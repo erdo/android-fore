@@ -24,15 +24,15 @@ public abstract class Async<Input, Progress, Result> extends AsyncTask<Input, Pr
      * will all be run synchronously on the same thread, so the executeTask() call will block.
      * This means that if you call cancel() sometime later on in the code, when you are running
      * tests (i.e. using SYNCHRONOUS), the whole thing will have already completed right the way
-     * through to onPostExecute() by the time you get to the cancel() part of your code of course.
+     * through to onPostExecute() by the time you get to the cancel() part of your code.
      * <p>
      * If you're planning on doing any network io or anything that will take a long time in
      * doInBackground() don't forget you also need to mock out that kind of behaviour when you are
      * doing tests, or at best your tests will take ages, at worst your tests will be dependent on
-     * a network ad fail when it's not available.
+     * a network and fail when it's not available.
      * <p>
      * if ASYNCHRONOUS, a regular AsyncTask will be used to perform the execute
-     * method as expected.
+     * method as expected (but using a THREAD_POOL_EXECUTOR in all versions of android)
      *
      */
     public Async(WorkMode workMode) {

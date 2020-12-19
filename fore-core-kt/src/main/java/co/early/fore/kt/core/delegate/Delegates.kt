@@ -16,7 +16,6 @@ import co.early.fore.kt.core.logging.SystemLogger
  *
  * To set your own Delegate e.g. `ForeDelegateHolder.setDelegate(DefaultTestDelegate())`
  */
-
 interface Delegate {
     val workMode: WorkMode
     val logger: Logger
@@ -68,8 +67,7 @@ class ForeDelegateHolder {
          * Keep in mind that this is a global operation, so if you are using it with tests that
          * run in parallel they will need to be running in separate JVMs to avoid synchronization
          * issues. If this is a problem for your set up, you can revert to passing the parameters
-         * to the fore component via the constructor - this is the technique used by the majority
-         * of the sample apps in the fore repo
+         * to the fore component via the constructor
          */
         fun setDelegate(delegate: Delegate){
             this.delegate = delegate

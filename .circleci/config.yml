@@ -158,3 +158,11 @@ jobs:
           path: example-kt-04retrofit/build/reports
       - store_test_results:
           path: example-kt-04retrofit/build/test-results
+
+      - run:
+          name: Run Tests example-kt-07apollo
+          command: ./gradlew example-kt-07apollo:lintRelease example-kt-07apollo:testRelease
+      - store_artifacts:
+          path: example-kt-07apollo/build/reports
+      - store_test_results:
+          path: example-kt-07apollo/build/test-results

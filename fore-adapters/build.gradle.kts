@@ -13,7 +13,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
 
-    //implementation("co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}")
+    //api("co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

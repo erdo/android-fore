@@ -4,7 +4,7 @@ import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.net.apollo.CallProcessorApollo
 import com.apollographql.apollo.api.Input
 import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
@@ -43,7 +43,7 @@ object OG {
                 InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = ApolloCallProcessor(
+        val callProcessor = CallProcessorApollo(
                 CustomGlobalErrorHandler(logger),
                 logger
         )

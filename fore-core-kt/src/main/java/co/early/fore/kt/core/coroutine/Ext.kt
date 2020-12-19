@@ -16,7 +16,7 @@ import kotlin.coroutines.coroutineContext
  * In any case https://github.com/Kotlin/kotlinx.coroutines/blob/coroutines-test/kotlinx-coroutines-test/README.md
  * is focussed on swapping out the main dispatcher for unit tests. Even with runBlockingTest, other dispatchers can
  * still run concurrently with your tests, making tests much more complicated. The whole thing is extremely
- * complicated in fact (which is why it doesn't work yet).
+ * complicated in fact (which is probably why it doesn't work yet).
  *
  * For the moment we continue to use the very simple and clear WorkMode switch as we have done in the past.
  * SYNCHRONOUS means everything is run sequentially in a blocking manner and on whatever thread the caller
@@ -149,30 +149,4 @@ suspend fun <T> awaitCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode?
     } else {
         withContext(dispatcher) { block() }
     }
-}
-
-
-@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitMainImm(workMode, block)"))
-suspend fun <T> withContextMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return awaitMainImm(workMode, block)
-}
-
-@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitMain(workMode, block)"))
-suspend fun <T> withContextMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return awaitMain(workMode, block)
-}
-
-@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitIO(workMode, block)"))
-suspend fun <T> withContextIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return awaitIO(workMode, block)
-}
-
-@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitDefault(workMode, block)"))
-suspend fun <T> withContextDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return awaitDefault(workMode, block)
-}
-
-@Deprecated("rename to make it easier to remember what this does", ReplaceWith("awaitCustom(workMode, block)"))
-suspend fun <T> withContextCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return awaitCustom(dispatcher, workMode, block)
 }

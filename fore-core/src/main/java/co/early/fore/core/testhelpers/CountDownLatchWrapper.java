@@ -41,7 +41,7 @@ public class CountDownLatchWrapper {
         CountDownLatchWrapper.timeoutInSeconds = timeoutInSeconds;
     }
 
-    public interface SurroundByCountdownLatch{
+    public interface SurroundByCountdownLatch {
         void run();
     }
 }

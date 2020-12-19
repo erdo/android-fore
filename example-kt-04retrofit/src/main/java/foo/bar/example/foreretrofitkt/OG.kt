@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofitkt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.InterceptorLogging
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreretrofitkt.api.CustomGlobalRequestInterceptor
@@ -38,7 +38,7 @@ object OG {
                 InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = Retrofit2CallProcessor(
+        val callProcessor = CallProcessorRetrofit2(
                 CustomGlobalErrorHandler(logger),
                 workMode,
                 logger

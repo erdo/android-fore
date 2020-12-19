@@ -5,7 +5,7 @@ import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.net.apollo.CallProcessorApollo
 import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage
@@ -39,7 +39,7 @@ class LaunchesModelUnitTest {
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
 
     @MockK
-    private lateinit var mockCallProcessor: ApolloCallProcessor<ErrorMessage>
+    private lateinit var mockCallProcessorApollo: CallProcessorApollo<ErrorMessage>
 
     @MockK
     private lateinit var mockLaunchService: LaunchService
@@ -62,7 +62,7 @@ class LaunchesModelUnitTest {
         //arrange
         val launchesModel = LaunchesModel(
                 mockLaunchService,
-                mockCallProcessor,
+                mockCallProcessorApollo,
                 mockAuthenticator,
                 logger,
                 WorkMode.SYNCHRONOUS
@@ -84,7 +84,7 @@ class LaunchesModelUnitTest {
         val mockLaunchesData = createMockLaunchesResponse(launch)
 
         //arrange
-        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallProcessorApollo
         val launchesModel = LaunchesModel(
                 mockLaunchService,
                 callProcessor,
@@ -118,7 +118,7 @@ class LaunchesModelUnitTest {
 
         //arrange
 
-        val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockCallProcessorApollo
         val launchesModel = LaunchesModel(
                 mockLaunchService,
                 callProcessor,
@@ -168,7 +168,7 @@ class LaunchesModelUnitTest {
         val mockLaunchesData = createMockLaunchesResponse(launch)
 
         //arrange
-        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockApolloCallProcessor
+        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallProcessorApollo
         val launchesModel = LaunchesModel(
                 mockLaunchService,
                 callProcessor,

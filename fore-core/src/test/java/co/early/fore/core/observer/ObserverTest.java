@@ -2,7 +2,7 @@ package co.early.fore.core.observer;
 
 import android.os.Looper;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.After;
 import org.junit.Before;
@@ -66,7 +66,7 @@ public class ObserverTest {
 
         //assert
         verifyZeroInteractions(mockLogger);
-        Assert.assertEquals(false, observable.hasObservers());
+        Assert.assertFalse(observable.hasObservers());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ObserverTest {
 
         //assert
         verifyZeroInteractions(mockLogger);
-        Assert.assertEquals(false, observable.hasObservers());
+        Assert.assertFalse(observable.hasObservers());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class ObserverTest {
 
         //assert
         verifyZeroInteractions(mockLogger);
-        Assert.assertEquals(false, observable.hasObservers());
+        Assert.assertFalse(observable.hasObservers());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class ObserverTest {
 
         //assert
         verifyZeroInteractions(mockLogger);
-        Assert.assertEquals(false, observable.hasObservers());
+        Assert.assertFalse(observable.hasObservers());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class ObserverTest {
         //assert
         verifyZeroInteractions(mockLogger);
         verify(mockObserver1, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class ObserverTest {
 
         //assert
         verify(mockObserver1, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class ObserverTest {
         //assert
         verifyZeroInteractions(mockLogger);
         verify(mockObserver1, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -171,7 +171,7 @@ public class ObserverTest {
 
         //assert
         verify(mockObserver1, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -189,7 +189,7 @@ public class ObserverTest {
         verifyZeroInteractions(mockLogger);
         verify(mockObserver1, times(1)).somethingChanged();
         verify(mockObserver2, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -206,7 +206,7 @@ public class ObserverTest {
         //assert
         verify(mockObserver1, times(1)).somethingChanged();
         verify(mockObserver2, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -240,7 +240,7 @@ public class ObserverTest {
         //assert
         verifyZeroInteractions(mockLogger);
         Assert.assertEquals(2, results[0]);
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -259,7 +259,7 @@ public class ObserverTest {
         //assert
         verify(mockObserver1, times(1)).somethingChanged();
         verify(mockObserver2, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -280,7 +280,7 @@ public class ObserverTest {
         verify(mockObserver1, times(1)).somethingChanged();
         verify(mockObserver2, times(1)).somethingChanged();
         verify(mockObserver3, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -299,7 +299,7 @@ public class ObserverTest {
         verify(mockObserver1, times(1)).somethingChanged();
         verify(mockObserver2, times(1)).somethingChanged();
         verify(mockObserver3, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -339,7 +339,7 @@ public class ObserverTest {
         verify(mockLogger, times(1)).w(anyString(), anyString());
         verifyNoMoreInteractions(mockLogger);
         Assert.assertEquals(3, results[0]);
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -360,7 +360,7 @@ public class ObserverTest {
         verify(mockObserver1, times(1)).somethingChanged();
         verify(mockObserver2, times(1)).somethingChanged();
         verify(mockObserver3, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -382,7 +382,7 @@ public class ObserverTest {
         verifyZeroInteractions(mockObserver1);
         verifyZeroInteractions(mockObserver2);
         verify(mockObserver3, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -405,7 +405,7 @@ public class ObserverTest {
         verifyZeroInteractions(mockObserver1);
         verifyZeroInteractions(mockObserver2);
         verifyZeroInteractions(mockObserver3);
-        Assert.assertEquals(false, observable.hasObservers());
+        Assert.assertFalse(observable.hasObservers());
     }
 
     @Test
@@ -426,7 +426,7 @@ public class ObserverTest {
         //assert
         verify(mockObserver1, times(5)).somethingChanged();
         verify(mockObserver2, times(5)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test
@@ -457,7 +457,7 @@ public class ObserverTest {
 
         //assert
         verify(mockLogger, times(2)).e(any(), any());
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
 
@@ -491,7 +491,7 @@ public class ObserverTest {
 
         //assert
         verify(mockObserver1, times(1)).somethingChanged();
-        Assert.assertEquals(true, observable.hasObservers());
+        Assert.assertTrue(observable.hasObservers());
     }
 
     @Test

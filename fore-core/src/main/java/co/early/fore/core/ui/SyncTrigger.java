@@ -15,7 +15,7 @@ import co.early.fore.core.Affirm;
  *      {@link CheckTriggerThreshold#checkThreshold()} once again returns true.
  * </p><p>
  *      To configure this trigger to immediately reset itself after each time it's fired without
- *      having to wait for {@link CheckTriggerThreshold#checkThreshold()} to return false
+ *      having to wait for {@link CheckTriggerThreshold#checkThreshold()} to return false,
  *      construct this class with the ResetRule.IMMEDIATELY flag
  * </p>
  */
@@ -48,7 +48,6 @@ public class SyncTrigger {
          */
         NEVER
     }
-
 
     public SyncTrigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold) {
         this(doThisWhenTriggered, checkTriggerThreshold, ResetRule.ONLY_AFTER_REVERSION);
