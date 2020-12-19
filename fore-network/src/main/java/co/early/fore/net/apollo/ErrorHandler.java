@@ -1,8 +1,8 @@
 package co.early.fore.net.apollo;
 
-import androidx.annotation.Nullable;
-
 import com.apollographql.apollo.api.Response;
+
+import org.jetbrains.annotations.Nullable;
 
 
 /**

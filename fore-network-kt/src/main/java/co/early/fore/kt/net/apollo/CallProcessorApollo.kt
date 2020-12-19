@@ -37,7 +37,7 @@ import kotlin.coroutines.suspendCoroutine
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-class ApolloCallProcessor<F>(
+class CallProcessorApollo<F>(
         private val globalErrorHandler: ErrorHandler<F>,
         private val logger: Logger? = null,
         private val workMode: WorkMode? = null,
@@ -94,8 +94,6 @@ class ApolloCallProcessor<F>(
     ): Either<F, SuccessResult<S>> {
 
         val data: S? = response.data
-
-        //TODO case where there is no data, but that is not an error
 
         return if (data != null) {
             if (!response.hasErrors() || allowPartialSuccesses) {

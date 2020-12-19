@@ -72,10 +72,11 @@ public class BasicTextWrapper {
     /**
      * Takes a string of text, replacing any '\n' line breaks with new lines which are added to the output list
      *
-     * @param lines
-     * @param lineWhichMayIncludeLineBreaks
+     * @param lines list of lines, which will have more lines appended to it by this method
+     * @param lineWhichMayIncludeLineBreaks this is the text which will be appended to the lines list (if it contains
+     *                                      line breaks, then the text will be broken into multiple lines before
+     *                                      being appended)
      */
-
     private static void expandLineBreaks(List<String> lines, String lineWhichMayIncludeLineBreaks) {
 
         int positionOfLineBreak = lineWhichMayIncludeLineBreaks.indexOf(LINE_BREAK);
@@ -92,8 +93,8 @@ public class BasicTextWrapper {
      * Recursive method, takes a list of words and concatenates them in order and with spaces in between each word, up to a maximum line width of widthAvailable,
      * further lines are added to linesSoFar until all the wordsStillToWrap have been processed.
      *
-     * @param linesSoFar
-     * @param wordsStillToWrap
+     * @param linesSoFar output list of lines of text limited to the characters available and made up of the words taken from wordsStillToWrap
+     * @param wordsStillToWrap words that are to be concatenated into lines and then added to linesSoFar
      */
     private static void extractWrappedLines(List<String> linesSoFar, List<String> wordsStillToWrap, int charactersAvailable) {
 
@@ -161,5 +162,4 @@ public class BasicTextWrapper {
 
         return stringBuilder.toString();
     }
-
 }

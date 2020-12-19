@@ -26,12 +26,10 @@ android {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
+    //api("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core-kt"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
-    api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")

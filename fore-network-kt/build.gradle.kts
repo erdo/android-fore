@@ -19,15 +19,15 @@ android {
         )
         exclude(
                 "co/early/fore/net/InterceptorLogging.java",
-                "co/early/fore/net/apollo/ApolloCallProcessor.java",
-                "co/early/fore/net/retrofit2/Retrofit2CallProcessor.java"
+                "co/early/fore/net/apollo/CallProcessorApollo.java",
+                "co/early/fore/net/retrofit2/CallProcessorRetrofit2.java"
         )
     }
 }
 
 dependencies {
 
-    //implementation("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
+    //api("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core-kt"))
 
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

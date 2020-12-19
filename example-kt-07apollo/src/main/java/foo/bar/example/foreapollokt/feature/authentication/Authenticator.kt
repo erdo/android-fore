@@ -9,7 +9,7 @@ import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.net.apollo.ApolloCallProcessor
+import co.early.fore.kt.net.apollo.CallProcessorApollo
 import com.apollographql.apollo.ApolloMutationCall
 import foo.bar.example.foreapollokt.graphql.LoginMutation
 import foo.bar.example.foreapollokt.message.ErrorMessage
@@ -23,7 +23,7 @@ data class AuthService(
  */
 class Authenticator(
         private val authService: AuthService,
-        private val callProcessor: ApolloCallProcessor<ErrorMessage>,
+        private val callProcessor: CallProcessorApollo<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {

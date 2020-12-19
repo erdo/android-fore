@@ -74,7 +74,8 @@
                 <ImageView
                     android:id="@+id/launch_patch_img"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20dp"/>
             </LinearLayout>
 
             <TextView

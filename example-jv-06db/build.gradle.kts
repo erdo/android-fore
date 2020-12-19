@@ -56,8 +56,11 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-jv:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-jv"))
+    if (Shared.Publish.use_published_version) {
+        implementation("co.early.fore:fore-jv:${Shared.Publish.published_fore_version_for_examples}")
+    } else {
+        implementation(project(":fore-jv"))
+    }
 
     kapt("androidx.room:room-compiler:${Shared.Versions.room_compiler}")
     kapt("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
@@ -67,6 +70,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("com.google.android.material:material:${Shared.Versions.material}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
+    implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.room:room-runtime:${Shared.Versions.room_runtime}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")

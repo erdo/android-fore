@@ -22,15 +22,6 @@ public class ObservableImp implements Observable{
      * @param notificationMode If notifications should be posted to the UI thread (appropriate for most app code) then use ASYNCHRONOUS.<p>
      *                         If notifications should be executed directly (more appropriate for test code) then use SYNCHRONOUS<p>
      *
-     *                         For tests, you will want to inject SYNCHRONOUS here which will force
-     *                         all the notifications to come through on the same thread that notifyObservers()
-     *                         is called on.<p>
-     *                         For application code, you probably want ASYNCHRONOUS - this will ensure
-     *                         all the notifications are delivered on the UI thread (posting to the UI thread only if
-     *                         necessary) regardless of what thread called the notifyObservers() method
-     *                         (this is handy if you will be updating the UI from
-     *                         somethingChanged()).<p>
-     *
      *                         NB: If there are any Android Adapters depending on your model for their list data, you will
      *                         want to make sure that you only update this list based data on the UI thread (i.e. for use
      *                         with adapters, you should only call notifyObservers() on the UI thread). This remains true
@@ -49,15 +40,6 @@ public class ObservableImp implements Observable{
     /**
      * @param notificationMode If notifications should be posted to the UI thread (appropriate for most app code) then use ASYNCHRONOUS.<p>
      *                         If notifications should be executed directly (more appropriate for test code) then use SYNCHRONOUS<p>
-     *
-     *                         For tests, you will want to inject SYNCHRONOUS here which will force
-     *                         all the notifications to come through on the same thread that notifyObservers()
-     *                         is called on.<p>
-     *                         For application code, you probably want ASYNCHRONOUS - this will ensure
-     *                         all the notifications are delivered on the UI thread (posting to the UI thread only if
-     *                         necessary) regardless of what thread called the notifyObservers() method
-     *                         (this is handy if you will be updating the UI from
-     *                         somethingChanged()).<p>
      *
      *                         NB: If there are any Android Adapters depending on your model for their list data, you will
      *                         want to make sure that you only update this list based data on the UI thread (i.e. for use
@@ -116,7 +98,7 @@ public class ObservableImp implements Observable{
      * called on.<p>
      * If the Observable has been constructed with the ASYNCHRONOUS method parameter
      * then the notifications will be posted to the UI thread if necessary (if notifyObservers
-     * is already on the UI thread then the observers will be called inline with no posting done)
+     * is already on the UI thread then the observers will be called immediately, with no posting done)
      * <p>
      * NB: If there are any Android Adapters depending on your model for their list data, you will
      * want to make sure that you only update this list based data on the UI thread (i.e. for use
@@ -175,5 +157,4 @@ public class ObservableImp implements Observable{
     private Handler handler(WorkMode workMode){
         return (workMode == WorkMode.ASYNCHRONOUS) ? new Handler(Looper.getMainLooper()) : null;
     }
-
 }

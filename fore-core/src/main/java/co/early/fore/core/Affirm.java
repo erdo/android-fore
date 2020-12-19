@@ -8,5 +8,4 @@ public class Affirm {
         }
         return param;
     }
-
 }

@@ -63,7 +63,7 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
     @MockK
-    lateinit var mockRetrofit2CallProcessor: co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor<ErrorMessage>
+    lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
 
@@ -80,7 +80,7 @@ class FruitViewRotationTest {
         //construct a real model with mock dependencies
         fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockRetrofit2CallProcessor,
+            mockCallProcessorRetrofit2,
             logger,
             WorkMode.ASYNCHRONOUS
         )

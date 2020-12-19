@@ -19,11 +19,6 @@ import retrofit2.Response
  * CE needs to implement MessageProvider&lt;F&gt; (i.e. it needs to be able to give you a failure
  * message that can be passed back to the application)
  *
- * ( By the way, would love to drop workMode entirely when using co-routines and just depend on
- * kotlinx-coroutines-test, sadly we can't always get determinate test results at
- * the moment - and for unit tests that's a total deal breaker. There is a complicated discussion
- * about that here: https://github.com/Kotlin/kotlinx.coroutines/pull/1206 )
- *
  * @param globalErrorHandler Error handler for the service (interpreting HTTP codes etc). This
  * error handler is often the same across a range of services required by the app. However, sometimes
  * the APIs all have different error behaviours (say when the service APIs have been developed
@@ -39,7 +34,7 @@ import retrofit2.Response
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-class Retrofit2CallProcessor<F>(
+class CallProcessorRetrofit2<F>(
         private val globalErrorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
         private val workMode: WorkMode? = null,
         private val logger: Logger?

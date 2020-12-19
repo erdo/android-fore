@@ -56,8 +56,11 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-network-kt:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-network-kt"))
+    if (Shared.Publish.use_published_version) {
+        implementation("co.early.fore:fore-network-kt:${Shared.Publish.published_fore_version_for_examples}")
+    } else {
+        implementation(project(":fore-network-kt"))
+    }
 
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")

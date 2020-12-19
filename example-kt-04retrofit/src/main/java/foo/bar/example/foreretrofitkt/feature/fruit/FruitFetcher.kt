@@ -9,7 +9,7 @@ import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.core.Either.Left
 import co.early.fore.kt.core.Either.Right
-import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.retrofit2.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
@@ -23,7 +23,7 @@ import java.util.Random
  */
 class FruitFetcher(
         private val fruitService: FruitService,
-        private val retrofit2CallProcessor: Retrofit2CallProcessor<ErrorMessage>,
+        private val retrofit2CallProcessor: CallProcessorRetrofit2<ErrorMessage>,
         private val logger: Logger,
         private val workMode: WorkMode
 ) : Observable by ObservableImp(workMode, logger) {

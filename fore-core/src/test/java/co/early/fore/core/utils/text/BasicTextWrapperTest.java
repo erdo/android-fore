@@ -143,7 +143,7 @@ public class BasicTextWrapperTest {
             exceptionThrown = true;
         }
 
-        Assert.assertEquals(true, exceptionThrown);
+        Assert.assertTrue(exceptionThrown);
     }
 
 

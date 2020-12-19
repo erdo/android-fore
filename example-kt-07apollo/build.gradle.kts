@@ -72,8 +72,11 @@ repositories {
 
 dependencies {
 
-    implementation(project(":fore-network-kt"))
-    //implementation("co.early.fore:fore-network-kt:${Shared.Versions.fore_version_for_examples}")
+    if (Shared.Publish.use_published_version) {
+        implementation("co.early.fore:fore-network-kt:${Shared.Publish.published_fore_version_for_examples}")
+    } else {
+        implementation(project(":fore-network-kt"))
+    }
 
     implementation("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
 

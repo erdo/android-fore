@@ -56,8 +56,11 @@ repositories {
 
 dependencies {
 
-    //implementation("co.early.fore:fore-adapters-kt:${Shared.Versions.fore_version_for_examples}")
-    implementation(project(":fore-adapters-kt"))
+    if (Shared.Publish.use_published_version) {
+        implementation("co.early.fore:fore-adapters-kt:${Shared.Publish.published_fore_version_for_examples}")
+    } else {
+        implementation(project(":fore-adapters-kt"))
+    }
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

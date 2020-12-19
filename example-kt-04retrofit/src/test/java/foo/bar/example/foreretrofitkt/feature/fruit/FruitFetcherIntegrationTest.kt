@@ -4,7 +4,7 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.retrofit2.Retrofit2CallProcessor
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
@@ -42,7 +42,7 @@ class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
     private val interceptorLogging = InterceptorLogging(logger)
-    private val callProcessor = Retrofit2CallProcessor(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
+    private val callProcessor = CallProcessorRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
 
     @MockK
     private lateinit var mockSuccess: Success

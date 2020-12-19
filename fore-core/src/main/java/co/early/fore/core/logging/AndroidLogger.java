@@ -51,11 +51,10 @@ public class AndroidLogger implements Logger{
     }
 
     public void v(String tag, String message, Throwable throwable) {
-        Log.e(addTagPrefixIfPresent(tag), message, throwable);
+        Log.v(addTagPrefixIfPresent(tag), message, throwable);
     }
 
     private String addTagPrefixIfPresent(String message){
         return (tagPrefix == null ? message : tagPrefix + message);
     }
-
 }
