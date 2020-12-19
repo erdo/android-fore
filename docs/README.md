@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.2.1](https://img.shields.io/badge/jcenter-1.2.1-green.svg){: .float-left}
+![jcenter-1.3.1](https://img.shields.io/badge/jcenter-1.3.1-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -54,27 +54,27 @@ Specifically _why_ it is that apps written this way are both sparse _and_ scalab
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.2.1"
+implementation "co.early.fore:fore-kt:1.3.1"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.2.1"
+implementation "co.early.fore:fore-jv:1.3.1"
 ```
 
 You can use the individual packages too if you want (although they are so small anyway, it's hardly worth bothering):
 
 ```
-implementation "co.early.fore:fore-core:1.2.1"
-implementation "co.early.fore:fore-adapters:1.2.1"
-implementation "co.early.fore:fore-retrofit:1.2.1"
-implementation "co.early.fore:fore-lifecycle:1.2.1"
+implementation "co.early.fore:fore-core:1.3.1"
+implementation "co.early.fore:fore-adapters:1.3.1"
+implementation "co.early.fore:fore-network:1.3.1"
+implementation "co.early.fore:fore-lifecycle:1.3.1"
 
 //backed by coroutines rather than threads
 //but just as testable, and slightly more kotliny
-implementation "co.early.fore:fore-core-kt:1.2.1"
-implementation "co.early.fore:fore-adapters-kt:1.2.1"
-implementation "co.early.fore:fore-retrofit-kt:1.2.1"
+implementation "co.early.fore:fore-core-kt:1.3.1"
+implementation "co.early.fore:fore-adapters-kt:1.3.1"
+implementation "co.early.fore:fore-network-kt:1.3.1"
 ```
 _(**pre Kotlin 1.4** use version **1.2.1-legacy-KOTLIN-1.3.x** see [this issue](https://github.com/erdo/android-fore/issues/72))_
 <br/>
