@@ -1,11 +1,11 @@
+<a name="fore-network"></a>
+# Retrofit2 and Apollo
 
-# Retrofit and the CallProcessor
-
-The **CallProcessor** ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/CallProcessor.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-retrofit/src/main/java/co/early/fore/retrofit/CallProcessor.java)) is a wrapper for the Retrofit2 Call class. For a usage example, please see the Retrofit [Example App](https://erdo.github.io/android-fore/#fore-4-retrofit-example).
+**fore** handles both Retrofit2 and Apollo networking calls in a similar way, by wrapping them with a **CallProcessor** class ([CallProcessorRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/CallProcessorRetrofit2.kt) \| [CallProcessorApollo](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/apollo/CallProcessorApollo.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
-The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/Either.kt).
+The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/Either.kt).
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -14,6 +14,8 @@ The Java and Kotlin implementations have slightly different APIs, while the Java
  </div>
 
 <pre class="tabcontent tabbed java"><code>
+//Retrofit2 example
+
 callProcessor.processCall(service.getFruits("3s"), workMode,
     successResponse -> handleSuccess(successResponse),
     failureMessage -> handleFailure(failureMessage)
@@ -21,6 +23,8 @@ callProcessor.processCall(service.getFruits("3s"), workMode,
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
+//Retrofit2 example
+
 launchMain(workMode) {
 
     val result = callProcessor.processCallAwait {
@@ -54,10 +58,12 @@ And then you can convert any CallProcessor results from Fore Eithers to Arrow Ei
 
 ## carryOn
 
-The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-retrofit-kt/src/main/java/co/early/fore/kt/retrofit/ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
+The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
 
 
 ```kotlin
+
+//Retrofit2 example
 
 callProcessor.processCallAsync {
 
@@ -83,10 +89,11 @@ callProcessor.processCallAsync {
 
 You can see it live in the kotlin version of [sample app 4](https://erdo.github.io/android-fore/#fore-4-retrofit-example)
 
+*Because of small differences in Apollo's API design, it's not quite as convenient to chain calls together when using Apollo. There is however an extension function on fore's Either implementation which let's you achieve something [very similar](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-07apollo/src/main/java/foo/bar/example/foreapollokt/feature/launch/LaunchesModel.kt#L104).*
 
 ## Custom APIs
 
-All APIs will be slightly different regarding what global headers they require, what HTTP response code they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api) of this customisation.
+All APIs will be slightly different regarding what global headers they require, what HTTP response codes they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api) of this customisation.
 
 The sample apps all use JSON over HTTP, but there is no reason you can't use something like protobuf, for example.
 
@@ -104,7 +111,7 @@ As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONO
 
 # Adapter animations
 
-*For some robust and testable implementations, please see the [Adapter Example App Source Code](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
+*For some robust and testable implementations, please see the [Adapter Example App](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
 
 Firstly, if you _don't_ care about adapter animations, just call notifyDataSetChanged() from inside the syncView() function:
 
@@ -160,7 +167,7 @@ The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-examp
 
 ## Ensuring Robustness
 
-More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/observer/ObservableImp.java) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
+More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
 
 > "the change to the list data MUST be done on the UI thread AND the adapter MUST be told before the current thread yields"
 
@@ -175,11 +182,11 @@ This is because android will call **Adapter.count()** then **Adapter.get()** on 
 
 A lot of **fore** classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a mock SystemTimeWrapper rather than a real one, when you want to test various time based behaviour). It's simple and clear but potentially annoying to see these parameters crop up all the time.
 
-From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt#L22) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
 
 By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
 
-All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt).
+All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt#L11).
 
 
 # AsyncTasks with Lambdas
@@ -338,8 +345,6 @@ For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS
 
 A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
 
-From **1.2.0**, kotlin code can use default parameters in production code and then during tests can use the ForeDegelateHolder to substitue WorkMode.ASYNCHRONOUS with WorkMode.SYNCHRONOUS as follows: `ForeDelegateHolder.setDelegate(TestDelegateDefault())`.
-
 # Kotlin Coroutines
 With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
 
@@ -353,7 +358,7 @@ There is a dev.to tutorial on State and Events which might be worth a read, it d
 
 When using a SyncTrigger you need to implement the **triggered()** method which will be run when the SyncTrigger is fired (e.g. to run an animation), and also implement the **checkThreshold()** method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON). If the threshold is breached i.e. checkThreshold() returns **true**, then triggered() will be called.
 
-For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the [SyncTrigger source](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncTrigger.java) for more details about this).
+For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the SyncTrigger source for more details about this).
 
 
 By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.

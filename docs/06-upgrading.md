@@ -1,9 +1,15 @@
 
 # Upgrading from previous versions
 
-In the 3 years we've been publishing on jcenter, the core code has remained almost identical. Most version number bumps have been due to adding new classes to the optional packages or tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - so some version bumps have no effect for a particular package).
+Since we've been publishing on jcenter, the core code has remained almost identical. Most version number bumps have been due to adding new classes to the optional packages or tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - so some version bumps have no effect for a particular package).
 
-## default parameters for WorkMode, Logger and SystemTimeWrapper
+## GraphQL Support
+**1.3.1** adds support for **Apollo**, it wraps the calls using a CallProcessor in a similar way to how Retrofit2 is handled.
+
+## projects still on kotlin 1.3
+If you haven't updgrade your project to kotin 1.4 yet, **1.2.1-legacy-KOTLIN-1.3.x** is the most recent version of **fore** you can use, see [this issue](https://github.com/erdo/android-fore/issues/72)
+
+## defaults for WorkMode, Logger and SystemTimeWrapper
 
 From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. See more [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params). 1.2.1 is built with Kotlin 1.4, if you haven't upgraded yet, you can use **1.2.1-legacy-KOTLIN-1.3.x** see [this issue](https://github.com/erdo/android-fore/issues/72)
 
