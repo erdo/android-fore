@@ -11,13 +11,13 @@ These classes:
 > "View layers are: ephemeral; tightly coupled to the context; slow to test"
 
 
-In short they are no place to put business logic, any code placed in those classes will present the developer with a range of challenges related to managing a complicated lifecycle when screens are rotated or phone calls accepted such as:
+In short they are no place to put business logic or networking code, any code placed in those classes will present the developer with a range of challenges related to managing a complicated lifecycle when screens are rotated or phone calls accepted, such as:
 
 - loosing data stored in memory (causing null pointers or requiring unecessary network calls)
 - maintaining UI consistency
 - guarding against memory leaks
 
-It seems obvious but still, those issues account for a fairly large chunk of the bugs present in a typical android app.
+It might seem obvious, but still: handling those issues accounts for a fairly large chunk of the boiler plate present in a typical android app.
 
 
 ## Examples
@@ -41,16 +41,16 @@ Here are few examples:
 Pretty much all views in **fore** do the same few things when they are created:
 
 - get a reference to all the view components like Buttons, TextViews etc.
-- get a reference to all models that the view needs to observe using some form of DI
+- get a reference to all models that the view needs to observe (using some form of DI)
 - set up all the click listeners, text changed listeners etc
-- set up any adapters (optional)
-- set up any SyncTriggers for things like animations (optional)
+- *(optionally) set up any adapters*
+- *(optionally) set up any SyncTriggers for things like animations*
 
 In addition to that there will be:
 
 - the syncView() function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) by calling adapter.notifyDataSetChangedAuto method).
 
-_Often there will then be the add / remove observers methods where the view latches onto the models it is interested in - this is handled automatically in the Sync... classes, see below._
+Often there will also be the add / remove observers methods where the view registers with the models it is interested in - this is handled automatically in the Sync... classes, see below.
 
 
 ## Removing even more boiler plate
@@ -157,7 +157,7 @@ class MySpeedoFragment : SyncFragmentX() {
  </code></pre>
 
 ### Sync[ViewGroup]
- There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes. For example here's the one for [ScrollView](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/view/SyncScrollView.java)).
+ There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included - it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes. For example here's the one for [ScrollView](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/view/SyncScrollView.java)).
 
  <!-- Tabbed code sample -->
   <div class="tab">

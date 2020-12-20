@@ -35,8 +35,7 @@ As part of refreshing the entire view, the syncView() method must set an **affir
 
 It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be indeterministic (it will be whatever state it had previously). This is one of those sneaky edge case things that at first glance might look fine, but can reveal itself as a bug later.
 
-So don't do this:
-
+So don't do this inside your syncView() function:
 
 
 <!-- Tabbed code sample -->
@@ -165,7 +164,7 @@ val observer = Observer { syncView() }
 Both will compile and run though and the observer will be triggered successfully **but you will end up with a memory leak when you come to remove this observer as the reference will have changed.**
 
 
-And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be an added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using Fragment lifecycle methods to do it)*:
+And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using Fragment lifecycle methods to do it)*:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -243,13 +242,13 @@ accountModel.accountStateLiveData.observer(this, Observer { status ->
 })
 ```
 
-We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. The same would be the case if we had a parameter in the somethingChanged() method. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually.
+We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler-plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually. This is what **fore** code would also look like if we had a parameter in the somethingChanged() method, luckily there is no parameter. All fore observables have exactly the same code signature, no matter what type of data is involved.
 
-*We can improve this situation by using LiveData to observe a single immutable state class which contains all the states - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if a view is observing more than one model...*
+*We can improve this situation by using LiveData to observe a single immutable state class which contains all the states by the way - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if a view is observing more than one model...*
 
 
 ### Views want things from more than one model
-Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected on the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
+Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected in the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
 
 Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's):
 
@@ -324,7 +323,7 @@ override fun getThingsToObserve(): LifecycleSyncer.Observables {
 
 > "reduce view layer code to its absolute fundamentals: what things look like"
 
-This lets you reduce view layer code to its absolute fundamentals: what things look like. Imagine a fairly complex reactive UI that displays if the user is logged in or not, shows the last time the user logged in, the number of unread emails, what the account status is, a weather forecast, and the current wind speed and temperature. With appropriately written and observable models, the syncView implementation for that screen would be:
+This lets you reduce view layer code to its absolute fundamentals: what things look like. Imagine a fairly complex reactive UI that displays if the user is logged in or not, shows the last time the user logged in, the number of unread emails, what the account status is, a weather forecast, and the current wind speed and temperature. With appropriately written, observable models, the syncView implementation for that screen would be:
 
 ``` kotlin
 
