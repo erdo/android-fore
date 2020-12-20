@@ -35,9 +35,6 @@ public class ObservableGroup implements AutoSyncable {
     }
 
     public void addObserversAndSync(SyncableView syncableView) {
-        if (observablesList.size() > 0){
-            throw new RuntimeException("Observables have already been added");
-        }
         this.syncableView = Affirm.notNull(syncableView);
         for (Observable observable : observablesList){
             observable.addObserver(viewUpdater);

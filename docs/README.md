@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![jcenter-1.3.1](https://img.shields.io/badge/jcenter-1.3.1-green.svg){: .float-left}
+![jcenter-1.3.2](https://img.shields.io/badge/jcenter-1.3.2-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -54,25 +54,25 @@ Specifically _why_ it is that apps written this way are both sparse _and_ scalab
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.3.1"
+implementation "co.early.fore:fore-kt:1.3.2"
 ```
 
 the original **java**:
 ```
-implementation "co.early.fore:fore-jv:1.3.1"
+implementation "co.early.fore:fore-jv:1.3.2"
 ```
 
 The packages are available individually too:
 
 ```
-implementation "co.early.fore:fore-core:1.3.1"
-implementation "co.early.fore:fore-adapters:1.3.1"
-implementation "co.early.fore:fore-network:1.3.1"
-implementation "co.early.fore:fore-lifecycle:1.3.1"
+implementation "co.early.fore:fore-core:1.3.2"
+implementation "co.early.fore:fore-adapters:1.3.2"
+implementation "co.early.fore:fore-network:1.3.2"
+implementation "co.early.fore:fore-lifecycle:1.3.2"
 
-implementation "co.early.fore:fore-core-kt:1.3.1"
-implementation "co.early.fore:fore-adapters-kt:1.3.1"
-implementation "co.early.fore:fore-network-kt:1.3.1"
+implementation "co.early.fore:fore-core-kt:1.3.2"
+implementation "co.early.fore:fore-adapters-kt:1.3.2"
+implementation "co.early.fore:fore-network-kt:1.3.2"
 ```
 
 If you want to check what versions of what dependencies each package pulls in, the definitive answer is found in the pom files hosted at [jcenter](https://jcenter.bintray.com/co/early/fore/). See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.

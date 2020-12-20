@@ -106,6 +106,17 @@ checkoutButton.enabled = !basket.isBelowMinimum()
 totalPrice.color = if (basket.isBelowMinimum()) red else black
  </code></pre>
 
+### showOrGone and showOrInvisible
+
+When writing syncView() functions, you will often come across situations where you want to set a visibility to VISIBLE / INVISIBLE or VISIBLE / GONE based on a boolean state of a model. This is a very short line to write in java, slightly less so in kotlin (as we don't have the elvis operator for ternerary operations). So for kotlin the cleanest way of writing these lines is with one of two extension functions that fore provides. So if you prefer, you can write the following:
+
+
+``` kotlin
+fun syncView() {
+    homepage_busy_progbar.showOrGone(authentication.isBusy)
+    homepage_memberstatus_img.showOrInvisible(user.isRegistered)
+}
+```
 
 ### Don't count notifications
 Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors.
