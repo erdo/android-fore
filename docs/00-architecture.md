@@ -50,7 +50,7 @@ Here's an example app structure showing some models being observed by fragments 
 
 ![data binding](img/app_arch_0.png)
 
-A lot of the time, things happen in an app that do not originate directly from user interaction: incoming notifications, network connectivity changes, bluetooth LE connections etc. Often, we have to propagate those events to the view layer somehow, often by locating the current foreground activity / fragment (using ActivityLifecycleCallbacks for instance) and then pushing the information to the view component directly: this is the <strong>opposite</strong> of a reactive UI.
+A lot of the time, things happen in an app that do not originate directly from user interaction: incoming notifications, network connectivity changes, Bluetooth LE connections etc. We have to propagate those events to the view layer somehow, often by locating the current foreground activity / fragment (using ActivityLifecycleCallbacks for example) and then pushing the information to the view layer directly: this is the <strong>opposite</strong> of a reactive UI.
 
 MVO's observable models provide an easy and much less boiler-plate intensive solution: when the models' state changes, they notify their observers (they don't need to involve themselves in any view layer considerations at all).
 
@@ -78,7 +78,7 @@ The code looks extremely simple and it is, but surprisingly the technique works 
 
 
 ## Handling State
-In MVO, the state is kept inside in the models, typically accessible via getter methods or properties. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other ui data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course, MVO just tends to keep the functional code out of ephemeral view layers. This means that you can have a Redux style reducer, and immutable state for your models internally  - as long as that state is accessed by the view layer using getters / properties, you'll still be able to take full advantage of MVO architecture.
+In MVO, the state is kept inside the models, typically accessible via getter methods or properties. You'll notice that's not particularly functional in style, but it's one of the reasons that MVO has such shockingly low boiler plate compared with other ui data-binding techniques. And this shouldn't worry you by the way (dependency injection is not a functional pattern either - as developers we simply always look for the best tool for the job). Whatever drives the state of your models and the rest of your app can be as functional as you want of course, MVO just tends to keep the functional code out of ephemeral view layers. This means that you can have a Redux style reducer, and immutable state for your models internally  - as long as that state is accessed by the view layer using getters / properties, you'll still be able to take full advantage of MVO architecture.
 
 There is further discussion of state versus events [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events)
 
