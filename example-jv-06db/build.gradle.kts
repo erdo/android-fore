@@ -43,6 +43,10 @@ android {
             signingConfig = signingConfigs.getByName("release")
             testBuildType = "release"
         }
+        getByName("debug") {
+            isMinifyEnabled = false
+            testBuildType = "debug"
+        }
     }
     lintOptions {
         isAbortOnError = true

@@ -4,6 +4,7 @@
  *
  * ./gradlew connectedReleaseAndroidTest
  * ./gradlew connectedDebugAndroidTest
+ *
  * ./gradlew testDebugUnitTest
  *
  * ./gradlew clean
