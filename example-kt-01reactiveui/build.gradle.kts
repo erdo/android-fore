@@ -29,7 +29,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "foo.bar.example.forereactiveui"
+        applicationId = "foo.bar.example.forereactiveuikt"
         minSdkVersion(Shared.Android.minSdkVersion)
         targetSdkVersion(Shared.Android.targetSdkVersion)
         versionCode = 1
