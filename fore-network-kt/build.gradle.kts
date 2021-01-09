@@ -27,7 +27,6 @@ android {
 
 dependencies {
 
-    //api("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core-kt"))
 
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

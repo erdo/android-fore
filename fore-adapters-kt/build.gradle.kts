@@ -26,7 +26,6 @@ android {
 
 dependencies {
 
-    //api("co.early.fore:fore-core-kt:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core-kt"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

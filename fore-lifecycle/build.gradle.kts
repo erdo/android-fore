@@ -13,7 +13,6 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
 
-    //api("co.early.fore:fore-core:${Shared.Versions.fore_version_for_examples}")
     api(project(":fore-core"))
 
     api("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

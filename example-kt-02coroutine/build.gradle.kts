@@ -18,14 +18,15 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
-//    signingConfigs {
-//        create("release") {
-//            storeFile = file("../../keystore/debug.keystore")
-//            storePassword = "android"
-//            keyAlias = "android"
-//            keyPassword = "android"
-//        }
-//    }
+    signingConfigs {
+        create("release") {
+            // keytool -genkey -v -keystore debug.fake_keystore -storetype PKCS12 -alias android -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 20000 -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown"
+            storeFile = file("../keystore/debug.fake_keystore")
+            storePassword = "android"
+            keyAlias = "android"
+            keyPassword = "android"
+        }
+    }
 
     defaultConfig {
         applicationId = "foo.bar.example.forecoroutine"
@@ -39,7 +40,8 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"))
-//          signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("release")
+            testBuildType = "release"
         }
     }
     lintOptions {

@@ -2,7 +2,7 @@
  *
  * ./gradlew check
  *
- * ./gradlew connectedDebugAndroidTest
+ * ./gradlew connectedReleaseAndroidTest
  * ./gradlew testDebugUnitTest
  *
  * ./gradlew clean
