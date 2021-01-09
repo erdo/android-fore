@@ -131,7 +131,7 @@ public class InterceptorLogging implements Interceptor {
         if (HttpHeaders.hasBody(response)){
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
-            Buffer buffer = source.buffer();
+            Buffer buffer = source.getBuffer();
             Charset charset = getCharset(responseBody.contentType());
             if (!isPlaintext(buffer)) {
                 logger.i(TAG + randomPostTag, " (binary " + buffer.size() + " byte body omitted)");

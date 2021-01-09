@@ -75,7 +75,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.room:room-runtime:${Shared.Versions.room_runtime}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Shared.Versions.kotlin_version}")
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("androidx.room:room-testing:${Shared.Versions.room_testing}")

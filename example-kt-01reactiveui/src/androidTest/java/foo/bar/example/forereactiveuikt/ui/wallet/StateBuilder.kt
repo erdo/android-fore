@@ -1,10 +1,6 @@
 package foo.bar.example.forereactiveuikt.ui.wallet
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
-import co.early.fore.kt.core.delegate.TestDelegateDefault
-import foo.bar.example.forereactiveuikt.App
 import foo.bar.example.forereactiveuikt.OG
 import foo.bar.example.forereactiveuikt.feature.wallet.Wallet
 import io.mockk.every

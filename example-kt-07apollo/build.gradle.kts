@@ -96,7 +96,7 @@ dependencies {
     }
     androidTestImplementation("org.objenesis:objenesis:2.6")
     //work around for https://github.com/mockk/issues/281
-    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtestcore}")
+    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:rules:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test.ext:junit:${Shared.Versions.androidxjunit}")
