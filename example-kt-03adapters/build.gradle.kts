@@ -39,7 +39,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"))
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "../proguard-example-app.pro")
             signingConfig = signingConfigs.getByName("release")
             testBuildType = "release"
         }
