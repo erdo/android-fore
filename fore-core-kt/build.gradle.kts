@@ -26,6 +26,7 @@ android {
 
 dependencies {
 
+    //promote the kotlin-reflect version used in the android lint tools to match kotlin_version used elsewhere
     implementation("org.jetbrains.kotlin:kotlin-reflect:${Shared.Versions.kotlin_version}")
 
     api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
