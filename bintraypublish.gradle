@@ -2,10 +2,8 @@
  *
  * ./gradlew check
  *
- * ./gradlew connectedReleaseAndroidTest
- * ./gradlew connectedDebugAndroidTest
- *
  * ./gradlew testDebugUnitTest
+ * ./gradlew connectedAndroidTest -PtestBuildType=release
  *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal

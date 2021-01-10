@@ -12,7 +12,7 @@ object Shared {
     }
 
     object Versions {
-        const val android_gradle_plugin = "4.0.1"
+        const val android_gradle_plugin = "4.0.2"
         const val kotlin_version = "1.4.0"
         const val gradle_bintray_plugin = "1.8.4"
         const val android_core = "1.1.0"
@@ -45,6 +45,12 @@ object Shared {
         const val core_ktx = "1.3.2"
         const val kotlinx_coroutines_core = "1.4.2"
         const val kotlinx_coroutines_android = "1.4.2"
+    }
+
+    object BuildTypes {
+        const val DEBUG = "debug"
+        const val RELEASE = "release"
+        const val DEFAULT = DEBUG
     }
 
     object Publish {
