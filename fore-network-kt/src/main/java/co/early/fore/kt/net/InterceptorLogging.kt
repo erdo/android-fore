@@ -103,7 +103,7 @@ class InterceptorLogging @JvmOverloads constructor(
                 val charset = getCharset(it.contentType())
                 val source = it.source()
                 source.request(Long.MAX_VALUE) // Buffer the entire body.
-                val buffer = source.buffer()
+                val buffer = source.buffer
                 if (!isPlaintext(buffer)) {
                     ForeDelegateHolder.getLogger(logger).i(
                             TAG + randomPostTag,

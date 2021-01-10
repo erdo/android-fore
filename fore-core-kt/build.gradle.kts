@@ -26,10 +26,11 @@ android {
 
 dependencies {
 
+    //promote the kotlin-reflect version used in the android lint tools to match kotlin_version used elsewhere
     implementation("org.jetbrains.kotlin:kotlin-reflect:${Shared.Versions.kotlin_version}")
 
     api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Shared.Versions.kotlin_version}")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Shared.Versions.kotlin_version}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Shared.Versions.kotlinx_coroutines_core}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Shared.Versions.kotlinx_coroutines_android}")
 }

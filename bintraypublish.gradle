@@ -2,8 +2,11 @@
  *
  * ./gradlew check
  *
- * ./gradlew connectedDebugAndroidTest
- * ./gradlew testDebugUnitTest
+ * ./gradlew testDebugUnitTest --info
+ * ./gradlew connectedAndroidTest -PtestBuildType=debug
+ * ./gradlew connectedAndroidTest -PtestBuildType=release
+ *
+ * ./gradlew example-kt-01reactiveui:testDebugUnitTest --info
  *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal

@@ -6,3 +6,8 @@
 -keep class co.early.fore.kt.core.logging.SystemLogger
 -keep class co.early.fore.kt.core.delegate.** { *; }
 -keep class co.early.fore.core.testhelpers.** { *; }
+-dontwarn co.early.fore.kt.net.apollo.**
+-dontwarn co.early.fore.net.apollo.**
+-dontwarn com.apollographql.apollo.ApolloCall$Callback
+-dontwarn co.early.fore.kt.net.retrofit2.**
+-dontwarn co.early.fore.net.retrofit2.**

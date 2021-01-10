@@ -1,4 +1,5 @@
 import co.early.fore.Shared
+import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
@@ -9,6 +10,16 @@ plugins {
     kotlin("kapt")
 }
 
+
+val appId = "foo.bar.example.foreretrofitkt"
+
+fun getTestBuildType(): String {
+    return project.properties["testBuildType"] as String? ?: co.early.fore.Shared.BuildTypes.DEFAULT
+}
+
+println("[$appId testBuildType:${getTestBuildType()}]")
+
+
 android {
 
     compileOptions {
@@ -18,28 +29,32 @@ android {
 
     compileSdkVersion(Shared.Android.compileSdkVersion)
 
-//    signingConfigs {
-//        create("release") {
-//            storeFile = file("../../keystore/debug.keystore")
-//            storePassword = "android"
-//            keyAlias = "android"
-//            keyPassword = "android"
-//        }
-//    }
-
     defaultConfig {
-        applicationId = "foo.bar.example.foreretrofitkt"
+        applicationId = appId
         minSdkVersion(Shared.Android.minSdkVersion)
         targetSdkVersion(Shared.Android.targetSdkVersion)
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testBuildType = getTestBuildType()
+    }
+    signingConfigs {
+        create(BuildTypes.RELEASE) {
+            // keytool -genkey -v -keystore debug.fake_keystore -storetype PKCS12 -alias android -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 20000 -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown"
+            storeFile = file("../keystore/debug.fake_keystore")
+            storePassword = "android"
+            keyAlias = "android"
+            keyPassword = "android"
+        }
     }
     buildTypes {
-        getByName("release") {
+        getByName(BuildTypes.DEBUG) {
+            isMinifyEnabled = false
+        }
+        getByName(BuildTypes.RELEASE) {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"))
-//          signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "../proguard-example-app.pro")
+            signingConfig = signingConfigs.getByName(BuildTypes.RELEASE)
         }
     }
     lintOptions {
@@ -67,20 +82,15 @@ dependencies {
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
 
-
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 
     //These tests need to be run on at least Android P / 9 / 27 (https://github.com/mockk/mockk/issues/182)
-    androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}") {
-        exclude(module = "objenesis")
-    }
-    androidTestImplementation("org.objenesis:objenesis:2.6")
-    //work around for https://github.com/mockk/issues/281
-    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtestcore}")
+    androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
+    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:rules:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test.ext:junit:${Shared.Versions.androidxjunit}")
+    androidTestImplementation("androidx.test.ext:junit-ktx:${Shared.Versions.androidxjunit}")
     androidTestImplementation("androidx.annotation:annotation:${Shared.Versions.annotation}")
     androidTestImplementation("androidx.test.espresso:espresso-core:${Shared.Versions.espresso_core}") {
         exclude(group = "com.android.support", module = "support-annotations")
