@@ -73,15 +73,15 @@ class ForeDelegateHolder {
             this.delegate = delegate
         }
 
-        fun getWorkMode(specified: WorkMode?) : WorkMode {
+        fun getWorkMode(specified: WorkMode? = null) : WorkMode {
             return specified ?: delegate.workMode
         }
 
-        fun getLogger(specified: Logger?) : Logger {
+        fun getLogger(specified: Logger? = null) : Logger {
             return specified ?: delegate.logger
         }
 
-        fun getSystemTimeWrapper(specified: SystemTimeWrapper?) : SystemTimeWrapper {
+        fun getSystemTimeWrapper(specified: SystemTimeWrapper? = null) : SystemTimeWrapper {
             return specified ?: delegate.systemTimeWrapper
         }
     }

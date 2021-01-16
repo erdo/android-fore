@@ -2,7 +2,7 @@
  *
  * ./gradlew check
  *
- * ./gradlew testDebugUnitTest --info
+ * ./gradlew testDebugUnitTest
  * ./gradlew connectedAndroidTest -PtestBuildType=debug
  * ./gradlew connectedAndroidTest -PtestBuildType=release
  *
