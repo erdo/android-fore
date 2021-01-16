@@ -46,6 +46,9 @@ allprojects {
     }
 }
 
+tasks.register("clean", Delete::class){
+    delete(rootProject.buildDir)
+}
 ext.apply {
 
     // TODO remove these once we migrate bintraypublish.gradle to kts
@@ -72,10 +75,6 @@ ext.apply {
 
     set("BINTRAY_USER", System.getenv("BINTRAY_USER") ?: secrets.getProperty("BINTRAY_USER"))
     set("BINTRAY_API_KEY", System.getenv("BINTRAY_API_KEY") ?: secrets.getProperty("BINTRAY_API_KEY"))
-}
-
-tasks.create<Delete>("clean") {
-    delete(rootProject.buildDir)
 }
 
 fun readProperties(propertiesFile: File): Properties {

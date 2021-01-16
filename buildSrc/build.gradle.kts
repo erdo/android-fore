@@ -1,10 +1,11 @@
 //import co.early.fore.Shared
 
 plugins {
-  `kotlin-dsl`
+    id("org.gradle.kotlin.kotlin-dsl").version("1.4.9")
 }
 
 repositories {
+  gradlePluginPortal()
   mavenCentral()
   google()
   jcenter()
