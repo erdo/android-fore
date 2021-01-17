@@ -5,7 +5,7 @@ plugins {
     id("com.android.application")
     id("maven")
     id("idea")
-    id("com.apollographql.apollo").version("2.4.5")
+    id("com.apollographql.apollo").version("2.5.2")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
