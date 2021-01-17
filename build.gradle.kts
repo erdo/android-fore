@@ -46,13 +46,16 @@ allprojects {
     }
 }
 
+tasks.register("clean", Delete::class){
+    delete(rootProject.buildDir)
+}
 ext.apply {
 
     // TODO remove these once we migrate bintraypublish.gradle to kts
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    set("LIB_VERSION_NAME", "1.3.3")
-    set("LIB_VERSION_CODE", 47)
+    set("LIB_VERSION_NAME", "1.3.4")
+    set("LIB_VERSION_CODE", 48)
 
     set("REPO", "fore")
     set("LIB_GROUP", "co.early.fore")
@@ -72,10 +75,6 @@ ext.apply {
 
     set("BINTRAY_USER", System.getenv("BINTRAY_USER") ?: secrets.getProperty("BINTRAY_USER"))
     set("BINTRAY_API_KEY", System.getenv("BINTRAY_API_KEY") ?: secrets.getProperty("BINTRAY_API_KEY"))
-}
-
-tasks.create<Delete>("clean") {
-    delete(rootProject.buildDir)
 }
 
 fun readProperties(propertiesFile: File): Properties {
