@@ -54,8 +54,8 @@ ext.apply {
     // TODO remove these once we migrate bintraypublish.gradle to kts
 
     //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    set("LIB_VERSION_NAME", "1.3.3")
-    set("LIB_VERSION_CODE", 47)
+    set("LIB_VERSION_NAME", "1.3.4")
+    set("LIB_VERSION_CODE", 48)
 
     set("REPO", "fore")
     set("LIB_GROUP", "co.early.fore")
