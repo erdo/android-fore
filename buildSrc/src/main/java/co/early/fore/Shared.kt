@@ -29,7 +29,7 @@ object Shared {
         const val espresso_core = "3.1.0-beta02"
         const val butterknife = "10.2.0"
         const val mockito_core = "2.23.0"
-        const val mockk = "1.10.4"
+        const val mockk = "1.10.5"
         const val junit = "4.12"
         const val espresso = "3.0.2"
         const val hamcrest_library = "1.3"
