@@ -13,9 +13,35 @@
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-**fore** helps you move code out of the view layer. Because once you do that, magical things start to happen.
+**fore** helps you move code out of the view layer. Because once you do that on Android, magical things start to happen!
 
-The most important class in the fore library is the observable implementation. This very simple class lets you **make anything observable** (usually it's models & repositories that are made observable, things in the view layer like activities & fragments do the observing).
+## Quick Start
+
+for a more **kotlin** style API and running coroutines under the hood:
+```
+implementation "co.early.fore:fore-kt:1.3.4"
+```
+
+the original **java** API:
+```
+implementation "co.early.fore:fore-jv:1.3.4"
+```
+
+To check what versions of what dependencies each package pulls in, the definitive answer is found in the pom files hosted at [jcenter](https://jcenter.bintray.com/co/early/fore/). See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+
+
+## New to fore
+
+This repo contains 10 tiny example apps, any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together.
+
+There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention helps you to write less code, while removing a whole class of UI consistency bugs from the UI layer. Or [this one](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) which details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) using fore.
+
+
+## Overview
+
+The main innovation in **fore** is its radically simplified observer implementation. This lets you seperate architectural layers to a greater degree than would usually be possible, and also transforms any classes doing the observing into genuinely reactive code.
+
+Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 
 
 <!-- Tabbed code sample -->
@@ -37,76 +63,109 @@ public class AccountRepository extends ObservableImp {
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-class AccountRepository : Observable by ObservableImp() {
+class AccountRepository
+: Observable by ObservableImp() {
 
   ...
 
 }
  </code></pre>
 
-The core package is tiny (the java version references **128 methods** in all, and adds just **12.5KB** to your apk _before_ obfuscation). You can simply use the observer to make your view layer [**reactive**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom) and **testable**, or go full on [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) and wonder where all your code went ;)
 
-The view layer is particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
-
-Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This dev.to [article](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to MVO (and in doing so drops the lines-of-code count by about half). This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) also gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
-
-## Quick Start
-
-for a more **kotlin** style API and running coroutines under the hood:
-```
-implementation "co.early.fore:fore-kt:1.3.4"
-```
-
-the original **java**:
-```
-implementation "co.early.fore:fore-jv:1.3.4"
-```
-
-The packages are available individually too:
-
-```
-implementation "co.early.fore:fore-core:1.3.4"
-implementation "co.early.fore:fore-adapters:1.3.4"
-implementation "co.early.fore:fore-network:1.3.4"
-implementation "co.early.fore:fore-lifecycle:1.3.4"
-
-implementation "co.early.fore:fore-core-kt:1.3.4"
-implementation "co.early.fore:fore-adapters-kt:1.3.4"
-implementation "co.early.fore:fore-network-kt:1.3.4"
-```
-
-If you want to check what versions of what dependencies each package pulls in, the definitive answer is found in the pom files hosted at [jcenter](https://jcenter.bintray.com/co/early/fore/). See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+ Somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
 
 
-## New to fore
+ <!-- Tabbed code sample -->
+  <div class="tab">
+    <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+  </div>
 
-**If you're new to fore, Welcome! might I suggest to:**
+ <pre class="tabcontent tabbed java"><code>
+ Observer observer = this::syncView;
+  </code></pre>
 
- 1. Clone this git repo
- 2. Get the example apps running
-
-(The repo contains 10 tiny example apps, any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current)
-
-**Then either**
-
-Check out some of the tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention helps you to write less code, while removing a whole class of UI consistency bugs from the UI layer.
-
-**Or**
-
-While referring to the code of the [sample apps](#sample-apps), dip in to the following sections of this site:
-  [**MVO Architecture**](https://erdo.github.io/android-fore/00-architecture.html#shoom),
-  [**Views**](https://erdo.github.io/android-fore/01-views.html#shoom), [**Models**](https://erdo.github.io/android-fore/02-models.html#shoom), [**Reactive UIs**](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom)
+ <pre class="tabcontent tabbed kotlin"><code>
+ val observer = Observer { syncView() }
+  </code></pre>
 
 
-Using **fore** and a few techniques outlined in these docs, you can quickly and robustly implement android apps in the [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) architectural style _(it's like a radically reduced version of MVVM, with the addition of a render() style function similar to MVI/Redux, or like MvRx's invalidate() function - it's called **syncView()** in MVO)_. It usually results in much less code in the view layer, rock-solid UI consistency, great testability, and support for rotation **by default**.
+And that observer is typically added and removed from the observable in line with lifecycle methods so that we dont get any memory leaks. In the case below, a fragment is observing a Wallet [model](https://en.wikipedia.org/wiki/Domain_model) representing the details of a user's wallet.
 
-MVO addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering.
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
 
-**fore** (though now stable) has been going through iterations privately for more than half a decade - and that privacy has facilitated the focussed *removal* of surplus functionality and methods, in a way that would probably be more difficult for a public project.
+<pre class="tabcontent tabbed java"><code>
+@Override
+protected void onStart() {
+    super.onStart();
+    wallet.addObserver(observer);
+    syncView(); //  <- don't forget this
+}
 
-The result is an MVO implementation which is particularly small but surprisingly powerful (just over 500 lines of code for the core package).
+@Override
+protected void onStop() {
+    super.onStop();
+    wallet.removeObserver(observer);
+}
+ </code></pre>
 
-### Overview
+<pre class="tabcontent tabbed kotlin"><code>
+override fun onStart() {
+    super.onStart()
+    wallet.addObserver(observer)
+    syncView() //  <- don't forget this
+}
+
+override fun onStop() {
+    super.onStop()
+    wallet.removeObserver(observer)
+}
+ </code></pre>
+
+(There are a few ways to [cut out](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) the add and remove boiler plate by the way)
+
+All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of the observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate()
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+public void syncView(){
+    increaseMobileWalletBtn.setEnabled(wallet.canIncrease());
+    decreaseMobileWalletBtn.setEnabled(wallet.canDecrease());
+    mobileWalletAmount.setText("" + wallet.getMobileWalletAmount());
+    savingsWalletAmount.setText("" + wallet.getSavingsWalletAmount());
+}
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+override fun syncView() {
+    wallet_increase_btn.isEnabled = wallet.canIncrease()
+    wallet_decrease_btn.isEnabled = wallet.canDecrease()
+    wallet_mobileamount_txt.text = wallet.mobileWalletAmount.toString()
+    wallet_savingsamount_txt.text = wallet.savingsWalletAmount.toString()
+}
+ </code></pre>
+
+Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests [Model Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) and [View Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt)
+
+The view layer tends to be particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
+
+ Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
+
+In fact fore itself is tiny: just over 500 lines of code for the core package The java version references **128 methods** in all, and adds just **12.5KB** to your apk _before_ obfuscation.
+
+MVO implemented with fore addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering.
+
+
+### Still reading?
 
 In a nutshell, developing with **fore** means writing:
 
@@ -255,7 +314,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2015-2020 early.co
+    Copyright 2015-2021 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

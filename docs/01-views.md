@@ -211,3 +211,42 @@ class MySpeedoFragment : SyncFragmentX() {
      }
  }
   </code></pre>
+
+### ViewModels observing many observables
+Similarly you can observe multiple observables from a ViewModel like this:
+
+
+``` kotlin
+
+class MyViewModel(
+    private val accountModel: AccountModel,
+    private val networkInfo: NetworkInfo,
+    private val emailInBox: EmailInBox,
+    private val weatherRepository: WeatherRepository
+) : ViewModel(), SyncableView, AutoSyncable by ObservableGroup(
+    accountModel,
+    networkInfo,
+    emailInBox,
+    weatherRepository) {
+
+    init {
+        addObserversAndSync(this)
+    }
+
+    override fun syncView() {
+       // Here you might create an immutable view state
+       // to pass to your fragment (based on the state of
+       // the models that you're observing).
+       // You can use LiveData to make the final hop
+       // to the fragment from here, or again use a fore
+       // observable to make the ViewModel itself observable
+        ...
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        removeObservers()
+    }
+}
+
+```
