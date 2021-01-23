@@ -12,7 +12,7 @@ An important thing about these models is that none of the code should know anyth
 
 In the sample apps, the models are all found in the **feature** package.
 
-Here's an example of a model that fetches a session token over a network connection to authenticate a user: [Authentication.kt](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/login/Authentication.kt)
+Here's a very simple model which represents a user's [Wallet](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code
 
 
 ## Writing a Basic Model

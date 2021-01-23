@@ -32,14 +32,14 @@ To check what versions of what dependencies each package pulls in, the definitiv
 
 ## New to fore
 
-This repo contains 10 tiny example apps, any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together.
+This repo includes 10 tiny example apps, any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together.
 
 There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention helps you to write less code, while removing a whole class of UI consistency bugs from the UI layer. Or [this one](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) which details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) using fore.
 
 
 ## Overview
 
-The main innovation in **fore** is its radically simplified observer implementation. This lets you seperate architectural layers to a greater degree than would usually be possible, and also transforms any classes doing the observing into genuinely reactive code.
+The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible, it also encourages the development of genuinely reactive code at the view layer.
 
 Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 
@@ -154,11 +154,11 @@ override fun syncView() {
 }
  </code></pre>
 
-Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests [Model Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) and [View Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt)
+Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
-The view layer tends to be particularly sparse when implementing MVO with **fore** and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
+The view layer tends to be particularly sparse when implementing MVO with **fore**, and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
- Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
+ Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see above) also touch on this. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
 
 In fact fore itself is tiny: just over 500 lines of code for the core package The java version references **128 methods** in all, and adds just **12.5KB** to your apk _before_ obfuscation.
 
@@ -294,11 +294,6 @@ It is driven by a Room db, and there are a few distinct architectural layers: as
 All the database changes are done away from the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows), the app is totally robust and supports rotation out of the box. There is a TodoListModel written in Java and one in Kotlin for convenience, in case you are looking to use these as starting points for your own code.
 
 There is only one test class included with this app which demonstrates how to test Models which are driven by a Room DB (using CountdownLatches etc). For other test examples, please see sample apps 1-4
-
-
-### Tutorials
-
-- There is a short series of **dev.to** tutorials which include more sample apps covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
 
 
 ### Other Full App Examples

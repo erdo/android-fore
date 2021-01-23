@@ -55,6 +55,8 @@
 - text: Extras
   url: /05-extras.html
   subitems:
+    - text: Tutorials
+      url: "#tutorials"
     - text: Presentation Slides
       url: "#presentations"
     - text: State versus Events

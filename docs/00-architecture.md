@@ -38,7 +38,7 @@ Notice the syncView() method does not take a parameter. It gets all it needs fro
 
 If you like using an immutable ViewState to drive your UI, the best place to put that for MVO would be within a ViewModel class, which you would access from inside your syncView function (e.g. myAccountViewModel.getViewState()).
 
-*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. You can use UseCases as normal, although for reasons we'll get to, they tend to be of the fire-and-forget variety. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
+*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. You can use UseCases as normal, although for reasons we'll get to, they tend to be of the fire-and-forget variety. There are two slightly larger, more commercial style app examples to check out, though they are starting to get a little out of date: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
 In a nutshell this is what we have with MVO:
 
@@ -99,7 +99,7 @@ There is one important thing to note about about this diagram however. If we foc
 
 _(It's worth mentioning that many early Android apps had no discernible domain model at all, some still don't, essentially writing the entire app in the UI layer - so if you can't find it in the app you are working on, it might not exist)._
 
-Anyway I did say that I thought the typical MVC diagram is not particularly useful, I think its main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
+Anyway I did say that the typical MVC diagram is not particularly useful, I think its main purpose is just to be shown before the MVP diagram is - so that we can see a particular difference. So here is a typical MVP diagram:
 
 ![simple basket](img/arch_mvp.png)
 
