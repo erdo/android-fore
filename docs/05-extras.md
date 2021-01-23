@@ -1,23 +1,24 @@
 
+
+# Tutorials
+
+There is a short series of **dev.to** tutorials which include more sample apps covering the basics of fore [here](https://dev.to/erdo/tutorial-android-fore-basics-1155)
+
+
 # Presentations
 
 There are a couple of presentations hosted on surge that I occasionally use, they might be useful for you too. Ironically they don't work at all on mobile.
 
-They were written using [spectacle](https://github.com/FormidableLabs/spectacle) which is a pretty good ReactJS presentation library.
+They were written using [spectacle](https://github.com/FormidableLabs/spectacle) and [reveal.js](https://github.com/hakimel/reveal.js) which are both pretty good javascript presentation libraries.
 
 
-### State versus Events at the UI layer
+### State vs. Event at the UI layer
 
 ![android basics presentation](img/pres_screenshot_3.png)
 
-Compares the two main strategies used when updating a view: using events (MVP, MVC) and using state (MVO, MVI, MvRx).
+Compares the two main strategies used when updating a view: using "event-y" architectures like MVP, MVC and using "state-y" architectures like MVO, MVI, MvRx.
 
-<strong>Presenter perspective including notes is [here](http://fore-ui.surge.sh/#/?presenter&timer)</strong>
-
-<strong>Regular slides without notes is [here](http://fore-ui.surge.sh)</strong>
-
-(if you open those two links on separate tabs of the same browser, the slides will automatically keep themselves in sync)
-
+<strong>presentation [here](http://state-event.surge.sh) (click "s" to view the presentation notes)</strong>
 
 ### Android architecture basics
 
@@ -46,13 +47,13 @@ This one takes you though all the main points of **fore** together with a lot of
 
 
 # State versus Events
-This is quite subtle but the issue presents itself in many different architectures, so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
+This is quite subtle but the issue presents itself in many different architectures (see also the presentation above), so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
 
 Let's take the example of a network error.
 
 If you choose to treat the network error as **state**, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
 
-Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you  still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible, is when the error state has actually been reset to ERROR_NONE by some logic processing away from the view layer.
+Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible, is when the error state has actually been reset to ERROR_NONE by some logic processing away from the view layer.
 
 Looks like choosing to store our error as state was the right move here.
 
@@ -64,7 +65,7 @@ This comes up a lot with displaying menus, popups, errors and running animations
 
 # Android's Original Mistake
 
-Separating view code from everything else is widely considered a good thing, but despite that agreement, it's rare to come across an android app that actually does that.
+Separating view code from everything else is widely considered a good thing, but despite that agreement, it's still common to see android apps that write most of their code in the view layer.
 
 Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
 
@@ -90,7 +91,7 @@ Android apps that are written using **fore** have a certain *look* to them code-
 
 ## Typical characteristics of an app built with **fore**
 
-- **The package structure** tends to contain two main packages (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/fore-full-example-02-kotlin/tree/master/app/src/main/java/foo/bar/example/fore/fullapp02), [here](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt) and [here](https://github.com/erdo/android-fore/tree/master/example-jv-06db/src/main/java/foo/bar/example/foredb)
+- **The structure** tends to contain two main packages/modules (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/fore-full-example-02-kotlin/tree/master/app/src/main/java/foo/bar/example/fore/fullapp02), [here](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt) and [here](https://github.com/erdo/android-fore/tree/master/example-jv-06db/src/main/java/foo/bar/example/foredb)
 - **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/android-fore/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/taskdetail/TaskDetailFragment.java), [here](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/ui/fruit/FruitActivity.java) and [here](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/ui/CounterActivity.kt)
 - **The View classes follow a very standard flow** which is: get a reference to UI components -> inject model dependencies -> setup click listeners/adapters etc -> setup any animations if needed -> make the ui reactive by adding and removing an observer and using a syncView method.
 
@@ -369,9 +370,9 @@ This seems to be the reaction of about 20% of the developers that come across th
 
 The first thing to bare in mind is of course: "premature optimisation is the route of all evil" or however that quote goes.
 
-The second thing is to make absolutely sure there is a complete understanding of the section on [syncView()](/android-fore/03-reactive-uis.html#syncview), particularly the deliberate bug that shows how doing ad-hoc updates can go wrong.
+The second thing is to make absolutely sure there is a complete understanding of the [dev.to spot the bug tutorial](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k).
 
-Everything in computing is a trade off, and when considering a trade off you need to understand two things: **the upsides** (in this case: the lure of only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the syncView() link above).
+Everything in computing is a trade off, and when considering a trade off you need to understand two things: **the upsides** (in this case: the lure of only updating the parts of the view that need updating) and **the downsides** (in this case: loosing the ability to support rotations by default, and increasing the risk of UI consistency issues as discussed in the tutorial above).
 
 Making a tradeoff when you don't fully appreciate one of those sides (up or down) is obviously not a great place to be.
 

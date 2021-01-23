@@ -135,7 +135,7 @@ The fore observable has two different WorkModes:
 - **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
 - **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
 
-With kotlin you no longer need to specify the WorkMode in the constructor, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more
+**With kotlin you no longer need to specify the WorkMode in the constructor, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more**
 
 By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt), the models gain the following characteristics:
 
