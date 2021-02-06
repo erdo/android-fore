@@ -32,17 +32,6 @@ allprojects {
         mavenCentral()
         google()
         mavenLocal()
-
-//  used to test rc builds - you won't have my key, but you can do something similar with your own amazon bucket
-//        maven {
-//            url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
-//            //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
-//            credentials(AwsCredentials) {
-//                accessKey AWS_ACCESS_KEY
-//                secretKey AWS_SECRET_KEY
-//            }
-//        }
-
     }
 }
 
