@@ -10,7 +10,7 @@
  *
  * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
  *
- * 
+ *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
  * ./gradlew bintrayUpload

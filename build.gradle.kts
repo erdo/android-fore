@@ -40,7 +40,7 @@ tasks.register("clean", Delete::class){
 }
 ext.apply {
 
-    // TODO remove these once we migrate bintraypublish.gradle to kts
+    // TODO remove these once we migrate publish.gradle to kts
 
     set("LIB_VERSION_NAME", "1.3.4")
     set("LIB_VERSION_CODE", 48)

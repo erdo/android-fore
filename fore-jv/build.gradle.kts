@@ -27,4 +27,4 @@ dependencies {
     api(project(":fore-lifecycle"))
 }
 
-apply(from = "../bintraypublish.gradle")
+apply(from = "../publish.gradle")

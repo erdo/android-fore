@@ -43,4 +43,4 @@ dependencies {
     implementation("com.squareup.okio:okio:${Shared.Versions.okio}")
 }
 
-apply(from = "../bintraypublish.gradle")
+apply(from = "../publish.gradle")
