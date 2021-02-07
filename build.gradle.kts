@@ -8,9 +8,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${co.early.fore.Shared.Versions.gradle_bintray_plugin}")
-        classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
+        classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
     }
 }
 
@@ -18,13 +17,8 @@ plugins {
     id("idea")
 }
 
-
 //read in secrets file
-val secrets = readProperties(File(project.rootDir, "secrets.properties"))
-
-val AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.getProperty("AWS_ACCESS_KEY")
-val AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.getProperty("AWS_SECRET_KEY")
-
+val secrets = readProperties(File(project.rootDir, "../secrets/secrets.properties"))
 
 allprojects {
     repositories {
@@ -61,8 +55,13 @@ ext.apply {
     set("LICENCE_NAME", "The Apache Software License, Version 2.0")
     set("LICENCE_URL", "http://www.apache.org/licenses/LICENSE-2.0.txt")
 
-    set("BINTRAY_USER", System.getenv("BINTRAY_USER") ?: secrets.getProperty("BINTRAY_USER"))
-    set("BINTRAY_API_KEY", System.getenv("BINTRAY_API_KEY") ?: secrets.getProperty("BINTRAY_API_KEY"))
+    set("MAVEN_USER", System.getenv("MAVEN_USER") ?: secrets.getProperty("MAVEN_USER"))
+    set("MAVEN_PASSWORD", System.getenv("MAVEN_PASSWORD") ?: secrets.getProperty("MAVEN_PASSWORD"))
+    set("SONATYPE_STAGING_PROFILE_ID", System.getenv("SONATYPE_STAGING_PROFILE_ID") ?: secrets.getProperty("SONATYPE_STAGING_PROFILE_ID"))
+
+    set("SIGNING_KEY_ID", System.getenv("SIGNING_KEY_ID") ?: secrets.getProperty("SIGNING_KEY_ID"))
+    set("SIGNING_PASSWORD", System.getenv("SIGNING_PASSWORD") ?: secrets.getProperty("SIGNING_PASSWORD"))
+    set("SIGNING_KEY_RING_FILE", System.getenv("SIGNING_KEY_RING_FILE") ?: secrets.getProperty("SIGNING_KEY_RING_FILE"))
 }
 
 fun readProperties(propertiesFile: File): Properties {
