@@ -9,8 +9,8 @@ Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core
 ## GraphQL Support
 **1.3.1** adds support for **Apollo**, it wraps the calls using a CallProcessor in a similar way to how Retrofit2 is handled.
 
-## projects still on kotlin 1.3
-If you haven't updgrade your project to kotin 1.4 yet, **1.2.1-legacy-KOTLIN-1.3.x** is the most recent version of **fore** you can use, see [this issue](https://github.com/erdo/android-fore/issues/72)
+## kotlin 1.4
+**1.2.1** bumps the kotlin version to 1.4 so if you haven't updgrade your project to kotin 1.4 yet, you might encounter strange problems with obfuscation, if so drop down to **fore 1.2.0** or upgrade kotlin in your project, see [this issue](https://github.com/erdo/android-fore/issues/72)
 
 ## defaults for WorkMode, Logger and SystemTimeWrapper
 
