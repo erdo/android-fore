@@ -13,6 +13,7 @@ public class ObservableGroup implements AutoSyncable {
 
     private final List<Observable> observablesList;
     private SyncableView syncableView;
+    private Observer observer;
 
     private Observer viewUpdater = new Observer() {
         @Override
@@ -26,26 +27,51 @@ public class ObservableGroup implements AutoSyncable {
         checkObservables();
     }
 
-    private void checkObservables(){
-        for (Observable observable: observablesList){
-            if (observable == null){
+    private void checkObservables() {
+        for (Observable observable : observablesList) {
+            if (observable == null) {
                 throw new RuntimeException("ObservableGroup has been instantiated with at least one null observable");
             }
         }
     }
 
     public void addObserversAndSync(SyncableView syncableView) {
+        if (alreadyObserving()){
+            throw new RuntimeException("you must remove previously added observers first");
+        }
         this.syncableView = Affirm.notNull(syncableView);
-        for (Observable observable : observablesList){
+        for (Observable observable : observablesList) {
             observable.addObserver(viewUpdater);
         }
         this.syncableView.syncView();
     }
 
-    public void removeObservers() {
-        for (Observable observable : observablesList){
-            observable.removeObserver(viewUpdater);
+    public void addObserversAndSync(Observer observer) {
+        if (alreadyObserving()){
+            throw new RuntimeException("you must remove previously added observers first");
         }
-        this.syncableView = null;
+        this.observer = Affirm.notNull(observer);
+        for (Observable observable : observablesList) {
+            observable.addObserver(observer);
+        }
+        observer.somethingChanged();
+    }
+
+    public void removeObservers() {
+        if (observer != null) {
+            for (Observable observable : observablesList) {
+                observable.removeObserver(observer);
+            }
+            this.observer = null;
+        } else if (syncableView != null) {
+            for (Observable observable : observablesList) {
+                observable.removeObserver(viewUpdater);
+            }
+            this.syncableView = null;
+        }
+    }
+
+    private boolean alreadyObserving(){
+        return (observer != null || syncableView != null);
     }
 }
