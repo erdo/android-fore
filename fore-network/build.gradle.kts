@@ -37,4 +37,4 @@ dependencies {
     }
 }
 
-apply(from = "../bintraypublish.gradle")
+apply(from = "../publish.gradle")

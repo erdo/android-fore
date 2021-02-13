@@ -39,4 +39,4 @@ dependencies {
     compileOnly("androidx.cardview:cardview:${Shared.Versions.cardview}")
 }
 
-apply(from = "../bintraypublish.gradle")
+apply(from = "../publish.gradle")

@@ -35,4 +35,4 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Shared.Versions.kotlinx_coroutines_android}")
 }
 
-apply(from = "../bintraypublish.gradle")
+apply(from = "../publish.gradle")

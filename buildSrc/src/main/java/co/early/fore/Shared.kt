@@ -12,9 +12,8 @@ object Shared {
     }
 
     object Versions {
-        const val android_gradle_plugin = "4.1.1"
+        const val android_gradle_plugin = "4.1.2"
         const val kotlin_version = "1.4.0"
-        const val gradle_bintray_plugin = "1.8.4"
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
         const val recyclerview = "1.1.0"
@@ -33,7 +32,7 @@ object Shared {
         const val junit = "4.12"
         const val espresso = "3.0.2"
         const val hamcrest_library = "1.3"
-        const val dexmaker_mockito = "2.19.1"
+        const val dexmaker_mockito = "2.21.0"
         const val robolectric = "4.4"
         const val gson = "2.8.5"
         const val constraintlayout = "1.1.3"
@@ -56,8 +55,8 @@ object Shared {
 
     object Publish {
         //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "1.3.4"
-        const val LIB_VERSION_CODE = 48
+        const val LIB_VERSION_NAME = "1.3.5"
+        const val LIB_VERSION_CODE = 49
         const val REPO = "fore"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
@@ -73,7 +72,7 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.3.4"
-        const val use_published_version = false
+        const val published_fore_version_for_examples = "1.3.5"
+        const val use_published_version = true
     }
 }

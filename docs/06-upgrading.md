@@ -1,7 +1,10 @@
 
 # Upgrading from previous versions
 
-Since we've been publishing on jcenter, the core code has remained almost identical. Most version number bumps have been due to adding new classes to the optional packages or tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - so some version bumps have no effect for a particular package).
+Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - so some version bumps have no effect for a particular package).
+
+## jcenter removal
+**1.3.4** is the last version that was published on jcenter, mavenCentral has most versions since **1.1.0** (if for some reason you need an older version, please open an issue and I might be able to sign one and put it on mavenCentral for you). **All new versions will be released to mavenCentral only**. All references to jcenter have been removed from the project so it will continue to build after jcenter has been [closed](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/).
 
 ## GraphQL Support
 **1.3.1** adds support for **Apollo**, it wraps the calls using a CallProcessor in a similar way to how Retrofit2 is handled.
@@ -11,7 +14,7 @@ If you haven't updgrade your project to kotin 1.4 yet, **1.2.1-legacy-KOTLIN-1.3
 
 ## defaults for WorkMode, Logger and SystemTimeWrapper
 
-From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. See more [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params). 1.2.1 is built with Kotlin 1.4, if you haven't upgraded yet, you can use **1.2.1-legacy-KOTLIN-1.3.x** see [this issue](https://github.com/erdo/android-fore/issues/72)
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. See more [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params).
 
 ## removing deprecated sync views
 

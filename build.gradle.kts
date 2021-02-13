@@ -3,14 +3,12 @@ import java.io.File
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
         google()
     }
     dependencies {
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${co.early.fore.Shared.Versions.gradle_bintray_plugin}")
-        classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
+        classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
     }
 }
 
@@ -18,31 +16,16 @@ plugins {
     id("idea")
 }
 
-
 //read in secrets file
-val secrets = readProperties(File(project.rootDir, "secrets.properties"))
-
-val AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY") ?: secrets.getProperty("AWS_ACCESS_KEY")
-val AWS_SECRET_KEY = System.getenv("AWS_SECRET_KEY") ?: secrets.getProperty("AWS_SECRET_KEY")
-
+val secrets = readProperties(File(project.rootDir, "../secrets/secrets.properties"))
 
 allprojects {
     repositories {
-        jcenter()
         mavenCentral()
         google()
         mavenLocal()
-
-//  used to test rc builds - you won't have my key, but you can do something similar with your own amazon bucket
-//        maven {
-//            url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/snapshots"
-//            //url "s3://com.ixpocket.repo.s3.eu-west-2.amazonaws.com/releases"
-//            credentials(AwsCredentials) {
-//                accessKey AWS_ACCESS_KEY
-//                secretKey AWS_SECRET_KEY
-//            }
-//        }
-
+        //temporary while we wait for library maintainers to move out of jcenter
+        maven { url = uri("$rootDir/jcenterlocal/repository/") }
     }
 }
 
@@ -51,11 +34,10 @@ tasks.register("clean", Delete::class){
 }
 ext.apply {
 
-    // TODO remove these once we migrate bintraypublish.gradle to kts
+    // TODO remove these once we migrate publish.gradle to kts
 
-    //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-    set("LIB_VERSION_NAME", "1.3.4")
-    set("LIB_VERSION_CODE", 48)
+    set("LIB_VERSION_NAME", "1.3.5")
+    set("LIB_VERSION_CODE", 49)
 
     set("REPO", "fore")
     set("LIB_GROUP", "co.early.fore")
@@ -73,8 +55,13 @@ ext.apply {
     set("LICENCE_NAME", "The Apache Software License, Version 2.0")
     set("LICENCE_URL", "http://www.apache.org/licenses/LICENSE-2.0.txt")
 
-    set("BINTRAY_USER", System.getenv("BINTRAY_USER") ?: secrets.getProperty("BINTRAY_USER"))
-    set("BINTRAY_API_KEY", System.getenv("BINTRAY_API_KEY") ?: secrets.getProperty("BINTRAY_API_KEY"))
+    set("MAVEN_USER", System.getenv("MAVEN_USER") ?: secrets.getProperty("MAVEN_USER"))
+    set("MAVEN_PASSWORD", System.getenv("MAVEN_PASSWORD") ?: secrets.getProperty("MAVEN_PASSWORD"))
+    set("SONATYPE_STAGING_PROFILE_ID", System.getenv("SONATYPE_STAGING_PROFILE_ID") ?: secrets.getProperty("SONATYPE_STAGING_PROFILE_ID"))
+
+    set("SIGNING_KEY_ID", System.getenv("SIGNING_KEY_ID") ?: secrets.getProperty("SIGNING_KEY_ID"))
+    set("SIGNING_PASSWORD", System.getenv("SIGNING_PASSWORD") ?: secrets.getProperty("SIGNING_PASSWORD"))
+    set("SIGNING_KEY_RING_FILE", System.getenv("SIGNING_KEY_RING_FILE") ?: secrets.getProperty("SIGNING_KEY_RING_FILE"))
 }
 
 fun readProperties(propertiesFile: File): Properties {

@@ -66,5 +66,8 @@ Thumbs.db
 *.key
 *.pub
 
+# gpg signing key
+secret_key_ring.gpg
+
 # passwords
 secrets.properties
