@@ -3,7 +3,6 @@ import java.io.File
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
         google()
     }
@@ -22,10 +21,11 @@ val secrets = readProperties(File(project.rootDir, "../secrets/secrets.propertie
 
 allprojects {
     repositories {
-        jcenter()
         mavenCentral()
         google()
         mavenLocal()
+        //temporary while we wait for library maintainers to move out of jcenter
+        maven { url = uri("$rootDir/jcenterlocal/repository/") }
     }
 }
 
