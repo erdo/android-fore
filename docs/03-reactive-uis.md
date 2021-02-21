@@ -318,19 +318,7 @@ override fun onStop() {
 
 ```
 
-With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with the self-syncing [SyncXXX](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) classes:
-
-``` kotlin
-
-override fun getThingsToObserve(): LifecycleSyncer.Observables {
-  return LifecycleSyncer.Observables(
-      emailInbox,
-      accountModel,
-      weatherModel
-  )
-}
-
-```
+With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate).
 
 > "reduce view layer code to its absolute fundamentals: what things look like"
 

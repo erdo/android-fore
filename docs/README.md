@@ -257,21 +257,6 @@ As you're using the app, please notice:
 
 As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details.
 
-<div class="shoom" id="fore-5-ui-example"/>
-### **fore 5** UI Helpers Example (Tic Tac Toe)
-
-[video](https://www.youtube.com/watch?v=Zuwe45EttY4) \| [playstore listing](https://play.google.com/store/apps/details?id=foo.bar.example.foreui) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-05ui)
-
-![fore tic-tac-toe sample app](https://j.gifs.com/zKMM35.gif)
-
-A regular Tic Tac Toe game that makes use of:
-
-- The [SyncXXX](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) lifecycle convenience classes which reduce boiler plate even more by automatically handling the adding and removing of observers in line with various lifecycle methods
-
-- [SyncTrigger](https://erdo.github.io/android-fore/04-more-fore.html#synctrigger) which is fore's way of bridging the two worlds of **state** and **events**. It's optional of course, but here we use it to fire event triggers (such as displaying a win animation at the end of a game) off the back of observable state changes.
-
-
-No automated tests for this app (but you should be getting the idea by now - sample apps 1-4 all have comprehensive tests included).
 
 <div class="shoom" id="fore-6-db-example-room"/>
 ### **fore 6** DB Example (Room db driven to-do list)

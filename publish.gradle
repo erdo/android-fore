@@ -15,6 +15,7 @@
  * ./gradlew publishToMavenLocal
  * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
+ * bundle exec jekyll serve
  */
 apply plugin: 'maven-publish'
 apply plugin: 'signing'

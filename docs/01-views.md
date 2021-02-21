@@ -55,166 +55,10 @@ Often there will also be the add / remove observers methods where the view regis
 
 ## Removing even more boiler plate
 
-If you don't want to have to bother with implementing the adding and removing of observers in your view code, you can let the Sync... classes do it for you.
+If the list of things you are observing gets a little long, you can remove some of this add and remove boiler plate by using an ObservableGoup (it's just a convenience class that maintains a list of observables internally)
 
-### SyncActivityX and SyncActivity
-By extending one of these classes (the first one is for androidx), you will just be left with having to state which observable models you want to observe, and then implementing the syncView() method:
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-<pre class="tabcontent tabbed java"><code>
-public class MySpeedoActivity extends SyncActivityX {
-
-  private SpeedoModel speedoModel; //inject these
-  private RoadInfoModel roadInfoModel; //inject these
-
-  @Override
-  public LifecycleSyncer.Observables getThingsToObserve() {
-    return new LifecycleSyncer.Observables(
-        speedoModel,
-        roadInfoModel
-    );
-  }
-
-  @Override
-  public void syncView() {
-    speedo_roadname_textview.text = roadInfoModel.getRoadName();
-    speedo_speed_textview.text = speedoModel.getSpeed();
-  }
-}
- </code></pre>
-<pre class="tabcontent tabbed kotlin"><code>
-class MySpeedoActivity : SyncActivityX() {
-
-  private val speedoModel: SpeedoModel by inject()
-  private val roadInfoModel: RoadInfoModel by inject()
-
-  override fun getThingsToObserve(): LifecycleSyncer.Observables {
-    return LifecycleSyncer.Observables(
-        speedoModel,
-        roadInfoModel
-    )
-  }
-
-  override fun syncView() {
-    speedo_roadname_textview.text = roadInfoModel.roadName
-    speedo_speed_textview.text = speedoModel.speed
-  }
-}
- </code></pre>
-
-
-### SyncFragmentX and SyncFragment
-If you prefer to use Fragments for your view layer you can extend one of these (and again, the first one is for androidx).
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-<pre class="tabcontent tabbed java"><code>
-public class MySpeedoFragment extends SyncFragmentX {
-
-  private SpeedoModel speedoModel; //inject these
-  private RoadInfoModel roadInfoModel; //inject these
-
-  @Override
-  public LifecycleSyncer.Observables getThingsToObserve() {
-    return new LifecycleSyncer.Observables(
-            speedoModel,
-            roadInfoModel
-    );
-  }
-
-  @Override
-  public void syncView() {
-    speedo_roadname_textview.text = roadInfoModel.getRoadName();
-    speedo_speed_textview.text = speedoModel.getSpeed();
-  }
-}
- </code></pre>
-<pre class="tabcontent tabbed kotlin"><code>
-class MySpeedoFragment : SyncFragmentX() {
-
-    private val speedoModel: SpeedoModel by inject()
-    private val roadInfoModel: RoadInfoModel by inject()
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            speedoModel,
-            roadInfoModel
-        )
-    }
-
-    override fun syncView() {
-        speedo_roadname_textview.text = roadInfoModel.roadName
-        speedo_speed_textview.text = speedoModel.speed
-    }
-}
- </code></pre>
-
-### Sync[ViewGroup]
- There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included - it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes. For example here's the one for [ScrollView](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/view/SyncScrollView.java)).
-
- <!-- Tabbed code sample -->
-  <div class="tab">
-    <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
-  </div>
- <pre class="tabcontent tabbed java"><code>
- public class MySpeedoView extends SyncConstraintLayout {
-
-   private SpeedoModel speedoModel; //inject these
-   private RoadInfoModel roadInfoModel; //inject these
-
-   //constructors
-
-   @Override
-   public LifecycleSyncer.Observables getThingsToObserve() {
-     return new LifecycleSyncer.Observables(
-             speedoModel,
-             roadInfoModel
-     );
-   }
-
-   @Override
-   public void syncView() {
-     speedo_roadname_textview.text = roadInfoModel.getRoadName();
-     speedo_speed_textview.text = speedoModel.getSpeed();
-   }
- }
-  </code></pre>
- <pre class="tabcontent tabbed kotlin"><code>
- class MySpeedoView @JvmOverloads constructor(
-    context: Context?,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) :
-    SyncConstraintLayout(context, attrs, defStyleAttr) {
-
-     private val speedoModel: SpeedoModel by inject()
-     private val roadInfoModel: RoadInfoModel by inject()
-
-     override fun getThingsToObserve(): LifecycleSyncer.Observables {
-         return LifecycleSyncer.Observables(
-             speedoModel,
-             roadInfoModel
-         )
-     }
-
-     override fun syncView() {
-         speedo_roadname_textview.text = roadInfoModel.roadName
-         speedo_speed_textview.text = speedoModel.speed
-     }
- }
-  </code></pre>
-
-### ViewModels observing many observables
-Similarly you can observe multiple observables from a ViewModel like this:
-
+### Using ObservableGroup in a ViewModel
+Here's how you can use an ObservableGroup from a ViewModel:
 
 ``` kotlin
 
@@ -223,14 +67,17 @@ class MyViewModel(
     private val networkInfo: NetworkInfo,
     private val emailInBox: EmailInBox,
     private val weatherRepository: WeatherRepository
-) : ViewModel(), SyncableView, AutoSyncable by ObservableGroup(
+) : ViewModel(), ObservableGroup by ObservableGroupImp(
     accountModel,
     networkInfo,
     emailInBox,
     weatherRepository) {
 
+    private val observer = Observer { syncView() }
+
     init {
-        addObserversAndSync(this)
+        addObserver(observer)
+        syncView()
     }
 
     override fun syncView() {
@@ -245,7 +92,7 @@ class MyViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        removeObservers()
+        removeObserver(observer)
     }
 }
 
