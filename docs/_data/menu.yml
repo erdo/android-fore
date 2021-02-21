@@ -21,8 +21,12 @@
 - text: Views
   url: /01-views.html
   subitems:
-    - text: Self Syncing Views
+    - text: Examples
+      url: "#examples"
+    - text: ObservableGroup
       url: "#removing-even-more-boiler-plate"
+    - text: SyncTrigger
+      url: "#synctrigger"
 - text: Models
   url: /02-models.html
   subitems:
@@ -50,8 +54,6 @@
       url: "#default-params"
     - text: Async and Coroutines
       url: "#asynctasks-with-lambdas"
-    - text: SyncTrigger
-      url: "#synctrigger"
 - text: Extras
   url: /05-extras.html
   subitems:
