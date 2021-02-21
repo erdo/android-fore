@@ -19,11 +19,6 @@ android {
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
-    sourceSets["main"].java.apply {
-        srcDirs(
-                "../fore-lifecycle/src/main/java"
-        )
-    }
 }
 
 dependencies {

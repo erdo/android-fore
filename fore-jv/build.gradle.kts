@@ -24,7 +24,6 @@ dependencies {
     api(project(":fore-core"))
     api(project(":fore-adapters"))
     api(project(":fore-network"))
-    api(project(":fore-lifecycle"))
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
