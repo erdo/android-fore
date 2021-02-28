@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.3.6](https://img.shields.io/badge/central-1.3.6-green.svg){: .float-left}
+![central-1.3.7](https://img.shields.io/badge/central-1.3.7-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -19,12 +19,12 @@
 
 for a more **kotlin** style API and running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.3.6"
+implementation "co.early.fore:fore-kt:1.3.7"
 ```
 
 the original **java** API:
 ```
-implementation "co.early.fore:fore-jv:1.3.6"
+implementation "co.early.fore:fore-jv:1.3.7"
 ```
 
 *(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing)*
