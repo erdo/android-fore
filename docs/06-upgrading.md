@@ -1,7 +1,10 @@
 
 # Upgrading from previous versions
 
-Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - so some version bumps have no effect for a particular package).
+Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
+
+## fore-lifecycle deprecation
+**1.3.5** was the last version of the fore-lifecycle package that will be published on mavenCentral. The useful classes from this package were moved into fore-core a while ago and with the ObservableGoup interface, most of what fore-lifecycle did can be done yourself pretty easily anyway. 1.3.5 won't be going anywhere of course and you can still pull it in individually if you want it.
 
 ## jcenter removal
 **1.3.4** is the last version that was published on jcenter, mavenCentral has most versions since **1.1.0** (if for some reason you need an older version, please open an issue and I might be able to sign one and put it on mavenCentral for you). **All new versions will be released to mavenCentral only**. All references to jcenter have been removed from the project so it will continue to build after jcenter has been [closed](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/).
@@ -49,7 +52,6 @@ There was one minor breaking change previous to 0.11.1 (sorry):
 These are more substantial, but are mainly related to renaming or shuffling packages around, there are no functionality changes.
 
 * most of the packages have changed from **co.early.asaf** to **co.early.fore**
-* the **asaf-ui** package has been renamed to **fore-lifecycle** to better reflect what it is
 * the deprecated classes **SimpleChangeAwareAdapter** and **SimpleChangeAwareList** have finally been removed (you should use **ChangeAwareAdapter** and **ChangeAwareList** as appropriate)
 * the deprecated **SyncTrigger** methods: **resetAfterCheckFails(), resetAfterCheckAlways(), setImmediatelyResetAfterCheck()** have now been removed. Use the construction parameter: **ResetRule** instead.
 * the deprecated **SyncTrigger** method: **check(boolean swallowTriggerForFirstCheck)** has been made private. Use **check()** and **checkLazy()** instead (checkLazy() swallows the trigger on first check so it's equivalent to calling the old check(false))

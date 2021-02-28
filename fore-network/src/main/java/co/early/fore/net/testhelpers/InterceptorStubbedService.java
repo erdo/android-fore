@@ -41,6 +41,7 @@ public class InterceptorStubbedService implements Interceptor {
                     .request(chain.request())
                     .protocol(Protocol.HTTP_1_1)
                     .code(stubbedServiceDefinition.httpCode)
+                    .addHeader("Content-Type", stubbedServiceDefinition.mimeType)
                     .body(ResponseBody.create(MediaType.parse(stubbedServiceDefinition.mimeType), bodyString))
                     .message("")
                     .build();

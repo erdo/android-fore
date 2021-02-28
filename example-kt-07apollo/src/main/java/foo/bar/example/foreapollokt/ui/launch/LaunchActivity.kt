@@ -1,6 +1,7 @@
 package foo.bar.example.foreapollokt.ui.launch
 
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
@@ -29,18 +30,12 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
     //single observer reference
     private var observer = Observer { syncView() }
 
+
     private val success: Success = {
-        Toast.makeText(
-            this, "Success - you can use this trigger to " +
-                    "perform a one off action like starting a new activity or " +
-                    "something", Toast.LENGTH_SHORT
-        ).show()
+        showToast("Success!")
     }
     private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
-        Toast.makeText(
-            this, "Fail - maybe tell the user to try again, message:" + userMessage.localisedMessage,
-            Toast.LENGTH_SHORT
-        ).show()
+        showToast(userMessage)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,4 +83,12 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
         launchesModel.removeObserver(observer)
         authenticator.removeObserver(observer)
     }
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showToast(message: ErrorMessage) {
+    Toast.makeText(this, message.localisedMessage, Toast.LENGTH_LONG).show()
 }

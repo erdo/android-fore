@@ -1,8 +1,8 @@
 package foo.bar.example.foreretrofitkt.ui.fruit
 
 
+import android.content.Context
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.observer.Observer
@@ -28,20 +28,11 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
     private var observer = Observer { syncView() }
 
 
-    //just because we re-use these in 3 different button clicks
-    //in this example we define them here
     private val success: Success = {
-        Toast.makeText(
-            this, "Success - you can use this trigger to " +
-                    "perform a one off action like starting a new activity or " +
-                    "something", Toast.LENGTH_SHORT
-        ).show()
+        showToast("Success!")
     }
     private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
-        Toast.makeText(
-            this, "Fail - maybe tell the user to try again, message:" + userMessage.localisedMessage,
-            Toast.LENGTH_SHORT
-        ).show()
+        showToast(userMessage)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,4 +82,12 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
         super.onStop()
         fruitFetcher.removeObserver(observer)
     }
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showToast(message: ErrorMessage) {
+    Toast.makeText(this, message.localisedMessage, Toast.LENGTH_LONG).show()
 }

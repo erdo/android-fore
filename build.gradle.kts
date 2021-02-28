@@ -8,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:${co.early.fore.Shared.Versions.kotlin_version}")
         classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
     }
 }
@@ -36,8 +37,8 @@ ext.apply {
 
     // TODO remove these once we migrate publish.gradle to kts
 
-    set("LIB_VERSION_NAME", "1.3.5")
-    set("LIB_VERSION_CODE", 49)
+    set("LIB_VERSION_NAME", "1.3.6")
+    set("LIB_VERSION_CODE", 50)
 
     set("REPO", "fore")
     set("LIB_GROUP", "co.early.fore")

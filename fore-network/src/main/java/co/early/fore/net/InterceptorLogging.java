@@ -1,6 +1,5 @@
 package co.early.fore.net;
 
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -77,7 +76,7 @@ public class InterceptorLogging implements Interceptor {
 
         if (networkingLogSanitizer == null){
             logHeaders(request.headers(), randomPostTag);
-        }else {
+        } else {
             logHeaders(networkingLogSanitizer.sanitizeHeaders(request.headers()), randomPostTag);
         }
 
@@ -124,6 +123,13 @@ public class InterceptorLogging implements Interceptor {
 
         long t2 = System.nanoTime();
         logger.i(TAG + randomPostTag, "HTTP " + method + " <-- Server replied HTTP-" + response.code() + " " + (t2-t1)/(1000*1000) + "ms " + url);
+
+
+        if (networkingLogSanitizer == null){
+            logHeaders(response.headers(), randomPostTag);
+        } else {
+            logHeaders(networkingLogSanitizer.sanitizeHeaders(response.headers()), randomPostTag);
+        }
 
         ResponseBody responseBody = response.body();
         long contentLength = responseBody.contentLength();

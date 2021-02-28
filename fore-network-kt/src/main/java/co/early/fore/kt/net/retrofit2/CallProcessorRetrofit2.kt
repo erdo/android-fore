@@ -7,7 +7,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
-import co.early.fore.net.retrofit2.MessageProvider
+import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 

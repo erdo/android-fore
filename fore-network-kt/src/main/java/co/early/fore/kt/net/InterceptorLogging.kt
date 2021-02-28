@@ -9,7 +9,6 @@ import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.Response
-import okhttp3.internal.http.HttpHeaders
 import java.io.EOFException
 import java.io.IOException
 import java.nio.charset.Charset
@@ -36,8 +35,8 @@ class InterceptorLogging @JvmOverloads constructor(
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val method = request.method()
-        val url = request.url().toString()
+        val method = request.method
+        val url = request.url.toString()
         val randomPostTag = (" " + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)]
@@ -50,10 +49,10 @@ class InterceptorLogging @JvmOverloads constructor(
         ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url))
 
         networkingLogSanitizer?.let {
-            logHeaders(it.sanitizeHeaders(request.headers()), randomPostTag)
-        } ?: logHeaders(request.headers(), randomPostTag)
+            logHeaders(it.sanitizeHeaders(request.headers), randomPostTag)
+        } ?: logHeaders(request.headers, randomPostTag)
 
-        request.body()?.let {
+        request.body?.let {
 
             val buffer = Buffer()
             val charset = getCharset(it.contentType())
@@ -94,28 +93,30 @@ class InterceptorLogging @JvmOverloads constructor(
 
         ForeDelegateHolder.getLogger(logger).i(
                 TAG + randomPostTag,
-                "HTTP " + method + " <-- Server replied HTTP- ${response.code()}  " +
+                "HTTP " + method + " <-- Server replied HTTP-${response.code}  " +
                         "${nanosFormat.format(timeTaken / (1000 * 1000))} ms $url")
 
-        if (HttpHeaders.hasBody(response)) {
-            response.body()?.let {
-                val contentLength = it.contentLength()
-                val charset = getCharset(it.contentType())
-                val source = it.source()
-                source.request(Long.MAX_VALUE) // Buffer the entire body.
-                val buffer = source.buffer
-                if (!isPlaintext(buffer)) {
-                    ForeDelegateHolder.getLogger(logger).i(
-                            TAG + randomPostTag,
-                            " (binary " + buffer.size + " byte body omitted)")
+        networkingLogSanitizer?.let {
+            logHeaders(it.sanitizeHeaders(response.headers), randomPostTag)
+        } ?: logHeaders(response.headers, randomPostTag)
+
+        response.body?.let {
+            val contentLength = it.contentLength()
+            val charset = getCharset(it.contentType())
+            val source = it.source()
+            source.request(Long.MAX_VALUE) // Buffer the entire body.
+            val buffer = source.buffer
+            if (!isPlaintext(buffer)) {
+                ForeDelegateHolder.getLogger(logger).i(
+                        TAG + randomPostTag,
+                        " (binary " + buffer.size + " byte body omitted)")
+            } else {
+                if (contentLength != 0L) {
+                    val bodyJson = truncate(buffer.clone().readString(charset))
+                    val wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
+                    logLines(wrappedLines, randomPostTag)
                 } else {
-                    if (contentLength != 0L) {
-                        val bodyJson = truncate(buffer.clone().readString(charset))
-                        val wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
-                        logLines(wrappedLines, randomPostTag)
-                    } else {
-                        ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, " (no body content)")
-                    }
+                    ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, " (no body content)")
                 }
             }
         }

@@ -11,14 +11,4 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-dependencies {
-
-    testImplementation("junit:junit:${Shared.Versions.junit}")
-    testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
-    testImplementation("org.hamcrest:hamcrest-library:${Shared.Versions.hamcrest_library}")
-    testImplementation("org.robolectric:robolectric:${Shared.Versions.robolectric}") {
-        exclude(module = "maven-artifact")
-    }
-}
-
 apply(from = "../publish.gradle")

@@ -16,14 +16,6 @@ dependencies {
     api(project(":fore-core"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
-
-    testImplementation("junit:junit:${Shared.Versions.junit}")
-    testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
-    testImplementation("org.hamcrest:hamcrest-library:${Shared.Versions.hamcrest_library}")
-
-    androidTestImplementation("androidx.test.espresso:espresso-core:${Shared.Versions.espresso_core}") {
-        exclude(group = "com.android.support", module = "support-annotations")
-    }
 }
 
 apply(from = "../publish.gradle")

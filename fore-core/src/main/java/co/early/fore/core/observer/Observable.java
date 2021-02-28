@@ -1,9 +1,7 @@
 package co.early.fore.core.observer;
 
 
-public interface Observable {
-    void addObserver(Observer observer);
-    void removeObserver(Observer observer);
+public interface Observable extends ObservableGroup {
     void notifyObservers();
     boolean hasObservers();
 }

@@ -24,60 +24,20 @@ jobs:
           key: v4-gradle-dependencies-cache
 
       - run:
-          name: Run Tests fore-core
-          command: ./gradlew fore-core:lintRelease fore-core:testRelease
+          name: Run Tests fore-jv
+          command: ./gradlew fore-jv:lintRelease fore-jv:testRelease
       - store_artifacts:
-          path: fore-core/build/reports
+          path: fore-jv/build/reports
       - store_test_results:
-          path: fore-core/build/test-results
+          path: fore-jv/build/test-results
 
       - run:
-          name: Run Tests fore-core-kt
-          command: ./gradlew fore-core-kt:lintRelease fore-core-kt:testRelease
+          name: Run Tests fore-kt
+          command: ./gradlew fore-kt:lintRelease fore-kt:testRelease
       - store_artifacts:
-          path: fore-core-kt/build/reports
+          path: fore-kt/build/reports
       - store_test_results:
-          path: fore-core-kt/build/test-results
-
-      - run:
-          name: Run Tests fore-adapters
-          command: ./gradlew fore-adapters:lintRelease fore-adapters:testRelease
-      - store_artifacts:
-          path: fore-adapters/build/reports
-      - store_test_results:
-          path: fore-adapters/build/test-results
-
-      - run:
-          name: Run Tests fore-adapters-kt
-          command: ./gradlew fore-adapters-kt:lintRelease fore-adapters-kt:testRelease
-      - store_artifacts:
-          path: fore-adapters-kt/build/reports
-      - store_test_results:
-          path: fore-adapters-kt/build/test-results
-
-      - run:
-          name: Run Tests fore-network
-          command: ./gradlew fore-network:lintRelease fore-network:testRelease
-      - store_artifacts:
-          path: fore-network/build/reports
-      - store_test_results:
-          path: fore-network/build/test-results
-
-      - run:
-          name: Run Tests fore-network-kt
-          command: ./gradlew fore-network-kt:lintRelease fore-network-kt:testRelease
-      - store_artifacts:
-          path: fore-network-kt/build/reports
-      - store_test_results:
-          path: fore-network-kt/build/test-results
-
-      - run:
-          name: Run Tests fore-lifecycle
-          command: ./gradlew fore-lifecycle:lintRelease fore-lifecycle:testRelease
-      - store_artifacts:
-          path: fore-lifecycle/build/reports
-      - store_test_results:
-          path: fore-lifecycle/build/test-results
+          path: fore-kt/build/test-results
 
       - run:
           name: Run Tests example-jv-01reactiveui
@@ -110,14 +70,6 @@ jobs:
           path: example-jv-04retrofit/build/reports
       - store_test_results:
           path: example-jv-04retrofit/build/test-results
-
-      - run:
-          name: Run Tests example-jv-05ui
-          command: ./gradlew example-jv-05ui:lintRelease example-jv-05ui:testRelease
-      - store_artifacts:
-          path: example-jv-05ui/build/reports
-      - store_test_results:
-          path: example-jv-05ui/build/test-results
 
       - run:
           name: Run Tests example-jv-06db
@@ -166,3 +118,11 @@ jobs:
           path: example-kt-07apollo/build/reports
       - store_test_results:
           path: example-kt-07apollo/build/test-results
+
+      - run:
+          name: Run Tests example-kt-08ktor
+          command: ./gradlew example-kt-08ktor:lintRelease example-kt-08ktor:testRelease
+      - store_artifacts:
+          path: example-kt-08ktor/build/reports
+      - store_test_results:
+          path: example-kt-08ktor/build/test-results

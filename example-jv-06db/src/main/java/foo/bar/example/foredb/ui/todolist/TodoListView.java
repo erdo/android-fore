@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -18,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.early.fore.core.logging.Logger;
-import co.early.fore.lifecycle.LifecycleSyncer;
-import co.early.fore.lifecycle.view.SyncRelativeLayout;
+import co.early.fore.core.observer.ObservableGroup;
+import co.early.fore.core.observer.ObservableGroupImp;
+import co.early.fore.core.observer.Observer;
+import co.early.fore.core.ui.SyncableView;
 import foo.bar.example.foredb.OG;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.remote.RemoteWorker;
@@ -33,13 +36,17 @@ import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
  * In this example we are using one of the fore Sync... helper classes to handle
  * the observer boiler plate for us
  */
-public class TodoListView extends SyncRelativeLayout {
+public class TodoListView extends RelativeLayout implements SyncableView {
 
     //models that we need
     private TodoListModel todoListModel;
     private RemoteWorker remoteWorker;
-    private Logger logger;
+    private ObservableGroup observableGroup;
 
+    //single observer reference
+    private Observer observer = this::syncView;
+
+    private Logger logger;
     private InputMethodManager keyboard;
 
 
@@ -124,6 +131,9 @@ public class TodoListView extends SyncRelativeLayout {
     private void getModelReferences(){
         todoListModel = OG.get(TodoListModel.class);
         remoteWorker = OG.get(RemoteWorker.class);
+
+        observableGroup = new ObservableGroupImp(todoListModel, remoteWorker);
+
         logger = OG.get(Logger.class);
         keyboard = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
@@ -233,9 +243,18 @@ public class TodoListView extends SyncRelativeLayout {
 
     //data binding stuff below
 
+
     @Override
-    public LifecycleSyncer.Observables getThingsToObserve() {
-        return new LifecycleSyncer.Observables(todoListModel, remoteWorker);
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        observableGroup.addObserver(observer);
+        syncView();  // <- don't forget this
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        observableGroup.removeObserver(observer);
     }
 
     public void syncView(){

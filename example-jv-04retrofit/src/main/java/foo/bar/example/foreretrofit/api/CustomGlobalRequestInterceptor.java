@@ -35,7 +35,7 @@ public class CustomGlobalRequestInterceptor implements Interceptor {
         Request.Builder requestBuilder = original.newBuilder();
 
 
-        requestBuilder.addHeader("content-type", "application/json");
+        requestBuilder.addHeader("Content-Type", "application/json");
         //requestBuilder.addHeader("X-MyApp-Auth-Token", !session.hasSession() ? "expired" : session.getSessionToken());
         requestBuilder.addHeader("User-Agent", "fore-example-user-agent-" + BuildConfig.VERSION_NAME);
 

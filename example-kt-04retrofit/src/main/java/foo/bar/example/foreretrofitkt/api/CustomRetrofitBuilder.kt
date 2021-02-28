@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * bare in mind that you should be able to use this class in your tests to mock the server
  * by passing different interceptors in:
  *
- * see @[co.early.fore.retrofit.testhelpers.InterceptorStubbedService]
+ * see @[co.early.fore.net.testhelpers.InterceptorStubbedService]
  *
  */
 object CustomRetrofitBuilder {

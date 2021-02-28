@@ -1,6 +1,7 @@
 package foo.bar.example.foreretrofitkt.api
 
 import co.early.fore.kt.core.logging.Logger
+import co.early.fore.net.MessageProvider
 import com.google.gson.Gson
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_CLIENT
@@ -21,7 +22,7 @@ import java.io.UnsupportedEncodingException
 class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.net.retrofit2.ErrorHandler<ErrorMessage> {
 
 
-    override fun <CE : co.early.fore.net.retrofit2.MessageProvider<ErrorMessage>> handleError(
+    override fun <CE : MessageProvider<ErrorMessage>> handleError(
             t: Throwable?,
             errorResponse: Response<*>?,
             customErrorClazz: Class<CE>?,
@@ -71,7 +72,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.n
     }
 
 
-    private fun <CE : co.early.fore.net.retrofit2.MessageProvider<ErrorMessage>> parseCustomError(
+    private fun <CE : MessageProvider<ErrorMessage>> parseCustomError(
             provisionalErrorMessage: ErrorMessage,
             errorResponse: Response<*>,
             customErrorClazz: Class<CE>

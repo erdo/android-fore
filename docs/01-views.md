@@ -55,166 +55,10 @@ Often there will also be the add / remove observers methods where the view regis
 
 ## Removing even more boiler plate
 
-If you don't want to have to bother with implementing the adding and removing of observers in your view code, you can let the Sync... classes do it for you.
+If the list of things you are observing gets a little long, you can remove some of this add and remove boiler plate by using an **ObservableGoup** (it's just a convenience class that maintains a list of observables internally)
 
-### SyncActivityX and SyncActivity
-By extending one of these classes (the first one is for androidx), you will just be left with having to state which observable models you want to observe, and then implementing the syncView() method:
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-<pre class="tabcontent tabbed java"><code>
-public class MySpeedoActivity extends SyncActivityX {
-
-  private SpeedoModel speedoModel; //inject these
-  private RoadInfoModel roadInfoModel; //inject these
-
-  @Override
-  public LifecycleSyncer.Observables getThingsToObserve() {
-    return new LifecycleSyncer.Observables(
-        speedoModel,
-        roadInfoModel
-    );
-  }
-
-  @Override
-  public void syncView() {
-    speedo_roadname_textview.text = roadInfoModel.getRoadName();
-    speedo_speed_textview.text = speedoModel.getSpeed();
-  }
-}
- </code></pre>
-<pre class="tabcontent tabbed kotlin"><code>
-class MySpeedoActivity : SyncActivityX() {
-
-  private val speedoModel: SpeedoModel by inject()
-  private val roadInfoModel: RoadInfoModel by inject()
-
-  override fun getThingsToObserve(): LifecycleSyncer.Observables {
-    return LifecycleSyncer.Observables(
-        speedoModel,
-        roadInfoModel
-    )
-  }
-
-  override fun syncView() {
-    speedo_roadname_textview.text = roadInfoModel.roadName
-    speedo_speed_textview.text = speedoModel.speed
-  }
-}
- </code></pre>
-
-
-### SyncFragmentX and SyncFragment
-If you prefer to use Fragments for your view layer you can extend one of these (and again, the first one is for androidx).
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-<pre class="tabcontent tabbed java"><code>
-public class MySpeedoFragment extends SyncFragmentX {
-
-  private SpeedoModel speedoModel; //inject these
-  private RoadInfoModel roadInfoModel; //inject these
-
-  @Override
-  public LifecycleSyncer.Observables getThingsToObserve() {
-    return new LifecycleSyncer.Observables(
-            speedoModel,
-            roadInfoModel
-    );
-  }
-
-  @Override
-  public void syncView() {
-    speedo_roadname_textview.text = roadInfoModel.getRoadName();
-    speedo_speed_textview.text = speedoModel.getSpeed();
-  }
-}
- </code></pre>
-<pre class="tabcontent tabbed kotlin"><code>
-class MySpeedoFragment : SyncFragmentX() {
-
-    private val speedoModel: SpeedoModel by inject()
-    private val roadInfoModel: RoadInfoModel by inject()
-
-    override fun getThingsToObserve(): LifecycleSyncer.Observables {
-        return LifecycleSyncer.Observables(
-            speedoModel,
-            roadInfoModel
-        )
-    }
-
-    override fun syncView() {
-        speedo_roadname_textview.text = roadInfoModel.roadName
-        speedo_speed_textview.text = speedoModel.speed
-    }
-}
- </code></pre>
-
-### Sync[ViewGroup]
- There are a few Sync ViewGroup classes that you can use if you prefer working with custom views but also want the observer boiler plate taken care of. SyncConstraintLayout, SyncScrollView etc. If there is a ViewGroup you want, that isn't included - it's not too hard to do it yourself (just look at the source of the ones we have, they're very small classes. For example here's the one for [ScrollView](https://github.com/erdo/android-fore/blob/master/fore-lifecycle/src/main/java/co/early/fore/lifecycle/view/SyncScrollView.java)).
-
- <!-- Tabbed code sample -->
-  <div class="tab">
-    <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
-  </div>
- <pre class="tabcontent tabbed java"><code>
- public class MySpeedoView extends SyncConstraintLayout {
-
-   private SpeedoModel speedoModel; //inject these
-   private RoadInfoModel roadInfoModel; //inject these
-
-   //constructors
-
-   @Override
-   public LifecycleSyncer.Observables getThingsToObserve() {
-     return new LifecycleSyncer.Observables(
-             speedoModel,
-             roadInfoModel
-     );
-   }
-
-   @Override
-   public void syncView() {
-     speedo_roadname_textview.text = roadInfoModel.getRoadName();
-     speedo_speed_textview.text = speedoModel.getSpeed();
-   }
- }
-  </code></pre>
- <pre class="tabcontent tabbed kotlin"><code>
- class MySpeedoView @JvmOverloads constructor(
-    context: Context?,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) :
-    SyncConstraintLayout(context, attrs, defStyleAttr) {
-
-     private val speedoModel: SpeedoModel by inject()
-     private val roadInfoModel: RoadInfoModel by inject()
-
-     override fun getThingsToObserve(): LifecycleSyncer.Observables {
-         return LifecycleSyncer.Observables(
-             speedoModel,
-             roadInfoModel
-         )
-     }
-
-     override fun syncView() {
-         speedo_roadname_textview.text = roadInfoModel.roadName
-         speedo_speed_textview.text = speedoModel.speed
-     }
- }
-  </code></pre>
-
-### ViewModels observing many observables
-Similarly you can observe multiple observables from a ViewModel like this:
-
+### Using ObservableGroup in a ViewModel
+Here's how you can use an ObservableGroup from a ViewModel:
 
 ``` kotlin
 
@@ -223,14 +67,17 @@ class MyViewModel(
     private val networkInfo: NetworkInfo,
     private val emailInBox: EmailInBox,
     private val weatherRepository: WeatherRepository
-) : ViewModel(), SyncableView, AutoSyncable by ObservableGroup(
+) : ViewModel(), ObservableGroup by ObservableGroupImp(
     accountModel,
     networkInfo,
     emailInBox,
     weatherRepository) {
 
+    private val observer = Observer { syncView() }
+
     init {
-        addObserversAndSync(this)
+        addObserver(observer)
+        syncView()
     }
 
     override fun syncView() {
@@ -245,8 +92,24 @@ class MyViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        removeObservers()
+        removeObserver(observer)
     }
 }
 
 ```
+
+# SyncTrigger
+
+The [SyncTrigger](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncTrigger.java) class lets you create a one off event (like an animation that must be fired only once) from inside the syncView() method (which is called at any time, [an arbitrary number of times](https://erdo.github.io/android-fore/05-extras.html#notification-counting)).
+
+All "statey" view architectures have this issue (MVO, MVI, MVVM) whereas it's not an issue with MVP because that is event based to start with. Essentially we need a way to bridge the two worlds of state and events. There are a load of ways to do this, take a look [here](https://www.reddit.com/r/androiddev/comments/g6kgfn/android_databinding_with_livedata_holds_old_values/foabqm0/), [here](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150), [here](https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9), [here](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java), and [here](https://github.com/android/architecture-components-samples/issues/63#issuecomment-310422475) for example.
+
+Anyway this is fore's solution, but there is no need to use it if you already have a preferred way of handling this situation.
+
+When using a SyncTrigger you need to implement the **triggered()** method which will be run when the SyncTrigger is fired (e.g. to run an animation), and also implement the **checkThreshold()** method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON). If the threshold is breached i.e. checkThreshold() returns **true**, then triggered() will be called.
+
+For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the SyncTrigger source for more details about this).
+
+By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
+
+Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) for example usage of the SyncTrigger.
