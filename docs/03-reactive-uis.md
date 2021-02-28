@@ -255,7 +255,7 @@ accountModel.accountStateLiveData.observer(this, Observer { status ->
 
 We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler-plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually. This is what **fore** code would also look like if we had a parameter in the somethingChanged() method, luckily there is no parameter. All fore observables have exactly the same code signature, no matter what type of data is involved.
 
-*We can improve this situation by using LiveData to observe a single immutable state class which contains all the states by the way - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if a view is observing more than one model...*
+*(NB: If you've used MVI before, you'll immediately spot that we can improve this situation by observing a single immutable viewState - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if your view layer is observing more than one model...)*
 
 
 ### Views want things from more than one model

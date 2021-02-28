@@ -55,7 +55,7 @@ Often there will also be the add / remove observers methods where the view regis
 
 ## Removing even more boiler plate
 
-If the list of things you are observing gets a little long, you can remove some of this add and remove boiler plate by using an **ObservableGoup** (it's just a convenience class that maintains a list of observables internally)
+If the list of things you are observing gets a little long, you can remove some of this *add and remove* boiler plate by using an **ObservableGoup** (it's just a convenience class that maintains a list of observables internally)
 
 ### Using ObservableGroup in a ViewModel
 Here's how you can use an ObservableGroup from a ViewModel:

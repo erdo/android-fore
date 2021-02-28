@@ -10,7 +10,7 @@ Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core
 **1.3.5** was the last version of the fore-lifecycle package that will be published on mavenCentral. The useful classes from this package were moved into fore-core a while ago and with the ObservableGoup interface, most of what fore-lifecycle did can be done yourself pretty easily anyway. 1.3.5 won't be going anywhere of course and you can still pull it in individually if you want it.
 
 ## jcenter removal
-**1.3.4** is the last version that was published on jcenter, mavenCentral has most versions since **1.1.0** (if for some reason you need an older version, please open an issue and I might be able to sign one and put it on mavenCentral for you). **All new versions will be released to mavenCentral only**. All references to jcenter have been removed from the project so it will continue to build after jcenter has been [closed](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/).
+**1.3.4** is the last version that was published on jcenter, mavenCentral has most versions since **1.1.0** (if for some reason you need an older version, please open an issue and I might be able to sign one and put it on mavenCentral for you). **All new versions will be released to mavenCentral only**. All references to jcenter have been removed from the project so it will continue to build after jcenter has been closed.
 
 ## GraphQL Support
 **1.3.1** adds support for **Apollo**, it wraps the calls using a CallProcessor in a similar way to how Retrofit2 is handled.

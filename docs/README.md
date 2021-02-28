@@ -27,7 +27,7 @@ the original **java** API:
 implementation "co.early.fore:fore-jv:1.3.6"
 ```
 
-(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing.)
+*(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing)*
 
 To check what versions of what dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc). See the [release notes](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
 
@@ -41,7 +41,7 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 ## Overview
 
-The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible, it also encourages the development of genuinely reactive code at the view layer.
+The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible. It also encourages the development of genuinely reactive code at the view layer (you can't use the API to replace a callback with an observable stream and think you're done, for example - what you would have there is just a more complicated callback, not reactive code per se).
 
 Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 
