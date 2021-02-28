@@ -3,6 +3,9 @@
 
 Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
+## Ktor Client Support
+**1.3.6** adds support for **Ktor**, it wraps the calls using a CallProcessor in a similar way to how Retrofit2 and Apollo is handled.
+
 ## fore-lifecycle deprecation
 **1.3.5** was the last version of the fore-lifecycle package that will be published on mavenCentral. The useful classes from this package were moved into fore-core a while ago and with the ObservableGoup interface, most of what fore-lifecycle did can be done yourself pretty easily anyway. 1.3.5 won't be going anywhere of course and you can still pull it in individually if you want it.
 
