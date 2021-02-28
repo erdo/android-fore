@@ -11,3 +11,5 @@
 -dontwarn com.apollographql.apollo.ApolloCall$Callback
 -dontwarn co.early.fore.kt.net.retrofit2.**
 -dontwarn co.early.fore.net.retrofit2.**
+-keep class okhttp3.Request { *;}
+-keep class okhttp3.Response { *;}

@@ -5,10 +5,6 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.time.measureNanos
 import co.early.fore.kt.core.time.nanosFormat
-import okhttp3.Headers
-import okhttp3.Interceptor
-import okhttp3.MediaType
-import okhttp3.Response
 import java.io.EOFException
 import java.io.IOException
 import java.nio.charset.Charset
@@ -16,7 +12,9 @@ import java.util.*
 import java.util.concurrent.locks.ReentrantLock
 
 import co.early.fore.net.NetworkingLogSanitizer
+import okhttp3.*
 import okio.Buffer
+import kotlin.reflect.KVisibility
 
 /**
  * see https://github.com/square/okhttp/blob/master/okhttp-logging-interceptor/src/main/java/okhttp3/logging/HttpLoggingInterceptor.java
@@ -31,28 +29,68 @@ class InterceptorLogging @JvmOverloads constructor(
     private val someCharacters = "ABDEFGH023456789".toCharArray()
     private val TAG = "Network"
     private val logLinesLock = ReentrantLock()
+    private var printedWarningAlready = false
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val method = request.method
-        val url = request.url.toString()
+        var url: HttpUrl? = null
+        var method: String? = null
         val randomPostTag = (" " + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)])
 
-        /*
-        request
-         */
+        try {
+            val pair = logRequest(request, randomPostTag)
+            url = pair.first
+            method = pair.second
+        } catch (t: Throwable) {
+            logWarning(t)
+        }
+
+        val decoratedResponse = measureNanos {
+            try {
+                chain.proceed(request)
+            } catch (e: Throwable) {
+                ForeDelegateHolder.getLogger(logger).e(
+                        TAG + randomPostTag,
+                        "HTTP $method <-- Connection dropped, but GETs will be retried $url : $e")
+                throw e
+            }
+        }
+        val response = decoratedResponse.first
+        val timeTaken = decoratedResponse.second
+
+        try {
+            logResponse(response, randomPostTag, method, url, timeTaken)
+        } catch (t: Throwable) {
+            logWarning(t)
+        }
+
+        return response
+    }
+
+    private fun logWarning(t: Throwable) {
+        if (!printedWarningAlready) {
+            ForeDelegateHolder.getLogger(logger).w("No network logging available: fore doesn't recognise this version of OkHttp, or you have excluded kotlin-reflect from your dependencies. ${t.message}")
+            printedWarningAlready = true
+        }
+    }
+
+    private fun logRequest(request: Request, randomPostTag: String): Pair<HttpUrl, String> {
+
+        val method = method(request)
+        val url = url(request)
+
         ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url))
 
         networkingLogSanitizer?.let {
-            logHeaders(it.sanitizeHeaders(request.headers), randomPostTag)
-        } ?: logHeaders(request.headers, randomPostTag)
+            logHeaders(it.sanitizeHeaders(headers(request)), randomPostTag)
+        } ?: logHeaders(headers(request), randomPostTag)
 
-        request.body?.let {
+        body(request)?.let {
 
             val buffer = Buffer()
             val charset = getCharset(it.contentType())
@@ -74,33 +112,21 @@ class InterceptorLogging @JvmOverloads constructor(
             }
         }
 
+        return url to method
+    }
 
-        /*
-        response
-         */
-        val decoratedResponse = measureNanos {
-            try {
-                chain.proceed(request)
-            } catch (e: Exception) {
-                ForeDelegateHolder.getLogger(logger).e(
-                        TAG + randomPostTag,
-                        "HTTP $method <-- Connection dropped, but GETs will be retried $url : $e")
-                throw e
-            }
-        }
-        val response = decoratedResponse.first
-        val timeTaken = decoratedResponse.second
+    private fun logResponse(response: Response, randomPostTag: String, method: String?, url: HttpUrl?, timeTaken: Long) {
 
         ForeDelegateHolder.getLogger(logger).i(
                 TAG + randomPostTag,
-                "HTTP " + method + " <-- Server replied HTTP-${response.code}  " +
+                "HTTP " + method + " <-- Server replied HTTP-${code(response)}  " +
                         "${nanosFormat.format(timeTaken / (1000 * 1000))} ms $url")
 
         networkingLogSanitizer?.let {
-            logHeaders(it.sanitizeHeaders(response.headers), randomPostTag)
-        } ?: logHeaders(response.headers, randomPostTag)
+            logHeaders(it.sanitizeHeaders(headers(response)), randomPostTag)
+        } ?: logHeaders(headers(response), randomPostTag)
 
-        response.body?.let {
+        body(response)?.let {
             val contentLength = it.contentLength()
             val charset = getCharset(it.contentType())
             val source = it.source()
@@ -109,7 +135,7 @@ class InterceptorLogging @JvmOverloads constructor(
             if (!isPlaintext(buffer)) {
                 ForeDelegateHolder.getLogger(logger).i(
                         TAG + randomPostTag,
-                        " (binary " + buffer.size + " byte body omitted)")
+                        " (binary body omitted)")
             } else {
                 if (contentLength != 0L) {
                     val bodyJson = truncate(buffer.clone().readString(charset))
@@ -120,7 +146,6 @@ class InterceptorLogging @JvmOverloads constructor(
                 }
             }
         }
-        return response
     }
 
     private fun logLines(wrappedLines: List<String>, rndmPostTag: String) {
@@ -185,4 +210,25 @@ class InterceptorLogging @JvmOverloads constructor(
     init {
         require(maxBodyLogCharacters >= 1) { "maxBodyLogCharacters must be greater than 0" }
     }
+
+    //OkHttp3 v3.X.X used by Retrofit2 and Apollo has method calls: method(), body(), code() etc
+    //OkHttp3 v4.X.X used by Ktor has fields: method, body, code etc instead
+
+    private fun method(request: Request): String = call(request, "method") as String
+    private fun url(request: Request): HttpUrl = call(request, "url") as HttpUrl
+    private fun headers(request: Request): Headers = call(request, "headers") as Headers
+    private fun body(request: Request): RequestBody? = call(request, "body")?.let { it as RequestBody }
+
+    private fun code(response: Response): Int = call(response, "code") as Int
+    private fun headers(response: Response): Headers = call(response, "headers") as Headers
+    private fun body(response: Response): ResponseBody? = call(response, "body")?.let { it as ResponseBody }
+
+    private fun call(clazz: Any, name: String): Any? {
+        return clazz::class.members.find {
+            it.name == name && it.parameters.size == 1 && it.visibility == KVisibility.PUBLIC
+        }?.let {
+            it.call(clazz)
+        }
+    }
 }
+

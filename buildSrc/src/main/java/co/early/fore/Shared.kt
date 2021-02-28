@@ -41,11 +41,6 @@ object Shared {
         const val retrofit = "2.9.0"
         const val apollo = "2.5.4"
         const val ktor_client = "1.5.2"
-        //ktor uses a higher version of okhttp than retrofit or apollo
-        //it matters for co.early.fore.kt.net.InterceptorLogging
-        //(if for some reason you need an older version of okhttp, you can pull
-        //fore-network in explicitly and use the java InterceptorLogging class instead)
-        const val okhttp = "4.6.0"//"3.14.9"
         const val converter_gson = "2.6.0"
         const val core_ktx = "1.3.2"
         const val kotlinx_coroutines_core = "1.4.2"
@@ -60,8 +55,8 @@ object Shared {
 
     object Publish {
         //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "1.3.6"
-        const val LIB_VERSION_CODE = 50
+        const val LIB_VERSION_NAME = "1.3.7"
+        const val LIB_VERSION_CODE = 51
         const val REPO = "fore"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
@@ -77,7 +72,7 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.3.6"
-        const val use_published_version = true
+        const val published_fore_version_for_examples = "1.3.7"
+        const val use_published_version = false
     }
 }

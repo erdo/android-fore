@@ -40,7 +40,10 @@ dependencies {
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 
-    implementation("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp}")
+    // OkHttp3 v3.X.X used by Retrofit2 and Apollo has method calls: method(), body(), code() etc
+    // OkHttp3 v4.X.X used by Ktor has fields: method, body, code etc instead
+    // we use reflection so that we can handle either case in InterceptorLogging.kt
+    implementation(kotlin("reflect"))
 }
 
 apply(from = "../publish.gradle")
