@@ -27,12 +27,6 @@ dependencies {
     api(project(":fore-adapters-kt"))
     api(project(":fore-network-kt"))
 
-    //for the fore-lifecycle package
-    api("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
-    compileOnly("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
-    compileOnly("androidx.coordinatorlayout:coordinatorlayout:${Shared.Versions.coordinatorlayout}")
-    compileOnly("androidx.cardview:cardview:${Shared.Versions.cardview}")
-
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 

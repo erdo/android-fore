@@ -3,6 +3,7 @@ package foo.bar.example.foreapollokt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo.CallProcessorApollo
 import com.apollographql.apollo.api.Input
@@ -34,7 +35,7 @@ object OG {
 
         // create dependency graph
 
-        val logger = AndroidLogger("fore_")
+        val logger = if (BuildConfig.DEBUG) AndroidLogger("fore_") else SilentLogger()
 
         // networking classes common to all models
         val globalRequestInterceptor = CustomGlobalRequestInterceptor(logger)

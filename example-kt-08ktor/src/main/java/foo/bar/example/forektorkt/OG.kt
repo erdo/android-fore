@@ -2,6 +2,7 @@ package foo.bar.example.forektorkt
 
 import android.app.Application
 import co.early.fore.kt.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.ktor.CallProcessorKtor
 import foo.bar.example.forektorkt.api.CustomGlobalErrorHandler
@@ -28,7 +29,7 @@ object OG {
 
         // create dependency graph
 
-        val logger = AndroidLogger("fore_")
+        val logger = if (BuildConfig.DEBUG) AndroidLogger("fore_") else SilentLogger()
 
         // networking classes common to all models
         val httpClient = CustomKtorBuilder.create(

@@ -3,6 +3,7 @@ package foo.bar.example.foreretrofitkt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
+import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.InterceptorLogging
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
@@ -30,7 +31,7 @@ object OG {
 
         // create dependency graph
 
-        val logger = AndroidLogger("fore_")
+        val logger = if (BuildConfig.DEBUG) AndroidLogger("fore_") else SilentLogger()
 
         // networking classes common to all models
         val retrofit = CustomRetrofitBuilder.create(
