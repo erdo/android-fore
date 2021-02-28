@@ -3,6 +3,9 @@
 
 Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
+## OkHttp3
+As **fore** now wraps **Retrofit2**, **Apollo** or **Ktor** calls with a single package, the network logs need to work out which version of OkHttp3 your app is running (Retrofit2 and Apollo use v3.x.x, Ktor uses 4.x.x and these versions of OkHttp3 have slightly different APIs). From **1.3.7** we do this with reflection, but feel free to exclude the kotlin-reflect package from your release builds as follows: `exclude("org.jetbrains.kotlin", "kotlin-reflect")`, you just won't see any network logs when using the InterceptorLogging class (which you probably have turned off for release builds anyway).
+
 ## Ktor Client Support
 **1.3.6** adds support for **Ktor**, it wraps the calls using a CallProcessor in a similar way to how Retrofit2 and Apollo is handled.
 
