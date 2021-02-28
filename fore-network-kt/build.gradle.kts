@@ -39,8 +39,8 @@ dependencies {
 
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
-    //we explicitly set this up as apollo uses a more recent version of okio than retrofit2 does
-    implementation("com.squareup.okio:okio:${Shared.Versions.okio}")
+
+    implementation("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp}")
 }
 
 apply(from = "../publish.gradle")

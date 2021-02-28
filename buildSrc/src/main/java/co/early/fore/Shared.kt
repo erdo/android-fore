@@ -39,8 +39,13 @@ object Shared {
         const val coordinatorlayout = "1.1.0"
         const val cardview = "1.0.0"
         const val retrofit = "2.9.0"
-        const val okio = "2.9.0"
-        const val apollo = "2.5.2"
+        const val apollo = "2.5.4"
+        const val ktor_client = "1.5.2"
+        //ktor uses a higher version of okhttp than retrofit or apollo
+        //it matters for co.early.fore.kt.net.InterceptorLogging
+        //(if for some reason you need an older version of okhttp, you can pull
+        //fore-network in explicitly and use the java InterceptorLogging class instead)
+        const val okhttp = "4.6.0"//"3.14.9"
         const val converter_gson = "2.6.0"
         const val core_ktx = "1.3.2"
         const val kotlinx_coroutines_core = "1.4.2"

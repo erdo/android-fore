@@ -5,7 +5,7 @@ plugins {
     id("com.android.application")
     id("maven")
     id("idea")
-    id("com.apollographql.apollo").version("2.5.2")
+    id("com.apollographql.apollo").version("2.5.4")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -15,7 +15,7 @@ plugins {
 val appId = "foo.bar.example.foreapollokt"
 
 fun getTestBuildType(): String {
-    return project.properties["testBuildType"] as String? ?: co.early.fore.Shared.BuildTypes.DEFAULT
+    return project.properties["testBuildType"] as String? ?: BuildTypes.DEFAULT
 }
 
 println("[$appId testBuildType:${getTestBuildType()}]")

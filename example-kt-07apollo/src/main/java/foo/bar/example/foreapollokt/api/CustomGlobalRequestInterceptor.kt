@@ -25,14 +25,14 @@ class CustomGlobalRequestInterceptor(
         val requestBuilder = original.newBuilder()
 
 
-        requestBuilder.addHeader("content-type", "application/json")
+        requestBuilder.addHeader("Content-Type", "application/json")
         authenticator?.let {
-            requestBuilder.addHeader("Authorization", if (it.sessionToken == NO_SESSION) "expired" else it.sessionToken);
+            requestBuilder.addHeader("Authorization", if (it.sessionToken == NO_SESSION) "expired" else it.sessionToken)
         }
         requestBuilder.addHeader("User-Agent", "fore-example-user-agent-" + BuildConfig.VERSION_NAME)
 
 
-        requestBuilder.method(original.method(), original.body())
+        requestBuilder.method(original.method, original.body)
 
         return chain.proceed(requestBuilder.build())
     }

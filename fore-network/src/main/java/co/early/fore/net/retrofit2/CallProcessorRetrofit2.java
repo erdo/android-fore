@@ -8,6 +8,7 @@ import co.early.fore.core.WorkMode;
 import co.early.fore.core.callbacks.FailureCallbackWithPayload;
 import co.early.fore.core.callbacks.SuccessCallbackWithPayload;
 import co.early.fore.core.logging.Logger;
+import co.early.fore.net.MessageProvider;
 import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -61,8 +62,8 @@ public class CallProcessorRetrofit2<F> {
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
     public <S, CE extends MessageProvider<F>> void processCall(Call<S> call, WorkMode workMode, final Class<CE> customErrorClazz,
-                                           final SuccessCallbackWithPayload<S> successCallbackWithPayload,
-                                           final FailureCallbackWithPayload<F> failureCallbackWithPayload) {
+                                                               final SuccessCallbackWithPayload<S> successCallbackWithPayload,
+                                                               final FailureCallbackWithPayload<F> failureCallbackWithPayload) {
         doProcessCall(call, workMode, Affirm.notNull(customErrorClazz), successCallbackWithPayload, failureCallbackWithPayload);
     }
 

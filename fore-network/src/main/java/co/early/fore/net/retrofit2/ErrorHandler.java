@@ -2,6 +2,7 @@ package co.early.fore.net.retrofit2;
 
 import org.jetbrains.annotations.Nullable;
 
+import co.early.fore.net.MessageProvider;
 import okhttp3.Request;
 import retrofit2.Response;
 

@@ -9,7 +9,7 @@ import okhttp3.OkHttpClient
  * bare in mind that you should be able to use this class in your tests to mock the server
  * by passing different interceptors in:
  *
- * see @[co.early.fore.retrofit.testhelpers.InterceptorStubbedService]
+ * see @[co.early.fore.net.testhelpers.InterceptorStubbedService]
  *
  */
 object CustomApolloBuilder {

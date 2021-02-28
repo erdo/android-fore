@@ -34,7 +34,7 @@ import retrofit2.Retrofit
  * difference.
  *
  *
- * As usual for tests, we setup the [XCallProcessor] with [WorkMode.SYNCHRONOUS] so
+ * As usual for tests, we setup the [CallProcessor] with [WorkMode.SYNCHRONOUS] so
  * that everything plays out in a single thread.
  *
  */

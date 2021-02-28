@@ -1,4 +1,4 @@
-package co.early.fore.net.retrofit2;
+package co.early.fore.net;
 
 /**
  * Created by eric on 12/01/2017.

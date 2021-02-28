@@ -3,7 +3,7 @@ package foo.bar.example.foreretrofit.api.fruits;
 import com.google.gson.annotations.SerializedName;
 
 import co.early.fore.core.Affirm;
-import co.early.fore.net.retrofit2.MessageProvider;
+import co.early.fore.net.MessageProvider;
 import foo.bar.example.foreretrofit.message.UserMessage;
 
 import static foo.bar.example.foreretrofit.message.UserMessage.ERROR_MISC;

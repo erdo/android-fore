@@ -61,7 +61,7 @@ class LaunchViewTest {
 
     @Test
     @Throws(Exception::class)
-    fun isFetchinLaunch() {
+    fun isFetchingLaunch() {
 
         //arrange
         LaunchesViewTestStateBuilder(mockLaunchesModel)

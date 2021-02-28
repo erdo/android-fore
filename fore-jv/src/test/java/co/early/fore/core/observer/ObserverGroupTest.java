@@ -80,7 +80,7 @@ public class ObserverGroupTest {
 
         //act
         try {
-            ObservableGroup observableGroup = new ObservableGroupImp(null);
+            ObservableGroup observableGroup = new ObservableGroupImp((Observable) null);
         } catch (Throwable npe) {
             exceptionThrown = true;
         }

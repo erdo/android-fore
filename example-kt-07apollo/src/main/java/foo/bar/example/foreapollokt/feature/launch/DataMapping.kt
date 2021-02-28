@@ -1,6 +1,5 @@
 package foo.bar.example.foreapollokt.feature.launch
 
-import android.view.View
 import foo.bar.example.foreapollokt.graphql.LaunchDetailsQuery
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 
