@@ -60,8 +60,8 @@ object Shared {
 
     object Publish {
         //LIB_VERSION_NAME="0.9.25-SNAPSHOT"
-        const val LIB_VERSION_NAME = "1.3.5"
-        const val LIB_VERSION_CODE = 49
+        const val LIB_VERSION_NAME = "1.3.6"
+        const val LIB_VERSION_CODE = 50
         const val REPO = "fore"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
@@ -77,7 +77,7 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.3.5"
+        const val published_fore_version_for_examples = "1.3.6"
         const val use_published_version = true
     }
 }
