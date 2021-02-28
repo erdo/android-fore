@@ -72,14 +72,6 @@ jobs:
           path: example-jv-04retrofit/build/test-results
 
       - run:
-          name: Run Tests example-jv-05ui
-          command: ./gradlew example-jv-05ui:lintRelease example-jv-05ui:testRelease
-      - store_artifacts:
-          path: example-jv-05ui/build/reports
-      - store_test_results:
-          path: example-jv-05ui/build/test-results
-
-      - run:
           name: Run Tests example-jv-06db
           command: ./gradlew example-jv-06db:lintRelease example-jv-06db:testRelease
       - store_artifacts:
@@ -126,3 +118,11 @@ jobs:
           path: example-kt-07apollo/build/reports
       - store_test_results:
           path: example-kt-07apollo/build/test-results
+
+      - run:
+          name: Run Tests example-kt-08ktor
+          command: ./gradlew example-kt-08ktor:lintRelease example-kt-08ktor:testRelease
+      - store_artifacts:
+          path: example-kt-08ktor/build/reports
+      - store_test_results:
+          path: example-kt-08ktor/build/test-results
