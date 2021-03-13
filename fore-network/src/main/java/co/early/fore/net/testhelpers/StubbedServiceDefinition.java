@@ -26,6 +26,10 @@ public class StubbedServiceDefinition<R> {
         this.expectedResult = expectedResult;
     }
 
+    public StubbedServiceDefinition(int httpCode, String resourceFileName) {
+        this(httpCode, resourceFileName, "application/json", null);
+    }
+
     public StubbedServiceDefinition(int httpCode, String resourceFileName, R expectedResult) {
         this(httpCode, resourceFileName, "application/json", expectedResult);
     }
