@@ -4,12 +4,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.net.MessageProvider
 import com.google.gson.Gson
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_CLIENT
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_MISC
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_NETWORK
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_SECURITY_UNKNOWN
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_SERVER
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_SESSION_TIMED_OUT
+import foo.bar.example.foreretrofitkt.message.ErrorMessage.*
 import okhttp3.Request
 import retrofit2.Response
 import java.io.InputStreamReader
@@ -40,6 +35,8 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.n
                 401 -> message = ERROR_SESSION_TIMED_OUT
 
                 400, 405 -> message = ERROR_CLIENT
+
+                429 -> message = ERROR_RATE_LIMITED
 
                 //realise 404 is officially a "client" error, but in my experience if it happens in prod it is usually the fault of the server ;)
                 404, 500, 503 -> message = ERROR_SERVER

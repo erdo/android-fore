@@ -17,6 +17,7 @@ enum class ErrorMessage constructor(private val messageResId: Int) : Parcelable 
     ERROR_SECURITY_UNKNOWN(R.string.msg_error_misc),
     ERROR_SERVER(R.string.msg_error_server),
     ERROR_CLIENT(R.string.msg_error_client),
+    ERROR_RATE_LIMITED(R.string.msg_rate_limited),
     ERROR_SESSION_TIMED_OUT(R.string.msg_error_session_timeout),
     ERROR_BUSY(R.string.msg_error_busy),
     ERROR_CANCELLED(R.string.msg_error_cancelled),

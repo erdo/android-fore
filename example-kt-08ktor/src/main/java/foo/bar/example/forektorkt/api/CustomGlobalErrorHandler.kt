@@ -4,11 +4,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.net.ktor.ErrorHandler
 import co.early.fore.net.MessageProvider
 import foo.bar.example.forektorkt.message.ErrorMessage
-import foo.bar.example.forektorkt.message.ErrorMessage.ERROR_CLIENT
-import foo.bar.example.forektorkt.message.ErrorMessage.ERROR_NETWORK
-import foo.bar.example.forektorkt.message.ErrorMessage.ERROR_SECURITY_UNKNOWN
-import foo.bar.example.forektorkt.message.ErrorMessage.ERROR_SERVER
-import foo.bar.example.forektorkt.message.ErrorMessage.ERROR_SESSION_TIMED_OUT
+import foo.bar.example.forektorkt.message.ErrorMessage.*
 import io.ktor.client.call.*
 import io.ktor.client.features.*
 import io.ktor.client.statement.*
@@ -53,6 +49,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
                 msg = when (response.status.value) {
                     401 -> ERROR_SESSION_TIMED_OUT
                     400, 405 -> ERROR_CLIENT
+                    429 -> ERROR_RATE_LIMITED
                     404 -> ERROR_SERVER //if this happens in prod, it's usually a server config issue
                     else -> null
                 } ?: msg
