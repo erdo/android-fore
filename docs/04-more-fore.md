@@ -40,7 +40,7 @@ launchMain(workMode) {
 
 The API is very slightly different depending on whever we are wrapping **Retrofit2** calls, **Apollo** calls or **Ktor** calls, please refer to the sample apps for details and test strategies.
 
-In all cases though, using the CallProcessor ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callProcessor responses) and **error handling** (the callProcessor API requires an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
+In all cases though, using the CallProcessor ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callProcessor responses) and **error handling** (the callProcessor API requires that an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
 
 ## Either either
 
