@@ -1,7 +1,7 @@
 <a name="fore-network"></a>
-# Retrofit2 and Apollo
+# Retrofit2, Apollo and Ktor
 
-**fore** handles both Retrofit2 and Apollo networking calls in a similar way, by wrapping them with a **CallProcessor** class ([CallProcessorRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/CallProcessorRetrofit2.kt) \| [CallProcessorApollo](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/apollo/CallProcessorApollo.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
+Retrofit2, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallProcessor** class ([CallProcessorRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/CallProcessorRetrofit2.kt) \| [CallProcessorApollo](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/apollo/CallProcessorApollo.kt) \| [CallProcessorKtor](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/ktor/CallProcessorKtor.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
@@ -37,6 +37,10 @@ launchMain(workMode) {
     }
 }
  </code></pre>
+
+The API is very slightly different depending on whever we are wrapping **Retrofit2** calls, **Apollo** calls or **Ktor** calls, please refer to the sample apps for details and test strategies.
+
+In all cases though, using the CallProcessor ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callProcessor responses) and **error handling** (the callProcessor API requires an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
 
 ## Either either
 
@@ -89,7 +93,7 @@ callProcessor.processCallAsync {
 
 You can see it live in the kotlin version of [sample app 4](https://erdo.github.io/android-fore/#fore-4-retrofit-example)
 
-*Because of small differences in Apollo's API design, it's not quite as convenient to chain calls together when using Apollo. There is however an extension function on fore's Either implementation which let's you achieve something [very similar](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-07apollo/src/main/java/foo/bar/example/foreapollokt/feature/launch/LaunchesModel.kt#L104).*
+*Because of small differences in Ktor and Apollo's API design, it's not quite as convenient to chain calls together. There is however an extension function on fore's Either implementation which lets you achieve something [very similar](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-07apollo/src/main/java/foo/bar/example/foreapollokt/feature/launch/LaunchesModel.kt#L104).*
 
 ## Custom APIs
 
