@@ -160,17 +160,59 @@ Of course, if you're setting a state on a UI element which is the same as the st
 
 ## SyncTrigger
 
-The [SyncTrigger](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/ui/SyncTrigger.kt) class lets you create a one off event (like an animation that must be fired only once) from inside the syncView() method (which is called at any time, [an arbitrary number of times](https://erdo.github.io/android-fore/05-extras.html#notification-counting)).
+The SyncTrigger ([kotlin](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/ui/SyncTrigger.kt) \| [java](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncTrigger.java)) lets you create an event like an animation that must be fired only once, from inside the syncView() method (which can be called at any time, [an arbitrary number of times](https://erdo.github.io/android-fore/05-extras.html#notification-counting)).
 
-All "statey" view architectures have this issue (MVO, MVI, MVVM) whereas it's not an issue with MVP because that is event based to start with. Essentially we need a way to bridge the two worlds of state and events. There are a load of ways to do this, take a look [here](https://www.reddit.com/r/androiddev/comments/g6kgfn/android_databinding_with_livedata_holds_old_values/foabqm0/), [here](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150), [here](https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9), [here](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java), and [here](https://github.com/android/architecture-components-samples/issues/63#issuecomment-310422475) for example.
+All "statey" view architectures have this issue (MVO, MVI, MVVM) whereas it's not an issue with MVP because that is event based to start with. Essentially we need a way to bridge the two worlds of **state** and **events**. There are a load of ways to do this, take a look [here](https://www.reddit.com/r/androiddev/comments/g6kgfn/android_databinding_with_livedata_holds_old_values/foabqm0/), [here](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150), [here](https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9), [here](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java), and [here](https://github.com/android/architecture-components-samples/issues/63#issuecomment-310422475) for example.
 
 Anyway this is fore's solution, but there is no need to use it if you already have a preferred way of handling this situation.
 
-When using a SyncTrigger you need to implement the **triggered()** method which will be run when the SyncTrigger is fired (e.g. to run an animation), and also implement the **checkThreshold()** method which will be used to check if some value is over a threshold (e.g. when a game state changes to WON). If the threshold is breached i.e. checkThreshold() returns **true**, then triggered() will be called.
+The java and kotlin versions of the SyncTrigger have slightly different APIs but you need to specify a the same things for both:
 
-For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers. Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be ignored. This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger. (see the SyncTrigger source for more details about this).
+- the condition or **threshold** that you want to trigger the event e.g. `bankBalance<5` if that resolves to true, then the event will be triggered
+- the **action** that you want to be taken when the trigger is fired e.g. `showToast("Bank balance is low")`
+- a **reset rule**: the next time the trigger is checked and the bank balance is more than 5, this could reset the trigger based on the ResetRule: IMMEDIATELY, NEVER, or ONLY_AFTER_REVERSION (the default is ONLY_AFTER_REVERSION) - more information in the source code comments
 
-By default, the SyncTrigger will be reset when checkThreshold() again returns **false**. Alternatively you can construct the SyncTrigger with ResetRule.IMMEDIATELY for an immediate reset.
+For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers.
+
+Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be supressed (the trigger won't fire, but it will be considered when taking into account any reset rules). This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger.
+
+<!-- Tabbed code sample -->
+ <div class="tab">
+   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
+   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
+ </div>
+
+<pre class="tabcontent tabbed java"><code>
+balanceWarnTrigger = new SyncTrigger(
+    () -> showToast("bank balance is low!"),
+    () -> account.balance < 5,
+    ONLY_AFTER_REVERSION
+);
+
+...
+
+public void syncView(){
+
+    ...
+
+    balanceWarnTrigger.checkLazy();
+}
+ </code></pre>
+
+<pre class="tabcontent tabbed kotlin"><code>
+balanceWarnTrigger = SyncTrigger({ account.balance < 5 }) {
+    showToast("bank balance is low!")
+}.resetRule(ONLY_AFTER_REVERSION)
+
+...
+
+fun syncView() {
+
+    ...
+
+    balanceWarnTrigger.checkLazy()
+}
+ </code></pre>
 
 Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) for example usage of the SyncTrigger.
 
