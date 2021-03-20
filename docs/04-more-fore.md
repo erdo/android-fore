@@ -48,15 +48,14 @@ I didn't really want to add yet another implementation of Either, but in the end
 
 So fore 1.2.1 is the last version that uses Arrow's Either by default. If you still want to use Arrow after that, it's no problem, simply add an extension function like this somewhere in your app code:
 
-```kotlin
-
-fun <L, R> Either<L, R>.toArrow(): arrow.core.Either<L, R> {
+<pre class="codesample"><code>
+fun &lt;L, R&gt; Either&lt;L, R&gt;.toArrow(): arrow.core.Either&lt;L, R&gt; {
     return when(this){
         is Either.Left ->  arrow.core.Either.left(this.a)
         is Either.Right -> arrow.core.Either.right(this.b)
     }
 }
-```
+</code></pre>
 
 And then you can convert any CallProcessor results from Fore Eithers to Arrow Eithers by doing: `result.toArrow()`. (You can of course use the same technique to convert Fore Eithers to whatever flavour of Either you prefer).
 
@@ -65,31 +64,29 @@ And then you can convert any CallProcessor results from Fore Eithers to Arrow Ei
 The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
 
 
-```kotlin
-
+<pre class="codesample"><code>
 //Retrofit2 example
 
 callProcessor.processCallAsync {
 
     var ticketRef = ""
-    ticketSvc.createUser() //Response<UserPojo>
+    ticketSvc.createUser() //Response&lt;UserPojo&gt;
     .carryOn {
-      ticketSvc.createTicket(it.userId) //Response<TicketPojo>
+      ticketSvc.createTicket(it.userId) //Response&lt;TicketPojo&gt;
     }
     .carryOn {
       ticketRef = it.ticketRef
-      ticketSvc.getEstWaitingTime(it.ticketRef) //Response<TimePojo>
+      ticketSvc.getEstWaitingTime(it.ticketRef) //Response&lt;TimePojo&gt;
     }
     .carryOn {
       if (it.minutesWait > 10) {
-        ticketSvc.cancelTicket(ticketRef) //Response<ResultPojo>
+        ticketSvc.cancelTicket(ticketRef) //Response&lt;ResultPojo&gt;
       } else {
-        ticketSvc.confirmTicket(ticketRef) //Response<ResultPojo>
+        ticketSvc.confirmTicket(ticketRef) //Response&lt;ResultPojo&gt;
       }
    }
 }
-
-```
+</code></pre>
 
 You can see it live in the kotlin version of [sample app 4](https://erdo.github.io/android-fore/#fore-4-retrofit-example)
 
@@ -106,8 +103,8 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 
 Another advantage of using the CallProcessor is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
 
-- [one](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
-- [the other](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java) ([kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
+- one ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
+- the other ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
 As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
 
@@ -190,7 +187,7 @@ From **1.2.0** the kotlin APIs will set default values for these parameters if y
 
 By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
 
-All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt#L11).
+All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt#L24-L50).
 
 
 # AsyncTasks with Lambdas

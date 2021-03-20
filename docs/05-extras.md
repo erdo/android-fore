@@ -97,7 +97,7 @@ Android apps that are written using **fore** have a certain *look* to them code-
 
 Given any app that is attempting to implement **fore**: first check the package structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a UI class to see if you recognise the flow mentioned above. Check the reactive behaviour especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any UI state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that, here is a list of specific warning signs that will highlight potentially incorrect code (this list is especially helpful for code reviews - these are all things I have seen professional developers do).
 
-<a name="adhoc-state-setting"></a> 1) **Any code which is setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's a very common pattern in MVP (and it makes handling rotation hard), in MVO it's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the reactive ui section where it talks about [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview).
+<a name="adhoc-state-setting"></a> 1) **Any code which is setting or updating view states that is not inside the syncView() method**. Example: "clickListener -> setDisabled". That's a very common pattern in MVP (and it makes handling rotation hard), in MVO it's usually an indication that the developer might not understand why syncView() is designed like it is, and will almost certainly result in hard to identify UI consistency bugs when screens are rotated etc. Point them to the reactive ui section where it talks about [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview).
 
 <a name="fat-activity"></a> 2) **Activities and Fragments that have anything in them (other than the standard flow of a UI layer component)**. Sometimes there are good reasons for putting code in Activities and Fragments, setting up bundles and intents is often unavoidable for example, but you should be immediately suspicious of any errant code that gets into these classes. Often this code can be moved to a model class, safely away from tricky lifecycle issues and where it can also be more easily tested. It's generally helpful to avoid any having asynchronous or networking code in your Activity or Fragment code at all, unless there is a very good reason for it.
 
@@ -119,7 +119,7 @@ Given any app that is attempting to implement **fore**: first check the package 
 
 *The deal is that whenever something (anything) changes in a model, you will be notified. But you maybe be notified more than you expect. In order to be robust, your syncView() must make no assumptions about the number of times it may or may not be called. Sometimes you will of course need to bridge the world of syncing views and triggering one off events, and the way you do that in fore is to use [SyncTrigger](https://erdo.github.io/android-fore/01-views.html#synctrigger). Also take a look at [this](https://erdo.github.io/android-fore/05-extras.html#observer-listener) in case what you really want is a callback anyway.*
 
-<a name="complicated-syncview"></a> 10) **A syncView() that is more than 5-10 lines long or so and/or doesn't have one line to set an affirmative value for each property of each UI element you are concerned with**. Take a look at how to write a good [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) method under the data binding section.
+<a name="complicated-syncview"></a> 10) **A syncView() that is more than 5-10 lines long or so and/or doesn't have one line to set an affirmative value for each property of each UI element you are concerned with**. Take a look at how to write a good [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) method under the data binding section.
 
 <a name="redundant-click-routing"></a> 11) **Any click listeners or text change listeners should generally be talking directly to model classes, or asking for navigation operations** for example: MyActivity.startMe(getContext()). Occasionally it's useful for listeners to directly call syncView() to refresh the view (when an edit text field has changed for example). What they generally shouldn't be doing is accessing other view components like fragments or activities and checking their state in some way. Sometimes if you follow this code it ends up calling a model class somewhere down the line anyway, in which case the model class should just be called directly (you get your model references to any view class using [dependency injection](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics))
 
@@ -129,7 +129,7 @@ Given any app that is attempting to implement **fore**: first check the package 
 
 <a name="view-logic"></a> 14) **Any logic kept in view layer classes is usually harder to test**. It can be hard to totally remove all the logic from the view layer (especially navigational logic once you factor in the back button) but be aware that the logic here is usually a lot harder to test and if you can move it away from the view layer reasonably easily, then you probably should. If there is some particularly complicated logic for a view state in the syncView() method for example, that logic is a prime candidate to be moved out of the view layer into a model or utility class where it can be tested more easily.
 
-<a name="syncview-name"></a> 15) **Having a syncView() method, but not calling it syncView()**. This specific method is talked about a lot and it's very handy to call it the same thing so that everyone knows what everyone else is talking about. Making your View implement [SyncableView](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncableView.java) is probably a good idea anyway, it's also a requirement to use the optional lifecycle classes.
+<a name="syncview-name"></a> 15) **Having a syncView() method, but not calling it syncView()**. This specific method is talked about a lot and it's very handy to call it the same thing so that everyone knows what everyone else is talking about. Making your View implement [SyncableView](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/ui/SyncableView.java) is probably a good idea anyway.
 
 
 
@@ -198,7 +198,7 @@ MessageSender messageSender;
 protected void onFinishInflate() {
     super.onFinishInflate();
 
-    messageSender = CustomApp.get(MessageSender.class);
+    messageSender = OG.get(MessageSender.class);
 }
  </code></pre>
 
@@ -208,7 +208,7 @@ private lateinit var messageSender: MessageSender
 override fun onFinishInflate() {
     super.onFinishInflate()
 
-    messageSender = CustomApp.get(MessageSender::class.java)
+    messageSender = OG[MessageSender::class.java]
 }
  </code></pre>
 
@@ -361,7 +361,7 @@ fun doStuffOnAThread(success: Success, fail: FailWithReason) {
 
 For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java#L41). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
 
-For consistency, and for the same reasons outlined above, try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work, but it breaks the whole point of MVO and it will lead other more inexperienced developers down the wrong path when they are trying to use your model - why would they bother to implement syncView() properly in their view, if they can just take a short cut here (hint: they won't). And then without anyone noticing, they will loose all the benefits of reactive UIs, see [syncView()](/android-fore/03-reactive-uis.html#syncview) for a refresher.
+For consistency, and for the same reasons outlined above, try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work, but it breaks the whole point of MVO and it will lead other more inexperienced developers down the wrong path when they are trying to use your model - why would they bother to implement syncView() properly in their view, if they can just take a short cut here (hint: they won't). And then without anyone noticing, they will loose all the benefits of reactive UIs, see [syncView()](/android-fore/01-views.html#syncview) for a refresher.
 
 
 ## <a name="syncview"></a> 2) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
