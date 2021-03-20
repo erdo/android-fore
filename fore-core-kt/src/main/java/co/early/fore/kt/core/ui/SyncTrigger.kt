@@ -20,8 +20,7 @@ class SyncTrigger(
         private val doThisWhenTriggered: () -> Unit
 ) {
 
-    var resetRule: ResetRule = ResetRule.ONLY_AFTER_REVERSION
-        private set
+    private var resetRule: ResetRule = ResetRule.ONLY_AFTER_REVERSION
     private var overThreshold = false
     private var firstCheck = true
 
@@ -50,6 +49,10 @@ class SyncTrigger(
     fun resetRule(resetRule: ResetRule): SyncTrigger{
         this.resetRule = resetRule
         return this
+    }
+
+    fun getResetRule(): ResetRule{
+        return resetRule
     }
 
     /**

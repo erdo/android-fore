@@ -30,7 +30,7 @@ class SyncTriggerTest {
         // act
 
         // assert
-        assertEquals(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION, syncTrigger.resetRule)
+        assertEquals(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION, syncTrigger.getResetRule())
     }
 
     @Test
