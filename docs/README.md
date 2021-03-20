@@ -132,7 +132,7 @@ override fun onStop() {
 
 (There are a few ways to [cut out](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) the add and remove boiler plate by the way)
 
-All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of the observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate()
+All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of the observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate(), though you might be surprised to learn that syncView() has been used in commercial android apps since at least 2013!
 
 <!-- Tabbed code sample -->
  <div class="tab">
