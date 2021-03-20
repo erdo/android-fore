@@ -130,7 +130,7 @@ override fun onStop() {
 }
  </code></pre>
 
-(There are a few ways to [cut out](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) the add and remove boiler plate by the way)
+(There are a few ways to [cut out](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) the add and remove boiler plate by the way)
 
 All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of the observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate()
 
@@ -180,7 +180,7 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 **There are a few important things in MVO that allow you an architecture this simple:**
 
 * The first is a very robust but simple [**Observer API**](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) that lets views attach themselves to any model they are interested in
-* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention
+* The second is the [**syncView()**](https://erdo.github.io/android-fore/01-views.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
@@ -190,7 +190,7 @@ The **fore** library also includes some testable wrappers for AsyncTask (that Go
 
 If you've moved over to using coroutines already, a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) are all you need to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206) [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
-There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) and abstract your networking layer when using [**Retrofit2**](https://erdo.github.io/android-fore/04-more-fore.html#retrofit2-and-apollo) or **Apollo** if you're using GraphQL. **fore** works really well with RoomDB too, checkout the sample app for details.
+There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) and abstract your networking layer when using [**Retrofit2**, **Ktor** or **Apollo**](https://erdo.github.io/android-fore/04-more-fore.html#fore-network). **fore** works really well with RoomDB too, checkout the sample app for details.
 
 ## Sample Apps
 

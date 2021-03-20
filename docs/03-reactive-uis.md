@@ -9,125 +9,6 @@ So if your shopping basket model is empty: the checkout button on your view need
 Lately it's been applied to other (non UI) areas of code very successfully under the name of *reactive* programming. Back at the UI layer, you could say that the view is *reacting* to changes in the model (i.e. the view layer does not need to check the model to see if it has changed, and of course there is no polling involved).
 
 
-## SyncView()
-
-MVO uses one of the most simple (but extremely reliable) reactive implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method - compare MVO with MVI [here](https://erdo.github.io/android-fore/00-architecture.html#comparison-with-mvi))*. On the surface it looks very simple, but there are some important details to discuss that can trip you up, or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
-
-That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself so that you remember it...
-
-> "If a model being observed changes **in any way**, then the **entire** view is refreshed."
-
-That doesn't mean that you can't subdivide your views and only refresh one of the subviews if you want by the way - as long as both (sub)views have their own syncView() method and they are observing their respective models.
-
-
-### I need convincing
-
-I'm going to defer to the [dev.to spot the bug tutorial](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) for this.
-
-
-### Writing an effective syncView() method
-
-*A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
-
-As part of refreshing the entire view, the syncView() method must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
-
-> "Where there is an if, there must always be an else"
-
-It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be indeterministic (it will be whatever state it had previously). This is one of those sneaky edge case things that at first glance might look fine, but can reveal itself as a bug later.
-
-So don't do this inside your syncView() function:
-
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-if (basket.isBelowMinimum()){
-    checkoutButton.setEnabled(false);
-    totalPrice.setColour(red);
-}
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-if (basket.isBelowMinimum()){
-    checkoutButton.enabled = false
-    totalPrice.color = red
-}
- </code></pre>
-
-
-At the very least you must do this:
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-if (basket.isBelowMinimum()){
-    checkoutButton.setEnabled(false);
-    totalPrice.setColour(red);
-} else {
-    checkoutButton.setEnabled(true);
-    totalPrice.setColour(black);
-}
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-if (basket.isBelowMinimum()){
-    checkoutButton.enabled = false
-    totalPrice.color = red
-} else {
-    checkoutButton.enabled = true
-    totalPrice.color = black
-}
- </code></pre>
-
-But you'll find that by **focusing on the UI component** first rather than the condition, you can get some extremely tight code like so:
-
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-checkoutButton.setEnabled(!basket.isBelowMinimum());
-totalPrice.setColour(basket.isBelowMinimum() ? red : black);
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-checkoutButton.enabled = !basket.isBelowMinimum()
-totalPrice.color = if (basket.isBelowMinimum()) red else black
- </code></pre>
-
-### showOrGone and showOrInvisible
-
-When writing syncView() functions, you will often come across situations where you want to set a visibility to VISIBLE / INVISIBLE or VISIBLE / GONE based on a boolean state of a model. This is a very short line to write in java, slightly less so in kotlin (as we don't have the elvis operator for ternerary operations). So for kotlin the cleanest way of writing these lines is with one of two extension functions that fore provides. So if you prefer, you can write the following:
-
-
-``` kotlin
-fun syncView() {
-    homepage_busy_progbar.showOrGone(authentication.isBusy)
-    homepage_memberstatus_img.showOrInvisible(user.isRegistered)
-}
-```
-
-### Don't count notifications
-Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors.
-
-### Beware infinite loops
-One final point to mention is about syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like, after all.
-
-However, you will usually be setting a state on that UI element during your syncView(), if that UI element then calls its "changed" listener, you will end up calling syncView() again and find yourself in an infinite loop.
-
-Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing its "changed" listeners anyway. But Android. And indeed Android's EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy. (Interesting that the equivalent TextInput component of ReactNative doesn't suffer from this "feature").
-
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
@@ -215,9 +96,52 @@ override fun onStop() {
 }
  </code></pre>
 
-If you're still not satisfied with that, you can [remove even more boiler plate](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate).
-
 That's everything you need to do to get bullet proof reactive UIs in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.
+
+
+## Removing even more boiler plate
+
+If the list of things you are observing gets a little long, you can remove some of this *add and remove* boiler plate by using an **ObservableGoup** (it's just a convenience class that maintains a list of observables internally)
+
+### Using ObservableGroup in a ViewModel
+Here's how you can use an ObservableGroup from a ViewModel:
+
+<pre class="codesample"><code>
+class MyViewModel(
+    private val accountModel: AccountModel,
+    private val networkInfo: NetworkInfo,
+    private val emailInBox: EmailInBox,
+    private val weatherRepository: WeatherRepository
+) : ViewModel(), ObservableGroup by ObservableGroupImp(
+    accountModel,
+    networkInfo,
+    emailInBox,
+    weatherRepository) {
+
+    private val observer = Observer { syncView() }
+
+    init {
+        addObserver(observer)
+        syncView()
+    }
+
+    override fun syncView() {
+       // Here you might create an immutable view state
+       // to pass to your fragment (based on the state of
+       // the models that you're observing).
+       // You can use LiveData to make the final hop
+       // to the fragment from here, or again use a fore
+       // observable to make the ViewModel itself observable
+        ...
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        removeObserver(observer)
+    }
+}
+ </code></pre>
+
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
 
@@ -228,18 +152,19 @@ Usually, view layer components are going to want different things from the same 
 
 Regardless, our example model will be managing these three pieces of state:
 
-``` kotlin
+<pre class="codesample"><code>
 fun hasSessionToken(): Boolean
 fun getLastLoggedInTimeStampMs(): Long
 fun getAccountStatus(): Account.Status
-```
+
+</code></pre>
 
 All those states may change (potentially as a result of a network request completing in the background, or a notification arriving on the device etc). And if they change, the views need to update themselves immediately without us needing to do it (that's the whole point of reactive UIs after all!).
 
 If we make all these things individually observable, we might choose something like RxJava observables, or LiveData, and the views will need to observe each piece of state individually. Taking LiveData as an example, the view layer will have to contain something like this:
 
 
-``` kotlin
+<pre class="codesample"><code>
 accountModel.sessionTokenLiveData.observer(this, Observer { hasToken ->
   //update the view based on the hasToken Boolean
 })
@@ -251,7 +176,8 @@ accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp -
 accountModel.accountStateLiveData.observer(this, Observer { status ->
   //update the view based on the status class
 })
-```
+
+</code></pre>
 
 We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler-plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually. This is what **fore** code would also look like if we had a parameter in the somethingChanged() method, luckily there is no parameter. All fore observables have exactly the same code signature, no matter what type of data is involved.
 
@@ -261,10 +187,10 @@ We already learnt about how updating views in this way introduces very [hard to 
 ### Views want things from more than one model
 Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected in the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
 
-Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's):
+Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's - of course Rx will have operators that help, but your developers have to know about them & use them properly, it's not something that comes for free due to the API design):
 
 
-``` kotlin
+<pre class="codesample"><code>
 emailInbox.unreadCountLiveData.observer(this, Observer { unread ->
   //update the [view / presenter / viewmodel / viewState] based on the unread Int
 })
@@ -293,11 +219,11 @@ weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
   //update the [view / presenter / viewmodel / viewState] based on the windSpeed int
 })
 
-```
+</code></pre>
 
-Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview), and it's what lets us write:
+Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview), and it's what lets us write:
 
-``` kotlin
+<pre class="codesample"><code>
 //single observer reference
 private var observer = Observer { syncView() }
 
@@ -316,16 +242,15 @@ override fun onStop() {
     weatherModel.removeObserver(observer)
 }
 
-```
+</code></pre>
 
-With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate).
+With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate).
 
 > "reduce view layer code to its absolute fundamentals: what things look like"
 
 This lets you reduce view layer code to its absolute fundamentals: what things look like. Imagine a fairly complex reactive UI that displays if the user is logged in or not, shows the last time the user logged in, the number of unread emails, what the account status is, a weather forecast, and the current wind speed and temperature. With appropriately written, observable models, the syncView implementation for that screen would be:
 
-``` kotlin
-
+<pre class="codesample"><code>
 fun syncView() {
     homepage_unreademails.text = "${emailInbox.getUnreadCount()}"
     homepage_loggedin.text = if (accountModel.hasSessionToken()) "IN" else "OUT"
@@ -336,7 +261,7 @@ fun syncView() {
     homepage_windspeed.text = "${weatherModel.getWindSpeed()}"
 }
 
-```
+</code></pre>
 
 [This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is worth a read, but the upshot is that adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer.
 

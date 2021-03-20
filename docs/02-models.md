@@ -12,7 +12,7 @@ An important thing about these models is that none of the code should know anyth
 
 In the sample apps, the models are all found in the **feature** package.
 
-Here's a very simple model which represents a user's [Wallet](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code
+Here's the code for a very simple model which represents a user's [Wallet](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt)
 
 
 ## Writing a Basic Model

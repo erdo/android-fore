@@ -18,29 +18,29 @@
       url: "#handling-state"
     - text: Comparison with MV*
       url: "#comparisons-with-mv"
-- text: Views
-  url: /01-views.html
-  subitems:
-    - text: Examples
-      url: "#examples"
-    - text: ObservableGroup
-      url: "#removing-even-more-boiler-plate"
-    - text: SyncTrigger
-      url: "#synctrigger"
 - text: Models
   url: /02-models.html
   subitems:
     - text: Model Checklist
       url: "#model-checklist"
-- text: Reactive UIs
-  url: /03-reactive-uis.html
+- text: Views
+  url: /01-views.html
   subitems:
     - text: SyncView()
       url: "#syncview"
+    - text: SyncTrigger
+      url: "#synctrigger"
+    - text: Examples
+      url: "#view-examples"
+- text: Observers
+  url: /03-reactive-uis.html
+  subitems:
     - text: Observables
       url: "#fore-observables"
     - text: Connecting Views and Models
       url: "#connecting-views-and-models"
+    - text: ObservableGroup
+      url: "#removing-even-more-boiler-plate"
     - text: fore's Observer API
       url: "#somethingchanged-parameter"
 - text: More fore

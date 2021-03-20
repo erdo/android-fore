@@ -74,7 +74,7 @@ One great thing about MVO is that the view layer and the rest of the app are so 
 
 > "the code works if you rotate the screen - without you needing to do a single thing"
 
-The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/android-fore/blob/master/example-jv-03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsActivity.java) [\[screen shot\]](https://raw.githubusercontent.com/erdo/android-fore/master/example-jv-03adapters/screenshot.png), or if you're doing [**asynchronous work in your model**](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java), or fetching data [**from a network**](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/ui/fruit/FruitActivity.kt). It even works when you have a heavily animated view like we do in [**sample app 5**](https://erdo.github.io/android-fore/#fore-5-ui-helpers-example-tic-tac-toe).
+The code looks extremely simple and it is, but surprisingly the technique works the same if you're using [**adapters**](https://github.com/erdo/android-fore/blob/master/example-jv-03adapters/src/main/java/foo/bar/example/foreadapters/ui/playlist/PlaylistsActivity.java) [\[screen shot\]](https://raw.githubusercontent.com/erdo/android-fore/master/example-jv-03adapters/screenshot.png), or if you're doing [**asynchronous work in your model**](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java), or fetching data [**from a network**](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/ui/fruit/FruitActivity.kt).
 
 
 ## Handling State
@@ -125,7 +125,7 @@ In MVVM you typically have a View-Model for each View, so even though there are 
 
 ![simple basket](img/arch_mvvm_reality.png)
 
-By the way, you can make these Views reactive by making the [ViewModels observable](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt) using *fore* (we did mention fore can make anything observable). But if you are following Google's typical ViewModel implementation, you would use LiveData for this purpose. The lack of a [syncView](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention (or render() in MVI), does result in increasingly complex view code once you start tackling non trivial UIs with lots of bits of state though - so even here, adding a *fore* Observable would be a quick win over using LiveData.
+By the way, you can make these Views reactive by making the [ViewModels observable](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt) using *fore* (we did mention fore can make anything observable). But if you are following Google's typical ViewModel implementation, you would use LiveData for this purpose. The lack of a [syncView](https://erdo.github.io/android-fore/01-views.html#syncview) convention (or render() in MVI), does result in increasingly complex view code once you start tackling non trivial UIs with lots of bits of state though - so even here, adding a *fore* Observable would be a quick win over using LiveData.
 
 Importantly, all the arrows are pointing the right way! (which, no surprise, happens to match the direction of the arrows in [clean architecture](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html))
 
@@ -148,7 +148,7 @@ Sometimes you really will want to scope a model to just a single activity (altho
 **There are a few important things in MVO that allow you an architecture this simple:**
 
 * The first is a very robust but simple [**Observer API**](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) that lets views attach themselves to any model (or multiple models) they are interested in
-* The second is the [**syncView()**](https://erdo.github.io/android-fore/03-reactive-uis.html#syncview) convention
+* The second is the [**syncView()**](https://erdo.github.io/android-fore/01-views.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
 
