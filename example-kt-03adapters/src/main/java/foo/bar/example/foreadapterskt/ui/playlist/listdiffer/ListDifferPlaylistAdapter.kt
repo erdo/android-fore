@@ -65,7 +65,7 @@ class ListDifferPlaylistAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Track, newItem: Track): Boolean {
-            return oldItem.contentsTheSame(newItem)
+            return oldItem.itemsLookTheSame(newItem)
         }
     }
     private val differ = AsyncListDiffer<Track>(this, itemCallback)

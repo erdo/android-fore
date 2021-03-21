@@ -1,8 +1,8 @@
 package foo.bar.example.foreadapterskt.feature.playlist.diffable
 
-import co.early.fore.adapters.Diffable
+import co.early.fore.adapters.immutable.Diffable
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.adapters.DiffableImp
+import co.early.fore.kt.adapters.immutable.DiffableImp
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.generateRandomColourResource
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.randomLong

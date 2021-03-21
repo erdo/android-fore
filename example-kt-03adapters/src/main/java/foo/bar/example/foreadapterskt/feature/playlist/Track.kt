@@ -1,8 +1,8 @@
 package foo.bar.example.foreadapterskt.feature.playlist
 
 import androidx.annotation.ColorRes
-import co.early.fore.adapters.DiffComparator
-import co.early.fore.kt.adapters.DeepCopyable
+import co.early.fore.adapters.immutable.DiffComparator
+import co.early.fore.adapters.immutable.DeepCopyable
 
 
 class Track(
@@ -52,7 +52,7 @@ class Track(
         } else false
     }
 
-    override fun contentsTheSame(other: Track?): Boolean {
+    override fun itemsLookTheSame(other: Track?): Boolean {
         return if (other != null) {
             this.numberOfPlaysRequested == other.numberOfPlaysRequested
                     && this.colourResource == other.colourResource

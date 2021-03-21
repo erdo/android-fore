@@ -4,10 +4,10 @@ package foo.bar.example.foreadapters.feature.playlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.early.fore.adapters.ChangeAwareArrayList;
-import co.early.fore.adapters.ChangeAwareList;
-import co.early.fore.adapters.UpdateSpec;
-import co.early.fore.adapters.Updateable;
+import co.early.fore.adapters.mutable.ChangeAwareArrayList;
+import co.early.fore.adapters.mutable.ChangeAwareList;
+import co.early.fore.adapters.mutable.UpdateSpec;
+import co.early.fore.adapters.mutable.Updateable;
 import co.early.fore.core.Affirm;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.Logger;

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import co.early.fore.adapters.UpdateSpec;
+import co.early.fore.adapters.mutable.UpdateSpec;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.logging.SystemLogger;

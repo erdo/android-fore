@@ -28,7 +28,6 @@ android {
 
 dependencies {
 
-    compileOnly(project(":fore-core"))
     api(project(":fore-core-kt"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

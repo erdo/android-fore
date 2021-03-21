@@ -2,7 +2,7 @@ package foo.bar.example.foreadapters.ui.playlist;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-import co.early.fore.adapters.UpdateSpec;
+import co.early.fore.adapters.mutable.UpdateSpec;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.time.SystemTimeWrapper;
 import foo.bar.example.foreadapters.App;

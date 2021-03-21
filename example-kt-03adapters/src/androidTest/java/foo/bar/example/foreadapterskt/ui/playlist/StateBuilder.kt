@@ -1,7 +1,7 @@
 package foo.bar.example.foreadapterskt.ui.playlist
 
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.adapters.UpdateSpec
+import co.early.fore.adapters.mutable.UpdateSpec
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.delegate.TestDelegateDefault

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import co.early.fore.adapters.ChangeAwareAdapter
+import co.early.fore.kt.adapters.ChangeAwareAdapter
 import foo.bar.example.foreadapterskt.R
 import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
 import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_decreaseplays_button
@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_rem
  */
 class DiffablePlaylistModelAdapter(
         private val diffablePlaylistModel: DiffablePlaylistModel
-) : ChangeAwareAdapter<DiffablePlaylistModelAdapter.ViewHolder>(diffablePlaylistModel) {
+) : ChangeAwareAdapter<DiffablePlaylistModelAdapter.ViewHolder>(diffable = diffablePlaylistModel) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_playlists_listitem, parent, false)
