@@ -1,10 +1,7 @@
-package co.early.fore.adapters;
+package co.early.fore.adapters.mutable;
 
 import java.util.List;
 
-/**
- *
- */
 public interface ChangeAwareList<E> extends List<E>, Updateable {
 
     /**

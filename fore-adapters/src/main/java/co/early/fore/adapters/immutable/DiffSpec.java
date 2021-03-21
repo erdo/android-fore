@@ -1,4 +1,4 @@
-package co.early.fore.adapters;
+package co.early.fore.adapters.immutable;
 
 
 import androidx.recyclerview.widget.DiffUtil;
@@ -8,7 +8,7 @@ import co.early.fore.core.time.SystemTimeWrapper;
 
 /**
  * Wraps a DiffResult with a timestamp so that we can abandon it when it gets old. This helps
- * the ChangeAware* classes manage adapter updates appropriately
+ * the ChangeAwareAdapter manage adapter updates appropriately
  */
 public class DiffSpec {
 

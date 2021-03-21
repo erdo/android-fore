@@ -18,14 +18,17 @@ android {
             "../fore-adapters/src/main/java"
         )
         exclude(
-            "co/early/fore/adapters/ChangeAwareArrayList.java",
-            "co/early/fore/adapters/ChangeAwareLinkedList.java"
+            "co/early/fore/adapters/mutable/ChangeAwareArrayList.java",
+            "co/early/fore/adapters/mutable/ChangeAwareLinkedList.java",
+            "co/early/fore/adapters/immutable/DiffableImp.java",
+            "co/early/fore/adapters/ChangeAwareAdapter.java"
         )
     }
 }
 
 dependencies {
 
+    compileOnly(project(":fore-core"))
     api(project(":fore-core-kt"))
 
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

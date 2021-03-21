@@ -1,25 +1,29 @@
-package co.early.fore.adapters;
+package co.early.fore.adapters.mutable;
 
 import android.os.Build;
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.function.UnaryOperator;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.time.SystemTimeWrapper;
 
 /**
- * <p>Android adapters used to just have a notifyDataSetChanged() method which would trigger a redraw of the list UI.
+ * <p>Basic Android adapters use notifyDataSetChanged() to trigger a redraw of the list UI.
  *
  * <code>
  * adapter.notifyDataSetChanged();
  * </code>
  *
- * <p>We now have access to a selection of notifyXXX methods() which indicate to a recyclerview adapter what sort of change
- * happened and which rows were effected (eg: there was an item inserted at position 5; the item at position 3
- * changed etc).
+ * <p>In order to take advantage of insert and remove animations, we can provide the adapter with
+ * more information about how the list has changed (eg: there was an item inserted at position 5
+ * or the item at position 3 has changed etc), for that we call a selection of notifyXXX methods()
+ * indicating what sort of change happened and which rows were effected.
+ *
+ * <p>This list class will automatically generate an update specification for each change you make
+ * to it, suitable for deciding how to call the various notifyXXX methods:
  *
  * <code>
  *
@@ -42,36 +46,22 @@ import co.early.fore.core.time.SystemTimeWrapper;
  *
  * </code>
  *
- * <p>Android uses this information to apply default animations on the list view (like fading in
- * changes or animating a new row in to position).
- *
- * <p>This architecture puts the onus on the developer to indicate the change type rather than the platform
- * inferring it automatically (like with iOS lists)
- *
- * <p>As this needs to be done for every list and it's reasonably involved, this class handles this work
- * automatically - but it only supports one type of change at a time (you can't handle a cell update;
+ * <p>This class only supports one type of change at a time (you can't handle a cell update;
  * two removals; and three inserts, all in the same notify round trip - each has to be handled one at a time)
  *
- *
  */
-public class ChangeAwareArrayList<T> extends ArrayList<T> implements ChangeAwareList<T>, Updateable {
+public class ChangeAwareLinkedList<T> extends LinkedList<T> implements ChangeAwareList<T>, Updateable {
 
     private final SystemTimeWrapper systemTimeWrapper;
     private UpdateSpec updateSpec;
 
-    public ChangeAwareArrayList(SystemTimeWrapper systemTimeWrapper) {
+    public ChangeAwareLinkedList(SystemTimeWrapper systemTimeWrapper) {
         super();
         this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
         updateSpec = createFullUpdateSpec(systemTimeWrapper);
     }
 
-    public ChangeAwareArrayList(int capacity, SystemTimeWrapper systemTimeWrapper) {
-        super(capacity);
-        this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
-        updateSpec = createFullUpdateSpec(systemTimeWrapper);
-    }
-
-    public ChangeAwareArrayList(@NonNull Collection<? extends T> c, SystemTimeWrapper systemTimeWrapper) {
+    public ChangeAwareLinkedList(@NonNull Collection<? extends T> c, SystemTimeWrapper systemTimeWrapper) {
         super(c);
         this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
         updateSpec = createFullUpdateSpec(systemTimeWrapper);

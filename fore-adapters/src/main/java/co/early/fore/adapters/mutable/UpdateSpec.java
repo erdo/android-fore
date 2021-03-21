@@ -1,4 +1,4 @@
-package co.early.fore.adapters;
+package co.early.fore.adapters.mutable;
 
 import co.early.fore.core.Affirm;
 import co.early.fore.core.time.SystemTimeWrapper;

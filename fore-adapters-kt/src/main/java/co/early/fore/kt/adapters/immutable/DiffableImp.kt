@@ -1,12 +1,13 @@
-package co.early.fore.kt.adapters
+package co.early.fore.kt.adapters.immutable
 
-import co.early.fore.adapters.DiffCalculator
-import co.early.fore.adapters.DiffComparator
-import co.early.fore.adapters.DiffSpec
-import co.early.fore.adapters.Diffable
+import co.early.fore.adapters.immutable.DiffCalculator
+import co.early.fore.adapters.immutable.DiffComparator
+import co.early.fore.adapters.immutable.DiffSpec
+import co.early.fore.adapters.immutable.Diffable
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.adapters.immutable.DeepCopyable
 import co.early.fore.kt.core.coroutine.awaitDefault
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.delegate.ForeDelegateHolder

@@ -1,47 +1,56 @@
-package co.early.fore.kt.adapters
+package co.early.fore.kt.adapters.mutable
 
-import co.early.fore.adapters.ChangeAwareList
-import co.early.fore.adapters.UpdateSpec
-import co.early.fore.adapters.Updateable
+import co.early.fore.adapters.mutable.ChangeAwareList
+import co.early.fore.adapters.mutable.UpdateSpec
+import co.early.fore.adapters.mutable.Updateable
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import java.util.*
 import java.util.function.UnaryOperator
 
 /**
- * This list is aware of how it was changed, to help support android's adapter animations. For example
- * if you add an item, it will create an UpdateSpec that matches that operation.
+ * <p>Basic Android adapters use notifyDataSetChanged() to trigger a redraw of the list UI.
+ *
+ * <code>
+ * adapter.notifyDataSetChanged();
+ * </code>
+ *
+ * <p>In order to take advantage of insert and remove animations, we can provide the adapter with
+ * more information about how the list has changed (eg: there was an item inserted at position 5
+ * or the item at position 3 has changed etc), for that we call a selection of notifyXXX methods()
+ * indicating what sort of change happened and which rows were effected.
+ *
+ * <p>This list class will automatically generate an update specification for each change you make
+ * to it, suitable for deciding how to call the various notifyXXX methods:
+ *
+ * <code>
  *
  * UpdateSpec updateSpec = list.getMostRecentUpdateSpec();
  *
  * switch (updateSpec.type) {
- * case FULL_UPDATE:
- * adapter.notifyDataSetChanged();
- * break;
- * case ITEM_CHANGED:
- * adapter.notifyItemChanged(updateSpec.rowPosition);
- * break;
- * case ITEM_REMOVED:
- * adapter.notifyItemRemoved(updateSpec.rowPosition);
- * break;
- * case ITEM_INSERTED:
- * adapter.notifyItemInserted(updateSpec.rowPosition);
- * break;
+ *  case FULL_UPDATE:
+ *      adapter.notifyDataSetChanged();
+ *      break;
+ *  case ITEM_CHANGED:
+ *      adapter.notifyItemChanged(updateSpec.rowPosition);
+ *      break;
+ *  case ITEM_REMOVED:
+ *      adapter.notifyItemRemoved(updateSpec.rowPosition);
+ *      break;
+ *  case ITEM_INSERTED:
+ *      adapter.notifyItemInserted(updateSpec.rowPosition);
+ *      break;
  * }
  *
- * The only operations it may not aware of are change operations, so if you change the data in the
- * list without going through this class, it's your responsibility to inform this class by
- * calling the makeAwareOfDataChange() methods
+ * </code>
  *
- * This class only supports one type of change at a time (you can't handle a cell update;
+ * <p>This class only supports one type of change at a time (you can't handle a cell update;
  * two removals; and three inserts, all in the same notify round trip - each has to be handled one at a time)
  *
- * @see co.early.fore.adapters.ChangeAwareAdapter
- *
  */
-class ChangeAwareLinkedList<T>(
+class ChangeAwareArrayList<T>(
         private val systemTimeWrapper: SystemTimeWrapper? = null
-) : LinkedList<T>(), ChangeAwareList<T>, Updateable {
+) : ArrayList<T>(), ChangeAwareList<T>, Updateable {
 
     private var updateSpec: UpdateSpec = createFullUpdateSpec(ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper))
 
