@@ -46,7 +46,7 @@
 - text: More fore
   url: /04-more-fore.html
   subitems:
-    - text: Retrofit Apollo and Ktor
+    - text: Retrofit, Apollo and Ktor
       url: "#fore-network"
     - text: Adapter animations
       url: "#adapter-animations"
