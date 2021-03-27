@@ -2,15 +2,15 @@ package foo.bar.example.foreadapters.ui.playlist;
 
 import android.app.Activity;
 import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import foo.bar.example.foreadapters.R;
-import foo.bar.example.foreadapters.feature.playlist.PlaylistAdvancedModel;
-import foo.bar.example.foreadapters.feature.playlist.PlaylistSimpleModel;
+import foo.bar.example.foreadapters.feature.playlist.ImmutablePlaylistModel;
+import foo.bar.example.foreadapters.feature.playlist.MutablePlaylistModel;
 import foo.bar.example.foreadapters.feature.playlist.Track;
 import foo.bar.example.foreadapters.ui.EspressoTestMatchers;
 
@@ -34,8 +34,8 @@ import static org.mockito.Mockito.verify;
 public class PlaylistsViewTest {
 
 
-    private PlaylistSimpleModel mockPlaylistSimpleModel;
-    private PlaylistAdvancedModel mockPlaylistAdvancedModel;
+    private ImmutablePlaylistModel mockImmutablePlaylistModel;
+    private MutablePlaylistModel mockMutablePlaylistModel;
 
 
     @Before
@@ -44,8 +44,8 @@ public class PlaylistsViewTest {
         //MockitoAnnotations.initMocks(WalletView.this);
         System.setProperty("dexmaker.dexcache", InstrumentationRegistry.getTargetContext().getCacheDir().getPath());
 
-        mockPlaylistAdvancedModel = mock(PlaylistAdvancedModel.class);
-        mockPlaylistSimpleModel = mock(PlaylistSimpleModel.class);
+        mockMutablePlaylistModel = mock(MutablePlaylistModel.class);
+        mockImmutablePlaylistModel = mock(ImmutablePlaylistModel.class);
     }
 
 
@@ -53,9 +53,9 @@ public class PlaylistsViewTest {
     public void emptyPlaylists() throws Exception {
 
         //arrange
-        new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withAdvancedPlaylistHavingTracks(0)
-                .withSimplePlaylistHavingTracks(0)
+        new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withMutablePlaylistHavingTracks(0)
+                .withImmutablePlaylistHavingTracks(0)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -86,9 +86,9 @@ public class PlaylistsViewTest {
     public void with3ItemsInEachPlaylist() throws Exception {
 
         //arrange
-        new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withAdvancedPlaylistHavingTracks(3)
-                .withSimplePlaylistHavingTracks(3)
+        new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withMutablePlaylistHavingTracks(3)
+                .withImmutablePlaylistHavingTracks(3)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -119,9 +119,9 @@ public class PlaylistsViewTest {
     public void with5ItemsInEachPlaylist() throws Exception {
 
         //arrange
-        new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withAdvancedPlaylistHavingTracks(5)
-                .withSimplePlaylistHavingTracks(5)
+        new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withMutablePlaylistHavingTracks(5)
+                .withImmutablePlaylistHavingTracks(5)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -152,9 +152,9 @@ public class PlaylistsViewTest {
     public void withDifferentItemsInEachPlaylist() throws Exception {
 
         //arrange
-        new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withSimplePlaylistHavingTracks(0)
-                .withAdvancedPlaylistHavingTracks(5)
+        new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withImmutablePlaylistHavingTracks(0)
+                .withMutablePlaylistHavingTracks(5)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -181,9 +181,9 @@ public class PlaylistsViewTest {
     public void stateMaintainedAfterRotation() throws Exception {
 
         //arrange
-        Activity activity = new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withAdvancedPlaylistHavingTracks(3)
-                .withSimplePlaylistHavingTracks(3)
+        Activity activity = new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withMutablePlaylistHavingTracks(3)
+                .withImmutablePlaylistHavingTracks(3)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -204,11 +204,11 @@ public class PlaylistsViewTest {
 
 
     @Test
-    public void clickAddTrackAdvancedCallsModel() throws Exception {
+    public void clickAddTrackMutableCallsModel() throws Exception {
         //arrange
-        new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withAdvancedPlaylistHavingTracks(0)
-                .withSimplePlaylistHavingTracks(0)
+        new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withMutablePlaylistHavingTracks(0)
+                .withImmutablePlaylistHavingTracks(0)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -217,16 +217,16 @@ public class PlaylistsViewTest {
         onView(withId(R.id.playlist_add2_button)).perform(click());
 
         //assert
-        verify(mockPlaylistAdvancedModel).addNewTrack();
+        verify(mockMutablePlaylistModel).addNewTrack();
     }
 
 
     @Test
-    public void clickAddTrackSimpleCallsModel() throws Exception {
+    public void clickAddTrackImmutableCallsModel() throws Exception {
         //arrange
-        new StateBuilder(mockPlaylistAdvancedModel, mockPlaylistSimpleModel)
-                .withAdvancedPlaylistHavingTracks(0)
-                .withSimplePlaylistHavingTracks(0)
+        new StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
+                .withMutablePlaylistHavingTracks(0)
+                .withImmutablePlaylistHavingTracks(0)
                 .withPlaylistsContainingTracks(new Track(R.color.pastel1))
                 .createRule()
                 .launchActivity(null);
@@ -235,7 +235,7 @@ public class PlaylistsViewTest {
         onView(withId(R.id.playlist_add1_button)).perform(click());
 
         //assert
-        verify(mockPlaylistSimpleModel).addNewTrack();
+        verify(mockImmutablePlaylistModel).addNewTrack();
     }
 
 }

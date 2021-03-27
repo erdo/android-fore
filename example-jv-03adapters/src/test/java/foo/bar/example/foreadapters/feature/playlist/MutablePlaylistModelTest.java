@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 /**
  *
  */
-public class PlaylistAdvancedModelTest {
+public class MutablePlaylistModelTest {
 
 
     private static Logger logger = new SystemLogger();
@@ -36,16 +36,16 @@ public class PlaylistAdvancedModelTest {
     public void initialConditions() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
 
         //act
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.getTrackListSize());
-        Assert.assertEquals(false, playlistAdvancedModel.hasObservers());
+        Assert.assertEquals(0, mutablePlaylistModel.getItemCount());
+        Assert.assertEquals(false, mutablePlaylistModel.hasObservers());
         // 50ms won't have any effect here as the mocked systemTimeWrapper will always give the current
         // time as 0 anyway, so we will never have the chance to be over maxAgeMs
-        Assert.assertEquals(UpdateSpec.UpdateType.FULL_UPDATE, playlistAdvancedModel.getAndClearLatestUpdateSpec(50).type);
+        Assert.assertEquals(UpdateSpec.UpdateType.FULL_UPDATE, mutablePlaylistModel.getAndClearLatestUpdateSpec(50).type);
     }
 
 
@@ -53,14 +53,14 @@ public class PlaylistAdvancedModelTest {
     public void addNewTrack() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
 
         //act
-        playlistAdvancedModel.addNewTrack();
+        mutablePlaylistModel.addNewTrack();
 
         //assert
-        Assert.assertEquals(1, playlistAdvancedModel.getTrackListSize());
-        Assert.assertEquals(1, playlistAdvancedModel.getTrack(0).getNumberOfPlaysRequested());
+        Assert.assertEquals(1, mutablePlaylistModel.getItemCount());
+        Assert.assertEquals(1, mutablePlaylistModel.getItem(0).getNumberOfPlaysRequested());
     }
 
 
@@ -68,14 +68,14 @@ public class PlaylistAdvancedModelTest {
     public void removeTrack() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.addNewTrack();
 
         //act
-        playlistAdvancedModel.removeTrack(0);
+        mutablePlaylistModel.removeTrack(0);
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.getTrackListSize());
+        Assert.assertEquals(0, mutablePlaylistModel.getItemCount());
     }
 
 
@@ -83,14 +83,14 @@ public class PlaylistAdvancedModelTest {
     public void add5NewTracks() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
 
         //act
-        playlistAdvancedModel.add5NewTracks();
+        mutablePlaylistModel.add5NewTracks();
 
         //assert
-        Assert.assertEquals(5, playlistAdvancedModel.getTrackListSize());
-        Assert.assertEquals(1, playlistAdvancedModel.getTrack(4).getNumberOfPlaysRequested());
+        Assert.assertEquals(5, mutablePlaylistModel.getItemCount());
+        Assert.assertEquals(1, mutablePlaylistModel.getItem(4).getNumberOfPlaysRequested());
     }
 
 
@@ -98,14 +98,14 @@ public class PlaylistAdvancedModelTest {
     public void remove5Tracks() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.add5NewTracks();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.add5NewTracks();
 
         //act
-        playlistAdvancedModel.remove5Tracks();
+        mutablePlaylistModel.remove5Tracks();
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.getTrackListSize());
+        Assert.assertEquals(0, mutablePlaylistModel.getItemCount());
     }
 
 
@@ -113,14 +113,14 @@ public class PlaylistAdvancedModelTest {
     public void increasePlays() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.addNewTrack();
 
         //act
-        playlistAdvancedModel.increasePlaysForTrack(0);
+        mutablePlaylistModel.increasePlaysForTrack(0);
 
         //assert
-        Assert.assertEquals(2, playlistAdvancedModel.getTrack(0).getNumberOfPlaysRequested());
+        Assert.assertEquals(2, mutablePlaylistModel.getItem(0).getNumberOfPlaysRequested());
     }
 
 
@@ -128,15 +128,15 @@ public class PlaylistAdvancedModelTest {
     public void decreasePlays() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.addNewTrack();
-        playlistAdvancedModel.increasePlaysForTrack(0);
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.addNewTrack();
+        mutablePlaylistModel.increasePlaysForTrack(0);
 
         //act
-        playlistAdvancedModel.decreasePlaysForTrack(0);
+        mutablePlaylistModel.decreasePlaysForTrack(0);
 
         //assert
-        Assert.assertEquals(1, playlistAdvancedModel.getTrack(0).getNumberOfPlaysRequested());
+        Assert.assertEquals(1, mutablePlaylistModel.getItem(0).getNumberOfPlaysRequested());
     }
 
 
@@ -144,16 +144,16 @@ public class PlaylistAdvancedModelTest {
     public void removeAllTracks() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.add5NewTracks();
-        playlistAdvancedModel.addNewTrack();
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.add5NewTracks();
+        mutablePlaylistModel.addNewTrack();
+        mutablePlaylistModel.addNewTrack();
 
         //act
-        playlistAdvancedModel.removeAllTracks();
+        mutablePlaylistModel.removeAllTracks();
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.getTrackListSize());
+        Assert.assertEquals(0, mutablePlaylistModel.getItemCount());
     }
 
 
@@ -177,12 +177,12 @@ public class PlaylistAdvancedModelTest {
     public void observersNotifiedAtLeastOnceForAddTrack() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
         Observer mockObserver = mock(Observer.class);
-        playlistAdvancedModel.addObserver(mockObserver);
+        mutablePlaylistModel.addObserver(mockObserver);
 
         //act
-        playlistAdvancedModel.addNewTrack();
+        mutablePlaylistModel.addNewTrack();
 
         //assert
         verify(mockObserver, atLeastOnce()).somethingChanged();
@@ -193,13 +193,13 @@ public class PlaylistAdvancedModelTest {
     public void observersNotifiedAtLeastOnceForIncreasePlays() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.addNewTrack();
         Observer mockObserver = mock(Observer.class);
-        playlistAdvancedModel.addObserver(mockObserver);
+        mutablePlaylistModel.addObserver(mockObserver);
 
         //act
-        playlistAdvancedModel.increasePlaysForTrack(0);
+        mutablePlaylistModel.increasePlaysForTrack(0);
 
         //assert
         verify(mockObserver, atLeastOnce()).somethingChanged();
@@ -217,13 +217,13 @@ public class PlaylistAdvancedModelTest {
     public void updateSpecCorrectForAddTrack() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
 
         //act
-        playlistAdvancedModel.addNewTrack();
+        mutablePlaylistModel.addNewTrack();
 
         //assert
-        UpdateSpec updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50);
+        UpdateSpec updateSpec = mutablePlaylistModel.getAndClearLatestUpdateSpec(50);
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_INSERTED, updateSpec.type);
         Assert.assertEquals(0, updateSpec.rowPosition);
         Assert.assertEquals(1, updateSpec.rowsEffected);
@@ -234,15 +234,15 @@ public class PlaylistAdvancedModelTest {
     public void updateSpecCorrectForIncreasePlays() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.addNewTrack();
-        playlistAdvancedModel.add5NewTracks();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.addNewTrack();
+        mutablePlaylistModel.add5NewTracks();
 
         //act
-        playlistAdvancedModel.increasePlaysForTrack(3);
+        mutablePlaylistModel.increasePlaysForTrack(3);
 
         //assert
-        UpdateSpec updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50);
+        UpdateSpec updateSpec = mutablePlaylistModel.getAndClearLatestUpdateSpec(50);
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_CHANGED, updateSpec.type);
         Assert.assertEquals(3, updateSpec.rowPosition);
         Assert.assertEquals(1, updateSpec.rowsEffected);
@@ -253,15 +253,15 @@ public class PlaylistAdvancedModelTest {
     public void updateSpecCorrectForRemove5Tracks() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.add5NewTracks();
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.add5NewTracks();
+        mutablePlaylistModel.addNewTrack();
 
         //act
-        playlistAdvancedModel.remove5Tracks();
+        mutablePlaylistModel.remove5Tracks();
 
         //assert
-        UpdateSpec updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50);
+        UpdateSpec updateSpec = mutablePlaylistModel.getAndClearLatestUpdateSpec(50);
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_REMOVED, updateSpec.type);
         Assert.assertEquals(0, updateSpec.rowPosition);
         Assert.assertEquals(5, updateSpec.rowsEffected);
@@ -271,15 +271,15 @@ public class PlaylistAdvancedModelTest {
     public void updateSpecCorrectForClearAllTracks() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.add5NewTracks();
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.add5NewTracks();
+        mutablePlaylistModel.addNewTrack();
 
         //act
-        playlistAdvancedModel.removeAllTracks();
+        mutablePlaylistModel.removeAllTracks();
 
         //assert
-        UpdateSpec updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50);
+        UpdateSpec updateSpec = mutablePlaylistModel.getAndClearLatestUpdateSpec(50);
         Assert.assertEquals(UpdateSpec.UpdateType.ITEM_REMOVED, updateSpec.type);
         Assert.assertEquals(0, updateSpec.rowPosition);
         Assert.assertEquals(6, updateSpec.rowsEffected);
@@ -290,16 +290,16 @@ public class PlaylistAdvancedModelTest {
     public void updateSpecCorrectPastMaxAge() throws Exception {
 
         //arrange
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
-        playlistAdvancedModel.add5NewTracks();
-        playlistAdvancedModel.addNewTrack();
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(mockSystemTimeWrapper, WorkMode.SYNCHRONOUS, logger);
+        mutablePlaylistModel.add5NewTracks();
+        mutablePlaylistModel.addNewTrack();
 
         //act
-        playlistAdvancedModel.increasePlaysForTrack(3);
+        mutablePlaylistModel.increasePlaysForTrack(3);
         when(mockSystemTimeWrapper.currentTimeMillis()).thenReturn((long)51);
 
         //assert
-        UpdateSpec updateSpec = playlistAdvancedModel.getAndClearLatestUpdateSpec(50);
+        UpdateSpec updateSpec = mutablePlaylistModel.getAndClearLatestUpdateSpec(50);
         Assert.assertEquals(UpdateSpec.UpdateType.FULL_UPDATE, updateSpec.type);
         Assert.assertEquals(0, updateSpec.rowPosition);
         Assert.assertEquals(0, updateSpec.rowsEffected);

@@ -4,6 +4,7 @@ package foo.bar.example.foreadapters.feature.playlist;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.early.fore.adapters.Adaptable;
 import co.early.fore.adapters.mutable.ChangeAwareArrayList;
 import co.early.fore.adapters.mutable.ChangeAwareList;
 import co.early.fore.adapters.mutable.UpdateSpec;
@@ -17,68 +18,61 @@ import co.early.fore.core.time.SystemTimeWrapper;
 import static foo.bar.example.foreadapters.feature.playlist.RandomTrackGeneratorUtil.generateRandomColourResource;
 
 /**
+ * Example model based on **mutable** list data
  *
+ * Copyright © 2015-2021 early.co. All rights reserved.
  */
-public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
+public class MutablePlaylistModel extends ObservableImp implements  Adaptable<Track>, Updateable {
 
-    private static String TAG = PlaylistAdvancedModel.class.getSimpleName();
+    private static final String LOG_TAG = MutablePlaylistModel.class.getSimpleName();
 
     private final Logger logger;
-    private ChangeAwareList<Track> trackList;
+    private final ChangeAwareList<Track> trackList;
 
 
-    public PlaylistAdvancedModel(SystemTimeWrapper systemTimeWrapper, WorkMode workMode, Logger logger) {
+    public MutablePlaylistModel(SystemTimeWrapper systemTimeWrapper, WorkMode workMode, Logger logger) {
         super(workMode, logger);
         this.logger = Affirm.notNull(logger);
         trackList = new ChangeAwareArrayList<>(Affirm.notNull(systemTimeWrapper));
     }
 
     public void addNewTrack() {
-        logger.i(TAG, "addNewTrack()");
+        logger.i(LOG_TAG, "addNewTrack()");
         trackList.add(new Track(generateRandomColourResource()));
         notifyObservers();
     }
 
     public void removeTrack(int index) {
-        logger.i(TAG, "removeTrack() " + index);
+        logger.i(LOG_TAG, "removeTrack() " + index);
         checkIndex(index);
         trackList.remove(index);
         notifyObservers();
     }
 
     public void removeAllTracks() {
-        logger.i(TAG, "removeAllTracks()");
+        logger.i(LOG_TAG, "removeAllTracks()");
         trackList.clear();
         notifyObservers();
     }
 
     public void increasePlaysForTrack(int index) {
-        logger.i(TAG, "increasePlaysForTrack() " + index);
-        getTrack(index).increasePlaysRequested();
+        logger.i(LOG_TAG, "increasePlaysForTrack() " + index);
+        getItem(index).increasePlaysRequested();
         trackList.makeAwareOfDataChange(index);
         notifyObservers();
     }
 
     public void decreasePlaysForTrack(int index) {
-        logger.i(TAG, "decreasePlaysForTrack() " + index);
-        getTrack(index).decreasePlaysRequested();
+        logger.i(LOG_TAG, "decreasePlaysForTrack() " + index);
+        getItem(index).decreasePlaysRequested();
         trackList.makeAwareOfDataChange(index);
         notifyObservers();
     }
 
-    public Track getTrack(int index) {
-        checkIndex(index);
-        return trackList.get(index);
-    }
-
-    public int getTrackListSize() {
-        return trackList.size();
-    }
-
     public void add5NewTracks() {
-        logger.i(TAG, "add5NewTracks()");
+        logger.i(LOG_TAG, "add5NewTracks()");
         List<Track> newTracks = new ArrayList<>();
-        for (int ii=0; ii<5; ii++){
+        for (int ii = 0; ii < 5; ii++) {
             newTracks.add(new Track(generateRandomColourResource()));
         }
         trackList.addAll(0, newTracks);
@@ -86,8 +80,8 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
     }
 
     public void remove5Tracks() {
-        logger.i(TAG, "remove5Tracks()");
-        if (getTrackListSize()>4){
+        logger.i(LOG_TAG, "remove5Tracks()");
+        if (getItemCount() > 4) {
             trackList.removeRange(0, 5);
             notifyObservers();
         }
@@ -102,8 +96,18 @@ public class PlaylistAdvancedModel extends ObservableImp implements Updateable {
     }
 
     @Override
+    public Track getItem(int index) {
+        checkIndex(index);
+        return trackList.get(index);
+    }
+
+    @Override
+    public int getItemCount() {
+        return trackList.size();
+    }
+
+    @Override
     public UpdateSpec getAndClearLatestUpdateSpec(long maxAgeMs) {
         return trackList.getAndClearLatestUpdateSpec(maxAgeMs);
     }
-
 }

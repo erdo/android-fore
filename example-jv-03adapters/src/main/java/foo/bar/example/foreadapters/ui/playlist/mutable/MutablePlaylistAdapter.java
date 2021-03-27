@@ -1,4 +1,4 @@
-package foo.bar.example.foreadapters.ui.playlist.simple;
+package foo.bar.example.foreadapters.ui.playlist.mutable;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,26 +7,31 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.early.fore.adapters.Notifyable;
+import co.early.fore.adapters.NotifyableImp;
 import co.early.fore.core.Affirm;
 import foo.bar.example.foreadapters.R;
-import foo.bar.example.foreadapters.feature.playlist.PlaylistSimpleModel;
+import foo.bar.example.foreadapters.feature.playlist.MutablePlaylistModel;
 import foo.bar.example.foreadapters.feature.playlist.Track;
+import foo.bar.example.foreadapters.ui.widget.PercentPie;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
+import static foo.bar.example.foreadapters.ui.playlist.mutable.MutablePlaylistAdapter.*;
 
 /**
- *
+ * Copyright © 2015-2021 early.co. All rights reserved.
  */
-public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterSimple.ViewHolder>{
+public class MutablePlaylistAdapter extends RecyclerView.Adapter<ViewHolder> implements Notifyable<ViewHolder> {
 
-    private static final String TAG = PlaylistAdapterSimple.class.getSimpleName();
+    private final MutablePlaylistModel mutablePlaylistModel;
+    private final NotifyableImp<ViewHolder> notifyableImp;
 
-    private final PlaylistSimpleModel playlistSimpleModel;
-
-    public PlaylistAdapterSimple(PlaylistSimpleModel playlistSimpleModel) {
-        this.playlistSimpleModel = Affirm.notNull(playlistSimpleModel);
+    public MutablePlaylistAdapter(final MutablePlaylistModel mutablePlaylistModel) {
+        this.mutablePlaylistModel = Affirm.notNull(mutablePlaylistModel);
+        this.notifyableImp = new NotifyableImp<>(this, mutablePlaylistModel);
     }
 
     @Override
@@ -40,7 +45,7 @@ public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterS
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        final Track item = playlistSimpleModel.getTrack(position);
+        final Track item = mutablePlaylistModel.getItem(position);
 
         holder.increase.setOnClickListener(v -> {
             //if you tap very fast on different rows removing them
@@ -48,21 +53,21 @@ public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterS
             //you check for this
             int betterPosition = holder.getAdapterPosition();
             if (betterPosition != NO_POSITION) {
-                playlistSimpleModel.increasePlaysForTrack(betterPosition);
+                mutablePlaylistModel.increasePlaysForTrack(betterPosition);
             }
         });
 
         holder.decrease.setOnClickListener(v -> {
             int betterPosition = holder.getAdapterPosition();
             if (betterPosition != NO_POSITION) {
-                playlistSimpleModel.decreasePlaysForTrack(betterPosition);
+                mutablePlaylistModel.decreasePlaysForTrack(betterPosition);
             }
         });
 
         holder.remove.setOnClickListener(v -> {
             int betterPosition = holder.getAdapterPosition();
             if (betterPosition != NO_POSITION) {
-                playlistSimpleModel.removeTrack(betterPosition);
+                mutablePlaylistModel.removeTrack(betterPosition);
             }
         });
 
@@ -70,13 +75,18 @@ public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterS
         holder.playsRequested.setText("" + item.getNumberOfPlaysRequested());
         holder.increase.setEnabled(item.canIncreasePlays());
         holder.decrease.setEnabled(item.canDecreasePlays());
+        holder.pie.setPercentDone(item.getUniqueId(), item.getNumberOfPlaysRequested()*100/Track.MAX_PLAYS_REQUESTED);
     }
 
     @Override
     public int getItemCount() {
-        return playlistSimpleModel.getTrackListSize();
+        return mutablePlaylistModel.getItemCount();
     }
 
+    @Override
+    public void notifyDataSetChangedAuto() {
+        notifyableImp.notifyDataSetChangedAuto();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -92,10 +102,12 @@ public class PlaylistAdapterSimple extends RecyclerView.Adapter<PlaylistAdapterS
         @BindView(R.id.track_remove_button)
         protected Button remove;
 
+        @BindView(R.id.track_percent_pie)
+        protected PercentPie pie;
+
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
-
 }
