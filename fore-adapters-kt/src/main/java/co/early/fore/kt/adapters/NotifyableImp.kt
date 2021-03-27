@@ -1,14 +1,17 @@
 package co.early.fore.kt.adapters
 
 import androidx.recyclerview.widget.RecyclerView
+import co.early.fore.adapters.Notifyable
 import co.early.fore.adapters.immutable.Diffable
 import co.early.fore.adapters.mutable.UpdateSpec.UpdateType
 import co.early.fore.adapters.mutable.Updateable
 
-abstract class ChangeAwareAdapter<VH : RecyclerView.ViewHolder?>(
+class NotifyableImp<VH : RecyclerView.ViewHolder>(
         private val updateable: Updateable? = null,
         private val diffable: Diffable? = null
-) : RecyclerView.Adapter<VH>() {
+) : Notifyable<VH> {
+
+    private lateinit var adapter: RecyclerView.Adapter<VH>
 
     init {
         if (updateable == null && diffable == null) {
@@ -19,7 +22,19 @@ abstract class ChangeAwareAdapter<VH : RecyclerView.ViewHolder?>(
         }
     }
 
-    fun notifyDataSetChangedAuto() {
+    fun initializeAdapter(adapter: RecyclerView.Adapter<VH>) {
+        if (this::adapter.isInitialized) {
+            throw IllegalAccessException("adapter has already been initialized")
+        }
+        this.adapter = adapter
+    }
+
+    override fun notifyDataSetChangedAuto() {
+
+        if (!this::adapter.isInitialized) {
+            throw IllegalAccessException("adapter must be initialized first, please call initializeAdapter() from the init{} of your Adapter class")
+        }
+
         if (updateable != null) {
             processUpdateable()
         } else {
@@ -29,20 +44,20 @@ abstract class ChangeAwareAdapter<VH : RecyclerView.ViewHolder?>(
 
     private fun processUpdateable() {
         val updateSpec = updateable!!.getAndClearLatestUpdateSpec(MAX_AGE_MS_BEFORE_IGNORE.toLong())
-        when (updateSpec.type) {
-            UpdateType.FULL_UPDATE -> notifyDataSetChanged()
-            UpdateType.ITEM_CHANGED -> notifyItemRangeChanged(updateSpec.rowPosition, updateSpec.rowsEffected)
-            UpdateType.ITEM_REMOVED -> notifyItemRangeRemoved(updateSpec.rowPosition, updateSpec.rowsEffected)
-            UpdateType.ITEM_INSERTED -> notifyItemRangeInserted(updateSpec.rowPosition, updateSpec.rowsEffected)
+        when (updateSpec.type!!) {
+            UpdateType.FULL_UPDATE -> adapter.notifyDataSetChanged()
+            UpdateType.ITEM_CHANGED -> adapter.notifyItemRangeChanged(updateSpec.rowPosition, updateSpec.rowsEffected)
+            UpdateType.ITEM_REMOVED -> adapter.notifyItemRangeRemoved(updateSpec.rowPosition, updateSpec.rowsEffected)
+            UpdateType.ITEM_INSERTED -> adapter.notifyItemRangeInserted(updateSpec.rowPosition, updateSpec.rowsEffected)
         }
     }
 
     private fun processDiffable() {
         val diffSpec = diffable!!.getAndClearLatestDiffSpec(MAX_AGE_MS_BEFORE_IGNORE.toLong())
         if (diffSpec.diffResult == null) {
-            notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         } else {
-            diffSpec.diffResult.dispatchUpdatesTo(this)
+            diffSpec.diffResult.dispatchUpdatesTo(adapter)
         }
     }
 

@@ -15,7 +15,7 @@ public class DiffCalculator<T extends DiffComparator<T>> {
      * It's very important that the contents of the two lists are not changed from another thread
      * while the DiffUtil calculations are being made. You could use synchronization blocks to
      * ensure this, use an implementation of an immutable list, or you can make a deepCopy() of
-     * the lists to severe the connection between the lists you pass to this function and the calling
+     * the lists to sever the connection between the lists you pass to this function and the calling
      * code.
      *
      * <p>
@@ -63,5 +63,4 @@ public class DiffCalculator<T extends DiffComparator<T>> {
             }
         });
     }
-
 }

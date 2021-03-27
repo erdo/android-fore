@@ -8,7 +8,7 @@ import co.early.fore.core.time.SystemTimeWrapper;
 
 /**
  * Wraps a DiffResult with a timestamp so that we can abandon it when it gets old. This helps
- * the ChangeAwareAdapter manage adapter updates appropriately
+ * the NotifyableImp manage adapter updates appropriately
  */
 public class DiffSpec {
 

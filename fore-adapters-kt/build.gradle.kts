@@ -20,8 +20,8 @@ android {
         exclude(
             "co/early/fore/adapters/mutable/ChangeAwareArrayList.java",
             "co/early/fore/adapters/mutable/ChangeAwareLinkedList.java",
-            "co/early/fore/adapters/immutable/DiffableImp.java",
-            "co/early/fore/adapters/ChangeAwareAdapter.java"
+            "co/early/fore/adapters/immutable/ImmutableListMgr.java",
+            "co/early/fore/adapters/NotifyableImp.java"
         )
     }
 }
