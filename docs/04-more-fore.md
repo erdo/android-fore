@@ -148,13 +148,13 @@ In this way you let your adapters piggy back on the observer which you have alre
 
 ## Animations
 
-Adapter animations are probably one of the most complicated parts of android to get completely right as subtle timing and threading differences will make them break in edge case situations. But getting adapters animations to work "99% of the time" is not too difficult (especially if your list changes are small and infrequent).
+Adapter animations are probably one of the most complicated parts of android to get completely right as subtle timing and threading differences will make them break in edge case situations. But getting adapter animations to work "99% of the time" is not too difficult (especially if your list changes are small and infrequent).
 
 **To be totally clear**: if your list is being updated infrequently (e.g. based on the result of a single network connection), and the list data is small so that running DiffUtil on the UI thread is an option, and if the UI prevents a user from rapidly smashing buttons to change the list items (e.g. swipe-to-delete makes it infeasible that a user will be able to delete enough items, quickly enough to cause issues). Then you probably won't need the fore adapter classes, just add a DiffUtil.Callback in your adapter, run it whenever you receive a new list and it should work fine.
 
 But if you're chasing 100% robustness and you'd rather not depend on luck and timing for your app's performance (because your app has a lot of users for instance, or you're dealing with multiple rapid changes to your data) it can require some very carefully written code.
 
-### No crash list implentations
+### No crash list implementations
 
 As most android developers know, in order to get animations you need to tell the adapter what kind of change actually happened i.e. what rows were added or changed etc. There are two ways to do this on android:
 
