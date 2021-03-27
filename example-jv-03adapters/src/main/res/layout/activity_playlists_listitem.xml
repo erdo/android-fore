@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:gravity="center">
 
     <Button
         android:id="@+id/track_increaseplays_button"
@@ -30,5 +31,11 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:text="clear" />
+
+    <foo.bar.example.foreadapters.ui.widget.PercentPie
+        android:id="@+id/track_percent_pie"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp" />
 
 </LinearLayout>

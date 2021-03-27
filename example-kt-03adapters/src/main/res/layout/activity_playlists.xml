@@ -10,12 +10,12 @@
         android:layout_height="match_parent"
         android:layout_weight="33"/>
 
-    <include layout="@layout/view_playlists_updateable"
+    <include layout="@layout/view_playlists_mutable"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="33"/>
 
-    <include layout="@layout/view_playlists_diffable"
+    <include layout="@layout/view_playlists_immutable"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="33"/>

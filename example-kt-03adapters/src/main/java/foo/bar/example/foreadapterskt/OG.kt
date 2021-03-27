@@ -3,10 +3,9 @@ package foo.bar.example.foreadapterskt
 import android.app.Application
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.logging.Logger
-import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
-import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.mutable.MutablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.immutable.ImmutablePlaylistModel
 import java.util.HashMap
 
 
@@ -26,17 +25,17 @@ object OG {
 
         // create dependency graph
         val logger = AndroidLogger("fore_")
-        val playlistAdvancedModel = UpdatablePlaylistModel(
+        val playlistAdvancedModel = MutablePlaylistModel(
                 logger
         )
-        val playlistSimpleModel = DiffablePlaylistModel(
+        val playlistSimpleModel = ImmutablePlaylistModel(
                 logger
         )
 
 
         // add models to the dependencies map if you will need them later
-        dependencies[UpdatablePlaylistModel::class.java] = playlistAdvancedModel
-        dependencies[DiffablePlaylistModel::class.java] = playlistSimpleModel
+        dependencies[MutablePlaylistModel::class.java] = playlistAdvancedModel
+        dependencies[ImmutablePlaylistModel::class.java] = playlistSimpleModel
         dependencies[Logger::class.java] = logger
 
     }

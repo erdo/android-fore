@@ -8,16 +8,15 @@ import java.util.Map;
 import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.AndroidLogger;
 import co.early.fore.core.time.SystemTimeWrapper;
-import foo.bar.example.foreadapters.feature.playlist.PlaylistAdvancedModel;
-import foo.bar.example.foreadapters.feature.playlist.PlaylistSimpleModel;
+import foo.bar.example.foreadapters.feature.playlist.ImmutablePlaylistModel;
+import foo.bar.example.foreadapters.feature.playlist.MutablePlaylistModel;
 
 import static co.early.fore.core.Affirm.notNull;
 
 /**
- *
  * OG - Object Graph, pure DI implementation
- *
- * Copyright © 2019 early.co. All rights reserved.
+ * <p>
+ * Copyright © 2015-2021 early.co. All rights reserved.
  */
 public class OG {
 
@@ -34,24 +33,22 @@ public class OG {
         notNull(application);
         notNull(workMode);
 
-
         // create dependency graph
         AndroidLogger logger = new AndroidLogger("fore_");
         SystemTimeWrapper systemTimeWrapper = new SystemTimeWrapper();
-        PlaylistAdvancedModel playlistAdvancedModel = new PlaylistAdvancedModel(
+        MutablePlaylistModel mutablePlaylistModel = new MutablePlaylistModel(
                 systemTimeWrapper,
                 workMode,
                 logger);
-        PlaylistSimpleModel playlistSimpleModel = new PlaylistSimpleModel(
+        ImmutablePlaylistModel immutablePlaylistModel = new ImmutablePlaylistModel(
+                systemTimeWrapper,
                 workMode,
                 logger);
 
-
         // add models to the dependencies map if you will need them later
         dependencies.put(SystemTimeWrapper.class, systemTimeWrapper);
-        dependencies.put(PlaylistAdvancedModel.class, playlistAdvancedModel);
-        dependencies.put(PlaylistSimpleModel.class, playlistSimpleModel);
-
+        dependencies.put(MutablePlaylistModel.class, mutablePlaylistModel);
+        dependencies.put(ImmutablePlaylistModel.class, immutablePlaylistModel);
     }
 
     public static void init() {
@@ -79,5 +76,4 @@ public class OG {
 
         dependencies.put(clazz, object);
     }
-
 }

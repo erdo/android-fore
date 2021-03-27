@@ -209,7 +209,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 
 [video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-01reactiveui)
 
-![fore reactive UI sample app](https://j.gifs.com/MQ33GB.gif)
+![fore reactive UI sample app](img/fore-android-sample-reactive.gif)
 
 This app is a bare bones implementation of **fore** reactive UIs. No threading, no networking, no database access - just the minimum required to demonstrate [Reactive UIs](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
@@ -221,7 +221,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 [video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine)
 
-![fore threading sample app](https://j.gifs.com/32LLNn.gif)
+![fore threading sample app](img/fore-android-sample-async.gif)
 
 This one demonstrates asynchronous programming, and importantly how to test it. The **java** version uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)), the **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that make the coroutines unit testable). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
@@ -232,16 +232,15 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 [video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters)
 
-![fore adapters sample app](https://j.gifs.com/wmJJ3m.gif)
-
+![fore adapters sample app](img/fore-android-sample-adapters.gif)
 
 This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
 
 To take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you can instead call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
 
-The **java** sample has two lists side by side so you can see the effect this has when adding or removing items. The "Simple" list is on the left, the "Advanced" one that uses notifyDataSetChangedAuto() is on the right. As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
+The **java** sample has two lists side by side so you can see the how the implementation differs depending on if you are backed by immutable list data (typical in architectures that use view states such as MVI) or mutable list data. As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
 
-The **kotlin** version has three lists, all of which use adapter animations. The first list uses google's **AsyncListDiffer** (which is what drives ListAdapter), the second list uses fore's **Updatable** (which uses android's notifyItem... methods for a very efficient animated adapter implementation), the third list uses fore's **Diffable** (which relies on DiffUtil under the hood). All three implementations have slightly different characteristics, check the source code for further infomation.
+The **kotlin** version has three lists, adding an implementation of google's **AsyncListDiffer**. All three implementations have slightly different characteristics, most notably the google version moves logic out of the model and into the adapter (that's why it doesn't automatically support rotation - but it could be added easiy enough by passing an external list copy to the adapter). Check the source code for further infomation.
 
 
 <div class="shoom" id="fore-4-retrofit-example"/>
@@ -249,7 +248,7 @@ The **kotlin** version has three lists, all of which use adapter animations. The
 
 [video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit)
 
-![fore retrofit sample app](https://j.gifs.com/qYzz3D.gif)
+![fore retrofit sample app](img/fore-android-sample-network.gif)
 
 Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallProcessor](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-network library, the kotlin implementation of CallProcessor is implemented with coroutines and has an API better suited to kotlin and functional programming.
 
@@ -274,7 +273,7 @@ Ditto but using Ktor (and OkHttp). And as usual includes the ability to chain ne
 
 [video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-06db)
 
-![fore room db sample app](https://j.gifs.com/Xo88J8.gif)
+![fore room db sample app](img/fore-android-sample-db.gif)
 
 
 A To-do list on steroids that lets you:

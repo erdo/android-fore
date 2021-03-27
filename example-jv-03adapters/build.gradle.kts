@@ -88,6 +88,7 @@ dependencies {
     androidTestImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
     androidTestImplementation("com.linkedin.dexmaker:dexmaker-mockito:${Shared.Versions.dexmaker_mockito}")
     androidTestImplementation("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
+    androidTestImplementation("androidx.test.ext:junit:${Shared.Versions.androidxjunit}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:rules:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.annotation:annotation:${Shared.Versions.annotation}")

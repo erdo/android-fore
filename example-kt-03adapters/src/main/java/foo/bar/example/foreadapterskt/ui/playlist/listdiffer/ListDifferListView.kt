@@ -4,15 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.early.fore.core.observer.Observer
+import co.early.fore.adapters.CrossFadeRemover
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreadapterskt.OG
-import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
-import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
-import kotlinx.android.synthetic.main.view_playlists_diffable.view.*
+import kotlinx.android.synthetic.main.view_playlists_immutable.view.*
 import kotlinx.android.synthetic.main.view_playlists_listadapter.view.*
-import kotlinx.android.synthetic.main.view_playlists_updateable.view.*
 
 /**
  * Copyright © 2015-2020 early.co. All rights reserved.
@@ -51,8 +48,12 @@ class ListDifferListView @JvmOverloads constructor(
 
     private fun setupAdapters() {
         listDifferAdapter = ListDifferPlaylistAdapter(this, logger)
-        listdiffer_list_recycleview.adapter = listDifferAdapter
-        listdiffer_list_recycleview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        listdiffer_list_recycleview.apply{
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = listDifferAdapter
+            itemAnimator = CrossFadeRemover()
+            setHasFixedSize(true)
+        }
     }
 
     override fun syncView() {

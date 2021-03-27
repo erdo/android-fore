@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="@dimen/common_space_small"
-        android:text="ListDiffer\nAdapter" />
+        android:text="ListDiffer\nAdapter Based" />
 
     <TextView
         android:id="@+id/listdiffer_totaltracks_textview"

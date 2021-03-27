@@ -4,9 +4,6 @@ import java.util.Random;
 
 import foo.bar.example.foreadapters.R;
 
-/**
- *
- */
 public class RandomTrackGeneratorUtil {
 
     private static Random random = new Random();
@@ -19,12 +16,11 @@ public class RandomTrackGeneratorUtil {
             R.color.pastel5
     };
 
-    public static int generateRandomColourResource(){
+    public static int generateRandomColourResource() {
         return randomInt(colours);
     }
 
-    public static int randomInt(int[] intArray){
-        return intArray[random.nextInt(intArray.length-1)];
+    public static int randomInt(int[] intArray) {
+        return intArray[random.nextInt(intArray.length - 1)];
     }
-
 }

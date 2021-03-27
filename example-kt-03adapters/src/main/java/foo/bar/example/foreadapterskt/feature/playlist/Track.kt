@@ -1,8 +1,8 @@
 package foo.bar.example.foreadapterskt.feature.playlist
 
 import androidx.annotation.ColorRes
-import co.early.fore.adapters.DiffComparator
-import co.early.fore.kt.adapters.DeepCopyable
+import co.early.fore.adapters.immutable.DiffComparator
+import co.early.fore.adapters.immutable.DeepCopyable
 
 
 class Track(
@@ -43,7 +43,7 @@ class Track(
 
     companion object {
         private const val MIN_PLAYS_REQUESTED = 1
-        private const val MAX_PLAYS_REQUESTED = 9
+        const val MAX_PLAYS_REQUESTED = 4
     }
 
     override fun itemsTheSame(other: Track?): Boolean {
@@ -52,7 +52,7 @@ class Track(
         } else false
     }
 
-    override fun contentsTheSame(other: Track?): Boolean {
+    override fun itemsLookTheSame(other: Track?): Boolean {
         return if (other != null) {
             this.numberOfPlaysRequested == other.numberOfPlaysRequested
                     && this.colourResource == other.colourResource

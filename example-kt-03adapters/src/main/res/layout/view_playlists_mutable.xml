@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.foreadapterskt.ui.playlist.mutable.MutableListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0px"
+    android:layout_height="match_parent"
+    android:layout_weight="33"
+    android:background="@color/colorGreyLight">
+
+    <TextView
+        android:id="@+id/updatable_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/common_space_small"
+        android:text="Mutable\nList Based" />
+
+    <TextView
+        android:id="@+id/updatable_totaltracks_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/common_space_small"
+        android:layout_toEndOf="@+id/updatable_title_textview"
+        android:layout_toRightOf="@+id/updatable_title_textview"
+        android:text="0" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/updatable_list_recycleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/updatable_buttoncontainer_linear"
+        android:layout_below="@+id/updatable_title_textview"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/common_space_medium"
+        android:background="@color/colorAccent" />
+
+    <LinearLayout
+        android:id="@+id/updatable_buttoncontainer_linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/updatable_add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_tiny"
+                android:text="Add\nTrack" />
+
+            <Button
+                android:id="@+id/updatable_clear_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_tiny"
+                android:text="Clear\nAll" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/updatable_add5_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_tiny"
+                android:text="+ 5" />
+
+            <Button
+                android:id="@+id/updatable_remove5_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_tiny"
+                android:text="- 5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/updatable_add100_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_tiny"
+                android:text="+ 100" />
+
+            <Button
+                android:id="@+id/updatable_remove100_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/common_space_tiny"
+                android:text="- 100" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</foo.bar.example.foreadapterskt.ui.playlist.mutable.MutableListView>

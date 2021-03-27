@@ -13,10 +13,7 @@ import foo.bar.example.foreadapterskt.R
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil
 import foo.bar.example.foreadapterskt.feature.playlist.RandomStuffGeneratorUtil.randomLong
 import foo.bar.example.foreadapterskt.feature.playlist.Track
-import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_decreaseplays_button
-import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_increaseplays_button
-import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_playsrequested_text
-import kotlinx.android.synthetic.main.activity_playlists_listitem.view.track_remove_button
+import kotlinx.android.synthetic.main.activity_playlists_listitem.view.*
 import java.util.ArrayList
 
 
@@ -65,10 +62,10 @@ class ListDifferPlaylistAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Track, newItem: Track): Boolean {
-            return oldItem.contentsTheSame(newItem)
+            return oldItem.itemsLookTheSame(newItem)
         }
     }
-    private val differ = AsyncListDiffer<Track>(this, itemCallback)
+    private val differ = AsyncListDiffer(this, itemCallback)
 
 
     fun removeTrack(index: Int) {
@@ -187,6 +184,10 @@ class ListDifferPlaylistAdapter(
         holder.itemView.track_playsrequested_text.text = "${item.numberOfPlaysRequested}"
         holder.itemView.track_increaseplays_button.isEnabled = item.canIncreasePlays()
         holder.itemView.track_decreaseplays_button.isEnabled = item.canDecreasePlays()
+        holder.itemView.track_percent_vbar.setPercentDone(
+                item.id,
+                (item.numberOfPlaysRequested*100/Track.MAX_PLAYS_REQUESTED).toFloat()
+        )
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

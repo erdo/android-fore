@@ -166,7 +166,7 @@ public class TodoListView extends RelativeLayout implements SyncableView {
 
     private void setupAdapters(){
 
-        todoListAdapter = new TodoListAdapter(todoListModel, logger);
+        todoListAdapter = new TodoListAdapter(todoListModel);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getContext());
         linearLayoutManager1.setOrientation(RecyclerView.VERTICAL);

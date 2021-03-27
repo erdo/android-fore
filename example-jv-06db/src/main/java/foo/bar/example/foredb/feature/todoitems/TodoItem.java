@@ -1,6 +1,6 @@
 package foo.bar.example.foredb.feature.todoitems;
 
-import co.early.fore.adapters.DiffComparator;
+import co.early.fore.adapters.immutable.DiffComparator;
 import co.early.fore.core.Affirm;
 import foo.bar.example.foredb.db.todoitems.TodoItemEntity;
 
@@ -88,7 +88,7 @@ public class TodoItem implements DiffComparator<TodoItem> {
      * @return
      */
     @Override
-    public boolean contentsTheSame(TodoItem other) {
+    public boolean itemsLookTheSame(TodoItem other) {
         if (isDirty()){
             return false;
         } else if (isDone() != other.isDone()){
