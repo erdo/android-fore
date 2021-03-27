@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import co.early.fore.adapters.ChangeAwareAdapter;
+import co.early.fore.adapters.Notifyable;
+import co.early.fore.adapters.NotifyableImp;
 import co.early.fore.core.Affirm;
-import co.early.fore.core.logging.Logger;
 import foo.bar.example.foredb.R;
 import foo.bar.example.foredb.feature.todoitems.TodoItem;
 import foo.bar.example.foredb.feature.todoitems.TodoListModel;
@@ -19,17 +19,14 @@ import foo.bar.example.foredb.feature.todoitems.TodoListModel;
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 
-public class TodoListAdapter extends ChangeAwareAdapter<TodoListAdapter.ViewHolder> {
-
-    private static final String TAG = TodoListAdapter.class.getSimpleName();
+public class TodoListAdapter extends RecyclerView.Adapter<TodoListAdapter.ViewHolder> implements Notifyable<TodoListAdapter.ViewHolder> {
 
     private final TodoListModel todoListModel;
-    private final Logger logger;
+    private final NotifyableImp<ViewHolder> notifyableImp;
 
-    public TodoListAdapter(final TodoListModel todoListModel, Logger logger) {
-        super(todoListModel);
+    public TodoListAdapter(final TodoListModel todoListModel) {
         this.todoListModel = Affirm.notNull(todoListModel);
-        this.logger = Affirm.notNull(logger);
+        this.notifyableImp = new NotifyableImp<>(this, todoListModel);
     }
 
     @Override
@@ -64,6 +61,10 @@ public class TodoListAdapter extends ChangeAwareAdapter<TodoListAdapter.ViewHold
         return todoListModel.size();
     }
 
+    @Override
+    public void notifyDataSetChangedAuto() {
+        notifyableImp.notifyDataSetChangedAuto();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

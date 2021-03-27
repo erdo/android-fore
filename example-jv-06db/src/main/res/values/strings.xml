@@ -36,8 +36,8 @@
     <string name="todo_action_add50">Add 50</string>
     <string name="todo_action_do10pc">Do 10%</string>
     <string name="todo_action_del10pc">Delete 10%</string>
-    <string name="todo_action_add25_web">Download 25 extra tasks from the internet each time you tap this</string>
-    <string name="todo_action_bossmode_on">Turn boss mode on for extra random todos</string>
+    <string name="todo_action_add25_web">Download 25 extra tasks</string>
+    <string name="todo_action_bossmode_on">Random todos for 10s</string>
     <string name="todo_work_from_home">Work from home</string>
 
 </resources>
