@@ -43,7 +43,7 @@ class Track(
 
     companion object {
         private const val MIN_PLAYS_REQUESTED = 1
-        private const val MAX_PLAYS_REQUESTED = 9
+        const val MAX_PLAYS_REQUESTED = 4
     }
 
     override fun itemsTheSame(other: Track?): Boolean {

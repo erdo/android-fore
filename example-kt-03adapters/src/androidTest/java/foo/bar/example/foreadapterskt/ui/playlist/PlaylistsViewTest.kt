@@ -11,8 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import foo.bar.example.foreadapterskt.R
-import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
-import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.mutable.MutablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.immutable.ImmutablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.Track
 import foo.bar.example.foreadapterskt.ui.EspressoTestMatchers
 import io.mockk.MockKAnnotations
@@ -32,9 +32,9 @@ class PlaylistsViewTest {
 
 
     @MockK
-    private lateinit var mockDiffablePlaylistModel: DiffablePlaylistModel
+    private lateinit var mockImmutablePlaylistModel: ImmutablePlaylistModel
     @MockK
-    private lateinit var mockUpdatablePlaylistModel: UpdatablePlaylistModel
+    private lateinit var mockMutablePlaylistModel: MutablePlaylistModel
 
 
     @Before
@@ -46,7 +46,7 @@ class PlaylistsViewTest {
     fun emptyPlaylists() {
 
         //arrange
-        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withUpdatablePlaylistHavingTracks(0)
             .withDiffablePlaylistHavingTracks(0)
             .createRule()
@@ -78,7 +78,7 @@ class PlaylistsViewTest {
     fun with3ItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withUpdatablePlaylistHavingTracks(3)
             .withDiffablePlaylistHavingTracks(3)
             .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
@@ -112,7 +112,7 @@ class PlaylistsViewTest {
     fun with5ItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withUpdatablePlaylistHavingTracks(5)
             .withDiffablePlaylistHavingTracks(5)
             .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
@@ -146,7 +146,7 @@ class PlaylistsViewTest {
     fun withDifferentItemsInEachPlaylist() {
 
         //arrange
-        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withDiffablePlaylistHavingTracks(0)
             .withUpdatablePlaylistHavingTracks(5)
             .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
@@ -176,7 +176,7 @@ class PlaylistsViewTest {
     fun stateMaintainedAfterRotation() {
 
         //arrange
-        val activity = StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        val activity = StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withUpdatablePlaylistHavingTracks(3)
             .withDiffablePlaylistHavingTracks(3)
             .withPlaylistsContainingTrack(Track(R.color.pastel1, 123))
@@ -202,7 +202,7 @@ class PlaylistsViewTest {
     @Throws(Exception::class)
     fun clickAddTrackDiffableCallsModel() {
         //arrange
-        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withUpdatablePlaylistHavingTracks(0)
             .withDiffablePlaylistHavingTracks(0)
             .createRule()
@@ -213,7 +213,7 @@ class PlaylistsViewTest {
 
         //assert
         verify(exactly = 1) {
-            mockDiffablePlaylistModel.addNTracks(1)
+            mockImmutablePlaylistModel.addNTracks(1)
         }
     }
 
@@ -222,7 +222,7 @@ class PlaylistsViewTest {
     @Throws(Exception::class)
     fun clickAddTrackUpdatableCallsModel() {
         //arrange
-        StateBuilder(mockUpdatablePlaylistModel, mockDiffablePlaylistModel)
+        StateBuilder(mockMutablePlaylistModel, mockImmutablePlaylistModel)
             .withUpdatablePlaylistHavingTracks(0)
             .withDiffablePlaylistHavingTracks(0)
             .createRule()
@@ -233,7 +233,7 @@ class PlaylistsViewTest {
 
         //assert
         verify(exactly = 1) {
-            mockUpdatablePlaylistModel.addNTracks(1)
+            mockMutablePlaylistModel.addNTracks(1)
         }
     }
 

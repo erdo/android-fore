@@ -6,8 +6,8 @@ import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreadapterskt.OG
-import foo.bar.example.foreadapterskt.feature.playlist.updatable.UpdatablePlaylistModel
-import foo.bar.example.foreadapterskt.feature.playlist.diffable.DiffablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.mutable.MutablePlaylistModel
+import foo.bar.example.foreadapterskt.feature.playlist.immutable.ImmutablePlaylistModel
 import foo.bar.example.foreadapterskt.feature.playlist.Track
 import io.mockk.CapturingSlot
 import io.mockk.every
@@ -17,14 +17,14 @@ import io.mockk.mockk
 /**
  *
  */
-class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: UpdatablePlaylistModel, private val mockDiffablePlaylistModel: DiffablePlaylistModel) {
+class StateBuilder internal constructor(private val mockMutablePlaylistModel: MutablePlaylistModel, private val mockImmutablePlaylistModel: ImmutablePlaylistModel) {
 
     init {
 
         val updateSpec = UpdateSpec(UpdateSpec.UpdateType.FULL_UPDATE, 0, 0, mockk<SystemTimeWrapper>(relaxed = true))
 
         every {
-            mockUpdatablePlaylistModel.getAndClearLatestUpdateSpec(any())
+            mockMutablePlaylistModel.getAndClearLatestUpdateSpec(any())
         } returns updateSpec
 
     }
@@ -32,16 +32,16 @@ class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: 
     internal fun withUpdatablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
-            mockUpdatablePlaylistModel.trackListSize
+            mockMutablePlaylistModel.itemCount
         } returns numberOfTracks
 
         every {
-            mockUpdatablePlaylistModel.isEmpty()
+            mockMutablePlaylistModel.isEmpty()
         } returns (numberOfTracks == 0)
 
         var slot = CapturingSlot<Int>()
         every {
-            mockUpdatablePlaylistModel.hasAtLeastNItems(capture(slot))
+            mockMutablePlaylistModel.hasAtLeastNItems(capture(slot))
         } answers { numberOfTracks >= slot.captured }
 
         return this
@@ -50,16 +50,16 @@ class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: 
     internal fun withDiffablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
-            mockDiffablePlaylistModel.size()
+            mockImmutablePlaylistModel.getItemCount()
         } returns numberOfTracks
 
         every {
-            mockDiffablePlaylistModel.isEmpty()
+            mockImmutablePlaylistModel.isEmpty()
         } returns (numberOfTracks == 0)
 
         var slot = CapturingSlot<Int>()
         every {
-            mockDiffablePlaylistModel.hasAtLeastNItems(capture(slot))
+            mockImmutablePlaylistModel.hasAtLeastNItems(capture(slot))
         } answers { numberOfTracks >= slot.captured }
 
         return this
@@ -68,11 +68,11 @@ class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: 
     internal fun withPlaylistsContainingTrack(track: Track): StateBuilder {
 
         every {
-            mockUpdatablePlaylistModel.getTrack(any())
+            mockMutablePlaylistModel.getItem(any())
         } returns track
 
         every {
-            mockDiffablePlaylistModel.getTrack(any())
+            mockImmutablePlaylistModel.getItem(any())
         } returns track
 
         return this
@@ -86,8 +86,8 @@ class StateBuilder internal constructor(private val mockUpdatablePlaylistModel: 
                 ForeDelegateHolder.setDelegate(TestDelegateDefault())
 
                 //inject our mocks so our UI layer will pick them up
-                OG.putMock(UpdatablePlaylistModel::class.java, mockUpdatablePlaylistModel)
-                OG.putMock(DiffablePlaylistModel::class.java, mockDiffablePlaylistModel)
+                OG.putMock(MutablePlaylistModel::class.java, mockMutablePlaylistModel)
+                OG.putMock(ImmutablePlaylistModel::class.java, mockImmutablePlaylistModel)
             }
         }
     }
