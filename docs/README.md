@@ -76,7 +76,7 @@ class AccountRepository
  </code></pre>
 
 
- Somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
+ Somewhere in the view layer (Activity/Fragment/View or ViewModel) there will be a piece of code like this:
 
 
  <!-- Tabbed code sample -->
