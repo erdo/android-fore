@@ -3,6 +3,27 @@
 
 Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
+The fore library is divided into optional packages which you can pull in independently if you want (though the uber package is so small, it doesn't really seem worth it IMO).
+
+for a more **kotlin** style API and running coroutines under the hood:
+```
+co.early.fore:fore-core-kt (mandatory for the kotlin packages)
+co.early.fore:fore-adapters-kt
+co.early.fore:fore-network-kt
+```
+
+the original **java** API:
+```
+co.early.fore:fore-core (mandatory for the java packages)
+co.early.fore:fore-adapters
+co.early.fore:fore-network
+```
+
+The java and kotlin packages will co-exist in the same app with no problem. To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
+
+## 1.4.0
+Though we are not formally following semantic versioning at the moment, because there have been some some API changes to the adapters package in this release we decided to bump the version up to 1.4.0
+
 ## OkHttp3
 As **fore** now wraps **Retrofit2**, **Apollo** or **Ktor** calls with a single package, the network logs need to work out which version of OkHttp3 your app is running (Retrofit2 and Apollo use v3.x.x, Ktor uses 4.x.x and these versions of OkHttp3 have slightly different APIs). From **1.3.7** we do this with reflection, but feel free to exclude the kotlin-reflect package from your release builds as follows: `exclude("org.jetbrains.kotlin", "kotlin-reflect")`, you just won't see any network logs when using the InterceptorLogging class (which you probably have turned off for release builds anyway).
 
