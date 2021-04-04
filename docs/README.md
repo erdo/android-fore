@@ -17,7 +17,7 @@
 
 ## Quick Start
 
-for a more **kotlin** style API and running coroutines under the hood:
+the **kotlin** API, running coroutines under the hood:
 ```
 implementation "co.early.fore:fore-kt:1.4.1"
 ```
@@ -155,6 +155,7 @@ override fun syncView() {
     wallet_decrease_btn.isEnabled = wallet.canDecrease()
     wallet_mobileamount_txt.text = wallet.mobileWalletAmount.toString()
     wallet_savingsamount_txt.text = wallet.savingsWalletAmount.toString()
+    wallet_balancewarning_img.showOrGone(wallet.mobileWalletAmount<2)
 }
  </code></pre>
 
