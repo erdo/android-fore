@@ -13,7 +13,7 @@ object Shared {
 
     object Versions {
         const val android_gradle_plugin = "4.1.2"
-        const val kotlin_version = "1.4.0"
+        const val kotlin_version = "1.4.30"
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
         const val recyclerview = "1.1.0"
