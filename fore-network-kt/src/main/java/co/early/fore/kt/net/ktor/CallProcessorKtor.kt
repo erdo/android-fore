@@ -35,7 +35,7 @@ import kotlinx.coroutines.Deferred
 class CallProcessorKtor<F>(
         private val globalErrorHandler: ErrorHandler<F>,
         private val workMode: WorkMode? = null,
-        private val logger: Logger?
+        private val logger: Logger? = null
 ) {
 
     /**

@@ -5,7 +5,7 @@ Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core
 
 The fore library is divided into optional packages which you can pull in independently if you want (though the uber package is so small, it doesn't really seem worth it IMO).
 
-for a more **kotlin** style API and running coroutines under the hood:
+the **kotlin** API, running coroutines under the hood:
 ```
 co.early.fore:fore-core-kt (mandatory for the kotlin packages)
 co.early.fore:fore-adapters-kt
@@ -20,6 +20,9 @@ co.early.fore:fore-network
 ```
 
 The java and kotlin packages will co-exist in the same app with no problem. To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
+
+## 1.4.1
+The version of kotlin has been bumped up to kotlin 1.4.30
 
 ## 1.4.0
 fore does not formally follow semantic versioning at the moment, the bump to 1.4.0 is simply because there have been some minor API changes to the adapters package in this release (all known sample apps and tutorials have been updated to reflect this already).
