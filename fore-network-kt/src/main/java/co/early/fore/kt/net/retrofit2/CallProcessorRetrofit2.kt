@@ -37,7 +37,7 @@ import retrofit2.Response
 class CallProcessorRetrofit2<F>(
         private val globalErrorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
         private val workMode: WorkMode? = null,
-        private val logger: Logger?
+        private val logger: Logger? = null
 ) {
 
     /**
