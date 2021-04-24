@@ -1,7 +1,7 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-plugin")
+    id("fore-android-plugin")
     kotlin("android")
 }
 
@@ -42,4 +42,4 @@ dependencies {
     }
 }
 
-apply(from = "../publish.gradle")
+apply(from = "../publish-android-lib.gradle")

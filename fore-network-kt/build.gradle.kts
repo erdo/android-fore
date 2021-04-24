@@ -1,13 +1,13 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-plugin")
+    id("fore-android-plugin")
     kotlin("android")
 }
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-network-kt")
-    set("LIB_DESCRIPTION", "android fore - network helpers")
+    set("LIB_DESCRIPTION", "fore - network helpers, kotlin")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
@@ -23,20 +23,21 @@ android {
 
     sourceSets["main"].java.apply {
         srcDirs(
-                "../fore-network/src/main/java"
+                "../fore-network-jv/src/main/java"
         )
         exclude(
                 "co/early/fore/net/InterceptorLogging.java",
                 "co/early/fore/net/apollo/CallProcessorApollo.java",
-                "co/early/fore/net/retrofit2/CallProcessorRetrofit2.java"
+                "co/early/fore/net/apollo/ApolloCaller.java",
+                "co/early/fore/net/retrofit2/CallProcessorRetrofit2.java",
+                "co/early/fore/net/retrofit2/Retrofit2Caller.java"
         )
     }
 }
 
 dependencies {
 
-    api(project(":fore-core-kt"))
-
+    api(project(":fore-core-android-kt"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 
@@ -46,4 +47,4 @@ dependencies {
     implementation(kotlin("reflect"))
 }
 
-apply(from = "../publish.gradle")
+apply(from = "../publish-android-lib.gradle")

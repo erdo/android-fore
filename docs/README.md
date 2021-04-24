@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.4.1](https://img.shields.io/badge/central-1.4.1-green.svg){: .float-left}
+![central-1.4.2](https://img.shields.io/badge/central-1.4.2-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -19,12 +19,12 @@
 
 the **kotlin** API, running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.4.1"
+implementation "co.early.fore:fore-kt:1.4.2"
 ```
 
 the original **java** API:
 ```
-implementation "co.early.fore:fore-jv:1.4.1"
+implementation "co.early.fore:fore-jv:1.4.2"
 ```
 
 *(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing)*
@@ -43,7 +43,7 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 ## Overview
 
-The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible. It also encourages the development of genuinely reactive code at the view layer (you can't use the API to replace a callback with an observable stream and think you're done, for example - what you would have there is just a more complicated callback, not reactive code per se).
+The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible. It also encourages the development of genuinely reactive code at the view layer (you can't use the API to replace a callback with a Single&lt;Boolean&gt; and think you're done for example - what you would have there is just another callback, not reactive code per se).
 
 Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 

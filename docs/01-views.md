@@ -35,7 +35,7 @@ In addition to that there will be:
 - the [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations)).
 - the add / remove observers methods where the view registers with the models it is interested in.
 
-A few [examples](https://erdo.github.io/android-fore/01-views.html#view-examples) are listed at the bottom of this page
+This leaves almost all everythng else to be handled in other modules or layers in the form of plain, unit testable code. A few view [examples](https://erdo.github.io/android-fore/01-views.html#view-examples) are listed at the bottom of this page
 
 ## SyncView()
 

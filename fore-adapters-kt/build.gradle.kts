@@ -1,13 +1,13 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-plugin")
+    id("fore-android-plugin")
     kotlin("android")
 }
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-adapters-kt")
-    set("LIB_DESCRIPTION", "android fore - adapter and diff util helpers")
+    set("LIB_DESCRIPTION", "fore - android adapter and diff util helpers, kotlin")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
@@ -15,7 +15,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 android {
     sourceSets["main"].java.apply {
         srcDirs(
-            "../fore-adapters/src/main/java"
+            "../fore-adapters-jv/src/main/java"
         )
         exclude(
             "co/early/fore/adapters/mutable/ChangeAwareArrayList.java",
@@ -28,9 +28,8 @@ android {
 
 dependencies {
 
-    api(project(":fore-core-kt"))
-
+    api(project(":fore-core-android-kt"))
     api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 
-apply(from = "../publish.gradle")
+apply(from = "../publish-android-lib.gradle")

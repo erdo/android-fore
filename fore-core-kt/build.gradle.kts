@@ -1,39 +1,30 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-plugin")
-    kotlin("android")
+    id("java-library")
+    id("kotlin")
 }
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-core-kt")
-    set("LIB_DESCRIPTION", "android fore - a few kotlin additions esp around coroutines")
+    set("LIB_DESCRIPTION", "fore - core code for kotlin")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-android {
-    sourceSets["main"].java.apply {
-        srcDirs(
-            "../fore-core/src/main/java"
-        )
-        exclude(
-            "co/early/fore/core/logging/**",
-            "co/early/fore/core/observer/ObservableImp.java",
-            "co/early/fore/core/ui/SyncTrigger.java"
-        )
-    }
+sourceSets["main"].java.apply {
+    srcDirs(
+        "../fore-core-jv/src/main/java"
+    )
+    exclude(
+        "co/early/fore/core/logging/**",
+        "co/early/fore/core/ui/SyncTrigger.java"
+    )
 }
 
 dependencies {
-
-    //promote the kotlin-reflect version used in the android lint tools to match kotlin_version used elsewhere
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${Shared.Versions.kotlin_version}")
-
-    api("androidx.core:core-ktx:${Shared.Versions.core_ktx}")
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Shared.Versions.kotlin_version}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Shared.Versions.kotlinx_coroutines_core}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Shared.Versions.kotlinx_coroutines_android}")
 }
 
-apply(from = "../publish.gradle")
+apply(from = "../publish-lib.gradle")

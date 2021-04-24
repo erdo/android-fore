@@ -3,7 +3,6 @@ package co.early.fore.kt.core.delegate
 import co.early.fore.core.WorkMode
 import co.early.fore.core.WorkMode.ASYNCHRONOUS
 import co.early.fore.core.WorkMode.SYNCHRONOUS
-import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.logging.SilentLogger
@@ -26,13 +25,6 @@ class ReleaseDelegateDefault (
     override val workMode: WorkMode = ASYNCHRONOUS,
     override val logger: Logger = SilentLogger(),
     override val systemTimeWrapper: SystemTimeWrapper = SystemTimeWrapper()
-) : Delegate
-
-class DebugDelegateDefault (
-        tagPrefix: String? = null,
-        override val workMode: WorkMode = ASYNCHRONOUS,
-        override val logger: Logger = AndroidLogger(tagPrefix),
-        override val systemTimeWrapper: SystemTimeWrapper = SystemTimeWrapper()
 ) : Delegate
 
 class TestDelegateDefault (

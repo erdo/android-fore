@@ -7,16 +7,18 @@ The fore library is divided into optional packages which you can pull in indepen
 
 **kotlin** API
 ```
-co.early.fore:fore-core-kt (mandatory for the kotlin packages)
+co.early.fore:fore-core-kt
+co.early.fore:fore-core-android-kt
 co.early.fore:fore-adapters-kt
 co.early.fore:fore-network-kt
 ```
 
 **java** API
 ```
-co.early.fore:fore-core (mandatory for the java packages)
-co.early.fore:fore-adapters
-co.early.fore:fore-network
+co.early.fore:fore-core-jv
+co.early.fore:fore-core-android-jv
+co.early.fore:fore-adapters-jv
+co.early.fore:fore-network-jv
 ```
 
 The java and kotlin packages will co-exist in the same app with no problem. To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
@@ -77,7 +79,7 @@ There was one minor breaking change previous to 0.11.1 (sorry):
 
 * SuccessCallBack -> SuccessCallback (case change)
 
-## Post the rename from ASAF to fore (>0.9.32)
+## Post the rename from ASAF to fore (&lt;0.9.32)
 
 These are more substantial, but are mainly related to renaming or shuffling packages around, there are no functionality changes.
 

@@ -9,6 +9,23 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 
+interface KtorCaller<F> {
+    suspend fun <S> processCallAwait(
+        call: suspend () -> S
+    ): Either<F, S>
+    suspend fun <S, CE : MessageProvider<F>> processCallAwait(
+        customErrorClazz: Class<CE>,
+        call: suspend () -> S
+    ): Either<F, S>
+    suspend fun <S> processCallAsync(
+        call: suspend () -> S
+    ): Deferred<Either<F, S>>
+    suspend fun <S, CE : MessageProvider<F>> processCallAsync(
+        customErrorClazz: Class<CE>,
+        call: suspend () -> S
+    ): Deferred<Either<F, S>>
+}
+
 /**
  * F - Globally applicable failure message class, like an enum for example
  * S - Success pojo you expect to be returned from the API (or Unit for an empty response)
@@ -36,13 +53,13 @@ class CallProcessorKtor<F>(
         private val globalErrorHandler: ErrorHandler<F>,
         private val workMode: WorkMode? = null,
         private val logger: Logger? = null
-) {
+) : KtorCaller<F> {
 
     /**
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S> processCallAwait(call: suspend () -> S): Either<F, S> {
+    override suspend fun <S> processCallAwait(call: suspend () -> S): Either<F, S> {
         return processCallAsync(call).await()
     }
 
@@ -50,7 +67,7 @@ class CallProcessorKtor<F>(
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S, CE : MessageProvider<F>> processCallAwait(
+    override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
             customErrorClazz: Class<CE>,
             call: suspend () -> S
     ): Either<F, S> {
@@ -62,7 +79,7 @@ class CallProcessorKtor<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S> processCallAsync(call: suspend () -> S): Deferred<Either<F, S>> {
+    override suspend fun <S> processCallAsync(call: suspend () -> S): Deferred<Either<F, S>> {
         return doCallAsync<S, MessageProvider<F>>(null, call)
     }
 
@@ -71,7 +88,7 @@ class CallProcessorKtor<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S, CE : MessageProvider<F>> processCallAsync(
+    override suspend fun <S, CE : MessageProvider<F>> processCallAsync(
             customErrorClazz: Class<CE>,
             call: suspend () -> S
     ): Deferred<Either<F, S>> {

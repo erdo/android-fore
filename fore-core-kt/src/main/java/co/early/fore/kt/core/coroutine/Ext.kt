@@ -29,22 +29,6 @@ import kotlin.coroutines.coroutineContext
  * Copyright © 2019 early.co. All rights reserved.
  */
 
-fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main.immediate).launch { block() }
-    }
-}
-
-fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main).launch { block() }
-    }
-}
-
 fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -69,23 +53,6 @@ fun launchCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, bl
     }
 }
 
-
-fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main.immediate).async { block() }
-    }
-}
-
-fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main).async { block() }
-    }
-}
-
 fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -107,23 +74,6 @@ fun <T> asyncCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null,
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(dispatcher).async { block() }
-    }
-}
-
-
-suspend fun <T> awaitMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(Dispatchers.Main.immediate) { block() }
-    }
-}
-
-suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(Dispatchers.Main) { block() }
     }
 }
 

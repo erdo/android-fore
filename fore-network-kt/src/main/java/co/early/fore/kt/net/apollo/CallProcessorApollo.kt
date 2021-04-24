@@ -14,6 +14,15 @@ import kotlinx.coroutines.Deferred
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+interface ApolloCaller<F> {
+    suspend fun <S> processCallAwait(
+        call: () -> ApolloCall<S>
+    ): Either<F, CallProcessorApollo.SuccessResult<S>>
+    suspend fun <S> processCallAsync(
+        call: () -> ApolloCall<S>
+    ): Deferred<Either<F, CallProcessorApollo.SuccessResult<S>>>
+}
+
 /**
  * @param globalErrorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
  * etc). This error handler is often the same across a range of services required by the app.
@@ -42,7 +51,7 @@ class CallProcessorApollo<F>(
         private val logger: Logger? = null,
         private val workMode: WorkMode? = null,
         private val allowPartialSuccesses: Boolean = false
-) {
+) : ApolloCaller<F> {
 
     data class SuccessResult<S>(
             val data: S,
@@ -57,7 +66,7 @@ class CallProcessorApollo<F>(
      *
      * @returns Either<F, SuccessResult<S>>
      */
-    suspend fun <S> processCallAwait(call: () -> ApolloCall<S>): Either<F, SuccessResult<S>> {
+    override suspend fun <S> processCallAwait(call: () -> ApolloCall<S>): Either<F, SuccessResult<S>> {
         return processCallAsync(call).await()
     }
 
@@ -67,7 +76,7 @@ class CallProcessorApollo<F>(
      *
      * @returns Deferred<Either<F, SuccessResult<S>>>
      */
-    suspend fun <S> processCallAsync(call: () -> ApolloCall<S>): Deferred<Either<F, SuccessResult<S>>> {
+    override suspend fun <S> processCallAsync(call: () -> ApolloCall<S>): Deferred<Either<F, SuccessResult<S>>> {
 
         return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
             try {

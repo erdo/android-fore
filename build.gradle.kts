@@ -37,8 +37,8 @@ ext.apply {
 
     // TODO remove these once we migrate publish.gradle to kts
 
-    set("LIB_VERSION_NAME", "1.4.1")
-    set("LIB_VERSION_CODE", 53)
+    set("LIB_VERSION_NAME", "1.4.2")
+    set("LIB_VERSION_CODE", 54)
 
     set("REPO", "fore")
     set("LIB_GROUP", "co.early.fore")
@@ -77,4 +77,3 @@ fun readProperties(propertiesFile: File): Properties {
         }
     }
 }
-
