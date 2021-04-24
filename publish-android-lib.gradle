@@ -1,0 +1,140 @@
+/**
+ *
+ * ./gradlew check
+ *
+ * ./gradlew testDebugUnitTest
+ * ./gradlew connectedAndroidTest -PtestBuildType=debug
+ * ./gradlew connectedAndroidTest -PtestBuildType=release
+ *
+ * ./gradlew example-kt-01reactiveui:testDebugUnitTest --info
+ *
+ * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
+ *
+ *
+ * ./gradlew clean
+ * ./gradlew publishToMavenLocal
+ * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
+ *
+ * ./gradlew :app:buildEnvironment
+ *
+ * bundle exec jekyll serve
+ */
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+println "[${LIB_ARTIFACT_ID} android lib publish file]"
+
+group = "${rootProject.ext.LIB_GROUP}"
+version =  "${rootProject.ext.LIB_VERSION_NAME}"
+
+
+ext["signing.keyId"] = "${rootProject.ext.SIGNING_KEY_ID}"
+ext["signing.password"] = "${rootProject.ext.SIGNING_PASSWORD}"
+ext["signing.secretKeyRingFile"] = "${rootProject.ext.SIGNING_KEY_RING_FILE}"
+
+
+project.afterEvaluate {
+	publishing {
+		publications {
+			release(MavenPublication) {
+
+				groupId = "${rootProject.ext.LIB_GROUP}"
+				artifactId = LIB_ARTIFACT_ID
+				version = "${rootProject.ext.LIB_VERSION_NAME}"
+
+				artifact(bundleReleaseAar)
+				artifact(androidSourcesJar)
+
+				pom {
+					name = "${rootProject.ext.PROJ_NAME}"
+					description = LIB_DESCRIPTION
+					url = "${rootProject.ext.POM_URL}"
+
+					licenses {
+						license {
+							name = "${rootProject.ext.LICENCE_NAME}"
+							url = "${rootProject.ext.LICENCE_URL}"
+						}
+					}
+					developers {
+						developer {
+							id = "${rootProject.ext.LIB_DEVELOPER_ID}"
+							name = "${rootProject.ext.LIB_DEVELOPER_NAME}"
+							email = "${rootProject.ext.LIB_DEVELOPER_EMAIL}"
+						}
+					}
+					scm {
+						connection = "${rootProject.ext.POM_SCM_CONNECTION}"
+						developerConnection = "${rootProject.ext.POM_SCM_CONNECTION}"
+						url = "${rootProject.ext.POM_SCM_URL}"
+					}
+					withXml {
+
+						def dependenciesNode = asNode().appendNode('dependencies')
+
+						// List all compile dependencies and write to POM
+						ext.addDependency = { dep, String scope ->
+							if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+								return // ignore invalid dependencies
+
+							final dependencyNode = dependenciesNode.appendNode('dependency')
+							dependencyNode.appendNode('groupId', dep.group)
+							dependencyNode.appendNode('artifactId', dep.name)
+							dependencyNode.appendNode('version', dep.version)
+							dependencyNode.appendNode('scope', scope)
+
+							if (!dep.transitive) {
+								// If this dependency is not transitive, we should force exclude all its dependencies from the POM
+								final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+								exclusionNode.appendNode('groupId', '*')
+								exclusionNode.appendNode('artifactId', '*')
+							} else if (!dep.properties.excludeRules.empty) {
+								// Otherwise add specified exclude rules
+								final exclusionsNode = dependencyNode.appendNode('exclusions')
+								dep.properties.excludeRules.each { rule ->
+									final exclusionNode = exclusionsNode.appendNode('exclusion')
+									exclusionNode.appendNode('groupId', rule.group ?: '*')
+									exclusionNode.appendNode('artifactId', rule.module ?: '*')
+								}
+							}
+						}
+
+						// List all "compile" dependencies (for old Gradle)
+						configurations.compile.getDependencies().each { dep -> addDependency(dep, "compile") }
+						// List all "api" dependencies (for new Gradle) as "compile" dependencies
+						configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
+						// List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+						configurations.implementation.getDependencies().each { dep -> addDependency(dep, "runtime") }
+					}
+				}
+			}
+		}
+		repositories {
+			maven {
+				name = "mavenCentral"
+
+				def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+				def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+				credentials {
+					username = "${rootProject.ext.MAVEN_USER}"
+					password = "${rootProject.ext.MAVEN_PASSWORD}"
+				}
+			}
+		}
+	}
+
+	signing {
+		sign(publishing.publications)
+	}
+}
+
+task androidSourcesJar(type: Jar) {
+	archiveClassifier.set('sources')
+	from(android.sourceSets.main.java.srcDirs)
+}
+
+artifacts {
+	archives(androidSourcesJar)
+}

@@ -1,7 +1,7 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-plugin")
+    id("fore-android-plugin")
 }
 
 ext.apply {
@@ -21,9 +21,9 @@ android {
 }
 
 dependencies {
-    api(project(":fore-core"))
-    api(project(":fore-adapters"))
-    api(project(":fore-network"))
+    api(project(":fore-core-jv"))
+    api(project(":fore-adapters-jv"))
+    api(project(":fore-network-jv"))
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
@@ -33,4 +33,4 @@ dependencies {
     }
 }
 
-apply(from = "../publish.gradle")
+apply(from = "../publish-android-lib.gradle")

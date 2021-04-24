@@ -1,6 +1,5 @@
 package co.early.fore.kt.net.retrofit2
 
-
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
@@ -10,6 +9,23 @@ import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
+
+interface Retrofit2Caller<F> {
+    suspend fun <S> processCallAwait(
+        call: suspend () -> Response<S>
+    ): Either<F, S>
+    suspend fun <S, CE : MessageProvider<F>> processCallAwait(
+        customErrorClazz: Class<CE>,
+        call: suspend () -> Response<S>
+    ): Either<F, S>
+    suspend fun <S> processCallAsync(
+        call: suspend () -> Response<S>
+    ): Deferred<Either<F, S>>
+    suspend fun <S, CE : MessageProvider<F>> processCallAsync(
+        customErrorClazz: Class<CE>,
+        call: suspend () -> Response<S>
+    ): Deferred<Either<F, S>>
+}
 
 /**
  * F - Globally applicable failure message class, like an enum for example
@@ -38,13 +54,13 @@ class CallProcessorRetrofit2<F>(
         private val globalErrorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
         private val workMode: WorkMode? = null,
         private val logger: Logger? = null
-) {
+) : Retrofit2Caller<F> {
 
     /**
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S> processCallAwait(call: suspend () -> Response<S>): Either<F, S> {
+    override suspend fun <S> processCallAwait(call: suspend () -> Response<S>): Either<F, S> {
         return processCallAsync(call).await()
     }
 
@@ -53,7 +69,7 @@ class CallProcessorRetrofit2<F>(
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    suspend fun <S, CE : MessageProvider<F>> processCallAwait(
+    override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
             customErrorClazz: Class<CE>,
             call: suspend () -> Response<S>
     ): Either<F, S> {
@@ -65,7 +81,7 @@ class CallProcessorRetrofit2<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S> processCallAsync(call: suspend () -> Response<S>): Deferred<Either<F, S>> {
+    override suspend fun <S> processCallAsync(call: suspend () -> Response<S>): Deferred<Either<F, S>> {
         return doCallAsync<S, MessageProvider<F>>(null, call)
     }
 
@@ -74,7 +90,7 @@ class CallProcessorRetrofit2<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    suspend fun <S, CE : MessageProvider<F>> processCallAsync(
+    override suspend fun <S, CE : MessageProvider<F>> processCallAsync(
             customErrorClazz: Class<CE>,
             call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
