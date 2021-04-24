@@ -43,7 +43,7 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 ## Overview
 
-The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible. It also encourages the development of genuinely reactive code at the view layer (you can't use the API to replace a callback with an observable stream and think you're done, for example - what you would have there is just a more complicated callback, not reactive code per se).
+The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible. It also encourages the development of genuinely reactive code at the view layer (you can't use the API to replace a callback with a Single&lt;Boolean&gt; and think you're done for example - what you would have there is just another callback, not reactive code per se).
 
 Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 
