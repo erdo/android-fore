@@ -16,6 +16,7 @@ dependencies {
 
     api(project(":fore-core-kt"))
 
+    api("androidx.lifecycle:lifecycle-common-java8:${Shared.Versions.androidx_lifecycle_common}")
     //promote the kotlin-reflect version used in the android lint tools to match kotlin_version used elsewhere
     implementation("org.jetbrains.kotlin:kotlin-reflect:${Shared.Versions.kotlin_version}")
 
