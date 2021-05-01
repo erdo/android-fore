@@ -45,6 +45,7 @@ object Shared {
         const val core_ktx = "1.3.2"
         const val kotlinx_coroutines_core = "1.4.2"
         const val kotlinx_coroutines_android = "1.4.2"
+        const val androidx_lifecycle_common = "2.2.0"
     }
 
     object BuildTypes {
