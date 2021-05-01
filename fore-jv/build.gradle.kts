@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    api(project(":fore-core-jv"))
+
     api(project(":fore-adapters-jv"))
     api(project(":fore-network-jv"))
 

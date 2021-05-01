@@ -23,7 +23,6 @@ android {
 
 dependencies {
 
-    api(project(":fore-core-kt"))
     api(project(":fore-adapters-kt"))
     api(project(":fore-network-kt"))
 

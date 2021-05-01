@@ -1,24 +1,18 @@
 package co.early.fore.kt.core.observer
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.observer.Observer
+import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.launchCustom
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import java.lang.IllegalArgumentException
+
 
 /**
- * This is the pure kotlin observable implementation which does not reference
- * the android platform - to achieve parity with the android implementation
- * ObservableImp (which you should probably use in preference to this one if you
- * can access it), you would need to pass in Dispatchers.Main.immediate as
- * a construction param
- *
- * @param dispatcher The dispatcher to run the coroutines on, to match the
- * android implementation behaviour, use Dispatchers.Main.immediate
- *
- * @param notificationMode If notifications should be run to the UI thread (appropriate for most
+ * @param notificationMode If notifications should be run on the UI thread (appropriate for most
  * app code) then use ASYNCHRONOUS. For tests, you will want to inject SYNCHRONOUS here which will
  * force all the notifications to come through on the same thread that notifyObservers()
  * is called on.
@@ -26,21 +20,25 @@ import kotlinx.coroutines.CoroutineDispatcher
  * @param logger If you want to be told about warnings, pass an implementation of Logger
  * here (recommended)
  *
+ * @param dispatcher You will only need to specify this if you are running in a non-android module,
+ * we'd recommend passing in Dispatchers.Main.immediate here in that case, otherwise leave this as
+ * null
+ *
  * If you don't specify any construction parameters, they will be taken from ForeDelegateHolder
  *
- * NB: If there are any Android Adapters depending directly on your model for their list data, you will
+ * NB: If there are any Android Adapters depending on your model for their list data, you will
  * want to make sure that you only update this list based data on the UI thread (i.e. for use
- * with adapters, you should only call notifyObservers() from the UI thread). This remains true
+ * with adapters, you should only call notifyObservers() on the UI thread). This remains true
  * regardless of whether this Observable has been created with ASYNCHRONOUS or SYNCHRONOUS
  * WorkMode.
  * Synchronizing any list updates is not enough, Android will call Adapter.count() and
  * Adapter.get() on the UI thread and you cannot change the adapter's size between these calls.
  *
  */
-class ObservableKImp(
-        private val dispatcher: CoroutineDispatcher,
-        private val notificationMode: WorkMode? = null,
-        private val logger: Logger? = null
+class ObservableImp(
+    private val notificationMode: WorkMode? = null,
+    private val logger: Logger? = null,
+    private val dispatcher: CoroutineDispatcher? = null
 ) : Observable {
 
     private val observerList = mutableListOf<Observer>()
@@ -111,7 +109,24 @@ class ObservableKImp(
      */
     @Synchronized
     override fun notifyObservers() {
-        launchCustom(dispatcher, ForeDelegateHolder.getWorkMode(notificationMode)) {
+
+        var dispatch = dispatcher
+
+        if (dispatch == null) {
+            try {
+                dispatch = Dispatchers.Main.immediate
+            } catch (uoe: UnsupportedOperationException){
+                val errorMessage = "\nIt looks like you are running in a non-android module\n" +
+                        "If this is intentional, you will need to specify a dispatcher in the\n" +
+                        "constructor, we'd recommend Dispatchers.Main.immediate\n" +
+                        "If this is NOT intentional, move this code to a module that supports\n" +
+                        "Dispatchers.Main.immediate"
+                ForeDelegateHolder.getLogger(logger).e(errorMessage)
+                throw IllegalArgumentException(errorMessage)
+            }
+        }
+
+        launchCustom(dispatch, ForeDelegateHolder.getWorkMode(notificationMode)) {
             for (observer in observerList) {
                 doNotification(observer)
             }
