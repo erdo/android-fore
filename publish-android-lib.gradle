@@ -18,6 +18,8 @@
  * ./gradlew :app:buildEnvironment
  *
  * bundle exec jekyll serve
+ *
+ * bundle lock --update
  */
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
