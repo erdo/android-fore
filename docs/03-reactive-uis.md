@@ -103,7 +103,8 @@ That's everything you need to do to get bullet proof reactive UIs in your app, e
 
 If the list of things you are observing gets a little long, you can remove some of this *add and remove* boiler plate by using an **ObservableGoup** (it's just a convenience class that maintains a list of observables internally)
 
-### Using ObservableGroup in a ViewModel
+### <a name="ObservableGroup"></a>Using ObservableGroup in a ViewModel
+
 Here's how you can use an ObservableGroup from a ViewModel:
 
 <pre class="codesample"><code>
@@ -142,10 +143,44 @@ class MyViewModel(
 }
  </code></pre>
 
+### ForeLifecycleObserver
+
+If you want to remove _even more_ then you can use the ForeLifecycleObserver from an Activity, Fragment or ViewModel which will handle it all for you:
+
+ <pre class="codesample"><code>
+ lifecycle.addObserver(
+     ForeLifecycleObserver(
+         this,
+         accountModel,
+         networkInfo,
+         emailInBox,
+         weatherRepository
+     )
+ )
+
+ </code></pre>
+
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
 
-If I had a dollar for everyone who asked me this question! (I would have, about $4). It is the obvious question for anyone not familiar with this style of reactive view implementation, indeed in the distant past the Observer interface did have a generic on it which supported this behaviour. But it was finally removed when we realised that doing so *significantly* reduced the amount of view code that had to be written.
+This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did have a generic on it along the lines of Observable<SomeClass> which supported this behaviour. But it was removed when we realised that doing so *significantly* reduced the amount of boiler plate and view code that had to be written.
+
+There are a few different ways to explain this, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you want an app architecture based on it, then I'd advise you to stay with Rx or migrate to Flow. fore observers are not reactive streams.
+
+### Reactive Streams
+Let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
+
+- Observers (tell me whenever you've changed)
+- Streams (data and operators like .map .filter etc)
+
+For some specific use cases: handling streams of changing data, which you want to process on various threads (like the raw output of an IOT device for example) reactive streams is a natural fit. The needs of most android apps however tend to be a little more along the lines of:
+
+ - connect to a network to download a discreet piece of data (_always_ on an IO thread)
+ - update a UI based on some change of state (_always_ on the UI thread)
+
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single<Whatever> anyway (effectively turning things back into a one-off callback, but done with reactive streams, giving you... the worst of both worlds? 🤔 ) But [callback-hell!](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) etc.
+
+Anyway, fore is just the observable bit, separate from the data that actually changed. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable<Somethings> won't slowly spread throughout your code base. This separation also has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see.
 
 ### Views want different things from the same model
 Usually, view layer components are going to want different things from the same model. Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
@@ -244,7 +279,9 @@ override fun onStop() {
 
 </code></pre>
 
-With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate).
+With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#observablegroup), or the [ForeLifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#forelifecycleobserver).
+
+*(We've been ignoring ViewModels here, but the same principle applies. ViewModels are often observing a number of different observable Usecases or Repositories, and a fore style observable API radically reduces the boiler plate that needs to be written there too)*
 
 > "reduce view layer code to its absolute fundamentals: what things look like"
 
