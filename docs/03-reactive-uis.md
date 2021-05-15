@@ -189,7 +189,7 @@ For some specific use cases: handling streams of changing data, which you want t
  - connect to a network to download a discreet piece of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway (effectively turning things back into a one-off callback, but done with reactive streams, giving you... the worst of both worlds? 🤔 ) But [callback-hell!](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) etc.
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway. Regular code that touches reactive streams often gets _reactive-stream-ified_ like this (even code that isn't, and has no need to be, reactive in the first place). By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays without the need to use reactive streams.
 
 Anyway, fore is just the observable bit, separate from the data that actually changed. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base. This separation also has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
@@ -292,8 +292,6 @@ override fun onStop() {
 
 With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#observablegroup), or the [ForeLifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#forelifecycleobserver).
 
-*(We've been ignoring ViewModels here, but the same principle applies. ViewModels are often observing a number of different observable Usecases or Repositories, and a fore style observable API radically reduces the boiler plate that needs to be written there too)*
-
 > "reduce view layer code to its absolute fundamentals: what things look like"
 
 This lets you reduce view layer code to its absolute fundamentals: what things look like. Imagine a fairly complex reactive UI that displays if the user is logged in or not, shows the last time the user logged in, the number of unread emails, what the account status is, a weather forecast, and the current wind speed and temperature. With appropriately written, observable models, the syncView implementation for that screen would be:
@@ -307,6 +305,21 @@ fun syncView() {
     homepage_weatherforecast.text = weatherModel.getForecast()
     homepage_temperature.text = "${weatherModel.getTemperature()}"
     homepage_windspeed.text = "${weatherModel.getWindSpeed()}"
+}
+
+</code></pre>
+
+If we used a ViewModel to constuct a ViewState (placed in between the Activity/Fragment code and the model code), the syncView() function can directly reference this single ViewState, it would have the same number of lines but it would make the code even clearer.
+
+<pre class="codesample"><code>
+fun syncView() {
+    homepage_unreademails.text = viewState.unreadCountText
+    homepage_loggedin.text = viewState.loggedInStatusText
+    homepage_lastloggedin.text = viewState.lastLoggedInText
+    homepage_accountstatus.text = viewState.accountStatusText
+    homepage_weatherforecast.text = viewState.forecastText
+    homepage_temperature.text = viewState.temperatureText
+    homepage_windspeed.text = viewState.windspeedText
 }
 
 </code></pre>

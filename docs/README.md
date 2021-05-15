@@ -19,12 +19,12 @@
 
 the **kotlin** API, running coroutines under the hood:
 ```
-implementation "co.early.fore:fore-kt:1.4.4"
+implementation("co.early.fore:fore-kt:1.4.4")
 ```
 
 the original **java** API:
 ```
-implementation "co.early.fore:fore-jv:1.4.4"
+implementation("co.early.fore:fore-jv:1.4.4")
 ```
 
 *(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing)*
