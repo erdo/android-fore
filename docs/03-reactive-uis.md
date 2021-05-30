@@ -6,27 +6,21 @@ Data Binding is the old term for this, and its basic definition is: any changes 
 
 So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled. This concept is decades old, and in UI frameworks is generally implemented with some form of Observer pattern.
 
-Lately it's been applied to other (non UI) areas of code very successfully under the name of *reactive* programming. Back at the UI layer, you could say that the view is *reacting* to changes in the model (i.e. the view layer does not need to check the model to see if it has changed, and of course there is no polling involved).
+Lately it's been applied to other (non UI) areas of code very successfully under the name of *reactive* programming. Back at the UI layer, you could say that the view is *reacting* to changes in the model (i.e. the view layer does not need to explicitly check the model to see if it has changed, and of course there is no polling involved).
 
 
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
-The fore observable has two different WorkModes:
-- **ASYNCHROUNOUS**: observers will always be notified on the UI thread (making it trivial to update UI elements)
-- **SYNCHRONOUS**: observers will be always be notified on the same thread that notifyObservers() was called on (perfect for running Unit tests).
-
-**With kotlin you no longer need to specify the WorkMode in the constructor, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more**
-
-By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/fore-full-example-02-kotlin/blob/master/app/src/main/java/foo/bar/example/fore/fullapp02/feature/basket/BasketModel.kt), the models gain the following characteristics:
+By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt), the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
 - When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
 - For this to work, all a model must do is call **notifyObservers()** whenever its own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
-- When the model is constructed in **ASYNCHRONOUS** mode, these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI
+- When the model is constructed in **ASYNCHRONOUS** mode (which is the default), these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI (**SYNCHRONOUS** mode is useful for running unit tests)
 - To avoid memory leaks, **views are responsible for removing their observer callback** from the observable model once they are no longer interested in receiving notifications
 - Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as Activity.onStart() / Activity.onStop or View.onAttachedToWindow() / View.onDetachedFromWindow()
-- The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observable is required.
+- The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observer is required.
 
 ## Connecting Views and Models
 
@@ -96,7 +90,7 @@ override fun onStop() {
 }
  </code></pre>
 
-That's everything you need to do to get bullet proof reactive UIs in your app, everything now takes care of itself, no matter what happens to the model or the rotation state of the device.
+That's everything you need to do to get bullet proof reactive UIs in your app, everything now takes care of itself, no matter what happens to the state of the model or the rotation of the device.
 
 
 ## <a name="boiler-plate"></a>Removing even more boiler plate
@@ -145,7 +139,7 @@ class MyViewModel(
 
 ### ForeLifecycleObserver
 
-If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity, Fragment or ViewModel which will handle it all for you:
+If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity, Fragment which will handle it all for you:
 
  <pre class="codesample"><code>
 class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
@@ -171,6 +165,8 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
 
  </code></pre>
 
+ This lets you reduce view layer code to its absolute fundamentals: what things look like.
+
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
 
@@ -194,7 +190,11 @@ You certainly _can_ treat everything as a reactive stream if you wish, and if pa
 Anyway, fore is just the observable bit, separate from the data that actually changed. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base. This separation also has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
 ### Views want different things from the same model
-Usually, view layer components are going to want different things from the same model. Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
+Usually, view layer components are going to want different things from the same model.
+
+(If you've just joined us here by the way, we are using the term model as it's defined by [wikipedia](https://en.wikipedia.org/wiki/Domain_model), a software representation of a real life thing, the model can have state and/or logic. And for all this to work, it just has to be observable i.e. if its state changes, it needs to tell all its observers that its state changed. The following example models expose their state via getters, but you can also expose a kotlin data class which encapsulates all the public state in an immutable object like we do in the clean architecture sample - it makes no difference to the pattern or how fore works.)
+
+Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
 
 Regardless, our example model will be managing these three pieces of state:
 
