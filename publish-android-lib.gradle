@@ -15,11 +15,13 @@
  * ./gradlew publishToMavenLocal
  * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
- * ./gradlew :app:buildEnvironment
+ * ./gradlew :buildEnvironment
+ * ./gradlew :app:dependencies
  *
  * bundle exec jekyll serve
  *
  * bundle lock --update
+ * bundle install
  */
 apply plugin: 'maven-publish'
 apply plugin: 'signing'

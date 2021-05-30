@@ -6,8 +6,8 @@ object Shared {
 
     object Android {
         const val minSdkVersion = 16
-        const val compileSdkVersion = 29
-        const val targetSdkVersion = 29
+        const val compileSdkVersion = 30
+        const val targetSdkVersion = 30
         val javaVersion = JavaVersion.VERSION_1_8
     }
 

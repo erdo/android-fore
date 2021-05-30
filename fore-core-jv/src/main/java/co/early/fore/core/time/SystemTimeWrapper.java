@@ -9,4 +9,7 @@ public class SystemTimeWrapper {
         return System.currentTimeMillis();
     }
 
+    public long nanoTime() {
+        return System.nanoTime();
+    }
 }
