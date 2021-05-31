@@ -1,5 +1,12 @@
+import co.early.fore.Shared
+
 plugins {
     id("java-library")
+}
+
+java {
+    sourceCompatibility = Shared.Android.javaVersion
+    targetCompatibility = Shared.Android.javaVersion
 }
 
 ext.apply {
@@ -9,4 +16,4 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-apply(from = "../publish-lib.gradle")
+apply(from = "../publish-lib.gradle.kts")

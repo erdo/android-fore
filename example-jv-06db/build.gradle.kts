@@ -14,7 +14,7 @@ plugins {
 val appId = "foo.bar.example.foredb"
 
 fun getTestBuildType(): String {
-    return project.properties["testBuildType"] as String? ?: co.early.fore.Shared.BuildTypes.DEFAULT
+    return project.properties["testBuildType"] as String? ?: BuildTypes.DEFAULT
 }
 
 println("[$appId testBuildType:${getTestBuildType()}]")

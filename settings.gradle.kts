@@ -1,3 +1,5 @@
+rootProject.name = "android-fore"
+
 include(":fore-core-jv")
 include(":fore-core-kt")
 include(":fore-core-android-jv")
@@ -14,4 +16,3 @@ include(":example-kt-01reactiveui", ":example-kt-02coroutine", "example-kt-03ada
         ":example-jv-01reactiveui", ":example-jv-02threading", ":example-jv-03adapters",
         ":example-jv-04retrofit", ":example-jv-06db")
 
-rootProject.name = "android-fore"

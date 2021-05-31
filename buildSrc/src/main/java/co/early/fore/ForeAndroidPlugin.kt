@@ -1,12 +1,13 @@
 package co.early.fore
 
 import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.api.AndroidSourceSet
+import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.getByType
 import java.io.File
-
-//https://quickbirdstudios.com/blog/gradle-kotlin-buildsrc-plugin-android/
 
 class ForeAndroidPlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -49,6 +50,43 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
             isMinifyEnabled = false
             consumerProguardFiles("../proguard-library-consumer.pro")
         }
+    }
+
+    //logSourceSets(sourceSets)
+
+    //register (not create) - we want this to run after the rest of the android
+    // block has been configured in the individual build files as they add files
+    // to the source sets
+    project.tasks.register("androidSourcesJar", Jar::class.java) {
+        archiveClassifier.set("sources")
+        from(sourceSets.getByName("main").java.srcDirs)
+    }
+}
+
+fun logSourceSets(sourceSets: NamedDomainObjectContainer<AndroidSourceSet>) {
+    println("\n**********")
+    println("android sourcesets available:")
+    sourceSets.names.forEach {
+        println("-> ${it}")
+    }
+    println("...... listing contents of main only:")
+    val mainsourceset = sourceSets.getByName("main")
+    mainsourceset.java.srcDirs.forEach { dir ->
+        print("${dir.absolutePath}")
+        logFiles(dir)
+        print("\n")
+    }
+    println("**********")
+}
+
+fun logFiles(file: File, space: String = ""){
+    if (file.isDirectory){
+        print("\n${space}${file.name}")
+        file.listFiles()?.forEach {
+            logFiles(it, space + "  ")
+        }
+    } else {
+        print("\n${space}${file.name}")
     }
 }
 

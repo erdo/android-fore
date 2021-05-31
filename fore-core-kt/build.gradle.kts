@@ -5,6 +5,11 @@ plugins {
     id("kotlin")
 }
 
+java {
+    sourceCompatibility = Shared.Android.javaVersion
+    targetCompatibility = Shared.Android.javaVersion
+}
+
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-core-kt")
     set("LIB_DESCRIPTION", "fore - core code for kotlin")
@@ -28,4 +33,4 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Shared.Versions.kotlinx_coroutines_core}")
 }
 
-apply(from = "../publish-lib.gradle")
+apply(from = "../publish-lib.gradle.kts")

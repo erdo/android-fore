@@ -78,9 +78,9 @@ repositories {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-network-kt:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-kt:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-network-kt"))
+        implementation(project(":fore-kt"))
     }
 
     implementation("io.ktor:ktor-client-serialization:${Shared.Versions.ktor_client}")
@@ -92,7 +92,7 @@ dependencies {
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 
-    //These tests need to be run on at least Android P / 9 / 27 (https://github.com/mockk/mockk/issues/182)
+    //These tests need to be run on Android 27<SDK<30 something to do with mockk I think
     androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
     androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")

@@ -2,9 +2,11 @@ package co.early.fore.kt.core.logging
 
 import android.util.Log
 
-class AndroidLogger(private val tagPrefix: String? = null,
-                    private val stableTagLength: Boolean = false,
-                    overrideMaxTagLength: Int? = null) :
+class AndroidLogger(
+        private val tagPrefix: String? = null,
+        private val stableTagLength: Boolean = false,
+        overrideMaxTagLength: Int? = null
+) :
         Logger,
         TagInferer by TagInfererImpl(),
         TagFormatter by TagFormatterImpl(overrideMaxTagLength) {

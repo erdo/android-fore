@@ -14,7 +14,8 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 dependencies {
 
     api(project(":fore-core-android-jv"))
-    api("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
+
+    compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 
-apply(from = "../publish-android-lib.gradle")
+apply(from = "../publish-android-lib.gradle.kts")
