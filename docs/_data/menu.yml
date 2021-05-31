@@ -35,8 +35,6 @@
 - text: O.observers
   url: /03-reactive-uis.html
   subitems:
-    - text: Observables
-      url: "#fore-observables"
     - text: Connecting Views and Models
       url: "#connecting-views-and-models"
     - text: Boiler Plate
