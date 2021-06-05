@@ -182,12 +182,12 @@ Let's briefly detour to a discussion of reactive streams. Reactive Streams could
 
 For some specific use cases: handling streams of changing data, which you want to process on various threads (like the raw output of an IOT device for example) reactive streams is a natural fit. The needs of most android apps however tend to be a little more along the lines of:
 
- - connect to a network to download a discreet piece of data (_always_ on an IO thread)
+ - connect to a network to download discreet pieces of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway. Regular code that touches reactive streams often gets _reactive-stream-ified_ like this (even code that isn't, and has no need to be, reactive in the first place). By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays without the need to use reactive streams.
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway. Regular code that touches reactive streams often gets _reactive-streamified_ like this (even code that isn't, and has no need to be, reactive in the first place). By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless of reactive streams.
 
-Anyway, fore is just the observable bit, separate from the data that actually changed. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base. This separation also has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
+Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_, separate to the _data that actually changed_ (that's what fore does). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base. This separation also has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
 ### Views want different things from the same model
 Usually, view layer components are going to want different things from the same model.
