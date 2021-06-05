@@ -1,7 +1,7 @@
 package co.early.fore.adapters;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import java.util.List;
 
@@ -17,12 +17,12 @@ import java.util.List;
 public class CrossFadeRemover extends DefaultItemAnimator {
 
     @Override
-    public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder, List<Object> payloads) {
+    public boolean canReuseUpdatedViewHolder(ViewHolder viewHolder, List<Object> payloads) {
         return true;
     }
 
     @Override
-    public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder) {
+    public boolean canReuseUpdatedViewHolder(ViewHolder viewHolder) {
         return true;
     }
 }

@@ -26,6 +26,10 @@ dependencies {
     api(project(":fore-adapters-kt"))
     api(project(":fore-network-kt"))
 
+    compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
+    compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
+    compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
+
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 
@@ -41,4 +45,4 @@ dependencies {
     }
 }
 
-apply(from = "../publish-android-lib.gradle")
+apply(from = "../publish-android-lib.gradle.kts")

@@ -14,7 +14,7 @@ plugins {
 val appId = "foo.bar.example.forereactiveuikt"
 
 fun getTestBuildType(): String {
-    return project.properties["testBuildType"] as String? ?: co.early.fore.Shared.BuildTypes.DEFAULT
+    return project.properties["testBuildType"] as String? ?: BuildTypes.DEFAULT
 }
 
 println("[$appId testBuildType:${getTestBuildType()}]")
@@ -82,7 +82,7 @@ dependencies {
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 
-    //These tests need to be run on at least Android P / 9 / 27 (https://github.com/mockk/mockk/issues/182)
+    //These tests need to be run on Android 27<SDK<30 something to do with mockk I think
     androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
     androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")

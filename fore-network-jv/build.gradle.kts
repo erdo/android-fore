@@ -23,8 +23,9 @@ android {
 dependencies {
 
     api(project(":fore-core-android-jv"))
+
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }
 
-apply(from = "../publish-android-lib.gradle")
+apply(from = "../publish-android-lib.gradle.kts")

@@ -13,14 +13,12 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
-
     sourceSets["main"].java.apply {
         srcDirs(
                 "../fore-network-jv/src/main/java"
@@ -38,6 +36,7 @@ android {
 dependencies {
 
     api(project(":fore-core-android-kt"))
+
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 
@@ -47,4 +46,4 @@ dependencies {
     implementation(kotlin("reflect"))
 }
 
-apply(from = "../publish-android-lib.gradle")
+apply(from = "../publish-android-lib.gradle.kts")

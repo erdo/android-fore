@@ -13,4 +13,4 @@ dependencies {
     api(project(":fore-core-jv"))
 }
 
-apply(from = "../publish-android-lib.gradle")
+apply(from = "../publish-android-lib.gradle.kts")
