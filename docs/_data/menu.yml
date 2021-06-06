@@ -3,10 +3,10 @@
   subitems:
     - text: Quick Start
       url: /#quick-start
+    - text: Overview
+      url: /#overview
     - text: Sample Apps
       url: /#sample-apps
-    - text: Contributing
-      url: /#contributing
     - text: License
       url: /#license
 - text: MVO
@@ -14,16 +14,12 @@
   subitems:
     - text: Overview
       url: "#mvo-architecture"
-    - text: Handling State
-      url: "#handling-state"
-    - text: Comparison with MV*
-      url: "#comparisons-with-mv"
-- text: M.models
+- text: M (models)
   url: /02-models.html
   subitems:
     - text: Model Checklist
       url: "#model-checklist"
-- text: V.views
+- text: V (views)
   url: /01-views.html
   subitems:
     - text: SyncView()
@@ -32,7 +28,7 @@
       url: "#synctrigger"
     - text: Examples
       url: "#view-examples"
-- text: O.observers
+- text: O (observers)
   url: /03-reactive-uis.html
   subitems:
     - text: Connecting Views and Models

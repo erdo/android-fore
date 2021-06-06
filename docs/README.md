@@ -43,7 +43,13 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 ## Overview
 
-The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible. It also encourages the development of genuinely reactive code at the view layer (you can't use the API to replace a callback with a Single&lt;Boolean&gt; and think you're done for example - what you would have there is just another callback, not reactive code per se).
+Imagine your app existing entirely separately from its UI (its UI could be a command line interface, or a GUI - the app shouldn't care or even know what type of UI it has). Then imagine the UI layer as a thin window on to this app, free to deal exclusively with _what things look like_.
+
+This is a goal of a lot of architectures and it's a great way to develop anything that has a UI. It's especially helpful for a platform like android with its ephemeral view layer that gets destroyed and recreated on rotation. It also lets you unit test almost everything, the UI layer becoming as close to trivial as possible.
+
+## Observability is the key
+
+The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible.
 
 Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 
@@ -161,7 +167,9 @@ override fun syncView() {
 
 Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
-The view layer tends to be particularly sparse when implementing MVO with **fore**, and the apps are highly scalable from a complexity standpoint, so **fore** works for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
+In that example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state - it's entirely up to you how to write your code, it makes no difference to the syncView() technique.
+
+**fore** enables you to write view layers that are particularly sparse, and the apps are highly scalable from a complexity standpoint. This makes **fore** suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
  Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see above) also touch on this. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
 
@@ -176,7 +184,7 @@ In a nutshell, developing with **fore** means writing:
 
 > "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
-In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model. With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (be that an application level scoped model, or a ViewModel). With this architecture you remove a lot of problems around lifecycle management and handling rotations on android, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
@@ -187,9 +195,9 @@ In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (li
 
 If you totally grok those 4 things, that's pretty much all you need to use **fore** successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
 
-The **fore** library also includes some testable wrappers for AsyncTask (that Google should have provided, but didn't): [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which support lambdas, making using them alot nicer to use.
+The **fore** library also includes a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that are all you need to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
-If you've moved over to using coroutines already, a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) are all you need to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206) [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
+For Java development, there are some testable wrappers for AsyncTask (that Google should have provided, but didn't) [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which support lambdas, making threads very easy to use.
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) and abstract your networking layer when using [**Retrofit2**, **Ktor** or **Apollo**](https://erdo.github.io/android-fore/04-more-fore.html#fore-network). **fore** works really well with RoomDB too, checkout the sample app for details.
 
@@ -197,7 +205,7 @@ There are also optional extras that simplify [**adapter animations**](https://er
 
 ![all samples](img/screenshot_asaf_samples_phone_all_1000.png)
 
-The apps here are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts or implement ripple effects - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
+The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts and they are not written using jetpack compose yet - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
 
 These apps are however, totally robust and comprehensively tested (and properly support rotation). And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
@@ -226,7 +234,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 This one demonstrates asynchronous programming, and importantly how to test it. The **java** version uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)), the **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that make the coroutines unit testable). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
-This app has a counter that you can increase by pressing a button (but it takes time to do the increasing - so you can rotate the device, background the app etc and see the effect). There are two methods demonstrated: one which uses lambda expressions (for java), and one which publishes progress.
+This app has a counter that you can increase by pressing a button (but it takes time to do the increasing - so you can rotate the device, background the app etc and see the effect).
 
 <div class="shoom" id="fore-3-adapter-example"/>
 ### **fore 3** Adapter Example
@@ -235,13 +243,13 @@ This app has a counter that you can increase by pressing a button (but it takes 
 
 ![fore adapters sample app](img/fore-android-sample-adapters.gif)
 
-This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) with **fore** (essentially call notifyDataSetChanged() inside the syncView() method).
-
-To take advantage of the built in list animations that Android provides. Once you have set your adapter up correctly, you can instead call notifyDataSetChangedAuto() inside the syncView() method and **fore** will take care of all the notify changes work. (You could also use **fore**'s notifyDataSetChangedAuto() to do this for you from your render() function if you're using MVI / MvRx or some flavour of Redux).
+This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) with **fore**.
 
 The **java** sample has two lists side by side so you can see the how the implementation differs depending on if you are backed by immutable list data (typical in architectures that use view states such as MVI) or mutable list data. As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
 
 The **kotlin** version has three lists, adding an implementation of google's **AsyncListDiffer**. All three implementations have slightly different characteristics, most notably the google version moves logic out of the model and into the adapter (that's why it doesn't automatically support rotation - but it could be added easiy enough by passing an external list copy to the adapter). Check the source code for further infomation.
+
+The UI for each app is deliberately challenging to implement on android, and although it's ugly, the UI lets you smash buttons to not only add and remove multiple items, but also to change the state of each item in the list. All changes are animated, it supports rotation, it's totally robust and the UI layer is extremely thin for both apps.
 
 
 <div class="shoom" id="fore-4-retrofit-example"/>
@@ -262,7 +270,7 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 <div class="shoom" id="fore-7-apollo-example"/>
 ### **fore 7** Apollo Example
 [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-07apollo)
-In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is competely testable / tested (Unit tests and UI tests)
+In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is competely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
 
 <div class="shoom" id="fore-8-ktor-example"/>
 ### **fore 8** Ktor Example
@@ -287,9 +295,9 @@ A To-do list on steroids that lets you:
 
 It's obviously ridiculously contrived, but the idea is to implement something that would be quite challenging and to see how little code you need in the view layer to do it.
 
-It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
+It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages: ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
 
-All the database changes are done away from the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows), the app is totally robust and supports rotation out of the box. There is a TodoListModel written in Java and one in Kotlin for convenience, in case you are looking to use these as starting points for your own code.
+All the database changes are done away from the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows), the app is totally robust and supports rotation out of the box.
 
 There is only one test class included with this app which demonstrates how to test Models which are driven by a Room DB (using CountdownLatches etc). For other test examples, please see sample apps 1-4
 
