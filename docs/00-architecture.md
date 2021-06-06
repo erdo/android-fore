@@ -8,7 +8,7 @@ This little library helps you implement an architecture we call **MVO (Model Vie
 
 That block diagram above is what MVO looks like (it's simplified of course, further details below).
 
-By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be somehow observable (when it changes, it needs to tell everyone observing it, that it changed) and it needs to expose its state via quick returning getter methods. The model can have application level scope, or it can be a View-Model - it makes no difference from an MVO perspective. (But mostly with MVO we are talking about application level things like AccountModel, MessageInboxRepository, TodoListManager, Favourites etc).
+By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be observable (when it changes, it needs to tell everyone observing it, that it changed) and it needs to expose its state somehow, via quick returning getters, properties or a single immutable state. The model can have application level scope, or it can be a View-Model - it makes no difference from an MVO perspective. (But mostly with MVO we are talking about application level things like AccountModel, MessageInboxRepository, TodoListManager, Favourites etc).
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, though you could implement an MVO architecture using Rx if you wanted to).
 
@@ -38,7 +38,7 @@ Notice the syncView() method does not take a parameter. It gets all it needs fro
 
 If you prefer using immutable state, just have your model expose that state via a property or a getter: (gameModel.currentState.score).
 
-*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are two slightly larger, more commercial style app examples to check out, though they are starting to get a little out of date: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
+*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
 In a nutshell this is what we have with MVO:
 
@@ -64,7 +64,7 @@ If your team is getting on well with MVVM, here is where the ViewModel would fit
 
 ![data binding](img/app_arch_2_viewmodel.png)
 
-The Mobile Wallet Model / Wallet Fragment section of that diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) that does the observing. (That's the expressive style of doing things so that you can easily see what is happening, even that boilerplate is [optional](https://erdo.github.io/android-fore/03-reactive-uis.html#boiler-plate) though)
+The Mobile Wallet Model / Wallet Fragment section of that diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) and the [**view code**](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) that does the observing. (That's the expressive style of doing things so that you can easily see what is happening, even that boilerplate is [optional](https://erdo.github.io/android-fore/03-reactive-uis.html#boiler-plate) though, this is what an implementation of the [**same view**](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) looks like with the add and remove boiler plate removed).
 
 One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In the code examples above, the code just works if you rotate the screen simply because of how it's structured - you don't need to do a single thing.
 
@@ -72,14 +72,11 @@ One great thing about MVO is that the view layer and the rest of the app are so 
 
 The code looks extremely simple and it is, but surprisingly the technique works the same if you're using android adapters, or if you're doing asynchronous work in your model, or fetching data from a network.
 
-## Handling State
-In MVO, the state is kept inside the models, typically accessible via getter methods or properties. If you prefer exposing your model's state using an immutable data class for example, you can of course do that - but it must still be accessible via a property or a getter. That's how the clean architecture sample is written incidentally.
-
 ## Dependency arrows
 
 As with all M* architectures, with MVO the Model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model using the observer pattern. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model or an intemediary viewModel (from the UI thread - asynchronous code is managed in the models, not at the UI layer). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
-Sometimes you really will want to scope a model to just a single activity (although you might be surprised at how rarely this is genuinely useful - look at how much code we removed using the MVO approach on the [android architecture blueprints](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) for example). Anyway, if you decide that's what your app needs at that moment, use a ViewModel and make it observable using the *fore* Observable as you would with any other Model. If you are injecting your ViewModels in to the view layer and using fore observables to synchronize your UI, the view layer will not even be aware of what type of model it is anyway.
+Sometimes you really will want to scope a model to just a single activity (although you might be surprised at how rarely this is genuinely useful - look at how much code we removed using the MVO approach on the [android architecture blueprints](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) for example). Anyway, if you decide that's what your app needs at that moment, use a ViewModel and make it observable using a **fore** Observable as you would with any other Model. If you are injecting your ViewModels in to the view layer and using fore observables to synchronize your UI, the view layer will not even be aware of what type of model it is anyway.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 

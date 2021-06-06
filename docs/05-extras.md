@@ -79,9 +79,9 @@ A more standard way of looking at UI frameworks would have been to do something 
 
 ![horizontal separation](img/horizontal-separation.png)
 
-I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin view layer (which is what it really is).  Hacks like onSaveInstanceState() etc, are the result of fundamentally missing the basic requirement of (all?) UI platforms: the need to separate the view layer from everything else.
+I know, crap diagrams, but anyway a lot of the complication of Android development comes from treating the Activity class as some kind of reusable modular component and not as a thin, ephemeral view layer (which is what it really is).  Hacks like onSaveInstanceState() etc, are the result of fundamentally missing the basic requirement of (all?) UI platforms: the need to separate the view layer from everything else.
 
-Despite the obvious problems of writing networking code or asynchronous code inside an ephemeral view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). Sometimes even smart developers can fail to see the wood for all the trees.
+Despite the obvious problems of writing networking code or maintaining non-UI state inside an ephemeral view layer, think about how many Android apps you've encountered that fill their Activity and Fragment classes with exactly that. And think about how much additional code is then required to deal with a simple screen rotation (or worse, how many apps simply disable screen rotation because of the extra headache). How many times have you seen similar code that exists purely to enable android's ephemeral view components to communicate with each other? (instead of having the view components communicate with application scoped models or viewmodels, leaving the views to simply represent the current state of the app). Sometimes even smart developers can fail to see the wood for all the trees.
 
 Fortunately it's almost all completely unecessary. The [sample apps](https://erdo.github.io/android-fore/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
 
@@ -255,7 +255,7 @@ A quick way to check how your Java code is doing on this front is to look for th
 
 ### Inversion of Control
 
-This term really confused me when I first heard it years ago, so here's my take in case it's helpful for you.
+This term really confused me when I first heard it years ago, so here's my take in case it's helpful for you or your team.
 
 Imagine if we have a company. It has a CEO at the top. Underneath the CEO are departments like Marketing, HR, Finance. Those departments all print documents using a printer.
 
@@ -269,7 +269,7 @@ Inversion of control means turning that control on its head and giving it to the
 
 ## <a name="observer-listener"></a> 1) When should I use an Observer, when should I use a callback listener?
 
-**Note: I am personally on the fence about this, it is certainly more convenient sometimes to just have a callback from a model for: event based / transitory data - but you really need to know what you are doing to make that judgement. If you'd rather take that decision out of the hands of more junior developers, not allowing any callbacks in model APIs is one approach. It would mean that you would have to expose this event based data via getters or properties, and you would need to use something like a [syncTrigger](https://erdo.github.io/android-fore/01-views.html#synctrigger) to convert the change of state into an event, suitable for displaying in a toast for example. Basically: more complicated, but also more consistent with how regular state is handled.**
+Note: I am personally on the fence about this, it is certainly more convenient sometimes to just have a callback from a model for: event based / transitory data - but you really need to know what you are doing to make that judgement. If you'd rather take that decision out of the hands of more junior developers, not allowing any callbacks in model APIs is one approach. It would mean that you would have to expose this event/transitory based data via regaulr getters or properties exposing state, and you would need to use something like a [syncTrigger](https://erdo.github.io/android-fore/01-views.html#synctrigger) to convert a **change of state** into an **event**, suitable for displaying in a toast for example. Basically: more complicated, but also more consistent with how regular state is handled. In case this is unfamiliar to you, there is a little presentation [here](http://state-event.surge.sh/) (click **s** to view the presentation notes) that discusses the relationship between state and events.
 
 So having said that: if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) then a regular callback may serve you better. In this case the success or failure of the network call does not alter any fundamental state of the model, so a callback / listener will also work fine. *This means that the success / fail callback may be lost if the device is rotated - if that's a problem, then you'll need to treat things as state and use the Observer pattern*. More about how to treat state [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events).
 
