@@ -458,4 +458,73 @@ class SyncTriggerTest {
         // assert
         assertEquals(30, keptValue)
     }
+
+    @Test
+    fun `on trigger with keep, first swap indicates change`() {
+
+        // arrange
+        var change = false
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                change = keeper.swap {
+                    val newValue = 73
+                    newValue
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+
+        // assert
+        assertEquals(true, change)
+    }
+
+    @Test
+    fun `on trigger with changing kept value, swap indicates change`() {
+
+        // arrange
+        var change = false
+        var keptValue = -1
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                change = keeper.swap { previous ->
+                    keptValue = previous ?: 0
+                    val newValueToKeep = keptValue + 10
+                    newValueToKeep
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+        syncTrigger.check()
+
+        // assert
+        assertEquals(true, change)
+    }
+
+    @Test
+    fun `on trigger with same kept value, swap indicates no change`() {
+
+        // arrange
+        var change = false
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                change = keeper.swap {
+                    7
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+        syncTrigger.check()
+
+        // assert
+        assertEquals(false, change)
+    }
 }

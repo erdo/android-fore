@@ -4,8 +4,12 @@ interface Keeper<K> {
     /**
      * swapper provides the previously kept value (or null),
      * and expects the new value to keep in return
+     *
+     * the swap function should return true if the values have
+     * changed (i.e. when the new value is not the same as the
+     * previously kept value)
      */
-    fun swap(swapper: (K?) -> K)
+    fun swap(swapper: (K?) -> K) : Boolean
 }
 
 /**
@@ -34,9 +38,11 @@ class SyncTriggerKeeper<T>(
 
     private var previousValue: T? = null
     private val keeper = object : Keeper<T> {
-        override fun swap(swapper: (T?) -> T) {
+        override fun swap(swapper: (T?) -> T): Boolean {
             val valueToKeep = swapper(previousValue)
+            val hasChanged = (valueToKeep != previousValue)
             previousValue = valueToKeep
+            return hasChanged
         }
     }
 
