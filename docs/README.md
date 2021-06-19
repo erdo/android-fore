@@ -47,9 +47,9 @@ Imagine your app existing entirely separately from its UI (its UI could be a com
 
 This is a goal of a lot of architectures and it's a great way to develop anything that has a UI. It's especially helpful for a platform like android with its ephemeral view layer that gets destroyed and recreated on rotation. It also lets you unit test almost everything, the UI layer becoming as close to trivial as possible.
 
-## Observability is the key
+## Observers and Observables
 
-The main innovation in **fore** is its radically simplified observer implementation. This lets you separate architectural layers to a degree that would not normally be possible.
+This is the kind of challenge that the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) has been solving for decades. And the main innovation in **fore** is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
 
 Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
 
@@ -184,7 +184,7 @@ In a nutshell, developing with **fore** means writing:
 
 > "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
-In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the observer pattern and syncs its view. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (be that an application level scoped model, or a ViewModel). With this architecture you remove a lot of problems around lifecycle management and handling rotations on android, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+In [**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the android lifecyce. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (be that an application level scoped model, or a ViewModel). With this architecture you remove a lot of problems around lifecycle management and handling rotations on android, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
