@@ -1,6 +1,8 @@
 package co.early.fore.kt.core.ui
 
-import co.early.fore.kt.core.ui.SyncTriggerKeeper.ResetRule
+import co.early.fore.kt.core.ui.synctrigger.ResetRule
+import co.early.fore.kt.core.ui.synctrigger.SyncTrigger
+import co.early.fore.kt.core.ui.synctrigger.SyncTriggerKeeper
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

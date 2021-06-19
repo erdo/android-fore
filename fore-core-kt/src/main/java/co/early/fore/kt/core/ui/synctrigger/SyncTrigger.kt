@@ -1,4 +1,4 @@
-package co.early.fore.kt.core.ui
+package co.early.fore.kt.core.ui.synctrigger
 
 /**
  *
