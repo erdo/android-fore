@@ -8,6 +8,10 @@ interface Keeper<K> {
      * the swap function should return true if the values have
      * changed (i.e. when the new value is not the same as the
      * previously kept value)
+     *
+     * if you are using a keeper in your triggeredWhen() function
+     * too keep track of a variable that sometimes changes, you
+     * probably also want to use ResetRule.IMMEDIATELY
      */
     fun swap(swapper: (K?) -> K) : Boolean
 }
