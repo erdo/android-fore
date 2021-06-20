@@ -1,4 +1,20 @@
-package co.early.fore.kt.core.ui
+package co.early.fore.kt.core.ui.synctrigger
+
+interface Keeper<K> {
+    /**
+     * swapper provides the previously kept value (or null),
+     * and expects the new value to keep in return
+     *
+     * the swap function should return true if the values have
+     * changed (i.e. when the new value is not the same as the
+     * previously kept value)
+     *
+     * if you are using a keeper in your triggeredWhen() function
+     * too keep track of a variable that sometimes changes, you
+     * probably also want to use ResetRule.IMMEDIATELY
+     */
+    fun swap(swapper: (K?) -> K) : Boolean
+}
 
 /**
  *
@@ -14,44 +30,36 @@ package co.early.fore.kt.core.ui
  * having to wait for [triggeredWhen] to return false,
  * construct this class with the ResetRule.IMMEDIATELY flag
  *
+ * So that we can remember temporary states between invocations of triggeredWhen(), triggeredWhen
+ * passes a Keeper to the client which can be used to keep temporary values so that they can be
+ * read again during the next invocation of triggeredWhen
+ *
  */
-class SyncTrigger(
-        private val triggeredWhen: () -> Boolean,
-        private val doThisWhenTriggered: () -> Unit
+class SyncTriggerKeeper<T>(
+    private val triggeredWhen: (Keeper<T>) -> Boolean,
+    private val doThisWhenTriggered: () -> Unit
 ) {
+
+    private var previousValue: T? = null
+    private val keeper = object : Keeper<T> {
+        override fun swap(swapper: (T?) -> T): Boolean {
+            val valueToKeep = swapper(previousValue)
+            val hasChanged = (valueToKeep != previousValue)
+            previousValue = valueToKeep
+            return hasChanged
+        }
+    }
 
     private var resetRule: ResetRule = ResetRule.ONLY_AFTER_REVERSION
     private var overThreshold = false
     private var firstCheck = true
 
-    enum class ResetRule {
-        /*
-            Trigger is reset after each successful check
-         */
-        IMMEDIATELY,
-
-        /*
-            Trigger is only reset after a successful check, once a subsequent check fails.
-            This is the default.
-         */
-        ONLY_AFTER_REVERSION,
-
-        /*
-            Trigger is never reset i.e. it fires once only _per instance_. NB: SyncTriggers usually
-            live in Views and are destroyed and recreated on device rotation along with the View,
-            which would give you a new instance - although checkLazy() might be enough to prevent
-            issues here. You might instead prefer to keep the SyncTrigger in a ViewModel to reduce
-            the likely-hood of getting a new instance of the SyncTrigger.
-         */
-        NEVER
-    }
-
-    fun resetRule(resetRule: ResetRule): SyncTrigger{
+    fun resetRule(resetRule: ResetRule): SyncTriggerKeeper<T> {
         this.resetRule = resetRule
         return this
     }
 
-    fun getResetRule(): ResetRule{
+    fun getResetRule(): ResetRule {
         return resetRule
     }
 
@@ -101,7 +109,7 @@ class SyncTrigger(
      * firing due to a screen rotation.
      */
     private fun check(swallowTriggerForFirstCheck: Boolean) {
-        val reached = triggeredWhen()
+        val reached = triggeredWhen(keeper)
         if (!overThreshold && reached) {
             overThreshold = true
             if (!(swallowTriggerForFirstCheck && firstCheck)) { //not ignoring the first check AND threshold has been reached

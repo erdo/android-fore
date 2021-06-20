@@ -32,7 +32,7 @@ Pretty much all views in **fore** do the same few things when they are created:
 
 In addition to that there will be:
 
-- the [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) function which sets an affirmative state on each of the view components, in line with what the models indicate (or proxys this to an [adapter](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations)).
+- the [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) function which sets an affirmative state on each of the view components, in line with what the models indicate.
 - the add / remove observers methods where the view registers with the models it is interested in.
 
 This leaves almost all everything else to be handled in other modules or layers in the form of plain, unit testable code. A few view [examples](https://erdo.github.io/android-fore/01-views.html#view-examples) are listed at the bottom of this page
@@ -141,8 +141,8 @@ When writing syncView() functions, you will often come across situations where y
 
 <pre class="codesample"><code>
 fun syncView() {
-    homepage_busy_progbar.showOrGone(authentication.isBusy)
-    homepage_memberstatus_img.showOrInvisible(user.isRegistered)
+    homepage_busy.showOrGone(authentication.isBusy)
+    homepage_memberstatus.showOrInvisible(user.isRegistered)
 }
 
 </code></pre>

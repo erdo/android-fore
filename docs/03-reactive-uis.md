@@ -99,40 +99,54 @@ If the list of things you are observing gets a little long, you can remove some 
 
 ### <a name="observablegroup"></a>Using ObservableGroup in a ViewModel
 
-Here's how you can use an ObservableGroup from a ViewModel:
+Here's how you can use an ObservableGroup with a ViewModel (we use this technique in the clean architecture sample):
 
 <pre class="codesample"><code>
+
+abstract class BaseViewModel(
+    vararg observablesList: Observable
+): ViewModel(), SyncableView {
+
+    private val observableGroup: ObservableGroup
+    private val observer = Observer { syncView() }
+
+    init {
+        observableGroup = ObservableGroupImp(*observablesList)
+        observableGroup.addObserver(observer)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        observableGroup.removeObserver(observer)
+    }
+}
+
 class MyViewModel(
     private val accountModel: AccountModel,
     private val networkInfo: NetworkInfo,
     private val emailInBox: EmailInBox,
     private val weatherRepository: WeatherRepository
-) : ViewModel(), ObservableGroup by ObservableGroupImp(
+) : BaseViewModel(
     accountModel,
     networkInfo,
     emailInBox,
     weatherRepository) {
 
-    private val observer = Observer { syncView() }
+    var viewState = MyViewState()
+        private set
 
     init {
-        addObserver(observer)
         syncView()
     }
 
     override fun syncView() {
-       // Here you might create an immutable view state
-       // to pass to your fragment (based on the state of
-       // the models that you're observing).
-       // You can use LiveData to make the final hop
-       // to the fragment from here, or again use a fore
-       // observable to make the ViewModel itself observable
-        ...
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        removeObserver(observer)
+        // Here you might create an immutable view state
+        // to pass to your fragment (based on the state of
+        // the various models that you're observing)
+        viewState = MyViewState(
+            ...
+        )
+        notifyObservers()
     }
 }
  </code></pre>
@@ -172,10 +186,10 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
 
 This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that doing so *significantly* reduced the amount of boiler plate and view code that had to be written.
 
-There are a few different ways to explain this, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you want an app architecture based on it, then I'd advise you to stay with Rx or migrate to Flow. fore observers are not reactive streams.
+There are a few different ways to explain this, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you want an app architecture based on it, then I'd advise you to stay with Rx or migrate to Flow. fore observers are NOT reactive streams - quite deliberately so.
 
 ### Reactive Streams
-Let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
+While we're on the subject, let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
 
 - Observers (tell me whenever you've changed)
 - Streams (data and operators like .map .filter etc)
@@ -185,9 +199,13 @@ For some specific use cases: handling streams of changing data, which you want t
  - connect to a network to download discreet pieces of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway. Regular code that touches reactive streams often gets _reactive-streamified_ like this (even code that isn't, and has no need to be, reactive in the first place). By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless of reactive streams.
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway. Regular code that touches reactive streams often gets _reactive-streamified_ like this (even code that isn't, and has no need to be, reactive in the first place).
 
-Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base. This separation **also** has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
+*By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless of reactive streams.*
+
+Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does - it deals exclusively with the first, letting you handle the second however you wish). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base.
+
+It turns out that this separation **also** has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
 ### Views want different things from the same model
 Usually, view layer components are going to want different things from the same model.

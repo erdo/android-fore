@@ -142,13 +142,16 @@ class ObservableImp(
             observer.somethingChanged()
         } catch (e: Exception) {
 
+            val dispatcherMsg = if (dispatcher!=null) {
+                        " and the dispatcher used was: $dispatcher \n" +
+                        "If you are trying to update any part of the android UI directly from the somethingChanged() callback,\n" +
+                        "then ObservableImp needs to be constructed with Dispatchers.Main.immediate" } else ""
+
             val errorMessage = "\nOne of the observers has thrown an exception during it's somethingChanged() callback\n" +
-                    "The currentThread id is: ${Thread.currentThread().id} and the dispatcher used was: ${dispatcher}\n" +
-                    "If you are trying to update any part of the android UI directly from the somethingChanged() callback,\n" +
-                    "then ObservableKImp needs to be constructed with Dispatchers.Main.immediate,\n" +
-                    "which will give it the same behaviour as the standard ObservableImp class\n" +
-                    "also, if you are updating an android adapter directly, you will want to make sure that notifyObservers() \n" +
-                    "is being called from the UI thread. See stack trace for further info, Error Message: "
+                    "The currentThread id is: ${Thread.currentThread().id} $dispatcherMsg\n" +
+                    "If you are updating an android adapter directly, you will want to make sure that notifyObservers()\n" +
+                    "is being called from the UI thread. Having said that, it's quite possible you just have a crash somewhere\n" +
+                    "in your UI code which has bubbled its way up to here. See stack trace for further info, Error Message: "
 
             ForeDelegateHolder.getLogger(logger).e(errorMessage + e.message)
             throw e

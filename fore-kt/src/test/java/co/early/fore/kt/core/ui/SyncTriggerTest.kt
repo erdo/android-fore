@@ -1,10 +1,14 @@
 package co.early.fore.kt.core.ui
 
+import co.early.fore.kt.core.ui.synctrigger.ResetRule
+import co.early.fore.kt.core.ui.synctrigger.SyncTrigger
+import co.early.fore.kt.core.ui.synctrigger.SyncTriggerKeeper
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -30,7 +34,7 @@ class SyncTriggerTest {
         // act
 
         // assert
-        assertEquals(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION, syncTrigger.getResetRule())
+        assertEquals(ResetRule.ONLY_AFTER_REVERSION, syncTrigger.getResetRule())
     }
 
     @Test
@@ -151,7 +155,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION)
+        }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
         syncTrigger.check()
@@ -171,7 +175,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION)
+        }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
         syncTrigger.checkLazy()
@@ -191,7 +195,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION)
+        }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
         syncTrigger.check()
@@ -211,7 +215,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.ONLY_AFTER_REVERSION)
+        }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
         syncTrigger.checkLazy()
@@ -231,7 +235,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.IMMEDIATELY)
+        }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
         syncTrigger.check()
@@ -251,7 +255,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.IMMEDIATELY)
+        }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
         syncTrigger.checkLazy()
@@ -271,7 +275,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.IMMEDIATELY)
+        }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
         syncTrigger.check()
@@ -291,7 +295,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.IMMEDIATELY)
+        }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
         syncTrigger.checkLazy()
@@ -311,7 +315,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.NEVER)
+        }.resetRule(ResetRule.NEVER)
 
         // act
         syncTrigger.check()
@@ -331,7 +335,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.NEVER)
+        }.resetRule(ResetRule.NEVER)
 
         // act
         syncTrigger.checkLazy()
@@ -351,7 +355,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.NEVER)
+        }.resetRule(ResetRule.NEVER)
 
         // act
         syncTrigger.check()
@@ -371,7 +375,7 @@ class SyncTriggerTest {
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
         val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
             mockDoThis()
-        }.resetRule(SyncTrigger.ResetRule.NEVER)
+        }.resetRule(ResetRule.NEVER)
 
         // act
         syncTrigger.checkLazy()
@@ -382,5 +386,145 @@ class SyncTriggerTest {
         verify(exactly = 0) {
             mockDoThis()
         }
+    }
+
+    @Test
+    fun `on trigger with keep, first kept value is null`() {
+
+        // arrange
+        var keptValue: Int? = null
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                keeper.swap { previous ->
+                    keptValue = previous
+                    99
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+
+        // assert
+        assertNull(keptValue)
+    }
+
+    @Test
+    fun `on trigger with keep, second kept value is correct`() {
+
+        // arrange
+        var keptValue: Int? = null
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                keeper.swap { previous ->
+                    keptValue = previous
+                    73
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+        syncTrigger.check()
+
+        // assert
+        assertEquals(73, keptValue)
+    }
+
+    @Test
+    fun `on 3 triggers with keeps, triggeredWhen receives correct value`() {
+
+        // arrange
+        var keptValue = -1
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                keeper.swap { previous ->
+                    keptValue = previous ?: 0
+                    val newValueToKeep = keptValue + 10
+                    newValueToKeep
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+        syncTrigger.check()
+        syncTrigger.check()
+        syncTrigger.check()
+
+        // assert
+        assertEquals(30, keptValue)
+    }
+
+    @Test
+    fun `on trigger with keep, first swap indicates change`() {
+
+        // arrange
+        var change = false
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                change = keeper.swap {
+                    val newValue = 73
+                    newValue
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+
+        // assert
+        assertEquals(true, change)
+    }
+
+    @Test
+    fun `on trigger with changing kept value, swap indicates change`() {
+
+        // arrange
+        var change = false
+        var keptValue = -1
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                change = keeper.swap { previous ->
+                    keptValue = previous ?: 0
+                    val newValueToKeep = keptValue + 10
+                    newValueToKeep
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+        syncTrigger.check()
+
+        // assert
+        assertEquals(true, change)
+    }
+
+    @Test
+    fun `on trigger with same kept value, swap indicates no change`() {
+
+        // arrange
+        var change = false
+        val syncTrigger = SyncTriggerKeeper<Int>(
+            { keeper ->
+                change = keeper.swap {
+                    7
+                }
+                true
+            })
+        { mockDoThis() }.resetRule(ResetRule.NEVER)
+
+        // act
+        syncTrigger.check()
+        syncTrigger.check()
+
+        // assert
+        assertEquals(false, change)
     }
 }
