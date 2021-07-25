@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.4.6](https://img.shields.io/badge/central-1.4.6-green.svg){: .float-left}
+![central-1.4.7](https://img.shields.io/badge/central-1.4.7-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -19,17 +19,17 @@
 
 the **kotlin** API, running coroutines under the hood:
 ```
-implementation("co.early.fore:fore-kt:1.4.6")
+implementation("co.early.fore:fore-kt:1.4.7")
 ```
 
 the original **java** API:
 ```
-implementation("co.early.fore:fore-jv:1.4.6")
+implementation("co.early.fore:fore-jv:1.4.7")
 ```
 
 *(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing)*
 
-See the [updgrade guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+**fore 1.4.7** is built with Kotlin 1.5.10, the last version to be built with Kotlin 1.4.30 was **fore 1.4.6** More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
 
 ## New to fore
@@ -39,6 +39,8 @@ This repo includes 10 tiny example apps, any updates to fore are immediately ref
 `git clone git@github.com:erdo/android-fore.git`
 
 There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention helps you to write less code, while removing a whole class of UI consistency bugs from the UI layer. Or [this one](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) which details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) using fore.
+
+A few other sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore. Like this sample app which uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) struture.
 
 
 ## Overview
@@ -305,9 +307,11 @@ There is only one test class included with this app which demonstrates how to te
 
 ### Other Full App Examples
 
-- Many of the **[dev.to](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)** tutorials have full sample apps associated with them, mostly kotlin
-- There is a full app example hosted in a separate repo written in Kotlin **[here](https://github.com/erdo/fore-full-example-02-kotlin)**
+ All the known sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore.
 
+- Many of the **[dev.to](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)** tutorials have full sample apps associated with them, mostly kotlin
+- This sample app uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) struture.
+- Slightly larger app also written in Kotlin **[here](https://github.com/erdo/fore-full-example-02-kotlin)**
 
 
 ## Contributing
