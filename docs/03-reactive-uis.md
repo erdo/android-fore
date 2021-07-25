@@ -99,27 +99,9 @@ If the list of things you are observing gets a little long, you can remove some 
 
 ### <a name="observablegroup"></a>Using ObservableGroup in a ViewModel
 
-Here's how you can use an ObservableGroup with a ViewModel (we use this technique in the clean architecture sample):
+Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what **fore** means by "thinner android view layers"
 
 <pre class="codesample"><code>
-
-abstract class BaseViewModel(
-    vararg observablesList: Observable
-): ViewModel(), SyncableView {
-
-    private val observableGroup: ObservableGroup
-    private val observer = Observer { syncView() }
-
-    init {
-        observableGroup = ObservableGroupImp(*observablesList)
-        observableGroup.addObserver(observer)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        observableGroup.removeObserver(observer)
-    }
-}
 
 class MyViewModel(
     private val accountModel: AccountModel,
@@ -130,7 +112,8 @@ class MyViewModel(
     accountModel,
     networkInfo,
     emailInBox,
-    weatherRepository) {
+    weatherRepository,
+), Observable by ObservableImp() {
 
     var viewState = MyViewState()
         private set
@@ -147,6 +130,25 @@ class MyViewModel(
             ...
         )
         notifyObservers()
+    }
+}
+
+
+abstract class BaseViewModel(
+    vararg observablesList: Observable
+): ViewModel(), SyncableView {
+
+    private val observableGroup: ObservableGroup
+    private val observer = Observer { syncView() }
+
+    init {
+        observableGroup = ObservableGroupImp(*observablesList)
+        observableGroup.addObserver(observer)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        observableGroup.removeObserver(observer)
     }
 }
  </code></pre>
@@ -179,7 +181,7 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
 
  </code></pre>
 
- This lets you reduce view layer code to its absolute fundamentals: what things look like.
+We use this technique in the clean architecture sample, and it lets you reduce view layer code to its absolute fundamentals: what things look like.
 
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?

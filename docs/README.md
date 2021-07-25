@@ -13,7 +13,7 @@
 
 [(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
 
-**fore** helps you move code out of the view layer. Because once you do that on Android, magical things start to happen!
+**fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ## Quick Start
 
@@ -34,7 +34,7 @@ implementation("co.early.fore:fore-jv:1.4.7")
 
 ## New to fore
 
-This repo includes 10 tiny example apps, any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
+This repo includes the tiny fore-core library, the optional packages, and 10 mini example apps. Any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
 
 `git clone git@github.com:erdo/android-fore.git`
 
@@ -53,7 +53,7 @@ This is a goal of a lot of architectures and it's a great way to develop anythin
 
 This is the kind of challenge that the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) has been solving for decades. And the main innovation in **fore** is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
 
-Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**).
+Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
 
 
 <!-- Tabbed code sample -->
@@ -138,7 +138,7 @@ override fun onStop() {
 }
  </code></pre>
 
-(There are a few ways to [cut out](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) the add and remove boiler plate by the way)
+(fore is very boiler-plate light, but you can [remove even more](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate))
 
 All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of the observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate(), though you might be surprised to learn that syncView() has been used in commercial android apps since at least 2013!
 
