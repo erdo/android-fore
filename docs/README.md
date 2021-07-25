@@ -29,7 +29,7 @@ implementation("co.early.fore:fore-jv:1.4.6")
 
 *(and you now need mavenCentral() listed as a repository in your build files as jcenter is closing)*
 
-See the [updgrade guide](https://erdo.github.io/android-fore/06-upgrading.html#shoom) if you're coming from an older version.
+**fore 1.4.7** is built with Kotlin 1.5.10, the last version to be built with Kotlin 1.4.30 was **fore 1.4.6** More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
 
 ## New to fore
