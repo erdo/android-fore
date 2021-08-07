@@ -138,7 +138,7 @@ override fun onStop() {
 }
  </code></pre>
 
-(fore is very boiler-plate light, but you can [remove even more](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate))
+(fore has a low boiler-plate overhead and it becomes even more apparent as screen complexity increases, see [here](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) for details)
 
 All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of the observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate(), though you might be surprised to learn that syncView() has been used in commercial android apps since at least 2013!
 

@@ -132,7 +132,9 @@ class MyViewModel(
         notifyObservers()
     }
 }
+ </code></pre>
 
+<pre class="codesample"><code>
 
 abstract class BaseViewModel(
     vararg observablesList: Observable
