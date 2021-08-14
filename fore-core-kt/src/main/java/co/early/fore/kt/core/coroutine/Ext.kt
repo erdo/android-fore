@@ -7,9 +7,11 @@ import kotlin.coroutines.coroutineContext
 
 
 /**
- * Would love to drop workMode entirely when using co-routines and just depend on
- * kotlinx-coroutines-test, sadly we can't always get determinate test results at
- * the moment - and for unit tests that's a total deal breaker.
+ * Testing unwrapped co-routines is not as straight forward as it could be, depending on
+ * kotlinx-coroutines-test, was not giving us determinate test results at
+ * the moment - and for unit tests that's a total deal breaker. It's ok to test single suspend
+ * functions, but not if you want to test units of code that contain more than one suspend function
+ * and use a mixture of IO and Main dispatchers.
  *
  * There is a complicated discussion about that here: https://github.com/Kotlin/kotlinx.coroutines/pull/1206
  *
@@ -53,6 +55,32 @@ fun launchCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, bl
     }
 }
 
+/**
+ * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
+ * if using this code from a pure kotlin module
+ */
+fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        runBlocking { CompletableDeferred(block()) }
+    } else {
+        CoroutineScope(Dispatchers.Main).launch { block() }
+    }
+}
+
+/**
+ * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
+ * if using this code from a pure kotlin module
+ *
+ * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
+ */
+fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        runBlocking { CompletableDeferred(block()) }
+    } else {
+        CoroutineScope(Dispatchers.Main.immediate).launch { block() }
+    }
+}
+
 fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -77,6 +105,32 @@ fun <T> asyncCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null,
     }
 }
 
+/**
+ * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
+ * if using this code from a pure kotlin module
+ */
+fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        runBlocking { CompletableDeferred(block()) }
+    } else {
+        CoroutineScope(Dispatchers.Main).async { block() }
+    }
+}
+
+/**
+ * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
+ * if using this code from a pure kotlin module
+ *
+ * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
+ */
+fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        runBlocking { CompletableDeferred(block()) }
+    } else {
+        CoroutineScope(Dispatchers.Main.immediate).async { block() }
+    }
+}
+
 suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
@@ -98,5 +152,31 @@ suspend fun <T> awaitCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode?
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(dispatcher) { block() }
+    }
+}
+
+/**
+ * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
+ * if using this code from a pure kotlin module
+ */
+suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        block(CoroutineScope(coroutineContext))
+    } else {
+        withContext(Dispatchers.Main) { block() }
+    }
+}
+
+/**
+ * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
+ * if using this code from a pure kotlin module
+ *
+ * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
+ */
+suspend fun <T> awaitMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+        block(CoroutineScope(coroutineContext))
+    } else {
+        withContext(Dispatchers.Main.immediate) { block() }
     }
 }
