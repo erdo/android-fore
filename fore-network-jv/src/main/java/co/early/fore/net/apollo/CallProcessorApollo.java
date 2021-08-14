@@ -23,7 +23,7 @@ import co.early.fore.core.logging.Logger;
  * CE needs to implement MessageProvider&lt;F&gt; (i.e. it needs to be able to give you a failure
  * message that can be passed back to the application)
  *
- * Testing: Apollo id not setup to be able to run calls in a synchronous manner (unlike Retrofit),
+ * Testing: Apollo is not setup to be able to run calls in a synchronous manner (unlike Retrofit),
  * for this reason when testing the fore ApolloCallProcessor we need to use count down latches
  * and there are no WorkMode options specified here
  *

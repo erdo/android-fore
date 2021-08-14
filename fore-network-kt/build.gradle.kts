@@ -38,9 +38,10 @@ dependencies {
     api(project(":fore-core-android-kt"))
 
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
+    compileOnly("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 
-    // OkHttp3 v3.X.X used by Retrofit2 and Apollo has method calls: method(), body(), code() etc
+    // OkHttp3 v3.X.X used by Retrofit2 and Apollo2 has method calls: method(), body(), code() etc
     // OkHttp3 v4.X.X used by Ktor has fields: method, body, code etc instead
     // we use reflection so that we can handle either case in InterceptorLogging.kt
     implementation(kotlin("reflect"))

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:textSize="15sp"
+            android:textColor="@color/colorAccent"
+            android:text="Launch Fetcher (Apollo)" />
+
+        <TextView
+            android:id="@+id/launch_session_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorAccent"
+            android:text="session token:" />
+
+        <ProgressBar
+            android:id="@+id/launch_authbusy_progbar"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"/>
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:background="@color/colorLightGrey">
+
+            <ProgressBar
+                android:id="@+id/launch_busy_progbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <LinearLayout
+                android:id="@+id/launch_detailcontainer_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/launch_id_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="launch id"
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
+                    android:textColor="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/launch_patch_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/launch_booked_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="booked:"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/colorAccent"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/launch_fetch_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="fetch random launch" />
+
+        <Button
+            android:id="@+id/launch_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="login" />
+
+        <Button
+            android:id="@+id/launch_logout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="logout" />
+
+        <Button
+            android:id="@+id/launch_chain_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="login > fetch launch > toggle booking (chained)" />
+
+        <!--Button
+            android:id="@+id/fruit_fetchfailbasic_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="fetch - (fail result basic)" />
+
+        <Button
+            android:id="@+id/fruit_fetchfailadvanced_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="fetch - (fail result advanced)" /-->
+
+    </LinearLayout>
+
+</ScrollView>

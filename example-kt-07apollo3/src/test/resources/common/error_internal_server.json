@@ -1,0 +1,19 @@
+{
+  "errors": [
+    {
+      "message": "computer says no",
+      "locations": [
+        {
+          "line": 1,
+          "column": 10
+        }
+      ],
+      "path": [
+        "launches"
+      ],
+      "extensions": {
+        "code": "INTERNAL_SERVER_ERROR"
+      }
+    }
+  ]
+}
