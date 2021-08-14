@@ -190,7 +190,7 @@ We use this technique in the clean architecture sample, and it lets you reduce v
 
 This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that doing so *significantly* reduced the amount of boiler plate and view code that had to be written.
 
-There are a few different ways to explain this, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you want an app architecture based on it, then I'd advise you to stay with Rx or migrate to Flow. fore observers are NOT reactive streams - quite deliberately so.
+There are a few different ways to explain this, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you want an app architecture based on it, then I'd advise you to stay with Rx or migrate to Flow, it's not my job to persuade you otherwise! fore observers are NOT reactive streams - quite deliberately so.
 
 ### Reactive Streams
 While we're on the subject, let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
@@ -198,7 +198,7 @@ While we're on the subject, let's briefly detour to a discussion of reactive str
 - Observers (tell me whenever you've changed)
 - Streams (data and operators like .map .filter etc)
 
-For some specific use cases: handling streams of changing data, which you want to process on various threads (like the raw output of an IOT device for example) reactive streams is a natural fit. The needs of most android apps however tend to be a little more along the lines of:
+For some specific use cases: handling streams of changing data, which you want to process on various threads (like the raw output of an IOT device for example) reactive streams is a natural fit. The needs of most android app architectures however tend to be a little more along the lines of:
 
  - connect to a network to download discreet pieces of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
@@ -350,7 +350,7 @@ fun syncView() {
 
 It would also lead developers down the wrong path regarding how to move data about in the UI layer whilst ensuring consistency when the application is rotated etc. It sounds a little strange, but part of the benefit of using **fore** in a team is that it automatically discourages developers from making that mistake. It's almost like an automatic, invisible code review.
 
-Not having the ability to send data via the somethingChanged() function is one of the key reasons that fore UI code tends to be so compact compared with other architectures.
+Not having the ability to send data via the somethingChanged() function is one of the key reasons that fore UI code tends to be so compact compared with other architectures - and also why fore naturally lends itself to supporting rotation on android.
 
 
 > "adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer"

@@ -36,7 +36,7 @@ fun syncView() {
 
 Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. This style of view state binding is deceptively simple, and is _one_ of the reasons that fore is so tiny and the library so easy to understand.
 
-*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are two slightly larger, more commercial style app examples to check out: one in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
+*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/clean-modules-sample) written in kotlin modules. This one is a larger but more standard MVO implementation written in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
 In a nutshell this is what we have with MVO:
 
@@ -44,7 +44,7 @@ In a nutshell this is what we have with MVO:
 
 Here's an example app structure showing some models being observed by fragments in typical MVO style. As discussed below, the dependency arrows point towards the models (i.e. the view layer is aware of the models, the models are not aware of the view layer).
 
-<a name="bad-diagram"></a>
+<a name="an overview of the structure of an MVO app, showing models (like NetworkModel and WalletModel) that are informing various views (like DashBoardFragment and WalletFragment) that their states have changed"></a>
 
 ![data binding](img/app_arch_0.png)
 
@@ -58,7 +58,7 @@ This flow is so lightweight and easy to implement, it's actually how MVO handles
 
 Here is where a ViewModel would fit in our example app:
 
-<a name="bad-diagram-w-viewmodel"></a>
+<a name="a similar diagram to the previous one, but which shows a DashboardViewModel placed in between some regular models (like NetworkModel and ChatModel) and a DashBoardFragment. The DashboardViewModel notifies that it's state has changed whenever one of the models it's observing changes"></a>
 
 ![data binding](img/app_arch_2_viewmodel.png)
 
@@ -72,7 +72,7 @@ The code looks extremely simple and it is, but surprisingly the technique works 
 
 ## Dependency arrows
 
-As with all M* architectures, with MVO the Model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the android lifecyce. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model or an intemediary viewModel (from the UI thread - asynchronous code is managed in the models, not at the UI layer). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+As with all M* architectures, with MVO the Model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the android lifecyce and re-draws the state provided to it by the model. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model or an intemediary viewModel (from the UI thread - asynchronous code is managed in the models, not at the UI layer). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 Sometimes you really will want to scope a model to just a single activity (although you might be surprised at how rarely this is genuinely useful - look at how much code we removed using the MVO approach on the [android architecture blueprints](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) for example). Anyway, if you decide that's what your app needs at that moment, use a ViewModel and make it observable using a **fore** Observable as you would with any other Model. If you are injecting your ViewModels in to the view layer and using fore observables to synchronize your UI, the view layer will not even be aware of what type of model it is anyway.
 

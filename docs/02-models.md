@@ -21,9 +21,9 @@ If you write a good model, using it in the rest of your app should be a piece of
 
 You'll see that in all the sample apps, the models have been written with the assumption that all the methods are being accessed on a single thread (which for a live app would be the UI thread). Not having to worry about thread safety here is a *very* big win in terms of code complexity. The models can use threads and coroutines internally of course.
 
-If you need to pop onto another thread, do it explicitly with something like an [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) or launch a [**coroutine**](https://erdo.github.io/android-fore/04-more-fore.html#kotlin-coroutines) for example, and then pop back on to the UI thread when you are done. The **WorkMode.ASYNCHRONOUS** parameter will make Observables notify on the UI thread anyway, so you don't need to do any extra work when you want to update the UI.
+If you need to hop onto another thread for IO or any heavy processing, do it explicitly with something like an [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) or launch a [**coroutine**](https://erdo.github.io/android-fore/04-more-fore.html#kotlin-coroutines) for example, and then pop back on to the UI thread when you are ready to update your state.
 
-> ASYNCHRONOUS notifications from an Observable in **fore** are always sent on the UI thread, no need to do any thread hopping to update the UI
+> pop back on to the UI thread when you are ready to update your state
 
 Check out a [[few]](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [[examples]](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice applies to writing ViewModels too, so this is all fairly obvious if you are coming from MVVM)_, feel free to skim over the checklist below for a refresher and you should be good to go.
 
