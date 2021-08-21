@@ -99,7 +99,7 @@ If the list of things you are observing gets a little long, you can remove some 
 
 ### <a name="observablegroup"></a>Using ObservableGroup in a ViewModel
 
-Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what **fore** means by "thinner android view layers"
+Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what fore means by "thinner android view layers". We're using this exact technique in the [clean architecture modules sample app](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt).
 
 <pre class="codesample"><code>
 
@@ -157,7 +157,7 @@ abstract class BaseViewModel(
 
 ### ForeLifecycleObserver
 
-If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity, Fragment which will handle it all for you:
+If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity or Fragment which will handle it all for you:
 
  <pre class="codesample"><code>
 class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
@@ -183,14 +183,16 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
 
  </code></pre>
 
-We use this technique in the clean architecture sample, and it lets you reduce view layer code to its absolute fundamentals: what things look like.
+You can see this technique in the [sample app for the persista library](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt). It's also used to observe a view model in the [clean architecture sample](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt). The point of all these techniques is to reduce view layer code to its absolute fundamentals: what things look like.
 
 
 ## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
 
-This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that doing so *significantly* reduced the amount of boiler plate and view code that had to be written.
+This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did briefly have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that adding it had *significantly increased* the amount of boiler plate and view code that had to be written.
 
-There are a few different ways to explain this, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you want an app architecture based on it, then I'd advise you to stay with Rx or migrate to Flow, it's not my job to persuade you otherwise! fore observers are NOT reactive streams - quite deliberately so.
+If you're sceptical about that - and why wouldn't you be? I'd encourage you to do a before and after comparison in a small sample app, there is nothing quite like seeing it for yourself. You could use one of the fore samples to get started [very simple app](https://github.com/erdo/persista/tree/main/example-app), [clean modules app](https://github.com/erdo/clean-modules-sample) - make sure to consider what happens once you add more data sources that need to be observed
+
+There are a few different ways to explain why reactive stream style APIs are not a good fit here, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you **want** an app architecture based on it (for whatever reason), then I'd advise you to stay with Rx or migrate to Flow! fore observers are NOT reactive streams - quite deliberately so.
 
 ### Reactive Streams
 While we're on the subject, let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
@@ -198,7 +200,7 @@ While we're on the subject, let's briefly detour to a discussion of reactive str
 - Observers (tell me whenever you've changed)
 - Streams (data and operators like .map .filter etc)
 
-For some specific use cases: handling streams of changing data, which you want to process on various threads (like the raw output of an IOT device for example) reactive streams is a natural fit. The needs of most android app architectures however tend to be a little more along the lines of:
+For some specific use cases: handling streams of changing data, which you want to process on various threads (like the raw output of an IoT device for example) reactive streams is a natural fit. The needs of most android app architectures however tend to be a little more along the lines of:
 
  - connect to a network to download discreet pieces of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
@@ -218,7 +220,7 @@ Usually, view layer components are going to want different things from the same 
 
 Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
 
-Regardless, our example model will be managing these three pieces of state:
+Regardless, our example model will be managing these three pieces of state (via a single immutable data class if that's how you like to write your code):
 
 <pre class="codesample"><code>
 fun hasSessionToken(): Boolean

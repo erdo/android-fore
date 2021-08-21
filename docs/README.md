@@ -31,6 +31,14 @@ More detailed [version information here](https://erdo.github.io/android-fore/06-
 
 ## New to fore
 
+**fore** is a small library, plus a selection of techniques. You could just use the techniques and implement the library yourself, though fore has evolved from years of use in various production android apps, so you'll find some optimisations in it that might not be immediately obvious (optimisations = simplifications which result in less complex client code).
+
+There is often a tendency in business requirements towards complexity, the longer a project exists, the more complex it becomes. For an android app to remain maintainable it needs to be able to absorb this complexity without too much damage to the code base. So if there was one guiding principle followed when developing fore and its techniques, I guess it was: *complexity is the enemy*.
+
+But as any developer knows, in the moment, writing complicated code is usually easier than writing simple code (you pay for the complexity later). Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
+
+**fore** doesn't do everything for you (it doesn't do much actually) you have to understand where and how to use it, which is why there is so much focus on the docs and the sample apps.
+
 This repo includes the tiny fore-core library, the optional packages, and 10 mini example apps. Any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
 
 `git clone git@github.com:erdo/android-fore.git`
@@ -48,9 +56,11 @@ This is a goal of a lot of architectures and it's a great way to develop anythin
 
 ## Observers and Observables
 
-This is the kind of challenge that the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) has been solving for decades. And the main innovation in **fore** is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
+This is the kind of challenge that the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) has been solving for decades. And the main innovation in fore is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
 
-Fore's observable classes let you **make anything observable** (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
+It's at this point that some jump to the conclusion that fore is a replacement for reactive stream libraries like RxJava - but they really are very different. Connecting architectural layers with reactive streams will tyically result in more code in the view layer and the need to consider quite complicated threading and lifecycle issues, which worsen as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)). Similarly processing and combining data streams on different threads using fore would be pointless, and a natural fit for something like Rx or Flow.
+
+**fore**'s observable classes basically let you **make anything observable** from the persepective of the UI thread (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
 
 
 <!-- Tabbed code sample -->
@@ -166,39 +176,25 @@ override fun syncView() {
 
 Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
-In that example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state - it's entirely up to you how to write your code, it makes no difference to the syncView() technique.
+In that example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to above) - it's entirely up to you how to write your code, it makes no difference to the syncView() technique.
 
-**fore** enables you to write view layers that are particularly sparse, and the apps are highly scalable from a complexity standpoint. This makes **fore** suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
+**fore** enables you to write view layers that are particularly sparse, and the apps are highly scalable from a complexity standpoint. This makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
- Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the **fore** api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see above) also touch on this. But these are subtle, advanced topics that are not really necessary to use **fore** at all - most of the actual code in the fore library is quite simple.
+Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see above) also touch on this
 
-In fact fore itself is tiny: just over 500 lines of code for the core package The java version references **128 methods** in all, and adds just **12.5KB** to your apk _before_ obfuscation.
+**fore** itself is tiny: just over 500 lines of code for the core package The java version references **128 methods** in all, and adds just **12.5KB** to your apk _before_ obfuscation.
 
 MVO implemented with fore addresses issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering.
 
+Read more about the [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture of fore apps.
 
-### Still reading?
+### Extras
 
-In a nutshell, developing with **fore** means writing:
+The optional packages include a few solutions to common issues that crop up in android app development like [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
-> "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
-
-[**MVO**](https://erdo.github.io/android-fore/00-architecture.html#shoom) is a convenient way to talk about how fore connects architectural layers together in an app, but fore style observers are just as useful when using clean architecture as you can see [here](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3). In MVO (like with most MV* architectures) the model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the android lifecyce and re-draws the state provided to it by the model. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model (be that an application level scoped model, or a ViewModel). With this architecture you remove a lot of problems around lifecycle management and handling rotations on android, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
-
-**There are a few important things in MVO that allow you an architecture this simple:**
-
-* The first is a very robust but simple [**Observer API**](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) that lets views attach themselves to any model they are interested in
-* The second is the [**syncView()**](https://erdo.github.io/android-fore/01-views.html#syncview) convention
-* The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
-* The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
-
-If you totally grok those 4 things, that's pretty much all you need to use **fore** successfully, the [**code review guide**](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews) should also come in handy as you get up to speed, or you bring your team up to speed.
-
-The **fore** library also includes a few fore [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that are all you need to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
+There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations), and networking layer abstractions compatible with [**Retrofit2**, **Ktor** or **Apollo**](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) that will encourage your team to write robust networking code by default. fore works really well with RoomDB too, checkout the sample app for details.
 
 For Java development, there are some testable wrappers for AsyncTask (that Google should have provided, but didn't) [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which support lambdas, making threads very easy to use.
-
-There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations) and abstract your networking layer when using [**Retrofit2**, **Ktor** or **Apollo**](https://erdo.github.io/android-fore/04-more-fore.html#fore-network). **fore** works really well with RoomDB too, checkout the sample app for details.
 
 ## Sample Apps
 
@@ -219,7 +215,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 
 ![fore reactive UI sample app](img/fore-android-sample-reactive.gif)
 
-This app is a bare bones implementation of **fore** reactive UIs. No threading, no networking, no database access - just the minimum required to demonstrate [Reactive UIs](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
+This app is a bare bones implementation of a reactive UI. No threading, no networking, no database access - just the minimum required to demonstrate [Reactive UIs](https://erdo.github.io/android-fore/03-reactive-uis.html#shoom). It's still a full app though, supports rotation and has a full set of tests to go along with it.
 
 In the app you move money from a "Savings" wallet to a "Mobile" wallet and then back again. It implements a tiny section of the diagram from the [architecture](https://erdo.github.io/android-fore/00-architecture.html#bad-diagram) section.
 
