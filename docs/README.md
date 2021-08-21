@@ -58,7 +58,7 @@ This is a goal of a lot of architectures and it's a great way to develop anythin
 
 This is the kind of challenge that the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) has been solving for decades. And the main innovation in fore is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
 
-It's at this point that some jump to the conclusion that fore is a replacement for reactive stream libraries like RxJava - but they really are very different. Connecting architectural layers with reactive streams will tyically result in more code in the view layer and the need to consider quite complicated threading and lifecycle issues, which worsen as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)). Similarly processing and combining data streams on different threads using fore would be pointless, and a natural fit for something like Rx or Flow.
+It's at this point that some jump to the conclusion that fore is a replacement for reactive stream libraries like RxJava - but they really are very different. Connecting architectural layers with reactive streams will typically result in more code in the view layer and the need to consider quite complicated threading and lifecycle issues, which worsen as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)). Similarly, processing and combining data streams on different threads using fore would be pointless, and a natural fit for something like Rx or Flow.
 
 **fore**'s observable classes basically let you **make anything observable** from the persepective of the UI thread (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
 
@@ -303,7 +303,7 @@ There is only one test class included with this app which demonstrates how to te
  All the known sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore.
 
 - Many of the **[dev.to](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)** tutorials have full sample apps associated with them, mostly kotlin
-- This sample app uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) struture.
+- This sample app uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) structure.
 - Slightly larger app also written in Kotlin **[here](https://github.com/erdo/fore-full-example-02-kotlin)**
 
 
