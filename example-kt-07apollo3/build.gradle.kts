@@ -69,15 +69,6 @@ apollo {
     srcDir("src/main/graphql")
 }
 
-//apollo {
-//    generateKotlinModels.set(true)
-//}
-//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-//    kotlinOptions {
-//        jvmTarget = Shared.Android.javaVersion.toString()
-//    }
-//}
-
 // fetch the graphql schema:
 //./gradlew :example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'
 // creating graphql queries:
