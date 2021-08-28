@@ -192,7 +192,7 @@ This is the obvious question for anyone familiar with Reactive Stream based APIs
 
 If you're sceptical about that - and why wouldn't you be? I'd encourage you to do a before and after comparison in a small sample app, there is nothing quite like seeing it for yourself. You could use one of the fore samples to get started [very simple app](https://github.com/erdo/persista/tree/main/example-app), [clean modules app](https://github.com/erdo/clean-modules-sample) - make sure to consider what happens once you add more data sources that need to be observed
 
-There are a few different ways to explain why reactive stream style APIs are not a good fit here, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are _certain_ that you **want** an app architecture based on it (for whatever reason), then I'd advise you to stay with Rx or migrate to Flow! fore observers are NOT reactive streams - quite deliberately so.
+There are a few different ways to explain why reactive stream style APIs are not a good fit here, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are certain that you **want** an app architecture based on it (for whatever reason), then I'd advise you to stay with Rx or migrate to Flow! fore observers are NOT reactive streams - quite deliberately so.
 
 ### Reactive Streams
 While we're on the subject, let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
@@ -213,7 +213,7 @@ Anyway, it's entirely possible to treat these two concepts separately. We can co
 
 It turns out that this separation **also** has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
-### Views want different things from the same model
+### 1) Views want different things from the same model
 Usually, view layer components are going to want different things from the same model.
 
 (If you've just joined us here by the way, we are using the term model as it's defined by [wikipedia](https://en.wikipedia.org/wiki/Domain_model), a software representation of a real life thing, the model can have state and/or logic. And for all this to work, it just has to be observable i.e. if its state changes, it needs to tell all its observers that its state changed. The following example models expose their state via getters, but you can also expose a kotlin data class which encapsulates all the public state in an immutable object like we do in the clean architecture sample - it makes no difference to the pattern or how fore works.)
@@ -254,7 +254,7 @@ We already learnt about how updating views in this way introduces very [hard to 
 *(NB: If you've used MVI before, you'll immediately spot that we can improve this situation by observing a single immutable viewState - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if your view layer is observing more than one model...)*
 
 
-### Views want things from more than one model
+### 2) Views want things from more than one model
 Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected in the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
 
 Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's - of course Rx will have operators that help, but your developers have to know about them & use them properly, it's not something that comes for free due to the API design):
@@ -290,6 +290,8 @@ weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
 })
 
 </code></pre>
+
+### Remove the parameter, remove the boilerplate
 
 Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview), and it's what lets us write:
 
