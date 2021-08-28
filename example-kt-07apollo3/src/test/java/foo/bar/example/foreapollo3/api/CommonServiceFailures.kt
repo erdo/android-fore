@@ -9,6 +9,7 @@ import java.util.ArrayList
 /**
  * This will be specific to your own app, it's closely linked with: @[CustomGlobalErrorHandler]
  */
+@ExperimentalStdlibApi
 class CommonServiceFailures : ArrayList<StubbedServiceDefinition<ErrorMessage>>() {
     init {
 

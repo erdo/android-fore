@@ -3,25 +3,22 @@ package co.early.fore.kt.net.apollo3
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.coroutine.asyncMain
+import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.net.apollo.ErrorHandler
-import com.apollographql.apollo.ApolloCall
-import com.apollographql.apollo.api.Error
-import com.apollographql.apollo.api.Response
-import com.apollographql.apollo.exception.ApolloException
+import com.apollographql.apollo3.api.Error
+import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.ExecutionContext
+import com.apollographql.apollo3.api.Operation
 import kotlinx.coroutines.Deferred
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
-TODO
-
-interface ApolloCaller<F> {
-    suspend fun <S> processCallAwait(
-        call: () -> ApolloCall<S>
+@ExperimentalStdlibApi
+interface Apollo3Caller<F> {
+    suspend fun <S : Operation.Data> processCallAwait(
+        call: suspend () -> ApolloResponse<S>
     ): Either<F, CallProcessorApollo3.SuccessResult<S>>
-    suspend fun <S> processCallAsync(
-        call: () -> ApolloCall<S>
+    suspend fun <S : Operation.Data> processCallAsync(
+        call: suspend () -> ApolloResponse<S>
     ): Deferred<Either<F, CallProcessorApollo3.SuccessResult<S>>>
 }
 
@@ -30,7 +27,7 @@ interface ApolloCaller<F> {
  * etc). This error handler is often the same across a range of services required by the app.
  * However, sometimes the APIs all have different error behaviours (say when the service APIs have
  * been developed at different times, or by different teams or different third parties). In this
- * case a separate ApolloCallProcessor instance (and ErrorHandler) will be required for each micro
+ * case a separate CallProcessorApollo3 instance (and ErrorHandler) will be required for each micro
  * service.
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
  * @param workMode (optional: ForeDelegateHolder will choose a sensible default) Testing: Apollo
@@ -48,18 +45,19 @@ interface ApolloCaller<F> {
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
+@ExperimentalStdlibApi
 class CallProcessorApollo3<F>(
         private val globalErrorHandler: ErrorHandler<F>,
         private val logger: Logger? = null,
         private val workMode: WorkMode? = null,
         private val allowPartialSuccesses: Boolean = false
-) : ApolloCaller<F> {
+) : Apollo3Caller<F> {
 
     data class SuccessResult<S>(
-            val data: S,
-            val partialErrors: List<Error> = listOf(),
-            val extensions: Map<String, Any?> = hashMapOf(),
-            val isFromCache: Boolean = false
+        val data: S,
+        val partialErrors: List<Error> = listOf(),
+        val extensions: Map<String, Any?> = hashMapOf(),
+        val executionContext: ExecutionContext = ExecutionContext.Empty
     )
 
     /**
@@ -68,7 +66,7 @@ class CallProcessorApollo3<F>(
      *
      * @returns Either<F, SuccessResult<S>>
      */
-    override suspend fun <S> processCallAwait(call: () -> ApolloCall<S>): Either<F, SuccessResult<S>> {
+    override suspend fun <S : Operation.Data> processCallAwait(call: suspend () -> ApolloResponse<S>): Either<F, SuccessResult<S>> {
         return processCallAsync(call).await()
     }
 
@@ -78,21 +76,20 @@ class CallProcessorApollo3<F>(
      *
      * @returns Deferred<Either<F, SuccessResult<S>>>
      */
-    override suspend fun <S> processCallAsync(call: () -> ApolloCall<S>): Deferred<Either<F, SuccessResult<S>>> {
+    override suspend fun <S : Operation.Data> processCallAsync(call: suspend () -> ApolloResponse<S>): Deferred<Either<F, SuccessResult<S>>> {
 
         return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
             try {
-                suspendCoroutine { continuation ->
-                    call().enqueue(object : ApolloCall.Callback<S>() {
-                        override fun onResponse(response: Response<S>) {
-                            continuation.resume(processSuccessResponse(response))
-                        }
 
-                        override fun onFailure(e: ApolloException) {
-                            continuation.resume(processFailResponse(e, null))
-                        }
-                    })
+                val result: ApolloResponse<S> = awaitIO(ForeDelegateHolder.getWorkMode(workMode)) {
+
+                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, thread:" + Thread.currentThread())
+
+                    call()
                 }
+
+                processSuccessResponse(result)
+
             } catch (t: Throwable) {
                 ForeDelegateHolder.getLogger(logger).e("Has the ApolloCall already been executed? you cannot use an ApolloCall more than once")
                 processFailResponse(t, null)
@@ -100,8 +97,8 @@ class CallProcessorApollo3<F>(
         }
     }
 
-    private fun <S> processSuccessResponse(
-            response: Response<S>
+    private fun <S : Operation.Data> processSuccessResponse(
+            response: ApolloResponse<S>
     ): Either<F, SuccessResult<S>> {
 
         val data: S? = response.data
@@ -109,7 +106,7 @@ class CallProcessorApollo3<F>(
         return if (data != null) {
             if (!response.hasErrors() || allowPartialSuccesses) {
                 Either.right(SuccessResult(data, response.errors
-                        ?: mutableListOf(), response.extensions, response.isFromCache))
+                        ?: mutableListOf(), response.extensions, response.executionContext))
             } else {
                 processFailResponse(null, response)
             }
@@ -119,7 +116,7 @@ class CallProcessorApollo3<F>(
     }
 
     private fun <S> processFailResponse(
-            t: Throwable?, errorResponse: Response<*>?
+            t: Throwable?, errorResponse: ApolloResponse<*>?
     ): Either<F, SuccessResult<S>> {
 
         if (t != null) {

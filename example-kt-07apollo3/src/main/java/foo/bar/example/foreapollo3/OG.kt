@@ -5,8 +5,8 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.apollo.CallProcessorApollo
-import com.apollographql.apollo.api.Input
+import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import com.apollographql.apollo3.api.ApolloRequest
 import foo.bar.example.foreapollokt.BuildConfig
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
@@ -15,7 +15,6 @@ import foo.bar.example.foreapollo3.feature.authentication.AuthService
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.LaunchService
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
-import foo.bar.example.foreapollokt.graphql.*
 import java.util.*
 
 
@@ -25,6 +24,7 @@ import java.util.*
  *
  * Copyright © 2019 early.co. All rights reserved.
  */
+@ExperimentalStdlibApi
 @Suppress("UNUSED_PARAMETER")
 object OG {
 
@@ -45,7 +45,7 @@ object OG {
                 InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = CallProcessorApollo(
+        val callProcessor = CallProcessorApollo3(
                 CustomGlobalErrorHandler(logger),
                 logger
         )
@@ -53,7 +53,7 @@ object OG {
         // models
         val authenticator = Authenticator(
                 authService = AuthService(
-                        login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) }
+                        login = { email -> apolloClient.mutate(ApolloRequest(LoginMutation(email))) }
                 ),
                 callProcessor,
                 logger,
@@ -63,7 +63,7 @@ object OG {
         val launchesModel = LaunchesModel(
                 launchService = LaunchService(
                         getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) },
+                        login = { email -> apolloClient.mutate(LoginMutation(email)) },
                         refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
                         bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
                         cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }

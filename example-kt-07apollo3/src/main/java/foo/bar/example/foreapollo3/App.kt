@@ -6,6 +6,7 @@ import android.app.Application
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
+@ExperimentalStdlibApi
 class App : Application() {
 
     override fun onCreate() {

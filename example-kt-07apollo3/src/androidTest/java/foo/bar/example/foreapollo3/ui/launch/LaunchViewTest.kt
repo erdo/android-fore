@@ -26,6 +26,7 @@ import org.junit.runner.RunWith
  * and that clicking the buttons results in the correct action being performed
  */
 
+@ExperimentalStdlibApi
 @RunWith(AndroidJUnit4::class)
 class LaunchViewTest {
 

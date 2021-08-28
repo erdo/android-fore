@@ -1,7 +1,8 @@
 package foo.bar.example.foreapollo3.feature.launch
 
-import foo.bar.example.foreapollokt.graphql.LaunchDetailsQuery
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
+import foo.bar.example.foreapollo3.LaunchDetailsQuery
+import foo.bar.example.foreapollo3.LaunchListQuery
+
 
 //we don't want the API / graphQL pojo abstractions leaking in to the rest of the app
 //so we convert them here to app level items, nothing bellow the feature level

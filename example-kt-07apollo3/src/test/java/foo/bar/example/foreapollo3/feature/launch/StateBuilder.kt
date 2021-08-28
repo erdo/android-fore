@@ -2,7 +2,8 @@ package foo.bar.example.foreapollo3.feature.launch
 
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.net.apollo.CallProcessorApollo
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
+import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.coEvery
 import io.mockk.every
@@ -12,13 +13,14 @@ import kotlinx.coroutines.CompletableDeferred
 /**
  *
  */
+@ExperimentalStdlibApi
 class StateBuilder internal constructor() {
 
-    val mockCallProcessorApollo: CallProcessorApollo<ErrorMessage> = mockk()
+    val mockCallProcessorApollo: CallProcessorApollo3<ErrorMessage> = mockk()
 
     internal fun getLaunchSuccess(launches: LaunchListQuery.Data): StateBuilder {
 
-        val mockResponseSuccess: CallProcessorApollo.SuccessResult<LaunchListQuery.Data> = mockk()
+        val mockResponseSuccess: CallProcessorApollo3.SuccessResult<LaunchListQuery.Data> = mockk()
 
         every {
             mockResponseSuccess.data

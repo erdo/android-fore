@@ -10,17 +10,18 @@ import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
-import com.apollographql.apollo3.ApolloMutationCall
+import com.apollographql.apollo3.api.ApolloResponse
 import foo.bar.example.foreapollo3.LoginMutation
 import foo.bar.example.foreapollo3.message.ErrorMessage
 
 data class AuthService(
-        val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>
+    val login: suspend (email: String) -> ApolloResponse<LoginMutation.Data>
 )
 
 /**
  * logs the user in / out (gets a session token from the server / disposes of it)
  */
+@ExperimentalStdlibApi
 class Authenticator(
     private val authService: AuthService,
     private val callProcessor: CallProcessorApollo3<ErrorMessage>,

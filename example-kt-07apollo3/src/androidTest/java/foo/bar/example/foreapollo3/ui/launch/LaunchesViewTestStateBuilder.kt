@@ -13,6 +13,7 @@ import foo.bar.example.foreapollo3.ui.launch.LaunchActivity
 import io.mockk.every
 
 
+@ExperimentalStdlibApi
 class LaunchesViewTestStateBuilder internal constructor(private val mockLaunchesModel: LaunchesModel) {
 
     internal fun isBusy(busy: Boolean): LaunchesViewTestStateBuilder {

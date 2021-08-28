@@ -1,6 +1,8 @@
 package foo.bar.example.foreapollo3.api
 
-import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.network.http.DefaultHttpEngine
+import com.apollographql.apollo3.network.http.HttpNetworkTransport
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
@@ -21,11 +23,12 @@ object CustomApolloBuilder {
      * @return ApolloClient object suitable for instantiating service interfaces
      */
     fun create(vararg interceptors: Interceptor): ApolloClient {
-
-        return ApolloClient.builder()
-                .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
-                .okHttpClient(createOkHttpClient(*interceptors))
-                .build()
+        return ApolloClient(
+            HttpNetworkTransport(
+                serverUrl = "https://apollo-fullstack-tutorial.herokuapp.com",
+                okHttpClient = createOkHttpClient(*interceptors)
+            )
+        )
     }
 
     private fun createOkHttpClient(vararg interceptors: Interceptor): OkHttpClient {

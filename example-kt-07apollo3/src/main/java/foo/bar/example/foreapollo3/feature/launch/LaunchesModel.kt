@@ -7,29 +7,29 @@ import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.kt.core.Either.Left
 import co.early.fore.kt.core.Either.Right
 import co.early.fore.kt.core.carryOn
-import com.apollographql.apollo.ApolloMutationCall
-import com.apollographql.apollo.ApolloQueryCall
+import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import com.apollographql.apollo3.api.ApolloResponse
+import foo.bar.example.foreapollo3.*
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
-import foo.bar.example.foreapollokt.graphql.*
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import java.util.Random
 
 data class LaunchService(
-        val getLaunchList: () -> ApolloQueryCall<LaunchListQuery.Data>,
-        val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>,
-        val refreshLaunchDetail: (id: String) -> ApolloQueryCall<LaunchDetailsQuery.Data>,
-        val bookTrip: (id: String) -> ApolloMutationCall<BookTripMutation.Data>,
-        val cancelTrip: (id: String) -> ApolloMutationCall<CancelTripMutation.Data>
+    val getLaunchList: suspend () -> ApolloResponse<LaunchListQuery.Data>,
+    val login: suspend (email: String) -> ApolloResponse<LoginMutation.Data>,
+    val refreshLaunchDetail: suspend (id: String) -> ApolloResponse<LaunchDetailsQuery.Data>,
+    val bookTrip: suspend (id: String) -> ApolloResponse<BookTripMutation.Data>,
+    val cancelTrip: suspend (id: String) -> ApolloResponse<CancelTripMutation.Data>
 )
 
 
+@ExperimentalStdlibApi
 class LaunchesModel(
     private val launchService: LaunchService,
-    private val callProcessor: CallProcessorApollo<ErrorMessage>,
+    private val callProcessor: CallProcessorApollo3<ErrorMessage>,
     private val authenticator: Authenticator,
     private val logger: Logger,
     private val workMode: WorkMode

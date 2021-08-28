@@ -6,28 +6,29 @@ import androidx.test.rule.ActivityTestRule
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.apollo.CallProcessorApollo
-import com.apollographql.apollo.ApolloCall
+import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import com.apollographql.apollo3.api.ApolloResponse
 import foo.bar.example.foreapollo3.App
+import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.OG
 import foo.bar.example.foreapollo3.ProgressBarIdler
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import foo.bar.example.foreapollo3.ui.launch.LaunchActivity
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 
 
+@ExperimentalStdlibApi
 class LaunchViewRotationTestStateBuilder internal constructor(private val launchViewRotationTest: LaunchViewRotationTest) {
 
     internal fun withDelayedCallProcessor(): LaunchViewRotationTestStateBuilder {
 
-        val deferred = CompletableDeferred<Either<ErrorMessage, CallProcessorApollo.SuccessResult<LaunchListQuery.Data>>>()
+        val deferred = CompletableDeferred<Either<ErrorMessage, CallProcessorApollo3.SuccessResult<LaunchListQuery.Data>>>()
 
         coEvery {
             launchViewRotationTest.mockCallProcessorApollo.processCallAsync(
-                any() as () -> ApolloCall<LaunchListQuery.Data>
+                any() as suspend () -> ApolloResponse<LaunchListQuery.Data>
             )
         } returns deferred
 

@@ -9,10 +9,11 @@ import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo.CallProcessorApollo
+import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.api.Input
+import com.apollographql.apollo3.ApolloClient
+import foo.bar.example.foreapollo3.*
 import foo.bar.example.foreapollo3.api.CommonServiceFailures
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
@@ -21,7 +22,6 @@ import foo.bar.example.foreapollo3.feature.launch.Launch
 import foo.bar.example.foreapollo3.feature.launch.LaunchService
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.feature.launch.NO_ID
-import foo.bar.example.foreapollokt.graphql.*
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
@@ -45,11 +45,12 @@ import org.junit.Test
  * boiler plate)
  *
  */
+@ExperimentalStdlibApi
 class LaunchFetcherIntegrationTest {
 
     private val interceptorLogging = InterceptorLogging()
     private val logger = SystemLogger()
-    private val callProcessor = CallProcessorApollo(CustomGlobalErrorHandler(logger))
+    private val callProcessor = CallProcessorApollo3(CustomGlobalErrorHandler(logger))
 
     @MockK
     private lateinit var mockSuccess: Success
@@ -247,7 +248,7 @@ class LaunchFetcherIntegrationTest {
     private fun createLaunchService(apolloClient: ApolloClient): LaunchService {
         return LaunchService(
                 getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) },
+                login = { email -> apolloClient.mutate(LoginMutation(email)) },
                 refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
                 bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
                 cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }

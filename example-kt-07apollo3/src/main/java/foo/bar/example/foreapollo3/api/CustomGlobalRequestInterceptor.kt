@@ -11,6 +11,7 @@ import java.io.IOException
 /**
  * This will be specific to your own app.
  */
+@ExperimentalStdlibApi
 class CustomGlobalRequestInterceptor(
         private val logger: Logger
 ) : Interceptor {

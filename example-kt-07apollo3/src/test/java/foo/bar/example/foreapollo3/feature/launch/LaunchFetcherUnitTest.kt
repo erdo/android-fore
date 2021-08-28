@@ -6,12 +6,13 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.net.apollo.CallProcessorApollo
+import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.Launch
 import foo.bar.example.foreapollo3.feature.launch.LaunchService
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.feature.launch.NO_ID
-import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -32,6 +33,7 @@ import org.junit.Test
  * 3) Observers and State: we check that the model updates its observers correctly and presents its current state accurately
  *
  */
+@ExperimentalStdlibApi
 class LaunchesModelUnitTest {
 
     private val launch = Launch("123", "site", true, "http://www.test.com/someimage.png")
@@ -43,7 +45,7 @@ class LaunchesModelUnitTest {
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
 
     @MockK
-    private lateinit var mockCallProcessorApollo: CallProcessorApollo<ErrorMessage>
+    private lateinit var mockCallProcessorApollo: CallProcessorApollo3<ErrorMessage>
 
     @MockK
     private lateinit var mockLaunchService: LaunchService

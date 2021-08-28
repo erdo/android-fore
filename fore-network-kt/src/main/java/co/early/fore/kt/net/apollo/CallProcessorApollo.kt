@@ -28,7 +28,7 @@ interface ApolloCaller<F> {
  * etc). This error handler is often the same across a range of services required by the app.
  * However, sometimes the APIs all have different error behaviours (say when the service APIs have
  * been developed at different times, or by different teams or different third parties). In this
- * case a separate ApolloCallProcessor instance (and ErrorHandler) will be required for each micro
+ * case a separate CallProcessorApollo instance (and ErrorHandler) will be required for each micro
  * service.
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
  * @param workMode (optional: ForeDelegateHolder will choose a sensible default) Testing: Apollo
