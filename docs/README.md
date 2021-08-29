@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.4.8](https://img.shields.io/badge/central-1.4.8-green.svg){: .float-left}
+![central-1.4.9](https://img.shields.io/badge/central-1.4.9-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -19,12 +19,12 @@
 
 the **kotlin** API, running coroutines under the hood:
 ```
-implementation("co.early.fore:fore-kt:1.4.8")
+implementation("co.early.fore:fore-kt:1.4.9")
 ```
 
 the original **java** API:
 ```
-implementation("co.early.fore:fore-jv:1.4.8")
+implementation("co.early.fore:fore-jv:1.4.9")
 ```
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
