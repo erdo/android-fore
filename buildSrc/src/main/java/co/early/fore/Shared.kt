@@ -7,15 +7,15 @@ import java.util.*
 object Shared {
 
     object Android {
-        const val minSdkVersion = 16
-        const val compileSdkVersion = 30
-        const val targetSdkVersion = 30
-        val javaVersion = JavaVersion.VERSION_1_8
+        const val minSdk = 16
+        const val compileSdk = 30
+        const val targetSdk = 30
+        val javaVersion = JavaVersion.VERSION_11
     }
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "4.2.1"
+        const val android_gradle_plugin = "7.0.2"
         const val kotlin_version = "1.5.10"
         const val kotlinx_coroutines_core = "1.4.2"
         // fore optional package dependencies

@@ -40,10 +40,6 @@ import org.junit.Test
  * in /resources. This all happens in OkHttp land so the model under test is not aware of any
  * difference.
  *
- * Apollo doesn't let us work in single thread mode for tests, so we need to use count down
- * latches unfortunately (we use fore's CountDownLatchWrapper class to get rid of some of the
- * boiler plate)
- *
  */
 @ExperimentalStdlibApi
 class LaunchFetcherIntegrationTest {
@@ -90,14 +86,8 @@ class LaunchFetcherIntegrationTest {
         )
 
 
-        // we're expecting two observer notifications during this process so we'll use that
-        // to count down the latch, that makes our test code brittle unfortunately:
-        // https://erdo.github.io/android-fore/05-extras.html#notification-counting
-        // it's the best we can do for junit testing Apollo though
-        runInBatch(2, launchesModel) {
-            //act
-            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-        }
+        //act
+        launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -134,9 +124,7 @@ class LaunchFetcherIntegrationTest {
 
 
         //act
-        runInBatch(2, launchesModel) {
-            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-        }
+        launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -172,9 +160,7 @@ class LaunchFetcherIntegrationTest {
 
 
         //act
-        runInBatch(2, launchesModel) {
-            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-        }
+        launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
 
 
         //assert
@@ -221,9 +207,8 @@ class LaunchFetcherIntegrationTest {
 
 
             //act
-            runInBatch(2, launchesModel) {
-                launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-            }
+            launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
+
 
             //assert
             verify(exactly = 0) {

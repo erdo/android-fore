@@ -14,7 +14,7 @@ dependencies {
 
   // we want the kotlin and android gradle plugin, because we want to access them in our plugin
   //implementation("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
-  implementation("com.android.tools.build:gradle:4.2.1")
+  implementation("com.android.tools.build:gradle:7.0.2")
   //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
   implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10")
 

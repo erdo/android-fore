@@ -30,10 +30,7 @@ interface Apollo3Caller<F> {
  * case a separate CallProcessorApollo3 instance (and ErrorHandler) will be required for each micro
  * service.
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
- * @param workMode (optional: ForeDelegateHolder will choose a sensible default) Testing: Apollo
- * library is NOT setup to be able to run calls in a synchronous manner (unlike Retrofit), for this
- * reason when testing the fore ApolloCallProcessor we still need to use count down latches even with
- * workMode = SYNCHRONOUS
+ * @param workMode (optional: ForeDelegateHolder will choose a sensible default)
  * @param allowPartialSuccesses (defaults to false) The GraphQL spec allows for success responses
  * with qualified errors, like this: https://spec.graphql.org/draft/#example-90475 if true, you will
  * receive these responses as successes, together with the list of partial errors that were attached

@@ -3,7 +3,6 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("maven")
     id("idea")
 }
 
@@ -24,12 +23,12 @@ android {
         targetCompatibility = Shared.Android.javaVersion
     }
 
-    compileSdkVersion(Shared.Android.compileSdkVersion)
+    compileSdk = Shared.Android.compileSdk
 
     defaultConfig {
         applicationId = appId
-        minSdkVersion(Shared.Android.minSdkVersion)
-        targetSdkVersion(Shared.Android.targetSdkVersion)
+        minSdk = Shared.Android.minSdk
+        targetSdk = Shared.Android.targetSdk
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -54,7 +53,7 @@ android {
             signingConfig = signingConfigs.getByName(BuildTypes.RELEASE)
         }
     }
-    lintOptions {
+    lint {
         isAbortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
