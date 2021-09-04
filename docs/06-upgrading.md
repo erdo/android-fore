@@ -17,7 +17,7 @@ The fore library is divided into optional packages which you can pull in indepen
 
 **kotlin** API
 ```
-co.early.fore:fore-core-kt
+co.early.fore:fore-kt-core
 co.early.fore:fore-kt-android-core
 co.early.fore:fore-kt-android-adapters
 co.early.fore:fore-kt-android-network
@@ -25,7 +25,7 @@ co.early.fore:fore-kt-android-network
 
 **java** API
 ```
-co.early.fore:fore-core-jv
+co.early.fore:fore-jv-core
 co.early.fore:fore-jv-android-core
 co.early.fore:fore-jv-android-adapters
 co.early.fore:fore-jv-android-network

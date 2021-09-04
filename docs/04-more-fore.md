@@ -5,7 +5,7 @@ Retrofit2, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
-The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/Either.kt).
+The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/Either.kt).
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -170,7 +170,7 @@ Once things have been setup correctly with fore, the only thing you'll need to d
 
 ## Why do adapters crash in the first place?
 
-More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
+More specifics regarding adapters and threading are in the source of [ObservableImp](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/observer/ObservableImp.kt) where it talks about the notificationMode. One of the subtle gotchas with android adapters is that when you update list data that is driving an adapter, **the actual change to the list must be done on the UI thread** and the **adapter must be told straight after** (or at least before the thread you are on, yields). Call it at the end of the method you are in, for example.
 
 > "the change to the list data MUST be done on the UI thread AND the adapter MUST be told before the current thread yields"
 
@@ -193,7 +193,7 @@ From **1.2.0** the kotlin APIs will set default values for these parameters if y
 
 By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
 
-All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/fore-core-kt/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt#L24-L50).
+All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt#L24-L50).
 
 
 # AsyncTasks with Lambdas
@@ -232,7 +232,7 @@ The quickest **fore** solution to all that is to use AsyncBuilder
 
 (_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
 
-This class uses the builder pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
+This class uses the builder pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
 
 One restriction with AsyncBuilder is there is no way to publish progress as you can with android's AsyncTask. If you want to use that feature during your asynchronous operation, see the Async class below.
 
@@ -269,7 +269,7 @@ Passing WorkMode.SYNCHRONOUS here on the other hand makes the whole AsyncBuilder
 ## Async
 Async (which is basically a wrapper over AsyncTask that makes it testable) looks and behaves very similarly to android's AsyncTask and is an (almost) drop in replacement for it.
 
-You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
+You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
 
 Here's how you use Async:
 

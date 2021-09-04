@@ -14,15 +14,15 @@
  * co.early.fore.kt.adapters.NotifyableImp() //fore-kt-android-adapters
  * co.early.fore.adapters.CrossFadeRemover() //fore-jv-android-adapters
  * co.early.fore.kt.core.delegate.DebugDelegateDefault() //fore-kt-android-core
- * co.early.fore.kt.core.logging.SystemLogger() //fore-core-kt
- * co.early.fore.core.testhelpers.CountDownLatchWrapper() //fore-core-jv
+ * co.early.fore.kt.core.logging.SystemLogger() //fore-kt-core
+ * co.early.fore.core.testhelpers.CountDownLatchWrapper() //fore-jv-core
  *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
  * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
  * ./gradlew :buildEnvironment
- * ./gradlew :fore-core-kt:dependencies
+ * ./gradlew :fore-kt-core:dependencies
  *
  * bundle exec jekyll serve
  *

@@ -181,7 +181,7 @@ Because of the low boiler plate and the clear separation of architectural layers
 
 ## Where to get more information
 
-This repo includes the tiny fore-core library, the optional packages, and 10 mini example apps. Any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
+This repo includes the tiny fore library, the optional packages, and 10 mini example apps. Any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
 
 `git clone git@github.com:erdo/android-fore.git`
 
@@ -191,7 +191,7 @@ A few other sample apps are listed in the [github project summary](https://githu
 
 ## Extras
 
-The optional packages include a few solutions to common issues that crop up in android app development like [extension functions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
+The optional packages include a few solutions to common issues that crop up in android app development like [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them completely testable (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
 There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations), and networking layer abstractions compatible with [**Retrofit2**, **Ktor** or **Apollo**](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) that will encourage your team to write robust networking code by default. fore works really well with RoomDB too, checkout the sample app for details.
 
@@ -228,7 +228,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 
 ![fore threading sample app](img/fore-android-sample-async.gif)
 
-This one demonstrates asynchronous programming, and importantly how to test it. The **java** version uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)), the **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-core-kt/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that make the coroutines unit testable). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
+This one demonstrates asynchronous programming, and importantly how to test it. The **java** version uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)), the **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that make the coroutines unit testable). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
 This app has a counter that you can increase by pressing a button (but it takes time to do the increasing - so you can rotate the device, background the app etc and see the effect).
 
