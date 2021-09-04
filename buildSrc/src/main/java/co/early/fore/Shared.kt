@@ -7,15 +7,15 @@ import java.util.*
 object Shared {
 
     object Android {
-        const val minSdkVersion = 16
-        const val compileSdkVersion = 30
-        const val targetSdkVersion = 30
-        val javaVersion = JavaVersion.VERSION_1_8
+        const val minSdk = 16
+        const val compileSdk = 30
+        const val targetSdk = 30
+        val javaVersion = JavaVersion.VERSION_11
     }
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "4.2.1"
+        const val android_gradle_plugin = "7.0.2"
         const val kotlin_version = "1.5.10"
         const val kotlinx_coroutines_core = "1.4.2"
         // fore optional package dependencies
@@ -23,6 +23,7 @@ object Shared {
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
+        const val apollo3 = "3.0.0-alpha03"
         const val retrofit = "2.9.0"
         // example app and test dependencies
         const val android_core = "1.1.0"
@@ -57,8 +58,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.4.8" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 60
+        const val LIB_VERSION_NAME = "1.4.10" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 62
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -71,7 +72,7 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.4.8"
+        const val published_fore_version_for_examples = "1.4.10"
         const val use_published_version = false
     }
 

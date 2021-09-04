@@ -3,7 +3,6 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("maven")
     id("idea")
     kotlin("android")
     kotlin("android.extensions")
@@ -27,12 +26,12 @@ android {
         targetCompatibility = Shared.Android.javaVersion
     }
 
-    compileSdkVersion(Shared.Android.compileSdkVersion)
+    compileSdk = Shared.Android.compileSdk
 
     defaultConfig {
         applicationId = appId
-        minSdkVersion(Shared.Android.minSdkVersion)
-        targetSdkVersion(Shared.Android.targetSdkVersion)
+        minSdk = Shared.Android.minSdk
+        targetSdk = Shared.Android.targetSdk
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -57,7 +56,7 @@ android {
             signingConfig = signingConfigs.getByName(BuildTypes.RELEASE)
         }
     }
-    lintOptions {
+    lint {
         isAbortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
@@ -71,9 +70,9 @@ repositories {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-core-android-kt:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-core-android-kt"))
+        implementation(project(":fore-kt-android-core"))
     }
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

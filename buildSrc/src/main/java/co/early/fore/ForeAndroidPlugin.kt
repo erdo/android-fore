@@ -25,20 +25,17 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
         targetCompatibility = Shared.Android.javaVersion
     }
 
-    compileSdkVersion(Shared.Android.compileSdkVersion)
+    compileSdk = Shared.Android.compileSdk
 
-    lintOptions {
+    lint {
         isAbortOnError = true
         lintConfig = File(project.rootDir, "lint-library.xml")
     }
 
     defaultConfig {
 
-        minSdkVersion(Shared.Android.minSdkVersion)
-        targetSdkVersion(Shared.Android.targetSdkVersion)
-
-        versionCode = Shared.Publish.LIB_VERSION_CODE
-        versionName = Shared.Publish.LIB_VERSION_NAME
+        minSdk = Shared.Android.minSdk
+        targetSdk = Shared.Android.targetSdk
 
         multiDexEnabled = true
 
@@ -65,14 +62,14 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
 
 fun logSourceSets(sourceSets: NamedDomainObjectContainer<AndroidSourceSet>) {
     println("\n**********")
-    println("android sourcesets available:")
+    println("android sourceSets available:")
     sourceSets.names.forEach {
-        println("-> ${it}")
+        println("-> $it")
     }
     println("...... listing contents of main only:")
-    val mainsourceset = sourceSets.getByName("main")
-    mainsourceset.java.srcDirs.forEach { dir ->
-        print("${dir.absolutePath}")
+    val mainSourceSet = sourceSets.getByName("main")
+    mainSourceSet.java.srcDirs.forEach { dir ->
+        print(dir.absolutePath)
         logFiles(dir)
         print("\n")
     }
@@ -83,7 +80,7 @@ fun logFiles(file: File, space: String = ""){
     if (file.isDirectory){
         print("\n${space}${file.name}")
         file.listFiles()?.forEach {
-            logFiles(it, space + "  ")
+            logFiles(it, "$space  ")
         }
     } else {
         print("\n${space}${file.name}")

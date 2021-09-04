@@ -9,11 +9,11 @@
  * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
  *
  * sourcefile downloads sanity check:
- * co.early.fore.kt.net.apollo.CallProcessorApollo() //fore-network-kt
- * co.early.fore.net.NetworkingLogSanitizer() //fore-network-jv
- * co.early.fore.kt.adapters.NotifyableImp() //fore-adapters-kt
- * co.early.fore.adapters.CrossFadeRemover() //fore-adapters-jv
- * co.early.fore.kt.core.delegate.DebugDelegateDefault() //fore-core-android-kt
+ * co.early.fore.kt.net.apollo.CallProcessorApollo() //fore-kt-android-network
+ * co.early.fore.net.NetworkingLogSanitizer() //fore-jv-android-network
+ * co.early.fore.kt.adapters.NotifyableImp() //fore-kt-android-adapters
+ * co.early.fore.adapters.CrossFadeRemover() //fore-jv-android-adapters
+ * co.early.fore.kt.core.delegate.DebugDelegateDefault() //fore-kt-android-core
  * co.early.fore.kt.core.logging.SystemLogger() //fore-core-kt
  * co.early.fore.core.testhelpers.CountDownLatchWrapper() //fore-core-jv
  *

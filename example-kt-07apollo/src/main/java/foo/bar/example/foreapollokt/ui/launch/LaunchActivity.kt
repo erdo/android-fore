@@ -59,7 +59,7 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
         launch_login_btn.isEnabled = !authenticator.isBusy
         launch_logout_btn.isEnabled = !authenticator.isBusy
         launch_fetch_btn.isEnabled = !launchesModel.isBusy
-        launch_chain_btn.isEnabled = !launchesModel.isBusy && launchesModel.currentLaunch != NO_LAUNCH
+        launch_chain_btn.isEnabled = !launchesModel.isBusy && !authenticator.isBusy
         launch_session_txt.text = "session token:${authenticator.sessionToken}"
         launch_authbusy_progbar.showOrGone(authenticator.isBusy)
         launch_session_txt.showOrGone(!authenticator.isBusy)

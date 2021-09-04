@@ -3,7 +3,6 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("maven")
     id("idea")
     id("com.apollographql.apollo").version("2.5.4")
     kotlin("android")
@@ -28,12 +27,12 @@ android {
         targetCompatibility = Shared.Android.javaVersion
     }
 
-    compileSdkVersion(Shared.Android.compileSdkVersion)
+    compileSdk = Shared.Android.compileSdk
 
     defaultConfig {
         applicationId = appId
-        minSdkVersion(Shared.Android.minSdkVersion)
-        targetSdkVersion(Shared.Android.targetSdkVersion)
+        minSdk = Shared.Android.minSdk
+        targetSdk = Shared.Android.targetSdk
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -58,7 +57,7 @@ android {
             signingConfig = signingConfigs.getByName(BuildTypes.RELEASE)
         }
     }
-    lintOptions {
+    lint {
         isAbortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
@@ -85,9 +84,9 @@ repositories {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-network-kt:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-kt-android-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-network-kt"))
+        implementation(project(":fore-kt-android-network"))
     }
 
     implementation("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

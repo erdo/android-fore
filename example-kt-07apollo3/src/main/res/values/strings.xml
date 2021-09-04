@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">kt 7 apllo3</string>
+
+    <!-- common error messages -->
+    <string name="msg_empty_message"></string>
+    <string name="msg_error_misc">Some kind of error, maybe check logs</string>
+    <string name="msg_error_network">Network error, check connection</string>
+    <string name="msg_error_server">Server down, try again soon</string>
+    <string name="msg_error_already_executed">Call has already been executed, check code</string>
+    <string name="msg_error_client">Client error</string>
+    <string name="msg_rate_limited">Too many requests</string>
+    <string name="msg_error_session_timeout">Unauthorized</string>
+    <string name="msg_error_busy">Busy</string>
+    <string name="msg_error_cancelled">Cancelled</string>
+
+    <!-- launch related custom messages -->
+    <string name="msg_error_blank_email">Email is blank</string>
+    <string name="msg_error_no_launch">No launch to book</string>
+    <string name="msg_error_launch_server_says_no">Sorry, please contact us</string>
+    <string name="msg_error_launch_internal_server">Server error, please try again</string>
+
+    <string name="fruit_percent">(%s%% tasty)</string>
+
+</resources>
