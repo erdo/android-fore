@@ -193,7 +193,7 @@ From **1.2.0** the kotlin APIs will set default values for these parameters if y
 
 By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
 
-All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt#L24-L50).
+All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt) and [here](https://github.com/erdo/android-fore/blob/master/fore-kt-android-core/src/main/java/co/early/fore/kt/core/delegate/AndroidDebugDelegate.kt).
 
 
 # AsyncTasks with Lambdas
@@ -232,7 +232,7 @@ The quickest **fore** solution to all that is to use AsyncBuilder
 
 (_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
 
-This class uses the builder pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
+This class uses the builder pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-android-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
 
 One restriction with AsyncBuilder is there is no way to publish progress as you can with android's AsyncTask. If you want to use that feature during your asynchronous operation, see the Async class below.
 
@@ -269,7 +269,7 @@ Passing WorkMode.SYNCHRONOUS here on the other hand makes the whole AsyncBuilder
 ## Async
 Async (which is basically a wrapper over AsyncTask that makes it testable) looks and behaves very similarly to android's AsyncTask and is an (almost) drop in replacement for it.
 
-You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
+You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-android-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
 
 Here's how you use Async:
 
