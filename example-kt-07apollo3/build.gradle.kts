@@ -81,9 +81,9 @@ repositories {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-network-kt:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-kt-android-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-network-kt"))
+        implementation(project(":fore-kt-android-network"))
     }
 
     implementation("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")

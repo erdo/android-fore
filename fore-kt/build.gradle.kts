@@ -23,8 +23,8 @@ android {
 
 dependencies {
 
-    api(project(":fore-adapters-kt"))
-    api(project(":fore-network-kt"))
+    api(project(":fore-kt-android-adapters"))
+    api(project(":fore-kt-android-network"))
 
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

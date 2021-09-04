@@ -67,9 +67,9 @@ repositories {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-core-android-jv:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-jv-android-core:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-core-android-jv"))
+        implementation(project(":fore-jv-android-core"))
     }
 
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")

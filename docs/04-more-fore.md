@@ -1,7 +1,7 @@
 <a name="fore-network"></a>
 # Retrofit2, Apollo and Ktor
 
-Retrofit2, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallProcessor** class ([CallProcessorRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/CallProcessorRetrofit2.kt) \| [CallProcessorApollo](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/apollo/CallProcessorApollo.kt) \| [CallProcessorKtor](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/ktor/CallProcessorKtor.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
+Retrofit2, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallProcessor** class ([CallProcessorRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/CallProcessorRetrofit2.kt) \| [CallProcessorApollo](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/apollo/CallProcessorApollo.kt) \| [CallProcessorKtor](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/ktor/CallProcessorKtor.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
 
 The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
@@ -61,7 +61,7 @@ And then you can convert any CallProcessor results from Fore Eithers to Arrow Ei
 
 ## carryOn
 
-The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-network-kt/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
+The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
 
 
 <pre class="codesample"><code>

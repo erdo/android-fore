@@ -11,7 +11,7 @@ java {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-core-kt")
+    set("LIB_ARTIFACT_ID", "fore-kt-core")
     set("LIB_DESCRIPTION", "fore - core code for kotlin")
 }
 
@@ -19,7 +19,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 sourceSets["main"].java.apply {
     srcDirs(
-        "../fore-core-jv/src/main/java"
+        "../fore-jv-core/src/main/java"
     )
     exclude(
         "co/early/fore/core/logging/**",

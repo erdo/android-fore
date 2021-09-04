@@ -6,7 +6,7 @@ plugins {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-adapters-kt")
+    set("LIB_ARTIFACT_ID", "fore-kt-android-adapters")
     set("LIB_DESCRIPTION", "fore - android adapter and diff util helpers, kotlin")
 }
 
@@ -15,7 +15,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 android {
     sourceSets["main"].java.apply {
         srcDirs(
-            "../fore-adapters-jv/src/main/java"
+            "../fore-jv-android-adapters/src/main/java"
         )
         exclude(
             "co/early/fore/adapters/mutable/ChangeAwareArrayList.java",
@@ -28,8 +28,7 @@ android {
 
 dependencies {
 
-    api(project(":fore-core-android-kt"))
-
+    api(project(":fore-kt-android-core"))
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 

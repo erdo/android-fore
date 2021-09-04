@@ -6,7 +6,7 @@ plugins {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-network-kt")
+    set("LIB_ARTIFACT_ID", "fore-kt-android-network")
     set("LIB_DESCRIPTION", "fore - network helpers, kotlin")
 }
 
@@ -21,7 +21,7 @@ android {
     }
     sourceSets["main"].java.apply {
         srcDirs(
-                "../fore-network-jv/src/main/java"
+                "../fore-jv-android-network/src/main/java"
         )
         exclude(
                 "co/early/fore/net/InterceptorLogging.java",
@@ -35,8 +35,7 @@ android {
 
 dependencies {
 
-    api(project(":fore-core-android-kt"))
-
+    api(project(":fore-kt-android-core"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")

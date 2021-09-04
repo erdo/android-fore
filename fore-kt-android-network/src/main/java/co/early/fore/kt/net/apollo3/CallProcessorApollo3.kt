@@ -23,15 +23,15 @@ interface Apollo3Caller<F> {
 }
 
 /**
- * @param globalErrorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
+ * @property globalErrorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
  * etc). This error handler is often the same across a range of services required by the app.
  * However, sometimes the APIs all have different error behaviours (say when the service APIs have
  * been developed at different times, or by different teams or different third parties). In this
  * case a separate CallProcessorApollo3 instance (and ErrorHandler) will be required for each micro
  * service.
- * @param logger (optional: ForeDelegateHolder will choose a sensible default)
- * @param workMode (optional: ForeDelegateHolder will choose a sensible default)
- * @param allowPartialSuccesses (defaults to false) The GraphQL spec allows for success responses
+ * @property logger (optional: ForeDelegateHolder will choose a sensible default)
+ * @property workMode (optional: ForeDelegateHolder will choose a sensible default)
+ * @property allowPartialSuccesses (defaults to false) The GraphQL spec allows for success responses
  * with qualified errors, like this: https://spec.graphql.org/draft/#example-90475 if true, you will
  * receive these responses as successes, together with the list of partial errors that were attached
  * in the response. If allowPartialSuccesses=false, these types of responses will be delivered as
@@ -39,7 +39,7 @@ interface Apollo3Caller<F> {
  * make keeping your domain layer and api layers separate a lot harder, and apart from in some highly
  * optimised situations I'd recommend you keep it set to false.
  *
- * @param <F>  The class type passed back in the event of a failure, Globally applicable
+ * @param F  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
 @ExperimentalStdlibApi
@@ -58,20 +58,20 @@ class CallProcessorApollo3<F>(
     )
 
     /**
-     * @param call functional type that returns a fresh instance of the ApolloCall to be processed
-     * @param <S> Success class you expect to be returned from the call (or Unit for an empty response)
+     * @param call functional type that returns the result of an ApolloRequest
+     * @param S Success class you expect to be returned from the call (or Unit for an empty response)
      *
-     * @returns Either<F, SuccessResult<S>>
+     * @return Either<F, SuccessResult<S>>
      */
     override suspend fun <S : Operation.Data> processCallAwait(call: suspend () -> ApolloResponse<S>): Either<F, SuccessResult<S>> {
         return processCallAsync(call).await()
     }
 
     /**
-     * @param call functional type that returns a fresh instance of the ApolloCall to be processed
-     * @param <S> Success class you expect to be returned from the call (or Unit for an empty response)
+     * @param call functional type that returns the result of an ApolloRequest
+     * @param S Success class you expect to be returned from the call (or Unit for an empty response)
      *
-     * @returns Deferred<Either<F, SuccessResult<S>>>
+     * @return Deferred<Either<F, SuccessResult<S>>>
      */
     override suspend fun <S : Operation.Data> processCallAsync(call: suspend () -> ApolloResponse<S>): Deferred<Either<F, SuccessResult<S>>> {
 

@@ -10,7 +10,7 @@ java {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-core-jv")
+    set("LIB_ARTIFACT_ID", "fore-jv-core")
     set("LIB_DESCRIPTION", "fore - core code for java")
 }
 
