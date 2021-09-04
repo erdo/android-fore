@@ -120,6 +120,14 @@ jobs:
           path: example-kt-07apollo/build/test-results
 
       - run:
+          name: Run Tests example-kt-07apollo3
+          command: ./gradlew example-kt-07apollo3:lintRelease example-kt-07apollo3:testRelease
+      - store_artifacts:
+          path: example-kt-07apollo3/build/reports
+      - store_test_results:
+          path: example-kt-07apollo3/build/test-results
+
+      - run:
           name: Run Tests example-kt-08ktor
           command: ./gradlew example-kt-08ktor:lintRelease example-kt-08ktor:testRelease
       - store_artifacts:
