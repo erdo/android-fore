@@ -10,7 +10,7 @@ object Shared {
         const val minSdk = 16
         const val compileSdk = 30
         const val targetSdk = 30
-        val javaVersion = JavaVersion.VERSION_11
+        val javaVersion = JavaVersion.VERSION_1_8
     }
 
     object Versions {
