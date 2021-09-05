@@ -10,7 +10,7 @@ object Shared {
         const val minSdk = 16
         const val compileSdk = 30
         const val targetSdk = 30
-        val javaVersion = JavaVersion.VERSION_11
+        val javaVersion = JavaVersion.VERSION_1_8
     }
 
     object Versions {
@@ -58,8 +58,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.4.10" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 62
+        const val LIB_VERSION_NAME = "1.4.11" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 63
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -72,7 +72,7 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.4.10"
+        const val published_fore_version_for_examples = "1.4.11"
         const val use_published_version = false
     }
 
