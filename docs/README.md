@@ -161,21 +161,21 @@ override fun syncView() {
 }
  </code></pre>
 
+ In this example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) - it's entirely up to you, it makes no difference to the syncView() technique.
+
 **fore** enables you to write view layers that are particularly sparse, and the apps are highly scalable from a complexity standpoint. This makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
 
 Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on this
 
 Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
-In that example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) - it's entirely up to you, it makes no difference to the syncView() technique.
-
 Read more about the [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture of fore apps.
 
 ### Motivation
 
-There is often a tendency in business requirements towards complexity, the longer a project exists, the more complex it becomes. For an android app to remain maintainable it needs to be able to absorb this complexity without too much damage to the code base. So if there was one guiding principle followed when developing fore and its techniques, it was probably: *complexity is the enemy*.
+There is often a tendency in business requirements towards complexity, the longer a project exists, the more complex it becomes. For an android app to remain maintainable over a period of years, it needs to be able to absorb this complexity without too much damage to the code base. So if there was one guiding principle followed when developing fore and its techniques, it was probably: *complexity is the enemy*.
 
-But as any developer knows, in the moment, writing complicated code is usually easier than writing simple code (you pay for the complexity later). Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
+But as any developer knows, writing complicated code is usually easier than writing simple code (you pay for the complexity later). Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
 
 Because of the low boiler plate and the clear separation of architectural layers, MVO implemented with fore should help with issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering.
 
