@@ -24,20 +24,20 @@ jobs:
           key: v4-gradle-dependencies-cache
 
       - run:
-          name: Run Tests fore-jv
-          command: ./gradlew fore-jv:lintRelease fore-jv:testRelease
+          name: Run Tests fore-jv-android
+          command: ./gradlew fore-jv-android:lintRelease fore-jv-android:testRelease
       - store_artifacts:
-          path: fore-jv/build/reports
+          path: fore-jv-android/build/reports
       - store_test_results:
-          path: fore-jv/build/test-results
+          path: fore-jv-android/build/test-results
 
       - run:
-          name: Run Tests fore-kt
-          command: ./gradlew fore-kt:lintRelease fore-kt:testRelease
+          name: Run Tests fore-kt-android
+          command: ./gradlew fore-kt-android:lintRelease fore-kt-android:testRelease
       - store_artifacts:
-          path: fore-kt/build/reports
+          path: fore-kt-android/build/reports
       - store_test_results:
-          path: fore-kt/build/test-results
+          path: fore-kt-android/build/test-results
 
       - run:
           name: Run Tests example-jv-01reactiveui

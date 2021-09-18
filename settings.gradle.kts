@@ -1,12 +1,14 @@
 rootProject.name = "android-fore"
 
-include(":fore-jv")
+include(":fore-jv-android")
+
 include(":fore-jv-core")
 include(":fore-jv-android-core")
 include(":fore-jv-android-adapters")
 include(":fore-jv-android-network")
 
-include(":fore-kt")
+include(":fore-kt-android")
+
 include(":fore-kt-core")
 include(":fore-kt-android-core")
 include(":fore-kt-android-adapters")

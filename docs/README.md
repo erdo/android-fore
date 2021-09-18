@@ -19,12 +19,12 @@
 
 the **kotlin** API, running coroutines under the hood:
 ```
-implementation("co.early.fore:fore-kt:1.4.11")
+implementation("co.early.fore:fore-kt-android:1.4.12")
 ```
 
 the original **java** API:
 ```
-implementation("co.early.fore:fore-jv:1.4.11")
+implementation("co.early.fore:fore-jv-android:1.4.12")
 ```
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 

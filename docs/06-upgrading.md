@@ -3,14 +3,14 @@
 
 Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
-**kotlin** API fat package
+**kotlin** API android package
 ```
-co.early.fore:fore-kt
+co.early.fore:fore-kt-android
 ```
 
-**java** API fat package
+**java** API android package
 ```
-co.early.fore:fore-jv
+co.early.fore:fore-jv-android
 ```
 
 The fore library is divided into optional packages which you can pull in independently if you want (though the fat package is so small, it doesn't really seem worth it IMO).
@@ -31,7 +31,7 @@ co.early.fore:fore-jv-android-adapters
 co.early.fore:fore-jv-android-network
 ```
 
-The java and kotlin packages will co-exist in the same app with no problem. To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
+To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
 
 ## kotlin 1.5.10
 **fore 1.4.7** bumps the kotlin version to 1.5.10 so if you haven't updgrade your project to kotin 1.5.10 yet, you might encounter strange problems with obfuscation or other issues. If you do, drop down to **fore 1.4.6** or upgrade kotlin in your project.
