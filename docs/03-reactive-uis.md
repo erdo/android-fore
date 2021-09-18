@@ -99,7 +99,7 @@ If the list of things you are observing gets a little long, you can remove some 
 
 ### <a name="observablegroup"></a>Using ObservableGroup in a ViewModel
 
-Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what fore means by "thinner android view layers". We're using this exact technique in the [clean architecture modules sample app](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt).
+Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any/all of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what fore means by "thinner android view layers". We're using this exact technique in the [clean architecture modules sample app](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt).
 
 <pre class="codesample"><code>
 
@@ -134,6 +134,8 @@ class MyViewModel(
 }
  </code></pre>
 
+For completeness, here is the BaseViewModel
+
 <pre class="codesample"><code>
 
 abstract class BaseViewModel(
@@ -157,7 +159,7 @@ abstract class BaseViewModel(
 
 ### ForeLifecycleObserver
 
-If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity or Fragment which will handle it all for you:
+If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally):
 
  <pre class="codesample"><code>
 class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {

@@ -47,7 +47,7 @@ This is the kind of challenge that the [observer pattern](https://en.wikipedia.o
 
 At this point, you might be thinking that fore is a reactive streams library like Rx. In fact (other than the observer pattern) fore and reactive streams have very little to do with each other, and it's normal to find them both in the same project.
 
-Connecting architectural layers with reactive streams is often done, but compared with a fore style solution it usually (always?) results in more code in the view layer. Plus this additional code now needs to consider lifecycle issues which are only present in the view layer. This boilerplate difference becomes steadily more apparent as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)).
+While connecting architectural layers with reactive streams is often done, it usually (always?) results in more code in the view layer when compared with a fore style solution. Plus this additional code needs to consider lifecycle issues which are only present in the view layer. This boilerplate difference becomes steadily more apparent as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)).
 
 On the other hand, processing and combining data streams in the data layer on different threads using fore would be pointless, and a natural fit for something like Rx or Flow.
 
