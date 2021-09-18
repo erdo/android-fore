@@ -248,7 +248,13 @@ accountModel.accountStateLiveData.observer(this, Observer { status ->
 
 </code></pre>
 
-We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler-plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually. This is what **fore** code would also look like if we had a parameter in the somethingChanged() method, luckily there is no parameter. All fore observables have exactly the same code signature, no matter what type of data is involved.
+We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler-plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical. None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually. This is what **fore** code would also look like if we had a parameter in the somethingChanged() method, luckily there is no parameter. All fore observables have exactly the same code signature, no matter what type of data is involved. This is the fore equivalent of the code above (the data is accessed directly from the models from within syncview() - the reason this is totally robust and safe by the way is that fore observers are fired on the UI thread by default).
+
+<pre class="codesample"><code>
+lifecycle.addObserver(
+  ForeLifecycleObserver(this, accountModel)
+)
+</code></pre>
 
 *(NB: If you've used MVI before, you'll immediately spot that we can improve this situation by observing a single immutable viewState - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if your view layer is observing more than one model...)*
 
@@ -290,9 +296,33 @@ weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
 
 </code></pre>
 
+Here's the fore equivalent to that code
+
+<pre class="codesample"><code>
+lifecycle.addObserver(
+  ForeLifecycleObserver(this, emailInbox, accountModel, weatherModel)
+)
+
+</code></pre>
+
+Or you could use a BaseViewModel to do this (see above for the BaseViewModel code)
+
+<pre class="codesample"><code>
+class MyViewModel(
+    private val emailInBox: EmailInBox,
+    private val accountModel: AccountModel,
+    private val weatherModel: WeatherModel
+) : BaseViewModel(emailInBox, accountModel, weatherModel) {
+  ...
+}
+
+</code></pre>
+
+This kind of code is only possible because fore separates a model's _observable nature_ from the _data that actually changed_
+
 ### Remove the parameter, remove the boilerplate
 
-Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview), and it's what lets us write:
+Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview), and it's what lets us write simple code like this:
 
 <pre class="codesample"><code>
 //single observer reference
@@ -315,7 +345,7 @@ override fun onStop() {
 
 </code></pre>
 
-With the Observble API cut down to that extent, we can actually take it further and remove even more boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#observablegroup), or the [ForeLifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#forelifecycleobserver).
+Or take it further as we did with the examples above and remove almost all the boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#observablegroup), or the [ForeLifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#forelifecycleobserver).
 
 > "reduce view layer code to its absolute fundamentals: what things look like"
 
