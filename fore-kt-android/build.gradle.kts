@@ -6,7 +6,7 @@ plugins {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-kt")
+    set("LIB_ARTIFACT_ID", "fore-kt-android")
     set("LIB_DESCRIPTION", "android fore - everything in one aar for kotlin development")
 }
 

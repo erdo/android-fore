@@ -77,9 +77,9 @@ repositories {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-kt:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-kt-android:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt"))
+        implementation(project(":fore-kt-android"))
     }
 
     implementation("io.ktor:ktor-client-serialization:${Shared.Versions.ktor_client}")

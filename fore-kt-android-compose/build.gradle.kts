@@ -1,0 +1,31 @@
+import co.early.fore.Shared
+
+plugins {
+    id("fore-android-plugin")
+    kotlin("android")
+}
+
+ext.apply {
+    set("LIB_ARTIFACT_ID", "fore-kt-android-compose")
+    set("LIB_DESCRIPTION", "fore - android kotlin compose")
+}
+
+println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
+
+android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Shared.Versions.compose
+    }
+}
+
+dependencies {
+
+    api(project(":fore-kt-android"))
+
+    implementation("androidx.compose.ui:ui:${Shared.Versions.compose}")
+}
+
+apply(from = "../publish-android-compose-lib.gradle.kts")
