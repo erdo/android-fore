@@ -36,7 +36,7 @@ project.afterEvaluate {
 
                 groupId = "${Shared.Publish.LIB_GROUP}"
                 artifactId = LIB_ARTIFACT_ID
-                version = "${Shared.Publish.LIB_VERSION_NAME}"
+                version = "${Shared.Versions.compose}" //compose version, not fore version
 
                 artifact(tasks["bundleReleaseAar"])
                 artifact(project.tasks["androidSourcesJar"])
