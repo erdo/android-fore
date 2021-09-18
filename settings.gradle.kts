@@ -13,6 +13,7 @@ include(":fore-kt-core")
 include(":fore-kt-android-core")
 include(":fore-kt-android-adapters")
 include(":fore-kt-android-network")
+include(":fore-kt-android-compose")
 
 include(":example-kt-01reactiveui", ":example-kt-02coroutine", "example-kt-03adapters",
         ":example-kt-04retrofit", ":example-kt-07apollo", ":example-kt-07apollo3", ":example-kt-08ktor",
