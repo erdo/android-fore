@@ -168,10 +168,7 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
     lifecycle.addObserver(
         ForeLifecycleObserver(
             this,
-            accountModel,
-            networkInfo,
-            emailInBox,
-            weatherRepository
+            viewModel
         )
     )
    }
