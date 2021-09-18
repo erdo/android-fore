@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.4.11](https://img.shields.io/badge/central-1.4.11-green.svg){: .float-left}
+![central-1.4.12](https://img.shields.io/badge/central-1.4.12-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -39,7 +39,7 @@ More detailed [version information here](https://erdo.github.io/android-fore/06-
 
 Imagine your app existing entirely separately from its UI (its UI could be a command line interface, or a GUI - the app shouldn't care or even know what type of UI it has). Then imagine the UI layer as a thin window on to this app, free to deal exclusively with _what things look like_.
 
-This level of separation is a goal of a lots of architectures and it's a great way to develop anything that has a UI. It's especially helpful for a platform like android with its ephemeral view layer that gets destroyed and recreated on rotation. It also lets you junit test almost everything, the UI layer becoming as close to trivial as possible.
+This level of separation is a goal of lots of architectures and it's a great way to develop anything that has a UI. It's especially helpful for a platform like android with its ephemeral view layer that gets destroyed and recreated on rotation. It also lets you junit test almost everything, the UI layer becoming as close to trivial as possible.
 
 ### Observers and Observables
 
