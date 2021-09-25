@@ -14,7 +14,7 @@ fun <T> Observable.observeAsState(getState: () -> T): State<T> {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state = remember { mutableStateOf(getState()) }
     val observer = Observer { state.value = getState() }
-    lifecycleOwner.lifecycle.addObserver(ForeLifeCycleObserver(observer,this))
+    lifecycleOwner.lifecycle.addObserver(ForeLifecycleObserver(observer,this))
     return state
 }
 
@@ -23,6 +23,6 @@ fun <T> ObservableGroup.observeAsState(getState: () -> T): State<T> {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val state = remember { mutableStateOf(getState()) }
     val observer = Observer { state.value = getState() }
-    lifecycle.addObserver(ForeLifeCycleObserver(observer, this))
+    lifecycle.addObserver(ForeLifecycleObserver(observer, this))
     return state
 }
