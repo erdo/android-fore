@@ -8,7 +8,7 @@ object Shared {
 
     object Android {
         const val minSdk = 16
-        const val compileSdk = 30
+        const val compileSdk = 31
         const val targetSdk = 30
         val javaVersion = JavaVersion.VERSION_1_8
     }
@@ -40,7 +40,7 @@ object Shared {
         const val espresso_core = "3.1.0-beta02"
         const val butterknife = "10.2.0"
         const val mockito_core = "2.23.0"
-        const val mockk = "1.10.5"
+        const val mockk = "1.10.6"
         const val junit = "4.12"
         const val espresso = "3.0.2"
         const val hamcrest_library = "1.3"
