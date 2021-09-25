@@ -33,20 +33,20 @@ object OG {
 
         // networking classes common to all models
         val httpClient = CustomKtorBuilder.create(
-                CustomGlobalRequestInterceptor(logger),
-                InterceptorLogging(logger)
+            CustomGlobalRequestInterceptor(logger),
+            InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
         val callProcessor = CallProcessorKtor(
-                globalErrorHandler = CustomGlobalErrorHandler(logger),
-                logger = logger
+            globalErrorHandler = CustomGlobalErrorHandler(logger),
+            logger = logger
         )
 
         // models
         val fruitFetcher = FruitFetcher(
-                FruitService.create(httpClient),
-                callProcessor,
-                logger
+            FruitService.create(httpClient),
+            callProcessor,
+            logger
         )
 
         // add models to the dependencies map if you will need them later

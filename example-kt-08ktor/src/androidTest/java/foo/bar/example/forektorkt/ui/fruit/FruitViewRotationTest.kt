@@ -12,14 +12,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.Either
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
-import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.net.ktor.CallProcessorKtor
 import foo.bar.example.forektorkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.forektorkt.R

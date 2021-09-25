@@ -38,7 +38,7 @@ import org.junit.Test
 class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
-    private val interceptorLogging = InterceptorLogging(logger)
+    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
     private val callProcessor = CallProcessorKtor(
             globalErrorHandler = CustomGlobalErrorHandler(logger),
             logger = logger
@@ -211,34 +211,39 @@ class FruitFetcherIntegrationTest {
     }
 
 
-    private fun stubbedHttpClient(stubbedServiceDefinition: StubbedServiceDefinition<*>): HttpClient {
+    private fun stubbedHttpClient(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): HttpClient {
         return CustomKtorBuilder.create(
-                InterceptorStubbedService(stubbedServiceDefinition),
+            co.early.fore.net.testhelpers.InterceptorStubbedService(
+                stubbedServiceDefinition
+            ),
                 interceptorLogging
         )
     }
 
     companion object {
 
-        private val stubbedSuccess = StubbedServiceDefinition(
+        private val stubbedSuccess =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 201, //stubbed HTTP code
                 "fruit/success.json", //stubbed body response
                 "application/json; charset=UTF-8",
                 FruitPojo("orange", true, 43) //expected result
-        )
+            )
 
-        private val stubbedFailUserLocked = StubbedServiceDefinition(
+        private val stubbedFailUserLocked =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 401, //stubbed HTTP code
                 "common/error_user_locked.json", //stubbed body response
                 "application/json; charset=UTF-8",
                 ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
-        )
+            )
 
-        private val stubbedFailureUserNotEnabled = StubbedServiceDefinition(
+        private val stubbedFailureUserNotEnabled =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 401, //stubbed HTTP code
                 "common/error_user_not_enabled.json", //stubbed body response
                 "application/json; charset=UTF-8",
                 ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
-        )
+            )
     }
 }
