@@ -12,7 +12,7 @@ java {
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-kt-core")
-    set("LIB_DESCRIPTION", "fore - core code for kotlin")
+    set("LIB_DESCRIPTION", "fore - kotlin core code")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")

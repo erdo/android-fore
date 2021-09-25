@@ -43,7 +43,7 @@ import org.junit.Test
  */
 class LaunchFetcherIntegrationTest {
 
-    private val interceptorLogging = InterceptorLogging()
+    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging()
     private val logger = SystemLogger()
     private val callProcessor = CallProcessorApollo(CustomGlobalErrorHandler(logger))
 
@@ -233,9 +233,11 @@ class LaunchFetcherIntegrationTest {
     }
 
 
-    private fun stubbedApolloClient(stubbedServiceDefinition: StubbedServiceDefinition<*>): ApolloClient {
+    private fun stubbedApolloClient(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): ApolloClient {
         return CustomApolloBuilder.create(
-                InterceptorStubbedService(stubbedServiceDefinition),
+            co.early.fore.net.testhelpers.InterceptorStubbedService(
+                stubbedServiceDefinition
+            ),
                 interceptorLogging
         )
     }
@@ -252,24 +254,27 @@ class LaunchFetcherIntegrationTest {
 
     companion object {
 
-        private val stubbedSuccess = StubbedServiceDefinition(
+        private val stubbedSuccess =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 200, //stubbed HTTP code
                 "launches/success.json", //stubbed body response
                 Launch("109", "Site 40") //expected result
-        )
+            )
 
 
-        private val stubbedFailSaysNo = StubbedServiceDefinition(
+        private val stubbedFailSaysNo =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 200, //stubbed HTTP code
                 "launches/error_launch_service_says_no.json", //stubbed body response
                 ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
-        )
+            )
 
-        private val stubbedFailureInternalServerError = StubbedServiceDefinition(
+        private val stubbedFailureInternalServerError =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 200, //stubbed HTTP code - all 200 because GraphQL
                 "common/error_internal_server.json", //stubbed body response
                 ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
-        )
+            )
     }
 
 }

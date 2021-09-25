@@ -44,10 +44,10 @@ interface Apollo3Caller<F> {
  */
 @ExperimentalStdlibApi
 class CallProcessorApollo3<F>(
-        private val globalErrorHandler: ErrorHandler<F>,
-        private val logger: Logger? = null,
-        private val workMode: WorkMode? = null,
-        private val allowPartialSuccesses: Boolean = false
+    private val globalErrorHandler: ErrorHandler<F>,
+    private val logger: Logger? = null,
+    private val workMode: WorkMode? = null,
+    private val allowPartialSuccesses: Boolean = false
 ) : Apollo3Caller<F> {
 
     data class SuccessResult<S>(
@@ -88,7 +88,6 @@ class CallProcessorApollo3<F>(
                 processSuccessResponse(result)
 
             } catch (t: Throwable) {
-                ForeDelegateHolder.getLogger(logger).e("Has the ApolloCall already been executed? you cannot use an ApolloCall more than once")
                 processFailResponse(t, null)
             }
         }
@@ -117,7 +116,7 @@ class CallProcessorApollo3<F>(
     ): Either<F, SuccessResult<S>> {
 
         if (t != null) {
-            ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
+            ForeDelegateHolder.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
         return Either.left(globalErrorHandler.handleError(t, errorResponse))

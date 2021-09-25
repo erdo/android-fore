@@ -14,7 +14,6 @@ import foo.bar.example.foreapollo3.OG
 import foo.bar.example.foreapollo3.ProgressBarIdler
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.message.ErrorMessage
-import foo.bar.example.foreapollo3.ui.launch.LaunchActivity
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 

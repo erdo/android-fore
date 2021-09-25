@@ -16,7 +16,8 @@ import foo.bar.example.foreapollo3.message.ErrorMessage.*
  * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
  */
 @ExperimentalStdlibApi
-class CustomGlobalErrorHandler(private val logger: Logger?) : ErrorHandler<ErrorMessage> {
+class CustomGlobalErrorHandler(private val logger: Logger?) :
+    co.early.fore.kt.net.apollo3.ErrorHandler<ErrorMessage> {
 
     override fun handleError(
             t: Throwable?,

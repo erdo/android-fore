@@ -16,7 +16,6 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import foo.bar.example.foreapollo3.LaunchListQuery
