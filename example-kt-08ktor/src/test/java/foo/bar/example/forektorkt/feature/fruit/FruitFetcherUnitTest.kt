@@ -50,9 +50,11 @@ class FruitFetcherUnitTest {
     @Before
     fun setup() {
 
-        ForeDelegateHolder.setDelegate(TestDelegateDefault())
-
         MockKAnnotations.init(this, relaxed = true)
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
     }
 
 

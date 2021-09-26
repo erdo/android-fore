@@ -4,28 +4,25 @@ import android.app.Activity
 import android.content.pm.ActivityInfo
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.core.Either
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
+import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import foo.bar.example.foreapollo3.LaunchListQuery
-import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.Launch
 import foo.bar.example.foreapollo3.feature.launch.LaunchService
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.feature.launch.NO_ID
 import foo.bar.example.foreapollo3.message.ErrorMessage
+import foo.bar.example.foreapollokt.R
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -36,7 +33,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.CountDownLatch
 
 
@@ -92,11 +89,10 @@ class LaunchViewRotationTest {
 
         //construct a real model with mock dependencies
         launchesModel = LaunchesModel(
-                mockLaunchService,
-                mockCallProcessorApollo,
-                mockAuthenticator,
-                logger,
-                WorkMode.ASYNCHRONOUS
+            mockLaunchService,
+            mockCallProcessorApollo,
+            mockAuthenticator,
+            logger
         )
     }
 
@@ -108,9 +104,9 @@ class LaunchViewRotationTest {
 
         //arrange
         val activity = LaunchViewRotationTestStateBuilder(this)
-                .withDelayedCallProcessor()
-                .createRule()
-                .launchActivity(null)
+            .withDelayedCallProcessor()
+            .createRule()
+            .launchActivity(null)
 
         checkUIBeforeClick()
 
@@ -145,7 +141,13 @@ class LaunchViewRotationTest {
         getInstrumentation().runOnMainSync {
             logger.i("about to call success, id:" + Thread.currentThread().id)
 
-            deferredResult.complete(Either.right(CallProcessorApollo3.SuccessResult(createMockLaunchesResponse(launch))))
+            deferredResult.complete(
+                Either.right(
+                    CallProcessorApollo3.SuccessResult(
+                        createMockLaunchesResponse(launch)
+                    )
+                )
+            )
             countDownLatch.countDown()
         }
     }
@@ -187,19 +189,26 @@ class LaunchViewRotationTest {
     }
 
     private fun swapOrientation(activity: Activity) {
-        activity.requestedOrientation = if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        else
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        activity.requestedOrientation =
+            if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
-    private fun createMockLaunchesResponse (launch: Launch) : LaunchListQuery.Data {
+    private fun createMockLaunchesResponse(launch: Launch): LaunchListQuery.Data {
 
-        val mockLaunchesData =  mockk<LaunchListQuery.Data>()
-        val mockLaunches =  mockk<LaunchListQuery.Launches>()
+        val mockLaunchesData = mockk<LaunchListQuery.Data>()
+        val mockLaunches = mockk<LaunchListQuery.Launches>()
 
-        val missionQuery = LaunchListQuery.Mission(name ="mission name", missionPatch = launch.patchImgUrl)
-        val launchQuery = LaunchListQuery.Launch(id = launch.id, site = launch.site, mission = missionQuery, isBooked = launch.isBooked)
+        val missionQuery =
+            LaunchListQuery.Mission(name = "mission name", missionPatch = launch.patchImgUrl)
+        val launchQuery = LaunchListQuery.Launch(
+            id = launch.id,
+            site = launch.site,
+            mission = missionQuery,
+            isBooked = launch.isBooked
+        )
 
         every {
             mockLaunchesData.launches

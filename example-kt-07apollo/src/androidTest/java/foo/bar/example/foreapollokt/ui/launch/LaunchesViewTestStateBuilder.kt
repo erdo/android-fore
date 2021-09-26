@@ -34,7 +34,7 @@ class LaunchesViewTestStateBuilder internal constructor(private val mockLaunches
                 app.registerActivityLifecycleCallbacks(ProgressBarIdler())
 
                 //inject our mocks so our UI layer will pick them up
-                OG.setApplication(app, WorkMode.SYNCHRONOUS)
+                OG.setApplication(app)
                 OG.putMock(LaunchesModel::class.java, mockLaunchesModel)
             }
         }

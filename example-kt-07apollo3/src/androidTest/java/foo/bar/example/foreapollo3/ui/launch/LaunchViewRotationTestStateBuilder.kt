@@ -5,6 +5,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import com.apollographql.apollo3.api.ApolloResponse
@@ -49,7 +51,7 @@ class LaunchViewRotationTestStateBuilder internal constructor(private val launch
                 app.registerActivityLifecycleCallbacks(ProgressBarIdler())
 
                 //inject our mocks so our UI layer will pick them up
-                OG.setApplication(app, WorkMode.SYNCHRONOUS)
+                OG.setApplication(app)
                 OG.putMock(LaunchesModel::class.java, launchViewRotationTest.launchesModel)
             }
 

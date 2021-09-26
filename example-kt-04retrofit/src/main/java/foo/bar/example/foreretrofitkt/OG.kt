@@ -1,17 +1,16 @@
 package foo.bar.example.foreretrofitkt
 
 import android.app.Application
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.SilentLogger
-import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.InterceptorLogging
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreretrofitkt.api.CustomGlobalRequestInterceptor
 import foo.bar.example.foreretrofitkt.api.CustomRetrofitBuilder
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
-import java.util.HashMap
+import java.util.*
 
 
 /**
@@ -26,8 +25,7 @@ object OG {
     private var initialized = false
     private val dependencies = HashMap<Class<*>, Any>()
 
-    @JvmOverloads
-    fun setApplication(application: Application, workMode: WorkMode = WorkMode.ASYNCHRONOUS) {
+    fun setApplication(application: Application) {
 
         // create dependency graph
 
@@ -40,17 +38,15 @@ object OG {
         )//logging interceptor should be the last one
 
         val callProcessor = CallProcessorRetrofit2(
-                CustomGlobalErrorHandler(logger),
-                workMode,
-                logger
+            globalErrorHandler = CustomGlobalErrorHandler(logger),
+            logger = logger
         )
 
         // models
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
             callProcessor,
-            logger,
-            workMode
+            logger
         )
 
         // add models to the dependencies map if you will need them later

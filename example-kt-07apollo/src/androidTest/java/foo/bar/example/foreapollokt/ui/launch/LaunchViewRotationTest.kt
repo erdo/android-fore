@@ -94,8 +94,7 @@ class LaunchViewRotationTest {
                 mockLaunchService,
                 mockCallProcessorApollo,
                 mockAuthenticator,
-                logger,
-                WorkMode.ASYNCHRONOUS
+                logger
         )
     }
 

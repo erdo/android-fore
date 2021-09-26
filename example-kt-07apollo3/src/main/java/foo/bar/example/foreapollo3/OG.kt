@@ -31,8 +31,7 @@ object OG {
     private var initialized = false
     private val dependencies = HashMap<Class<*>, Any>()
 
-    @JvmOverloads
-    fun setApplication(application: Application, workMode: WorkMode = WorkMode.ASYNCHRONOUS) {
+    fun setApplication(application: Application) {
 
         // create dependency graph
 
@@ -56,8 +55,7 @@ object OG {
                 login = { email -> apolloClient.mutate(ApolloRequest(LoginMutation(email))) }
             ),
             callProcessor,
-            logger,
-            workMode
+            logger
         )
         globalRequestInterceptor.setAuthenticator(authenticator)
         val launchesModel = LaunchesModel(
@@ -70,8 +68,7 @@ object OG {
             ),
             callProcessor,
             authenticator,
-            logger,
-            workMode
+            logger
         )
 
         // add models to the dependencies map if you will need them later

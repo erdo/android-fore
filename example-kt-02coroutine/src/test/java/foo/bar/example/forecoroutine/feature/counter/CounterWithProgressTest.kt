@@ -3,9 +3,12 @@ package foo.bar.example.forecoroutine.feature.counter
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 
@@ -14,12 +17,19 @@ import org.junit.Test
  */
 class CounterWithProgressTest {
 
+    @Before
+    fun setup() {
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+    }
+
     @Test
     @Throws(Exception::class)
     fun initialConditions() {
 
         //arrange
-        val counterWithProgress = CounterWithProgress(WorkMode.SYNCHRONOUS, logger)
+        val counterWithProgress = CounterWithProgress(logger)
 
         //act
 
@@ -35,7 +45,7 @@ class CounterWithProgressTest {
     fun increasesBy20() {
 
         //arrange
-        val counterWithProgress = CounterWithProgress(WorkMode.SYNCHRONOUS, logger)
+        val counterWithProgress = CounterWithProgress(logger)
 
         //act
         counterWithProgress.increaseBy20()
@@ -68,7 +78,7 @@ class CounterWithProgressTest {
     fun observersNotifiedAtLeastOnce() {
 
         //arrange
-        val counterWithProgress = CounterWithProgress(WorkMode.SYNCHRONOUS, logger)
+        val counterWithProgress = CounterWithProgress(logger)
         val mockObserver = mockk<Observer>(relaxed = true)
         counterWithProgress.addObserver(mockObserver)
 
@@ -95,7 +105,7 @@ class CounterWithProgressTest {
     fun progressIsPublished() {
 
         //arrange
-        val counterWithProgress = CounterWithProgress(WorkMode.SYNCHRONOUS, logger)
+        val counterWithProgress = CounterWithProgress(logger)
         val pt = ProgressTracker()
         counterWithProgress.addObserver {
             val latestProgress = counterWithProgress.progress

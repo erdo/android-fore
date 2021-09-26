@@ -20,8 +20,7 @@ object OG {
     private var initialized = false
     private val dependencies = HashMap<Class<*>, Any>()
 
-    @JvmOverloads
-    fun setApplication(application: Application, workMode: WorkMode = WorkMode.ASYNCHRONOUS) {
+    fun setApplication(application: Application) {
 
         // create dependency graph
         val logger = AndroidLogger("fore_")

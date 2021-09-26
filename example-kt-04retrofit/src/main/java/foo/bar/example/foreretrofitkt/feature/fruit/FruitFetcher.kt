@@ -1,32 +1,31 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.core.Either.Left
 import co.early.fore.kt.core.Either.Right
+import co.early.fore.kt.core.callbacks.FailureWithPayload
+import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.coroutine.awaitMain
+import co.early.fore.kt.core.coroutine.launchMain
+import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.retrofit2.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.api.fruits.FruitsCustomError
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
-import java.util.Random
+import java.util.*
 
 
 /**
  * gets a list of fruit from the network, selects one at random to be currentFruit
  */
 class FruitFetcher(
-        private val fruitService: FruitService,
-        private val retrofit2CallProcessor: CallProcessorRetrofit2<ErrorMessage>,
-        private val logger: Logger,
-        private val workMode: WorkMode
-) : Observable by ObservableImp(workMode, logger) {
+    private val fruitService: FruitService,
+    private val retrofit2CallProcessor: CallProcessorRetrofit2<ErrorMessage>,
+    private val logger: Logger
+) : Observable by ObservableImp(logger = logger) {
 
     var isBusy: Boolean = false
         private set
@@ -35,8 +34,8 @@ class FruitFetcher(
 
 
     fun fetchFruitsAsync(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsAsync() t:" + Thread.currentThread())
@@ -49,7 +48,7 @@ class FruitFetcher(
         isBusy = true
         notifyObservers()
 
-        launchMain(workMode) {
+        launchMain {
 
             logger.i("about to use CallProcessor t:" + Thread.currentThread())
 
@@ -60,9 +59,11 @@ class FruitFetcher(
                 fruitService.getFruitsSimulateOk()
             }
 
-            when (val result = deferredResult.await()) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+            awaitMain {
+                when (val result = deferredResult.await()) {
+                    is Left -> handleFailure(failureWithPayload, result.a)
+                    is Right -> handleSuccess(success, result.b)
+                }
             }
         }
 
@@ -74,8 +75,8 @@ class FruitFetcher(
      * we also don't specify a custom error class here
      */
     fun fetchFruitsButFail(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFail()")
@@ -89,15 +90,17 @@ class FruitFetcher(
         notifyObservers()
 
 
-        launchMain(workMode) {
+        launchMain {
 
             val result = retrofit2CallProcessor.processCallAwait {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+            awaitMain {
+                when (result) {
+                    is Left -> handleFailure(failureWithPayload, result.a)
+                    is Right -> handleSuccess(success, result.b)
+                }
             }
         }
     }
@@ -108,8 +111,8 @@ class FruitFetcher(
      * here we specify a custom error class for more detail about the error than just an HTTP code can give us
      */
     fun fetchFruitsButFailAdvanced(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFailAdvanced()")
@@ -122,15 +125,17 @@ class FruitFetcher(
         isBusy = true
         notifyObservers()
 
-        launchMain(workMode) {
+        launchMain {
 
             val result = retrofit2CallProcessor.processCallAwait(FruitsCustomError::class.java) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+            awaitMain {
+                when (result) {
+                    is Left -> handleFailure(failureWithPayload, result.a)
+                    is Right -> handleSuccess(success, result.b)
+                }
             }
         }
     }
@@ -141,8 +146,8 @@ class FruitFetcher(
      * simple way
      */
     fun chainedCall(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: Success,
+        failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("chainedCall()")
@@ -155,11 +160,22 @@ class FruitFetcher(
         isBusy = true
         notifyObservers()
 
-        launchMain(workMode) {
+        launchMain {
 
             val result = retrofit2CallProcessor.processCallAwait(
                 FruitsCustomError::class.java
             ) {
+
+                /**
+                 * we're using fore's carryOn() extension function here but you can do whatever
+                 * you like here, including using reactive streams if appropriate. Once your network
+                 * chain is complete though, when you want to expose the resulting state,
+                 * you need to: 1) set it, and 2) call notifyObservers().
+                 *
+                 * (carryOn() lets you transparently handle networking
+                 * errors at each step - Internet search for "railway oriented programming"
+                 * or "andThen" functions)
+                 */
                 var ticketRef = ""
                 logger.i("...create user...")
                 fruitService.createUser()
@@ -187,16 +203,18 @@ class FruitFetcher(
                     }
             }
 
-            when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+            awaitMain {
+                when (result) {
+                    is Left -> handleFailure(failureWithPayload, result.a)
+                    is Right -> handleSuccess(success, result.b)
+                }
             }
         }
     }
 
     private fun handleSuccess(
-            success: Success,
-            successResponse: List<FruitPojo>
+        success: Success,
+        successResponse: List<FruitPojo>
     ) {
 
         logger.i("handleSuccess() t:" + Thread.currentThread())
@@ -207,8 +225,8 @@ class FruitFetcher(
     }
 
     private fun handleFailure(
-            failureWithPayload: FailureWithPayload<ErrorMessage>,
-            failureMessage: ErrorMessage
+        failureWithPayload: FailureWithPayload<ErrorMessage>,
+        failureMessage: ErrorMessage
     ) {
 
         logger.i("handleFailure() t:" + Thread.currentThread())

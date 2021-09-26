@@ -1,10 +1,11 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
+import co.early.fore.kt.core.logging.SystemLogger
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
@@ -31,18 +32,28 @@ class FruitFetcherUnitTest {
 
     @MockK
     private lateinit var mockSuccess: Success
+
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+
     @MockK
     private lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
+
     @MockK
     private lateinit var mockFruitService: FruitService
+
     @MockK
     private lateinit var mockObserver: Observer
 
 
     @Before
-    fun setup() = MockKAnnotations.init(this, relaxed = true)
+    fun setup() {
+        MockKAnnotations.init(this, relaxed = true)
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+    }
 
 
     @Test
@@ -53,8 +64,7 @@ class FruitFetcherUnitTest {
         val fruitFetcher = FruitFetcher(
             mockFruitService,
             mockCallProcessorRetrofit2,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
 
         //act
@@ -75,8 +85,7 @@ class FruitFetcherUnitTest {
         val fruitFetcher = FruitFetcher(
             mockFruitService,
             mockCallProcessorRetrofit2,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
 
 
@@ -94,7 +103,10 @@ class FruitFetcherUnitTest {
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(fruitPojo.name, fruitFetcher.currentFruit.name)
         Assert.assertEquals(fruitPojo.isCitrus, fruitFetcher.currentFruit.isCitrus)
-        Assert.assertEquals(fruitPojo.tastyPercentScore.toLong(), fruitFetcher.currentFruit.tastyPercentScore.toLong())
+        Assert.assertEquals(
+            fruitPojo.tastyPercentScore.toLong(),
+            fruitFetcher.currentFruit.tastyPercentScore.toLong()
+        )
     }
 
 
@@ -107,8 +119,7 @@ class FruitFetcherUnitTest {
         val fruitFetcher = FruitFetcher(
             mockFruitService,
             mockCallProcessorRetrofit2,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
 
 
@@ -154,8 +165,7 @@ class FruitFetcherUnitTest {
         val fruitFetcher = FruitFetcher(
             mockFruitService,
             mockCallProcessorRetrofit2,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
         fruitFetcher.addObserver(mockObserver)
 
