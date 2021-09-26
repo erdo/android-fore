@@ -173,7 +173,8 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
             viewModel
         )
     )
-   }
+    
+  }
 
   override fun syncView() {
      ...
@@ -254,6 +255,7 @@ We already learnt about how updating views in this way introduces very [hard to 
 lifecycle.addObserver(
   ForeLifecycleObserver(this, accountModel)
 )
+
 </code></pre>
 
 *(NB: If you've used MVI before, you'll immediately spot that we can improve this situation by observing a single immutable viewState - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if your view layer is observing more than one model...)*

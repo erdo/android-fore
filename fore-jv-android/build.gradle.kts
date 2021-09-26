@@ -6,7 +6,7 @@ plugins {
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-jv-android")
-    set("LIB_DESCRIPTION", "android fore - everything in one aar for java development")
+    set("LIB_DESCRIPTION", "android fore - everything in one aar for java android development")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")

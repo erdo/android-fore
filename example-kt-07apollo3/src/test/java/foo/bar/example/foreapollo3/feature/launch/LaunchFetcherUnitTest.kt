@@ -5,14 +5,9 @@ import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
-import foo.bar.example.foreapollo3.feature.launch.Launch
-import foo.bar.example.foreapollo3.feature.launch.LaunchService
-import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
-import foo.bar.example.foreapollo3.feature.launch.NO_ID
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.every

@@ -36,7 +36,7 @@ object OG {
         // networking classes common to all models
         val retrofit = CustomRetrofitBuilder.create(
             CustomGlobalRequestInterceptor(logger),
-                InterceptorLogging(logger)
+            InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
         val callProcessor = CallProcessorRetrofit2(

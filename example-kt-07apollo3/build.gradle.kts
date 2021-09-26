@@ -4,7 +4,7 @@ import co.early.fore.Shared.BuildTypes
 plugins {
     id("com.android.application")
     id("idea")
-    id("com.apollographql.apollo3").version("3.0.0-alpha03")
+    id("com.apollographql.apollo3").version("3.0.0-alpha06")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -95,7 +95,6 @@ dependencies {
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 
-    //These tests need to be run on Android 27<SDK<30 something to do with mockk I think
     androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
     androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
     androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")

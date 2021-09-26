@@ -40,37 +40,37 @@ object OG {
         // networking classes common to all models
         val globalRequestInterceptor = CustomGlobalRequestInterceptor(logger)
         val apolloClient = CustomApolloBuilder.create(
-                globalRequestInterceptor,
-                InterceptorLogging(logger)
+            globalRequestInterceptor,
+            InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
         val callProcessor = CallProcessorApollo(
-                CustomGlobalErrorHandler(logger),
-                logger
+            CustomGlobalErrorHandler(logger),
+            logger
         )
 
         // models
         val authenticator = Authenticator(
-                authService = AuthService(
-                        login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) }
-                ),
-                callProcessor,
-                logger,
-                workMode
+            authService = AuthService(
+                login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) }
+            ),
+            callProcessor,
+            logger,
+            workMode
         )
         globalRequestInterceptor.setAuthenticator(authenticator)
         val launchesModel = LaunchesModel(
-                launchService = LaunchService(
-                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) },
-                        refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
-                        bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
-                        cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
-                ),
-                callProcessor,
-                authenticator,
-                logger,
-                workMode
+            launchService = LaunchService(
+                getLaunchList = { apolloClient.query(LaunchListQuery()) },
+                login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) },
+                refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
+                bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
+                cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
+            ),
+            callProcessor,
+            authenticator,
+            logger,
+            workMode
         )
 
         // add models to the dependencies map if you will need them later

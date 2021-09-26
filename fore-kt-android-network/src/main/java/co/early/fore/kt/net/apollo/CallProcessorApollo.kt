@@ -92,7 +92,6 @@ class CallProcessorApollo<F>(
                     })
                 }
             } catch (t: Throwable) {
-                ForeDelegateHolder.getLogger(logger).e("Has the ApolloCall already been executed? you cannot use an ApolloCall more than once")
                 processFailResponse(t, null)
             }
         }
@@ -121,7 +120,7 @@ class CallProcessorApollo<F>(
     ): Either<F, SuccessResult<S>> {
 
         if (t != null) {
-            ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
+            ForeDelegateHolder.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
         return Either.left(globalErrorHandler.handleError(t, errorResponse))

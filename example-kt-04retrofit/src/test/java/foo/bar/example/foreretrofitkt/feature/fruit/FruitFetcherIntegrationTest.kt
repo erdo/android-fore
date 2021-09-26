@@ -41,7 +41,7 @@ import retrofit2.Retrofit
 class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
-    private val interceptorLogging = InterceptorLogging(logger)
+    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
     private val callProcessor = CallProcessorRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
 
     @MockK
@@ -210,32 +210,37 @@ class FruitFetcherIntegrationTest {
     }
 
 
-    private fun stubbedRetrofit(stubbedServiceDefinition: StubbedServiceDefinition<*>): Retrofit {
+    private fun stubbedRetrofit(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): Retrofit {
         return CustomRetrofitBuilder.create(
-            InterceptorStubbedService(stubbedServiceDefinition),
+            co.early.fore.net.testhelpers.InterceptorStubbedService(
+                stubbedServiceDefinition
+            ),
             interceptorLogging
         )
     }
 
     companion object {
 
-        private val stubbedSuccess = StubbedServiceDefinition(
-            200, //stubbed HTTP code
-            "fruit/success.json", //stubbed body response
-            FruitPojo("orange", true, 43) //expected result
-        )
+        private val stubbedSuccess =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+                200, //stubbed HTTP code
+                "fruit/success.json", //stubbed body response
+                FruitPojo("orange", true, 43) //expected result
+            )
 
-        private val stubbedFailUserLocked = StubbedServiceDefinition(
-            401, //stubbed HTTP code
-            "common/error_user_locked.json", //stubbed body response
-            ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
-        )
+        private val stubbedFailUserLocked =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+                401, //stubbed HTTP code
+                "common/error_user_locked.json", //stubbed body response
+                ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
+            )
 
-        private val stubbedFailureUserNotEnabled = StubbedServiceDefinition(
-            401, //stubbed HTTP code
-            "common/error_user_not_enabled.json", //stubbed body response
-            ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
-        )
+        private val stubbedFailureUserNotEnabled =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+                401, //stubbed HTTP code
+                "common/error_user_not_enabled.json", //stubbed body response
+                ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
+            )
     }
 
 }

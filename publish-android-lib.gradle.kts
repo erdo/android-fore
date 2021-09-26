@@ -10,7 +10,8 @@
  *
  * sourcefile downloads sanity check:
  * co.early.fore.kt.net.apollo.CallProcessorApollo() //fore-kt-android-network
- * co.early.fore.net.NetworkingLogSanitizer() //fore-jv-android-network
+ * co.early.fore.net.NetworkingLogSanitizer() //fore-jv-network
+ * co.early.fore.kt.net.NetworkingLogSanitizer() //fore-kt-network
  * co.early.fore.kt.adapters.NotifyableImp() //fore-kt-android-adapters
  * co.early.fore.adapters.CrossFadeRemover() //fore-jv-android-adapters
  * co.early.fore.kt.core.delegate.DebugDelegateDefault() //fore-kt-android-core

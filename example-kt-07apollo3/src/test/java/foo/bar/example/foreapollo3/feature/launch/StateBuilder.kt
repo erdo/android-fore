@@ -1,7 +1,6 @@
 package foo.bar.example.foreapollo3.feature.launch
 
 import co.early.fore.kt.core.Either
-import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.message.ErrorMessage

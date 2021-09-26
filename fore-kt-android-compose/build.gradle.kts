@@ -13,6 +13,11 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
+
+    defaultConfig {
+        minSdk = 21
+    }
+
     buildFeatures {
         compose = true
     }

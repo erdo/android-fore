@@ -1,14 +1,12 @@
 package foo.bar.example.foreapollo3.feature.launch
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.testhelpers.CountDownLatchWrapper.runInBatch
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.apollo.CallProcessorApollo
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
@@ -18,10 +16,6 @@ import foo.bar.example.foreapollo3.api.CommonServiceFailures
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
-import foo.bar.example.foreapollo3.feature.launch.Launch
-import foo.bar.example.foreapollo3.feature.launch.LaunchService
-import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
-import foo.bar.example.foreapollo3.feature.launch.NO_ID
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
@@ -44,7 +38,7 @@ import org.junit.Test
 @ExperimentalStdlibApi
 class LaunchFetcherIntegrationTest {
 
-    private val interceptorLogging = InterceptorLogging()
+    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging()
     private val logger = SystemLogger()
     private val callProcessor = CallProcessorApollo3(CustomGlobalErrorHandler(logger))
 
@@ -223,9 +217,11 @@ class LaunchFetcherIntegrationTest {
     }
 
 
-    private fun stubbedApolloClient(stubbedServiceDefinition: StubbedServiceDefinition<*>): ApolloClient {
+    private fun stubbedApolloClient(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): ApolloClient {
         return CustomApolloBuilder.create(
-                InterceptorStubbedService(stubbedServiceDefinition),
+            co.early.fore.net.testhelpers.InterceptorStubbedService(
+                stubbedServiceDefinition
+            ),
                 interceptorLogging
         )
     }
@@ -242,24 +238,27 @@ class LaunchFetcherIntegrationTest {
 
     companion object {
 
-        private val stubbedSuccess = StubbedServiceDefinition(
+        private val stubbedSuccess =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 200, //stubbed HTTP code
                 "launches/success.json", //stubbed body response
                 Launch("109", "Site 40") //expected result
-        )
+            )
 
 
-        private val stubbedFailSaysNo = StubbedServiceDefinition(
+        private val stubbedFailSaysNo =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 200, //stubbed HTTP code
                 "launches/error_launch_service_says_no.json", //stubbed body response
                 ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
-        )
+            )
 
-        private val stubbedFailureInternalServerError = StubbedServiceDefinition(
+        private val stubbedFailureInternalServerError =
+            co.early.fore.net.testhelpers.StubbedServiceDefinition(
                 200, //stubbed HTTP code - all 200 because GraphQL
                 "common/error_internal_server.json", //stubbed body response
                 ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
-        )
+            )
     }
 
 }

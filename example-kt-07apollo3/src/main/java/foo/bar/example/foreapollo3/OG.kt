@@ -7,7 +7,6 @@ import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import com.apollographql.apollo3.api.ApolloRequest
-import foo.bar.example.foreapollokt.BuildConfig
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollo3.api.CustomGlobalRequestInterceptor
@@ -15,6 +14,7 @@ import foo.bar.example.foreapollo3.feature.authentication.AuthService
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.LaunchService
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
+import foo.bar.example.foreapollokt.BuildConfig
 import java.util.*
 
 
@@ -41,37 +41,37 @@ object OG {
         // networking classes common to all models
         val globalRequestInterceptor = CustomGlobalRequestInterceptor(logger)
         val apolloClient = CustomApolloBuilder.create(
-                globalRequestInterceptor,
-                InterceptorLogging(logger)
+            globalRequestInterceptor,
+            InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
         val callProcessor = CallProcessorApollo3(
-                CustomGlobalErrorHandler(logger),
-                logger
+            CustomGlobalErrorHandler(logger),
+            logger
         )
 
         // models
         val authenticator = Authenticator(
-                authService = AuthService(
-                        login = { email -> apolloClient.mutate(ApolloRequest(LoginMutation(email))) }
-                ),
-                callProcessor,
-                logger,
-                workMode
+            authService = AuthService(
+                login = { email -> apolloClient.mutate(ApolloRequest(LoginMutation(email))) }
+            ),
+            callProcessor,
+            logger,
+            workMode
         )
         globalRequestInterceptor.setAuthenticator(authenticator)
         val launchesModel = LaunchesModel(
-                launchService = LaunchService(
-                        getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                        login = { email -> apolloClient.mutate(LoginMutation(email)) },
-                        refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
-                        bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
-                        cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
-                ),
-                callProcessor,
-                authenticator,
-                logger,
-                workMode
+            launchService = LaunchService(
+                getLaunchList = { apolloClient.query(LaunchListQuery()) },
+                login = { email -> apolloClient.mutate(LoginMutation(email)) },
+                refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
+                bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
+                cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
+            ),
+            callProcessor,
+            authenticator,
+            logger,
+            workMode
         )
 
         // add models to the dependencies map if you will need them later

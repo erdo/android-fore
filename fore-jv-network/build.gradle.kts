@@ -10,10 +10,15 @@ java {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-jv-core")
-    set("LIB_DESCRIPTION", "fore - java core code")
+    set("LIB_ARTIFACT_ID", "fore-jv-network")
+    set("LIB_DESCRIPTION", "fore - java network code")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
+
+dependencies {
+    api(project(":fore-jv-core"))
+    compileOnly("com.squareup.okhttp3:okhttp:3.14.9")
+}
 
 apply(from = "../publish-lib.gradle.kts")

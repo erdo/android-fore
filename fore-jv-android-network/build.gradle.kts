@@ -6,7 +6,7 @@ plugins {
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-jv-android-network")
-    set("LIB_DESCRIPTION", "fore - network helpers, java")
+    set("LIB_DESCRIPTION", "fore - android java networking helpers")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
@@ -22,6 +22,7 @@ android {
 
 dependencies {
 
+    api(project(":fore-jv-network"))
     api(project(":fore-jv-android-core"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")

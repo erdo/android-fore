@@ -7,7 +7,7 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.observer.ObservableGroupImp
 
-class ForeLifeCycleObserver(
+class ForeLifecycleObserver(
     private val observer: Observer,
     private val observableGroup: ObservableGroup
 ) : DefaultLifecycleObserver {
