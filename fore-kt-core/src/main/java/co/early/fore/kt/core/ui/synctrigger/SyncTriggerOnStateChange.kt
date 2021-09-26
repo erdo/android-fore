@@ -1,21 +1,5 @@
 package co.early.fore.kt.core.ui.synctrigger
 
-interface Keeper<K> {
-    /**
-     * swapper provides the previously kept value (or null),
-     * and expects the new value to keep in return
-     *
-     * the swap function should return true if the values have
-     * changed (i.e. when the new value is not the same as the
-     * previously kept value)
-     *
-     * if you are using a keeper in your triggeredWhen() function
-     * too keep track of a variable that sometimes changes, you
-     * probably also want to use ResetRule.IMMEDIATELY
-     */
-    fun swap(swapper: (K?) -> K) : Boolean
-}
-
 /**
  *
  * Convenience class used to fire one-off events from within the [SyncableView.syncView]
@@ -35,33 +19,13 @@ interface Keeper<K> {
  * read again during the next invocation of triggeredWhen
  *
  */
-class SyncTriggerKeeper<T>(
-    private val triggeredWhen: (Keeper<T>) -> Boolean,
-    private val doThisWhenTriggered: () -> Unit
+class SyncTriggerOnStateChange<T>(
+    private val currentState: () -> T,
+    private val doThisWhenTriggered: (T) -> Unit
 ) {
 
-    private var previousValue: T? = null
-    private val keeper = object : Keeper<T> {
-        override fun swap(swapper: (T?) -> T): Boolean {
-            val valueToKeep = swapper(previousValue)
-            val hasChanged = (valueToKeep != previousValue)
-            previousValue = valueToKeep
-            return hasChanged
-        }
-    }
-
-    private var resetRule: ResetRule = ResetRule.ONLY_AFTER_REVERSION
-    private var overThreshold = false
+    private var previousState: T? = null
     private var firstCheck = true
-
-    fun resetRule(resetRule: ResetRule): SyncTriggerKeeper<T> {
-        this.resetRule = resetRule
-        return this
-    }
-
-    fun getResetRule(): ResetRule {
-        return resetRule
-    }
 
     /**
      *
@@ -109,25 +73,21 @@ class SyncTriggerKeeper<T>(
      * firing due to a screen rotation.
      */
     private fun check(swallowTriggerForFirstCheck: Boolean) {
-        val reached = triggeredWhen(keeper)
-        if (!overThreshold && reached) {
-            overThreshold = true
-            if (!(swallowTriggerForFirstCheck && firstCheck)) { //not ignoring the first check AND threshold has been reached
-                fireTrigger()
+
+        val latestState = currentState()
+        val hasChanged = (latestState != previousState)
+        previousState = latestState
+
+        var fireTrigger = false
+        if (!(swallowTriggerForFirstCheck && firstCheck)) {
+            if (hasChanged) {
+                fireTrigger = true
             }
         }
         firstCheck = false
-        when (resetRule) {
-            ResetRule.IMMEDIATELY -> overThreshold = false
-            ResetRule.ONLY_AFTER_REVERSION -> if (!reached) {
-                overThreshold = false
-            }
-            ResetRule.NEVER -> {
-            }
-        }
-    }
 
-    private fun fireTrigger() {
-        doThisWhenTriggered()
+        if (fireTrigger){
+            doThisWhenTriggered(latestState)
+        }
     }
 }
