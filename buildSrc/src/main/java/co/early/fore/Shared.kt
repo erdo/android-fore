@@ -23,7 +23,7 @@ object Shared {
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
-        const val apollo3 = "3.0.0-alpha03"
+        const val apollo3 = "3.0.0-alpha06"
         const val retrofit = "2.9.0"
         const val compose = "1.1.0-alpha03"
         // example app and test dependencies
@@ -40,7 +40,7 @@ object Shared {
         const val espresso_core = "3.1.0-beta02"
         const val butterknife = "10.2.0"
         const val mockito_core = "2.23.0"
-        const val mockk = "1.10.6"
+        const val mockk = "1.11.0"
         const val junit = "4.12"
         const val espresso = "3.0.2"
         const val hamcrest_library = "1.3"
@@ -59,8 +59,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.4.12" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 64
+        const val LIB_VERSION_NAME = "1.5.0-alpha01" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 65
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
