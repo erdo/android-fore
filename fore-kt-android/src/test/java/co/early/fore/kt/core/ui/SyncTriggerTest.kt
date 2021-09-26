@@ -486,7 +486,7 @@ class SyncTriggerTest {
 
         // arrange
         var change = false
-        var keptValue = -1
+        var keptValue: Int
         val syncTrigger = SyncTriggerKeeper<Int>(
             { keeper ->
                 change = keeper.swap { previous ->

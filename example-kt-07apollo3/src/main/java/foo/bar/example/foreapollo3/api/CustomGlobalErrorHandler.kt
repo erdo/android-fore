@@ -17,11 +17,11 @@ import foo.bar.example.foreapollo3.message.ErrorMessage.*
  */
 @ExperimentalStdlibApi
 class CustomGlobalErrorHandler(private val logger: Logger?) :
-    co.early.fore.kt.net.apollo3.ErrorHandler<ErrorMessage> {
+    ErrorHandler<ErrorMessage> {
 
     override fun handleError(
-            t: Throwable?,
-            errorResponse: ApolloResponse<*>?
+        t: Throwable?,
+        errorResponse: ApolloResponse<*>?
     ): ErrorMessage {
 
         ForeDelegateHolder.getLogger(logger).e("handleError() t:$t errorResponse:$errorResponse")
@@ -43,7 +43,8 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
                 is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
                 is java.net.SocketTimeoutException -> ERROR_NETWORK
                 is ApolloHttpException -> {
-                    ForeDelegateHolder.getLogger(logger).e("handleError() HTTP:" + it.statusCode + " " + it.message)
+                    ForeDelegateHolder.getLogger(logger)
+                        .e("handleError() HTTP:" + it.statusCode + " " + it.message)
                     when (it.statusCode) {
                         401 -> ERROR_SESSION_TIMED_OUT
                         400, 405 -> ERROR_CLIENT
@@ -63,7 +64,7 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
             // amazingly GraphQL never had an error code in its standard error
             // block so it usually gets put under the extensions block like this:
             // https://spec.graphql.org/draft/#example-fce18
-            it.errors?.first()?.customAttributes?.get("extensions")?.let { extensions ->
+            it.errors?.first()?.extensions?.let { extensions ->
                 (extensions as? Map<*, *>)?.get("code")?.let { code ->
                     ErrorMessage.createFromName(code as? String)
                 }
