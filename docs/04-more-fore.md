@@ -195,10 +195,15 @@ By default, a SilentLogger will be used so if you do nothing, your release build
 
 All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt) and [here](https://github.com/erdo/android-fore/blob/master/fore-kt-android-core/src/main/java/co/early/fore/kt/core/delegate/AndroidDebugDelegate.kt).
 
+# Kotlin Coroutines
+
+We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
+
+**fore** offers some [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them testable in common useage scenarios (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
 
 # AsyncTasks with Lambdas
 
-(_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a coroutine based solution_)
+For legacy Java based clients, fore has some wrappers that make AsyncTask much easier to use and to test
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -220,8 +225,6 @@ AsyncBuilder<Unit, Int>(workMode)
     .execute()
  </code></pre>
 
-We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
-
 Android's AsyncTask suffers from a few problems - the main one being that it can't be tested and is difficult to mock because it needs to be instanciated each time it's used.
 
 The quickest **fore** solution to all that is to use AsyncBuilder
@@ -229,8 +232,6 @@ The quickest **fore** solution to all that is to use AsyncBuilder
 [Asynchronous Example App Source Code](https://erdo.github.io/android-fore/#fore-2-asynchronous-code-example) is the simplest way to see this all in action by the way.
 
 ## AsyncBuilder
-
-(_skip down to [Kotlin Coroutines](#kotlin-coroutines) if you prefer a non thread based solution_)
 
 This class uses the builder pattern and has a cut down API to take advantage of lambda expressions. For reference here's the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-android-core/src/main/java/co/early/fore/core/threading/AsyncBuilder.java)
 
@@ -269,7 +270,7 @@ Passing WorkMode.SYNCHRONOUS here on the other hand makes the whole AsyncBuilder
 ## Async
 Async (which is basically a wrapper over AsyncTask that makes it testable) looks and behaves very similarly to android's AsyncTask and is an (almost) drop in replacement for it.
 
-You should take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-android-core/src/main/java/co/early/fore/core/threading/Async.java) for Async, don't worry it's tiny.
+You can take a quick look at the [source code](https://github.com/erdo/android-fore/blob/master/fore-jv-android-core/src/main/java/co/early/fore/core/threading/Async.java) for Async to get an idea of what it's doing, don't worry it's <100 lines.
 
 Here's how you use Async:
 
@@ -344,15 +345,9 @@ object : Async<Unit, Int, Int>(workMode) {
 
 
 ### ExecuteTask
-**One difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).**
-
+One difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).
 
 ## Testing Asynchronous Code
 For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
 A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
-
-# Kotlin Coroutines
-With coroutines, Async and AsyncBuilder aren't really required (unless you prefer them). **fore** includes some extension functions which make coroutines much more testable than they otherwise would be, you can refer [here](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) for example usage.
-
-When using the **fore** coroutine classes, specifying the WorkMode parameter is now optional, see [here](https://erdo.github.io/android-fore/04-more-fore.html#default-params) for more

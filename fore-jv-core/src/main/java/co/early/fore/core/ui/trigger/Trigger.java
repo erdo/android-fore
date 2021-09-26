@@ -1,6 +1,7 @@
-package co.early.fore.core.ui;
+package co.early.fore.core.ui.trigger;
 
 import co.early.fore.core.Affirm;
+import co.early.fore.core.ui.SyncableView;
 
 /**
  * <p>
@@ -19,7 +20,7 @@ import co.early.fore.core.Affirm;
  *      construct this class with the ResetRule.IMMEDIATELY flag
  * </p>
  */
-public class SyncTrigger {
+public class Trigger {
 
     private final DoThisWhenTriggered doThisWhenTriggered;
     private final CheckTriggerThreshold checkTriggerThreshold;
@@ -49,11 +50,11 @@ public class SyncTrigger {
         NEVER
     }
 
-    public SyncTrigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold) {
+    public Trigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold) {
         this(doThisWhenTriggered, checkTriggerThreshold, ResetRule.ONLY_AFTER_REVERSION);
     }
 
-    public SyncTrigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold, ResetRule resetRule) {
+    public Trigger(DoThisWhenTriggered doThisWhenTriggered, CheckTriggerThreshold checkTriggerThreshold, ResetRule resetRule) {
         this.doThisWhenTriggered = Affirm.notNull(doThisWhenTriggered);
         this.checkTriggerThreshold = Affirm.notNull(checkTriggerThreshold);
         this.resetRule = Affirm.notNull(resetRule);

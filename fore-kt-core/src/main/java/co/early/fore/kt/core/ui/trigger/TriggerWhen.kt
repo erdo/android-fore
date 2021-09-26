@@ -1,4 +1,4 @@
-package co.early.fore.kt.core.ui.synctrigger
+package co.early.fore.kt.core.ui.trigger
 
 /**
  *
@@ -14,17 +14,13 @@ package co.early.fore.kt.core.ui.synctrigger
  * having to wait for [triggeredWhen] to return false,
  * construct this class with the ResetRule.IMMEDIATELY flag
  *
- * So that we can remember temporary states between invocations of triggeredWhen(), triggeredWhen
- * passes a Keeper to the client which can be used to keep temporary values so that they can be
- * read again during the next invocation of triggeredWhen
- *
  */
-class SyncTriggerOnStateChange<T>(
-    private val currentState: () -> T,
-    private val doThisWhenTriggered: (T) -> Unit
+class TriggerWhen(
+    private val triggeredWhen: () -> Boolean,
+    private val doThisWhenTriggered: () -> Unit
 ) {
-
-    private var previousState: T? = null
+    private var resetRule: ResetRule = ResetRule.ONLY_AFTER_REVERSION
+    private var overThreshold = false
     private var firstCheck = true
 
     /**
@@ -66,6 +62,15 @@ class SyncTriggerOnStateChange<T>(
         check(true)
     }
 
+    fun resetRule(resetRule: ResetRule): TriggerWhen {
+        this.resetRule = resetRule
+        return this
+    }
+
+    fun getResetRule(): ResetRule {
+        return resetRule
+    }
+
     /**
      *
      * @param swallowTriggerForFirstCheck true to swallow triggers on the first check - depending
@@ -73,21 +78,25 @@ class SyncTriggerOnStateChange<T>(
      * firing due to a screen rotation.
      */
     private fun check(swallowTriggerForFirstCheck: Boolean) {
-
-        val latestState = currentState()
-        val hasChanged = (latestState != previousState)
-        previousState = latestState
-
+        val reached = triggeredWhen()
         var fireTrigger = false
-        if (!(swallowTriggerForFirstCheck && firstCheck)) {
-            if (hasChanged) {
+        if (!overThreshold && reached) {
+            overThreshold = true
+            if (!(swallowTriggerForFirstCheck && firstCheck)) { //not ignoring the first check AND threshold has been reached
                 fireTrigger = true
             }
         }
         firstCheck = false
-
-        if (fireTrigger){
-            doThisWhenTriggered(latestState)
+        when (resetRule) {
+            ResetRule.IMMEDIATELY -> overThreshold = false
+            ResetRule.ONLY_AFTER_REVERSION -> if (!reached) {
+                overThreshold = false
+            }
+            ResetRule.NEVER -> {
+            }
+        }
+        if (fireTrigger) {
+            doThisWhenTriggered()
         }
     }
 }

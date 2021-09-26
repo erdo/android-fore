@@ -1,6 +1,7 @@
 package co.early.fore.kt.core.ui
 
-import co.early.fore.kt.core.ui.synctrigger.SyncTriggerOnStateChange
+import co.early.fore.kt.core.ui.trigger.StateChange
+import co.early.fore.kt.core.ui.trigger.TriggerOnChange
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -8,7 +9,8 @@ import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 
-class SyncTriggerOnStateChangeTest {
+
+class TriggerOnChangeTest {
 
     private data class TestData(
         val message: String,
@@ -19,16 +21,16 @@ class SyncTriggerOnStateChangeTest {
     private lateinit var mockCurrentState: () -> Int
 
     @MockK
-    private lateinit var mockDoThisWhenTriggered: (Int) -> Unit
+    private lateinit var mockDoThisWhenTriggered: (StateChange<Int>) -> Unit
 
     @MockK
-    private lateinit var mockNullDoThisWhenTriggered: (String?) -> Unit
+    private lateinit var mockNullDoThisWhenTriggered: (StateChange<String?>) -> Unit
 
     @MockK
     private lateinit var mockDataClassCurrentState: () -> TestData
 
     @MockK
-    private lateinit var mockDataClassDoThisWhenTriggered: (TestData) -> Unit
+    private lateinit var mockDataClassDoThisWhenTriggered: (StateChange<TestData>) -> Unit
 
     private val TEST_1 = TestData("yes", 1)
     private val TEST_2 = TestData("no", 0)
@@ -41,10 +43,10 @@ class SyncTriggerOnStateChangeTest {
 
         // arrange
         every { mockCurrentState.invoke() } returns 1
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
@@ -56,10 +58,10 @@ class SyncTriggerOnStateChangeTest {
     fun `when initial state stays null, check() does not trigger`() {
 
         // arrange
-        val syncTrigger = SyncTriggerOnStateChange<String?>({ null }, mockNullDoThisWhenTriggered)
+        val trigger = TriggerOnChange({ null }, mockNullDoThisWhenTriggered)
 
         // act
-        syncTrigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 0) {
@@ -72,14 +74,14 @@ class SyncTriggerOnStateChangeTest {
 
         // arrange
         every { mockCurrentState.invoke() } returns 3
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
-            mockDoThisWhenTriggered(3)
+            mockDoThisWhenTriggered(eq(StateChange(null, 3)))
         }
     }
 
@@ -89,24 +91,27 @@ class SyncTriggerOnStateChangeTest {
         // arrange
         every { mockCurrentState.invoke() } returns 3 andThen 5 andThen 6 andThen 6 andThen 3
 
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
-        verify(exactly = 2) {
-            mockDoThisWhenTriggered(3)
+        verify(exactly = 1) {
+            mockDoThisWhenTriggered(eq(StateChange(null,3)))
         }
         verify(exactly = 1) {
-            mockDoThisWhenTriggered(5)
+            mockDoThisWhenTriggered(eq(StateChange(3, 5)))
         }
         verify(exactly = 1) {
-            mockDoThisWhenTriggered(6)
+            mockDoThisWhenTriggered(eq(StateChange(5, 6)))
+        }
+        verify(exactly = 1) {
+            mockDoThisWhenTriggered(eq(StateChange(6,3)))
         }
     }
 
@@ -115,10 +120,10 @@ class SyncTriggerOnStateChangeTest {
 
         // arrange
         every { mockCurrentState.invoke() } returns 1
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -130,11 +135,11 @@ class SyncTriggerOnStateChangeTest {
     fun `when initial state stays null, checkLazy() does not trigger`() {
 
         // arrange
-        val syncTrigger = SyncTriggerOnStateChange<String?>({ null }, mockNullDoThisWhenTriggered)
+        val trigger = TriggerOnChange<String?>({ null }, mockNullDoThisWhenTriggered)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -147,11 +152,11 @@ class SyncTriggerOnStateChangeTest {
 
         // arrange
         every { mockCurrentState.invoke() } returns 3
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -165,24 +170,24 @@ class SyncTriggerOnStateChangeTest {
         // arrange
         every { mockCurrentState.invoke() } returns 3 andThen 5 andThen 6 andThen 6 andThen 3
 
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 1) {
-            mockDoThisWhenTriggered(3)
+            mockDoThisWhenTriggered(eq(StateChange(3, 5)))
         }
         verify(exactly = 1) {
-            mockDoThisWhenTriggered(5)
+            mockDoThisWhenTriggered(eq(StateChange(5, 6)))
         }
         verify(exactly = 1) {
-            mockDoThisWhenTriggered(6)
+            mockDoThisWhenTriggered(eq(StateChange(6, 3)))
         }
     }
 
@@ -192,11 +197,11 @@ class SyncTriggerOnStateChangeTest {
         // arrange
         every { mockCurrentState.invoke() } returns 3 andThen 3
 
-        val syncTrigger = SyncTriggerOnStateChange(mockCurrentState, mockDoThisWhenTriggered)
+        val trigger = TriggerOnChange(mockCurrentState, mockDoThisWhenTriggered)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -211,19 +216,19 @@ class SyncTriggerOnStateChangeTest {
         // arrange
         every { mockDataClassCurrentState.invoke() } returns TEST_1 andThen TEST_2
 
-        val syncTrigger =
-            SyncTriggerOnStateChange(mockDataClassCurrentState, mockDataClassDoThisWhenTriggered)
+        val trigger =
+            TriggerOnChange(mockDataClassCurrentState, mockDataClassDoThisWhenTriggered)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
-            mockDataClassDoThisWhenTriggered(TEST_1)
+            mockDataClassDoThisWhenTriggered(eq(StateChange(null, TEST_1)))
         }
         verify(exactly = 1) {
-            mockDataClassDoThisWhenTriggered(TEST_2)
+            mockDataClassDoThisWhenTriggered(eq(StateChange(TEST_1, TEST_2)))
         }
     }
 
@@ -233,12 +238,12 @@ class SyncTriggerOnStateChangeTest {
         // arrange
         every { mockDataClassCurrentState.invoke() } returns TEST_1 andThen TEST_1
 
-        val syncTrigger =
-            SyncTriggerOnStateChange(mockDataClassCurrentState, mockDataClassDoThisWhenTriggered)
+        val trigger =
+            TriggerOnChange(mockDataClassCurrentState, mockDataClassDoThisWhenTriggered)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -246,3 +251,7 @@ class SyncTriggerOnStateChangeTest {
         }
     }
 }
+
+//fun MockKMatcherScope.eq(other: StateChange<Int>) = match<StateChange<Int>> {
+//    it.pre == other.pre && it.now == other.now
+//}

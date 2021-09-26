@@ -22,7 +22,7 @@ the **kotlin** API, running coroutines under the hood:
 implementation("co.early.fore:fore-kt-android:1.4.12")
 ```
 
-the original **java** API:
+the legacy **java** API:
 ```
 implementation("co.early.fore:fore-jv-android:1.4.12")
 ```
@@ -136,8 +136,6 @@ override fun onStop() {
 }
  </code></pre>
 
-(by nature, fore has low boiler-plate overhead and it becomes even more apparent as screen complexity increases, see [here](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) for details)
-
 All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of your observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate(), though you might be surprised to learn that fore has been using syncView() to implement unidirectional data flow since at least 2013!
 
 <!-- Tabbed code sample -->
@@ -163,13 +161,50 @@ override fun syncView() {
     wallet_savingsamount_txt.text = wallet.savingsWalletAmount.toString()
     wallet_balancewarning_img.showOrGone(wallet.mobileWalletAmount<2)
 }
- </code></pre>
 
- In this example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) - it's entirely up to you, it makes no difference to the syncView() technique.
+</code></pre>
 
-**fore** enables you to write view layers that are particularly sparse, and the apps are highly scalable from a complexity standpoint. This makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code.
+In this example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) it's entirely up to you, it makes no difference to the syncView() technique.
 
-Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on this
+**fore** has low boiler-plate overhead anyway, but its structure enables you to go further and remove almost all of it, see [here](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) for details.
+
+Making the most of fore's ability to remove boiler plate, a fully reactive, fully testable, memory leak free, rotation supporting view layer can easily come in under 100 lines of code (listing is complete apart from imports):
+
+<pre class="codesample"><code>
+class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), SyncableView {
+
+    //models that we need to sync with
+    private val viewModel: DashboardViewModel by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //setup observers
+        lifecycle.addObserver(ForeLifecycleObserver(this, viewModel))
+
+        //setup click listeners
+        dashboard_startautorefresh_btn.setOnClickListener { viewModel.startAutoRefresh() }
+        dashboard_stopautorefresh_btn.setOnClickListener { viewModel.stopAutoRefresh() }
+        dashboard_updatenow_btn.setOnClickListener { viewModel.updateNow() }
+    }
+
+    //called by ForeLifecycleObserver, on the UI thread, whenever the viewModel state changes
+    override fun syncView() {
+        viewModel.viewState.apply {
+            dashboard_busy.showOrInvisible(isUpdating)
+            dashboard_updatenow_btn.isEnabled = !isUpdating
+            dashboard_startautorefresh_btn.isEnabled = !autoRefresh.autoRefreshing
+            dashboard_stopautorefresh_btn.isEnabled = autoRefresh.autoRefreshing
+            dashboard_pollenlevel_img.setImageResource(weather.pollenLevel.toImgRes())
+            dashboard_tempmaxmin.setMaxPercent(weather.maxTempPercent())
+            dashboard_tempmaxmin.setMinPercent(weather.minTempPercent())
+        }
+    }
+}
+
+</code></pre>
+
+Writing view layers this way helps quite a bit from a complexity standpoint, and it's one of the things that makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code. Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious though. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on the complexity / robustness aspect.
 
 Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
@@ -181,7 +216,7 @@ There is often a tendency in business requirements towards complexity, the longe
 
 But as any developer knows, writing complicated code is usually easier than writing simple code (you pay for the complexity later). Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
 
-Because of the low boiler plate and the clear separation of architectural layers, MVO implemented with fore should help with issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering.
+Because of the low boiler plate and the clear separation of architectural layers, MVO implemented with fore should help with issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
 
 ## Where to get more information
 
@@ -205,7 +240,7 @@ For Java development, there are some testable wrappers for AsyncTask (that Googl
 
 ![all samples](img/screenshot_asaf_samples_phone_all_1000.png)
 
-The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts and they are not written using jetpack compose yet - all that you can do later in the **View** layers and it should have no impact on the stability of the app.
+The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts - all that you can do later in the **View** layers and it should have no impact on the stability of the app, (there is a jetpack compose example on the way incidentally).
 
 These apps are however, totally robust and comprehensively tested (and properly support rotation). And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 

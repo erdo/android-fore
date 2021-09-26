@@ -24,8 +24,8 @@
   subitems:
     - text: SyncView()
       url: "#syncview"
-    - text: SyncTrigger
-      url: "#synctrigger"
+    - text: Triggers
+      url: "#triggers"
     - text: Examples
       url: "#view-examples"
 - text: O (observers)
@@ -47,7 +47,7 @@
     - text: Default WorkMode
       url: "#default-params"
     - text: Async and Coroutines
-      url: "#asynctasks-with-lambdas"
+      url: "#kotlin-coroutines"
 - text: Extras
   url: /05-extras.html
   subitems:

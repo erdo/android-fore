@@ -136,7 +136,7 @@ totalPrice.color = if (basket.isBelowMinimum()) red else black
 
 ### showOrGone and showOrInvisible
 
-When writing syncView() functions, you will often come across situations where you want to set a visibility to VISIBLE / INVISIBLE or VISIBLE / GONE based on a boolean state of a model. This is a very short line to write in java, slightly less so in kotlin (as we don't have the elvis operator for ternerary operations). So for kotlin the cleanest way of writing these lines is with one of two extension functions that fore provides. So if you prefer, you can write the following:
+When writing syncView() functions, you will often come across situations where you want to set a visibility to VISIBLE / INVISIBLE or VISIBLE / GONE based on a boolean state of a model or viewState data class. This is a very short line to write in java, slightly less so in kotlin (as we don't have the elvis operator for ternerary operations). So for kotlin the fore offers one of two extension functions. So if you prefer, you can write the following:
 
 
 <pre class="codesample"><code>
@@ -146,6 +146,8 @@ fun syncView() {
 }
 
 </code></pre>
+
+_(You can now also use the extension functions from androidx such as **isVisible** and **isGone**, although they are unfortunately a bit less explicit than they could be. The trouble is visibilty has 3 states: VISIBLE, INVISIBLE, and GONE. The androidx extension functions only mention one state, the negative case is left for you to remember. For instance isGone=false means VISIBLE, but does isVisible=false means INVISIBLE? nope, it means GONE 🤷)_
 
 ### Don't count notifications
 Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors. Check out [SyncTrigger](https://erdo.github.io/android-fore/01-views.html#synctrigger)  below it case it fits your situation.
@@ -158,64 +160,114 @@ However, you will usually be setting a state on that UI element during your sync
 Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing its "changed" listeners anyway. But Android. And indeed Android's EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy. (Interesting that the equivalent TextInput component of ReactNative doesn't suffer from this "feature").
 
 
-## SyncTrigger
+## <a name="synctrigger"></a>Triggers
 
-The SyncTrigger ([kotlin](https://github.com/erdo/android-fore/tree/master/fore-kt-core/src/main/java/co/early/fore/kt/core/ui/synctrigger) \| [java](https://github.com/erdo/android-fore/tree/master/fore-jv-core/src/main/java/co/early/fore/core/ui)) lets you create an event like an animation that must be fired only once, from inside the syncView() method (which can be called at any time, [an arbitrary number of times](https://erdo.github.io/android-fore/05-extras.html#notification-counting)).
+A Trigger is fore's way of bridging the **world of state** (which is what drives a UI in architectures like MVO) and the **world of events** (which tend to happen on changes of state). There is a presentation about State vs Events [here](https://erdo.github.io/android-fore/05-extras.html#presentations).
 
-All "statey" view architectures have this issue (MVO, MVI, MVVM) whereas it's not an issue with MVP because that is event based to start with. Essentially we need a way to bridge the two worlds of **state** and **events**. There are a load of ways to do this, take a look [here](https://www.reddit.com/r/androiddev/comments/g6kgfn/android_databinding_with_livedata_holds_old_values/foabqm0/), [here](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150), [here](https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9), [here](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java), and [here](https://github.com/android/architecture-components-samples/issues/63#issuecomment-310422475) for example.
+All "statey" view architectures have this issue (MVO, MVI, MVVM) and there are a load of ways to handle this, take a look [here](https://www.reddit.com/r/androiddev/comments/g6kgfn/android_databinding_with_livedata_holds_old_values/foabqm0/), [here](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150), [here](https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9), [here](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java), and [here](https://github.com/android/architecture-components-samples/issues/63#issuecomment-310422475) for example.
 
-Anyway this is fore's solution, but there is no need to use it if you already have a preferred way of handling this situation.
+Anyway this is fore's solution, but there is no need to use it if you already have a preferred way.
 
-The java and kotlin versions of the SyncTrigger have slightly different APIs but you need to specify a the same things for both:
+### TriggerWhen
+kotlin source is [here](https://github.com/erdo/android-fore/tree/master/fore-kt-core/src/main/java/co/early/fore/kt/core/ui/trigger/TiggerWhen.kt)
 
-- the condition or **threshold** that you want to trigger the event e.g. `bankBalance<5` if that resolves to true, then the event will be triggered
-- the **action** that you want to be taken when the trigger is fired e.g. `showToast("Bank balance is low")`
-- a **reset rule**: the next time the trigger is checked and the bank balance is more than 5, this could reset the trigger based on the ResetRule: IMMEDIATELY, NEVER, or ONLY_AFTER_REVERSION (the default is ONLY_AFTER_REVERSION) - more information in the source code comments
+A **TriggerWhen** fires a predefined action (an event), when a certain threshold is met (based on some state). For example, this trigger fires the "show toast warning event" when it detects that a user's ballance is low:
 
-For this to work you will need to call **check()** on the SyncTrigger each time the syncView() method is called by your observers.
+<pre class="codesample"><code>
+ballanceWarnTrigger = TriggerWhen(
+  triggeredWhen = { account.ballance < 5 },
+  doThisWhenTriggered = { showToast("bank ballance is low!") }
+)
 
-Alternatively you can call **checkLazy()** which will cause the first check result after the SyncTrigger has been constructed to be supressed (the trigger won't fire, but it will be considered when taking into account any reset rules). This is useful for not re-triggering just because your user rotated the device after receiving an initial trigger.
+</code></pre>
 
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
+Which can be written as:
 
-<pre class="tabcontent tabbed java"><code>
-balanceWarnTrigger = new SyncTrigger(
-    () -> showToast("bank balance is low!"),
-    () -> account.balance < 5,
-    ONLY_AFTER_REVERSION
-);
-
-...
-
-public void syncView(){
-
-    ...
-
-    balanceWarnTrigger.checkLazy();
+<pre class="codesample"><code>
+ballanceWarnTrigger = TriggerWhen({ account.ballance < 5 }) {
+  showToast("bank ballance is low!")
 }
- </code></pre>
 
-<pre class="tabcontent tabbed kotlin"><code>
-balanceWarnTrigger = SyncTrigger({ account.balance < 5 }) {
-    showToast("bank balance is low!")
-}.resetRule(ONLY_AFTER_REVERSION)
+</code></pre>
 
-...
+The triggers are typically checked (see below) during the syncView() function which already gets called whenever the state changes. The reason these events are not continually fired each time syncView() is called is the **ResetRule** of the Trigger. By default this is set to ResetRule.ONLY_AFTER_REVERSION, which means in the case above, the trigger will not be ready to fire again until the account balance is back to 5 or above. Other values are ResetRule.IMMEDIATELY and ResetRule.NEVER. Here's how you would apply a reset rule:
 
+<pre class="codesample"><code>
+ballanceWarnTrigger = TriggerWhen({ account.ballance < 5 }) {
+  showToast("bank ballance is low!")
+}.resetRule(ResetRule.IMMEDIATELY)
+
+</code></pre>
+
+### TriggerOnChange
+kotlin source is [here](https://github.com/erdo/android-fore/tree/master/fore-kt-core/src/main/java/co/early/fore/kt/core/ui/trigger/TriggerOnChange.kt)
+
+A **TriggerOnChange** fires a predefined action (an event), when a certain state changes. For example, this trigger fires the "animate event" when it detects that the pollenLevel has changed:
+
+<pre class="codesample"><code>
+fadePollenTrigger = TriggerOnChange(
+  currentState = { viewModel.viewState.weather.pollenLevel },
+  doThisWhenTriggered = { animations.animatePollenChange() }
+)
+
+</code></pre>
+
+Which can be written as:
+
+<pre class="codesample"><code>
+fadePollenTrigger = TriggerOnChange( { viewModel.viewState.weather.pollenLevel }) {
+  animations.animatePollenChange()
+}
+
+</code></pre>
+
+This trigger has no ResetRule, each time it is checked it will verify the latest state by running the currentState() function, if the state is not equal to the state it had previously, the trigger will fire.
+
+You can acces the previous and current state if required, for example:
+
+<pre class="codesample"><code>
+fadePollenTrigger = TriggerOnChange( { viewModel.viewState.weather.pollenLevel }) { state ->
+  animations.animatePollenChange(from = state.pre, to = state.now)
+}
+
+</code></pre>
+
+### check() vs checkLazy()
+Triggers tend to live in the UI layer of the app, and can therefore be destroyed and recreated on device rotation. If we take this error trigger as an example:
+
+<pre class="codesample"><code>
+showErrorTrigger = TriggerWhen({ viewModel.viewState.error != null }) {
+  showToast("viewModel.viewState.error")
+}
+
+</code></pre>
+When the error state is non null, syncView() is run and the trigger fires, showing the error toast. If we then rotate the device, a new trigger is constructed, syncView() is run and another error toast will be shown (the domain error state is still non null).
+
+<pre class="codesample"><code>
 fun syncView() {
 
-    ...
+  ...
 
-    balanceWarnTrigger.checkLazy()
+  showErrorTrigger.check()
 }
- </code></pre>
 
-Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) for example usage of the SyncTrigger.
+</code></pre>
 
+If this is not what you want (usually it isn't), we can use checkLazy() instead of check(). checkLazy() swallows the first trigger event if it occours the first time a check is run after construction - so you won't get a fresh error toast displaying each time you rotate the device.
+
+<pre class="codesample"><code>
+fun syncView() {
+
+  ...
+
+  showErrorTrigger.checkLazy()
+}
+
+</code></pre>
+
+Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt) for some example usages of Triggers.
+
+As with most fore components, the robustness comes from the fact the public functions are being called on the UI thread (which is where you will usualy already be if you are in the view layer). The exception to this is during a test where the main thread becomes the test thread.
 
 ## View Examples
 

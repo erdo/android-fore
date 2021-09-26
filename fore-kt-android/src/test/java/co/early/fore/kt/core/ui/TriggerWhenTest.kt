@@ -1,20 +1,20 @@
 package co.early.fore.kt.core.ui
 
-import co.early.fore.kt.core.ui.synctrigger.ResetRule
-import co.early.fore.kt.core.ui.synctrigger.SyncTrigger
+import co.early.fore.kt.core.ui.trigger.ResetRule
+import co.early.fore.kt.core.ui.trigger.TriggerWhen
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
-class SyncTriggerTest {
+class TriggerWhenTest {
 
     @MockK
     private lateinit var mockTriggeredWhen: () -> Boolean
+
     @MockK
     private lateinit var mockDoThis: () -> Unit
 
@@ -22,18 +22,18 @@ class SyncTriggerTest {
     fun setup() = MockKAnnotations.init(this, relaxed = true)
 
     @Test
-    fun `default SyncTrigger uses resetRule ONLY_AFTER_REVERSION`() {
+    fun `default Trigger uses resetRule ONLY_AFTER_REVERSION`() {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
 
         // assert
-        assertEquals(ResetRule.ONLY_AFTER_REVERSION, syncTrigger.getResetRule())
+        assertEquals(ResetRule.ONLY_AFTER_REVERSION, trigger.getResetRule())
     }
 
     @Test
@@ -41,12 +41,12 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
-        syncTrigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
@@ -59,12 +59,12 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns false
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
-        syncTrigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 0) {
@@ -77,12 +77,12 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -95,13 +95,13 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -114,13 +114,13 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -133,13 +133,13 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 1) {
@@ -152,14 +152,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
@@ -172,14 +172,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -192,14 +192,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 2) {
@@ -212,14 +212,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.ONLY_AFTER_REVERSION)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 1) {
@@ -232,14 +232,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 3) {
@@ -252,14 +252,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 2) {
@@ -272,14 +272,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 2) {
@@ -292,14 +292,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.IMMEDIATELY)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 1) {
@@ -312,14 +312,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.NEVER)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
@@ -332,14 +332,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.NEVER)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
@@ -352,14 +352,14 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.NEVER)
 
         // act
-        syncTrigger.check()
-        syncTrigger.check()
-        syncTrigger.check()
+        trigger.check()
+        trigger.check()
+        trigger.check()
 
         // assert
         verify(exactly = 1) {
@@ -372,17 +372,35 @@ class SyncTriggerTest {
 
         // arrange
         every { mockTriggeredWhen.invoke() } returns true andThen false andThen true
-        val syncTrigger = SyncTrigger({ mockTriggeredWhen() }) {
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
             mockDoThis()
         }.resetRule(ResetRule.NEVER)
 
         // act
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
-        syncTrigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
+        trigger.checkLazy()
 
         // assert
         verify(exactly = 0) {
+            mockDoThis()
+        }
+    }
+
+    @Test
+    fun `SyncTrigger typealias works as the same as TriggerWhen`() {
+
+        // arrange
+        every { mockTriggeredWhen.invoke() } returns true
+        val trigger = TriggerWhen({ mockTriggeredWhen() }) {
+            mockDoThis()
+        }
+
+        // act
+        trigger.check()
+
+        // assert
+        verify(exactly = 1) {
             mockDoThis()
         }
     }
