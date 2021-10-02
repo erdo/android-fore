@@ -59,8 +59,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.0-alpha02" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 66
+        const val LIB_VERSION_NAME = "1.5.0" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 67
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
