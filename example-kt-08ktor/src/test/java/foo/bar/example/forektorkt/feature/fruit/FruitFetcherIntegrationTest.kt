@@ -40,7 +40,7 @@ class FruitFetcherIntegrationTest {
     private val logger = SystemLogger()
     private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
     private val callProcessor = CallProcessorKtor(
-            globalErrorHandler = CustomGlobalErrorHandler(logger),
+            errorHandler = CustomGlobalErrorHandler(logger),
             logger = logger
     )
 

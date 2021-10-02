@@ -38,7 +38,7 @@ object OG {
         )//logging interceptor should be the last one
 
         val callProcessor = CallProcessorKtor(
-            globalErrorHandler = CustomGlobalErrorHandler(logger),
+            errorHandler = CustomGlobalErrorHandler(logger),
             logger = logger
         )
 

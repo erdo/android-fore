@@ -23,12 +23,12 @@ interface Apollo3Caller<F> {
 }
 
 /**
- * @property globalErrorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
+ * @property errorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
  * etc). This error handler is often the same across a range of services required by the app.
  * However, sometimes the APIs all have different error behaviours (say when the service APIs have
  * been developed at different times, or by different teams or different third parties). In this
- * case a separate CallProcessorApollo3 instance (and ErrorHandler) will be required for each micro
- * service.
+ * case it might be easier to use a separate CallProcessorApollo3 instance (and ErrorHandler) for
+ * each micro service.
  * @property logger (optional: ForeDelegateHolder will choose a sensible default)
  * @property workMode (optional: ForeDelegateHolder will choose a sensible default)
  * @property allowPartialSuccesses (defaults to false) The GraphQL spec allows for success responses
@@ -44,7 +44,7 @@ interface Apollo3Caller<F> {
  */
 @ExperimentalStdlibApi
 class CallProcessorApollo3<F>(
-    private val globalErrorHandler: ErrorHandler<F>,
+    private val errorHandler: ErrorHandler<F>,
     private val logger: Logger? = null,
     private val workMode: WorkMode? = null,
     private val allowPartialSuccesses: Boolean = false
@@ -119,6 +119,6 @@ class CallProcessorApollo3<F>(
             ForeDelegateHolder.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
-        return Either.left(globalErrorHandler.handleError(t, errorResponse))
+        return Either.left(errorHandler.handleError(t, errorResponse))
     }
 }
