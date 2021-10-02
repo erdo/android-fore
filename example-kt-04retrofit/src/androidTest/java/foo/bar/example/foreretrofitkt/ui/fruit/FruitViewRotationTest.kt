@@ -1,4 +1,3 @@
-
 package foo.bar.example.foreretrofitkt.ui.fruit
 
 import android.app.Activity
@@ -6,18 +5,14 @@ import android.content.pm.ActivityInfo
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.isEnabled
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.core.Either
+import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.logging.SystemLogger
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
@@ -31,7 +26,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.CountDownLatch
 
 
@@ -60,10 +55,13 @@ class FruitViewRotationTest {
 
     @MockK
     private lateinit var mockSuccess: Success
+
     @MockK
     private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+
     @MockK
     lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
+
     @MockK
     private lateinit var mockFruitService: FruitService
 
@@ -81,8 +79,7 @@ class FruitViewRotationTest {
         fruitFetcher = FruitFetcher(
             mockFruitService,
             mockCallProcessorRetrofit2,
-            logger,
-            WorkMode.ASYNCHRONOUS
+            logger
         )
     }
 
@@ -202,20 +199,23 @@ class FruitViewRotationTest {
         onView(withId(R.id.fruit_citrus_img)).check(
             matches(
                 withDrawable(
-                    if (fruitPojo.isCitrus)
+                    if (fruitPojo.isCitrus) {
                         R.drawable.lemon_positive
-                    else
+                    } else {
                         R.drawable.lemon_negative
+                    }
                 )
             )
         )
     }
 
     private fun swapOrientation(activity: Activity) {
-        activity.requestedOrientation = if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        else
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        activity.requestedOrientation =
+            if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else {
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
     }
 
 }

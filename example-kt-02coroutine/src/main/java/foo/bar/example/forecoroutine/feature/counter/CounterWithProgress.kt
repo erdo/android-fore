@@ -5,6 +5,7 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.coroutine.*
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
 import co.early.fore.kt.core.observer.ObservableImp
 import kotlinx.coroutines.delay
 
@@ -12,9 +13,8 @@ import kotlinx.coroutines.delay
  * Copyright © 2019 early.co. All rights reserved.
  */
 class CounterWithProgress(
-        private val workMode: WorkMode,
         private val logger: Logger
-) : Observable by ObservableImp(workMode, logger) {
+) : Observable by ObservableImp(logger = logger) {
 
     var isBusy = false
         private set
@@ -35,9 +35,9 @@ class CounterWithProgress(
         isBusy = true
         notifyObservers()
 
-        launchMain(workMode) {
+        launchMain {
 
-            val result = awaitDefault(workMode) {
+            val result = awaitDefault {
                 doStuffInBackground(20)
             }
 
@@ -54,11 +54,11 @@ class CounterWithProgress(
 
         for (ii in 1..countTo) {
 
-            delay((if (workMode == WorkMode.SYNCHRONOUS) 1 else 100).toLong())
+            delay((if (ForeDelegateHolder.getWorkMode() == WorkMode.SYNCHRONOUS) 1 else 100).toLong())
 
             ++totalIncrease
 
-            launchMain(workMode) {
+            launchMain {
                 publishProgress(totalIncrease)
             }
 

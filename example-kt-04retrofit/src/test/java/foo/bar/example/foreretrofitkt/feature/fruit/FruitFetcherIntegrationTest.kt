@@ -3,11 +3,12 @@ package foo.bar.example.foreretrofitkt.feature.fruit
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.kt.net.InterceptorLogging
+import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
 import co.early.fore.net.testhelpers.InterceptorStubbedService
-import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import foo.bar.example.foreretrofitkt.api.CommonServiceFailures
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreretrofitkt.api.CustomRetrofitBuilder
@@ -41,8 +42,9 @@ import retrofit2.Retrofit
 class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
-    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
-    private val callProcessor = CallProcessorRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
+    private val interceptorLogging = InterceptorLogging(logger)
+    private val callProcessor =
+        CallProcessorRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
 
     @MockK
     private lateinit var mockSuccess: Success
@@ -52,7 +54,13 @@ class FruitFetcherIntegrationTest {
 
 
     @Before
-    fun setup() = MockKAnnotations.init(this, relaxed = true)
+    fun setup() {
+        MockKAnnotations.init(this, relaxed = true)
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+    }
 
 
     /**
@@ -70,8 +78,7 @@ class FruitFetcherIntegrationTest {
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
             callProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
 
 
@@ -88,8 +95,14 @@ class FruitFetcherIntegrationTest {
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(stubbedSuccess.expectedResult.name, fruitFetcher.currentFruit.name)
-        Assert.assertEquals(stubbedSuccess.expectedResult.isCitrus, fruitFetcher.currentFruit.isCitrus)
-        Assert.assertEquals(stubbedSuccess.expectedResult.tastyPercentScore.toLong(), fruitFetcher.currentFruit.tastyPercentScore.toLong())
+        Assert.assertEquals(
+            stubbedSuccess.expectedResult.isCitrus,
+            fruitFetcher.currentFruit.isCitrus
+        )
+        Assert.assertEquals(
+            stubbedSuccess.expectedResult.tastyPercentScore.toLong(),
+            fruitFetcher.currentFruit.tastyPercentScore.toLong()
+        )
     }
 
     /**
@@ -107,8 +120,7 @@ class FruitFetcherIntegrationTest {
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
             callProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
 
 
@@ -142,8 +154,7 @@ class FruitFetcherIntegrationTest {
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
             callProcessor,
-            logger,
-            WorkMode.SYNCHRONOUS
+            logger
         )
 
 
@@ -188,8 +199,7 @@ class FruitFetcherIntegrationTest {
             val fruitFetcher = FruitFetcher(
                 retrofit.create(FruitService::class.java),
                 callProcessor,
-                logger,
-                WorkMode.SYNCHRONOUS
+                logger
             )
 
 
@@ -212,7 +222,7 @@ class FruitFetcherIntegrationTest {
 
     private fun stubbedRetrofit(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): Retrofit {
         return CustomRetrofitBuilder.create(
-            co.early.fore.net.testhelpers.InterceptorStubbedService(
+            InterceptorStubbedService(
                 stubbedServiceDefinition
             ),
             interceptorLogging

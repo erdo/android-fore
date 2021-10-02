@@ -1,6 +1,5 @@
 package foo.bar.example.foreapollokt.feature.authentication
 
-import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.Either.Left
 import co.early.fore.kt.core.Either.Right
@@ -15,18 +14,17 @@ import foo.bar.example.foreapollokt.graphql.LoginMutation
 import foo.bar.example.foreapollokt.message.ErrorMessage
 
 data class AuthService(
-        val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>
+    val login: (email: String) -> ApolloMutationCall<LoginMutation.Data>
 )
 
 /**
  * logs the user in / out (gets a session token from the server / disposes of it)
  */
 class Authenticator(
-        private val authService: AuthService,
-        private val callProcessor: CallProcessorApollo<ErrorMessage>,
-        private val logger: Logger,
-        private val workMode: WorkMode
-) : Observable by ObservableImp(workMode, logger) {
+    private val authService: AuthService,
+    private val callProcessor: CallProcessorApollo<ErrorMessage>,
+    private val logger: Logger
+) : Observable by ObservableImp(logger = logger) {
 
     var isBusy: Boolean = false
         private set
@@ -37,9 +35,9 @@ class Authenticator(
      * get a session token from the server using a GraphQl Mutation
      */
     fun login(
-            email: String,
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+        email: String,
+        success: Success,
+        failureWithPayload: FailureWithPayload<ErrorMessage>
     ) {
 
         logger.i("login() :$email")
@@ -57,7 +55,7 @@ class Authenticator(
         isBusy = true
         notifyObservers()
 
-        launchMain(workMode) {
+        launchMain {
 
             val deferredResult = callProcessor.processCallAsync {
                 authService.login(email)
@@ -77,7 +75,8 @@ class Authenticator(
 
         logger.i("logout()")
 
-        sessionToken = NO_SESSION //in reality you would probably also tell the server the user wants to log out
+        sessionToken =
+            NO_SESSION //in reality you would probably also tell the server the user wants to log out
         complete()
     }
 
@@ -92,13 +91,13 @@ class Authenticator(
         complete()
     }
 
-    fun hasSessionToken() : Boolean {
+    fun hasSessionToken(): Boolean {
         return sessionToken != NO_SESSION
     }
 
     private fun handleSuccess(
-            success: Success,
-            successResponse: String?
+        success: Success,
+        successResponse: String?
     ) {
 
         logger.i("handleSuccess() t:" + Thread.currentThread().id)
@@ -109,8 +108,8 @@ class Authenticator(
     }
 
     private fun handleFailure(
-            failureWithPayload: FailureWithPayload<ErrorMessage>,
-            failureMessage: ErrorMessage
+        failureWithPayload: FailureWithPayload<ErrorMessage>,
+        failureMessage: ErrorMessage
     ) {
 
         logger.i("handleFailure() t:" + Thread.currentThread().id)

@@ -24,12 +24,12 @@ interface ApolloCaller<F> {
 }
 
 /**
- * @param globalErrorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
+ * @param errorHandler Error handler for the service (interpreting HTTP codes, GraphQL errors
  * etc). This error handler is often the same across a range of services required by the app.
  * However, sometimes the APIs all have different error behaviours (say when the service APIs have
  * been developed at different times, or by different teams or different third parties). In this
- * case a separate CallProcessorApollo instance (and ErrorHandler) will be required for each micro
- * service.
+ * case it might be easier to use a separate CallProcessorApollo instance (and ErrorHandler) for
+ * each micro service.
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
  * @param workMode (optional: ForeDelegateHolder will choose a sensible default) Testing: Apollo
  * library is NOT setup to be able to run calls in a synchronous manner (unlike Retrofit), for this
@@ -47,10 +47,10 @@ interface ApolloCaller<F> {
  * failure message class, like an enum for example
  */
 class CallProcessorApollo<F>(
-        private val globalErrorHandler: ErrorHandler<F>,
-        private val logger: Logger? = null,
-        private val workMode: WorkMode? = null,
-        private val allowPartialSuccesses: Boolean = false
+    private val errorHandler: ErrorHandler<F>,
+    private val logger: Logger? = null,
+    private val workMode: WorkMode? = null,
+    private val allowPartialSuccesses: Boolean = false
 ) : ApolloCaller<F> {
 
     data class SuccessResult<S>(
@@ -123,6 +123,6 @@ class CallProcessorApollo<F>(
             ForeDelegateHolder.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
-        return Either.left(globalErrorHandler.handleError(t, errorResponse))
+        return Either.left(errorHandler.handleError(t, errorResponse))
     }
 }

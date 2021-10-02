@@ -1,11 +1,14 @@
 package foo.bar.example.forecoroutine.feature.counter
 
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
+import io.mockk.MockKAnnotations
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -13,12 +16,19 @@ import org.junit.Test
  */
 class CounterTest {
 
+    @Before
+    fun setup() {
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+    }
+
     @Test
     @Throws(Exception::class)
     fun initialConditions() {
 
         //arrange
-        val counter = Counter(WorkMode.SYNCHRONOUS, logger)
+        val counter = Counter(logger)
 
         //act
 
@@ -33,7 +43,7 @@ class CounterTest {
     fun increasesBy20() {
 
         //arrange
-        val counter = Counter(WorkMode.SYNCHRONOUS, logger)
+        val counter = Counter(logger)
 
         //act
         counter.increaseBy20()
@@ -65,7 +75,7 @@ class CounterTest {
     fun observersNotifiedAtLeastOnce() {
 
         //arrange
-        val counter = Counter(WorkMode.SYNCHRONOUS, logger)
+        val counter = Counter(logger)
         val mockObserver = mockk<Observer>(relaxed = true)
         counter.addObserver(mockObserver)
 

@@ -1,6 +1,5 @@
 package foo.bar.example.foreapollo3.feature.launch
 
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.ForeDelegateHolder
@@ -9,7 +8,6 @@ import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import co.early.fore.net.testhelpers.InterceptorStubbedService
-import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import com.apollographql.apollo3.ApolloClient
 import foo.bar.example.foreapollo3.*
 import foo.bar.example.foreapollo3.api.CommonServiceFailures
@@ -38,7 +36,7 @@ import org.junit.Test
 @ExperimentalStdlibApi
 class LaunchFetcherIntegrationTest {
 
-    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging()
+    private val interceptorLogging = InterceptorLogging()
     private val logger = SystemLogger()
     private val callProcessor = CallProcessorApollo3(CustomGlobalErrorHandler(logger))
 
@@ -55,6 +53,9 @@ class LaunchFetcherIntegrationTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
         ForeDelegateHolder.setDelegate(TestDelegateDefault())
     }
 
@@ -72,11 +73,10 @@ class LaunchFetcherIntegrationTest {
         //arrange
         val apolloClient = stubbedApolloClient(stubbedSuccess)
         val launchesModel = LaunchesModel(
-                createLaunchService(apolloClient),
-                callProcessor,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            createLaunchService(apolloClient),
+            callProcessor,
+            mockAuthenticator,
+            logger
         )
 
 
@@ -92,7 +92,10 @@ class LaunchFetcherIntegrationTest {
             mockFailureWithPayload(any())
         }
         Assert.assertEquals(false, launchesModel.isBusy)
-        Assert.assertEquals(stubbedSuccess.expectedResult.isBooked, launchesModel.currentLaunch.isBooked)
+        Assert.assertEquals(
+            stubbedSuccess.expectedResult.isBooked,
+            launchesModel.currentLaunch.isBooked
+        )
         Assert.assertEquals(stubbedSuccess.expectedResult.id, launchesModel.currentLaunch.id)
     }
 
@@ -109,11 +112,10 @@ class LaunchFetcherIntegrationTest {
         //arrange
         val apolloClient = stubbedApolloClient(stubbedFailSaysNo)
         val launchesModel = LaunchesModel(
-                createLaunchService(apolloClient),
-                callProcessor,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            createLaunchService(apolloClient),
+            callProcessor,
+            mockAuthenticator,
+            logger
         )
 
 
@@ -145,11 +147,10 @@ class LaunchFetcherIntegrationTest {
         //arrange
         val apolloClient = stubbedApolloClient(stubbedFailureInternalServerError)
         val launchesModel = LaunchesModel(
-                createLaunchService(apolloClient),
-                callProcessor,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            createLaunchService(apolloClient),
+            callProcessor,
+            mockAuthenticator,
+            logger
         )
 
 
@@ -192,11 +193,10 @@ class LaunchFetcherIntegrationTest {
             clearMocks(mockSuccess, mockFailureWithPayload)
             val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
             val launchesModel = LaunchesModel(
-                    createLaunchService(apolloClient),
-                    callProcessor,
-                    mockAuthenticator,
-                    logger,
-                    WorkMode.SYNCHRONOUS
+                createLaunchService(apolloClient),
+                callProcessor,
+                mockAuthenticator,
+                logger
             )
 
 
@@ -222,17 +222,17 @@ class LaunchFetcherIntegrationTest {
             co.early.fore.net.testhelpers.InterceptorStubbedService(
                 stubbedServiceDefinition
             ),
-                interceptorLogging
+            interceptorLogging
         )
     }
 
     private fun createLaunchService(apolloClient: ApolloClient): LaunchService {
         return LaunchService(
-                getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                login = { email -> apolloClient.mutate(LoginMutation(email)) },
-                refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
-                bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
-                cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
+            getLaunchList = { apolloClient.query(LaunchListQuery()) },
+            login = { email -> apolloClient.mutate(LoginMutation(email)) },
+            refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
+            bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
+            cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
         )
     }
 

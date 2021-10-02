@@ -157,6 +157,16 @@ class FruitFetcher(
 
             var ticketRef = ""
 
+            /**
+             * we're using fore's carryOn() extension function here but you can do whatever
+             * you like here, including using reactive streams if appropriate. Once your network
+             * chain is complete though, when you want to expose the resulting state,
+             * you need to: 1) set it, and 2) call notifyObservers().
+             *
+             * (carryOn() lets you transparently handle networking
+             * errors at each step - Internet search for "railway oriented programming"
+             * or "andThen" functions)
+             */
             val response = callProcessorKtor.processCallAwait() {
                 logger.i("...create user...")
                 fruitService.createUser()

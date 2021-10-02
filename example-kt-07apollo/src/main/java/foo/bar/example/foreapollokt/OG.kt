@@ -1,7 +1,6 @@
 package foo.bar.example.foreapollokt
 
 import android.app.Application
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
@@ -30,8 +29,7 @@ object OG {
     private var initialized = false
     private val dependencies = HashMap<Class<*>, Any>()
 
-    @JvmOverloads
-    fun setApplication(application: Application, workMode: WorkMode = WorkMode.ASYNCHRONOUS) {
+    fun setApplication(application: Application) {
 
         // create dependency graph
 
@@ -55,8 +53,7 @@ object OG {
                 login = { email -> apolloClient.mutate(LoginMutation(Input.optional(email))) }
             ),
             callProcessor,
-            logger,
-            workMode
+            logger
         )
         globalRequestInterceptor.setAuthenticator(authenticator)
         val launchesModel = LaunchesModel(
@@ -69,8 +66,7 @@ object OG {
             ),
             callProcessor,
             authenticator,
-            logger,
-            workMode
+            logger
         )
 
         // add models to the dependencies map if you will need them later

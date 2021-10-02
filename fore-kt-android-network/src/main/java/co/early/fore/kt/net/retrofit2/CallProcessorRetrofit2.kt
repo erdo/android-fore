@@ -35,11 +35,11 @@ interface Retrofit2Caller<F> {
  * CE needs to implement MessageProvider&lt;F&gt; (i.e. it needs to be able to give you a failure
  * message that can be passed back to the application)
  *
- * @param globalErrorHandler Error handler for the service (interpreting HTTP codes etc). This
+ * @param errorHandler Error handler for the service (interpreting HTTP codes etc). This
  * error handler is often the same across a range of services required by the app. However, sometimes
  * the APIs all have different error behaviours (say when the service APIs have been developed
- * at different times, or by different companies, or even teams). In this case a separate CallProcessor
- * instance (and ErrorHandler) will be required for each micro service.
+ * at different times, or by different companies, or even teams). In this case it might be easier
+ * to use a separate CallProcessor instance (and ErrorHandler) for each micro service.
  * @param workMode (optional: ForeDelegateHolder will choose a sensible default)  SYNCHRONOUS means
  * everything is run sequentially in a blocking manner
  * and on whatever thread the caller is on (suitable for running unit tests for example).
@@ -51,9 +51,9 @@ interface Retrofit2Caller<F> {
  * failure message class, like an enum for example
  */
 class CallProcessorRetrofit2<F>(
-        private val globalErrorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
-        private val workMode: WorkMode? = null,
-        private val logger: Logger? = null
+    private val errorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
+    private val workMode: WorkMode? = null,
+    private val logger: Logger? = null
 ) : Retrofit2Caller<F> {
 
     /**
@@ -143,6 +143,6 @@ class CallProcessorRetrofit2<F>(
             ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
-        return Either.left(globalErrorHandler.handleError(t, errorResponse, customErrorClass, null))
+        return Either.left(errorHandler.handleError(t, errorResponse, customErrorClass, null))
     }
 }

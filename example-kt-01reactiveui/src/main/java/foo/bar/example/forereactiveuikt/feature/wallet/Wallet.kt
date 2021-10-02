@@ -7,7 +7,7 @@ import co.early.fore.kt.core.observer.ObservableImp
 /**
  * Copyright © 2015-2020 early.co. All rights reserved.
  */
-class Wallet(private val logger: Logger) : Observable by ObservableImp() {
+class Wallet(private val logger: Logger) : Observable by ObservableImp(logger = logger) {
 
     val totalDollarsAvailable = 10
     var mobileWalletAmount = 0

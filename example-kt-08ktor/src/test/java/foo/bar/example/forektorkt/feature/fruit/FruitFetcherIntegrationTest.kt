@@ -40,7 +40,7 @@ class FruitFetcherIntegrationTest {
     private val logger = SystemLogger()
     private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
     private val callProcessor = CallProcessorKtor(
-            globalErrorHandler = CustomGlobalErrorHandler(logger),
+            errorHandler = CustomGlobalErrorHandler(logger),
             logger = logger
     )
 
@@ -53,10 +53,11 @@ class FruitFetcherIntegrationTest {
 
     @Before
     fun setup() {
-
-        ForeDelegateHolder.setDelegate(TestDelegateDefault())
-
         MockKAnnotations.init(this, relaxed = true)
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
     }
 
 

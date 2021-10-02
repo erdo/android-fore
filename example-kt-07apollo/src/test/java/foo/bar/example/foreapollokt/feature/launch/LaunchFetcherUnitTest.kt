@@ -1,10 +1,11 @@
 package foo.bar.example.foreapollokt.feature.launch
 
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
+import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.apollo.CallProcessorApollo
 import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
@@ -52,7 +53,13 @@ class LaunchesModelUnitTest {
 
 
     @Before
-    fun setup() = MockKAnnotations.init(this, relaxed = true)
+    fun setup() {
+        MockKAnnotations.init(this, relaxed = true)
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+    }
 
 
     @Test
@@ -61,11 +68,10 @@ class LaunchesModelUnitTest {
 
         //arrange
         val launchesModel = LaunchesModel(
-                mockLaunchService,
-                mockCallProcessorApollo,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            mockLaunchService,
+            mockCallProcessorApollo,
+            mockAuthenticator,
+            logger
         )
 
         //act
@@ -84,13 +90,13 @@ class LaunchesModelUnitTest {
         val mockLaunchesData = createMockLaunchesResponse(launch)
 
         //arrange
-        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallProcessorApollo
+        val callProcessor =
+            StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallProcessorApollo
         val launchesModel = LaunchesModel(
-                mockLaunchService,
-                callProcessor,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            mockLaunchService,
+            callProcessor,
+            mockAuthenticator,
+            logger
         )
 
 
@@ -118,13 +124,13 @@ class LaunchesModelUnitTest {
 
         //arrange
 
-        val callProcessor = StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockCallProcessorApollo
+        val callProcessor =
+            StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockCallProcessorApollo
         val launchesModel = LaunchesModel(
-                mockLaunchService,
-                callProcessor,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            mockLaunchService,
+            callProcessor,
+            mockAuthenticator,
+            logger
         )
 
 
@@ -168,13 +174,13 @@ class LaunchesModelUnitTest {
         val mockLaunchesData = createMockLaunchesResponse(launch)
 
         //arrange
-        val callProcessor = StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallProcessorApollo
+        val callProcessor =
+            StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallProcessorApollo
         val launchesModel = LaunchesModel(
-                mockLaunchService,
-                callProcessor,
-                mockAuthenticator,
-                logger,
-                WorkMode.SYNCHRONOUS
+            mockLaunchService,
+            callProcessor,
+            mockAuthenticator,
+            logger
         )
         launchesModel.addObserver(mockObserver)
 
@@ -192,13 +198,19 @@ class LaunchesModelUnitTest {
     companion object {
         private val logger = SystemLogger()
 
-        private fun createMockLaunchesResponse (launch: Launch) : LaunchListQuery.Data {
+        private fun createMockLaunchesResponse(launch: Launch): LaunchListQuery.Data {
 
-            val mockLaunchesData =  mockk<LaunchListQuery.Data>()
-            val mockLaunches =  mockk<LaunchListQuery.Launches>()
+            val mockLaunchesData = mockk<LaunchListQuery.Data>()
+            val mockLaunches = mockk<LaunchListQuery.Launches>()
 
-            val missionQuery = LaunchListQuery.Mission(name ="mission name", missionPatch = launch.patchImgUrl)
-            val launchQuery = LaunchListQuery.Launch(id = launch.id, site = launch.site, mission = missionQuery, isBooked = launch.isBooked)
+            val missionQuery =
+                LaunchListQuery.Mission(name = "mission name", missionPatch = launch.patchImgUrl)
+            val launchQuery = LaunchListQuery.Launch(
+                id = launch.id,
+                site = launch.site,
+                mission = missionQuery,
+                isBooked = launch.isBooked
+            )
 
             every {
                 mockLaunchesData.launches

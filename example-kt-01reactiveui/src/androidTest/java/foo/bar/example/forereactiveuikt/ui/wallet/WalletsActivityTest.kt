@@ -32,9 +32,6 @@ class WalletsActivityTest {
 
     @Before
     fun setup() {
-
-        ForeDelegateHolder.setDelegate(TestDelegateDefault())
-
         MockKAnnotations.init(this, relaxed = true)
     }
 

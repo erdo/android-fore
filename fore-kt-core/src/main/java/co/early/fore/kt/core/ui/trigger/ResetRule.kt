@@ -1,4 +1,4 @@
-package co.early.fore.kt.core.ui.synctrigger
+package co.early.fore.kt.core.ui.trigger
 
 enum class ResetRule {
     /*

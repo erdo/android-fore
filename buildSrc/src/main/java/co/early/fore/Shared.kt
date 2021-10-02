@@ -16,16 +16,16 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "7.0.2"
-        const val kotlin_version = "1.5.30"
+        const val kotlin_version = "1.5.31"
         const val kotlinx_coroutines_core = "1.4.2"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.4.2"
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
-        const val apollo3 = "3.0.0-alpha06"
+        const val apollo3 = "3.0.0-alpha07"
         const val retrofit = "2.9.0"
-        const val compose = "1.1.0-alpha03"
+        const val compose = "1.1.0-alpha05"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
@@ -59,8 +59,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.0-alpha01" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 65
+        const val LIB_VERSION_NAME = "1.5.0" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 67
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"

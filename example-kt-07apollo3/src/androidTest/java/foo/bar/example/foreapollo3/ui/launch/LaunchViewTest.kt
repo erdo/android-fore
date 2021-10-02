@@ -9,6 +9,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollo3.feature.launch.Launch
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
@@ -36,7 +38,9 @@ class LaunchViewTest {
     private val launch = Launch("123", "site")
 
     @Before
-    fun setUp() = MockKAnnotations.init(this, relaxed = true)
+    fun setUp() {
+        MockKAnnotations.init(this, relaxed = true)
+    }
 
 
     @Test
@@ -44,7 +48,7 @@ class LaunchViewTest {
     fun hasLaunch() {
 
         //arrange
-        val activity = LaunchesViewTestStateBuilder(mockLaunchesModel)
+        val activity = LaunchViewTestStateBuilder(mockLaunchesModel)
             .isBusy(false)
             .hasLaunch(launch)
             .createRule()
@@ -65,7 +69,7 @@ class LaunchViewTest {
     fun isFetchingLaunch() {
 
         //arrange
-        LaunchesViewTestStateBuilder(mockLaunchesModel)
+        LaunchViewTestStateBuilder(mockLaunchesModel)
             .isBusy(true)
             .hasLaunch(launch)
             .createRule()
@@ -86,7 +90,7 @@ class LaunchViewTest {
     @Throws(Exception::class)
     fun clickCallsFetchSuccess() {
         //arrange
-        LaunchesViewTestStateBuilder(mockLaunchesModel)
+        LaunchViewTestStateBuilder(mockLaunchesModel)
             .isBusy(false)
             .hasLaunch(launch)
             .createRule()

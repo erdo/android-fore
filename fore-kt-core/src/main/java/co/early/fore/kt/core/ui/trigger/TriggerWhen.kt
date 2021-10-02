@@ -1,20 +1,4 @@
-package co.early.fore.kt.core.ui.synctrigger
-
-interface Keeper<K> {
-    /**
-     * swapper provides the previously kept value (or null),
-     * and expects the new value to keep in return
-     *
-     * the swap function should return true if the values have
-     * changed (i.e. when the new value is not the same as the
-     * previously kept value)
-     *
-     * if you are using a keeper in your triggeredWhen() function
-     * too keep track of a variable that sometimes changes, you
-     * probably also want to use ResetRule.IMMEDIATELY
-     */
-    fun swap(swapper: (K?) -> K) : Boolean
-}
+package co.early.fore.kt.core.ui.trigger
 
 /**
  *
@@ -30,38 +14,14 @@ interface Keeper<K> {
  * having to wait for [triggeredWhen] to return false,
  * construct this class with the ResetRule.IMMEDIATELY flag
  *
- * So that we can remember temporary states between invocations of triggeredWhen(), triggeredWhen
- * passes a Keeper to the client which can be used to keep temporary values so that they can be
- * read again during the next invocation of triggeredWhen
- *
  */
-class SyncTriggerKeeper<T>(
-    private val triggeredWhen: (Keeper<T>) -> Boolean,
+class TriggerWhen(
+    private val triggeredWhen: () -> Boolean,
     private val doThisWhenTriggered: () -> Unit
 ) {
-
-    private var previousValue: T? = null
-    private val keeper = object : Keeper<T> {
-        override fun swap(swapper: (T?) -> T): Boolean {
-            val valueToKeep = swapper(previousValue)
-            val hasChanged = (valueToKeep != previousValue)
-            previousValue = valueToKeep
-            return hasChanged
-        }
-    }
-
     private var resetRule: ResetRule = ResetRule.ONLY_AFTER_REVERSION
     private var overThreshold = false
     private var firstCheck = true
-
-    fun resetRule(resetRule: ResetRule): SyncTriggerKeeper<T> {
-        this.resetRule = resetRule
-        return this
-    }
-
-    fun getResetRule(): ResetRule {
-        return resetRule
-    }
 
     /**
      *
@@ -102,6 +62,15 @@ class SyncTriggerKeeper<T>(
         check(true)
     }
 
+    fun resetRule(resetRule: ResetRule): TriggerWhen {
+        this.resetRule = resetRule
+        return this
+    }
+
+    fun getResetRule(): ResetRule {
+        return resetRule
+    }
+
     /**
      *
      * @param swallowTriggerForFirstCheck true to swallow triggers on the first check - depending
@@ -109,11 +78,12 @@ class SyncTriggerKeeper<T>(
      * firing due to a screen rotation.
      */
     private fun check(swallowTriggerForFirstCheck: Boolean) {
-        val reached = triggeredWhen(keeper)
+        val reached = triggeredWhen()
+        var fireTrigger = false
         if (!overThreshold && reached) {
             overThreshold = true
             if (!(swallowTriggerForFirstCheck && firstCheck)) { //not ignoring the first check AND threshold has been reached
-                fireTrigger()
+                fireTrigger = true
             }
         }
         firstCheck = false
@@ -125,9 +95,8 @@ class SyncTriggerKeeper<T>(
             ResetRule.NEVER -> {
             }
         }
-    }
-
-    private fun fireTrigger() {
-        doThisWhenTriggered()
+        if (fireTrigger) {
+            doThisWhenTriggered()
+        }
     }
 }

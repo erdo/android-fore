@@ -24,7 +24,7 @@ sourceSets["main"].java.apply {
     exclude(
         "co/early/fore/core/logging/**",
         "co/early/fore/core/observer/ObservableGroupImp.java",
-        "co/early/fore/core/ui/SyncTrigger.java"
+        "co/early/fore/core/ui/trigger/Trigger.java"
     )
 }
 
