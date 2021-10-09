@@ -99,7 +99,7 @@ If the list of things you are observing gets a little long, you can remove some 
 
 ### <a name="observablegroup"></a>Using ObservableGroup in a ViewModel
 
-Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any/all of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what fore means by "thinner android view layers". We're using this exact technique in the [clean architecture modules sample app](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt).
+Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any/all of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what fore means by "thinner android view layers". We're using this technique in the [clean architecture modules sample app](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt).
 
 <pre class="codesample"><code>
 
@@ -109,10 +109,7 @@ class MyViewModel(
     private val emailInBox: EmailInBox,
     private val weatherRepository: WeatherRepository
 ) : BaseViewModel(
-    accountModel,
-    networkInfo,
-    emailInBox,
-    weatherRepository,
+    accountModel, networkInfo, emailInBox, weatherRepository
 ), Observable by ObservableImp() {
 
     var viewState = MyViewState()
@@ -122,6 +119,7 @@ class MyViewModel(
         syncView()
     }
 
+    // this gets called whenever our domain models' state changes
     override fun syncView() {
         // Here you might create an immutable view state
         // to pass to your fragment (based on the state of
@@ -134,7 +132,7 @@ class MyViewModel(
 }
  </code></pre>
 
-For completeness, here is the BaseViewModel
+For completeness, here is an example BaseViewModel
 
 <pre class="codesample"><code>
 
@@ -157,6 +155,39 @@ abstract class BaseViewModel(
 }
  </code></pre>
 
+As you can see in the example BaseViewModel above, the observers will exist throught the life time of your viewmodel (which may or may not be what you want). You can add / remove the observers in line with  onStart / onStop by adding the onStart() and onStop() functions to the viewModel yourself and calling them from the host fragment or activity (the androidx viewModel doesn't support support for onStart onStop by itself).
+
+You can alternatively use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
+
+class MyViewModel(
+    private val accountModel: AccountModel,
+    private val networkInfo: NetworkInfo,
+    private val emailInBox: EmailInBox,
+    private val weatherRepository: WeatherRepository
+) : ViewModel(), SyncableView, ViewModelObservability by ViewModelObservabilityImp(
+    accountModel, networkInfo, emailInBox, weatherRepository
+) {
+
+    var viewState = MyViewState()
+        private set
+
+    init {
+        initSyncableView(this)
+    }
+    
+    // this gets called whenever our domain models' state changes
+    override fun syncView() {
+        // Here you might create an immutable view state
+        // to pass to your fragment (based on the state of
+        // the various models that you're observing)
+        viewState = MyViewState(
+            ...
+        )
+        notifyObservers()
+    }
+}
+ </code></pre>
+
 ### ForeLifecycleObserver
 
 If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally):
@@ -173,7 +204,7 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
             viewModel
         )
     )
-    
+
   }
 
   override fun syncView() {

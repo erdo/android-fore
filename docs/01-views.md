@@ -147,7 +147,7 @@ fun syncView() {
 
 </code></pre>
 
-_(You can now also use the extension functions from androidx such as **isVisible** and **isGone**, although they are unfortunately a bit less explicit than they could be. The trouble is visibilty has 3 states: VISIBLE, INVISIBLE, and GONE. The androidx extension functions only mention one state, the negative case is left for you to remember. For instance isGone=false means VISIBLE, but does isVisible=false means INVISIBLE? nope, it means GONE 🤷)_
+_(You can now also use the extension functions from androidx such as **isVisible** and **isGone**, although they are unfortunately a bit less explicit than they could be. The trouble is visibilty has 3 states: VISIBLE, INVISIBLE, and GONE. The androidx extension functions only mention one state, the negative case is left for you to remember. For instance does isVisible=false mean INVISIBLE? nope, it means GONE 🤷)_
 
 ### Don't count notifications
 Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors. Check out [SyncTrigger](https://erdo.github.io/android-fore/01-views.html#synctrigger)  below it case it fits your situation.
@@ -215,7 +215,7 @@ fadePollenTrigger = TriggerOnChange(
 Which can be written as:
 
 <pre class="codesample"><code>
-fadePollenTrigger = TriggerOnChange( { viewModel.viewState.weather.pollenLevel }) {
+fadePollenTrigger = TriggerOnChange({ viewModel.viewState.weather.pollenLevel }) {
   animations.animatePollenChange()
 }
 
@@ -226,8 +226,20 @@ This trigger has no ResetRule, each time it is checked it will verify the latest
 You can acces the previous and current state if required, for example:
 
 <pre class="codesample"><code>
-fadePollenTrigger = TriggerOnChange( { viewModel.viewState.weather.pollenLevel }) { state ->
+fadePollenTrigger = TriggerOnChange({ viewModel.viewState.weather.pollenLevel }) { state ->
   animations.animatePollenChange(from = state.pre, to = state.now)
+}
+
+</code></pre>
+
+### Careful with scope functions
+Don't be tempted to do something like this by the way. Here we are using **apply** but the pollenLevel changes won't be visible to the Trigger, the pollenLevel will be stuck at whatever it was the first time this is run.
+
+<pre class="codesample"><code>
+viewModel.viewState.weather.apply {
+  fadePollenTrigger = TriggerOnChange({ pollenLevel }) {
+    animations.animatePollenChange()
+  }
 }
 
 </code></pre>

@@ -92,7 +92,7 @@ There was one minor breaking change previous to 0.11.1 (sorry):
 
 * SuccessCallBack -> SuccessCallback (case change)
 
-## Post the rename from ASAF to fore (&lt;0.9.32)
+## Pre the rename from ASAF to fore (&lt;0.9.32)
 
 These are more substantial, but are mainly related to renaming or shuffling packages around, there are no functionality changes.
 
