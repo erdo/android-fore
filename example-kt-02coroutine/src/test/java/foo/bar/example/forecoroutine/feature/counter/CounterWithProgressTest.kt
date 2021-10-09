@@ -3,7 +3,7 @@ package foo.bar.example.forecoroutine.feature.counter
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import io.mockk.mockk
 import io.mockk.verify
@@ -21,7 +21,7 @@ class CounterWithProgressTest {
     fun setup() {
         // make the code run synchronously, reroute Log.x to
         // System.out.println() so we see it in the test log
-        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+        Fore.setDelegate(TestDelegateDefault())
     }
 
     @Test

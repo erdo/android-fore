@@ -5,7 +5,7 @@ import org.junit.Test
 
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreadapterskt.feature.playlist.immutable.ImmutablePlaylistModel
 import io.mockk.MockKAnnotations
@@ -28,7 +28,7 @@ class ImmutablePlaylistModelTest {
 
         // make the code run synchronously, reroute Log.x to
         // System.out.println() so we see it in the test log
-        ForeDelegateHolder.setDelegate(TestDelegateDefault())
+        Fore.setDelegate(TestDelegateDefault())
 
         immutablePlaylistModel = ImmutablePlaylistModel(logger)
     }

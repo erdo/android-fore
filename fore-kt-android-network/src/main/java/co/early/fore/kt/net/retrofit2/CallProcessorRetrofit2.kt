@@ -5,7 +5,7 @@ import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -102,19 +102,19 @@ class CallProcessorRetrofit2<F>(
             call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
 
-        ForeDelegateHolder.getLogger(logger).d("doCallAsync() t:" + Thread.currentThread())
+        Fore.getLogger(logger).d("doCallAsync() t:" + Thread.currentThread())
 
-        return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
+        return asyncMain(Fore.getWorkMode(workMode)) {
             try {
 
-                val result: Response<S> = awaitIO(ForeDelegateHolder.getWorkMode(workMode)) {
+                val result: Response<S> = awaitIO(Fore.getWorkMode(workMode)) {
 
-                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
+                    Fore.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
 
                     call()
                 }
 
-                ForeDelegateHolder.getLogger(logger).d("continuing back on main dispatcher t:" + Thread.currentThread())
+                Fore.getLogger(logger).d("continuing back on main dispatcher t:" + Thread.currentThread())
 
                 processSuccessResponse(result, customErrorClazz)
             } catch (t: Throwable) {
@@ -140,7 +140,7 @@ class CallProcessorRetrofit2<F>(
     ): Either<F, S> {
 
         if (t != null) {
-            ForeDelegateHolder.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
+            Fore.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
         return Either.left(errorHandler.handleError(t, errorResponse, customErrorClass, null))

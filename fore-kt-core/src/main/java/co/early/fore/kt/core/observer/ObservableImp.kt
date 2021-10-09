@@ -5,7 +5,7 @@ import co.early.fore.core.observer.Observable
 import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.launchCustom
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.lang.IllegalArgumentException
@@ -54,7 +54,7 @@ class ObservableImp(
         observerList.add(observer)
 
         if (observerList.size > 4) {
-            ForeDelegateHolder.getLogger(logger).w(
+            Fore.getLogger(logger).w(
                     "There are now:" + observerList.size + " Observers added to this Observable, that's quite a lot.\n" +
                     "It's sometimes indicative of code which is not removing observers when it should\n" +
                     "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
@@ -76,7 +76,7 @@ class ObservableImp(
         val beforeSize = observerList.size
         observerList.remove(observer)
         if (observerList.size == beforeSize) {
-            ForeDelegateHolder.getLogger(logger).w(
+            Fore.getLogger(logger).w(
                     "You have tried to remove an observer that wasn't added in the first place. This is almost certainly an error and " +
                     "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
                     "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
@@ -121,12 +121,12 @@ class ObservableImp(
                         "constructor, we'd recommend Dispatchers.Main.immediate\n" +
                         "If this is NOT intentional, move this code to a module that supports\n" +
                         "Dispatchers.Main.immediate"
-                ForeDelegateHolder.getLogger(logger).e(errorMessage)
+                Fore.getLogger(logger).e(errorMessage)
                 throw IllegalArgumentException(errorMessage)
             }
         }
 
-        launchCustom(dispatch, ForeDelegateHolder.getWorkMode(notificationMode)) {
+        launchCustom(dispatch, Fore.getWorkMode(notificationMode)) {
             for (observer in observerList) {
                 doNotification(observer)
             }
@@ -153,7 +153,7 @@ class ObservableImp(
                     "is being called from the UI thread. Having said that, it's quite possible you just have a crash somewhere\n" +
                     "in your UI code which has bubbled its way up to here. See stack trace for further info, Error Message: "
 
-            ForeDelegateHolder.getLogger(logger).e(errorMessage + e.message)
+            Fore.getLogger(logger).e(errorMessage + e.message)
             throw e
         }
     }

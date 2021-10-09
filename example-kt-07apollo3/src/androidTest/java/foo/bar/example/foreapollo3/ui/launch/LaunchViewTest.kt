@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollo3.feature.launch.Launch

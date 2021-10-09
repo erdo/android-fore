@@ -5,7 +5,7 @@ import co.early.fore.core.observer.ObservableGroup
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.delegate.Fore
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.observer.ObservableGroupImp
 import co.early.fore.kt.core.observer.ObservableImp
 

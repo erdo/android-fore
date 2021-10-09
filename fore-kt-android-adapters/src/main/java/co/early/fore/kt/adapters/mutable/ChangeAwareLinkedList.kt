@@ -4,7 +4,7 @@ import co.early.fore.adapters.mutable.ChangeAwareList
 import co.early.fore.adapters.mutable.UpdateSpec
 import co.early.fore.adapters.mutable.Updateable
 import co.early.fore.core.time.SystemTimeWrapper
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import java.util.*
 import java.util.function.UnaryOperator
 
@@ -52,7 +52,7 @@ class ChangeAwareLinkedList<T>(
         private val systemTimeWrapper: SystemTimeWrapper? = null
 ) : LinkedList<T>(), ChangeAwareList<T>, Updateable {
 
-    private var updateSpec: UpdateSpec = createFullUpdateSpec(ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper))
+    private var updateSpec: UpdateSpec = createFullUpdateSpec(Fore.getSystemTimeWrapper(systemTimeWrapper))
 
     override fun add(element: T): Boolean {
         val temp = super.add(element)
@@ -60,7 +60,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_INSERTED,
                 size - 1,
                 1,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
         return temp
     }
@@ -71,7 +71,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_INSERTED,
                 index,
                 1,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
     }
 
@@ -81,7 +81,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_CHANGED,
                 index,
                 1,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
         return temp
     }
@@ -92,7 +92,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_REMOVED,
                 index,
                 1,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
         return temp
     }
@@ -102,7 +102,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_REMOVED,
                 0,
                 size,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
         super.clear()
     }
@@ -113,7 +113,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_INSERTED,
                 size - 1,
                 elements.size,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
         return temp
     }
@@ -124,7 +124,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_INSERTED,
                 index,
                 elements.size,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
         return temp
     }
@@ -143,7 +143,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_REMOVED,
                 fromIndex,
                 toIndex - fromIndex,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
     }
 
@@ -155,7 +155,7 @@ class ChangeAwareLinkedList<T>(
                     UpdateSpec.UpdateType.ITEM_REMOVED,
                     index,
                     1,
-                    ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                    Fore.getSystemTimeWrapper(systemTimeWrapper)
             )
             temp
         } else {
@@ -167,7 +167,7 @@ class ChangeAwareLinkedList<T>(
         val temp = super.removeAll(elements)
         if (temp) {
             updateSpec = createFullUpdateSpec(
-                    ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                    Fore.getSystemTimeWrapper(systemTimeWrapper)
             )
         }
         return temp
@@ -193,7 +193,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_CHANGED,
                 rowIndex,
                 1,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
     }
 
@@ -214,7 +214,7 @@ class ChangeAwareLinkedList<T>(
                 UpdateSpec.UpdateType.ITEM_CHANGED,
                 rowStartIndex,
                 rowsAffected,
-                ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)
+                Fore.getSystemTimeWrapper(systemTimeWrapper)
         )
     }
 
@@ -239,8 +239,8 @@ class ChangeAwareLinkedList<T>(
      */
     override fun getAndClearLatestUpdateSpec(maxAgeMs: Long): UpdateSpec {
         val latestUpdateSpecAvailable = updateSpec
-        updateSpec = createFullUpdateSpec(ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper))
-        return if (ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper).currentTimeMillis() - latestUpdateSpecAvailable.timeStamp < maxAgeMs) {
+        updateSpec = createFullUpdateSpec(Fore.getSystemTimeWrapper(systemTimeWrapper))
+        return if (Fore.getSystemTimeWrapper(systemTimeWrapper).currentTimeMillis() - latestUpdateSpecAvailable.timeStamp < maxAgeMs) {
             latestUpdateSpecAvailable
         } else {
             updateSpec

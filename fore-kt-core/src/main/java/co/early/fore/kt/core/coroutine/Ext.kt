@@ -1,7 +1,7 @@
 package co.early.fore.kt.core.coroutine
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
@@ -32,7 +32,7 @@ import kotlin.coroutines.coroutineContext
  */
 
 fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.IO).launch { block() }
@@ -40,7 +40,7 @@ fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Uni
 }
 
 fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Default).launch { block() }
@@ -48,7 +48,7 @@ fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
 }
 
 fun launchCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(dispatcher).launch { block() }
@@ -60,7 +60,7 @@ fun launchCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, bl
  * if using this code from a pure kotlin module
  */
 fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main).launch { block() }
@@ -74,7 +74,7 @@ fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> U
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
 fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main.immediate).launch { block() }
@@ -82,7 +82,7 @@ fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
 }
 
 fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.IO).async { block() }
@@ -90,7 +90,7 @@ fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> 
 }
 
 fun <T> asyncDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Default).async { block() }
@@ -98,7 +98,7 @@ fun <T> asyncDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.(
 }
 
 fun <T> asyncCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(dispatcher).async { block() }
@@ -110,7 +110,7 @@ fun <T> asyncCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null,
  * if using this code from a pure kotlin module
  */
 fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main).async { block() }
@@ -124,7 +124,7 @@ fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
 fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
         CoroutineScope(Dispatchers.Main.immediate).async { block() }
@@ -132,7 +132,7 @@ fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.(
 }
 
 suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.IO) { block() }
@@ -140,7 +140,7 @@ suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScop
 }
 
 suspend fun <T> awaitDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Default) { block() }
@@ -148,7 +148,7 @@ suspend fun <T> awaitDefault(workMode: WorkMode? = null, block: suspend Coroutin
 }
 
 suspend fun <T> awaitCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(dispatcher) { block() }
@@ -160,7 +160,7 @@ suspend fun <T> awaitCustom(dispatcher: CoroutineDispatcher, workMode: WorkMode?
  * if using this code from a pure kotlin module
  */
 suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Main) { block() }
@@ -174,7 +174,7 @@ suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineSc
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
 suspend fun <T> awaitMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
-    return if (ForeDelegateHolder.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
+    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
         withContext(Dispatchers.Main.immediate) { block() }

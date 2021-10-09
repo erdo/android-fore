@@ -1,7 +1,7 @@
 package co.early.fore.kt.net
 
 import co.early.fore.core.utils.text.BasicTextWrapper
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.time.measureNanos
 import co.early.fore.kt.core.time.nanosFormat
@@ -54,7 +54,7 @@ class InterceptorLogging @JvmOverloads constructor(
             try {
                 chain.proceed(request)
             } catch (e: Throwable) {
-                ForeDelegateHolder.getLogger(logger).e(
+                Fore.getLogger(logger).e(
                         TAG + randomPostTag,
                         "HTTP $method <-- Connection dropped, but GETs will be retried $url : $e")
                 throw e
@@ -74,7 +74,7 @@ class InterceptorLogging @JvmOverloads constructor(
 
     private fun logWarning(t: Throwable) {
         if (!printedWarningAlready) {
-            ForeDelegateHolder.getLogger(logger).w("No network logging available: fore doesn't recognise this version of OkHttp, or you have excluded kotlin-reflect from your dependencies. ${t.message}")
+            Fore.getLogger(logger).w("No network logging available: fore doesn't recognise this version of OkHttp, or you have excluded kotlin-reflect from your dependencies. ${t.message}")
             printedWarningAlready = true
         }
     }
@@ -84,7 +84,7 @@ class InterceptorLogging @JvmOverloads constructor(
         val method = method(request)
         val url = url(request)
 
-        ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url))
+        Fore.getLogger(logger).i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url))
 
         networkingLogSanitizer?.let {
             logHeaders(it.sanitizeHeaders(headers(request)), randomPostTag)
@@ -108,7 +108,7 @@ class InterceptorLogging @JvmOverloads constructor(
                         150)
                 logLines(wrappedLines, randomPostTag)
             } else {
-                ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, "$method- binary data -")
+                Fore.getLogger(logger).i(TAG + randomPostTag, "$method- binary data -")
             }
         }
 
@@ -117,7 +117,7 @@ class InterceptorLogging @JvmOverloads constructor(
 
     private fun logResponse(response: Response, randomPostTag: String, method: String?, url: HttpUrl?, timeTaken: Long) {
 
-        ForeDelegateHolder.getLogger(logger).i(
+        Fore.getLogger(logger).i(
                 TAG + randomPostTag,
                 "HTTP " + method + " <-- Server replied HTTP-${code(response)}  " +
                         "${nanosFormat.format(timeTaken / (1000 * 1000))} ms $url")
@@ -133,7 +133,7 @@ class InterceptorLogging @JvmOverloads constructor(
             source.request(Long.MAX_VALUE) // Buffer the entire body.
             val buffer = source.buffer
             if (!isPlaintext(buffer)) {
-                ForeDelegateHolder.getLogger(logger).i(
+                Fore.getLogger(logger).i(
                         TAG + randomPostTag,
                         " (binary body omitted)")
             } else {
@@ -142,7 +142,7 @@ class InterceptorLogging @JvmOverloads constructor(
                     val wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
                     logLines(wrappedLines, randomPostTag)
                 } else {
-                    ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, " (no body content)")
+                    Fore.getLogger(logger).i(TAG + randomPostTag, " (no body content)")
                 }
             }
         }
@@ -152,7 +152,7 @@ class InterceptorLogging @JvmOverloads constructor(
         try {
             logLinesLock.lock()
             for (line in wrappedLines) {
-                ForeDelegateHolder.getLogger(logger).i(TAG + rndmPostTag, line)
+                Fore.getLogger(logger).i(TAG + rndmPostTag, line)
             }
         } finally {
             logLinesLock.unlock()
@@ -169,7 +169,7 @@ class InterceptorLogging @JvmOverloads constructor(
 
     private fun logHeaders(headers: Headers, randomPostTag: String) {
         for (headerName in headers.names()) {
-            ForeDelegateHolder.getLogger(logger).i(TAG + randomPostTag, String.format("    %s: %s", headerName, headers[headerName]))
+            Fore.getLogger(logger).i(TAG + randomPostTag, String.format("    %s: %s", headerName, headers[headerName]))
         }
     }
 

@@ -10,7 +10,7 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.callbacks.FailureWithPayload
 import co.early.fore.kt.core.callbacks.Success
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger

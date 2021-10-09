@@ -6,7 +6,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.kt.core.coroutine.awaitDefault
 import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.observer.ObservableImp
 import kotlinx.coroutines.delay
 
@@ -54,7 +54,7 @@ class Counter(
 
         for (ii in 1..countTo) {
 
-            delay((if (ForeDelegateHolder.getWorkMode() == WorkMode.SYNCHRONOUS) 1 else 100).toLong())
+            delay((if (Fore.getWorkMode() == WorkMode.SYNCHRONOUS) 1 else 100).toLong())
 
             ++totalIncrease
 

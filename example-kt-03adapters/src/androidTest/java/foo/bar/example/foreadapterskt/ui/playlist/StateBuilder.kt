@@ -3,7 +3,7 @@ package foo.bar.example.foreadapterskt.ui.playlist
 import androidx.test.rule.ActivityTestRule
 import co.early.fore.adapters.mutable.UpdateSpec
 import co.early.fore.core.time.SystemTimeWrapper
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import foo.bar.example.foreadapterskt.OG
 import foo.bar.example.foreadapterskt.feature.playlist.mutable.MutablePlaylistModel
@@ -83,7 +83,7 @@ class StateBuilder internal constructor(private val mockMutablePlaylistModel: Mu
         return object : ActivityTestRule<PlaylistsActivity>(PlaylistsActivity::class.java) {
             override fun beforeActivityLaunched() {
 
-                ForeDelegateHolder.setDelegate(TestDelegateDefault())
+                Fore.setDelegate(TestDelegateDefault())
 
                 //inject our mocks so our UI layer will pick them up
                 OG.putMock(MutablePlaylistModel::class.java, mockMutablePlaylistModel)

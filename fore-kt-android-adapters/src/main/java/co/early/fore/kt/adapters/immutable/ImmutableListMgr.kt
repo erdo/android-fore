@@ -7,7 +7,7 @@ import co.early.fore.core.observer.Observable
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.coroutine.awaitDefault
 import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 import kotlinx.coroutines.sync.Mutex
@@ -44,7 +44,7 @@ class ImmutableListMgr<T>(
     private val mutex = Mutex()
 
     fun changeList(block: (MutableList<T>) -> Unit) {
-        launchMain(ForeDelegateHolder.getWorkMode(workMode)) {
+        launchMain(Fore.getWorkMode(workMode)) {
             mutex.withLock {
                 block(currentListMutableCopy)
             }
@@ -78,7 +78,7 @@ class ImmutableListMgr<T>(
 
         latestDiffSpec = fullDiffSpec
 
-        return if (ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper).currentTimeMillis() - latestDiffSpecAvailable!!.timeStamp < maxAgeMs) {
+        return if (Fore.getSystemTimeWrapper(systemTimeWrapper).currentTimeMillis() - latestDiffSpecAvailable!!.timeStamp < maxAgeMs) {
             latestDiffSpecAvailable
         } else {
             fullDiffSpec
@@ -89,9 +89,9 @@ class ImmutableListMgr<T>(
 
         val input = Input(currentListVersion, currentList, newList)
 
-        launchMain(ForeDelegateHolder.getWorkMode(workMode)) {
+        launchMain(Fore.getWorkMode(workMode)) {
 
-            val result = awaitDefault(ForeDelegateHolder.getWorkMode(workMode)) {
+            val result = awaitDefault(Fore.getWorkMode(workMode)) {
 
                 // work out the differences in the lists
                 val diffResult = DiffCalculator<T>().createDiffResult(input.currentList, input.newList)
@@ -106,7 +106,7 @@ class ImmutableListMgr<T>(
                 }
 
                 //return to the UI thread
-                Result(input.currentListVersion, newListCopy, newListCopy2.toMutableList(), DiffSpec(diffResult, ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper)))
+                Result(input.currentListVersion, newListCopy, newListCopy2.toMutableList(), DiffSpec(diffResult, Fore.getSystemTimeWrapper(systemTimeWrapper)))
             }
 
             // otherwise this is an old change, we ignore it
@@ -115,14 +115,14 @@ class ImmutableListMgr<T>(
                 currentList = result.newList
                 currentListMutableCopy = result.newListCopy
                 latestDiffSpec = result.diffSpec
-                ForeDelegateHolder.getLogger(logger).i("list updated, thread:" + Thread.currentThread().id)
+                Fore.getLogger(logger).i("list updated, thread:" + Thread.currentThread().id)
                 notifyObservers()
             }
         }
     }
 
     private fun createFullDiffSpec(): DiffSpec {
-        return DiffSpec(null, ForeDelegateHolder.getSystemTimeWrapper(systemTimeWrapper))
+        return DiffSpec(null, Fore.getSystemTimeWrapper(systemTimeWrapper))
     }
 
     private data class Input<T>(

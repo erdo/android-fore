@@ -3,7 +3,7 @@ package co.early.fore.kt.net.apollo
 import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.coroutine.asyncMain
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.net.apollo.ErrorHandler
 import com.apollographql.apollo.ApolloCall
@@ -78,7 +78,7 @@ class CallProcessorApollo<F>(
      */
     override suspend fun <S> processCallAsync(call: () -> ApolloCall<S>): Deferred<Either<F, SuccessResult<S>>> {
 
-        return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
+        return asyncMain(Fore.getWorkMode(workMode)) {
             try {
                 suspendCoroutine { continuation ->
                     call().enqueue(object : ApolloCall.Callback<S>() {
@@ -120,7 +120,7 @@ class CallProcessorApollo<F>(
     ): Either<F, SuccessResult<S>> {
 
         if (t != null) {
-            ForeDelegateHolder.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
+            Fore.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
         return Either.left(errorHandler.handleError(t, errorResponse))

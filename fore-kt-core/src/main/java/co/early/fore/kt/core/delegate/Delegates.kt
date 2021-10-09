@@ -16,7 +16,7 @@ typealias ForeDelegateHolder = Fore
  * If these parameters are not specified, they will default to null and when they are needed by
  * the fore class they will be exchanged for the default delegate values indicated below.
  *
- * To set your own Delegate e.g. `ForeDelegateHolder.setDelegate(DefaultTestDelegate())`
+ * To set your own Delegate e.g. `Fore.setDelegate(DefaultTestDelegate())`
  */
 interface Delegate {
     val workMode: WorkMode

@@ -1,7 +1,7 @@
 package foo.bar.example.foreapollo3.api
 
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.net.apollo3.ErrorHandler
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.exception.ApolloHttpException
@@ -24,11 +24,11 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
         errorResponse: ApolloResponse<*>?
     ): ErrorMessage {
 
-        ForeDelegateHolder.getLogger(logger).e("handleError() t:$t errorResponse:$errorResponse")
+        Fore.getLogger(logger).e("handleError() t:$t errorResponse:$errorResponse")
 
         val message = parseSpecificErrors(errorResponse) ?: parseGeneralErrors(t)
 
-        ForeDelegateHolder.getLogger(logger).e("handleError() returning:$message")
+        Fore.getLogger(logger).e("handleError() returning:$message")
 
         return message
     }
@@ -43,7 +43,7 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
                 is java.net.UnknownServiceException -> ERROR_SECURITY_UNKNOWN
                 is java.net.SocketTimeoutException -> ERROR_NETWORK
                 is ApolloHttpException -> {
-                    ForeDelegateHolder.getLogger(logger)
+                    Fore.getLogger(logger)
                         .e("handleError() HTTP:" + it.statusCode + " " + it.message)
                     when (it.statusCode) {
                         401 -> ERROR_SESSION_TIMED_OUT

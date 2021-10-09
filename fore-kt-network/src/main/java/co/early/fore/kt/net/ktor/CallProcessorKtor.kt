@@ -5,7 +5,7 @@ import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 
@@ -100,25 +100,25 @@ class CallProcessorKtor<F>(
             call: suspend () -> S
     ): Deferred<Either<F, S>> {
 
-        ForeDelegateHolder.getLogger(logger).d("doCallAsync() thread:" + Thread.currentThread())
+        Fore.getLogger(logger).d("doCallAsync() thread:" + Thread.currentThread())
 
-        return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
+        return asyncMain(Fore.getWorkMode(workMode)) {
             try {
 
-                val result: S = awaitIO(ForeDelegateHolder.getWorkMode(workMode)) {
+                val result: S = awaitIO(Fore.getWorkMode(workMode)) {
 
-                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, thread:" + Thread.currentThread())
+                    Fore.getLogger(logger).d("about to make call from io dispatcher, thread:" + Thread.currentThread())
 
                     call()
                 }
 
-                ForeDelegateHolder.getLogger(logger).d("continuing back on main dispatcher thread:" + Thread.currentThread())
+                Fore.getLogger(logger).d("continuing back on main dispatcher thread:" + Thread.currentThread())
 
                 Either.right(result)
 
             } catch (t: Throwable) {
 
-                ForeDelegateHolder.getLogger(logger).w("processFailResponse() thread:${Thread.currentThread()} ${t.message}")
+                Fore.getLogger(logger).w("processFailResponse() thread:${Thread.currentThread()} ${t.message}")
 
                 Either.left(errorHandler.handleError(t, customErrorClazz))
             }

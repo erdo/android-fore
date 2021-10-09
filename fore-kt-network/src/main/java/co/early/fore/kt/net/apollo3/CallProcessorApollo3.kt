@@ -4,7 +4,7 @@ import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
-import co.early.fore.kt.core.delegate.ForeDelegateHolder
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
 import com.apollographql.apollo3.api.Error
 import com.apollographql.apollo3.api.ApolloResponse
@@ -75,12 +75,12 @@ class CallProcessorApollo3<F>(
      */
     override suspend fun <S : Operation.Data> processCallAsync(call: suspend () -> ApolloResponse<S>): Deferred<Either<F, SuccessResult<S>>> {
 
-        return asyncMain(ForeDelegateHolder.getWorkMode(workMode)) {
+        return asyncMain(Fore.getWorkMode(workMode)) {
             try {
 
-                val result: ApolloResponse<S> = awaitIO(ForeDelegateHolder.getWorkMode(workMode)) {
+                val result: ApolloResponse<S> = awaitIO(Fore.getWorkMode(workMode)) {
 
-                    ForeDelegateHolder.getLogger(logger).d("about to make call from io dispatcher, thread:" + Thread.currentThread())
+                    Fore.getLogger(logger).d("about to make call from io dispatcher, thread:" + Thread.currentThread())
 
                     call()
                 }
@@ -116,7 +116,7 @@ class CallProcessorApollo3<F>(
     ): Either<F, SuccessResult<S>> {
 
         if (t != null) {
-            ForeDelegateHolder.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
+            Fore.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
         return Either.left(errorHandler.handleError(t, errorResponse))
