@@ -219,7 +219,7 @@ class LaunchFetcherIntegrationTest {
 
     private fun stubbedApolloClient(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): ApolloClient {
         return CustomApolloBuilder.create(
-            co.early.fore.net.testhelpers.InterceptorStubbedService(
+            InterceptorStubbedService(
                 stubbedServiceDefinition
             ),
             interceptorLogging

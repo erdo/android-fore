@@ -3,10 +3,7 @@ package foo.bar.example.foreapollo3.ui.launch
 import android.content.pm.ActivityInfo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.Either
-import co.early.fore.kt.core.delegate.Fore
-import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import com.apollographql.apollo3.api.ApolloResponse
@@ -25,7 +22,7 @@ class LaunchViewRotationTestStateBuilder internal constructor(private val launch
 
     internal fun withDelayedCallProcessor(): LaunchViewRotationTestStateBuilder {
 
-        val deferred = CompletableDeferred<Either<ErrorMessage, CallProcessorApollo3.SuccessResult<LaunchListQuery.Data>>>()
+        val deferred = CompletableDeferred<Either<ErrorMessage, CallProcessorApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage>>>()
 
         coEvery {
             launchViewRotationTest.mockCallProcessorApollo.processCallAsync(

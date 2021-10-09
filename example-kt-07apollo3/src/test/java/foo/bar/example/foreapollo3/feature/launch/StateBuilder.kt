@@ -19,7 +19,7 @@ class StateBuilder internal constructor() {
 
     internal fun getLaunchSuccess(launches: LaunchListQuery.Data): StateBuilder {
 
-        val mockResponseSuccess: CallProcessorApollo3.SuccessResult<LaunchListQuery.Data> = mockk()
+        val mockResponseSuccess: CallProcessorApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage> = mockk()
 
         every {
             mockResponseSuccess.data
