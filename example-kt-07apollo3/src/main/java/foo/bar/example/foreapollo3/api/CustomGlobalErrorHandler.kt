@@ -4,6 +4,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.net.apollo3.ErrorHandler
 import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.Error
 import com.apollographql.apollo3.exception.ApolloHttpException
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.apollographql.apollo3.exception.ApolloParseException
@@ -13,7 +14,8 @@ import foo.bar.example.foreapollo3.message.ErrorMessage.*
 
 /**
  * You can probably use this class almost as it is for your own app, but you might want to
- * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
+ * customise the behaviour for specific HTTP codes, GraphQL error formats etc, hence it's not
+ * in the fore library
  */
 @ExperimentalStdlibApi
 class CustomGlobalErrorHandler(private val logger: Logger?) :
@@ -26,11 +28,17 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
 
         Fore.getLogger(logger).e("handleError() t:$t errorResponse:$errorResponse")
 
-        val message = parseSpecificErrors(errorResponse) ?: parseGeneralErrors(t)
+        val message = parseSpecificError(errorResponse?.errors?.first()) ?: parseGeneralErrors(t)
 
         Fore.getLogger(logger).e("handleError() returning:$message")
 
         return message
+    }
+
+    override fun handlePartialErrors(errors: List<Error?>?): List<ErrorMessage> {
+        return errors?.mapNotNull {
+            parseSpecificError(it)
+        } ?: emptyList()
     }
 
     private fun parseGeneralErrors(t: Throwable?): ErrorMessage {
@@ -59,17 +67,14 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
         } ?: ERROR_MISC
     }
 
-    private fun parseSpecificErrors(errorResponse: ApolloResponse<*>?): ErrorMessage? {
-        return errorResponse?.let {
-            // amazingly GraphQL never had an error code in its standard error
-            // block so it usually gets put under the extensions block like this:
-            // https://spec.graphql.org/draft/#example-fce18
-            it.errors?.first()?.extensions?.let { extensions ->
-                (extensions as? Map<*, *>)?.get("code")?.let { code ->
-                    ErrorMessage.createFromName(code as? String)
-                }
+    private fun parseSpecificError(error: Error?): ErrorMessage? {
+        // amazingly GraphQL never had an error code in its standard error
+        // block so it usually gets put under the extensions block like this:
+        // https://spec.graphql.org/draft/#example-8b658
+        return error?.extensions?.let { extensions ->
+            (extensions as? Map<*, *>)?.get("code")?.let { code ->
+                ErrorMessage.createFromName(code as? String)
             }
         }
     }
-
 }

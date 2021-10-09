@@ -1,11 +1,14 @@
 package co.early.fore.kt.core.ui
 
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.observer.ObservableGroup
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.observer.ObservableGroupImp
+
+typealias LifecycleObserver = ForeLifecycleObserver
 
 class ForeLifecycleObserver(
     private val observer: Observer,

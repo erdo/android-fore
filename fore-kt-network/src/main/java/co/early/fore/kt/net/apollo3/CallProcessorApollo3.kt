@@ -6,7 +6,6 @@ import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
-import com.apollographql.apollo3.api.Error
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.ExecutionContext
 import com.apollographql.apollo3.api.Operation
@@ -16,10 +15,10 @@ import kotlinx.coroutines.Deferred
 interface Apollo3Caller<F> {
     suspend fun <S : Operation.Data> processCallAwait(
         call: suspend () -> ApolloResponse<S>
-    ): Either<F, CallProcessorApollo3.SuccessResult<S>>
+    ): Either<F, CallProcessorApollo3.SuccessResult<S, F>>
     suspend fun <S : Operation.Data> processCallAsync(
         call: suspend () -> ApolloResponse<S>
-    ): Deferred<Either<F, CallProcessorApollo3.SuccessResult<S>>>
+    ): Deferred<Either<F, CallProcessorApollo3.SuccessResult<S, F>>>
 }
 
 /**
@@ -50,9 +49,9 @@ class CallProcessorApollo3<F>(
     private val allowPartialSuccesses: Boolean = false
 ) : Apollo3Caller<F> {
 
-    data class SuccessResult<S>(
+    data class SuccessResult<S, F>(
         val data: S,
-        val partialErrors: List<Error> = listOf(),
+        val partialErrors: List<F> = listOf(),
         val extensions: Map<String, Any?> = hashMapOf(),
         val executionContext: ExecutionContext = ExecutionContext.Empty
     )
@@ -63,7 +62,7 @@ class CallProcessorApollo3<F>(
      *
      * @return Either<F, SuccessResult<S>>
      */
-    override suspend fun <S : Operation.Data> processCallAwait(call: suspend () -> ApolloResponse<S>): Either<F, SuccessResult<S>> {
+    override suspend fun <S : Operation.Data> processCallAwait(call: suspend () -> ApolloResponse<S>): Either<F, SuccessResult<S, F>> {
         return processCallAsync(call).await()
     }
 
@@ -73,7 +72,7 @@ class CallProcessorApollo3<F>(
      *
      * @return Deferred<Either<F, SuccessResult<S>>>
      */
-    override suspend fun <S : Operation.Data> processCallAsync(call: suspend () -> ApolloResponse<S>): Deferred<Either<F, SuccessResult<S>>> {
+    override suspend fun <S : Operation.Data> processCallAsync(call: suspend () -> ApolloResponse<S>): Deferred<Either<F, SuccessResult<S, F>>> {
 
         return asyncMain(Fore.getWorkMode(workMode)) {
             try {
@@ -95,14 +94,20 @@ class CallProcessorApollo3<F>(
 
     private fun <S : Operation.Data> processSuccessResponse(
             response: ApolloResponse<S>
-    ): Either<F, SuccessResult<S>> {
+    ): Either<F, SuccessResult<S,F>> {
 
         val data: S? = response.data
 
         return if (data != null) {
             if (!response.hasErrors() || allowPartialSuccesses) {
-                Either.right(SuccessResult(data, response.errors
-                        ?: mutableListOf(), response.extensions, response.executionContext))
+                Either.right(
+                    SuccessResult(
+                        data,
+                        errorHandler.handlePartialErrors(response.errors),
+                        response.extensions,
+                        response.executionContext
+                    )
+                )
             } else {
                 processFailResponse(null, response)
             }
@@ -113,7 +118,7 @@ class CallProcessorApollo3<F>(
 
     private fun <S> processFailResponse(
             t: Throwable?, errorResponse: ApolloResponse<*>?
-    ): Either<F, SuccessResult<S>> {
+    ): Either<F, SuccessResult<S,F>> {
 
         if (t != null) {
             Fore.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
