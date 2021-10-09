@@ -236,8 +236,9 @@ fadePollenTrigger = TriggerOnChange({ viewModel.viewState.weather.pollenLevel })
 Don't be tempted to do something like this by the way. Here we are using **apply** but the pollenLevel changes won't be visible to the Trigger, the pollenLevel will be stuck at whatever it was the first time this is run.
 
 <pre class="codesample"><code>
+// DO NOT DO THIS
 viewModel.viewState.weather.apply {
-  fadePollenTrigger = TriggerOnChange({ pollenLevel }) {
+  fadePollenTrigger = TriggerOnChange({ pollenLevel }) { // THIS WILL NOT WORK!
     animations.animatePollenChange()
   }
 }

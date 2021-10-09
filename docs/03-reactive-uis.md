@@ -159,6 +159,8 @@ As you can see in the example BaseViewModel above, the observers will exist thro
 
 You can alternatively use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
 
+<pre class="codesample"><code>
+
 class MyViewModel(
     private val accountModel: AccountModel,
     private val networkInfo: NetworkInfo,
@@ -174,7 +176,7 @@ class MyViewModel(
     init {
         initSyncableView(this)
     }
-    
+
     // this gets called whenever our domain models' state changes
     override fun syncView() {
         // Here you might create an immutable view state
