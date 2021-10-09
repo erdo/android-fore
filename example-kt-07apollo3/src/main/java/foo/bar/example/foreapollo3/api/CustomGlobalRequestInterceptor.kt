@@ -1,7 +1,7 @@
 package foo.bar.example.foreapollo3.api
 
 import co.early.fore.kt.core.logging.Logger
-import foo.bar.example.foreapollokt.BuildConfig
+import foo.bar.example.foreapollo3.BuildConfig
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator.Companion.NO_SESSION
 import okhttp3.Interceptor

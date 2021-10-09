@@ -12,7 +12,7 @@ import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import coil.load
 import foo.bar.example.foreapollo3.OG
-import foo.bar.example.foreapollokt.R
+import foo.bar.example.foreapollo3.R
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.feature.launch.NO_LAUNCH

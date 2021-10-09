@@ -1,7 +1,6 @@
 package foo.bar.example.foreapollo3
 
 import android.app.Application
-import co.early.fore.core.WorkMode
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
@@ -14,7 +13,6 @@ import foo.bar.example.foreapollo3.feature.authentication.AuthService
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.LaunchService
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
-import foo.bar.example.foreapollokt.BuildConfig
 import java.util.*
 
 

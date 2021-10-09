@@ -3,7 +3,7 @@ package foo.bar.example.foreapollo3.message
 import android.os.Parcel
 import android.os.Parcelable
 import foo.bar.example.foreapollo3.App
-import foo.bar.example.foreapollokt.R
+import foo.bar.example.foreapollo3.R
 
 /**
  * As an enum, this value can be passed around the app to indicate various error states.
