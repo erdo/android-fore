@@ -8,6 +8,9 @@ import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.core.logging.SystemLogger
 
+@Deprecated("use Fore instead")
+typealias ForeDelegateHolder = Fore
+
 /**
  * Many fore classes take: WorkMode, Logger and/or SystemTimeWrapper as construction parameters.
  * If these parameters are not specified, they will default to null and when they are needed by
@@ -34,7 +37,7 @@ class TestDelegateDefault (
 ) : Delegate
 
 
-class ForeDelegateHolder {
+class Fore {
 
     companion object {
 
