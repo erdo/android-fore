@@ -190,9 +190,9 @@ class MyViewModel(
 }
  </code></pre>
 
-### ForeLifecycleObserver
+### <a name="forelifecycleobserver"></a><a name="lifecycleobserver"></a>fore LifecycleObserver
 
-If you want to remove _even more_ boiler plate then you can use the ForeLifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally):
+If you want to remove _even more_ boiler plate then you can use the fore LifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally):
 
  <pre class="codesample"><code>
 class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
@@ -201,7 +201,7 @@ class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
     super.onCreate(savedInstanceState)
 
     lifecycle.addObserver(
-        ForeLifecycleObserver(
+        LifecycleObserver(
             this,
             viewModel
         )
@@ -286,7 +286,7 @@ We already learnt about how updating views in this way introduces very [hard to 
 
 <pre class="codesample"><code>
 lifecycle.addObserver(
-  ForeLifecycleObserver(this, accountModel)
+  LifecycleObserver(this, accountModel)
 )
 
 </code></pre>
@@ -335,7 +335,7 @@ Here's the fore equivalent to that code
 
 <pre class="codesample"><code>
 lifecycle.addObserver(
-  ForeLifecycleObserver(this, emailInbox, accountModel, weatherModel)
+  LifecycleObserver(this, emailInbox, accountModel, weatherModel)
 )
 
 </code></pre>
@@ -380,7 +380,7 @@ override fun onStop() {
 
 </code></pre>
 
-Or take it further as we did with the examples above and remove almost all the boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#observablegroup), or the [ForeLifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#forelifecycleobserver).
+Or take it further as we did with the examples above and remove almost all the boiler plate with an [ObservableGroup](https://erdo.github.io/android-fore/03-reactive-uis.html#observablegroup), or the fore [LifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#lifecycleobserver).
 
 > "reduce view layer code to its absolute fundamentals: what things look like"
 
