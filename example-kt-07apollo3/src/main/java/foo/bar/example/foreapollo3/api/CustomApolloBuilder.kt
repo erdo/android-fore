@@ -22,12 +22,13 @@ object CustomApolloBuilder {
      * @return ApolloClient object suitable for instantiating service interfaces
      */
     fun create(vararg interceptors: Interceptor): ApolloClient {
-        return ApolloClient(
-            HttpNetworkTransport(
-                serverUrl = "https://apollo-fullstack-tutorial.herokuapp.com",
-                okHttpClient = createOkHttpClient(*interceptors)
-            )
-        )
+        return ApolloClient.Builder()
+            .networkTransport(
+                HttpNetworkTransport(
+                    serverUrl = "https://apollo-fullstack-tutorial.herokuapp.com",
+                    okHttpClient = createOkHttpClient(*interceptors)
+                )
+            ).build()
     }
 
     private fun createOkHttpClient(vararg interceptors: Interceptor): OkHttpClient {

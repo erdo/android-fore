@@ -50,7 +50,7 @@ object OG {
         // models
         val authenticator = Authenticator(
             authService = AuthService(
-                login = { email -> apolloClient.mutate(ApolloRequest(LoginMutation(email))) }
+                login = { email -> apolloClient.mutate(LoginMutation(email)) }
             ),
             callProcessor,
             logger

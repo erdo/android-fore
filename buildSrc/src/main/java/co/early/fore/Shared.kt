@@ -9,7 +9,7 @@ object Shared {
     object Android {
         const val minSdk = 16
         const val compileSdk = 31
-        const val targetSdk = 30
+        const val targetSdk = 31
         val javaVersion = JavaVersion.VERSION_1_8
     }
 
@@ -23,21 +23,21 @@ object Shared {
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
-        const val apollo3 = "3.0.0-alpha07"
+        const val apollo3 = "3.0.0-beta01"
         const val retrofit = "2.9.0"
-        const val compose = "1.1.0-alpha05"
+        const val compose = "1.1.0-alpha06"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
         const val material = "1.1.0"
         const val appcompat = "1.1.0"
         const val coil = "1.1.0"
-        const val androidxtest = "1.3.0"
+        const val androidxtest = "1.4.0-beta01"
         const val androidxjunit = "1.1.2"
         const val room_runtime = "2.2.5"
         const val room_compiler = "2.2.0-rc01"
         const val room_testing = "2.2.0-rc01"
-        const val espresso_core = "3.1.0-beta02"
+        const val espresso_core = "3.5.0-alpha03"
         const val butterknife = "10.2.0"
         const val mockito_core = "2.23.0"
         const val mockk = "1.11.0"

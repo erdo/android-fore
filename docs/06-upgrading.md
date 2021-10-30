@@ -31,7 +31,15 @@ co.early.fore:fore-jv-android-adapters
 co.early.fore:fore-jv-android-network
 ```
 
+There is also a small compose extension function which is still experimental (the versioning matches compose itself)
+```
+implementation("co.early.fore:fore-kt-android-compose:1.1.0-alpha06")
+```
+
 To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
+
+## fore 1.5.2
+**fore 1.5.2** includes experimental support for Apollo3 3.0.0-beta01
 
 ## fore 1.5.0
 **fore 1.5.0** bumps the kotlin version to **1.5.31** and adds a CallProcessor class (marked as experimental) supporting Apollo3 3.0.0-alpha07. A new package called **fore-kt-android-compose:1.1.0-alpha05** adds an extension function to use with jetpack compose 1.1.0-alpha05 (also marked as experimental).
