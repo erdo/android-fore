@@ -58,7 +58,10 @@ class ObservableImp(
                     "There are now:" + observerList.size + " Observers added to this Observable, that's quite a lot.\n" +
                     "It's sometimes indicative of code which is not removing observers when it should\n" +
                     "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
-                    "Failing to remove observers when you no longer need them will cause memory leaks"
+                    "Failing to remove observers when you no longer need them will cause memory leaks,\n" +
+                    "you might want to look in to the ForeLifecycleObserver which handles this for you.\n" +
+                    "[If the number of observers steadily increases as you use the app, that's probably what you have,\n" +
+                    "if the number remains constant or goes down, then you're probably ok :) ]"
             )
         }
     }

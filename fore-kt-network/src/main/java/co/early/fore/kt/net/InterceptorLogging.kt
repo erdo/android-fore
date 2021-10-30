@@ -14,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock
 import co.early.fore.net.NetworkingLogSanitizer
 import okhttp3.*
 import okio.Buffer
+import kotlin.concurrent.withLock
 import kotlin.reflect.KVisibility
 
 /**
@@ -27,8 +28,8 @@ class InterceptorLogging @JvmOverloads constructor(
     private val UTF8 = Charset.forName("UTF-8")
     private val random = Random()
     private val someCharacters = "ABDEFGH023456789".toCharArray()
-    private val TAG = "Network"
-    private val logLinesLock = ReentrantLock()
+    private val TAG = "Net"
+    private val logLinesLock = ReentrantLock(true)
     private var printedWarningAlready = false
 
     @Throws(IOException::class)
@@ -42,12 +43,14 @@ class InterceptorLogging @JvmOverloads constructor(
                 + someCharacters[random.nextInt(someCharacters.size - 1)]
                 + someCharacters[random.nextInt(someCharacters.size - 1)])
 
-        try {
-            val pair = logRequest(request, randomPostTag)
-            url = pair.first
-            method = pair.second
-        } catch (t: Throwable) {
-            logWarning(t)
+        logLinesLock.withLock {
+            try {
+                val pair = logRequest(request, randomPostTag)
+                url = pair.first
+                method = pair.second
+            } catch (t: Throwable) {
+                logWarning(t)
+            }
         }
 
         val decoratedResponse = measureNanos {
@@ -56,17 +59,19 @@ class InterceptorLogging @JvmOverloads constructor(
             } catch (e: Throwable) {
                 Fore.getLogger(logger).e(
                         TAG + randomPostTag,
-                        "HTTP $method <-- Connection dropped, but GETs will be retried $url : $e")
+                        "HTTP $method <-- Connection dropped, GETs may be retried $url : $e")
                 throw e
             }
         }
         val response = decoratedResponse.first
         val timeTaken = decoratedResponse.second
 
-        try {
-            logResponse(response, randomPostTag, method, url, timeTaken)
-        } catch (t: Throwable) {
-            logWarning(t)
+        logLinesLock.withLock {
+            try {
+                logResponse(response, randomPostTag, method, url, timeTaken)
+            } catch (t: Throwable) {
+                logWarning(t)
+            }
         }
 
         return response
@@ -149,19 +154,14 @@ class InterceptorLogging @JvmOverloads constructor(
     }
 
     private fun logLines(wrappedLines: List<String>, rndmPostTag: String) {
-        try {
-            logLinesLock.lock()
-            for (line in wrappedLines) {
-                Fore.getLogger(logger).i(TAG + rndmPostTag, line)
-            }
-        } finally {
-            logLinesLock.unlock()
+        for (line in wrappedLines) {
+            Fore.getLogger(logger).i(TAG + rndmPostTag, line)
         }
     }
 
     private fun truncate(potentiallyLongString: String): String {
         return if (potentiallyLongString.length > maxBodyLogCharacters) {
-            potentiallyLongString.substring(0, maxBodyLogCharacters) + "...truncated"
+            potentiallyLongString.substring(0, maxBodyLogCharacters) + "...truncated (set maxBodyLogCharacters=Int.MAX_VALUE)"
         } else {
             potentiallyLongString
         }

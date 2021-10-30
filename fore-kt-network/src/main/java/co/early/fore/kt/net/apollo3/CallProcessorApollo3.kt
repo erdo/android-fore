@@ -30,13 +30,11 @@ interface Apollo3Caller<F> {
  * each micro service.
  * @property logger (optional: ForeDelegateHolder will choose a sensible default)
  * @property workMode (optional: ForeDelegateHolder will choose a sensible default)
- * @property allowPartialSuccesses (defaults to false) The GraphQL spec allows for success responses
+ * @property allowPartialSuccesses (defaults to true) The GraphQL spec allows for success responses
  * with qualified errors, like this: https://spec.graphql.org/draft/#example-90475 if true, you will
  * receive these responses as successes, together with the list of partial errors that were attached
  * in the response. If allowPartialSuccesses=false, these types of responses will be delivered as
- * errors and the successful parts of the response will be dropped. Setting it to true is going to
- * make keeping your domain layer and api layers separate a lot harder, and apart from in some highly
- * optimised situations I'd recommend you keep it set to false.
+ * errors and the successful parts of the response will be dropped.
  *
  * @param F  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
@@ -46,7 +44,7 @@ class CallProcessorApollo3<F>(
     private val errorHandler: ErrorHandler<F>,
     private val logger: Logger? = null,
     private val workMode: WorkMode? = null,
-    private val allowPartialSuccesses: Boolean = false
+    private val allowPartialSuccesses: Boolean = true
 ) : Apollo3Caller<F> {
 
     data class SuccessResult<S, F>(

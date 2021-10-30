@@ -1,35 +1,3 @@
-/**
- *
- * ./gradlew check
- *
- * ./gradlew testDebugUnitTest
- * ./gradlew connectedAndroidTest -PtestBuildType=debug
- * ./gradlew connectedAndroidTest -PtestBuildType=release
- * ./gradlew example-kt-01reactiveui:testDebugUnitTest --info
- * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
- *
- * sourcefile downloads sanity check:
- * co.early.fore.kt.net.apollo.CallProcessorApollo() //fore-kt-android-network
- * co.early.fore.net.NetworkingLogSanitizer() //fore-jv-network
- * co.early.fore.kt.net.NetworkingLogSanitizer() //fore-kt-network
- * co.early.fore.kt.adapters.NotifyableImp() //fore-kt-android-adapters
- * co.early.fore.adapters.CrossFadeRemover() //fore-jv-android-adapters
- * co.early.fore.kt.core.delegate.DebugDelegateDefault() //fore-kt-android-core
- * co.early.fore.kt.core.logging.SystemLogger() //fore-kt-core
- * co.early.fore.core.testhelpers.CountDownLatchWrapper() //fore-jv-core
- *
- * ./gradlew clean
- * ./gradlew publishToMavenLocal
- * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
- *
- * ./gradlew :buildEnvironment
- * ./gradlew :fore-kt-core:dependencies
- *
- * bundle exec jekyll serve
- *
- * bundle lock --update
- * bundle install
- */
 import co.early.fore.Shared
 import org.gradle.kotlin.dsl.`maven-publish`
 import org.gradle.kotlin.dsl.signing

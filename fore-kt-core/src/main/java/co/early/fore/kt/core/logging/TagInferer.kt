@@ -11,7 +11,13 @@ class TagInfererImpl : TagInferer {
     override fun inferTag(): String {
         val trace = Throwable().stackTrace
         return if (trace.size > 3) {
-            extractClassName(trace[3])
+            extractClassName(trace[3]).let {
+                if (it == "ObservableImp" && trace.size > 4){
+                    extractClassName(trace[4])
+                } else {
+                    it
+                }
+            }
         } else "missing"
     }
 

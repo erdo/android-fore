@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.1](https://img.shields.io/badge/central-1.5.1-green.svg){: .float-left}
+![central-1.5.2](https://img.shields.io/badge/central-1.5.2-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -17,15 +17,10 @@
 
 ## Quick Start
 
-the **kotlin** API, running coroutines under the hood:
 ```
-implementation("co.early.fore:fore-kt-android:1.5.1")
+implementation("co.early.fore:fore-kt-android:1.5.2")
 ```
 
-the legacy **java** API:
-```
-implementation("co.early.fore:fore-jv-android:1.5.1")
-```
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
 
@@ -168,7 +163,7 @@ In this example the wallet state is being exposed via getters / properties, but 
 
 **fore** has low boiler-plate overhead anyway, but its structure enables you to go further and remove almost all of it, see [here](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) for details.
 
-Making the most of fore's ability to remove boiler plate, a fully reactive, fully testable, memory leak free, rotation supporting view layer can easily come in under 100 lines of code (listing is complete apart from imports):
+Making the most of fore's ability to remove boiler plate, a fully reactive, fully testable, memory leak free, rotation supporting view layer can easily come in under 100 lines of code (this listing is complete apart from imports):
 
 <pre class="codesample"><code>
 class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), SyncableView {
@@ -180,7 +175,7 @@ class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), Syncabl
         super.onCreate(savedInstanceState)
 
         //setup observers
-        lifecycle.addObserver(ForeLifecycleObserver(this, viewModel))
+        lifecycle.addObserver(LifecycleObserver(this, viewModel))
 
         //setup click listeners
         dashboard_startautorefresh_btn.setOnClickListener { viewModel.startAutoRefresh() }
@@ -188,7 +183,7 @@ class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), Syncabl
         dashboard_updatenow_btn.setOnClickListener { viewModel.updateNow() }
     }
 
-    //called by ForeLifecycleObserver, on the UI thread, whenever the viewModel state changes
+    //called on the UI thread, whenever the viewModel state changes
     override fun syncView() {
         viewModel.viewState.apply {
             dashboard_busy.showOrInvisible(isUpdating)
@@ -206,7 +201,7 @@ class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), Syncabl
 
 Writing view layers this way helps quite a bit from a complexity standpoint, and it's one of the things that makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code. Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious though. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on the complexity / robustness aspect.
 
-Here's a very basic example from one of the example kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
+Here's a very basic example from one of the mini kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
 Read more about the [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture of fore apps.
 
@@ -216,7 +211,7 @@ There is often a tendency in business requirements towards complexity, the longe
 
 But as any developer knows, writing complicated code is usually easier than writing simple code (you pay for the complexity later). Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
 
-Because of the low boiler plate and the clear separation of architectural layers, MVO implemented with fore should help with issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
+Because of the low boiler plate and the clear separation of architectural layers, MVO implemented with fore can help you with issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
 
 ## Where to get more information
 
@@ -228,13 +223,7 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 A few other sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore. Like this sample app which uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) struture (which now also comes with it's own [article](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3))
 
-## Extras
-
-The optional packages include a few solutions to common issues that crop up in android app development like [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them testable in common useage scenarios (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
-
-There are also optional extras that simplify [**adapter animations**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations), and networking layer abstractions compatible with [**Retrofit2**, **Ktor** or **Apollo**](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) that will encourage your team to write robust networking code by default. fore works really well with RoomDB too, checkout the sample app for details.
-
-For Java development, there are some testable wrappers for AsyncTask (that Google should have provided, but didn't) [**Async**](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) and [**AsyncBuilder**](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder) - which support lambdas, making threads very easy to use.
+I you want to write an article related to fore, open an issue and we might include a link to it from the docs
 
 ## Sample Apps
 
