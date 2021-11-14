@@ -3,7 +3,6 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("idea")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
