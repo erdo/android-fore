@@ -50,7 +50,7 @@ object OG {
         // models
         val authenticator = Authenticator(
             authService = AuthService(
-                login = { email -> apolloClient.mutate(LoginMutation(email)) }
+                login = { email -> apolloClient.mutate(LoginMutation(email)).execute() }
             ),
             callProcessor,
             logger
@@ -58,11 +58,11 @@ object OG {
         globalRequestInterceptor.setAuthenticator(authenticator)
         val launchesModel = LaunchesModel(
             launchService = LaunchService(
-                getLaunchList = { apolloClient.query(LaunchListQuery()) },
-                login = { email -> apolloClient.mutate(LoginMutation(email)) },
-                refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)) },
-                bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)) },
-                cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)) }
+                getLaunchList = { apolloClient.query(LaunchListQuery()).execute() },
+                login = { email -> apolloClient.mutate(LoginMutation(email)).execute() },
+                refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)).execute() },
+                bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)).execute() },
+                cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)).execute() }
             ),
             callProcessor,
             authenticator,
