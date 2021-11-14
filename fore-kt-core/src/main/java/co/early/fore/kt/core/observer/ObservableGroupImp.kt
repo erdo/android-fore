@@ -10,7 +10,7 @@ class ObservableGroupImp(vararg observablesList: Observable) : ObservableGroup {
 
     init {
         if (observablesList.isEmpty()){
-            throw IllegalArgumentException("observablesList must contain at least one observable")
+            throw IllegalArgumentException("\nobservablesList vararg passed to a LifecycleObserver or ObservableGroupImp, must contain at least one observable")
         }
     }
 

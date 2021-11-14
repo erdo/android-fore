@@ -238,7 +238,7 @@ For some specific use cases: handling streams of changing data, which you want t
  - connect to a network to download discreet pieces of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt; anyway. Regular code that touches reactive streams often gets _reactive-streamified_ like this (even code that isn't, and has no need to be, reactive in the first place).
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return a Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this giving it unasked-for complexity (even code that isn't, and has no need to be, reactive in the first place).
 
 *By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless of reactive streams.*
 
