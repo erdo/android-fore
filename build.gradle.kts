@@ -42,10 +42,6 @@ buildscript {
     }
 }
 
-plugins {
-    id("idea")
-}
-
 allprojects {
     repositories {
         mavenCentral()

@@ -3,7 +3,6 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("idea")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -61,9 +60,6 @@ android {
         isAbortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = Shared.Android.javaVersion.toString()
     }

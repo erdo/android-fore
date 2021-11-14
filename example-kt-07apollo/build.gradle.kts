@@ -3,7 +3,6 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("idea")
     id("com.apollographql.apollo").version("2.5.4")
     kotlin("android")
     kotlin("android.extensions")

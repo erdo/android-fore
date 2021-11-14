@@ -122,6 +122,10 @@ class CallProcessorApollo3<F>(
             Fore.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
+        if (errorResponse != null) {
+            Fore.getLogger(logger).e("processFailResponse() errorResponse:$errorResponse t:" + Thread.currentThread())
+        }
+
         return Either.left(errorHandler.handleError(t, errorResponse))
     }
 }

@@ -23,9 +23,9 @@ object Shared {
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
-        const val apollo3 = "3.0.0-beta01"
+        const val apollo3 = "3.0.0-beta03"
         const val retrofit = "2.9.0"
-        const val compose = "1.1.0-alpha06"
+        const val compose = "1.1.0-beta02"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
@@ -59,8 +59,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.2" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 69
+        const val LIB_VERSION_NAME = "1.5.3" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 70
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
