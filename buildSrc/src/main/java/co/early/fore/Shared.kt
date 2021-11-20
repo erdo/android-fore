@@ -44,7 +44,7 @@ object Shared {
         const val junit = "4.12"
         const val espresso = "3.0.2"
         const val hamcrest_library = "1.3"
-        const val dexmaker_mockito = "2.21.0"
+        const val dexmaker_mockito = "2.28.1"
         const val robolectric = "4.4"
         const val gson = "2.8.5"
         const val constraintlayout = "1.1.3"
