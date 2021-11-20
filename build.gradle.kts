@@ -44,11 +44,9 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
         mavenCentral()
         google()
-        mavenLocal()
-        //temporary while we wait for library maintainers to move out of jcenter
-        maven { setUrl("$rootDir/jcenterlocal/repository/") }
     }
 }
 
