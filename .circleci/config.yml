@@ -11,7 +11,7 @@ jobs:
       - checkout
       - restore_cache:
           # bump the cache version number if you want to wipe the gradle cache
-          key: v4-gradle-dependencies-cache
+          key: v5-gradle-dependencies-cache
 #      - run:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
@@ -21,7 +21,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v4-gradle-dependencies-cache
+          key: v5-gradle-dependencies-cache
 
       - run:
           name: Run Tests fore-jv-android

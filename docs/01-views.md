@@ -28,7 +28,7 @@ Pretty much all views in **fore** do the same few things when they are created:
 - get a reference to all models that the view needs to observe (using some form of DI)
 - set up all the click listeners, text changed listeners etc
 - *(optionally) set up any adapters*
-- *(optionally) set up any SyncTriggers for things like animations*
+- *(optionally) set up any Triggers for things like animations*
 
 In addition to that there will be:
 
@@ -150,7 +150,7 @@ fun syncView() {
 _(You can now also use the extension functions from androidx such as **isVisible** and **isGone**, although they are unfortunately a bit less explicit than they could be. The trouble is visibilty has 3 states: VISIBLE, INVISIBLE, and GONE. The androidx extension functions only mention one state, the negative case is left for you to remember. For instance does isVisible=false mean INVISIBLE? nope, it means GONE 🤷)_
 
 ### Don't count notifications
-Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors. Check out [SyncTrigger](https://erdo.github.io/android-fore/01-views.html#synctrigger)  below it case it fits your situation.
+Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors. Check out the [Triggers](https://erdo.github.io/android-fore/01-views.html#triggers) below it case they fit your situation.
 
 ### Beware infinite loops
 One final point to mention is about syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like, after all.
