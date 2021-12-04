@@ -2,6 +2,7 @@ package foo.bar.example.foreapollo3.api
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.http.HttpNetworkTransport
+import com.apollographql.apollo3.network.okHttpClient
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
@@ -24,10 +25,10 @@ object CustomApolloBuilder {
     fun create(vararg interceptors: Interceptor): ApolloClient {
         return ApolloClient.Builder()
             .networkTransport(
-                HttpNetworkTransport(
-                    serverUrl = "https://apollo-fullstack-tutorial.herokuapp.com",
-                    okHttpClient = createOkHttpClient(*interceptors)
-                )
+                HttpNetworkTransport.Builder()
+                    .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+                    .okHttpClient(createOkHttpClient(*interceptors))
+                    .build()
             ).build()
     }
 
