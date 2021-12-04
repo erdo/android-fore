@@ -229,10 +229,10 @@ class LaunchFetcherIntegrationTest {
     private fun createLaunchService(apolloClient: ApolloClient): LaunchService {
         return LaunchService(
             getLaunchList = { apolloClient.query(LaunchListQuery()).execute() },
-            login = { email -> apolloClient.mutate(LoginMutation(email)).execute() },
+            login = { email -> apolloClient.mutation(LoginMutation(email)).execute() },
             refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)).execute() },
-            bookTrip = { id -> apolloClient.mutate(BookTripMutation(id)).execute() },
-            cancelTrip = { id -> apolloClient.mutate(CancelTripMutation(id)).execute() }
+            bookTrip = { id -> apolloClient.mutation(BookTripMutation(id)).execute() },
+            cancelTrip = { id -> apolloClient.mutation(CancelTripMutation(id)).execute() }
         )
     }
 
