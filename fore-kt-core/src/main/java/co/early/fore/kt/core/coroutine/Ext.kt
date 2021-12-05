@@ -32,19 +32,19 @@ import kotlin.coroutines.coroutineContext
  * Copyright © 2019 early.co. All rights reserved.
  */
 
-fun launchIO(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> Unit): Job {
+fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.IO.add(exceptionHandler)).launch { block() }
+        CoroutineScope(Dispatchers.IO).launch { block() }
     }
 }
 
-fun launchDefault(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> Unit): Job {
+fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.Default.add(exceptionHandler)).launch { block() }
+        CoroutineScope(Dispatchers.Default).launch { block() }
     }
 }
 
@@ -60,11 +60,11 @@ fun launchCustom(dispatcher: CoroutineContext, workMode: WorkMode? = null, block
  * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
  * if using this code from a pure kotlin module
  */
-fun launchMain(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> Unit): Job {
+fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.Main.add(exceptionHandler)).launch { block() }
+        CoroutineScope(Dispatchers.Main).launch { block() }
     }
 }
 
@@ -74,27 +74,27 @@ fun launchMain(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionH
  *
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
-fun launchMainImm(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> Unit): Job {
+fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.Main.immediate.add(exceptionHandler)).launch { block() }
+        CoroutineScope(Dispatchers.Main.immediate).launch { block() }
     }
 }
 
-fun <T> asyncIO(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.IO.add(exceptionHandler)).async { block() }
+        CoroutineScope(Dispatchers.IO).async { block() }
     }
 }
 
-fun <T> asyncDefault(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+fun <T> asyncDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.Default.add(exceptionHandler)).async { block() }
+        CoroutineScope(Dispatchers.Default).async { block() }
     }
 }
 
@@ -110,11 +110,11 @@ fun <T> asyncCustom(dispatcher: CoroutineContext, workMode: WorkMode? = null, bl
  * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
  * if using this code from a pure kotlin module
  */
-fun <T> asyncMain(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.Main.add(exceptionHandler)).async { block() }
+        CoroutineScope(Dispatchers.Main).async { block() }
     }
 }
 
@@ -124,27 +124,27 @@ fun <T> asyncMain(workMode: WorkMode? = null, exceptionHandler: CoroutineExcepti
  *
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
-fun <T> asyncMainImm(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+fun <T> asyncMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
-        CoroutineScope(Dispatchers.Main.immediate.add(exceptionHandler)).async { block() }
+        CoroutineScope(Dispatchers.Main.immediate).async { block() }
     }
 }
 
-suspend fun <T> awaitIO(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
-        withContext(Dispatchers.IO.add(exceptionHandler)) { block() }
+        withContext(Dispatchers.IO) { block() }
     }
 }
 
-suspend fun <T> awaitDefault(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
-        withContext(Dispatchers.Default.add(exceptionHandler)) { block() }
+        withContext(Dispatchers.Default) { block() }
     }
 }
 
@@ -160,11 +160,11 @@ suspend fun <T> awaitCustom(dispatcher: CoroutineContext, workMode: WorkMode? = 
  * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
  * if using this code from a pure kotlin module
  */
-suspend fun <T> awaitMain(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
-        withContext(Dispatchers.Main.add(exceptionHandler)) { block() }
+        withContext(Dispatchers.Main) { block() }
     }
 }
 
@@ -174,16 +174,10 @@ suspend fun <T> awaitMain(workMode: WorkMode? = null, exceptionHandler: Coroutin
  *
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
-suspend fun <T> awaitMainImm(workMode: WorkMode? = null, exceptionHandler: CoroutineExceptionHandler? = null, block: suspend CoroutineScope.() -> T): T {
+suspend fun <T> awaitMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
-        withContext(Dispatchers.Main.immediate.add(exceptionHandler)) { block() }
+        withContext(Dispatchers.Main.immediate) { block() }
     }
-}
-
-private fun CoroutineContext.add(exceptionHandler: CoroutineExceptionHandler?): CoroutineContext {
-    return exceptionHandler?.let {
-        this + it
-    } ?: this
 }
