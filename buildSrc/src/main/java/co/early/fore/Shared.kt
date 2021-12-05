@@ -23,7 +23,7 @@ object Shared {
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
-        const val apollo3 = "3.0.0-beta04"
+        const val apollo3 = "3.0.0-beta05"
         const val retrofit = "2.9.0"
         const val compose = "1.1.0-beta03"
         // example app and test dependencies
