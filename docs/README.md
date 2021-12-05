@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.5](https://img.shields.io/badge/central-1.5.5-green.svg){: .float-left}
+![central-1.5.6](https://img.shields.io/badge/central-1.5.6-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -18,7 +18,7 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.5")
+implementation("co.early.fore:fore-kt-android:1.5.6")
 ```
 
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -211,9 +211,9 @@ There is often a tendency in business requirements towards complexity, the longe
 
 Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
 
-[gmk57](https://gmk57.medium.com/) on medium forwarded me a great [comment](https://medium.com/@a.artikov/i-in-my-opinion-this-solution-is-over-complicated-77ce684a4014) which I think applies here: **_In quantum physics there is an effect where observing of a system changes properties of this system_**. That complication is something we are explicity avoiding with fore (the things being observed with fore don't know or even care what is observing them).
+[gmk57](https://gmk57.medium.com/) on medium forwarded me a great [comment](https://medium.com/@a.artikov/i-in-my-opinion-this-solution-is-over-complicated-77ce684a4014) which I think applies here: **_In quantum physics there is an effect where observing of a system changes properties of this system_**. That complication is something we are explicity avoiding with fore (the things being observed with fore don't know or even care what is observing them). If you do want to link your UI state to some app behaviour though, that's as easy as: onResume(){gpsTracker.start()} for example. It doesn't require you to manage any streams of data in order to do that (the fore observers will continue to ensure that the UI reflects the current app state regardless).
 
-Anyway, because of the low boiler plate and the clear separation of architectural layers you get when developing this way, MVO implemented with fore can help you with issues like **testability**; **lifecycle management**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
+Anyway, because of the low boiler plate and the clear separation of architectural layers you get when developing this way, MVO implemented with fore can help you with issues like **code complexity**; **testability**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
 
 ## Where to get more information
 
@@ -225,7 +225,7 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 A few other sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore. Like this sample app which uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) struture (which now also comes with it's own [article](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3)) or the [Apollo3](https://dev.to/erdo/android-apollo3-and-graphql-1e8m) article and sample app on dev.to
 
-If you want to write an article related to fore, open an issue and we might include a link to it from the docs
+If you have a question about the best way to achieve what you want with fore, consider opening an issue (even better, a stackoverflow question which you can link to from an issue). Also, if you want to write an article related to fore, if you open an issue about it, we might include a link to it from the docs
 
 ## Sample Apps
 
