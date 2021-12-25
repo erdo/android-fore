@@ -350,4 +350,10 @@ One difference with Async is that to run it, you need to call executeTask() inst
 ## Testing Asynchronous Code
 For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
 
-A convenient way to make this happen is to inject the WorkMode into the enclosing class at construction time so that WorkMode.ASYNCHRONOUS can be used for deployed code and WorkMode.SYNCHRONOUS can be used for testing. This method is demonstrated in the tests for the [Threading Sample](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/test/java/foo/bar/example/forethreading/feature/counter/CounterWithLambdasTest.java)
+The easiest way to do that is to set a delegate like this:
+
+```
+Fore.setDelegate(TestDelegateDefault())
+```
+
+Check the sample apps that come with the fore repo for complete test examples
