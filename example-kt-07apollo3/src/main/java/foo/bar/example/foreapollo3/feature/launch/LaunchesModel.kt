@@ -26,7 +26,6 @@ data class LaunchService(
 )
 
 
-@ExperimentalStdlibApi
 class LaunchesModel(
     private val launchService: LaunchService,
     private val callProcessor: CallProcessorApollo3<ErrorMessage>,

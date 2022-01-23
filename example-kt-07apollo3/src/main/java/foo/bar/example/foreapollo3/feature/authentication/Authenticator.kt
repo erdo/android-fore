@@ -21,7 +21,6 @@ data class AuthService(
 /**
  * logs the user in / out (gets a session token from the server / disposes of it)
  */
-@ExperimentalStdlibApi
 class Authenticator(
     private val authService: AuthService,
     private val callProcessor: CallProcessorApollo3<ErrorMessage>,
