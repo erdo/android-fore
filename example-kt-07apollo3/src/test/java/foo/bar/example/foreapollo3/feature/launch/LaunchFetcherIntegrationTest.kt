@@ -9,6 +9,7 @@ import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 import foo.bar.example.foreapollo3.*
 import foo.bar.example.foreapollo3.api.CommonServiceFailures
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
@@ -229,7 +230,7 @@ class LaunchFetcherIntegrationTest {
     private fun createLaunchService(apolloClient: ApolloClient): LaunchService {
         return LaunchService(
             getLaunchList = { apolloClient.query(LaunchListQuery()).execute() },
-            login = { email -> apolloClient.mutation(LoginMutation(email)).execute() },
+            login = { email -> apolloClient.mutation(LoginMutation(Optional.Present(email))).execute() },
             refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)).execute() },
             bookTrip = { id -> apolloClient.mutation(BookTripMutation(id)).execute() },
             cancelTrip = { id -> apolloClient.mutation(CancelTripMutation(id)).execute() }

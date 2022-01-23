@@ -6,6 +6,7 @@ import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import com.apollographql.apollo3.api.ApolloRequest
+import com.apollographql.apollo3.api.Optional
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
 import foo.bar.example.foreapollo3.api.CustomGlobalRequestInterceptor
@@ -50,7 +51,7 @@ object OG {
         // models
         val authenticator = Authenticator(
             authService = AuthService(
-                login = { email -> apolloClient.mutation(LoginMutation(email)).execute() }
+                login = { email -> apolloClient.mutation(LoginMutation(Optional.Present(email))).execute() }
             ),
             callProcessor,
             logger
@@ -59,7 +60,7 @@ object OG {
         val launchesModel = LaunchesModel(
             launchService = LaunchService(
                 getLaunchList = { apolloClient.query(LaunchListQuery()).execute() },
-                login = { email -> apolloClient.mutation(LoginMutation(email)).execute() },
+                login = { email -> apolloClient.mutation(LoginMutation(Optional.Present(email))).execute() },
                 refreshLaunchDetail = { id -> apolloClient.query(LaunchDetailsQuery(id)).execute() },
                 bookTrip = { id -> apolloClient.mutation(BookTripMutation(id)).execute() },
                 cancelTrip = { id -> apolloClient.mutation(CancelTripMutation(id)).execute() }

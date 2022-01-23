@@ -8,7 +8,7 @@ import co.early.fore.kt.core.observer.ObservableGroupImp
 import co.early.fore.kt.core.observer.ObservableImp
 
 /**
- * Convenience class to use with ViewModels which will enable a viewModel to be
+ * Convenience class to use with ViewModels which will enable a viewModel to be:
  *
  * 1) Observable (by a fragment or activity)
  * 2) Observe other Observable models (usually from the domain layer).
