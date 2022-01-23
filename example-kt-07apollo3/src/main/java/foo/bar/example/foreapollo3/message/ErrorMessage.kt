@@ -10,7 +10,6 @@ import foo.bar.example.foreapollo3.R
  * If you want to display it to the user you can put it inside a dialog (it implements
  * parcelable). #localisedMessage provides human readable text.
  */
-@ExperimentalStdlibApi
 enum class ErrorMessage constructor(private val messageResId: Int) : Parcelable {
 
     ERROR_MISC(R.string.msg_error_misc),

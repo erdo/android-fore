@@ -17,7 +17,6 @@ import foo.bar.example.foreapollo3.message.ErrorMessage.*
  * customise the behaviour for specific HTTP codes, GraphQL error formats etc, hence it's not
  * in the fore library
  */
-@ExperimentalStdlibApi
 class CustomGlobalErrorHandler(private val logger: Logger?) :
     ErrorHandler<ErrorMessage> {
 

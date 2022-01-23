@@ -20,7 +20,6 @@ import foo.bar.example.foreapollo3.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_launches.*
 
 
-@ExperimentalStdlibApi
 class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
 
 
@@ -90,7 +89,6 @@ fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 
-@ExperimentalStdlibApi
 fun Context.showToast(message: ErrorMessage) {
     Toast.makeText(this, message.localisedMessage, Toast.LENGTH_LONG).show()
 }

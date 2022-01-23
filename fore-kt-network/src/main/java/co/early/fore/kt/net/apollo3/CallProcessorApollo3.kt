@@ -11,7 +11,6 @@ import com.apollographql.apollo3.api.ExecutionContext
 import com.apollographql.apollo3.api.Operation
 import kotlinx.coroutines.Deferred
 
-@ExperimentalStdlibApi
 interface Apollo3Caller<F> {
     suspend fun <S : Operation.Data> processCallAwait(
         call: suspend () -> ApolloResponse<S>
@@ -39,7 +38,6 @@ interface Apollo3Caller<F> {
  * @param F  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-@ExperimentalStdlibApi
 class CallProcessorApollo3<F>(
     private val errorHandler: ErrorHandler<F>,
     private val logger: Logger? = null,

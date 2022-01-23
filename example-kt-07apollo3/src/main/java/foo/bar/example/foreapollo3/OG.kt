@@ -23,7 +23,6 @@ import java.util.*
  *
  * Copyright © 2019 early.co. All rights reserved.
  */
-@ExperimentalStdlibApi
 @Suppress("UNUSED_PARAMETER")
 object OG {
 

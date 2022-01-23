@@ -23,6 +23,12 @@ implementation("co.early.fore:fore-kt-android:1.5.7")
 
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
+## Compose
+
+For Compose, use fore's observeAsState() function (the versioning matches compose itself)
+```
+implementation("co.early.fore:fore-kt-android-compose:1.1.0-rc01")
+```
 
 ## New to fore
 

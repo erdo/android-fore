@@ -6,7 +6,6 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
-
 /**
  * Testing unwrapped co-routines is not as straight forward as it could be, depending on
  * kotlinx-coroutines-test, was not giving us determinate test results at
@@ -30,8 +29,12 @@ import kotlin.coroutines.coroutineContext
  * You can write something like this instead: delay(if (workMode == WorkMode.ASYNCHRONOUS) 10000 else 1)
  *
  * Copyright © 2019 early.co. All rights reserved.
+ *
+ * Update Jan 2022: hopefully the reworked version of kotlinx-coroutines-test for 1.6 is going to fix these
+ * issues: https://blog.jetbrains.com/kotlin/2021/12/introducing-kotlinx-coroutines-1-6-0/
+ * The fore extension methods will remain as a convenience or just to use if you prefer testing asynchronous
+ * code by making them synchronous for tests
  */
-
 fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
