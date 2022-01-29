@@ -10,12 +10,12 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.delegate.Fore
 
 /**
- * Observes this [Observable], representing its state via [State]
+ * Observes this [Observable] or [ObservableGroup] representing its state via [State]
  *
- * This function uses a [DisposableEffect] to add and remove the an [Observer] in line
- * with the composable being added/entered or removed/exited (as [Flow.collectAsState] does)
+ * This function uses a [DisposableEffect] to add and remove an [Observer] in line
+ * with the Composable being added/entered or removed/exited (as Flow.collectAsState() does)
  * AND ALSO takes in to account the lifecycle of the activity or fragment containing the
- * composable (as [LiveData.observeAsState] does).
+ * composable (as LiveData.observeAsState() does).
  *
  * [State] will be added as an observer when BOTH: the composable is entered AND the containing
  * lifecycle is STARTED. If either or both conditions are false, the observer is removed (and
@@ -31,19 +31,7 @@ import co.early.fore.kt.core.delegate.Fore
  * Filter your logs on "foo_" and to Debug level
  *
  * There is a sample app that you can use to investigate this behaviour (and the behaviour
- * of [Flow.collectAsState] and [LiveData.observeAsState] here: https://github.com/erdo/compose-observe-as-state-explorer)
- */
-@Composable
-fun <T> Observable.observeAsState(
-    logString: String? = null,
-    policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    getState: () -> T
-): State<T> {
-    return (this as ObservableGroup).observeAsState(logString, policy, getState)
-}
-
-/**
- * See #Observable.observeAsState()
+ * of Flow.collectAsState and LiveData.observeAsState here: https://github.com/erdo/compose-observe-as-state-explorer)
  */
 @Composable
 fun <T> ObservableGroup.observeAsState(

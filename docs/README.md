@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.7](https://img.shields.io/badge/central-1.5.7-green.svg){: .float-left}
+![central-1.5.8](https://img.shields.io/badge/central-1.5.8-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -18,7 +18,7 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.7")
+implementation("co.early.fore:fore-kt-android:1.5.8")
 ```
 
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -27,7 +27,7 @@ More detailed [version information here](https://erdo.github.io/android-fore/06-
 
 For Compose, use fore's observeAsState() function (the versioning matches compose itself)
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.1.0-rc01")
+implementation("co.early.fore:fore-kt-android-compose:1.1.0-rc03")
 ```
 
 ## New to fore
