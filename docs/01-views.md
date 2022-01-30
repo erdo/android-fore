@@ -159,13 +159,19 @@ However, you will usually be setting a state on that UI element during your sync
 Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing its "changed" listeners anyway. But Android. And indeed Android's EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy. (Interesting that the equivalent TextInput component of ReactNative doesn't suffer from this "feature").
 
 
-## <a name="synctrigger"></a> Triggers [non-compose only]
+## <a name="synctrigger"></a><a name="triggers"></a>Triggers [non-compose only]
 
-A Trigger is fore's way of bridging the **world of state** (which is what drives a UI in architectures like MVO) and the **world of events** (which tend to happen on changes of state). There is a presentation about State vs Events [here](https://erdo.github.io/android-fore/05-extras.html#presentations).
+A Trigger is fore's way of bridging the **world of state** (which is what drives a UI in architectures like MVO) and the **world of events** (which tend to happen on changes of state).
 
 All "statey" view architectures have this issue (MVO, MVI, MVVM) and there are a load of ways to handle this, take a look [here](https://www.reddit.com/r/androiddev/comments/g6kgfn/android_databinding_with_livedata_holds_old_values/foabqm0/), [here](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150), [here](https://gist.github.com/JoseAlcerreca/e0bba240d9b3cffa258777f12e5c0ae9), [here](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java), and [here](https://github.com/android/architecture-components-samples/issues/63#issuecomment-310422475) for example.
 
 Anyway this is fore's solution, but there is no need to use it if you already have a preferred way.
+
+### Useage
+
+Triggers are created once - in onCreate() for example. And then "checked" each time syncView() is run.
+
+Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt) for some example usages of Triggers.
 
 ### TriggerWhen
 kotlin source is [here](https://github.com/erdo/android-fore/tree/master/fore-kt-core/src/main/java/co/early/fore/kt/core/ui/trigger/TiggerWhen.kt)
@@ -232,7 +238,7 @@ fadePollenTrigger = TriggerOnChange({ viewModel.viewState.weather.pollenLevel })
 </code></pre>
 
 ### Careful with scope functions
-Don't be tempted to do something like this by the way. Here we are using **apply** but the pollenLevel changes won't be visible to the Trigger, the pollenLevel will be stuck at whatever it was the first time this is run.
+Don't be tempted to do something like this when constructing a trigger by the way. Here we are using **apply** but the pollenLevel _changes_ won't be visible to the Trigger, the pollenLevel will be stuck at whatever it was the first time this is constructed.
 
 <pre class="codesample"><code>
 // DO NOT DO THIS
@@ -276,8 +282,6 @@ fun syncView() {
 }
 
 </code></pre>
-
-Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt) for some example usages of Triggers.
 
 As with most fore components, the robustness comes from the fact the public functions are being called on the UI thread (which is where you will usualy already be if you are in the view layer). The exception to this is during a test where the main thread becomes the test thread.
 
