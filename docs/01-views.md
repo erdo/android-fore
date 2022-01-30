@@ -1,6 +1,6 @@
 
 # Views
-Views are not just XML layouts, in Android the classes that form the view layer of an app are not just the classes extending View either, they include the **Activity**, **Fragment** *and* **View** classes.
+Views are not just XML layouts, in Android the classes that form the view layer of an app are not just the classes extending View either, they include the **Activity**, **Fragment** *and* **View** classes (and now also **Composables**).
 
 These classes:
 
@@ -10,8 +10,7 @@ These classes:
 
 > "View layers are: ephemeral; tightly coupled to the context; slow to test"
 
-
-In short they are no place to put business logic or networking code, any code placed in those classes will present the developer with a range of challenges related to managing a complicated lifecycle when screens are rotated or phone calls accepted, such as:
+In short, not a great place to put business logic or networking code, any code placed in those classes will present the developer with a range of challenges related to managing a complicated lifecycle when screens are rotated, phone calls accepted, or Composables are recomposed such as:
 
 - loosing data stored in memory (causing null pointers or requiring unecessary network calls)
 - maintaining UI consistency
@@ -24,20 +23,20 @@ It might seem obvious, but still: handling those issues accounts for a fairly la
 
 Pretty much all views in **fore** do the same few things when they are created:
 
-- get a reference to all the view components like Buttons, TextViews etc.
+- get a reference to all the view components like Buttons, TextViews etc. [non-compose only]
 - get a reference to all models that the view needs to observe (using some form of DI)
 - set up all the click listeners, text changed listeners etc
-- *(optionally) set up any adapters*
-- *(optionally) set up any Triggers for things like animations*
+- *(optionally) set up any adapters* [non-compose only]
+- *(optionally) set up any Triggers for things like animations* [non-compose only]
 
 In addition to that there will be:
 
-- the [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) function which sets an affirmative state on each of the view components, in line with what the models indicate.
-- the add / remove observers methods where the view registers with the models it is interested in.
+- the [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) function which sets an affirmative state on each of the view components, in line with what the models indicate. [non-compose only]
+- the add / remove observers methods where the view registers with the models it is interested in. [in compose this is replaced by the observeAsState() extension function]
 
 This leaves almost all everything else to be handled in other modules or layers in the form of plain, unit testable code. A few view [examples](https://erdo.github.io/android-fore/01-views.html#view-examples) are listed at the bottom of this page
 
-## SyncView()
+## <a name="syncview"></a> SyncView() [non-compose only]
 
 MVO uses one of the most simple (but extremely reliable) reactive implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method)*. On the surface it looks very simple, but there are some important details to discuss that can trip you up, or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
 
@@ -160,7 +159,7 @@ However, you will usually be setting a state on that UI element during your sync
 Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing its "changed" listeners anyway. But Android. And indeed Android's EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy. (Interesting that the equivalent TextInput component of ReactNative doesn't suffer from this "feature").
 
 
-## <a name="synctrigger"></a>Triggers
+## <a name="synctrigger"></a> <a name="Triggers"></a> Triggers [non-compose only]
 
 A Trigger is fore's way of bridging the **world of state** (which is what drives a UI in architectures like MVO) and the **world of events** (which tend to happen on changes of state). There is a presentation about State vs Events [here](https://erdo.github.io/android-fore/05-extras.html#presentations).
 

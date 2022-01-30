@@ -10,7 +10,7 @@ That block diagram above is what MVO looks like (it's simplified of course, furt
 
 By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean the standard definition of a software model, there are no particular restrictions we will put on this model other than it needs to be observable (when it changes, it needs to tell everyone observing it, that it changed) and it needs to expose its state somehow, via quick returning getters, properties or a single immutable state. The model can have application level scope, or it can be a ViewModel - it makes no difference from an MVO perspective. (But mostly with MVO we are talking about application level things like AccountModel, MessageInboxRepository, TodoListManager, Favourites etc).
 
-By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose, or a custom View class.
+By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose, a custom View class, or a Composable.
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much by design).
 
@@ -26,13 +26,13 @@ Here's an example app structure showing some models being observed by fragments 
 
 ![data binding](img/app_arch_0.png)
 
-A lot of the time, things happen in an app that do not originate directly from user interaction: incoming notifications, network connectivity changes, Bluetooth LE connections etc. We have to propagate those events to the view layer somehow. Sometimes that is done by locating the current foreground activity / fragment (using ActivityLifecycleCallbacks for example) and then pushing the information to the view layer directly: this is the <strong>opposite</strong> of a reactive UI. Implementing this with reactive-streams is doable but requires very careful handling of caching and memory references.
+A lot of the time, things happen in an app that do not originate directly from user interaction: incoming notifications, network connectivity changes, Bluetooth LE connections etc. We have to propagate those events to the view layer somehow. Sometimes that is done by locating the current foreground activity / fragment (using ActivityLifecycleCallbacks for example) and then pushing the information to the view layer directly: this is the <strong>opposite</strong> of a reactive UI. Implementing this with reactive-streams is doable, but not without paying the reactive-streams [tax](https://erdo.github.io/android-fore/03-reactive-uis.html#reactive-streams).
 
 MVO's observable models provide an easy and much less boiler-plate intensive solution: when the models' state changes, they notify their observers (they don't need to involve themselves in any view layer considerations at all).
 
 It's the view layer components job to observe whichever models they are interested in, and synchronize their UI when those models change.
 
-This flow is so lightweight and easy to implement, it's actually how MVO handles <strong>all</strong> state changes, including those that are a result of network responses, or actions triggered directly by the user.
+This flow is so lightweight and easy to implement, it's actually how MVO handles <strong>all</strong> state changes, including those that are a result of network responses, or actions triggered directly by the user (it's an implementation of unidirectional data flow)
 
 Sometimes you will want to scope a model to just a single activity (although you might be surprised at how rarely this is genuinely useful - look at how much code we removed using the MVO approach on the [android architecture blueprints](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) for example). Anyway, if you decide that's what your app needs at that moment, use a ViewModel, give it an immutable view state, and make it observable using a fore Observable as you would with any other Model. If you are injecting your ViewModels in to the view layer and using fore observables to synchronize your UI, the view layer will not even be aware of what type of model it is anyway.
 
@@ -48,11 +48,11 @@ One great thing about MVO is that the view layer and the rest of the app are so 
 
 > "the code works if you rotate the screen - without you needing to do a single thing"
 
-The code looks extremely simple and it is, but surprisingly the technique works the same if you're using android adapters, or if you're doing asynchronous work in your model, or fetching data from a network.
+The code looks extremely simple and it is, but surprisingly the technique works the same if you're using android adapters, or if you're doing asynchronous work in your model, or fetching data from a network. This separation is also what lets us replace the UI completely with someting like Jetpack Compose by using a simple extension function.
 
 ## State
 
-We mentioned **State**. The fore philosophy is to take state away from the UI layer, leaving the UI layer as thin as possible. fore puts state in the models where it can be comprehensively unit tested. For example, if you want to display a game's score, the place to manage that state is in a GameModel. The view simply represents whatever state the GameModel has, and is synchronised everytime the (observable) GameModel changes:
+We mentioned **State**. The fore philosophy is to manage state away from the UI layer, leaving the UI layer as thin as possible. fore puts state in the models where it can be comprehensively unit tested. For example, if you want to display a game's score, the place to manage that state is in a GameModel. The view simply represents whatever state the GameModel has, and is synchronised everytime the (observable) GameModel changes:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -77,7 +77,7 @@ Notice the syncView() method does not take a parameter. It gets all it needs fro
 
 ## Dependency arrows
 
-If you know your MV[X]s then you'll notice MVO has some similarity with both MVI and MVVM. As with all MV[X] architectures, with MVO the Model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the android lifecyce and re-draws the state provided to it by the model. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model or an intemediary viewModel (from the UI thread - asynchronous code is managed in the models, not at the UI layer). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
+If you know your MV[X]s then you'll notice MVO has some similarity with both MVI and MVVM. As with all MV[X] architectures, with MVO the Model knows nothing about the View. When the view is destroyed and recreated, the view re-attaches itself to the model in line with the android lifecycle and re-draws the state provided to it by the model. Any click listeners or method calls as a result of user interaction are sent directly to the relevant model or an intemediary viewModel (from the UI thread - asynchronous code is managed in the models, not at the UI layer). With this architecture you remove a lot of problems around lifecycle management and handling rotations, it also turns out that the code to implement this is a lot less verbose **(and it's also very testable and scalable)**.
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 

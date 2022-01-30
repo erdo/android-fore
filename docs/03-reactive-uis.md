@@ -17,14 +17,31 @@ By extending ObservableImp / implementing Observable in the case of java, or del
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
 - When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
 - For this to work, all a model must do is call **notifyObservers()** whenever its own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
-- When the model is constructed in **ASYNCHRONOUS** mode (which is the default), these notifications will always be delivered on the UI thread so that view code need not do anything special to update the UI (**SYNCHRONOUS** mode is useful for running unit tests)
-- To avoid memory leaks, **views are responsible for removing their observer callback** from the observable model once they are no longer interested in receiving notifications
-- Typically Views **add()** and **remove()** their observer callbacks in android lifecycle methods such as Activity.onStart() / Activity.onStop or View.onAttachedToWindow() / View.onDetachedFromWindow()
+- To avoid memory leaks, **views are responsible for removing their observer callback** from the observable model once they are no longer interested in receiving notifications. That's typically a one liner: ```lifecycle.addObserver(LifecycleObserver(this, wallet))``` (or for compose: ```val walletState by wallet.observeAsState { wallet.state }```)
 - The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observer is required.
 
-## Connecting Views and Models
+## Connecting Compose Views and Models
 
-So basically, somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
+For Compose UIs, use fore's observerAsState() extension function
+
+<pre class="codesample"><code>val walletState by wallet.observeAsState { wallet.state }
+</code></pre>
+
+## Connecting Non-Compose Views and Models
+
+For Non-Compose UIs, use fore's lifecycleObserver
+
+<pre class="codesample"><code>lifecycle.addObserver(LifecycleObserver(this, wallet))
+</code></pre>
+
+This will also enable you to observer mutliple models if required
+
+<pre class="codesample"><code>lifecycle.addObserver(LifecycleObserver(this, wallet, account, inbox))
+</code></pre>
+
+### How the Non-Compose UI works (long version)
+
+Somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
 
 
 <!-- Tabbed code sample -->
@@ -238,11 +255,13 @@ For some specific use cases: handling streams of changing data, which you want t
  - connect to a network to download discreet pieces of data (_always_ on an IO thread)
  - update a UI, based on some change of state (_always_ on the UI thread)
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can just have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this giving it unasked-for complexity (even code that isn't, and has no need to be, reactive in the first place).
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be, reactive in the first place). This is how reactive streams can unintentionally spread complexity throughout a code base. When this tendency to spread is combined with a large non-obvious API, and a focus on asynchronicity even when none is required it can quite easily swamp otherwise fairly trivial app projects. That risk is increased on larger projects employing developers with a mixture of skill levels, especially where there is a reasonably high turn over of developers. Keeping control of ever ballooning complexity in these situations can be a significant challenge.
 
-*By the way, in case callback-hell is a worry, there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless of reactive streams.*
+This is somewhat related to the famous [what color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) blog post - although that post is dealing with asynchronous code in general, which kotlin's **suspend** [handles pretty well](https://elizarov.medium.com/how-do-you-color-your-functions-a6bb423d936d). There is a parallel here though where blue is regular code, and red is reactive-streams code.
 
-Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does - it deals exclusively with the first, letting you handle the second however you wish). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; won't slowly spread throughout your code base.
+*Aside: the justification for using reactive-streams in android used to be to prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless.*
+
+Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does - it deals exclusively with the first, letting you handle the second however you wish). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; or Flow&lt;Somethings&gt; won't slowly spread throughout your code base.
 
 It turns out that this separation **also** has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
