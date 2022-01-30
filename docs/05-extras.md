@@ -57,7 +57,7 @@ Now let's think about the UI that might represent that error. Maybe when you are
 
 Looks like choosing to store our error as state was the right move here.
 
-Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in **fore** you would use a  [Trigger](https://erdo.github.io/android-fore/01-views.html#trigger) that bridges the two worlds of state and events, letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler.
+Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in **fore** you would use a  [Trigger](https://erdo.github.io/android-fore/01-views.html#synctrigger) that bridges the two worlds of state and events, letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler.
 
 After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - maybe you want to treat everything as state just for consistency. That's where you need to make a decision about state versus event.
 
@@ -65,9 +65,9 @@ This comes up a lot with displaying menus, popups, errors and running animations
 
 # Android's Original Mistake
 
-Separating view code from everything else is widely considered a good thing, but despite that agreement, it's still common to see android apps that write most of their code in the view layer.
+[This is old history BTW, just here for interest]. Separating view code from everything else is widely considered a good thing, but despite that agreement, it's still common to see android apps that write most of their code in the view layer.
 
-Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains to this day.
+Unfortunately, right from its inception the Android platform was developed with almost no consideration for data binding or for a separation between view code and testable business logic, and that legacy remains in many code bases to this day.
 
 Instead of separating things *horizontally* in layers with views in one layer and data in another layer, the Android designers separated things *vertically*. Each self contained Activity (incorporating UI, data and logic) wrapped up in its own little reusable component. That's also probably why testing was such an afterthought for years with Android - if you architect your apps like this, testing them becomes extremely difficult.
 
@@ -85,8 +85,9 @@ Despite the obvious problems of writing networking code or maintaining non-UI st
 
 If you're a new android developer the above description might not be that familiar, things did finally improve in android world when ViewModels were introduced. Although the situation hasn't gone away, just moved to a component that has a longer lifecycle.
 
-Fortunately it's almost all completely unecessary. The [sample apps](https://erdo.github.io/android-fore/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
+The fore [sample apps](https://erdo.github.io/android-fore/#sample-apps) should clearly demonstrate just how clean android code can become once you start properly separating view code from everything else.
 
+With the advent of Compose UI, this situation changes again! As Composables replace XML layouts, they do have a mixture of data and UI in them (though hopefully not business logic).
 
 # Troubleshooting / How to Smash Code Reviews
 Android apps that are written in **MVO** style have a certain *look* to them code-wise, the code in these docs and the sample apps looks very similar. This really helps when performing code reviews because structural errors tend to jump out at you a little more. The first part of this [**post**](https://www.joelonsoftware.com/2005/05/11/making-wrong-code-look-wrong/) explains the concept better than I could, and I'd recommend you give it a quick read.
@@ -112,7 +113,7 @@ Given any app that is using **fore** observables to implement an MVO style archi
 * 1) If the **model** is later refactored to contain some other piece of state that changes, it will result in an additional notification, and therefore call to syncView(), that your view was not prepared for.
 * 2) If the **view** is later refactored to observe an additional model, that additional model will also notify when its state changes, and you will get more syncView() calls than you were prepared for.
 
-*The deal is that whenever something (anything) changes in a model, you will be notified. But you maybe be notified more than you expect. In order to be robust, your syncView() must make no assumptions about the number of times it may or may not be called. Sometimes you will of course need to bridge the world of syncing views and triggering one off events, and the way you do that in fore is to use a [Trigger](https://erdo.github.io/android-fore/01-views.html#triggers).*
+*The deal is that whenever something (anything) changes in a model, you will be notified. But you maybe be notified more than you expect. In order to be robust, your syncView() must make no assumptions about the number of times it may or may not be called. Sometimes you will of course need to bridge the world of syncing views and triggering one off events, and the way you do that in fore is to use a [Trigger](https://erdo.github.io/android-fore/01-views.html#synctrigger).*
 
 ### Occasional Issues
 
@@ -277,7 +278,7 @@ Inversion of control means turning that control on its head and giving it to the
 
 ## <a name="observer-listener"></a> 1) When should I use an Observer, when should I use a callback listener?
 
-Note: I am personally on the fence about this, it is certainly more convenient sometimes to just have a callback from a model for: event based / transitory data - but you really need to know what you are doing to make that judgement. If you'd rather take that decision out of the hands of more junior developers, not allowing any callbacks in model APIs is one approach. It would mean that you would have to expose this event/transitory based data via regular getters or properties exposing state, and you would need to use something like a [Trigger](https://erdo.github.io/android-fore/01-views.html#trigger) to convert a **change of state** into an **event**, suitable for displaying in a toast for example. Basically: more complicated, but also more consistent with how regular state is handled. In case this is unfamiliar to you, there is a little presentation [here](http://state-event.surge.sh/) (click **s** to view the presentation notes) that discusses the relationship between state and events.
+Note: I am personally on the fence about this, it is certainly more convenient sometimes to just have a callback from a model for: event based / transitory data - but you really need to know what you are doing to make that judgement. If you'd rather take that decision out of the hands of more junior developers, not allowing any callbacks in model APIs is one approach. It would mean that you would have to expose this event/transitory based data via regular getters or properties exposing state, and you would need to use something like a [Trigger](https://erdo.github.io/android-fore/01-views.html#synctrigger) to convert a **change of state** into an **event**, suitable for displaying in a toast for example. Basically: more complicated, but also more consistent with how regular state is handled. In case this is unfamiliar to you, there is a little presentation [here](http://state-event.surge.sh/) (click **s** to view the presentation notes) that discusses the relationship between state and events.
 
 So having said that: if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) and you don't care if that data gets lost on rotation for example, then a regular callback could serve you better, it depends entirely on your apps requirements. More about how to treat state [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events).
 

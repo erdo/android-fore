@@ -54,7 +54,7 @@ I'm going to defer to the [dev.to spot the bug tutorial](https://dev.to/erdo/tut
 
 ### Writing an effective syncView() method
 
-*A lot of this advice also applies to writing MVI render() methods. MVO's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
+*A lot of this advice also applies to writing MVI render() methods. MVI's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
 
 As part of refreshing the entire view, the syncView() method must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
 
@@ -149,7 +149,7 @@ fun syncView() {
 _(You can now also use the extension functions from androidx such as **isVisible** and **isGone**, although they are unfortunately a bit less explicit than they could be. The trouble is visibilty has 3 states: VISIBLE, INVISIBLE, and GONE. The androidx extension functions only mention one state, the negative case is left for you to remember. For instance does isVisible=false mean INVISIBLE? nope, it means GONE 🤷)_
 
 ### Don't count notifications
-Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors. Check out the [Triggers](https://erdo.github.io/android-fore/01-views.html#triggers) below it case they fit your situation.
+Be careful not to rely on syncView() being called a certain number of times, as it results in fragile code. You can't predict when it will be called, and your syncView() code needs to be prepared for that. Make sure you understand [this](https://erdo.github.io/android-fore/05-extras.html#notification-counting) and you'll be writing solid syncView() implementations that will survive code refactors. Check out the [Triggers](https://erdo.github.io/android-fore/01-views.html#synctrigger) below it case they fit your situation.
 
 ### Beware infinite loops
 One final point to mention is about syncing your view directly from UI element "changed" listeners. It's generally fine to do that, and you should be able to call syncView() whenever you like, after all.
@@ -159,7 +159,7 @@ However, you will usually be setting a state on that UI element during your sync
 Of course, if you're setting a state on a UI element which is the same as the state it already had, it shouldn't be firing its "changed" listeners anyway. But Android. And indeed Android's EditText calls afterTextChanged() even when the text is identical to what it had before. Thankfully it's not a very common issue and the [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java) is easy. (Interesting that the equivalent TextInput component of ReactNative doesn't suffer from this "feature").
 
 
-## <a name="synctrigger"></a> <a name="Triggers"></a> Triggers [non-compose only]
+## <a name="synctrigger"></a> Triggers [non-compose only]
 
 A Trigger is fore's way of bridging the **world of state** (which is what drives a UI in architectures like MVO) and the **world of events** (which tend to happen on changes of state). There is a presentation about State vs Events [here](https://erdo.github.io/android-fore/05-extras.html#presentations).
 

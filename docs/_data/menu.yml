@@ -25,7 +25,7 @@
     - text: SyncView()
       url: "#syncview"
     - text: Triggers
-      url: "#triggers"
+      url: "#synctrigger"
     - text: Examples
       url: "#view-examples"
 - text: O (observers)
