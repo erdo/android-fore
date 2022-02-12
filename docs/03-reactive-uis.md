@@ -172,7 +172,7 @@ abstract class BaseViewModel(
 }
  </code></pre>
 
-As you can see in the example BaseViewModel above, the observers will exist throught the life time of your viewmodel (which may or may not be what you want). You can add / remove the observers in line with  onStart / onStop by adding the onStart() and onStop() functions to the viewModel yourself and calling them from the host fragment or activity (the androidx viewModel doesn't support support for onStart onStop by itself).
+As you can see in the example BaseViewModel above, the observers will exist throught the life time of your viewmodel (which may or may not be what you want). You can add / remove the observers in line with  onStart / onStop by adding the onStart() and onStop() functions to the viewModel yourself and calling them from the host fragment or activity (the androidx viewModel doesn't have support for onStart onStop by itself).
 
 You can alternatively use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
 

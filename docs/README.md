@@ -36,6 +36,34 @@ implementation("co.early.fore:fore-kt-android-compose:1.1.0-rc03")
 
 **fore** doesn't do everything for you (it doesn't do much actually) you have to understand where and how to use it, which is why there is so much focus on these docs and the sample apps.
 
+The quickest integration, observe your model(s)
+
+```
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    //setup observers
+    lifecycle.addObserver(LifecycleObserver(this, viewModel))
+
+    ....
+}
+```
+
+and then implement the syncView() function
+
+```
+//called on the UI thread, whenever the viewModel state changes
+override fun syncView() {
+    viewModel.viewState.apply {
+        dashboard_busy.showOrInvisible(isLoading)
+        dashboard_updatenow_btn.isEnabled = !isLoading
+        dashboard_pollenlevel_img.setImageResource(pollenLevel.toImgRes())
+        ...
+    }
+}
+```
+Full examples: [here](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt)
+
 ## Overview
 
 Imagine your app existing entirely separately from its UI (its UI could be a command line interface, or a GUI, compose or otherwise - the app shouldn't care or even know what type of UI it has). Then imagine the UI layer as a thin window on to this app, free to deal exclusively with _what things look like_.
@@ -351,7 +379,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2015-2021 early.co
+    Copyright 2015-2022 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
