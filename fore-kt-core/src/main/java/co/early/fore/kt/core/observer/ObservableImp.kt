@@ -9,6 +9,8 @@ import co.early.fore.kt.core.delegate.Fore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import java.lang.IllegalArgumentException
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 
 /**
@@ -42,27 +44,30 @@ class ObservableImp(
 ) : Observable {
 
     private val observerList = mutableListOf<Observer>()
+    private val addRemoveLock = ReentrantLock(true)
 
     /**
      * Take the observer and add it to the list of registered observers that
      * want to be notified when the model data changes. Usually you will do this
      * from android lifecycle methods like onStart() (and remove the observer in onStop())
      */
-    @Synchronized
     override fun addObserver(observer: Observer) {
 
-        observerList.add(observer)
+        addRemoveLock.withLock {
 
-        if (observerList.size > 4) {
-            Fore.getLogger(logger).w(
-                    "There are now:" + observerList.size + " Observers added to this Observable, that's quite a lot.\n" +
-                    "It's sometimes indicative of code which is not removing observers when it should\n" +
-                    "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
-                    "Failing to remove observers when you no longer need them will cause memory leaks,\n" +
-                    "you might want to look in to the ForeLifecycleObserver which handles this for you.\n" +
-                    "[If the number of observers steadily increases as you use the app, that's probably what you have,\n" +
-                    "if the number remains constant or goes down, then you're probably ok :) ]"
-            )
+            observerList.add(observer)
+
+            if (observerList.size > 4) {
+                Fore.getLogger(logger).w(
+                        "There are now:" + observerList.size + " Observers added to this Observable, that's quite a lot.\n" +
+                        "It's sometimes indicative of code which is not removing observers when it should\n" +
+                        "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
+                        "Failing to remove observers when you no longer need them will cause memory leaks,\n" +
+                        "you might want to look in to the ForeLifecycleObserver which handles this for you.\n" +
+                        "[If the number of observers steadily increases as you use the app, that's probably what you have,\n" +
+                        "if the number remains constant or goes down, then you're probably ok :) ]"
+                )
+            }
         }
     }
 
@@ -73,19 +78,22 @@ class ObservableImp(
      * @param observer the observer that is no longer interested in receiving updates
      * from the model when its data changes
      */
-    @Synchronized
     override fun removeObserver(observer: Observer) {
 
-        val beforeSize = observerList.size
-        observerList.remove(observer)
-        if (observerList.size == beforeSize) {
-            Fore.getLogger(logger).w(
+        addRemoveLock.withLock {
+
+            val beforeSize = observerList.size
+            observerList.remove(observer)
+
+            if (observerList.size == beforeSize) {
+                Fore.getLogger(logger).w(
                     "You have tried to remove an observer that wasn't added in the first place. This is almost certainly an error and " +
-                    "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
-                    "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
-                    "references in Kotlin: val observer = Observer { doStuffOnChange } will work, val observer = ::doStuffOnChange() " +
-                    "will NOT work, but it will compile."
-            )
+                            "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
+                            "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
+                            "references in Kotlin: val observer = Observer { doStuffOnChange } will work, val observer = ::doStuffOnChange() " +
+                            "will NOT work, but it will compile."
+                )
+            }
         }
     }
 
@@ -110,7 +118,6 @@ class ObservableImp(
      * Synchronizing any list updates is not enough, Android will call Adapter.count() and
      * Adapter.get() on the UI thread and you cannot change the adapter's size between these calls.
      */
-    @Synchronized
     override fun notifyObservers() {
 
         var dispatch = dispatcher
@@ -130,14 +137,18 @@ class ObservableImp(
         }
 
         launchCustom(dispatch, Fore.getWorkMode(notificationMode)) {
-            for (observer in observerList) {
-                doNotification(observer)
+            addRemoveLock.withLock {
+                for (observer in observerList) {
+                    doNotification(observer)
+                }
             }
         }
     }
 
     override fun hasObservers(): Boolean {
-        return observerList.size > 0
+        return addRemoveLock.withLock {
+            observerList.size > 0
+        }
     }
 
     private fun doNotification(observer: Observer) {
