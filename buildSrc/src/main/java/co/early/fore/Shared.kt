@@ -25,7 +25,7 @@ object Shared {
         const val apollo = "2.5.4"
         const val apollo3 = "3.0.0"
         const val retrofit = "2.9.0"
-        const val compose = "1.1.0-rc03"
+        const val compose = "1.1.0"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
