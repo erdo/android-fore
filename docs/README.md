@@ -259,6 +259,8 @@ There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tut
 
 A few other sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore. Like this sample app which uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) structure (which now also comes with it's own [article](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3)) or the [Apollo3](https://dev.to/erdo/android-apollo3-and-graphql-1e8m) article and sample app on dev.to
 
+The most recent sample comes with the [fore and Compose article](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) on dev.to which covers the basics of migrating a tick-tac-toe app from MVP to Compose.
+
 If you have a question about the best way to achieve what you want with fore, consider opening an issue (even better, a stackoverflow question which you can link to from an issue). Also, if you want to write an article related to fore, if you open an issue about it, we might include a link to it from the docs
 
 ## Sample Apps
