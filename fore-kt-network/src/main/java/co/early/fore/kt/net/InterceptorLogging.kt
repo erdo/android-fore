@@ -17,6 +17,8 @@ import okio.Buffer
 import kotlin.concurrent.withLock
 import kotlin.reflect.KVisibility
 
+const val BIG_LOG = 250000
+
 /**
  * see https://github.com/square/okhttp/blob/master/okhttp-logging-interceptor/src/main/java/okhttp3/logging/HttpLoggingInterceptor.java
  */
@@ -108,10 +110,17 @@ class InterceptorLogging @JvmOverloads constructor(
                     truncate(networkingLogSanitizer.sanitizeBody(buffer.clone().readString(charset)))
                 } ?: truncate(buffer.clone().readString(charset))
 
-                val wrappedLines = BasicTextWrapper.wrapMonospaceText(
+                try {
+                    val wrappedLines = BasicTextWrapper.wrapMonospaceText(
                         body.replace(",", ", "),
-                        150)
-                logLines(wrappedLines, randomPostTag)
+                        150
+                    )
+                    logLines(wrappedLines, randomPostTag)
+                } catch (oom: OutOfMemoryError) {
+                    Fore.getLogger(logger).e("Network request was too large to format nicely, consider reducing maxBodyLogCharacters from:$maxBodyLogCharacters")
+                    Fore.getLogger(logger).e(oom.toString())
+                }
+
             } else {
                 Fore.getLogger(logger).i(TAG + randomPostTag, "$method- binary data -")
             }
@@ -144,8 +153,13 @@ class InterceptorLogging @JvmOverloads constructor(
             } else {
                 if (contentLength != 0L) {
                     val bodyJson = truncate(buffer.clone().readString(charset))
-                    val wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
-                    logLines(wrappedLines, randomPostTag)
+                    try {
+                        val wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
+                        logLines(wrappedLines, randomPostTag)
+                    } catch (oom: OutOfMemoryError) {
+                        Fore.getLogger(logger).e("Network response was too large to format nicely, consider reducing maxBodyLogCharacters from:$maxBodyLogCharacters")
+                        Fore.getLogger(logger).e(oom.toString())
+                    }
                 } else {
                     Fore.getLogger(logger).i(TAG + randomPostTag, " (no body content)")
                 }
@@ -161,7 +175,8 @@ class InterceptorLogging @JvmOverloads constructor(
 
     private fun truncate(potentiallyLongString: String): String {
         return if (potentiallyLongString.length > maxBodyLogCharacters) {
-            potentiallyLongString.substring(0, maxBodyLogCharacters) + "...truncated (set maxBodyLogCharacters=Int.MAX_VALUE)"
+            potentiallyLongString.substring(0, maxBodyLogCharacters) + "...truncated " +
+                    if (maxBodyLogCharacters < BIG_LOG) { "(set maxBodyLogCharacters=BIG_LOG)" } else ""
         } else {
             potentiallyLongString
         }

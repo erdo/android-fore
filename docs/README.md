@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.8](https://img.shields.io/badge/central-1.5.8-green.svg){: .float-left}
+![central-1.5.9](https://img.shields.io/badge/central-1.5.9-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -18,7 +18,7 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.8")
+implementation("co.early.fore:fore-kt-android:1.5.9")
 ```
 
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -27,7 +27,7 @@ More detailed [version information here](https://erdo.github.io/android-fore/06-
 
 For Compose, use fore's observeAsState() function (the versioning matches compose itself)
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.1.0-rc03")
+implementation("co.early.fore:fore-kt-android-compose:1.1.0")
 ```
 
 ## New to fore
@@ -258,6 +258,8 @@ This repo includes the tiny fore library, the optional packages, and 12 mini exa
 There are also a few tutorials on dev.to [like this one](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) which demonstrates how the syncView() convention helps you to write less code, while removing a whole class of UI consistency bugs from the UI layer. Or [this one](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) which details the whys and the hows of converting the Android Architecture Blueprint Todo sample app from MVP to [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) using fore.
 
 A few other sample apps are listed in the [github project summary](https://github.com/erdo?tab=projects) for android-fore. Like this sample app which uses fore to implement a [clean architecture module](https://github.com/erdo/clean-modules-sample) structure (which now also comes with it's own [article](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3)) or the [Apollo3](https://dev.to/erdo/android-apollo3-and-graphql-1e8m) article and sample app on dev.to
+
+The most recent sample comes with the [fore and Compose article](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) on dev.to which covers the basics of migrating a tick-tac-toe app from MVP to Compose.
 
 If you have a question about the best way to achieve what you want with fore, consider opening an issue (even better, a stackoverflow question which you can link to from an issue). Also, if you want to write an article related to fore, if you open an issue about it, we might include a link to it from the docs
 

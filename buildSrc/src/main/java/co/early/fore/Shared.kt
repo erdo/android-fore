@@ -25,7 +25,7 @@ object Shared {
         const val apollo = "2.5.4"
         const val apollo3 = "3.0.0"
         const val retrofit = "2.9.0"
-        const val compose = "1.1.0-rc03"
+        const val compose = "1.1.0"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
@@ -59,8 +59,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.8" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 75
+        const val LIB_VERSION_NAME = "1.5.9" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 76
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
