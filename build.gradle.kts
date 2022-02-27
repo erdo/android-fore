@@ -3,7 +3,7 @@
  * ./gradlew check
  *
  * ./gradlew testDebugUnitTest
- * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel
+ * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue
  * ./gradlew connectedAndroidTest -PtestBuildType=release
  * ./gradlew example-kt-01reactiveui:testDebugUnitTest --info
  * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
@@ -29,6 +29,9 @@
  *
  * bundle lock --update
  * bundle install
+ *
+ * git tag -a v1.5.9 -m 'v1.5.9'
+ * git push origin --tags
  */
 buildscript {
     repositories {
