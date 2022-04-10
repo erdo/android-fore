@@ -15,11 +15,11 @@ object Shared {
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.0.4"
-        const val kotlin_version = "1.6.10"
-        const val kotlinx_coroutines_core = "1.6.0"
+        const val android_gradle_plugin = "7.1.0"
+        const val kotlin_version = "1.6.20"
+        const val kotlinx_coroutines_core = "1.6.1"
         // fore optional package dependencies
-        const val kotlinx_coroutines_android = "1.6.0"
+        const val kotlinx_coroutines_android = "1.6.1"
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"

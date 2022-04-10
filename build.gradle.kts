@@ -5,6 +5,7 @@
  * ./gradlew testDebugUnitTest
  * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue
  * ./gradlew connectedAndroidTest -PtestBuildType=release
+ * ./gradlew example-kt-01reactiveui:connectedAndroidTest -PtestBuildType=release --info
  * ./gradlew example-kt-01reactiveui:testDebugUnitTest --info
  * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
  *
