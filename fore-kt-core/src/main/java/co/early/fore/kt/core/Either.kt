@@ -1,5 +1,8 @@
 package co.early.fore.kt.core
 
+typealias Error<E> = Either.Left<E>
+typealias Success<R> = Either.Right<R>
+
 sealed class Either<out L, out R> {
     data class Left<out L> internal constructor(val a: L) : Either<L, Nothing>() {
         companion object {

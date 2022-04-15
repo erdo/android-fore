@@ -32,8 +32,8 @@ launchMain(workMode) {
     }
 
     when (result) {
-        is Left -> handleFailure(failureWithPayload, result.a)
-        is Right -> handleSuccess(success, result.b)
+        is Error -> handleFailure(failureWithPayload, result.a)
+        is Success -> handleSuccess(success, result.b)
     }
 }
  </code></pre>

@@ -1,12 +1,12 @@
 package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.apollo.CallProcessorApollo
+import foo.bar.example.foreapollokt.feature.FailureCallback
+import foo.bar.example.foreapollokt.feature.SuccessCallback
 import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.graphql.LaunchListQuery
 import foo.bar.example.foreapollokt.message.ErrorMessage
@@ -34,10 +34,10 @@ class LaunchesModelUnitTest {
     private val launch = Launch("123", "site", true, "http://www.test.com/someimage.png")
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
     private lateinit var mockCallProcessorApollo: CallProcessorApollo<ErrorMessage>

@@ -68,7 +68,11 @@ apollo {
 }
 
 // fetch the graphql schema:
-//./gradlew :example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'
+// ./gradlew :example-kt-07apollo:downloadApolloSchema --endpoint="https://apollo-fullstack-tutorial.herokuapp.com/" --schema="src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json"
+//
+// dev.to article
+// https://dev.to/erdo/android-apollo3-and-graphql-1e8m
+//
 // creating graphql queries:
 // https://www.youtube.com/watch?v=omSpI1Nu_pg
 

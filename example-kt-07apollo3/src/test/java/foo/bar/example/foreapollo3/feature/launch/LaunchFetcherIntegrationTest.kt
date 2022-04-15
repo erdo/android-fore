@@ -1,7 +1,5 @@
 package foo.bar.example.foreapollo3.feature.launch
 
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
@@ -14,6 +12,8 @@ import foo.bar.example.foreapollo3.*
 import foo.bar.example.foreapollo3.api.CommonServiceFailures
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
+import foo.bar.example.foreapollo3.feature.FailureCallback
+import foo.bar.example.foreapollo3.feature.SuccessCallback
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.MockKAnnotations
@@ -42,13 +42,13 @@ class LaunchFetcherIntegrationTest {
     private val callProcessor = CallProcessorApollo3(CustomGlobalErrorHandler(logger))
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
 
     @MockK
     private lateinit var mockAuthenticator: Authenticator
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
 
     @Before

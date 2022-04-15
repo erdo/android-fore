@@ -1,8 +1,6 @@
 package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.testhelpers.CountDownLatchWrapper.runInBatch
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
@@ -14,6 +12,8 @@ import com.apollographql.apollo.api.Input
 import foo.bar.example.foreapollokt.api.CommonServiceFailures
 import foo.bar.example.foreapollokt.api.CustomApolloBuilder
 import foo.bar.example.foreapollokt.api.CustomGlobalErrorHandler
+import foo.bar.example.foreapollokt.feature.FailureCallback
+import foo.bar.example.foreapollokt.feature.SuccessCallback
 import foo.bar.example.foreapollokt.feature.authentication.Authenticator
 import foo.bar.example.foreapollokt.graphql.*
 import foo.bar.example.foreapollokt.message.ErrorMessage
@@ -46,13 +46,13 @@ class LaunchFetcherIntegrationTest {
     private val callProcessor = CallProcessorApollo(CustomGlobalErrorHandler(logger))
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
 
     @MockK
     private lateinit var mockAuthenticator: Authenticator
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
 
     @Before

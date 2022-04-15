@@ -1,10 +1,8 @@
 package foo.bar.example.foreapollo3.feature.launch
 
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.Either.Left
-import co.early.fore.kt.core.Either.Right
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.Error
+import co.early.fore.kt.core.Success
 import co.early.fore.kt.core.carryOn
 import co.early.fore.kt.core.coroutine.awaitMain
 import co.early.fore.kt.core.coroutine.launchIO
@@ -13,6 +11,8 @@ import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.net.apollo3.CallProcessorApollo3
 import com.apollographql.apollo3.api.ApolloResponse
 import foo.bar.example.foreapollo3.*
+import foo.bar.example.foreapollo3.feature.FailureCallback
+import foo.bar.example.foreapollo3.feature.SuccessCallback
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import java.util.*
@@ -42,8 +42,8 @@ class LaunchesModel(
      * fetch the list of launches using a GraphQl Query, select one at random for the UI
      */
     fun fetchLaunches(
-        success: Success,
-        failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: SuccessCallback,
+        failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("fetchLaunches()")
@@ -64,8 +64,8 @@ class LaunchesModel(
 
             awaitMain {
                 when (val result = deferredResult.await()) {
-                    is Right -> handleSuccess(success, selectRandomLaunch(result.b.data.launches))
-                    is Left -> handleFailure(failureWithPayload, result.a)
+                    is Success -> handleSuccess(success, selectRandomLaunch(result.b.data.launches))
+                    is Error -> handleFailure(failureWithPayload, result.a)
                 }
             }
         }
@@ -78,8 +78,8 @@ class LaunchesModel(
      * it was > re-fetch the launch detail again
      */
     fun chainedCall(
-        success: Success,
-        failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: SuccessCallback,
+        failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("chainedCall()")
@@ -135,15 +135,15 @@ class LaunchesModel(
 
             awaitMain {
                 when (response) {
-                    is Left -> handleFailure(failureWithPayload, response.a)
-                    is Right -> handleSuccess(success, response.b.data.launch?.toApp() ?: NO_LAUNCH)
+                    is Error -> handleFailure(failureWithPayload, response.a)
+                    is Success -> handleSuccess(success, response.b.data.launch?.toApp() ?: NO_LAUNCH)
                 }
             }
         }
     }
 
     private fun handleSuccess(
-        success: Success,
+        success: SuccessCallback,
         launch: Launch
     ) {
 
@@ -155,7 +155,7 @@ class LaunchesModel(
     }
 
     private fun handleFailure(
-        failureWithPayload: FailureWithPayload<ErrorMessage>,
+        failureWithPayload: FailureCallback<ErrorMessage>,
         failureMessage: ErrorMessage
     ) {
 

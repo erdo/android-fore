@@ -2,12 +2,10 @@ package foo.bar.example.forektorkt.feature.fruit
 
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.core.Either.Left
-import co.early.fore.kt.core.Either.Right
+import co.early.fore.kt.core.Error
+import co.early.fore.kt.core.Success
 import co.early.fore.kt.core.carryOn
 import co.early.fore.kt.net.ktor.CallProcessorKtor
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
@@ -16,6 +14,8 @@ import foo.bar.example.forektorkt.api.fruits.FruitsCustomError
 import foo.bar.example.forektorkt.message.ErrorMessage
 import java.util.Random
 
+typealias SuccessCallback = () -> Unit
+typealias FailureCallback<T> = (T) -> Unit
 
 /**
  * gets a list of fruit from the network, selects one at random to be currentFruit
@@ -33,8 +33,8 @@ class FruitFetcher(
 
 
     fun fetchFruitsAsync(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+            success: SuccessCallback,
+            failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsAsync() t:" + Thread.currentThread())
@@ -59,8 +59,8 @@ class FruitFetcher(
             }
 
             when (val result = deferredResult.await()) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+                is Error -> handleFailure(failureWithPayload, result.a)
+                is Success -> handleSuccess(success, result.b)
             }
         }
 
@@ -72,8 +72,8 @@ class FruitFetcher(
      * we also don't specify a custom error class here
      */
     fun fetchFruitsButFail(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+            success: SuccessCallback,
+            failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFail()")
@@ -94,8 +94,8 @@ class FruitFetcher(
             }
 
             when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+                is Error -> handleFailure(failureWithPayload, result.a)
+                is Success -> handleSuccess(success, result.b)
             }
         }
     }
@@ -106,8 +106,8 @@ class FruitFetcher(
      * here we specify a custom error class for more detail about the error than just an HTTP code can give us
      */
     fun fetchFruitsButFailAdvanced(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+            success: SuccessCallback,
+            failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("fetchFruitsButFailAdvanced()")
@@ -127,8 +127,8 @@ class FruitFetcher(
             }
 
             when (result) {
-                is Left -> handleFailure(failureWithPayload, result.a)
-                is Right -> handleSuccess(success, result.b)
+                is Error -> handleFailure(failureWithPayload, result.a)
+                is Success -> handleSuccess(success, result.b)
             }
         }
     }
@@ -139,8 +139,8 @@ class FruitFetcher(
      * simple way
      */
     fun chainedCall(
-            success: Success,
-            failureWithPayload: FailureWithPayload<ErrorMessage>
+            success: SuccessCallback,
+            failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("chainedCall()")
@@ -201,14 +201,14 @@ class FruitFetcher(
             }
 
             when (response) {
-                is Left -> handleFailure(failureWithPayload, response.a)
-                is Right -> handleSuccess(success, response.b)
+                is Error -> handleFailure(failureWithPayload, response.a)
+                is Success -> handleSuccess(success, response.b)
             }
         }
     }
 
     private fun handleSuccess(
-            success: Success,
+            success: SuccessCallback,
             successResponse: List<FruitPojo>
     ) {
 
@@ -220,7 +220,7 @@ class FruitFetcher(
     }
 
     private fun handleFailure(
-            failureWithPayload: FailureWithPayload<ErrorMessage>,
+            failureWithPayload: FailureCallback<ErrorMessage>,
             failureMessage: ErrorMessage
     ) {
 
