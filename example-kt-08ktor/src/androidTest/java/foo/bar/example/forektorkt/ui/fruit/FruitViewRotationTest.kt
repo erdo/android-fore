@@ -14,15 +14,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.Either
 import co.early.fore.kt.net.ktor.CallProcessorKtor
 import foo.bar.example.forektorkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.forektorkt.R
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
+import foo.bar.example.forektorkt.feature.fruit.FailureCallback
 import foo.bar.example.forektorkt.feature.fruit.FruitFetcher
+import foo.bar.example.forektorkt.feature.fruit.SuccessCallback
 import foo.bar.example.forektorkt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -59,9 +59,9 @@ class FruitViewRotationTest {
     private var fruitPojo = FruitPojo("testFruit1", true, 45)
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
     @MockK
     lateinit var mockCallProcessorKtor: CallProcessorKtor<ErrorMessage>
     @MockK

@@ -1,15 +1,15 @@
 package foo.bar.example.foreapollokt.feature.authentication
 
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.Either.Left
-import co.early.fore.kt.core.Either.Right
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
+import co.early.fore.kt.core.Error
+import co.early.fore.kt.core.Success
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 import co.early.fore.kt.net.apollo.CallProcessorApollo
 import com.apollographql.apollo.ApolloMutationCall
+import foo.bar.example.foreapollokt.feature.FailureCallback
+import foo.bar.example.foreapollokt.feature.SuccessCallback
 import foo.bar.example.foreapollokt.graphql.LoginMutation
 import foo.bar.example.foreapollokt.message.ErrorMessage
 
@@ -36,8 +36,8 @@ class Authenticator(
      */
     fun login(
         email: String,
-        success: Success,
-        failureWithPayload: FailureWithPayload<ErrorMessage>
+        success: SuccessCallback,
+        failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
         logger.i("login() :$email")
@@ -62,8 +62,8 @@ class Authenticator(
             }
 
             when (val result = deferredResult.await()) {
-                is Right -> handleSuccess(success, result.b.data.login)
-                is Left -> handleFailure(failureWithPayload, result.a)
+                is Success -> handleSuccess(success, result.b.data.login)
+                is Error -> handleFailure(failureWithPayload, result.a)
             }
         }
     }
@@ -96,7 +96,7 @@ class Authenticator(
     }
 
     private fun handleSuccess(
-        success: Success,
+        success: SuccessCallback,
         successResponse: String?
     ) {
 
@@ -108,7 +108,7 @@ class Authenticator(
     }
 
     private fun handleFailure(
-        failureWithPayload: FailureWithPayload<ErrorMessage>,
+        failureWithPayload: FailureCallback<ErrorMessage>,
         failureMessage: ErrorMessage
     ) {
 

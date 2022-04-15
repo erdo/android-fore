@@ -1,8 +1,6 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
@@ -47,10 +45,10 @@ class FruitFetcherIntegrationTest {
         CallProcessorRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
 
     @Before

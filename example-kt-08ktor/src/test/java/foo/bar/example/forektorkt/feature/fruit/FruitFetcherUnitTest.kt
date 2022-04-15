@@ -2,8 +2,6 @@ package foo.bar.example.forektorkt.feature.fruit
 
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.net.ktor.CallProcessorKtor
@@ -32,10 +30,10 @@ class FruitFetcherUnitTest {
     private val fruitPojo = FruitPojo("strawberry", false, 71)
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
     private lateinit var mockCallProcessorKtor: CallProcessorKtor<ErrorMessage>

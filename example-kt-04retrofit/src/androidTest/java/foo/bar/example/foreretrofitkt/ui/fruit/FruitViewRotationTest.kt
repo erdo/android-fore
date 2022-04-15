@@ -9,15 +9,15 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import co.early.fore.kt.core.Either
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
+import foo.bar.example.foreretrofitkt.feature.fruit.FailureCallback
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
+import foo.bar.example.foreretrofitkt.feature.fruit.SuccessCallback
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -54,10 +54,10 @@ class FruitViewRotationTest {
     private var fruitPojo = FruitPojo("testFruit1", true, 45)
 
     @MockK
-    private lateinit var mockSuccess: Success
+    private lateinit var mockSuccess: SuccessCallback
 
     @MockK
-    private lateinit var mockFailureWithPayload: FailureWithPayload<ErrorMessage>
+    private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
     lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
