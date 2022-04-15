@@ -28,7 +28,7 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
     compileSdk = Shared.Android.compileSdk
 
     lint {
-        isAbortOnError = true
+        abortOnError = true
         lintConfig = File(project.rootDir, "lint-library.xml")
     }
 

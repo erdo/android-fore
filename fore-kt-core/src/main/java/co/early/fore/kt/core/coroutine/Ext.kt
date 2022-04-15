@@ -7,6 +7,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
 /**
+ * Copyright © 2019 early.co. All rights reserved. (See update below)
+ *
  * Testing unwrapped co-routines is not as straight forward as it could be, depending on
  * kotlinx-coroutines-test, was not giving us determinate test results at
  * the moment - and for unit tests that's a total deal breaker. It's ok to test single suspend
@@ -27,8 +29,6 @@ import kotlin.coroutines.coroutineContext
  * NB. This means there is no virtual time unless you implement it yourself though, for instance if you have code
  * like this in your app: delay(10 000), it will sit there and wait during a unit test, same as it would in app code.
  * You can write something like this instead: delay(if (workMode == WorkMode.ASYNCHRONOUS) 10000 else 1)
- *
- * Copyright © 2019 early.co. All rights reserved.
  *
  * Update Jan 2022: hopefully the reworked version of kotlinx-coroutines-test for 1.6 is going to fix these
  * issues: https://blog.jetbrains.com/kotlin/2021/12/introducing-kotlinx-coroutines-1-6-0/

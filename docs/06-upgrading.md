@@ -1,7 +1,9 @@
 
 # Version information
 
-Since we've been publishing on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical. Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
+For the 5 years that fore has been published on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical (apart from the addition of kotlin / coroutines under the hood several years ago).
+
+Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
 **kotlin** API android package
 ```
@@ -31,7 +33,17 @@ co.early.fore:fore-jv-android-adapters
 co.early.fore:fore-jv-android-network
 ```
 
+If you have a kotlin only domain module you are using as part of a clean architecture implementation, this is the package to pull in to that module (full [clean modules example](https://github.com/erdo/clean-modules-sample)):
+```
+co.early.fore:fore-kt-core
+```
+
+## Maven central
+
 To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
+
+## kotlin 1.6.20
+**fore 1.5.10** bumps the kotlin version to 1.6.20
 
 ## kotlin 1.6.10
 **fore 1.5.8** bumps the kotlin version to 1.6.10
