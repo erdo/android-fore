@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.R
+import foo.bar.example.foreretrofitkt.feature.fruit.FailureCallback
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
+import foo.bar.example.foreretrofitkt.feature.fruit.SuccessCallback
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
@@ -28,10 +28,10 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
     private var observer = Observer { syncView() }
 
 
-    private val success: Success = {
+    private val success: SuccessCallback = {
         showToast("Success!")
     }
-    private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
+    private val failureWithPayload: FailureCallback<ErrorMessage> = { userMessage ->
         showToast(userMessage)
     }
 
