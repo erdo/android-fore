@@ -6,16 +6,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.callbacks.FailureWithPayload
-import co.early.fore.kt.core.callbacks.Success
 import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import coil.load
 import foo.bar.example.foreapollo3.OG
 import foo.bar.example.foreapollo3.R
+import foo.bar.example.foreapollo3.feature.FailureCallback
+import foo.bar.example.foreapollo3.feature.SuccessCallback
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
-import foo.bar.example.foreapollo3.feature.launch.NO_LAUNCH
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_launches.*
 
@@ -31,10 +30,10 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
     private var observer = Observer { syncView() }
 
 
-    private val success: Success = {
+    private val success: SuccessCallback = {
         showToast("Success!")
     }
-    private val failureWithPayload: FailureWithPayload<ErrorMessage> = { userMessage ->
+    private val failureWithPayload: FailureCallback<ErrorMessage> = { userMessage ->
         showToast(userMessage)
     }
 

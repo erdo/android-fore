@@ -26,7 +26,7 @@ object CustomApolloBuilder {
         return ApolloClient.Builder()
             .networkTransport(
                 HttpNetworkTransport.Builder()
-                    .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+                    .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com/graphql")
                     .okHttpClient(createOkHttpClient(*interceptors))
                     .build()
             ).build()

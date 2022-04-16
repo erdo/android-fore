@@ -23,7 +23,7 @@ object CustomApolloBuilder {
     fun create(vararg interceptors: Interceptor): ApolloClient {
 
         return ApolloClient.builder()
-                .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com")
+                .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com/graphql")
                 .okHttpClient(createOkHttpClient(*interceptors))
                 .build()
     }

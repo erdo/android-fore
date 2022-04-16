@@ -15,7 +15,7 @@ object Shared {
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.1.0"
+        const val android_gradle_plugin = "7.1.3"
         const val kotlin_version = "1.6.20"
         const val kotlinx_coroutines_core = "1.6.1"
         // fore optional package dependencies
@@ -23,7 +23,7 @@ object Shared {
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
         const val apollo = "2.5.4"
-        const val apollo3 = "3.0.0"
+        const val apollo3 = "3.2.2"
         const val retrofit = "2.9.0"
         const val compose = "1.1.1"
         // example app and test dependencies
@@ -59,8 +59,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.11" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 78
+        const val LIB_VERSION_NAME = "1.5.12" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 79
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -96,7 +96,7 @@ fun readProperties(propertiesFile: File): Properties {
             propertiesFile.inputStream().use { fis ->
                 load(fis)
             }
-            println("[SECRETS LOADED]\n")
+            println("[SECRETS LOADED]")
         } catch (exception: Exception) {
             println("WARNING $propertiesFile not found! \n")
             println("exception: $exception \n")
