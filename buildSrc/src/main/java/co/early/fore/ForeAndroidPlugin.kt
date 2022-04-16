@@ -49,6 +49,12 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
         }
     }
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+
     //logSourceSets(sourceSets)
 
     //register (not create) - we want this to run after the rest of the android

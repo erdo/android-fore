@@ -15,7 +15,7 @@ object Shared {
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.1.0"
+        const val android_gradle_plugin = "7.1.3"
         const val kotlin_version = "1.6.20"
         const val kotlinx_coroutines_core = "1.6.1"
         // fore optional package dependencies
@@ -96,7 +96,7 @@ fun readProperties(propertiesFile: File): Properties {
             propertiesFile.inputStream().use { fis ->
                 load(fis)
             }
-            println("[SECRETS LOADED]\n")
+            println("[SECRETS LOADED]")
         } catch (exception: Exception) {
             println("WARNING $propertiesFile not found! \n")
             println("exception: $exception \n")
