@@ -10,14 +10,10 @@ java {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-jv-core")
-    set("LIB_DESCRIPTION", "fore - java core code")
+    set("LIB_ARTIFACT_ID", "fore-base-core")
+    set("LIB_DESCRIPTION", "fore - base core code")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
-
-dependencies {
-    api(project(":fore-base-core"))
-}
 
 apply(from = "../publish-lib.gradle.kts")
