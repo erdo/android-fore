@@ -10,13 +10,13 @@ object Shared {
         const val minSdk = 16
         const val compileSdk = 31
         const val targetSdk = 31
-        val javaVersion = JavaVersion.VERSION_1_8
+        val javaVersion = JavaVersion.VERSION_11
     }
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.1.3"
-        const val kotlin_version = "1.6.20"
+        const val android_gradle_plugin = "7.2.1"
+        const val kotlin_version = "1.6.21"
         const val kotlinx_coroutines_core = "1.6.1"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.1"
@@ -25,7 +25,7 @@ object Shared {
         const val apollo = "2.5.4"
         const val apollo3 = "3.2.2"
         const val retrofit = "2.9.0"
-        const val compose = "1.1.1"
+        const val compose = "1.2.0-beta02"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
@@ -73,8 +73,8 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.5.11"
-        const val use_published_version = false
+        const val published_fore_version_for_examples = "1.5.12"
+        const val use_published_version = true
     }
 
     object Secrets {

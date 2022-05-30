@@ -13,6 +13,11 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
+
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false

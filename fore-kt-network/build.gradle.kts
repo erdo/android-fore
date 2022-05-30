@@ -10,6 +10,12 @@ java {
     targetCompatibility = Shared.Android.javaVersion
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+}
+
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-kt-network")
     set("LIB_DESCRIPTION", "fore - network code for kotlin")

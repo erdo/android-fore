@@ -12,6 +12,12 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
+android {
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+}
+
 dependencies {
 
     api(project(":fore-kt-core"))

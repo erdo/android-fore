@@ -59,6 +59,9 @@ android {
         abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
 }
 
 repositories {

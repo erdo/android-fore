@@ -13,12 +13,18 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
+
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
+
     sourceSets["main"].java.apply {
         srcDirs(
                 "../fore-jv-android-network/src/main/java"

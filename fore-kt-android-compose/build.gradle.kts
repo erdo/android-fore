@@ -14,6 +14,10 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
 
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+
     defaultConfig {
         minSdk = 21
     }
@@ -21,6 +25,7 @@ android {
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = Shared.Versions.compose
     }

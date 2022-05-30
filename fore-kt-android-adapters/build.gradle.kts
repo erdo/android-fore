@@ -13,6 +13,11 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
+
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+
     sourceSets["main"].java.apply {
         srcDirs(
             "../fore-jv-android-adapters/src/main/java"
