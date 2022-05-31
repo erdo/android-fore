@@ -5,9 +5,9 @@
  * ./gradlew testDebugUnitTest
  * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue
  * ./gradlew connectedAndroidTest -PtestBuildType=release
- * ./gradlew example-kt-01reactiveui:connectedAndroidTest -PtestBuildType=release --info
- * ./gradlew example-kt-01reactiveui:testDebugUnitTest --info
- * ./gradlew example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
+ * ./gradlew app-examples:example-kt-01reactiveui:connectedAndroidTest -PtestBuildType=release --info
+ * ./gradlew app-examples:example-kt-01reactiveui:testDebugUnitTest --info
+ * ./gradlew app-examples:example-kt-04retrofit:dependencies --configuration releaseRuntimeClasspath
  *
  * sourcefile downloads sanity check:
  * co.early.fore.kt.net.apollo.CallProcessorApollo() //fore-kt-android-network
