@@ -23,18 +23,10 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-sourceSets["main"].java.apply {
-    srcDirs(
-        "../fore-jv-network/src/main/java"
-    )
-    exclude(
-        "co/early/fore/net/InterceptorLogging.java"
-    )
-}
-
 dependencies {
 
     api(project(":fore-kt-core"))
+    api(project(":fore-base-network"))
     compileOnly("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
 
     // OkHttp3 v3.X.X used by Retrofit2 and Apollo2 has method calls: method(), body(), code() etc
