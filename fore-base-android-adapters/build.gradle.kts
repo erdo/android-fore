@@ -5,16 +5,14 @@ plugins {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-jv-android-adapters")
-    set("LIB_DESCRIPTION", "fore - android adapter and diff util helpers, java")
+    set("LIB_ARTIFACT_ID", "fore-base-android-adapters")
+    set("LIB_DESCRIPTION", "fore - android adapter and diff util helpers, base")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
-
-    api(project(":fore-jv-android-core"))
-    api(project(":fore-base-android-adapters"))
+    api(project(":fore-base-core"))
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 

@@ -3,6 +3,7 @@ rootProject.name = "android-fore"
 // base (code shared between the jv and kt modules - as we re-write this code into kotlin, it will be moved into the respective jv and kt modules)
 include(":fore-base-core")
 include(":fore-base-network")
+include(":fore-base-android-adapters")
 include(":fore-base-android-network")
 
 // java
