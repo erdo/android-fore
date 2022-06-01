@@ -2,8 +2,6 @@ package co.early.fore.net.testhelpers;
 
 import java.io.IOException;
 
-import co.early.fore.core.Affirm;
-
 /**
  *
  * @param <R> The class type expected to be passed back as the result
@@ -22,7 +20,7 @@ public class StubbedServiceDefinition<R> {
         this.httpCode = 0;
         this.resourceFileName = null;
         this.mimeType = null;
-        this.ioException = Affirm.notNull(ioException);
+        this.ioException = notNull(ioException);
         this.expectedResult = expectedResult;
     }
 
@@ -36,13 +34,20 @@ public class StubbedServiceDefinition<R> {
 
     public StubbedServiceDefinition(int httpCode, String resourceFileName, String mimeType, R expectedResult) {
         this.httpCode = httpCode;
-        this.resourceFileName = Affirm.notNull(resourceFileName);
-        this.mimeType = Affirm.notNull(mimeType);
+        this.resourceFileName = notNull(resourceFileName);
+        this.mimeType = notNull(mimeType);
         this.ioException = null;
         this.expectedResult = expectedResult;
     }
 
     public boolean successfullyConnected(){
         return ioException == null;
+    }
+
+    private <T> T notNull(T param) {
+        if (param == null) {
+            throw new NullPointerException("Parameter must not be null");
+        }
+        return param;
     }
 }

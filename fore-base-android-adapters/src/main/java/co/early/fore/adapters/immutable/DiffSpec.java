@@ -3,7 +3,6 @@ package co.early.fore.adapters.immutable;
 
 import androidx.recyclerview.widget.DiffUtil;
 
-import co.early.fore.core.Affirm;
 import co.early.fore.core.time.SystemTimeWrapper;
 
 /**
@@ -21,6 +20,13 @@ public class DiffSpec {
      */
     public DiffSpec(DiffUtil.DiffResult diffResult, SystemTimeWrapper systemTimeWrapper) {
         this.diffResult = diffResult;
-        this.timeStamp = Affirm.notNull(systemTimeWrapper).currentTimeMillis();
+        this.timeStamp = notNull(systemTimeWrapper).currentTimeMillis();
+    }
+
+    private <T> T notNull(T param) {
+        if (param == null) {
+            throw new NullPointerException("Parameter must not be null");
+        }
+        return param;
     }
 }

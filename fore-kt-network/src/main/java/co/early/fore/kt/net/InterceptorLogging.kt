@@ -3,8 +3,6 @@ package co.early.fore.kt.net
 import co.early.fore.core.utils.text.BasicTextWrapper
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.time.measureNanos
-import co.early.fore.kt.core.time.nanosFormat
 import java.io.EOFException
 import java.io.IOException
 import java.nio.charset.Charset
@@ -14,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock
 import co.early.fore.net.NetworkingLogSanitizer
 import okhttp3.*
 import okio.Buffer
+import java.text.DecimalFormat
 import kotlin.concurrent.withLock
 import kotlin.reflect.KVisibility
 
@@ -27,6 +26,7 @@ class InterceptorLogging @JvmOverloads constructor(
         private val maxBodyLogCharacters: Int = 4000,
         private val networkingLogSanitizer: NetworkingLogSanitizer? = null) : Interceptor {
 
+    private val nanosFormat = DecimalFormat("#,###")
     private val UTF8 = Charset.forName("UTF-8")
     private val random = Random()
     private val someCharacters = "ABDEFGH023456789".toCharArray()
@@ -194,6 +194,12 @@ class InterceptorLogging @JvmOverloads constructor(
             charset = contentType.charset(charset)
         }
         return charset
+    }
+
+    private inline fun <T> measureNanos(function: () -> T): Pair<T, Long> {
+        val startTime = Fore.getSystemTimeWrapper().nanoTime()
+        val result: T = function.invoke()
+        return result to (System.nanoTime() - startTime)
     }
 
     companion object {

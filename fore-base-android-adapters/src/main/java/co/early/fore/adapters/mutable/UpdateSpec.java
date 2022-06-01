@@ -1,6 +1,5 @@
 package co.early.fore.adapters.mutable;
 
-import co.early.fore.core.Affirm;
 import co.early.fore.core.time.SystemTimeWrapper;
 
 /**
@@ -23,9 +22,16 @@ public class UpdateSpec {
     public final long timeStamp;
 
     public UpdateSpec(UpdateType type, int rowPosition, int rowsEffected, SystemTimeWrapper systemTimeWrapper) {
-        this.type = Affirm.notNull(type);
+        this.type = notNull(type);
         this.rowPosition = rowPosition;
         this.rowsEffected = rowsEffected;
-        this.timeStamp = Affirm.notNull(systemTimeWrapper).currentTimeMillis();
+        this.timeStamp = notNull(systemTimeWrapper).currentTimeMillis();
+    }
+
+    private <T> T notNull(T param) {
+        if (param == null) {
+            throw new NullPointerException("Parameter must not be null");
+        }
+        return param;
     }
 }

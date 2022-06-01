@@ -1,7 +1,5 @@
 package co.early.fore.core.utils.text;
 
-import co.early.fore.core.Affirm;
-
 import static co.early.fore.core.utils.text.TextPadder.Pad.LEFT;
 
 public class TextPadder {
@@ -13,8 +11,8 @@ public class TextPadder {
 
     public static String padText(String textOriginal, int desiredLength, Pad pad, char paddingCharacter) {
 
-        Affirm.notNull(textOriginal);
-        Affirm.notNull(pad);
+        notNull(textOriginal);
+        notNull(pad);
 
         int paddingCharactersRequired = desiredLength - textOriginal.length();
 
@@ -36,4 +34,10 @@ public class TextPadder {
         return sb.toString();
     }
 
+    private static <T> T notNull(T param) {
+        if (param == null) {
+            throw new NullPointerException("Parameter must not be null");
+        }
+        return param;
+    }
 }
