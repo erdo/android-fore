@@ -11,8 +11,11 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-dependencies {
+android {
+    namespace = "co.early.fore.adapters"
+}
 
+dependencies {
     api(project(":fore-jv-android-core"))
     api(project(":fore-base-android-adapters"))
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")

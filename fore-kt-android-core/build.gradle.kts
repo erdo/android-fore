@@ -16,10 +16,10 @@ android {
     kotlinOptions {
         jvmTarget = Shared.Android.javaVersion.toString()
     }
+    namespace = "co.early.fore.kt.core"
 }
 
 dependencies {
-
     api(project(":fore-kt-core"))
     api("androidx.lifecycle:lifecycle-common-java8:${Shared.Versions.androidx_lifecycle_common}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Shared.Versions.kotlinx_coroutines_android}")

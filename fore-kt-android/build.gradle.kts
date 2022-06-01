@@ -24,6 +24,8 @@ android {
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
+
+    namespace = "co.early.fore.kt"
 }
 
 dependencies {

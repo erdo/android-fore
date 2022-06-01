@@ -8,6 +8,11 @@ ext.apply {
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
+
+android {
+    namespace = "co.early.fore.core"
+}
+
 dependencies {
     api(project(":fore-jv-core"))
 }

@@ -17,6 +17,8 @@ android {
     kotlinOptions {
         jvmTarget = Shared.Android.javaVersion.toString()
     }
+
+    namespace = "co.early.fore.kt.adapters"
 }
 
 dependencies {

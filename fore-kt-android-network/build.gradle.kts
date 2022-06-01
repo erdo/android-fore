@@ -13,22 +13,20 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-
     kotlinOptions {
         jvmTarget = Shared.Android.javaVersion.toString()
     }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
+    namespace = "co.early.fore.kt.net"
 }
 
 dependencies {
-
-    api(project(":fore-kt-core"))
+    api(project(":fore-kt-android-core"))
     api(project(":fore-kt-network"))
     api(project(":fore-base-android-network"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

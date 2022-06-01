@@ -47,7 +47,11 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
         }
     }
 
-    //register (not create) - we want this to run after the rest of the android
+    buildFeatures {
+        buildConfig = false
+    }
+
+    // register (not create) - we want this to run after the rest of the android
     // block has been configured in the individual build files as they add files
     // to the source sets
     project.tasks.register("androidSourcesJar", Jar::class.java) {

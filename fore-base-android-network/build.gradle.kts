@@ -12,16 +12,10 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            consumerProguardFiles("../proguard-library-consumer-network.pro")
-        }
-    }
+    namespace = "co.early.fore.net"
 }
 
 dependencies {
-
     api(project(":fore-base-core"))
     api(project(":fore-base-network"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

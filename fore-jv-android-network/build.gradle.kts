@@ -18,10 +18,10 @@ android {
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
+    namespace = "co.early.fore.net"
 }
 
 dependencies {
-
     api(project(":fore-jv-network"))
     api(project(":fore-jv-android-core"))
     api(project(":fore-base-android-network"))
