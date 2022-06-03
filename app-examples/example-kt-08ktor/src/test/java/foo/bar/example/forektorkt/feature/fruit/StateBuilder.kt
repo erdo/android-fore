@@ -1,7 +1,8 @@
 package foo.bar.example.forektorkt.feature.fruit
 
-import co.early.fore.kt.core.Either
-import co.early.fore.kt.net.ktor.CallProcessorKtor
+import co.early.fore.kt.core.type.Either.Companion.fail
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.net.ktor.CallWrapperKtor
 import co.early.fore.net.MessageProvider
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.message.ErrorMessage
@@ -11,15 +12,15 @@ import kotlinx.coroutines.CompletableDeferred
 /**
  *
  */
-class StateBuilder internal constructor(private val mockCallProcessorKtor: CallProcessorKtor<ErrorMessage>) {
+class StateBuilder internal constructor(private val mockCallWrapperKtor: CallWrapperKtor<ErrorMessage>) {
 
     internal fun getFruitSuccess(fruitPojo: FruitPojo): StateBuilder {
 
         coEvery {
-            mockCallProcessorKtor.processCallAsync(
+            mockCallWrapperKtor.processCallAsync(
                 any() as suspend () -> List<FruitPojo>
             )
-        } returns CompletableDeferred(Either.right(listOf(fruitPojo)))
+        } returns CompletableDeferred(success(listOf(fruitPojo)))
 
         return this
     }
@@ -27,11 +28,11 @@ class StateBuilder internal constructor(private val mockCallProcessorKtor: CallP
     internal fun getFruitFail(errorMessage: ErrorMessage): StateBuilder {
 
         coEvery {
-            mockCallProcessorKtor.processCallAwait(
+            mockCallWrapperKtor.processCallAwait(
                 any() as Class<MessageProvider<ErrorMessage>>,
                 any() as suspend () -> List<FruitPojo>
             )
-        } returns Either.left(errorMessage)
+        } returns fail(errorMessage)
 
         return this
     }

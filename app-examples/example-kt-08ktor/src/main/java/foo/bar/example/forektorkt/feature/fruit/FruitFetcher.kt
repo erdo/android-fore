@@ -2,12 +2,17 @@ package foo.bar.example.forektorkt.feature.fruit
 
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.coroutine.launchMain
-import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.core.Error
-import co.early.fore.kt.core.Success
 import co.early.fore.kt.core.carryOn
-import co.early.fore.kt.net.ktor.CallProcessorKtor
+import co.early.fore.kt.core.coroutine.launchMain
+import co.early.fore.kt.core.eitherError
+import co.early.fore.kt.core.eitherSuccess
+import co.early.fore.kt.core.observer.ObservableImp
+import co.early.fore.kt.core.type.Either.Companion.fail
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.core.type.Either.Fail
+import co.early.fore.kt.core.type.Either.Success
+import co.early.fore.kt.core.type.carryOn
+import co.early.fore.kt.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.api.fruits.FruitsCustomError
@@ -21,9 +26,9 @@ typealias FailureCallback<T> = (T) -> Unit
  * gets a list of fruit from the network, selects one at random to be currentFruit
  */
 class FruitFetcher(
-        private val fruitService: FruitService,
-        private val callProcessorKtor: CallProcessorKtor<ErrorMessage>,
-        private val logger: Logger
+    private val fruitService: FruitService,
+    private val callWrapperKtor: CallWrapperKtor<ErrorMessage>,
+    private val logger: Logger
 ) : Observable by ObservableImp(logger = logger) {
 
     var isBusy: Boolean = false
@@ -33,7 +38,7 @@ class FruitFetcher(
 
 
     fun fetchFruitsAsync(
-            success: SuccessCallback,
+            successCallBack: SuccessCallback,
             failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
@@ -49,9 +54,9 @@ class FruitFetcher(
 
         launchMain {
 
-            logger.i("about to use CallProcessor t:" + Thread.currentThread())
+            logger.i("about to use CallWrapper t:" + Thread.currentThread())
 
-            val deferredResult = callProcessorKtor.processCallAsync {
+            val deferredResult = callWrapperKtor.processCallAsync {
 
                 logger.i("processing call t:" + Thread.currentThread())
 
@@ -59,8 +64,8 @@ class FruitFetcher(
             }
 
             when (val result = deferredResult.await()) {
-                is Error -> handleFailure(failureWithPayload, result.a)
-                is Success -> handleSuccess(success, result.b)
+                is Fail -> handleFailure(failureWithPayload, result.value)
+                is Success -> handleSuccess(successCallBack, result.value)
             }
         }
 
@@ -72,7 +77,7 @@ class FruitFetcher(
      * we also don't specify a custom error class here
      */
     fun fetchFruitsButFail(
-            success: SuccessCallback,
+            successCallBack: SuccessCallback,
             failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
@@ -86,16 +91,15 @@ class FruitFetcher(
         isBusy = true
         notifyObservers()
 
-
         launchMain {
 
-            val result = callProcessorKtor.processCallAwait {
+            val result = callWrapperKtor.processCallAwait {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
             when (result) {
-                is Error -> handleFailure(failureWithPayload, result.a)
-                is Success -> handleSuccess(success, result.b)
+                is Fail -> handleFailure(failureWithPayload, result.value)
+                is Success -> handleSuccess(successCallBack, result.value)
             }
         }
     }
@@ -106,7 +110,7 @@ class FruitFetcher(
      * here we specify a custom error class for more detail about the error than just an HTTP code can give us
      */
     fun fetchFruitsButFailAdvanced(
-            success: SuccessCallback,
+            successCallBack: SuccessCallback,
             failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
@@ -122,13 +126,13 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = callProcessorKtor.processCallAwait(FruitsCustomError::class.java) {
+            val result = callWrapperKtor.processCallAwait(FruitsCustomError::class.java) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
             when (result) {
-                is Error -> handleFailure(failureWithPayload, result.a)
-                is Success -> handleSuccess(success, result.b)
+                is Fail -> handleFailure(failureWithPayload, result.value)
+                is Success -> handleSuccess(successCallBack, result.value)
             }
         }
     }
@@ -139,7 +143,7 @@ class FruitFetcher(
      * simple way
      */
     fun chainedCall(
-            success: SuccessCallback,
+            successCallBack: SuccessCallback,
             failureWithPayload: FailureCallback<ErrorMessage>
     ) {
 
@@ -167,55 +171,55 @@ class FruitFetcher(
              * errors at each step - Internet search for "railway oriented programming"
              * or "andThen" functions)
              */
-            val response = callProcessorKtor.processCallAwait() {
+            val response = callWrapperKtor.processCallAwait {
                 logger.i("...create user...")
                 fruitService.createUser()
             }.carryOn {
                 logger.i("...create user ticket...")
-                callProcessorKtor.processCallAwait() {
+                callWrapperKtor.processCallAwait {
                     fruitService.createUserTicket(it.userId)
                 }
             }.carryOn {
                 ticketRef = it.ticketRef
                 logger.i("...get waiting time...")
-                callProcessorKtor.processCallAwait() {
+                callWrapperKtor.processCallAwait {
                     fruitService.getEstimatedWaitingTime(it.ticketRef)
                 }
             }.carryOn {
                 if (it.minutesWait > 10) {
                     logger.i("...cancel ticket...")
-                    callProcessorKtor.processCallAwait() {
+                    callWrapperKtor.processCallAwait {
                         fruitService.cancelTicket(ticketRef)
                     }
                 } else {
                     logger.i("...confirm ticket...")
-                    callProcessorKtor.processCallAwait() {
+                    callWrapperKtor.processCallAwait {
                         fruitService.confirmTicket(ticketRef)
                     }
                 }
             }.carryOn {
                 logger.i("...claim free fruit!...")
-                callProcessorKtor.processCallAwait() {
+                callWrapperKtor.processCallAwait {
                     fruitService.claimFreeFruit(it.ticketRef)
                 }
             }
 
             when (response) {
-                is Error -> handleFailure(failureWithPayload, response.a)
-                is Success -> handleSuccess(success, response.b)
+                is Fail -> handleFailure(failureWithPayload, response.value)
+                is Success -> handleSuccess(successCallBack, response.value)
             }
         }
     }
 
     private fun handleSuccess(
-            success: SuccessCallback,
+            successCallBack: SuccessCallback,
             successResponse: List<FruitPojo>
     ) {
 
         logger.i("handleSuccess() t:" + Thread.currentThread())
 
         currentFruit = selectRandomFruit(successResponse)
-        success()
+        successCallBack()
         complete()
     }
 
