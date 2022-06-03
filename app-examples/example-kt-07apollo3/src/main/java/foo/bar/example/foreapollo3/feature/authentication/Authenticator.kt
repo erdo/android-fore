@@ -1,13 +1,13 @@
 package foo.bar.example.foreapollo3.feature.authentication
 
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.Error
-import co.early.fore.kt.core.Success
 import co.early.fore.kt.core.coroutine.awaitMain
 import co.early.fore.kt.core.coroutine.launchIO
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import co.early.fore.kt.core.type.Either.Fail
+import co.early.fore.kt.core.type.Either.Success
+import co.early.fore.kt.net.apollo3.CallWrapperApollo3
 import com.apollographql.apollo3.api.ApolloResponse
 import foo.bar.example.foreapollo3.LoginMutation
 import foo.bar.example.foreapollo3.feature.FailureCallback
@@ -23,7 +23,7 @@ data class AuthService(
  */
 class Authenticator(
     private val authService: AuthService,
-    private val callProcessor: CallProcessorApollo3<ErrorMessage>,
+    private val callWrapperApollo3: CallWrapperApollo3<ErrorMessage>,
     private val logger: Logger
 ) : Observable by ObservableImp(logger = logger) {
 
@@ -58,14 +58,14 @@ class Authenticator(
 
         launchIO {
 
-            val deferredResult = callProcessor.processCallAsync {
+            val deferredResult = callWrapperApollo3.processCallAsync {
                 authService.login(email)
             }
 
             awaitMain {
                 when (val result = deferredResult.await()) {
-                    is Success -> handleSuccess(success, result.b.data.login)
-                    is Error -> handleFailure(failureWithPayload, result.a)
+                    is Success -> handleSuccess(success, result.value.data.login)
+                    is Fail -> handleFailure(failureWithPayload, result.value)
                 }
             }
         }
