@@ -211,7 +211,7 @@ class FruitViewRotationTest {
     }
 
     private fun swapOrientation(activity: Activity) {
-        activity.requestedOrientation = if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        activity.requestedOrientation = if (activity.resources.configuration.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         else
             ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

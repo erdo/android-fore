@@ -199,7 +199,7 @@ public class FruitViewRotationTest {
     }
 
     private void swapOrientation(Activity activity){
-        activity.setRequestedOrientation(activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT ?
+        activity.setRequestedOrientation(activity.getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT ?
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
