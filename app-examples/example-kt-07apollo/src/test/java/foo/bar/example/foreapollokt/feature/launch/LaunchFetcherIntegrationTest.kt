@@ -4,7 +4,7 @@ import co.early.fore.core.testhelpers.CountDownLatchWrapper.runInBatch
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.apollo.CallProcessorApollo
+import co.early.fore.kt.net.apollo.CallWrapperApollo
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import com.apollographql.apollo.ApolloClient
@@ -43,7 +43,7 @@ class LaunchFetcherIntegrationTest {
 
     private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging()
     private val logger = SystemLogger()
-    private val callProcessor = CallProcessorApollo(CustomGlobalErrorHandler(logger))
+    private val callWrapper = CallWrapperApollo(CustomGlobalErrorHandler(logger))
 
     @MockK
     private lateinit var mockSuccess: SuccessCallback
@@ -79,7 +79,7 @@ class LaunchFetcherIntegrationTest {
         val apolloClient = stubbedApolloClient(stubbedSuccess)
         val launchesModel = LaunchesModel(
             createLaunchService(apolloClient),
-            callProcessor,
+            callWrapper,
             mockAuthenticator,
             logger
         )
@@ -124,7 +124,7 @@ class LaunchFetcherIntegrationTest {
         val apolloClient = stubbedApolloClient(stubbedFailSaysNo)
         val launchesModel = LaunchesModel(
             createLaunchService(apolloClient),
-            callProcessor,
+            callWrapper,
             mockAuthenticator,
             logger
         )
@@ -161,7 +161,7 @@ class LaunchFetcherIntegrationTest {
         val apolloClient = stubbedApolloClient(stubbedFailureInternalServerError)
         val launchesModel = LaunchesModel(
             createLaunchService(apolloClient),
-            callProcessor,
+            callWrapper,
             mockAuthenticator,
             logger
         )
@@ -209,7 +209,7 @@ class LaunchFetcherIntegrationTest {
             val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
             val launchesModel = LaunchesModel(
                 createLaunchService(apolloClient),
-                callProcessor,
+                callWrapper,
                 mockAuthenticator,
                 logger
             )

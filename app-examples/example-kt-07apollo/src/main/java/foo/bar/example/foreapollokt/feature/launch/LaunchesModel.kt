@@ -1,13 +1,13 @@
 package foo.bar.example.foreapollokt.feature.launch
 
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.Error
-import co.early.fore.kt.core.Success
-import co.early.fore.kt.core.carryOn
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.net.apollo.CallProcessorApollo
+import co.early.fore.kt.core.type.Either.Fail
+import co.early.fore.kt.core.type.Either.Success
+import co.early.fore.kt.core.type.carryOn
+import co.early.fore.kt.net.apollo.CallWrapperApollo
 import com.apollographql.apollo.ApolloMutationCall
 import com.apollographql.apollo.ApolloQueryCall
 import foo.bar.example.foreapollokt.feature.FailureCallback
@@ -28,7 +28,7 @@ data class LaunchService(
 
 class LaunchesModel(
     private val launchService: LaunchService,
-    private val callProcessor: CallProcessorApollo<ErrorMessage>,
+    private val callWrapper: CallWrapperApollo<ErrorMessage>,
     private val authenticator: Authenticator,
     private val logger: Logger
 ) : Observable by ObservableImp(logger = logger) {
@@ -58,13 +58,13 @@ class LaunchesModel(
 
         launchMain {
 
-            val deferredResult = callProcessor.processCallAsync {
+            val deferredResult = callWrapper.processCallAsync {
                 launchService.getLaunchList()
             }
 
             when (val result = deferredResult.await()) {
-                is Success -> handleSuccess(success, selectRandomLaunch(result.b.data.launches))
-                is Error -> handleFailure(failureWithPayload, result.a)
+                is Success -> handleSuccess(success, selectRandomLaunch(result.value.data.launches))
+                is Fail -> handleFailure(failureWithPayload, result.value)
             }
         }
 
@@ -112,32 +112,32 @@ class LaunchesModel(
              * or "andThen" functions)
              */
             // log in
-            val response = callProcessor.processCallAwait {
+            val response = callWrapper.processCallAwait {
                 launchService.login("example@test.com")
             }.carryOn { // refresh launch details now we have session token to see the real booking status
                     authenticator.setSessionDirectly(it.data.login)
-                    callProcessor.processCallAwait {
+                    callWrapper.processCallAwait {
                         launchService.refreshLaunchDetail(currentLaunch.id)
                     }
             }.carryOn { // toggle the booking status
                 if (it.data.launch?.isBooked == true) {
-                    callProcessor.processCallAwait {
+                    callWrapper.processCallAwait {
                         launchService.cancelTrip(currentLaunch.id)
                     }
                 } else {
-                    callProcessor.processCallAwait {
+                    callWrapper.processCallAwait {
                         launchService.bookTrip(currentLaunch.id)
                     }
                 }
             }.carryOn { // refresh the launch detail again
-                callProcessor.processCallAwait {
+                callWrapper.processCallAwait {
                     launchService.refreshLaunchDetail(currentLaunch.id)
                 }
             }
 
             when (response) {
-                is Error -> handleFailure(failureWithPayload, response.a)
-                is Success -> handleSuccess(success, response.b.data.launch?.toApp() ?: NO_LAUNCH)
+                is Fail -> handleFailure(failureWithPayload, response.value)
+                is Success -> handleSuccess(success, response.value.data.launch?.toApp() ?: NO_LAUNCH)
             }
         }
     }

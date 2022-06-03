@@ -3,10 +3,9 @@ package foo.bar.example.foreapollokt.ui.launch
 import android.content.pm.ActivityInfo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.apollo.CallProcessorApollo
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.net.apollo.CallWrapperApollo
 import com.apollographql.apollo.ApolloCall
 import foo.bar.example.foreapollokt.App
 import foo.bar.example.foreapollokt.OG
@@ -22,10 +21,10 @@ class LaunchViewRotationTestStateBuilder internal constructor(private val launch
 
     internal fun withDelayedCallProcessor(): LaunchViewRotationTestStateBuilder {
 
-        val deferred = CompletableDeferred<Either<ErrorMessage, CallProcessorApollo.SuccessResult<LaunchListQuery.Data>>>()
+        val deferred = CompletableDeferred<Either<ErrorMessage, CallWrapperApollo.SuccessResult<LaunchListQuery.Data>>>()
 
         coEvery {
-            launchViewRotationTest.mockCallProcessorApollo.processCallAsync(
+            launchViewRotationTest.mockCallWrapperApollo.processCallAsync(
                 any() as () -> ApolloCall<LaunchListQuery.Data>
             )
         } returns deferred
