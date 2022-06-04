@@ -3,8 +3,8 @@ package foo.bar.example.foreretrofitkt.ui.fruit
 import android.content.pm.ActivityInfo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.core.type.Either
 import foo.bar.example.foreretrofitkt.App
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.ProgressBarIdler
@@ -23,7 +23,7 @@ class FruitViewRotationTestStateBuilder internal constructor(private val fruitVi
         val deferred = CompletableDeferred<Either<ErrorMessage, List<FruitPojo>>>()
 
         coEvery {
-            fruitViewRotationTest.mockCallProcessorRetrofit2.processCallAsync(
+            fruitViewRotationTest.mockCallWrapperRetrofit2.processCallAsync(
                 any() as suspend () -> Response<List<FruitPojo>>
             )
         } returns deferred

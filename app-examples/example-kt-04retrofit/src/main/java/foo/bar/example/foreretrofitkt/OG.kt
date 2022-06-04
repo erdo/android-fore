@@ -4,7 +4,7 @@ import android.app.Application
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
+import co.early.fore.kt.net.retrofit2.CallWrapperRetrofit2
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
 import foo.bar.example.foreretrofitkt.api.CustomGlobalRequestInterceptor
 import foo.bar.example.foreretrofitkt.api.CustomRetrofitBuilder
@@ -37,7 +37,7 @@ object OG {
             InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = CallProcessorRetrofit2(
+        val callWrapper = CallWrapperRetrofit2(
             errorHandler = CustomGlobalErrorHandler(logger),
             logger = logger
         )
@@ -45,7 +45,7 @@ object OG {
         // models
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
-            callProcessor,
+            callWrapper,
             logger
         )
 

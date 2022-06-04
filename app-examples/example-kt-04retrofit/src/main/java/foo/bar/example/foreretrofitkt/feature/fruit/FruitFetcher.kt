@@ -1,13 +1,13 @@
 package foo.bar.example.foreretrofitkt.feature.fruit
 
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.Error
-import co.early.fore.kt.core.Success
 import co.early.fore.kt.core.coroutine.awaitMain
 import co.early.fore.kt.core.coroutine.launchMain
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
-import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
+import co.early.fore.kt.core.type.Either.Fail
+import co.early.fore.kt.core.type.Either.Success
+import co.early.fore.kt.net.retrofit2.CallWrapperRetrofit2
 import co.early.fore.kt.net.retrofit2.carryOn
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
@@ -23,7 +23,7 @@ typealias FailureCallback<T> = (T) -> Unit
  */
 class FruitFetcher(
     private val fruitService: FruitService,
-    private val retrofit2CallProcessor: CallProcessorRetrofit2<ErrorMessage>,
+    private val callWrapper: CallWrapperRetrofit2<ErrorMessage>,
     private val logger: Logger
 ) : Observable by ObservableImp(logger = logger) {
 
@@ -52,7 +52,7 @@ class FruitFetcher(
 
             logger.i("about to use CallProcessor t:" + Thread.currentThread())
 
-            val deferredResult = retrofit2CallProcessor.processCallAsync {
+            val deferredResult = callWrapper.processCallAsync {
 
                 logger.i("processing call t:" + Thread.currentThread())
 
@@ -61,8 +61,8 @@ class FruitFetcher(
 
             awaitMain {
                 when (val result = deferredResult.await()) {
-                    is Error -> handleFailure(failureWithPayload, result.a)
-                    is Success -> handleSuccess(success, result.b)
+                    is Fail -> handleFailure(failureWithPayload, result.value)
+                    is Success -> handleSuccess(success, result.value)
                 }
             }
         }
@@ -92,14 +92,14 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = retrofit2CallProcessor.processCallAwait {
+            val result = callWrapper.processCallAwait {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
             awaitMain {
                 when (result) {
-                    is Error -> handleFailure(failureWithPayload, result.a)
-                    is Success -> handleSuccess(success, result.b)
+                    is Fail -> handleFailure(failureWithPayload, result.value)
+                    is Success -> handleSuccess(success, result.value)
                 }
             }
         }
@@ -127,14 +127,14 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = retrofit2CallProcessor.processCallAwait(FruitsCustomError::class.java) {
+            val result = callWrapper.processCallAwait(FruitsCustomError::class.java) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
             awaitMain {
                 when (result) {
-                    is Error -> handleFailure(failureWithPayload, result.a)
-                    is Success -> handleSuccess(success, result.b)
+                    is Fail -> handleFailure(failureWithPayload, result.value)
+                    is Success -> handleSuccess(success, result.value)
                 }
             }
         }
@@ -162,7 +162,7 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = retrofit2CallProcessor.processCallAwait(
+            val result = callWrapper.processCallAwait(
                 FruitsCustomError::class.java
             ) {
 
@@ -205,8 +205,8 @@ class FruitFetcher(
 
             awaitMain {
                 when (result) {
-                    is Error -> handleFailure(failureWithPayload, result.a)
-                    is Success -> handleSuccess(success, result.b)
+                    is Fail -> handleFailure(failureWithPayload, result.value)
+                    is Success -> handleSuccess(success, result.value)
                 }
             }
         }

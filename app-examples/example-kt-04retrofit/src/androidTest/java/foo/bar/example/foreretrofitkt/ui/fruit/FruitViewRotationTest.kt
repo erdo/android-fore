@@ -8,9 +8,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.net.retrofit2.CallWrapperRetrofit2
 import foo.bar.example.foreretrofitkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.foreretrofitkt.R
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
@@ -60,7 +62,7 @@ class FruitViewRotationTest {
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
-    lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
+    lateinit var mockCallWrapperRetrofit2: CallWrapperRetrofit2<ErrorMessage>
 
     @MockK
     private lateinit var mockFruitService: FruitService
@@ -78,7 +80,7 @@ class FruitViewRotationTest {
         //construct a real model with mock dependencies
         fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessorRetrofit2,
+            mockCallWrapperRetrofit2,
             logger
         )
     }
@@ -128,7 +130,7 @@ class FruitViewRotationTest {
         getInstrumentation().runOnMainSync {
             logger.i("about to call success, id:" + Thread.currentThread().id)
 
-            deferredResult.complete(Either.right(fruitList))
+            deferredResult.complete(success(fruitList))
             countDownLatch.countDown()
         }
     }

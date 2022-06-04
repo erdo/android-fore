@@ -4,6 +4,7 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.net.retrofit2.CallWrapperRetrofit2
 import foo.bar.example.foreretrofitkt.api.fruits.FruitPojo
 import foo.bar.example.foreretrofitkt.api.fruits.FruitService
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
@@ -35,7 +36,7 @@ class FruitFetcherUnitTest {
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
-    private lateinit var mockCallProcessorRetrofit2: co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2<ErrorMessage>
+    private lateinit var mockCallWrapperRetrofit2: CallWrapperRetrofit2<ErrorMessage>
 
     @MockK
     private lateinit var mockFruitService: FruitService
@@ -61,7 +62,7 @@ class FruitFetcherUnitTest {
         //arrange
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessorRetrofit2,
+            mockCallWrapperRetrofit2,
             logger
         )
 
@@ -79,10 +80,10 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockSuccess() {
 
         //arrange
-        StateBuilder(mockCallProcessorRetrofit2).getFruitSuccess(fruitPojo)
+        StateBuilder(mockCallWrapperRetrofit2).getFruitSuccess(fruitPojo)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessorRetrofit2,
+            mockCallWrapperRetrofit2,
             logger
         )
 
@@ -113,10 +114,10 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockFailure() {
 
         //arrange
-        StateBuilder(mockCallProcessorRetrofit2).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
+        StateBuilder(mockCallWrapperRetrofit2).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessorRetrofit2,
+            mockCallWrapperRetrofit2,
             logger
         )
 
@@ -159,10 +160,10 @@ class FruitFetcherUnitTest {
     fun observersNotifiedAtLeastOnce() {
 
         //arrange
-        StateBuilder(mockCallProcessorRetrofit2).getFruitSuccess(fruitPojo)
+        StateBuilder(mockCallWrapperRetrofit2).getFruitSuccess(fruitPojo)
         val fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessorRetrofit2,
+            mockCallWrapperRetrofit2,
             logger
         )
         fruitFetcher.addObserver(mockObserver)
