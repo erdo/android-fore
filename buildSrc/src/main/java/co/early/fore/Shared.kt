@@ -73,7 +73,7 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.5.12"
+        const val published_fore_version_for_examples = "1.5.13"
         const val use_published_version = true
     }
 
