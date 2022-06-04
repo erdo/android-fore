@@ -13,29 +13,22 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
-    sourceSets["main"].java.apply {
-        srcDirs(
-                "../fore-jv-android-network/src/main/java"
-        )
-        exclude(
-                "co/early/fore/net/apollo/CallProcessorApollo.java",
-                "co/early/fore/net/apollo/ApolloCaller.java",
-                "co/early/fore/net/retrofit2/CallProcessorRetrofit2.java",
-                "co/early/fore/net/retrofit2/Retrofit2Caller.java"
-        )
-    }
+    namespace = "co.early.fore.kt.net"
 }
 
 dependencies {
-
-    api(project(":fore-kt-network"))
     api(project(":fore-kt-android-core"))
+    api(project(":fore-kt-network"))
+    api(project(":fore-base-android-network"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }

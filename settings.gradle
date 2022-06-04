@@ -1,5 +1,11 @@
 rootProject.name = "android-fore"
 
+// base (code shared between the jv and kt modules - as we re-write this code into kotlin, it will be moved into the respective jv and kt modules)
+include(":fore-base-core")
+include(":fore-base-network")
+include(":fore-base-android-adapters")
+include(":fore-base-android-network")
+
 // java
 include(":fore-jv-core")
 include(":fore-jv-network")
@@ -21,9 +27,17 @@ include(":fore-kt-android-adapters")
 include(":fore-kt-android-network")
 include(":fore-kt-android-compose")
 
-
-include(":example-kt-01reactiveui", ":example-kt-02coroutine", "example-kt-03adapters",
-        ":example-kt-04retrofit", ":example-kt-07apollo", ":example-kt-07apollo3", ":example-kt-08ktor",
-        ":example-jv-01reactiveui", ":example-jv-02threading", ":example-jv-03adapters",
-        ":example-jv-04retrofit", ":example-jv-06db")
+include(":app-examples")
+include(":app-examples:example-kt-01reactiveui",
+        ":app-examples:example-kt-02coroutine",
+        ":app-examples:example-kt-03adapters",
+        ":app-examples:example-kt-04retrofit",
+        ":app-examples:example-kt-07apollo",
+        ":app-examples:example-kt-07apollo3",
+        ":app-examples:example-kt-08ktor",
+        ":app-examples:example-jv-01reactiveui",
+        ":app-examples:example-jv-02threading",
+        ":app-examples:example-jv-03adapters",
+        ":app-examples:example-jv-04retrofit",
+        ":app-examples:example-jv-06db")
 

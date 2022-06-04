@@ -13,12 +13,19 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
+
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
+
+    namespace = "co.early.fore.kt"
 }
 
 dependencies {

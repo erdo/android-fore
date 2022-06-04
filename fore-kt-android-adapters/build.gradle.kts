@@ -13,22 +13,17 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 android {
-    sourceSets["main"].java.apply {
-        srcDirs(
-            "../fore-jv-android-adapters/src/main/java"
-        )
-        exclude(
-            "co/early/fore/adapters/mutable/ChangeAwareArrayList.java",
-            "co/early/fore/adapters/mutable/ChangeAwareLinkedList.java",
-            "co/early/fore/adapters/immutable/ImmutableListMgr.java",
-            "co/early/fore/adapters/NotifyableImp.java"
-        )
+
+    kotlinOptions {
+        jvmTarget = Shared.Android.javaVersion.toString()
     }
+
+    namespace = "co.early.fore.kt.adapters"
 }
 
 dependencies {
-
     api(project(":fore-kt-android-core"))
+    api(project(":fore-base-android-adapters"))
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 

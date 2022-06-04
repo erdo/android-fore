@@ -16,4 +16,8 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
+dependencies {
+    api(project(":fore-base-core"))
+}
+
 apply(from = "../publish-lib.gradle.kts")

@@ -18,12 +18,13 @@ android {
             consumerProguardFiles("../proguard-library-consumer-network.pro")
         }
     }
+    namespace = "co.early.fore.net"
 }
 
 dependencies {
-
     api(project(":fore-jv-network"))
     api(project(":fore-jv-android-core"))
+    api(project(":fore-base-android-network"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }
