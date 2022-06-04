@@ -1,9 +1,9 @@
 <a name="fore-network"></a>
 # Retrofit2, Apollo and Ktor
 
-Retrofit2, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallProcessor** class ([CallProcessorRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/CallProcessorRetrofit2.kt) \| [CallProcessorApollo](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/apollo/CallProcessorApollo.kt) \| [CallProcessorKtor](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/ktor/CallProcessorKtor.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
+Retrofit, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallWrapper** class ([CallWrapperRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/CallWrapperRetrofit2.kt) \| [CallProcessorApollo3](https://github.com/erdo/android-fore/blob/master/fore-kt-network/src/main/java/co/early/fore/kt/net/apollo/CallWrapperApollo3.kt) \| [CallProcessorKtorX](https://github.com/erdo/android-fore/blob/master/fore-kt-network/src/main/java/co/early/fore/kt/net/ktor/CallWrapperKtor.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
 
-The CallProcessor allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
+The CallWrapper allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
 The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/Either.kt).
 
@@ -27,20 +27,20 @@ callProcessor.processCall(service.getFruits("3s"), workMode,
 
 launchMain(workMode) {
 
-    val result = callProcessor.processCallAwait {
+    val result = callWrapper.processCallAwait {
         service.getFruits("3s")
     }
 
     when (result) {
-        is Error -> handleFailure(failureWithPayload, result.a)
-        is Success -> handleSuccess(success, result.b)
+        is Fail -> handleFailure(failureWithPayload, result.value)
+        is Success -> handleSuccess(success, result.value)
     }
 }
  </code></pre>
 
-The API is very slightly different depending on whever we are wrapping **Retrofit2** calls, **Apollo** calls or **Ktor** calls, please refer to the sample apps for details and test strategies.
+The API is very slightly different depending on whether we are wrapping **Retrofit2** calls, **Apollo** calls or **Ktor** calls, please refer to the sample apps for details and test strategies.
 
-In all cases though, using the CallProcessor ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callProcessor responses) and **error handling** (the callProcessor API requires that an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
+In all cases though, using the CallWrapper ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callProcessor responses) and **error handling** (the callProcessor API requires that an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
 
 ## Either either
 
@@ -57,11 +57,11 @@ fun &lt;L, R&gt; Either&lt;L, R&gt;.toArrow(): arrow.core.Either&lt;L, R&gt; {
 }
 </code></pre>
 
-And then you can convert any CallProcessor results from Fore Eithers to Arrow Eithers by doing: `result.toArrow()`. (You can of course use the same technique to convert Fore Eithers to whatever flavour of Either you prefer).
+And then you can convert any CallWrapper results from Fore Eithers to Arrow Eithers by doing: `result.toArrow()`. (You can of course use the same technique to convert Fore Eithers to whatever flavour of Either you prefer).
 
 ## carryOn
 
-The kotlin CallProcessor is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
+The kotlin CallWrapper is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
 
 
 <pre class="codesample"><code>
@@ -101,9 +101,9 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 
 ## Testing Networking Code
 
-Another advantage of using the CallProcessor is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
+Another advantage of using the CallWrapper is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
 
-- one ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callProcessor so that it returns successes or failures to the model
+- one ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callWrapper so that it returns successes or failures to the model
 - the other ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
 
 As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
