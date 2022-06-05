@@ -3,10 +3,8 @@ package foo.bar.example.forektorkt
 import android.app.Application
 import co.early.fore.kt.core.delegate.DebugDelegateDefault
 import co.early.fore.kt.core.delegate.Fore
-import co.early.fore.kt.core.logging.AndroidLogger
-import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.ktor.CallProcessorKtor
+import co.early.fore.kt.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.api.CustomGlobalErrorHandler
 import foo.bar.example.forektorkt.api.CustomGlobalRequestInterceptor
 import foo.bar.example.forektorkt.api.CustomKtorBuilder
@@ -40,7 +38,7 @@ object OG {
             InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = CallProcessorKtor(
+        val callWrapper = CallWrapperKtor(
             errorHandler = CustomGlobalErrorHandler(logger),
             logger = logger
         )
@@ -48,7 +46,7 @@ object OG {
         // models
         val fruitFetcher = FruitFetcher(
             FruitService.create(httpClient),
-            callProcessor,
+            callWrapper,
             logger
         )
 

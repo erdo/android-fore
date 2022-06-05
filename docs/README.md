@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.13](https://img.shields.io/badge/central-1.5.13-green.svg){: .float-left}
+![central-1.5.14](https://img.shields.io/badge/central-1.5.14-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -18,7 +18,7 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.13")
+implementation("co.early.fore:fore-kt-android:1.5.14")
 ```
 
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -27,7 +27,7 @@ More detailed [version information here](https://erdo.github.io/android-fore/06-
 
 For Compose, use fore's observeAsState() function (the versioning matches compose itself)
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.1.1")
+implementation("co.early.fore:fore-kt-android-compose:1.2.0-beta03")
 ```
 
 ## New to fore
@@ -321,7 +321,7 @@ The UI for each app is deliberately challenging to implement on android, and alt
 
 ![fore retrofit sample app](img/fore-android-sample-network.gif)
 
-Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallProcessor](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-network library, the kotlin implementation of CallProcessor is implemented with coroutines and has an API better suited to kotlin and functional programming.
+Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallWrapper](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-network library, the kotlin implementation of CallProcessor is implemented with coroutines and has an API better suited to kotlin and functional programming.
 
 As you're using the app, please notice:
 

@@ -33,4 +33,4 @@ dependencies {
     implementation("androidx.compose.ui:ui:${Shared.Versions.compose}")
 }
 
-//apply(from = "../publish-android-compose-lib.gradle.kts")
+apply(from = "../publish-android-compose-lib.gradle.kts")

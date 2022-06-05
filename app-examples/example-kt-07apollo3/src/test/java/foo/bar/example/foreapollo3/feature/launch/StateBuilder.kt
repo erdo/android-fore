@@ -1,7 +1,8 @@
 package foo.bar.example.foreapollo3.feature.launch
 
-import co.early.fore.kt.core.Either
-import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import co.early.fore.kt.core.type.Either.Companion.fail
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.net.apollo3.CallWrapperApollo3
 import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import io.mockk.coEvery
@@ -15,23 +16,23 @@ import kotlinx.coroutines.CompletableDeferred
 @ExperimentalStdlibApi
 class StateBuilder internal constructor() {
 
-    val mockCallProcessorApollo: CallProcessorApollo3<ErrorMessage> = mockk()
+    val mockCallWrapperApollo: CallWrapperApollo3<ErrorMessage> = mockk()
 
     internal fun getLaunchSuccess(launches: LaunchListQuery.Data): StateBuilder {
 
-        val mockResponseSuccess: CallProcessorApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage> = mockk()
+        val mockResponseSuccess: CallWrapperApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage> = mockk()
 
         every {
             mockResponseSuccess.data
         } answers { launches }
 
         coEvery {
-            mockCallProcessorApollo.processCallAsync<LaunchListQuery.Data>(any())
-        } returns CompletableDeferred(Either.right(mockResponseSuccess))
+            mockCallWrapperApollo.processCallAsync<LaunchListQuery.Data>(any())
+        } returns CompletableDeferred(success(mockResponseSuccess))
 
         coEvery {
-            mockCallProcessorApollo.processCallAwait<LaunchListQuery.Data>(any())
-        } returns Either.right(mockResponseSuccess)
+            mockCallWrapperApollo.processCallAwait<LaunchListQuery.Data>(any())
+        } returns success(mockResponseSuccess)
 
         return this
     }
@@ -39,12 +40,12 @@ class StateBuilder internal constructor() {
     internal fun getLaunchFail(errorMessage: ErrorMessage): StateBuilder {
 
         coEvery {
-            mockCallProcessorApollo.processCallAsync<LaunchListQuery.Data>(any())
-        } returns CompletableDeferred(Either.left(errorMessage))
+            mockCallWrapperApollo.processCallAsync<LaunchListQuery.Data>(any())
+        } returns CompletableDeferred(fail(errorMessage))
 
         coEvery {
-            mockCallProcessorApollo.processCallAwait<LaunchListQuery.Data>(any())
-        } returns Either.left(errorMessage)
+            mockCallWrapperApollo.processCallAwait<LaunchListQuery.Data>(any())
+        } returns fail(errorMessage)
 
         return this
     }

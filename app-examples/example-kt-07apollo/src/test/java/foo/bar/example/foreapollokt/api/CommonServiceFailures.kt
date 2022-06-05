@@ -9,12 +9,12 @@ import java.util.ArrayList
 /**
  * This will be specific to your own app, it's closely linked with: @[CustomGlobalErrorHandler]
  */
-class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedServiceDefinition<ErrorMessage>>() {
+class CommonServiceFailures : ArrayList<StubbedServiceDefinition<ErrorMessage>>() {
     init {
 
         //network down / airplane mode
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 IOException("fake io exception for testing purposes"),
                 ErrorMessage.ERROR_NETWORK
             )
@@ -22,7 +22,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //network timeout
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 SocketTimeoutException("fake timeout exception for testing purposes"),
                 ErrorMessage.ERROR_NETWORK
             )
@@ -30,7 +30,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //bad request
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 400,
                 "common/empty.json",
                 ErrorMessage.ERROR_CLIENT
@@ -39,7 +39,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //session timeout
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 401,
                 "common/empty.json",
                 ErrorMessage.ERROR_SESSION_TIMED_OUT
@@ -48,7 +48,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //missing resource
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 404,
                 "common/empty.json",
                 ErrorMessage.ERROR_SERVER
@@ -57,7 +57,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //missing resource (html page)
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 404,
                 "common/html.json",
                 "text/html",
@@ -67,7 +67,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //bad request
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 405,
                 "common/empty.json",
                 ErrorMessage.ERROR_CLIENT
@@ -76,7 +76,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //server down
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 500,
                 "common/empty.json",
                 ErrorMessage.ERROR_SERVER
@@ -85,7 +85,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //service unavailable
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 503,
                 "common/empty.json",
                 ErrorMessage.ERROR_SERVER
@@ -94,7 +94,7 @@ class CommonServiceFailures : ArrayList<co.early.fore.net.testhelpers.StubbedSer
 
         //non valid json
         add(
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 200,
                 "common/html.json",
                 ErrorMessage.ERROR_SERVER

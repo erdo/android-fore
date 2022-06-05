@@ -1,11 +1,8 @@
 package co.early.fore.core.utils.text;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import co.early.fore.core.Affirm;
 
 /**
  * Basic class which only deals with Left to Right text and will work for Monospaced fonts only
@@ -35,7 +32,7 @@ public class BasicTextWrapper {
      */
     public static List<String> wrapMonospaceText(String fullText, int charactersAvailable) {
 
-        Affirm.notNull(fullText);
+        notNull(fullText);
 
         if (charactersAvailable <= 0) {
             throw new IllegalArgumentException("charactersAvailable needs to be larger than 0, charactersAvailable:" + charactersAvailable);
@@ -161,5 +158,12 @@ public class BasicTextWrapper {
         }
 
         return stringBuilder.toString();
+    }
+
+    private static <T> T notNull(T param) {
+        if (param == null) {
+            throw new NullPointerException("Parameter must not be null");
+        }
+        return param;
     }
 }

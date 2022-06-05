@@ -13,8 +13,9 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.apollo.CallProcessorApollo
-import co.early.fore.kt.core.Either
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.net.apollo.CallWrapperApollo
 import foo.bar.example.foreapollokt.R
 import foo.bar.example.foreapollokt.feature.FailureCallback
 import foo.bar.example.foreapollokt.feature.SuccessCallback
@@ -65,7 +66,7 @@ class LaunchViewRotationTest {
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
-    lateinit var mockCallProcessorApollo: CallProcessorApollo<ErrorMessage>
+    lateinit var mockCallWrapperApollo: CallWrapperApollo<ErrorMessage>
 
     @MockK
     private lateinit var mockLaunchService: LaunchService
@@ -78,7 +79,7 @@ class LaunchViewRotationTest {
 
     private val launch = Launch("123", "site", true, "http://www.test.com/someimage.png")
 
-    private lateinit var deferredResult: CompletableDeferred<Either<ErrorMessage, CallProcessorApollo.SuccessResult<LaunchListQuery.Data>>>
+    private lateinit var deferredResult: CompletableDeferred<Either<ErrorMessage, CallWrapperApollo.SuccessResult<LaunchListQuery.Data>>>
     private val countDownLatch = CountDownLatch(1)
 
     @Before
@@ -91,7 +92,7 @@ class LaunchViewRotationTest {
         //construct a real model with mock dependencies
         launchesModel = LaunchesModel(
                 mockLaunchService,
-                mockCallProcessorApollo,
+                mockCallWrapperApollo,
                 mockAuthenticator,
                 logger
         )
@@ -142,12 +143,12 @@ class LaunchViewRotationTest {
         getInstrumentation().runOnMainSync {
             logger.i("about to call success, id:" + Thread.currentThread().id)
 
-            deferredResult.complete(Either.right(CallProcessorApollo.SuccessResult(createMockLaunchesResponse(launch))))
+            deferredResult.complete(success(CallWrapperApollo.SuccessResult(createMockLaunchesResponse(launch))))
             countDownLatch.countDown()
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, CallProcessorApollo.SuccessResult<LaunchListQuery.Data>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, CallWrapperApollo.SuccessResult<LaunchListQuery.Data>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

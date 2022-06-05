@@ -4,8 +4,9 @@ import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import co.early.fore.kt.net.apollo3.CallWrapperApollo3
 import co.early.fore.net.testhelpers.InterceptorStubbedService
+import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import foo.bar.example.foreapollo3.*
@@ -39,7 +40,7 @@ class LaunchFetcherIntegrationTest {
 
     private val interceptorLogging = InterceptorLogging()
     private val logger = SystemLogger()
-    private val callProcessor = CallProcessorApollo3(CustomGlobalErrorHandler(logger))
+    private val callWrapper = CallWrapperApollo3(CustomGlobalErrorHandler(logger))
 
     @MockK
     private lateinit var mockSuccess: SuccessCallback
@@ -75,7 +76,7 @@ class LaunchFetcherIntegrationTest {
         val apolloClient = stubbedApolloClient(stubbedSuccess)
         val launchesModel = LaunchesModel(
             createLaunchService(apolloClient),
-            callProcessor,
+            callWrapper,
             mockAuthenticator,
             logger
         )
@@ -114,7 +115,7 @@ class LaunchFetcherIntegrationTest {
         val apolloClient = stubbedApolloClient(stubbedFailSaysNo)
         val launchesModel = LaunchesModel(
             createLaunchService(apolloClient),
-            callProcessor,
+            callWrapper,
             mockAuthenticator,
             logger
         )
@@ -149,7 +150,7 @@ class LaunchFetcherIntegrationTest {
         val apolloClient = stubbedApolloClient(stubbedFailureInternalServerError)
         val launchesModel = LaunchesModel(
             createLaunchService(apolloClient),
-            callProcessor,
+            callWrapper,
             mockAuthenticator,
             logger
         )
@@ -195,7 +196,7 @@ class LaunchFetcherIntegrationTest {
             val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
             val launchesModel = LaunchesModel(
                 createLaunchService(apolloClient),
-                callProcessor,
+                callWrapper,
                 mockAuthenticator,
                 logger
             )
@@ -218,7 +219,7 @@ class LaunchFetcherIntegrationTest {
     }
 
 
-    private fun stubbedApolloClient(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): ApolloClient {
+    private fun stubbedApolloClient(stubbedServiceDefinition: StubbedServiceDefinition<*>): ApolloClient {
         return CustomApolloBuilder.create(
             InterceptorStubbedService(
                 stubbedServiceDefinition
@@ -240,7 +241,7 @@ class LaunchFetcherIntegrationTest {
     companion object {
 
         private val stubbedSuccess =
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 200, //stubbed HTTP code
                 "launches/success.json", //stubbed body response
                 Launch("109", "Site 40") //expected result
@@ -248,14 +249,14 @@ class LaunchFetcherIntegrationTest {
 
 
         private val stubbedFailSaysNo =
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 200, //stubbed HTTP code
                 "launches/error_launch_service_says_no.json", //stubbed body response
                 ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
             )
 
         private val stubbedFailureInternalServerError =
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
+            StubbedServiceDefinition(
                 200, //stubbed HTTP code - all 200 because GraphQL
                 "common/error_internal_server.json", //stubbed body response
                 ErrorMessage.INTERNAL_SERVER_ERROR  //expected result

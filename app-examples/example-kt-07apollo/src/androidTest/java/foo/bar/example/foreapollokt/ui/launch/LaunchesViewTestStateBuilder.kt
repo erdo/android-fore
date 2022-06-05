@@ -3,7 +3,6 @@ package foo.bar.example.foreapollokt.ui.launch
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.core.WorkMode
 import foo.bar.example.foreapollokt.ProgressBarIdler
 import foo.bar.example.foreapollokt.App
 import foo.bar.example.foreapollokt.OG

@@ -4,8 +4,7 @@ import android.app.Application
 import co.early.fore.kt.core.logging.AndroidLogger
 import co.early.fore.kt.core.logging.SilentLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.apollo3.CallProcessorApollo3
-import com.apollographql.apollo3.api.ApolloRequest
+import co.early.fore.kt.net.apollo3.CallWrapperApollo3
 import com.apollographql.apollo3.api.Optional
 import foo.bar.example.foreapollo3.api.CustomApolloBuilder
 import foo.bar.example.foreapollo3.api.CustomGlobalErrorHandler
@@ -42,7 +41,7 @@ object OG {
             InterceptorLogging(logger)
         )//logging interceptor should be the last one
 
-        val callProcessor = CallProcessorApollo3(
+        val callWrapper = CallWrapperApollo3(
             CustomGlobalErrorHandler(logger),
             logger
         )
@@ -52,7 +51,7 @@ object OG {
             authService = AuthService(
                 login = { email -> apolloClient.mutation(LoginMutation(Optional.Present(email))).execute() }
             ),
-            callProcessor,
+            callWrapper,
             logger
         )
         globalRequestInterceptor.setAuthenticator(authenticator)
@@ -64,7 +63,7 @@ object OG {
                 bookTrip = { id -> apolloClient.mutation(BookTripMutation(id)).execute() },
                 cancelTrip = { id -> apolloClient.mutation(CancelTripMutation(id)).execute() }
             ),
-            callProcessor,
+            callWrapper,
             authenticator,
             logger
         )

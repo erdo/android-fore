@@ -10,6 +10,7 @@ import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 
+@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallerRetrofit2 instead", replaceWith = ReplaceWith(expression = "CallerRetrofit2<F>"))
 interface Retrofit2Caller<F> {
     suspend fun <S> processCallAwait(
         call: suspend () -> Response<S>
@@ -50,6 +51,7 @@ interface Retrofit2Caller<F> {
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
+@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallWrapperRetrofit2 instead", replaceWith = ReplaceWith(expression = "CallWrapperRetrofit2<F>"))
 class CallProcessorRetrofit2<F>(
     private val errorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
     private val workMode: WorkMode? = null,

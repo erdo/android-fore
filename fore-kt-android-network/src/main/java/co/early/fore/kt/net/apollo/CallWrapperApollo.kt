@@ -1,10 +1,12 @@
 package co.early.fore.kt.net.apollo
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.fail
+import co.early.fore.kt.core.type.Either.Companion.success
 import co.early.fore.net.apollo.ErrorHandler
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Error
@@ -14,14 +16,13 @@ import kotlinx.coroutines.Deferred
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallerApollo instead", replaceWith = ReplaceWith(expression = "CallerApollo<F>", "co.early.fore.kt.core.type.carryOn"))
-interface ApolloCaller<F> {
+interface CallerApollo<F> {
     suspend fun <S> processCallAwait(
         call: () -> ApolloCall<S>
-    ): Either<F, CallProcessorApollo.SuccessResult<S>>
+    ): Either<F, CallWrapperApollo.SuccessResult<S>>
     suspend fun <S> processCallAsync(
         call: () -> ApolloCall<S>
-    ): Deferred<Either<F, CallProcessorApollo.SuccessResult<S>>>
+    ): Deferred<Either<F, CallWrapperApollo.SuccessResult<S>>>
 }
 
 /**
@@ -47,13 +48,12 @@ interface ApolloCaller<F> {
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallWrapperApollo instead", replaceWith = ReplaceWith(expression = "CallWrapperApollo<F>"))
-class CallProcessorApollo<F>(
+class CallWrapperApollo<F>(
     private val errorHandler: ErrorHandler<F>,
     private val logger: Logger? = null,
     private val workMode: WorkMode? = null,
     private val allowPartialSuccesses: Boolean = false
-) : ApolloCaller<F> {
+) : CallerApollo<F> {
 
     data class SuccessResult<S>(
             val data: S,
@@ -107,7 +107,7 @@ class CallProcessorApollo<F>(
 
         return if (data != null) {
             if (!response.hasErrors() || allowPartialSuccesses) {
-                Either.right(SuccessResult(data, response.errors
+                success(SuccessResult(data, response.errors
                         ?: mutableListOf(), response.extensions, response.isFromCache))
             } else {
                 processFailResponse(null, response)
@@ -125,6 +125,6 @@ class CallProcessorApollo<F>(
             Fore.getLogger(logger).e("processFailResponse() t:" + Thread.currentThread(), t)
         }
 
-        return Either.left(errorHandler.handleError(t, errorResponse))
+        return fail(errorHandler.handleError(t, errorResponse))
     }
 }

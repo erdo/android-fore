@@ -3,10 +3,8 @@ package foo.bar.example.forektorkt.feature.fruit
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.ktor.CallProcessorKtor
+import co.early.fore.kt.net.ktor.CallWrapperKtor
 import co.early.fore.net.testhelpers.InterceptorStubbedService
-import co.early.fore.net.testhelpers.StubbedServiceDefinition
 import foo.bar.example.forektorkt.api.CommonServiceFailures
 import foo.bar.example.forektorkt.api.CustomGlobalErrorHandler
 import foo.bar.example.forektorkt.api.CustomKtorBuilder
@@ -37,9 +35,9 @@ class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
     private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
-    private val callProcessor = CallProcessorKtor(
-            errorHandler = CustomGlobalErrorHandler(logger),
-            logger = logger
+    private val callWrapper = CallWrapperKtor(
+        errorHandler = CustomGlobalErrorHandler(logger),
+        logger = logger
     )
 
     @MockK
@@ -73,7 +71,7 @@ class FruitFetcherIntegrationTest {
         val httpClient = stubbedHttpClient(stubbedSuccess)
         val fruitFetcher = FruitFetcher(
                 FruitService.create(httpClient),
-                callProcessor,
+                callWrapper,
                 logger
         )
 
@@ -109,7 +107,7 @@ class FruitFetcherIntegrationTest {
         val httpClient = stubbedHttpClient(stubbedFailUserLocked)
         val fruitFetcher = FruitFetcher(
                 FruitService.create(httpClient),
-                callProcessor,
+                callWrapper,
                 logger
         )
 
@@ -143,7 +141,7 @@ class FruitFetcherIntegrationTest {
         val httpClient = stubbedHttpClient(stubbedFailureUserNotEnabled)
         val fruitFetcher = FruitFetcher(
                 FruitService.create(httpClient),
-                callProcessor,
+                callWrapper,
                 logger
         )
 
@@ -188,7 +186,7 @@ class FruitFetcherIntegrationTest {
             val httpClient = stubbedHttpClient(stubbedServiceDefinition)
             val fruitFetcher = FruitFetcher(
                     FruitService.create(httpClient),
-                    callProcessor,
+                    callWrapper,
                     logger
             )
 

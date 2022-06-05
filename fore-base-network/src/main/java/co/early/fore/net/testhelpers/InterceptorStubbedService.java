@@ -2,7 +2,6 @@ package co.early.fore.net.testhelpers;
 
 import java.io.IOException;
 
-import co.early.fore.core.Affirm;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
@@ -25,7 +24,7 @@ public class InterceptorStubbedService implements Interceptor {
     private final StubbedServiceDefinition stubbedServiceDefinition;
 
     public InterceptorStubbedService(StubbedServiceDefinition stubbedServiceDefinition) {
-        this.stubbedServiceDefinition = Affirm.notNull(stubbedServiceDefinition);
+        this.stubbedServiceDefinition = notNull(stubbedServiceDefinition);
     }
 
     @Override
@@ -47,5 +46,11 @@ public class InterceptorStubbedService implements Interceptor {
                     .build();
     }
 
+    private <T> T notNull(T param) {
+        if (param == null) {
+            throw new NullPointerException("Parameter must not be null");
+        }
+        return param;
+    }
 }
 

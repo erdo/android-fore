@@ -14,8 +14,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.core.Either
-import co.early.fore.kt.net.ktor.CallProcessorKtor
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.forektorkt.R
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
@@ -63,7 +64,7 @@ class FruitViewRotationTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
     @MockK
-    lateinit var mockCallProcessorKtor: CallProcessorKtor<ErrorMessage>
+    lateinit var mockCallWrapperKtor: CallWrapperKtor<ErrorMessage>
     @MockK
     private lateinit var mockFruitService: FruitService
 
@@ -80,7 +81,7 @@ class FruitViewRotationTest {
         //construct a real model with mock dependencies
         fruitFetcher = FruitFetcher(
             mockFruitService,
-            mockCallProcessorKtor,
+            mockCallWrapperKtor,
             logger
         )
     }
@@ -119,7 +120,7 @@ class FruitViewRotationTest {
     }
 
 
-    fun completeDeferredResult() {
+    private fun completeDeferredResult() {
 
         logger.i("callSuccessOnCachedSuccessFailCallback()")
 
@@ -130,12 +131,12 @@ class FruitViewRotationTest {
         getInstrumentation().runOnMainSync {
             logger.i("about to call success, id:" + Thread.currentThread().id)
 
-            deferredResult.complete(Either.right(fruitList))
+            deferredResult.complete(success(fruitList))
             countDownLatch.countDown()
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, List<FruitPojo>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<co.early.fore.kt.core.type.Either<ErrorMessage, List<FruitPojo>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

@@ -3,7 +3,6 @@ package foo.bar.example.forektorkt.ui.fruit
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.core.WorkMode
 import foo.bar.example.forektorkt.ProgressBarIdler
 import foo.bar.example.forektorkt.App
 import foo.bar.example.forektorkt.OG

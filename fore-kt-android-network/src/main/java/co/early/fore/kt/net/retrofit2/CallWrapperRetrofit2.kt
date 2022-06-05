@@ -1,29 +1,31 @@
-package co.early.fore.kt.net.ktor
+package co.early.fore.kt.net.retrofit2
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.Fore
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.fail
+import co.early.fore.kt.core.type.Either.Companion.success
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
+import retrofit2.Response
 
-@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallerKtor instead", replaceWith = ReplaceWith(expression = "CallerKtor<F>"))
-interface KtorCaller<F> {
+interface CallerRetrofit2<F> {
     suspend fun <S> processCallAwait(
-        call: suspend () -> S
+        call: suspend () -> Response<S>
     ): Either<F, S>
     suspend fun <S, CE : MessageProvider<F>> processCallAwait(
         customErrorClazz: Class<CE>,
-        call: suspend () -> S
+        call: suspend () -> Response<S>
     ): Either<F, S>
     suspend fun <S> processCallAsync(
-        call: suspend () -> S
+        call: suspend () -> Response<S>
     ): Deferred<Either<F, S>>
     suspend fun <S, CE : MessageProvider<F>> processCallAsync(
         customErrorClazz: Class<CE>,
-        call: suspend () -> S
+        call: suspend () -> Response<S>
     ): Deferred<Either<F, S>>
 }
 
@@ -47,23 +49,23 @@ interface KtorCaller<F> {
  * means network requests are run on Dispatchers.IO
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
  *
- * @param <F> The class type passed back in the event of a failure, Globally applicable
+ * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallWrapperKtor instead", replaceWith = ReplaceWith(expression = "CallWrapperKtor<F>", "co.early.fore.kt.core.type.carryOn"))
-class CallProcessorKtor<F>(
-    private val errorHandler: ErrorHandler<F>,
+class CallWrapperRetrofit2<F>(
+    private val errorHandler: co.early.fore.net.retrofit2.ErrorHandler<F>,
     private val workMode: WorkMode? = null,
     private val logger: Logger? = null
-) : KtorCaller<F> {
+) : CallerRetrofit2<F> {
 
     /**
      * @param call Retrofit call to be processed
      * @param <S> Successful response body type
      */
-    override suspend fun <S> processCallAwait(call: suspend () -> S): Either<F, S> {
+    override suspend fun <S> processCallAwait(call: suspend () -> Response<S>): Either<F, S> {
         return processCallAsync(call).await()
     }
+
 
     /**
      * @param call Retrofit call to be processed
@@ -71,7 +73,7 @@ class CallProcessorKtor<F>(
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
             customErrorClazz: Class<CE>,
-            call: suspend () -> S
+            call: suspend () -> Response<S>
     ): Either<F, S> {
         return processCallAsync(customErrorClazz, call).await()
     }
@@ -81,7 +83,7 @@ class CallProcessorKtor<F>(
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
-    override suspend fun <S> processCallAsync(call: suspend () -> S): Deferred<Either<F, S>> {
+    override suspend fun <S> processCallAsync(call: suspend () -> Response<S>): Deferred<Either<F, S>> {
         return doCallAsync<S, MessageProvider<F>>(null, call)
     }
 
@@ -92,38 +94,57 @@ class CallProcessorKtor<F>(
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAsync(
             customErrorClazz: Class<CE>,
-            call: suspend () -> S
+            call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
         return doCallAsync(customErrorClazz, call)
     }
 
     private suspend fun <S, CE : MessageProvider<F>> doCallAsync(
             customErrorClazz: Class<CE>?,
-            call: suspend () -> S
+            call: suspend () -> Response<S>
     ): Deferred<Either<F, S>> {
 
-        Fore.getLogger(logger).d("doCallAsync() thread:" + Thread.currentThread())
+        Fore.getLogger(logger).d("doCallAsync() t:" + Thread.currentThread())
 
         return asyncMain(Fore.getWorkMode(workMode)) {
             try {
 
-                val result: S = awaitIO(Fore.getWorkMode(workMode)) {
+                val result: Response<S> = awaitIO(Fore.getWorkMode(workMode)) {
 
-                    Fore.getLogger(logger).d("about to make call from io dispatcher, thread:" + Thread.currentThread())
+                    Fore.getLogger(logger).d("about to make call from io dispatcher, t:" + Thread.currentThread())
 
                     call()
                 }
 
-                Fore.getLogger(logger).d("continuing back on main dispatcher thread:" + Thread.currentThread())
+                Fore.getLogger(logger).d("continuing back on main dispatcher t:" + Thread.currentThread())
 
-                Either.right(result)
-
+                processSuccessResponse(result, customErrorClazz)
             } catch (t: Throwable) {
-
-                Fore.getLogger(logger).w("processFailResponse() thread:${Thread.currentThread()} ${t.message}")
-
-                Either.left(errorHandler.handleError(t, customErrorClazz))
+                processFailResponse<CE, S>(t, null, customErrorClazz)
             }
         }
+    }
+
+    private fun <CE : MessageProvider<F>, S> processSuccessResponse(
+            response: Response<S>, customErrorClass: Class<CE>?
+    ): Either<F, S> {
+        val resp: S? = response.body()
+
+        return if (response.isSuccessful && resp != null) {
+            success(resp)
+        } else {
+            processFailResponse(null, response, customErrorClass)
+        }
+    }
+
+    private fun <CE : MessageProvider<F>, S> processFailResponse(
+            t: Throwable?, errorResponse: Response<*>?, customErrorClass: Class<CE>?
+    ): Either<F, S> {
+
+        if (t != null) {
+            Fore.getLogger(logger).w("processFailResponse() t:" + Thread.currentThread(), t)
+        }
+
+        return fail(errorHandler.handleError(t, errorResponse, customErrorClass, null))
     }
 }

@@ -7,10 +7,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.net.apollo3.CallProcessorApollo3
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.kt.net.apollo3.CallWrapperApollo3
 import foo.bar.example.foreapollo3.LaunchListQuery
 import foo.bar.example.foreapollo3.R
 import foo.bar.example.foreapollo3.feature.FailureCallback
@@ -62,7 +63,7 @@ class LaunchViewRotationTest {
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
-    lateinit var mockCallProcessorApollo: CallProcessorApollo3<ErrorMessage>
+    lateinit var mockCallWrapperApollo: CallWrapperApollo3<ErrorMessage>
 
     @MockK
     private lateinit var mockLaunchService: LaunchService
@@ -75,7 +76,7 @@ class LaunchViewRotationTest {
 
     private val launch = Launch("123", "site", true, "http://www.test.com/someimage.png")
 
-    private lateinit var deferredResult: CompletableDeferred<Either<ErrorMessage, CallProcessorApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage>>>
+    private lateinit var deferredResult: CompletableDeferred<Either<ErrorMessage, CallWrapperApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage>>>
     private val countDownLatch = CountDownLatch(1)
 
     @Before
@@ -88,7 +89,7 @@ class LaunchViewRotationTest {
         //construct a real model with mock dependencies
         launchesModel = LaunchesModel(
             mockLaunchService,
-            mockCallProcessorApollo,
+            mockCallWrapperApollo,
             mockAuthenticator,
             logger
         )
@@ -140,8 +141,8 @@ class LaunchViewRotationTest {
             logger.i("about to call success, id:" + Thread.currentThread().id)
 
             deferredResult.complete(
-                Either.right(
-                    CallProcessorApollo3.SuccessResult(
+                success(
+                    CallWrapperApollo3.SuccessResult(
                         createMockLaunchesResponse(launch)
                     )
                 )
@@ -150,7 +151,7 @@ class LaunchViewRotationTest {
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, CallProcessorApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<Either<ErrorMessage, CallWrapperApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

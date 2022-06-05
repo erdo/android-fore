@@ -5,7 +5,7 @@ import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
-import co.early.fore.kt.net.retrofit2.CallProcessorRetrofit2
+import co.early.fore.kt.net.retrofit2.CallWrapperRetrofit2
 import co.early.fore.net.testhelpers.InterceptorStubbedService
 import foo.bar.example.foreretrofitkt.api.CommonServiceFailures
 import foo.bar.example.foreretrofitkt.api.CustomGlobalErrorHandler
@@ -41,8 +41,8 @@ class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
     private val interceptorLogging = InterceptorLogging(logger)
-    private val callProcessor =
-        CallProcessorRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
+    private val callWrapper =
+        CallWrapperRetrofit2(CustomGlobalErrorHandler(logger), WorkMode.SYNCHRONOUS, logger)
 
     @MockK
     private lateinit var mockSuccess: SuccessCallback
@@ -75,7 +75,7 @@ class FruitFetcherIntegrationTest {
         val retrofit = stubbedRetrofit(stubbedSuccess)
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
-            callProcessor,
+            callWrapper,
             logger
         )
 
@@ -117,7 +117,7 @@ class FruitFetcherIntegrationTest {
         val retrofit = stubbedRetrofit(stubbedFailUserLocked)
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
-            callProcessor,
+            callWrapper,
             logger
         )
 
@@ -151,7 +151,7 @@ class FruitFetcherIntegrationTest {
         val retrofit = stubbedRetrofit(stubbedFailureUserNotEnabled)
         val fruitFetcher = FruitFetcher(
             retrofit.create(FruitService::class.java),
-            callProcessor,
+            callWrapper,
             logger
         )
 
@@ -196,7 +196,7 @@ class FruitFetcherIntegrationTest {
             val retrofit = stubbedRetrofit(stubbedServiceDefinition)
             val fruitFetcher = FruitFetcher(
                 retrofit.create(FruitService::class.java),
-                callProcessor,
+                callWrapper,
                 logger
             )
 

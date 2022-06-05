@@ -1,16 +1,17 @@
 package co.early.fore.kt.net.ktor
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.Either
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.coroutine.asyncMain
 import co.early.fore.kt.core.coroutine.awaitIO
 import co.early.fore.kt.core.delegate.Fore
+import co.early.fore.kt.core.type.Either
+import co.early.fore.kt.core.type.Either.Companion.fail
+import co.early.fore.kt.core.type.Either.Companion.success
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 
-@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallerKtor instead", replaceWith = ReplaceWith(expression = "CallerKtor<F>"))
-interface KtorCaller<F> {
+interface CallerKtor<F> {
     suspend fun <S> processCallAwait(
         call: suspend () -> S
     ): Either<F, S>
@@ -47,15 +48,14 @@ interface KtorCaller<F> {
  * means network requests are run on Dispatchers.IO
  * @param logger (optional: ForeDelegateHolder will choose a sensible default)
  *
- * @param <F> The class type passed back in the event of a failure, Globally applicable
+ * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-@Deprecated("uses a deprecated version of Either and will be removed in a future fore release, use CallWrapperKtor instead", replaceWith = ReplaceWith(expression = "CallWrapperKtor<F>", "co.early.fore.kt.core.type.carryOn"))
-class CallProcessorKtor<F>(
+class CallWrapperKtor<F>(
     private val errorHandler: ErrorHandler<F>,
     private val workMode: WorkMode? = null,
     private val logger: Logger? = null
-) : KtorCaller<F> {
+) : CallerKtor<F> {
 
     /**
      * @param call Retrofit call to be processed
@@ -116,13 +116,13 @@ class CallProcessorKtor<F>(
 
                 Fore.getLogger(logger).d("continuing back on main dispatcher thread:" + Thread.currentThread())
 
-                Either.right(result)
+                success(result)
 
             } catch (t: Throwable) {
 
                 Fore.getLogger(logger).w("processFailResponse() thread:${Thread.currentThread()} ${t.message}")
 
-                Either.left(errorHandler.handleError(t, customErrorClazz))
+                fail(errorHandler.handleError(t, customErrorClazz))
             }
         }
     }
