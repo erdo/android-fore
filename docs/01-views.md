@@ -54,7 +54,7 @@ I'm going to defer to the [dev.to spot the bug tutorial](https://dev.to/erdo/tut
 
 ### Writing an effective syncView() method
 
-*A lot of this advice also applies to writing MVI render() methods. MVI's reducer() function helps to maintain state consistency, but it won't matter if the render() method written in the view layer doesn't set an affirmative state for each UI element.*
+*This advice also applies to collecting UI state changes from a Flow, or writing MVI render() methods.*
 
 As part of refreshing the entire view, the syncView() method must set an **affirmative state** for every view element property that you are interested in. What that means is that where there is an **if** there must always be an **else** for each property.
 
@@ -135,7 +135,7 @@ totalPrice.color = if (basket.isBelowMinimum()) red else black
 
 ### showOrGone and showOrInvisible
 
-When writing syncView() functions, you will often come across situations where you want to set a visibility to VISIBLE / INVISIBLE or VISIBLE / GONE based on a boolean state of a model or viewState data class. This is a very short line to write in java, slightly less so in kotlin (as we don't have the elvis operator for ternerary operations). So for kotlin the fore offers one of two extension functions. So if you prefer, you can write the following:
+When writing syncView() functions, you will often come across situations where you want to set a visibility to VISIBLE / INVISIBLE or VISIBLE / GONE based on a boolean state of a model or viewState data class. This is a very short line to write in java, slightly less so in kotlin (as we don't have the elvis operator for ternerary operations). So for kotlin, fore offers one of two extension functions. So if you prefer, you can write the following:
 
 
 <pre class="codesample"><code>
@@ -174,7 +174,7 @@ Triggers are created once - in onCreate() for example. And then "checked" each t
 Please see [here](https://github.com/erdo/fore-state-tutorial/blob/master/app/src/main/java/foo/bar/example/forelife/ui/GameOfLifeActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt) for some example usages of Triggers.
 
 ### TriggerWhen
-kotlin source is [here](https://github.com/erdo/android-fore/tree/master/fore-kt-core/src/main/java/co/early/fore/kt/core/ui/trigger/TiggerWhen.kt)
+kotlin source is [here](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/ui/trigger/TriggerWhen.kt)
 
 A **TriggerWhen** fires a predefined action (an event), when a certain threshold is met (based on some state). For example, this trigger fires the "show toast warning event" when it detects that a user's ballance is low:
 
@@ -296,6 +296,6 @@ All the view classes (Activity/Fragment/View) for the sample apps are found in t
 
 Here are few examples:
 
-- [Wallets View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt)
+- [Wallets View](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt)
 
-- [Counter View](https://github.com/erdo/android-fore/blob/master/example-jv-02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java)
+- [Counter View](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-02threading/src/main/java/foo/bar/example/forethreading/ui/CounterActivity.java)

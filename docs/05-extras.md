@@ -47,21 +47,8 @@ This one takes you though all the main points of **fore** together with a lot of
 
 
 # State versus Events
-This is quite subtle but the issue presents itself in many different architectures (see also the presentation above), so I think it's worth saying a few things about it. You can choose to treat any of your applications data as state or an event. The choice you make will effect how straight forward it is to handle that data, and how clear your resulting code is.
 
-Let's take the example of a network error.
-
-If you choose to treat the network error as **state**, then in MVO style, somewhere you will have a getter in a model that exposes this error state, maybe it returns ERROR_NETWORK. It will return this ERROR_NETWORK object via the getter until the model changes (perhaps when you make another network call: that error state will be cleared, the observers notified, and the model's getter will now return a ERROR_NONE object when syncView() is next run). Similarly in MVI style, the ViewState will have an error field that will be ERROR_NETWORK and then after the error state has been cleared, the field will be ERROR_NONE in the next render() pass.
-
-Now let's think about the UI that might represent that error. Maybe when you are in the error state, you want a warning icon to display. Now let's say we rotate the screen (it's often helpful to think about what would happen during a screen rotation because it can be representative of a lot of other situations). After a rotation you still want to see the warning icon, because that's the current state, and you never want your view to lie. Other things can cause the view to re-sync itself and likewise you don't want that warning icon to disappear just because of a syncView() / render() call. The only time you want that warning icon to not be visible, is when the error state has actually been reset to ERROR_NONE by some logic processing away from the view layer.
-
-Looks like choosing to store our error as state was the right move here.
-
-Now let's consider another UI style, one where we display a temporary toast message or a snackbar when we encounter an error. That's a pretty common way of handling network errors. When the syncView() or render() method is called we notice the presence of ERROR_NETWORK and we show a toast message accordingly. How about when we rotate the screen? Well when the view is re-synced with the state of the app we will show that toast again, in fact anything that causes the view to be re drawn will cause that toast to appear again - multiple toasts for the same error is definitely not what we want. It's not the end of the world, there are a number of ways to handle this, in **fore** you would use a  [Trigger](https://erdo.github.io/android-fore/01-views.html#synctrigger) that bridges the two worlds of state and events, letting you fire one off events only as a result of a state *change*. But anyway, for this style of UI maybe we chose the wrong way of representing our error here. By treating our error as an **event** rather than a state of our view, we can just use a callback to fire a toast message and our code will likely end up a lot simpler.
-
-After all, a network error relates to a single point in time, if we loose it on rotation does it really matter? maybe it does, maybe it doesn't - maybe you want to treat everything as state just for consistency. That's where you need to make a decision about state versus event.
-
-This comes up a lot with displaying menus, popups, errors and running animations. There is a little more on that here: [When should I use an Observer, when should I use a callback listener?](https://erdo.github.io/android-fore/05-extras.html#observer-listener)
+Let's defer to [this article](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8)
 
 # Android's Original Mistake
 
@@ -94,9 +81,9 @@ Android apps that are written in **MVO** style have a certain *look* to them cod
 
 ## Typical characteristics of an app built with **fore**
 
-- **The structure** tends to contain two main packages (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/fore-full-example-02-kotlin/tree/master/app/src/main/java/foo/bar/example/fore/fullapp02), [here](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt) and [here](https://github.com/erdo/android-fore/tree/master/example-jv-06db/src/main/java/foo/bar/example/foredb)
+- **The structure** tends to contain two main packages (among others): **features** (which is usually straight forward testable code) and **ui** (which can only be tested with tools like Espresso or Robolectric). Examples: [here](https://github.com/erdo/fore-full-example-02-kotlin/tree/master/app/src/main/java/foo/bar/example/fore/fullapp02), [here](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt) and [here](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-06db/src/main/java/foo/bar/example/foredb)
 - For **Clean Architecture** implementations, the ui package can sometimes be called **presentation** and the feature package will often be renamed to **domain** and have its data specific components extracted and placed in a data **package**. It's also common to find clean architecture layers implemented in modules, rather then just packages. See here for an example [clean architecture implementation using fore](https://github.com/erdo/clean-modules-sample)
-- **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/android-fore/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/taskdetail/TaskDetailFragment.java), [here](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/ui/fruit/FruitActivity.java) and [here](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/ui/CounterActivity.kt)
+- **Activity and Fragment classes tend to be very light** and won't contain a lot of code in them. They are part of the [view layer](https://erdo.github.io/android-fore/01-views.html#shoom) after all. Examples: [here](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/taskdetail/TaskDetailFragment.java), [here](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/ui/fruit/FruitActivity.java) and [here](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/ui/CounterActivity.kt)
 - **The View classes follow a very standard flow** which is: get a reference to UI components -> inject model dependencies -> setup click listeners/adapters etc -> setup any animations if needed -> make the ui reactive by adding and removing an observer and using a syncView method. There are techniques to reduce some of this boiler plate though, so that views can end up looking more like [this](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) or [this](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt)
 
 Given any app that is using **fore** observables to implement an MVO style architecture (clean or otherwise): first check the package/module structure, then investigate one of the activities and/or fragments to check it's as small as it can be. Next take a look at a UI class to see if you recognise the flow mentioned above. Check the reactive behaviour especially i.e. is an observer being added and removed, how does the syncView method look. Look out for any UI state being set outside of the syncView method. It should take seconds to establish if the project is approximately correct and has a chance of the UI remaining consistent, handling rotations and not having memory leaks. Further to that, here is a list of specific warning signs that will highlight potentially incorrect code.
@@ -273,100 +260,7 @@ The CEO is in control of the whole lot, whatever she says goes. But if you took 
 Inversion of control means turning that control on its head and giving it to the lower parts of the system. Who decides when to enter power saving mode on the printer? the printer does, it has control. And the printer wasn't manufactured in the office, it was made elsewhere and "injected" into the office by being delivered. Sometimes it gets swapped out for a newer model that prints more reliably. Write software like that.
 
 
-
-# ~~Frequently~~ Occasionally Asked Questions
-
-## <a name="observer-listener"></a> 1) When should I use an Observer, when should I use a callback listener?
-
-Note: I am personally on the fence about this, it is certainly more convenient sometimes to just have a callback from a model for: event based / transitory data - but you really need to know what you are doing to make that judgement. If you'd rather take that decision out of the hands of more junior developers, not allowing any callbacks in model APIs is one approach. It would mean that you would have to expose this event/transitory based data via regular getters or properties exposing state, and you would need to use something like a [Trigger](https://erdo.github.io/android-fore/01-views.html#synctrigger) to convert a **change of state** into an **event**, suitable for displaying in a toast for example. Basically: more complicated, but also more consistent with how regular state is handled. In case this is unfamiliar to you, there is a little presentation [here](http://state-event.surge.sh/) (click **s** to view the presentation notes) that discusses the relationship between state and events.
-
-So having said that: if you are looking to receive a one off success/fail result from a model as a direct result of the model performing some operation (like a network request) and you don't care if that data gets lost on rotation for example, then a regular callback could serve you better, it depends entirely on your apps requirements. More about how to treat state [**here**](https://erdo.github.io/android-fore/05-extras.html#state-versus-events).
-
-for example, calling model code from the UI layer:
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-model.doStuffOnAThread(new ResultListener{
-    @Override
-    public void success(){
-        //do next thing
-    }
-    @Override
-    public void fail(UserMessage reason){
-        showMessage(reason);
-    }
-});
- </code></pre>
-<pre class="tabcontent tabbed kotlin"><code>
-model.doStuffAsynchronously(
-    success = {
-      //do next thing
-    }
-    fail = { reason ->
-      showMessage(reason)
-    }
-)
- </code></pre>
-
-
-You can use both patterns in the same model with no problem of course, in the example above, the model could have a busy state that changes from false to true and back to false again during a network request so that view code can redraw itself as showing a busy swirly if appropriate. That would be better managed using the observer pattern. The model could implement the method like this:
-
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-public void doStuffOnAThread(final ResultListener resultListener){
-
-    busy = true;
-    notifyObservers();
-
-    startAsyncOperation(new FinishedListener(){
-        @Override
-        public void finished(){
-            busy = false;
-            resultListener.success();
-            notifyObservers();
-        }
-    });
-}
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-fun doStuffOnAThread(success: Success, fail: FailWithReason) {
-
-    if (busy) {
-        fail(Msg.BUSY)
-        return
-    }
-
-    busy = true
-    notifyObservers()
-
-    startAsyncOperation(finished = {
-       busy = false
-       success()
-       notifyObservers()
-    })
-}
- </code></pre>
-
-*Note code like this is only robust because we have made an architectural decision to have our model's public functions called on a single thread (which for a live app would be the UI thread).*
-
-For a real example of both techniques, take a look at the **FruitFetcher.fetchFruits()** method in the [retrofit example app](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java#L41). Notice how it fetches some fruit definitions, which does change the state of the model and therefore results in a call to the notifyObservers(). But the success or failure of the result is temporary and does not form part of the state of the FruitFetcher model, so that is just reported via a call back and the model forgets about it.
-
-For consistency, and for the same reasons outlined above, try to strongly resist the urge to respond directly with the data that was fetched via this listener. i.e. callback.success(latestFruit). It's tempting, and it will even work (until you rotate the screen). It breaks the whole point of MVO and it will lead other more inexperienced developers down the wrong path when they are trying to use your model - why would they bother to implement syncView() properly in their view, if they can just take a short cut here (hint: they won't). And then without anyone noticing, they will loose all the benefits of reactive UIs, see [syncView()](/android-fore/01-views.html#syncview) for a refresher.
-
-
-## <a name="syncview"></a> 2) Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
+# <a name="syncview"></a>Syncing the whole view feels wasteful, I'm just going to update the UI components that have changed for efficiency reasons.
 
 This seems to be the reaction of about 20% of the developers that come across this pattern for the first time. I think it might depend on what style of development experience they have have had in the past (it obviously won't be a problem for anyone coming from MVI for example).
 
@@ -401,8 +295,3 @@ The syncView() also completes pretty quickly as all of your getters should be re
 In addition, if you are setting a value on a UI element that is the same as the value it already has, it would be a bug in the android framework if it caused a complete re-layout in response anyway (I'm not guaranteeing such bugs don't exist, in fact EditText does something slightly stupid: it calls afterTextChanged() even when the text is identical to what it had before, but it's easy to [work around](https://github.com/erdo/android-architecture/blob/todo-mvo/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/ui/widget/CustomEditText.java). In any case, if you ever did get any kind of performance issues here, that's the time to measure and see what is happening, not before). If you follow the guidelines here correctly you will almost certainly encounter no problems at all, and that includes running on very cheap, low end devices (it wasn't an issue 10 years ago, it's certainly not an issue now). What you do get however is unparalleled robustness and clarity of code - which, because logic mistakes become fewer under those circumstances, sometimes results in even more performant code.
 
 If you have a model that is changing in some way that an observer just so happens NOT be interested in, you will end up making a pass through syncView() unnecessarily (but still not actually redrawing the screen): chillax and be happy with the knowledge that your UI is *definitely* consistent ;)
-
-
-## <a name="somethingchangedparam"></a> 3) Why not put a parameter in the somethingChanged() function
-
-Head over [here](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) for a discusion of that.

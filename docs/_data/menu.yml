@@ -63,5 +63,5 @@
       url: "#troubleshooting--how-to-smash-code-reviews"
     - text: Dependency Injection Basics
       url: "#dependency-injection-basics"
-    - text: FAQ
-      url: "#frequently-occasionally-asked-questions"
+    - text: Syncview and Efficiency
+      url: "#syncview"

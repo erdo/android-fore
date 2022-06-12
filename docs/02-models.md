@@ -14,7 +14,7 @@ An important thing about these models is that none of the code should know anyth
 
 In the sample apps, the models are all found in the **feature** package, in a clean architecture app they will typically live in the **domain** module.
 
-Here's the code for a very simple model which represents a user's [Wallet](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt)
+Here's the code for a very simple model which represents a user's [Wallet](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt)
 
 
 ## Writing a Basic Model
@@ -27,7 +27,7 @@ If you need to hop onto another thread for IO or any heavy processing, do it exp
 
 > pop back on to the UI thread when you are ready to update your state
 
-Check out a [[few]](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [[examples]](https://github.com/erdo/android-fore/blob/master/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice is generic and applies to writing ViewModels too, so it's all fairly obvious)_ feel free to skim over the checklist below for a refresher and you should be good to go.
+Check out a [[few]](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [[examples]](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice is generic and applies to writing ViewModels too, so it's all fairly obvious)_ feel free to skim over the checklist below for a refresher and you should be good to go.
 
 ## Model Checklist
 
