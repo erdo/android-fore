@@ -11,8 +11,6 @@
 <br/>
 <br/>
 
-[(click here if you're reading this on github)](https://erdo.github.io/android-fore/#shoom)
-
 **fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ## Quick Start
@@ -82,6 +80,7 @@ On the other hand, processing and combining data streams in the data layer on di
 
 **fore**'s observable classes basically let you **make anything observable** from the perspective of the UI thread (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
 
+These code samples will make more sense in the web docs, so [(click here)](https://erdo.github.io/android-fore/#shoom) if you're reading this on github
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -165,6 +164,21 @@ override fun onStop() {
 }
  </code></pre>
 
+That's what a line like:
+
+```
+    //setup observers
+    lifecycle.addObserver(LifecycleObserver(this, wallet))
+    
+```
+does for you automatically. It takes a **vararg**, so you're not limited in the number of observable models you can observe, for example this is also fine:
+
+```
+    //setup observers
+    lifecycle.addObserver(LifecycleObserver(this, wallet, inbox, account))
+    
+```
+
 All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of your observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate(), though you might be surprised to learn that fore has been using syncView() to implement unidirectional data flow since at least 2013!
 
 <!-- Tabbed code sample -->
@@ -235,7 +249,7 @@ class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), Syncabl
 
 Writing view layers this way helps quite a bit from a complexity standpoint, and it's one of the things that makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code. Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious though. This [discussion](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on the complexity / robustness aspect.
 
-Here's a very basic example from one of the mini kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
+Here's a very basic example from one of the mini kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
 Read more about the [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture of fore apps.
 
@@ -278,7 +292,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 <div class="shoom" id="fore-1-reactive-ui-example"/>
 ### **fore 1** Reactive UI Example
 
-[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-01reactiveui)
+[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-01reactiveui)
 
 ![fore reactive UI sample app](img/fore-android-sample-reactive.gif)
 
@@ -290,7 +304,7 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 <div class="shoom" id="fore-2-async-example"/>
 ### **fore 2** Asynchronous Code Example
 
-[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-02coroutine)
+[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-02coroutine)
 
 ![fore threading sample app](img/fore-android-sample-async.gif)
 
@@ -301,7 +315,7 @@ This app has a counter that you can increase by pressing a button (but it takes 
 <div class="shoom" id="fore-3-adapter-example"/>
 ### **fore 3** Adapter Example
 
-[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters)
+[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters)
 
 ![fore adapters sample app](img/fore-android-sample-adapters.gif)
 
@@ -317,11 +331,11 @@ The UI for each app is deliberately challenging to implement on android, and alt
 <div class="shoom" id="fore-4-retrofit-example"/>
 ### **fore 4** Retrofit Example
 
-[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit)
+[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-04retrofit)
 
 ![fore retrofit sample app](img/fore-android-sample-network.gif)
 
-Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallWrapper](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-network library, the kotlin implementation of CallProcessor is implemented with coroutines and has an API better suited to kotlin and functional programming.
+Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallProcessor](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-network library, the kotlin implementation of CallProcessor is implemented with coroutines and has an API better suited to kotlin and functional programming.
 
 As you're using the app, please notice:
 
@@ -331,18 +345,18 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 <div class="shoom" id="fore-7-apollo-example"/>
 ### **fore 7** Apollo Example
-[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-07apollo) \| [source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/example-kt-07apollo3)
+[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo) \| [source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo3)
 In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is competely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer. The Apollo3 implementation is still experimental.
 
 <div class="shoom" id="fore-8-ktor-example"/>
 ### **fore 8** Ktor Example
-[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/example-kt-08ktor)
-Ditto but using Ktor (and OkHttp). And as usual includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is competely testable / tested (Unit tests and UI tests)
+[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-08ktor)
+Ditto but using Ktor (and OkHttp). And as usual includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests)
 
 <div class="shoom" id="fore-6-db-example-room"/>
 ### **fore 6** DB Example (Room db driven to-do list)
 
-[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/example-jv-06db)
+[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-06db)
 
 ![fore room db sample app](img/fore-android-sample-db.gif)
 

@@ -1,11 +1,11 @@
 <a name="fore-network"></a>
 # Retrofit2, Apollo and Ktor
 
-Retrofit, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallWrapper** class ([CallWrapperRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/CallWrapperRetrofit2.kt) \| [CallProcessorApollo3](https://github.com/erdo/android-fore/blob/master/fore-kt-network/src/main/java/co/early/fore/kt/net/apollo/CallWrapperApollo3.kt) \| [CallProcessorKtorX](https://github.com/erdo/android-fore/blob/master/fore-kt-network/src/main/java/co/early/fore/kt/net/ktor/CallWrapperKtor.kt)). For usage examples, please see the appropriate example apps in the [repo](https://github.com/erdo/android-fore/).
+Retrofit, Apollo and Ktor all use OkHttp under the hood (for Ktor it's optional) and this enables **fore** to handle their networking calls in a very similar way: by wrapping them with a **CallWrapper** class ([CallWrapperRetrofit2](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/CallWrapperRetrofit2.kt) \| [CallWrapperApollo3](https://github.com/erdo/android-fore/blob/master/fore-kt-network/src/main/java/co/early/fore/kt/net/apollo3/CallWrapperApollo3.kt) \| [CallWrapperKtorX](https://github.com/erdo/android-fore/blob/master/fore-kt-network/src/main/java/co/early/fore/kt/net/ktor/CallWrapperKtor.kt)). For usage examples, please see the appropriate example apps in the repo.
 
 The CallWrapper allows us to abstract all the networking related work so that the models can just deal with either successful data or domain error messages depending on the result of the network call (the models don't need to know anything about HTTP codes or io exceptions etc).
 
-The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/Either.kt).
+The Java and Kotlin implementations have slightly different APIs, while the Java implementation takes advantage of lambda expressions, the Kotlin implementation uses suspend functions and returns an [Either](https://dev.to/erdo/intro-to-eithers-in-android-2om9).
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -23,8 +23,6 @@ callProcessor.processCall(service.getFruits("3s"), workMode,
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-//Retrofit2 example
-
 launchMain(workMode) {
 
     val result = callWrapper.processCallAwait {
@@ -40,77 +38,59 @@ launchMain(workMode) {
 
 The API is very slightly different depending on whether we are wrapping **Retrofit2** calls, **Apollo** calls or **Ktor** calls, please refer to the sample apps for details and test strategies.
 
-In all cases though, using the CallWrapper ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callProcessor responses) and **error handling** (the callProcessor API requires that an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
-
-## Either either
-
-I didn't really want to add yet another implementation of Either, but in the end it was preferrable to forcing people to use Arrow's Either (the feeling on Reddit semed to be that it was a bit rude to force it on to clients). Arrow's Either comes as part of the arrow-core-data package and that adds around 700KB to the overall apk size of a client app. That might not sound like a huge amount, but the whole point of fore is to be tiny / simple and 700KB is an order of magnitude larger than fore itself! For just one class it wasn't worth it.
-
-So fore 1.2.1 is the last version that uses Arrow's Either by default. If you still want to use Arrow after that, it's no problem, simply add an extension function like this somewhere in your app code:
-
-<pre class="codesample"><code>
-fun &lt;L, R&gt; Either&lt;L, R&gt;.toArrow(): arrow.core.Either&lt;L, R&gt; {
-    return when(this){
-        is Either.Left ->  arrow.core.Either.left(this.a)
-        is Either.Right -> arrow.core.Either.right(this.b)
-    }
-}
-</code></pre>
-
-And then you can convert any CallWrapper results from Fore Eithers to Arrow Eithers by doing: `result.toArrow()`. (You can of course use the same technique to convert Fore Eithers to whatever flavour of Either you prefer).
+In all cases though, using the CallWrapper ensures **clear separation of concerns** (between data/api layer code and feature/domain layer code), **testability** (via the ability to mock callWrapper responses) and **error handling** (the callWrapper API requires that an error handler is supplied like [this one](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api/CustomGlobalErrorHandler.kt) for example - so no more catching IOExceptions or handling HTTP 401s in view layer code).
 
 ## carryOn
 
-The kotlin CallWrapper is explained in detail [here](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874). That article also gets into how you can use the **carryOn** extension function that ships with **fore**. For a totally bonkers [9 lines of kotlin code](https://github.com/erdo/android-fore/blob/master/fore-kt-android-network/src/main/java/co/early/fore/kt/net/retrofit2/Retrofit2ResponseExt.kt), you get to chain your network calls together whilst also letting you handle **all** potential networking errors. It works with coroutines under the hood to banish nested callbacks and it'll let you write code like this:
+carryOn is an extension function available on the fore Either that lets you chain network calls together using the CallWrapper to ensure all networking errors are being handled. It looks like this:
 
-
-<pre class="codesample"><code>
-//Retrofit2 example
-
-callProcessor.processCallAsync {
-
-    var ticketRef = ""
-    ticketSvc.createUser() //Response&lt;UserPojo&gt;
-    .carryOn {
-      ticketSvc.createTicket(it.userId) //Response&lt;TicketPojo&gt;
+<pre class="codesample"><code>val response = createUserUseCase()
+  .carryOn { user ->
+    createUserTicketUseCase(user.userId)
+  }.carryOn { ticket ->
+    ticketRef = ticket.ticketRef
+    getEstimatedWaitingTimeUseCase(it.ticketRef)
+  }.carryOn { minutesWait ->
+    if (minutesWait > 10) {
+        cancelTicketUseCase(ticketRef)
+    } else {
+        confirmTicketUseCase(ticketRef)
     }
-    .carryOn {
-      ticketRef = it.ticketRef
-      ticketSvc.getEstWaitingTime(it.ticketRef) //Response&lt;TimePojo&gt;
-    }
-    .carryOn {
-      if (it.minutesWait > 10) {
-        ticketSvc.cancelTicket(ticketRef) //Response&lt;ResultPojo&gt;
-      } else {
-        ticketSvc.confirmTicket(ticketRef) //Response&lt;ResultPojo&gt;
-      }
-   }
+  }.carryOn {
+    claimFreeGiftUseCase(ticketRef)
+  }
+
+when (response) {
+    is Fail -> handleFailure(response.value)
+    is Success -> handleSuccess(response.value)
 }
 </code></pre>
 
-You can see it live in the kotlin version of [sample app 4](https://erdo.github.io/android-fore/#fore-4-retrofit-example)
+If all those useCases return fore Eithers, we basically have:
 
-*Because of small differences in Ktor and Apollo's API design, it's not quite as convenient to chain calls together. There is however an extension function on fore's Either implementation which lets you achieve something [very similar](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-07apollo/src/main/java/foo/bar/example/foreapollokt/feature/launch/LaunchesModel.kt#L104).*
+- no callback hell
+- highly dense business logic
+- complete confidence that errors are being handled
+
+You can see this technique being used to create a weather report by calling separate wind speed, pollen level, and temperature services in this [clean modules sample app](https://github.com/erdo/clean-modules-sample/blob/810a688b32cd2e32f2e0c8680e7cdc8cbd693c63/app/domain/src/main/java/foo/bar/clean/domain/weather/WeatherModel.kt#L94-L115)
 
 ## Custom APIs
 
-All APIs will be slightly different regarding what global headers they require, what HTTP response codes they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample retrofit app for an [example](https://github.com/erdo/android-fore/tree/master/example-kt-04retrofit/src/main/java/foo/bar/example/foreretrofitkt/api) of this customisation.
+All APIs will be slightly different regarding what global headers they require, what HTTP response codes they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample apps in the repo for an example of this customization.
 
 The sample apps all use JSON over HTTP, but there is no reason you can't use something like protobuf, for example.
 
 
 ## Testing Networking Code
 
-Another advantage of using the CallWrapper is that it can be mocked out during tests. The fore-retrofit sample app takes two alternative approaches to testing:
+Another advantage of using the CallWrapper is that your network code can easily be mocked out during tests. The networking sample apps in the fore repo take two alternative approaches to testing:
 
-- one ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callWrapper so that it returns successes or failures to the model
-- the other ([java](https://github.com/erdo/android-fore/blob/master/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor and therefore the model.
+- one ([java](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callWrapper so that it returns successes or failures
+- the other ([java](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor
 
-As with testing any asynchronous code with **fore**, we use WorkMode.**SYNCHRONOUS** to cause the Call to be processed on one thread which simplifies our test code (no need for latches etc).
+As with testing any asynchronous code with **fore**, the calls are processed synchronously when using the TestDelegateDefault which simplifies our test code considerably (no need for latches, or magic).
 
-
-
-# Adapter animations
+# Adapter animations [non-compose only]
 
 *For some robust and testable implementations, please see the [Adapter Example Apps](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
 
@@ -158,11 +138,11 @@ But if you're chasing 100% robustness and you'd rather not depend on luck and ti
 
 As most android developers know, in order to get animations you need to tell the adapter what kind of change actually happened i.e. what rows were added or changed etc. There are two ways to do this on android:
 
-- Tell the adapter by calling the appropriate notifyItem... methods. This is how the classes in fore's **mutable** package work under the hood, in order to use these you need to be in a position to know what changes were made to the list. For example if you are maintaining the list inside a model, and a public `addItem(newItem: Item)` function is called, the model knows that the list has had an item added. Similarly if a model's public `removeItem(index:Int)` function is called, then the model knows that an item has been removed. If you back your mutable list with a ChangeAwareList, fore will work this all out for you and the correct notifyItem method will be called on the adapter. The one case when fore has no way of doing this is when an item itself is *changed* (in which case you need to manually call `list.makeAwareOfDataChange(index)`) You'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/mutable/MutableListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/mutable/MutablePlaylistAdapter.kt), [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/mutable/MutablePlaylistModel.kt)
+- Tell the adapter by calling the appropriate notifyItem... methods. This is how the classes in fore's **mutable** package work under the hood, in order to use these you need to be in a position to know what changes were made to the list. For example if you are maintaining the list inside a model, and a public `addItem(newItem: Item)` function is called, the model knows that the list has had an item added. Similarly if a model's public `removeItem(index:Int)` function is called, then the model knows that an item has been removed. If you back your mutable list with a ChangeAwareList, fore will work this all out for you and the correct notifyItem method will be called on the adapter. The one case when fore has no way of doing this is when an item itself is *changed* (in which case you need to manually call `list.makeAwareOfDataChange(index)`) You'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/mutable/MutableListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/mutable/MutablePlaylistAdapter.kt), [model](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/mutable/MutablePlaylistModel.kt)
 
-- Tell the adapter by using android's DiffUtil. This is how the classes in fore's **immutable** package work under the hood. This method is ideal if you aren't in a position to know what changes have been made to the list, for example if you are using a view state in MVI style which just provides you with a brand new list each time, or your list changes come via an API (i.e. **you only get the new list**, you don't get the new list plus information about what changed since the old list). DiffUtil is a little more resource intensive because it has to work out the differences between the two lists iself (so fore's Diffable classes run DiffUtil using coroutines), you'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/immutable/ImmutableListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/immutable/ImmutablePlaylistAdapter.kt), [model](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/immutable/ImmutablePlaylistModel.kt)
+- Tell the adapter by using android's DiffUtil. This is how the classes in fore's **immutable** package work under the hood. This method is ideal if you aren't in a position to know what changes have been made to the list, for example if you are using a view state in MVI style which just provides you with a brand new list each time, or your list changes come via an API (i.e. **you only get the new list**, you don't get the new list plus information about what changed since the old list). DiffUtil is a little more resource intensive because it has to work out the differences between the two lists iself (so fore's Diffable classes run DiffUtil using coroutines), you'll find example code for this here: [view](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/immutable/ImmutableListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/immutable/ImmutablePlaylistAdapter.kt), [model](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/feature/playlist/immutable/ImmutablePlaylistModel.kt)
 
-Android also provides us with **AsyncListDiffer / ListAdapter** (which also use DiffUtil under the hood). Depending on your situtation you might find these useful (one disadvantage is that it moves management of your list out of a model class and into an adapter, short-cutting some of the benefits of MVO). You'll find example code for this in the kotlin sample for comparison anyway, please see the guidance in the view source code: [view](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferPlaylistAdapter.kt), (there is no model).
+Android also provides us with **AsyncListDiffer / ListAdapter** (which also use DiffUtil under the hood). Depending on your situtation you might find these useful (one disadvantage is that it moves management of your list out of a model class and into an adapter, short-cutting some of the benefits of MVO). You'll find example code for this in the kotlin sample for comparison anyway, please see the guidance in the view source code: [view](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferListView.kt), [adapter](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters/src/main/java/foo/bar/example/foreadapterskt/ui/playlist/listdiffer/ListDifferPlaylistAdapter.kt), (there is no model).
 
 Once things have been setup correctly with fore, the only thing you'll need to do in the view layer is call notifyDataSetChangedAuto() instead of notifyDataSetChanged() from the syncView() function.
 
@@ -189,9 +169,9 @@ The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-examp
 
 A lot of **fore** classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a mock SystemTimeWrapper rather than a real one, when you want to test various time based behaviour). It's simple and clear but potentially annoying to see these parameters crop up all the time.
 
-From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt#L22) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt#L24-L27) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
 
-By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))`
+By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))` Setting `TestDelegateDefault()` will redirect any android logs to println() so you can easily see them during unit tests
 
 All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt) and [here](https://github.com/erdo/android-fore/blob/master/fore-kt-android-core/src/main/java/co/early/fore/kt/core/delegate/AndroidDebugDelegate.kt).
 
@@ -199,9 +179,12 @@ All the defaults used are specified [here](https://github.com/erdo/android-fore/
 
 We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
 
-**fore** offers some [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them testable in common useage scenarios (something that is [still](https://github.com/Kotlin/kotlinx.coroutines/pull/1206), [pending](https://github.com/Kotlin/kotlinx.coroutines/pull/1935) in the official release).
+**fore** offers some [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them easily testable in common usage scenarios.
 
-# AsyncTasks with Lambdas
+As mentioned above, passing `TestDelegateDefault()` to the `Fore.setDelegate()` function during [setup](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt#L24-L27) will ensure your coroutine code runs synchronously during tests
+
+
+# AsyncTasks with Lambdas [for Java clients]
 
 For legacy Java based clients, fore has some wrappers that make AsyncTask much easier to use and to test
 
@@ -347,8 +330,8 @@ object : Async<Unit, Int, Int>(workMode) {
 ### ExecuteTask
 One difference with Async is that to run it, you need to call executeTask() instead of execute(). (AsyncTask.execute() is marked final).
 
-## Testing Asynchronous Code
-For both Async and AsyncBuilder, testing is done by passing WorkMode.SYNCHRONOUS in via the constructor.
+## Testing
+For both Async and AsyncBuilder testing is done in the same way that it is done for the fore coroutine extensions, i.e. by passing WorkMode.SYNCHRONOUS in via the constructor.
 
 The easiest way to do that is to set a delegate like this:
 

@@ -12,7 +12,7 @@ Lately it's been applied to other (non UI) areas of code very successfully under
 ## **fore** Observables
 In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
 
-By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/android-fore/blob/master/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt), the models gain the following characteristics:
+By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt), the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
 - When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
@@ -257,7 +257,7 @@ For some specific use cases: handling streams of changing data, which you want t
 
 You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be, reactive in the first place).[\[1\]](#1)
 
-Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does - it deals exclusively with the first, letting you handle the second however you wish). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; or Flow&lt;Somethings&gt; won't slowly spread throughout your code base.
+Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does - it deals exclusively with the first, letting you handle the second however you wish). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Somethings&gt; or Flow&lt;Somethings&gt; won't slowly spread throughout your code base unnecessarily.
 
 It turns out that this separation **also** has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
 
@@ -306,13 +306,15 @@ lifecycle.addObserver(
 
 </code></pre>
 
-*(NB: If you've used MVI before, you'll immediately spot that we can improve this situation by observing a single immutable viewState - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if your view layer is observing more than one model...)*
+*(NB: If you've used MVI before - and now official google docs are also heading that way, you'll spot that we can improve this situation by observing a single immutable viewState - but you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if your view layer is observing more than one model...)*
 
 
 ### 2) Views want things from more than one model
-Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and need to be immediately reflected in the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
+Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and this needs to be immediately reflected in the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner. Something like **MVP / MVVM / MVI** would have you write a **Presenter / ViewModel / Interactor** respectively that would aggregate that data for you, but as we discovered: 1) it's often [not necessary](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) and 2) the problem is still there, it just gets moved to the Presenter, the ViewModel or the Interactor.
 
-Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's - of course Rx will have operators that help, but your developers have to know about them & use them properly, it's not something that comes for free due to the API design):
+Each model or repo class is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's)
+
+Both Rx and Flow have operators that can combine observable things, so that would be your option with a reactive streams solution. Your developers do have to know about them & use them properly though, it's not something that comes for free due to the API design. For example, fore's API is what enables the observing of multiple things by simply specifying a list of those things: you can observe as many things as you care to list. But both Flow and Rx need to have a different functions for combining two things, three things or four things (flow's combine functions go up to 5 things, after that you need to write your own function)
 
 
 <pre class="codesample"><code>
@@ -439,7 +441,7 @@ Not having the ability to send data via the somethingChanged() function is one o
 > "adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer"
 
 
-Try to get comfortable using these observers to just notify observing view code of any (unspecified) changes to the model's state (once the observing view code has been told there are changes, it will call fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly, check the [observer vs callback](https://erdo.github.io/android-fore/05-extras.html#observer-listener) discussion first).
+Try to get comfortable using these observers to just notify observing view code of any (unspecified) changes to the model's state (once the observing view code has been told there are changes, it will call fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly.
 
 For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
@@ -448,4 +450,4 @@ This is how reactive streams can unintentionally spread complexity throughout a 
 
 This is somewhat related to the famous [what color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) blog post - although that post is dealing with asynchronous code in general, which kotlin's **suspend** [handles pretty well](https://elizarov.medium.com/how-do-you-color-your-functions-a6bb423d936d). There is a parallel here though where blue is regular code, and red is reactive-streams code.
 
-*Aside: the justification for using reactive-streams in android used to be to prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874#quick-refresher-on-callback-hell) in kotlin nowadays regardless.*
+*Aside: the justification for using reactive-streams in android used to be to prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless.*
