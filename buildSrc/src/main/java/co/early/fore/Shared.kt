@@ -22,6 +22,7 @@ object Shared {
         const val kotlinx_coroutines_android = "1.6.1"
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
+        const val okhttp3 = "3.14.9"
         const val apollo = "2.5.4"
         const val apollo3 = "3.2.2"
         const val retrofit = "2.9.0"

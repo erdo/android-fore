@@ -53,4 +53,3 @@ public class InterceptorStubbedService implements Interceptor {
         return param;
     }
 }
-

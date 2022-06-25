@@ -18,8 +18,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
     api(project(":fore-jv-core"))
-    api(project(":fore-base-network"))
-    compileOnly("com.squareup.okhttp3:okhttp:3.14.9")
+    compileOnly("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp3}")
 }
 
 apply(from = "../publish-lib.gradle.kts")

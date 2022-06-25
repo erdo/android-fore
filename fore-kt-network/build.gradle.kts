@@ -25,7 +25,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
     api(project(":fore-kt-core"))
-    api(project(":fore-base-network"))
+    compileOnly("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp3}")
     compileOnly("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
     // OkHttp3 v3.X.X used by Retrofit2 and Apollo2 has method calls: method(), body(), code() etc
     // OkHttp3 v4.X.X used by Ktor has fields: method, body, code etc instead
