@@ -28,7 +28,6 @@ android {
 dependencies {
     api(project(":fore-kt-android-core"))
     api(project(":fore-kt-network"))
-    api(project(":fore-base-android-network"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }
