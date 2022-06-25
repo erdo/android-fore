@@ -17,7 +17,7 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
-    api(project(":fore-base-core"))
+    api(project(":fore-jv-core"))
     compileOnly("com.squareup.okhttp3:okhttp:3.14.9")
 }
 

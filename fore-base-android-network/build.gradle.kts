@@ -16,7 +16,6 @@ android {
 }
 
 dependencies {
-    api(project(":fore-base-core"))
     api(project(":fore-base-network"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
