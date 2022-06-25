@@ -113,7 +113,7 @@ class LaunchesModel(
             val response = callWrapper.processCallAwait {
                 launchService.login("example@test.com")
             }.carryOn { // refresh launch details now we have session token to see the real booking status
-                authenticator.setSessionDirectly(it.data.login)
+                authenticator.setSessionDirectly(it.data.login?.token)
                 callWrapper.processCallAwait {
                     launchService.refreshLaunchDetail(currentLaunch.id)
                 }

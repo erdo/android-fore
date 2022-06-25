@@ -67,11 +67,10 @@ android {
 
 apollo {
     packageName.set(appId)
-    srcDir("src/main/graphql")
 }
 
 // fetch the graphql schema:
-// ./gradlew :example-kt-07apollo:downloadApolloSchema --endpoint="https://apollo-fullstack-tutorial.herokuapp.com/" --schema="src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json"
+// ./gradlew :app-examples:example-kt-07apollo3:downloadApolloSchema --endpoint='https://apollo-fullstack-tutorial.herokuapp.com/graphql' --schema='app-examples/example-kt-07apollo3/src/main/graphql/schema.json'
 //
 // dev.to article
 // https://dev.to/erdo/android-apollo3-and-graphql-1e8m
