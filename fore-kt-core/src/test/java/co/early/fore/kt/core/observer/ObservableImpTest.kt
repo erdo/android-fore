@@ -2,6 +2,7 @@ package co.early.fore.kt.core.observer
 
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observer
+import co.early.fore.core.testhelpers.CountDownLatchWrapper.runInBatch
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.Logger
@@ -9,11 +10,11 @@ import co.early.fore.kt.core.logging.SilentLogger
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import org.junit.Assert.assertEquals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
@@ -139,6 +140,31 @@ class ObservableImpTest {
     }
 
     @Test
+    @Throws(Exception::class)
+    fun `when notifying asynchronously, all added observers are called`() {
+
+        //arrange
+        observableImp = ObservableImp(
+            notificationMode = WorkMode.ASYNCHRONOUS,
+            dispatcher = Dispatchers.IO
+        )
+        observableImp.addObserver(mockObserver1)
+        observableImp.addObserver(mockObserver2)
+        observableImp.addObserver(mockObserver3)
+        observableImp.removeObserver(mockObserver2)
+
+        //act
+        runInBatch(1, observableImp) {
+            observableImp.notifyObservers()
+        }
+
+        // assert
+        verify(exactly = 1) { mockObserver1.somethingChanged() }
+        verify(exactly = 0) { mockObserver2.somethingChanged() }
+        verify(exactly = 1) { mockObserver3.somethingChanged() }
+    }
+
+    @Test
     fun `when adding and removing observers on different threads, observer list is protected from concurrent changes`() {
 
         // arrange
@@ -157,7 +183,11 @@ class ObservableImpTest {
         ).launch {
             repeat(loop) {
                 launch {
-                    val observer = Observer { counter++ }
+                    val observer = object : Observer {
+                        override fun somethingChanged() {
+                            counter++
+                        }
+                    }
                     observableImp.addObserver(observer)
                     if (it % 2 == 0) {
                         observableImp.removeObserver(observer)

@@ -1,7 +1,5 @@
-package co.early.fore.kt.core.ui
+package co.early.fore.kt.core.ui.trigger
 
-import co.early.fore.kt.core.ui.trigger.ResetRule
-import co.early.fore.kt.core.ui.trigger.TriggerWhen
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

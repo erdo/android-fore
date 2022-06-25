@@ -1,7 +1,5 @@
-package co.early.fore.kt.core.ui
+package co.early.fore.kt.core.ui.trigger
 
-import co.early.fore.kt.core.ui.trigger.StateChange
-import co.early.fore.kt.core.ui.trigger.TriggerOnChange
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK

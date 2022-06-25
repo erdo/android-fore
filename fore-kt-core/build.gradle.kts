@@ -27,6 +27,9 @@ dependencies {
     api(project(":fore-base-core"))
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Shared.Versions.kotlin_version}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Shared.Versions.kotlinx_coroutines_core}")
+
+    testImplementation("junit:junit:${Shared.Versions.junit}")
+    testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 }
 
 apply(from = "../publish-lib.gradle.kts")

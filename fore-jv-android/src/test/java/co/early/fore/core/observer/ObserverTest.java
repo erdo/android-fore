@@ -147,9 +147,7 @@ public class ObserverTest {
         observable.addObserver(mockObserver1);
 
         //act
-        runInBatch(1, observable, () -> {
-            observable.notifyObservers();
-        });
+        runInBatch(1, observable, observable::notifyObservers);
 
         //assert
         verifyZeroInteractions(mockLogger);
