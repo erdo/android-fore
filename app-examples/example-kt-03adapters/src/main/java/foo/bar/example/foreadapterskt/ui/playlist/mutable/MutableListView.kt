@@ -59,7 +59,7 @@ class MutableListView @JvmOverloads constructor(
 
     fun syncView() {
         logger.i("syncView()")
-        updatable_totaltracks_textview.text = mutablePlaylistModel.itemCount.toString()
+        updatable_totaltracks_textview.text = mutablePlaylistModel.getItemCount().toString()
         updatable_clear_button.isEnabled = !mutablePlaylistModel.isEmpty()
         updatable_remove5_button.isEnabled = mutablePlaylistModel.hasAtLeastNItems(5)
         updatable_remove100_button.isEnabled = mutablePlaylistModel.hasAtLeastNItems(100)

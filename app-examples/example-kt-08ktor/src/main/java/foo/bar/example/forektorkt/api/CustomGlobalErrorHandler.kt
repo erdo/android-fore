@@ -23,11 +23,15 @@ import java.nio.charset.CoderMalfunctionError
 class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMessage> {
 
     override suspend fun <CE : MessageProvider<ErrorMessage>> handleError(
-            t: Throwable,
+            t: Throwable?,
             customErrorClazz: Class<CE>?
     ): ErrorMessage {
 
-        logWrapper.d("handling error in global error handler", t)
+        if (t == null) {
+            logWrapper.d("handling error in global error handler")
+        } else {
+            logWrapper.d("handling error in global error handler", t)
+        }
 
         val errorMessage = when (t) {
 

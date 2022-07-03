@@ -60,7 +60,9 @@ class ImmutableListMgr<T>(
         return currentList[index]
     }
 
-    override fun getItemCount(): Int = currentList.size
+    override fun getItemCount(): Int {
+        return currentList.size
+    }
 
     /**
      * If the DiffResult is old, then we assume that whatever changes

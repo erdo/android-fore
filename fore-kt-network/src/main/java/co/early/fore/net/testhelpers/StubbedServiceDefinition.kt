@@ -5,7 +5,7 @@ import java.io.IOException
 /**
  *
  * @param <R> The class type expected to be passed back as the result
-</R> */
+ */
 class StubbedServiceDefinition<R> {
     val httpCode: Int
     val resourceFileName: String
@@ -21,13 +21,12 @@ class StubbedServiceDefinition<R> {
         this.expectedResult = expectedResult
     }
 
-    constructor(httpCode: Int, resourceFileName: String, expectedResult: R) : this(
+    constructor(httpCode: Int, resourceFileName: String, expectedResult: R) : this (
         httpCode,
         resourceFileName,
         "application/json",
         expectedResult
-    ) {
-    }
+    )
 
     @JvmOverloads
     constructor(

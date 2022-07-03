@@ -44,7 +44,7 @@ class NotifyableImp<VH : RecyclerView.ViewHolder>(
 
     private fun processUpdateable() {
         val updateSpec = updateable!!.getAndClearLatestUpdateSpec(MAX_AGE_MS_BEFORE_IGNORE.toLong())
-        when (updateSpec.type!!) {
+        when (updateSpec.type) {
             UpdateType.FULL_UPDATE -> adapter.notifyDataSetChanged()
             UpdateType.ITEM_CHANGED -> adapter.notifyItemRangeChanged(updateSpec.rowPosition, updateSpec.rowsEffected)
             UpdateType.ITEM_REMOVED -> adapter.notifyItemRangeRemoved(updateSpec.rowPosition, updateSpec.rowsEffected)

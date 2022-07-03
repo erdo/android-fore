@@ -6,7 +6,7 @@ plugins {
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-jv-android-network")
-    set("LIB_DESCRIPTION", "fore - android java networking helpers")
+    set("LIB_DESCRIPTION", "fore - android network helpers, java")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")

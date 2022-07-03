@@ -38,7 +38,5 @@ class FruitsCustomError(private val errorCode: ErrorCode?) : MessageProvider<Err
 
     }
 
-    override fun getMessage(): ErrorMessage {
-        return errorCode?.errorMessage ?: ERROR_MISC
-    }
+    override val message: ErrorMessage = errorCode?.errorMessage ?: ERROR_MISC
 }

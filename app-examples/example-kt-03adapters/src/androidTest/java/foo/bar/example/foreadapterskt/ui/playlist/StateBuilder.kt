@@ -32,7 +32,7 @@ class StateBuilder internal constructor(private val mockMutablePlaylistModel: Mu
     internal fun withUpdatablePlaylistHavingTracks(numberOfTracks: Int): StateBuilder {
 
         every {
-            mockMutablePlaylistModel.itemCount
+            mockMutablePlaylistModel.getItemCount()
         } returns numberOfTracks
 
         every {

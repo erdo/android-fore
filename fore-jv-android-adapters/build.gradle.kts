@@ -17,7 +17,6 @@ android {
 
 dependencies {
     api(project(":fore-jv-android-core"))
-    api(project(":fore-base-android-adapters"))
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 

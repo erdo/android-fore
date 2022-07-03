@@ -11,7 +11,7 @@ java {
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-jv-network")
-    set("LIB_DESCRIPTION", "fore - java network code")
+    set("LIB_DESCRIPTION", "fore - network code for java")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")

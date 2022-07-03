@@ -18,7 +18,7 @@ interface ErrorHandler<F> {
      * @param <CE> class type of the custom error, may be null
      * @return the parsed error from the server
     </CE> */
-    fun <CE : MessageProvider<F>?> handleError(
+    fun <CE : MessageProvider<F>> handleError(
         t: Throwable?,
         errorResponse: Response<*>?,
         customErrorClazz: Class<CE>?,

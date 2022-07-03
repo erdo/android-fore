@@ -76,7 +76,6 @@ dependencies {
     } else {
         implementation(project(":fore-kt-android-network"))
     }
-
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

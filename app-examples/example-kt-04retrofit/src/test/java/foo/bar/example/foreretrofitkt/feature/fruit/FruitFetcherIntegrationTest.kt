@@ -92,13 +92,13 @@ class FruitFetcherIntegrationTest {
             mockFailureWithPayload(any())
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
-        Assert.assertEquals(stubbedSuccess.expectedResult.name, fruitFetcher.currentFruit.name)
+        Assert.assertEquals(stubbedSuccess.expectedResult?.name, fruitFetcher.currentFruit.name)
         Assert.assertEquals(
-            stubbedSuccess.expectedResult.isCitrus,
+            stubbedSuccess.expectedResult?.isCitrus,
             fruitFetcher.currentFruit.isCitrus
         )
         Assert.assertEquals(
-            stubbedSuccess.expectedResult.tastyPercentScore.toLong(),
+            stubbedSuccess.expectedResult?.tastyPercentScore?.toLong(),
             fruitFetcher.currentFruit.tastyPercentScore.toLong()
         )
     }
@@ -131,7 +131,7 @@ class FruitFetcherIntegrationTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailUserLocked.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailUserLocked.expectedResult as ErrorMessage))
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())
@@ -165,7 +165,7 @@ class FruitFetcherIntegrationTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailureUserNotEnabled.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailureUserNotEnabled.expectedResult as ErrorMessage))
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())
@@ -210,7 +210,7 @@ class FruitFetcherIntegrationTest {
                 mockSuccess()
             }
             verify(exactly = 1) {
-                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult))
+                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult as ErrorMessage))
             }
             Assert.assertEquals(false, fruitFetcher.isBusy)
             Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())

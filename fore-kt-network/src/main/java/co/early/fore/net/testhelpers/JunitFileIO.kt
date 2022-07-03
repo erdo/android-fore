@@ -11,7 +11,7 @@ import java.nio.charset.Charset
  */
 object JunitFileIO {
     @Throws(IOException::class)
-    fun getRawResourceAsUTF8String(resourceFileName: String, classLoader: ClassLoader): String {
+    @JvmStatic fun getRawResourceAsUTF8String(resourceFileName: String, classLoader: ClassLoader): String {
         return String(getResourceBytes(resourceFileName, classLoader), Charset.forName("UTF-8"))
     }
 

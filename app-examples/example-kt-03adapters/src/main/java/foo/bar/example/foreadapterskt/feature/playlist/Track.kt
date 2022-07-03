@@ -16,9 +16,7 @@ class Track(
         private set
 
     init {
-        numberOfPlaysRequested = playsRequested?.let {
-            it
-        } ?: MIN_PLAYS_REQUESTED
+        numberOfPlaysRequested = playsRequested ?: MIN_PLAYS_REQUESTED
     }
 
     fun increasePlaysRequested() {
@@ -46,13 +44,13 @@ class Track(
         const val MAX_PLAYS_REQUESTED = 4
     }
 
-    override fun itemsTheSame(other: Track?): Boolean {
+    override fun itemsTheSame(other: Track): Boolean {
         return if (other != null) {
             this.id == other.id
         } else false
     }
 
-    override fun itemsLookTheSame(other: Track?): Boolean {
+    override fun itemsLookTheSame(other: Track): Boolean {
         return if (other != null) {
             this.numberOfPlaysRequested == other.numberOfPlaysRequested
                     && this.colourResource == other.colourResource

@@ -64,7 +64,7 @@ class MutablePlaylistModel(
 
     fun removeNTracks(n: Int) {
         logger.i("removeNTracks() n:$n")
-        if (itemCount > n - 1) {
+        if (getItemCount() > n - 1) {
             trackList.removeRange(0, n)
             notifyObservers()
         }

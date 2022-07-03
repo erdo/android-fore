@@ -25,6 +25,7 @@
  *
  * ./gradlew :buildEnvironment
  * ./gradlew :fore-kt-core:dependencies
+ * ./gradlew :app-examples:example-kt-04retrofit:dependencies
  *
  * bundle exec jekyll serve
  *

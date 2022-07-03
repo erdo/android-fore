@@ -16,7 +16,6 @@ import java.io.UnsupportedEncodingException
  */
 class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.net.retrofit2.ErrorHandler<ErrorMessage> {
 
-
     override fun <CE : MessageProvider<ErrorMessage>> handleError(
             t: Throwable?,
             errorResponse: Response<*>?,
@@ -92,11 +91,6 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : co.early.fore.n
             return ERROR_SERVER
         }
 
-        return if (customError == null) {
-            provisionalErrorMessage
-        } else {
-            customError.message
-        }
+        return customError?.message ?: provisionalErrorMessage
     }
-
 }

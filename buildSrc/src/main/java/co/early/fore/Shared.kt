@@ -75,7 +75,7 @@ object Shared {
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
         const val published_fore_version_for_examples = "1.5.14"
-        const val use_published_version = true
+        const val use_published_version = false
     }
 
     object Secrets {

@@ -7,7 +7,7 @@ plugins {
 
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-kt-android-network")
-    set("LIB_DESCRIPTION", "fore - network helpers, kotlin")
+    set("LIB_DESCRIPTION", "fore - android network helpers, kotlin")
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")

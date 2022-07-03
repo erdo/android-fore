@@ -95,10 +95,10 @@ class LaunchFetcherIntegrationTest {
         }
         Assert.assertEquals(false, launchesModel.isBusy)
         Assert.assertEquals(
-            stubbedSuccess.expectedResult.isBooked,
+            stubbedSuccess.expectedResult?.isBooked,
             launchesModel.currentLaunch.isBooked
         )
-        Assert.assertEquals(stubbedSuccess.expectedResult.id, launchesModel.currentLaunch.id)
+        Assert.assertEquals(stubbedSuccess.expectedResult?.id, launchesModel.currentLaunch.id)
     }
 
     /**
@@ -130,7 +130,7 @@ class LaunchFetcherIntegrationTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailSaysNo.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailSaysNo.expectedResult as ErrorMessage))
         }
         Assert.assertEquals(false, launchesModel.isBusy)
         Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
@@ -165,7 +165,7 @@ class LaunchFetcherIntegrationTest {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailureInternalServerError.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailureInternalServerError.expectedResult as ErrorMessage))
         }
         Assert.assertEquals(false, launchesModel.isBusy)
         Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
@@ -211,7 +211,7 @@ class LaunchFetcherIntegrationTest {
                 mockSuccess()
             }
             verify(exactly = 1) {
-                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult))
+                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult as ErrorMessage))
             }
             Assert.assertEquals(false, launchesModel.isBusy)
             Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
@@ -262,5 +262,4 @@ class LaunchFetcherIntegrationTest {
                 ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
             )
     }
-
 }
