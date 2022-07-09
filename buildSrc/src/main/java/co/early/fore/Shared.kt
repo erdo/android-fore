@@ -49,7 +49,7 @@ object Shared {
         const val robolectric = "4.4"
         const val gson = "2.8.5"
         const val constraintlayout = "1.1.3"
-        const val ktor_client = "1.5.2"
+        const val ktor_client = "2.0.3"
         const val converter_gson = "2.6.0"
     }
 

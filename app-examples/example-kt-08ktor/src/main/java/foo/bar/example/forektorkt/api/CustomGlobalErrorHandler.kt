@@ -6,7 +6,7 @@ import co.early.fore.net.MessageProvider
 import foo.bar.example.forektorkt.message.ErrorMessage
 import foo.bar.example.forektorkt.message.ErrorMessage.*
 import io.ktor.client.call.*
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import io.ktor.client.statement.*
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -28,7 +28,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
     ): ErrorMessage {
 
         if (t == null) {
-            logWrapper.d("handling error in global error handler")
+            logWrapper.d("handling error in global error handler, throwable:null")
         } else {
             logWrapper.d("handling error in global error handler", t)
         }
@@ -87,7 +87,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
 
         try {
 
-            val bodyContent = errorResponse.readText(Charsets.UTF_8)
+            val bodyContent = errorResponse.bodyAsText(Charsets.UTF_8)
             logWrapper.d("parseCustomError() attempting to parse this content:\n $bodyContent")
             val errorClass = Json.decodeFromString(serializer(customErrorClazz), bodyContent) as CE
             customError = errorClass.message

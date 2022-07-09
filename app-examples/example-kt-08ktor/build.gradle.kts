@@ -78,8 +78,9 @@ dependencies {
         implementation(project(":fore-kt-android"))
     }
 
-    implementation("io.ktor:ktor-client-serialization:${Shared.Versions.ktor_client}")
     implementation("io.ktor:ktor-client-okhttp:${Shared.Versions.ktor_client}")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:${Shared.Versions.ktor_client}")
+    implementation("io.ktor:ktor-client-content-negotiation:${Shared.Versions.ktor_client}")
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")

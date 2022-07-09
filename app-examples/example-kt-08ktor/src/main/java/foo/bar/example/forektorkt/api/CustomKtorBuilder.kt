@@ -2,10 +2,10 @@ package foo.bar.example.forektorkt.api
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
 import okhttp3.Interceptor
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.json.serializer.KotlinxSerializer.Companion.DefaultJson
 
 /**
  * Most of this will all be specific to your application, when customising for your own case
@@ -32,8 +32,9 @@ object CustomKtorBuilder {
         }
 
         return HttpClient(okHttpConfig) {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer(DefaultJson)
+            expectSuccess = true
+            install(ContentNegotiation) {
+                this.json()
             }
         }
     }
