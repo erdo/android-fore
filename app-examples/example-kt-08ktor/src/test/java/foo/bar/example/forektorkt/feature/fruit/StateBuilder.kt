@@ -9,9 +9,6 @@ import foo.bar.example.forektorkt.message.ErrorMessage
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 
-/**
- *
- */
 class StateBuilder internal constructor(private val mockCallWrapperKtor: CallWrapperKtor<ErrorMessage>) {
 
     internal fun getFruitSuccess(fruitPojo: FruitPojo): StateBuilder {

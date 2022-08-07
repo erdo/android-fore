@@ -10,9 +10,6 @@ import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 import retrofit2.Response
 
-/**
- *
- */
 class StateBuilder internal constructor(private val mockCallWrapperRetrofit2: CallWrapperRetrofit2<ErrorMessage>) {
 
     internal fun getFruitSuccess(fruitPojo: FruitPojo): StateBuilder {

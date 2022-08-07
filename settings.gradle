@@ -13,6 +13,8 @@ include(":fore-jv-android-network")
 // kotlin
 include(":fore-kt-core")
 include(":fore-kt-network")
+include(":fore-kt-network-okhttp3v3x")
+include(":fore-kt-network-okhttp3v4x")
 
 // kotlin android
 include(":fore-kt-android") // everything
@@ -34,4 +36,3 @@ include(":app-examples:example-kt-01reactiveui",
         ":app-examples:example-jv-03adapters",
         ":app-examples:example-jv-04retrofit",
         ":app-examples:example-jv-06db")
-

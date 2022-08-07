@@ -3,8 +3,10 @@ package foo.bar.example.forektorkt.feature.fruit
 import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.ktor.CallWrapperKtor
-import co.early.fore.net.testhelpers.InterceptorStubbedService
+import co.early.fore.kt.net.testhelpers.InterceptorStubOkHttp3
+import co.early.fore.kt.net.testhelpers.Stub
 import foo.bar.example.forektorkt.api.CommonServiceFailures
 import foo.bar.example.forektorkt.api.CustomGlobalErrorHandler
 import foo.bar.example.forektorkt.api.CustomKtorBuilder
@@ -20,21 +22,17 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-
 /**
  * This is a slightly more end-to-end style of test, but without actually connecting to a network
  *
- *
- * Using [InterceptorStubbedService] we
- * replace the server response with a canned response taken from static text files saved
- * in /resources. This all happens in OkHttp land so the model under test is not aware of any
- * difference.
- *
+ * Using [InterceptorStubOkHttp3] we replace the server response with a canned response taken
+ * from static text files saved in /resources. This all happens in OkHttp land so the model
+ * under test is not aware of any difference.
  */
 class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
-    private val interceptorLogging = co.early.fore.kt.net.InterceptorLogging(logger)
+    private val interceptorLogging = InterceptorLogging(logger)
     private val callWrapper = CallWrapperKtor(
         errorHandler = CustomGlobalErrorHandler(logger),
         logger = logger
@@ -46,7 +44,6 @@ class FruitFetcherIntegrationTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
-
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
@@ -55,7 +52,6 @@ class FruitFetcherIntegrationTest {
         // System.out.println() so we see it in the test log
         Fore.setDelegate(TestDelegateDefault())
     }
-
 
     /**
      * Here we are making sure that the model correctly handles a successful server response
@@ -70,15 +66,13 @@ class FruitFetcherIntegrationTest {
         //arrange
         val httpClient = stubbedHttpClient(stubbedSuccess)
         val fruitFetcher = FruitFetcher(
-                FruitService.create(httpClient),
-                callWrapper,
-                logger
+            FruitService.create(httpClient),
+            callWrapper,
+            logger
         )
-
 
         //act
         fruitFetcher.fetchFruitsAsync(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 1) {
@@ -89,8 +83,14 @@ class FruitFetcherIntegrationTest {
         }
         Assert.assertEquals(false, fruitFetcher.isBusy)
         Assert.assertEquals(stubbedSuccess.expectedResult?.name, fruitFetcher.currentFruit.name)
-        Assert.assertEquals(stubbedSuccess.expectedResult?.isCitrus, fruitFetcher.currentFruit.isCitrus)
-        Assert.assertEquals(stubbedSuccess.expectedResult?.tastyPercentScore?.toLong(), fruitFetcher.currentFruit.tastyPercentScore.toLong())
+        Assert.assertEquals(
+            stubbedSuccess.expectedResult?.isCitrus,
+            fruitFetcher.currentFruit.isCitrus
+        )
+        Assert.assertEquals(
+            stubbedSuccess.expectedResult?.tastyPercentScore?.toLong(),
+            fruitFetcher.currentFruit.tastyPercentScore.toLong()
+        )
     }
 
     /**
@@ -106,15 +106,13 @@ class FruitFetcherIntegrationTest {
         //arrange
         val httpClient = stubbedHttpClient(stubbedFailUserLocked)
         val fruitFetcher = FruitFetcher(
-                FruitService.create(httpClient),
-                callWrapper,
-                logger
+            FruitService.create(httpClient),
+            callWrapper,
+            logger
         )
-
 
         //act
         fruitFetcher.fetchFruitsButFailAdvanced(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 0) {
@@ -140,15 +138,13 @@ class FruitFetcherIntegrationTest {
         //arrange
         val httpClient = stubbedHttpClient(stubbedFailureUserNotEnabled)
         val fruitFetcher = FruitFetcher(
-                FruitService.create(httpClient),
-                callWrapper,
-                logger
+            FruitService.create(httpClient),
+            callWrapper,
+            logger
         )
-
 
         //act
         fruitFetcher.fetchFruitsButFailAdvanced(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 0) {
@@ -161,7 +157,6 @@ class FruitFetcherIntegrationTest {
         Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())
     }
 
-
     /**
      * Here we are making sure that the model correctly handles common API failed responses
      *
@@ -171,76 +166,68 @@ class FruitFetcherIntegrationTest {
     @Throws(Exception::class)
     fun fetchFruit_CommonFailures() {
 
-        for (stubbedServiceDefinition in CommonServiceFailures()) {
+        for (stub in CommonServiceFailures()) {
 
             logger.i(
-                    "------- Common Service Failure: HTTP:"
-                            + stubbedServiceDefinition.httpCode
-                            + " res:" + stubbedServiceDefinition.resourceFileName
-                            + " expect:" + stubbedServiceDefinition.expectedResult
-                            + " --------"
+                "------- Common Service Failure: HTTP:"
+                        + stub.httpCode
+                        + " res:" + stub.bodyContentResourceFileName
+                        + " expect:" + stub.expectedResult
+                        + " --------"
             )
 
             //arrange
             clearMocks(mockSuccess, mockFailureWithPayload)
-            val httpClient = stubbedHttpClient(stubbedServiceDefinition)
+            val httpClient = stubbedHttpClient(stub)
             val fruitFetcher = FruitFetcher(
-                    FruitService.create(httpClient),
-                    callWrapper,
-                    logger
+                FruitService.create(httpClient),
+                callWrapper,
+                logger
             )
-
 
             //act
             fruitFetcher.fetchFruitsAsync(mockSuccess, mockFailureWithPayload)
-
 
             //assert
             verify(exactly = 0) {
                 mockSuccess()
             }
             verify(exactly = 1) {
-                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult as ErrorMessage))
+                mockFailureWithPayload(eq(stub.expectedResult as ErrorMessage))
             }
             Assert.assertEquals(false, fruitFetcher.isBusy)
             Assert.assertEquals(0, fruitFetcher.currentFruit.tastyPercentScore.toLong())
         }
     }
 
-
-    private fun stubbedHttpClient(stubbedServiceDefinition: co.early.fore.net.testhelpers.StubbedServiceDefinition<*>): HttpClient {
+    private fun stubbedHttpClient(stub: Stub<*>): HttpClient {
         return CustomKtorBuilder.create(
-            co.early.fore.net.testhelpers.InterceptorStubbedService(
-                stubbedServiceDefinition
-            ),
-                interceptorLogging
+            interceptorLogging,
+            InterceptorStubOkHttp3(stub),
         )
     }
 
     companion object {
 
-        private val stubbedSuccess =
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
-                201, //stubbed HTTP code
-                "fruit/success.json", //stubbed body response
-                "application/json; charset=UTF-8",
-                FruitPojo("orange", true, 43) //expected result
-            )
+        private val stubbedSuccess = Stub(
+            httpCode = 201, //stubbed HTTP code
+            bodyContentResourceFileName = "fruit/success.json", //stubbed body response
+            headers = listOf(Stub.Header("Content-Type", "application/json")), //headers
+            expectedResult = FruitPojo("orange", true, 43) //expected result
+        )
 
-        private val stubbedFailUserLocked =
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
-                401, //stubbed HTTP code
-                "common/error_user_locked.json", //stubbed body response
-                "application/json; charset=UTF-8",
-                ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
-            )
+        private val stubbedFailUserLocked = Stub(
+            httpCode = 401, //stubbed HTTP code
+            bodyContentResourceFileName = "common/error_user_locked.json", //stubbed body response
+            headers = listOf(Stub.Header("Content-Type", "application/json")), //headers
+            expectedResult = ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
+        )
 
-        private val stubbedFailureUserNotEnabled =
-            co.early.fore.net.testhelpers.StubbedServiceDefinition(
-                401, //stubbed HTTP code
-                "common/error_user_not_enabled.json", //stubbed body response
-                "application/json; charset=UTF-8",
-                ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
-            )
+        private val stubbedFailureUserNotEnabled = Stub(
+            httpCode = 401, //stubbed HTTP code
+            bodyContentResourceFileName = "common/error_user_not_enabled.json", //stubbed body response
+            headers = listOf(Stub.Header("Content-Type", "application/json")), //headers
+            expectedResult = ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
+        )
     }
 }

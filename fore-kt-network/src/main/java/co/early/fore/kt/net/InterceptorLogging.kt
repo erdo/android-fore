@@ -19,7 +19,10 @@ import kotlin.reflect.KVisibility
 const val BIG_LOG = 250000
 
 /**
- * see https://github.com/square/okhttp/blob/master/okhttp-logging-interceptor/src/main/java/okhttp3/logging/HttpLoggingInterceptor.java
+ * In order to log HTTP calls, add this interceptor at the bottom of your interceptor chain
+ * when creating an OkHttpConfig. The log tag will include a random string eg "Net B4D32" which
+ * will remain constant for a given call (request and response), so that you can use it to
+ * correlate logs in the event that you have many calls being logged simultaneously
  */
 class InterceptorLogging @JvmOverloads constructor(
         private val logger: Logger? = null,
@@ -33,6 +36,10 @@ class InterceptorLogging @JvmOverloads constructor(
     private val TAG = "Net"
     private val logLinesLock = ReentrantLock(true)
     private var printedWarningAlready = false
+
+    init {
+        require(maxBodyLogCharacters >= 1) { "maxBodyLogCharacters must be greater than 0" }
+    }
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -60,8 +67,9 @@ class InterceptorLogging @JvmOverloads constructor(
                 chain.proceed(request)
             } catch (e: Throwable) {
                 Fore.getLogger(logger).e(
-                        TAG + randomPostTag,
-                        "HTTP $method <-- Connection dropped, GETs may be retried $url : $e")
+                    TAG + randomPostTag,
+                    "HTTP $method <-- Connection dropped, GETs may be retried $url : $e"
+                )
                 throw e
             }
         }
@@ -202,38 +210,35 @@ class InterceptorLogging @JvmOverloads constructor(
         return result to (System.nanoTime() - startTime)
     }
 
-    companion object {
-        /**
-         * Returns true if the body in question probably contains human readable text. Uses a small sample
-         * of code points to detect unicode control characters commonly used in binary file signatures.
-         */
-        fun isPlaintext(buffer: Buffer): Boolean {
-            return try {
-                val prefix = Buffer()
-                val byteCount = if (buffer.size < 64) buffer.size else 64
-                buffer.copyTo(prefix, 0, byteCount)
-                for (i in 0..15) {
-                    if (prefix.exhausted()) {
-                        break
-                    }
-                    val codePoint = prefix.readUtf8CodePoint()
-                    if (Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint)) {
-                        return false
-                    }
+    /**
+     * Returns true if the body in question probably contains human readable text. Uses a small sample
+     * of code points to detect unicode control characters commonly used in binary file signatures.
+     */
+    private fun isPlaintext(buffer: Buffer): Boolean {
+        return try {
+            val prefix = Buffer()
+            val size = size(buffer)
+            val byteCount = if (size < 64) size else 64
+            buffer.copyTo(prefix, 0, byteCount)
+            for (i in 0..15) {
+                if (prefix.exhausted()) {
+                    break
                 }
-                true
-            } catch (e: EOFException) {
-                false // Truncated UTF-8 sequence.
+                val codePoint = prefix.readUtf8CodePoint()
+                if (Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint)) {
+                    return false
+                }
             }
+            true
+        } catch (e: EOFException) {
+            false // Truncated UTF-8 sequence.
         }
-    }
-
-    init {
-        require(maxBodyLogCharacters >= 1) { "maxBodyLogCharacters must be greater than 0" }
     }
 
     //OkHttp3 v3.X.X used by Retrofit2 and Apollo has method calls: method(), body(), code() etc
     //OkHttp3 v4.X.X used by Ktor has fields: method, body, code etc instead
+
+    private fun size(buffer: Buffer): Long = call(buffer, "size") as Long
 
     private fun method(request: Request): String = call(request, "method") as String
     private fun url(request: Request): HttpUrl = call(request, "url") as HttpUrl

@@ -6,6 +6,7 @@ import java.io.IOException
  *
  * @param <R> The class type expected to be passed back as the result
  */
+@Deprecated(message = "will be removed in the next major version", replaceWith = ReplaceWith(expression = "Stub", "co.early.fore.kt.net.testhelpers"))
 class StubbedServiceDefinition<R> {
     val httpCode: Int
     val resourceFileName: String

@@ -10,9 +10,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 
-/**
- *
- */
 class StateBuilder internal constructor() {
 
     val mockCallWrapperApollo: CallWrapperApollo<ErrorMessage> = mockk()
@@ -48,5 +45,4 @@ class StateBuilder internal constructor() {
 
         return this
     }
-
 }

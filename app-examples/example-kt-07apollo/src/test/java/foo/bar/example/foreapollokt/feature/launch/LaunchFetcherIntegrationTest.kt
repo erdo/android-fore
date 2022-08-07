@@ -5,8 +5,8 @@ import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.apollo.CallWrapperApollo
-import co.early.fore.net.testhelpers.InterceptorStubbedService
-import co.early.fore.net.testhelpers.StubbedServiceDefinition
+import co.early.fore.kt.net.testhelpers.InterceptorStubOkHttp3
+import co.early.fore.kt.net.testhelpers.Stub
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
 import foo.bar.example.foreapollokt.api.CommonServiceFailures
@@ -25,19 +25,16 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-
 /**
  * This is a slightly more end-to-end style of test, but without actually connecting to a network
  *
- * Using [InterceptorStubbedService] we
- * replace the server response with a canned response taken from static text files saved
- * in /resources. This all happens in OkHttp land so the model under test is not aware of any
- * difference.
+ * Using [InterceptorStubOkHttp3] we replace the server response with a canned response taken
+ * from static text files saved in /resources. This all happens in OkHttp land so the model
+ * under test is not aware of any difference.
  *
  * Apollo doesn't let us work in single thread mode for tests, so we need to use count down
  * latches unfortunately (we use fore's CountDownLatchWrapper class to get rid of some of the
- * boiler plate)
- *
+ * boiler plate) - Apollo3 doesn't have this restriction
  */
 class LaunchFetcherIntegrationTest {
 
@@ -54,7 +51,6 @@ class LaunchFetcherIntegrationTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
-
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
@@ -63,7 +59,6 @@ class LaunchFetcherIntegrationTest {
         // System.out.println() so we see it in the test log
         Fore.setDelegate(TestDelegateDefault())
     }
-
 
     /**
      * Here we are making sure that the model correctly handles a successful server response
@@ -84,7 +79,6 @@ class LaunchFetcherIntegrationTest {
             logger
         )
 
-
         // we're expecting two observer notifications during this process so we'll use that
         // to count down the latch, that makes our test code brittle unfortunately:
         // https://erdo.github.io/android-fore/05-extras.html#notification-counting
@@ -93,7 +87,6 @@ class LaunchFetcherIntegrationTest {
             //act
             launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
-
 
         //assert
         verify(exactly = 1) {
@@ -129,12 +122,10 @@ class LaunchFetcherIntegrationTest {
             logger
         )
 
-
         //act
         runInBatch(2, launchesModel) {
             launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
-
 
         //assert
         verify(exactly = 0) {
@@ -166,12 +157,10 @@ class LaunchFetcherIntegrationTest {
             logger
         )
 
-
         //act
         runInBatch(2, launchesModel) {
             launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
         }
-
 
         //assert
         verify(exactly = 0) {
@@ -194,26 +183,25 @@ class LaunchFetcherIntegrationTest {
     @Throws(Exception::class)
     fun fetchLaunch_CommonFailures() {
 
-        for (stubbedServiceDefinition in CommonServiceFailures()) {
+        for (stub in CommonServiceFailures()) {
 
             logger.i(
                 "------- Common Service Failure: HTTP:"
-                        + stubbedServiceDefinition.httpCode
-                        + " res:" + stubbedServiceDefinition.resourceFileName
-                        + " expect:" + stubbedServiceDefinition.expectedResult
+                        + stub.httpCode
+                        + " res:" + stub.bodyContentResourceFileName
+                        + " expect:" + stub.expectedResult
                         + " --------"
             )
 
             //arrange
             clearMocks(mockSuccess, mockFailureWithPayload)
-            val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
+            val apolloClient = stubbedApolloClient(stub)
             val launchesModel = LaunchesModel(
                 createLaunchService(apolloClient),
                 callWrapper,
                 mockAuthenticator,
                 logger
             )
-
 
             //act
             runInBatch(2, launchesModel) {
@@ -225,20 +213,17 @@ class LaunchFetcherIntegrationTest {
                 mockSuccess()
             }
             verify(exactly = 1) {
-                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult as ErrorMessage))
+                mockFailureWithPayload(eq(stub.expectedResult as ErrorMessage))
             }
             Assert.assertEquals(false, launchesModel.isBusy)
             Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
         }
     }
 
-
-    private fun stubbedApolloClient(stubbedServiceDefinition: StubbedServiceDefinition<*>): ApolloClient {
+    private fun stubbedApolloClient(stubbedServiceDefinition: Stub<*>): ApolloClient {
         return CustomApolloBuilder.create(
-            InterceptorStubbedService(
-                stubbedServiceDefinition
-            ),
-            interceptorLogging
+            interceptorLogging,
+            InterceptorStubOkHttp3(stubbedServiceDefinition),
         )
     }
 
@@ -254,27 +239,22 @@ class LaunchFetcherIntegrationTest {
 
     companion object {
 
-        private val stubbedSuccess =
-            StubbedServiceDefinition(
-                200, //stubbed HTTP code
-                "launches/success.json", //stubbed body response
-                Launch("109", "Site 40") //expected result
-            )
+        private val stubbedSuccess = Stub(
+            httpCode = 200, //stubbed HTTP code
+            bodyContentResourceFileName = "launches/success.json", //stubbed body response
+            expectedResult = Launch("109", "Site 40") //expected result
+        )
 
+        private val stubbedFailSaysNo = Stub(
+            httpCode = 200, //stubbed HTTP code
+            bodyContentResourceFileName = "launches/error_launch_service_says_no.json", //stubbed body response
+            expectedResult = ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
+        )
 
-        private val stubbedFailSaysNo =
-            StubbedServiceDefinition(
-                200, //stubbed HTTP code
-                "launches/error_launch_service_says_no.json", //stubbed body response
-                ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
-            )
-
-        private val stubbedFailureInternalServerError =
-            StubbedServiceDefinition(
-                200, //stubbed HTTP code - all 200 because GraphQL
-                "common/error_internal_server.json", //stubbed body response
-                ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
-            )
+        private val stubbedFailureInternalServerError = Stub (
+            httpCode = 200, //stubbed HTTP code - all 200 because GraphQL
+            bodyContentResourceFileName = "common/error_internal_server.json", //stubbed body response
+            expectedResult = ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
+        )
     }
-
 }

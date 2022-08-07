@@ -2,6 +2,7 @@ package co.early.fore.net
 
 import okhttp3.Interceptor.Chain
 import co.early.fore.core.utils.text.BasicTextWrapper.wrapMonospaceText
+import co.early.fore.kt.core.delegate.Fore
 import co.early.fore.kt.core.logging.Logger
 import okhttp3.*
 import okhttp3.internal.http.promisesBody
@@ -13,8 +14,12 @@ import java.nio.charset.Charset
 import java.util.*
 
 /**
- * see https://github.com/square/okhttp/blob/master/okhttp-logging-interceptor/src/main/java/okhttp3/logging/HttpLoggingInterceptor.java
+ * In order to log HTTP calls, add this interceptor at the bottom of your interceptor chain
+ * when creating an OkHttpConfig. The log tag will include a random string eg "B4D32" which
+ * will remain constant for a given call (request and response), so that you can use it to
+ * correlate logs in the event that you have many calls being logged simultaneously
  */
+@Deprecated(message = "will be removed in the next major version", replaceWith = ReplaceWith(expression = "co.early.fore.kt.net.InterceptorLogging"))
 class InterceptorLogging @JvmOverloads constructor(
     logger: Logger,
     maxBodyLogCharacters: Int = DEAFULT_MAX_BODY_LOG_LENGTH,
@@ -24,7 +29,7 @@ class InterceptorLogging @JvmOverloads constructor(
     var UTF8 = Charset.forName("UTF-8")
     private val logger: Logger
     private val random = Random()
-    private val somecharacters = "ABDEFGH023456789".toCharArray()
+    private val someCharacters = "ABDEFGH023456789".toCharArray()
     private val networkingLogSanitizer: NetworkingLogSanitizer?
 
     constructor(logger: Logger, networkingLogSanitizer: NetworkingLogSanitizer?) : this(
@@ -45,11 +50,11 @@ class InterceptorLogging @JvmOverloads constructor(
         val request: Request = chain.request()
         val method = request.method
         val url = request.url.toString()
-        val randomPostTag = (" " + somecharacters[random.nextInt(15)]
-                + somecharacters[random.nextInt(15)]
-                + somecharacters[random.nextInt(15)]
-                + somecharacters[random.nextInt(15)]
-                + somecharacters[random.nextInt(15)])
+        val randomPostTag = (" " + someCharacters[random.nextInt(15)]
+                + someCharacters[random.nextInt(15)]
+                + someCharacters[random.nextInt(15)]
+                + someCharacters[random.nextInt(15)]
+                + someCharacters[random.nextInt(15)])
 
         //request
         logger.i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url))
@@ -64,8 +69,7 @@ class InterceptorLogging @JvmOverloads constructor(
             requestBody.writeTo(buffer)
             val charset = getCharset(requestBody.contentType())
             if (isPlaintext(buffer)) {
-                val body: String
-                body = if (networkingLogSanitizer == null) {
+                val body: String = if (networkingLogSanitizer == null) {
                     truncate(buffer.clone().readString(charset!!))
                 } else {
                     truncate(
@@ -85,11 +89,9 @@ class InterceptorLogging @JvmOverloads constructor(
             }
         }
 
-
         //response
-        val t1 = System.nanoTime()
-        val response: Response
-        response = try {
+        val t1 = Fore.getSystemTimeWrapper().nanoTime()
+        val response: Response = try {
             chain.proceed(request)
         } catch (e: Exception) {
             logger.e(
@@ -98,7 +100,7 @@ class InterceptorLogging @JvmOverloads constructor(
             )
             throw e
         }
-        val t2 = System.nanoTime()
+        val t2 = Fore.getSystemTimeWrapper().nanoTime()
         logger.i(
             TAG + randomPostTag,
             "HTTP " + method + " <-- Server replied HTTP-" + response.code + " " + (t2 - t1) / (1000 * 1000) + "ms " + url
