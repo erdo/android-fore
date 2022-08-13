@@ -68,7 +68,7 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation("co.early.fore:fore-jv-android-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-jv-android-network"))
+        implementation(project(":fore-jv:fore-jv-android-network"))
     }
 
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")

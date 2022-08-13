@@ -89,8 +89,8 @@ dependencies {
         implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
         implementation("co.early.fore:fore-kt-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt-android-core"))
-        implementation(project(":fore-kt-network"))
+        implementation(project(":fore-kt:fore-kt-android-core"))
+        implementation(project(":fore-kt:fore-kt-network"))
     }
 
     implementation("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")

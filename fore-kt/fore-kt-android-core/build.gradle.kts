@@ -20,11 +20,11 @@ android {
 }
 
 dependencies {
-    api(project(":fore-kt-core"))
+    api(project(":fore-kt:fore-kt-core"))
     api("androidx.lifecycle:lifecycle-common-java8:${Shared.Versions.androidx_lifecycle_common}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Shared.Versions.kotlinx_coroutines_android}")
     //promote the kotlin-reflect version used in the android lint tools to match kotlin_version used elsewhere
     implementation(kotlin("reflect"))
 }
 
-apply(from = "../publish-android-lib.gradle.kts")
+apply(from = "../../publish-android-lib.gradle.kts")

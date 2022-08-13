@@ -22,10 +22,10 @@ android {
 }
 
 dependencies {
-    api(project(":fore-jv-network"))
-    api(project(":fore-jv-android-core"))
+    api(project(":fore-jv:fore-jv-network"))
+    api(project(":fore-jv:fore-jv-android-core"))
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
     compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 }
 
-apply(from = "../publish-android-lib.gradle.kts")
+apply(from = "../../publish-android-lib.gradle.kts")

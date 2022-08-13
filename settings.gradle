@@ -1,27 +1,29 @@
 rootProject.name = "android-fore"
 
 // java
-include(":fore-jv-core")
-include(":fore-jv-network")
+include(":fore-jv")
+include(":fore-jv:fore-jv-core")
+include(":fore-jv:fore-jv-network")
 
 // java android
-include(":fore-jv-android") // everything
-include(":fore-jv-android-core")
-include(":fore-jv-android-adapters")
-include(":fore-jv-android-network")
+include(":fore-jv:fore-jv-android") // everything
+include(":fore-jv:fore-jv-android-core")
+include(":fore-jv:fore-jv-android-adapters")
+include(":fore-jv:fore-jv-android-network")
 
 // kotlin
-include(":fore-kt-core")
-include(":fore-kt-network")
-include(":fore-kt-network-okhttp3v3x")
-include(":fore-kt-network-okhttp3v4x")
+include(":fore-kt")
+include(":fore-kt:fore-kt-core")
+include(":fore-kt:fore-kt-network")
+include(":fore-kt:fore-kt-network-okhttp3v3x")
+include(":fore-kt:fore-kt-network-okhttp3v4x")
 
 // kotlin android
-include(":fore-kt-android") // everything
-include(":fore-kt-android-core")
-include(":fore-kt-android-adapters")
-include(":fore-kt-android-network")
-include(":fore-kt-android-compose")
+include(":fore-kt:fore-kt-android") // everything
+include(":fore-kt:fore-kt-android-core")
+include(":fore-kt:fore-kt-android-adapters")
+include(":fore-kt:fore-kt-android-network")
+include(":fore-kt:fore-kt-android-compose")
 
 include(":app-examples")
 include(":app-examples:example-kt-01reactiveui",

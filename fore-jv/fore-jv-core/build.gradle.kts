@@ -16,4 +16,4 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-apply(from = "../publish-lib.gradle.kts")
+apply(from = "../../publish-lib.gradle.kts")

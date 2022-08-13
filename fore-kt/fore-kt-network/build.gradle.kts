@@ -24,9 +24,9 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
-    api(project(":fore-kt-core"))
-    api(project(":fore-kt-network-okhttp3v3x"))
-    api(project(":fore-kt-network-okhttp3v4x"))
+    api(project(":fore-kt:fore-kt-core"))
+    api(project(":fore-kt:fore-kt-network-okhttp3v3x"))
+    api(project(":fore-kt:fore-kt-network-okhttp3v4x"))
     compileOnly("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp3v3}")
     compileOnly("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
     // OkHttp3 v3.X.X used by Retrofit2 and Apollo2 has method calls: method(), body(), code() etc
@@ -35,4 +35,4 @@ dependencies {
     implementation(kotlin("reflect"))
 }
 
-apply(from = "../publish-lib.gradle.kts")
+apply(from = "../../publish-lib.gradle.kts")

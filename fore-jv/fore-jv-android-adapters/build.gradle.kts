@@ -16,8 +16,8 @@ android {
 }
 
 dependencies {
-    api(project(":fore-jv-android-core"))
+    api(project(":fore-jv:fore-jv-android-core"))
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
 }
 
-apply(from = "../publish-android-lib.gradle.kts")
+apply(from = "../../publish-android-lib.gradle.kts")

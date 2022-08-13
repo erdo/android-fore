@@ -71,7 +71,7 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation("co.early.fore:fore-jv-android:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-jv-android"))
+        implementation(project(":fore-jv:fore-jv-android"))
     }
 
     kapt("androidx.room:room-compiler:${Shared.Versions.room_compiler}")

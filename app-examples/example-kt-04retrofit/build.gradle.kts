@@ -74,7 +74,7 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation("co.early.fore:fore-kt-android-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt-android-network"))
+        implementation(project(":fore-kt:fore-kt-android-network"))
     }
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")

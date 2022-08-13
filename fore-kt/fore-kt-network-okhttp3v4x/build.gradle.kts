@@ -27,4 +27,4 @@ dependencies {
     compileOnly("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp3v4}")
 }
 
-apply(from = "../publish-lib.gradle.kts")
+apply(from = "../../publish-lib.gradle.kts")

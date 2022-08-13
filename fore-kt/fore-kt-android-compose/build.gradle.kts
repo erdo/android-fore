@@ -29,8 +29,8 @@ android {
 }
 
 dependencies {
-    api(project(":fore-kt-android"))
+    api(project(":fore-kt:fore-kt-android"))
     implementation("androidx.compose.ui:ui:${Shared.Versions.compose}")
 }
 
-apply(from = "../publish-android-compose-lib.gradle.kts")
+apply(from = "../../publish-android-compose-lib.gradle.kts")

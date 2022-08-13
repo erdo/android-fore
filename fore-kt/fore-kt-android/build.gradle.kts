@@ -30,8 +30,8 @@ android {
 
 dependencies {
 
-    api(project(":fore-kt-android-adapters"))
-    api(project(":fore-kt-android-network"))
+    api(project(":fore-kt:fore-kt-android-adapters"))
+    api(project(":fore-kt:fore-kt-android-network"))
 
     compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
     compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
@@ -52,4 +52,4 @@ dependencies {
     }
 }
 
-apply(from = "../publish-android-lib.gradle.kts")
+apply(from = "../../publish-android-lib.gradle.kts")

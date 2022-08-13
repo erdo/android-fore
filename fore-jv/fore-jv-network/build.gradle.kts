@@ -17,8 +17,8 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
-    api(project(":fore-jv-core"))
+    api(project(":fore-jv:fore-jv-core"))
     compileOnly("com.squareup.okhttp3:okhttp:${Shared.Versions.okhttp3v3}")
 }
 
-apply(from = "../publish-lib.gradle.kts")
+apply(from = "../../publish-lib.gradle.kts")

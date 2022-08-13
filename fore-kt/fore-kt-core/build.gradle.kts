@@ -31,4 +31,4 @@ dependencies {
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
 }
 
-apply(from = "../publish-lib.gradle.kts")
+apply(from = "../../publish-lib.gradle.kts")
