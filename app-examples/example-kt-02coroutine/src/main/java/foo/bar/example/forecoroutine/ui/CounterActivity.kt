@@ -1,10 +1,10 @@
 package foo.bar.example.forecoroutine.ui
 
-
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import co.early.fore.core.observer.Observer
+import co.early.fore.core.ui.SyncableView
+import co.early.fore.kt.core.ui.LifecycleObserver
 import foo.bar.example.forecoroutine.OG
 import foo.bar.example.forecoroutine.R
 import foo.bar.example.forecoroutine.feature.counter.Counter
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_counter.*
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
-class CounterActivity : FragmentActivity(R.layout.activity_counter) {
+class CounterActivity : FragmentActivity(R.layout.activity_counter), SyncableView {
 
 
     //models that we need to sync with
@@ -22,12 +22,10 @@ class CounterActivity : FragmentActivity(R.layout.activity_counter) {
     private val counter: Counter = OG[Counter::class.java]
 
 
-    //single observer reference
-    private var observer = Observer { syncView() }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycle.addObserver(LifecycleObserver(this, counter, counterWithProgress))
 
         setupButtonClickListeners()
     }
@@ -37,10 +35,7 @@ class CounterActivity : FragmentActivity(R.layout.activity_counter) {
         counterwprog_increase_btn.setOnClickListener { counterWithProgress.increaseBy20() }
     }
 
-
-    //data binding stuff below
-
-    fun syncView() {
+    override fun syncView() {
         counterwprog_increase_btn.isEnabled = !counterWithProgress.isBusy
         counterwprog_busy_progress.visibility = if (counterWithProgress.isBusy) View.VISIBLE else View.INVISIBLE
         counterwprog_progress_txt.text = "${counterWithProgress.progress}"
@@ -50,18 +45,4 @@ class CounterActivity : FragmentActivity(R.layout.activity_counter) {
         counter_busy_progress.visibility = if (counter.isBusy) View.VISIBLE else View.INVISIBLE
         counter_current_txt.text = "${counter.count}"
     }
-
-    override fun onStart() {
-        super.onStart()
-        counter.addObserver(observer)
-        counterWithProgress.addObserver(observer)
-        syncView() //<-- don't forget this
-    }
-
-    override fun onStop() {
-        super.onStop()
-        counter.removeObserver(observer)
-        counterWithProgress.removeObserver(observer)
-    }
-
 }

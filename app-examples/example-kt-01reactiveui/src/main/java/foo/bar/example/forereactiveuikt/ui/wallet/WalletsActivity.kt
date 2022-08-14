@@ -2,8 +2,8 @@ package foo.bar.example.forereactiveuikt.ui.wallet
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import co.early.fore.core.observer.Observer
 import co.early.fore.core.ui.SyncableView
+import co.early.fore.kt.core.ui.LifecycleObserver
 import foo.bar.example.forereactiveuikt.OG
 import foo.bar.example.forereactiveuikt.R
 import foo.bar.example.forereactiveuikt.feature.wallet.Wallet
@@ -17,12 +17,10 @@ class WalletsActivity : FragmentActivity(R.layout.activity_wallet), SyncableView
     //models that we need to sync with
     private val wallet: Wallet = OG[Wallet::class.java]
 
-    //single observer reference
-    var observer = Observer { syncView() }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycle.addObserver(LifecycleObserver(this, wallet))
 
         setupButtonClickListeners()
     }
@@ -36,22 +34,10 @@ class WalletsActivity : FragmentActivity(R.layout.activity_wallet), SyncableView
         }
     }
 
-    //reactive UI stuff below
     override fun syncView() {
         wallet_increase_btn.isEnabled = wallet.canIncrease()
         wallet_decrease_btn.isEnabled = wallet.canDecrease()
         wallet_mobileamount_txt.text = wallet.mobileWalletAmount.toString()
         wallet_savingsamount_txt.text = wallet.savingsWalletAmount.toString()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        wallet.addObserver(observer)
-        syncView() //  <- don't forget this
-    }
-
-    override fun onStop() {
-        super.onStop()
-        wallet.removeObserver(observer)
     }
 }

@@ -1,11 +1,11 @@
 package foo.bar.example.foreapollo3.ui.launch
 
-
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import co.early.fore.core.observer.Observer
+import co.early.fore.core.ui.SyncableView
+import co.early.fore.kt.core.ui.LifecycleObserver
 import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import coil.load
@@ -18,16 +18,12 @@ import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_launches.*
 
-
-class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
+class LaunchActivity : FragmentActivity(R.layout.activity_launches), SyncableView {
 
 
     //models that we need to sync with
     private val launchesModel: LaunchesModel = OG[LaunchesModel::class.java]
     private val authenticator: Authenticator = OG[Authenticator::class.java]
-
-    //single observer reference
-    private var observer = Observer { syncView() }
 
 
     private val success: SuccessCallback = {
@@ -40,6 +36,8 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        lifecycle.addObserver(LifecycleObserver(this, launchesModel, authenticator))
+
         setupButtonClickListeners()
     }
 
@@ -50,9 +48,7 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
         launch_chain_btn.setOnClickListener { launchesModel.chainedCall(success, failureWithPayload) }
     }
 
-    //data binding stuff below
-
-    fun syncView() {
+    override fun syncView() {
         launch_login_btn.showOrGone(!authenticator.hasSessionToken())
         launch_logout_btn.showOrGone(authenticator.hasSessionToken())
         launch_login_btn.isEnabled = !authenticator.isBusy
@@ -68,19 +64,6 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches) {
         launch_detailcontainer_linearlayout.showOrGone(!launchesModel.isBusy)
         launch_booked_txt.showOrGone(!launchesModel.isBusy && authenticator.hasSessionToken())
         launch_booked_txt.text = "booked:${launchesModel.currentLaunch.isBooked}"
-    }
-
-    override fun onStart() {
-        super.onStart()
-        launchesModel.addObserver(observer)
-        authenticator.addObserver(observer)
-        syncView() //  <- don't forget this
-    }
-
-    override fun onStop() {
-        super.onStop()
-        launchesModel.removeObserver(observer)
-        authenticator.removeObserver(observer)
     }
 }
 

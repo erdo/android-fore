@@ -1,11 +1,11 @@
 package foo.bar.example.forektorkt.ui.fruit
 
-
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import co.early.fore.core.observer.Observer
+import co.early.fore.core.ui.SyncableView
+import co.early.fore.kt.core.ui.LifecycleObserver
 import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import foo.bar.example.forektorkt.OG
@@ -14,18 +14,15 @@ import foo.bar.example.forektorkt.feature.fruit.FruitFetcher
 import foo.bar.example.forektorkt.message.ErrorMessage
 import kotlinx.android.synthetic.main.activity_fruit.*
 
-
-class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
+class FruitActivity : FragmentActivity(R.layout.activity_fruit), SyncableView {
 
     //models that we need to sync with
     private val fruitFetcher: FruitFetcher = OG[FruitFetcher::class.java]
 
-    //single observer reference
-    private var observer = Observer { syncView() }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycle.addObserver(LifecycleObserver(this, fruitFetcher))
 
         setupButtonClickListeners()
     }
@@ -65,10 +62,7 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
         }
     }
 
-
-    //data binding stuff below
-
-    fun syncView() {
+    override fun syncView() {
         fruit_fetchsuccess_btn.isEnabled = !fruitFetcher.isBusy
         fruit_fetchchainsuccess_btn.isEnabled = !fruitFetcher.isBusy
         fruit_fetchfailbasic_btn.isEnabled = !fruitFetcher.isBusy
@@ -84,19 +78,6 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit) {
         )
         fruit_busy_progbar.showOrInvisible(fruitFetcher.isBusy)
         fruit_detailcontainer_linearlayout.showOrGone(!fruitFetcher.isBusy)
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        fruitFetcher.addObserver(observer)
-        syncView() //  <- don't forget this
-    }
-
-
-    override fun onStop() {
-        super.onStop()
-        fruitFetcher.removeObserver(observer)
     }
 }
 
