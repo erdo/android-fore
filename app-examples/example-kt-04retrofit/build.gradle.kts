@@ -4,7 +4,6 @@ import co.early.fore.Shared.BuildTypes
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -27,6 +26,9 @@ android {
 
     compileSdk = Shared.Android.compileSdk
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = appId
         minSdk = Shared.Android.minSdk

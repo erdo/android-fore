@@ -3,11 +3,7 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    kotlin("android")
-    kotlin("android.extensions")
-    kotlin("kapt")
 }
-
 
 val appId = "foo.bar.example.foredb"
 
@@ -74,8 +70,8 @@ dependencies {
         implementation(project(":fore-jv:fore-jv-android"))
     }
 
-    kapt("androidx.room:room-compiler:${Shared.Versions.room_compiler}")
-    kapt("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
+    annotationProcessor("androidx.room:room-compiler:${Shared.Versions.room_compiler}")
+    annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
     //noinspection AnnotationProcessorOnCompilePath
     implementation("com.jakewharton:butterknife:${Shared.Versions.butterknife}")
 

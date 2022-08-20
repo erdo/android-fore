@@ -10,28 +10,24 @@ import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import foo.bar.example.foreretrofitkt.OG
 import foo.bar.example.foreretrofitkt.R
+import foo.bar.example.foreretrofitkt.databinding.ActivityFruitBinding
 import foo.bar.example.foreretrofitkt.feature.fruit.FailureCallback
 import foo.bar.example.foreretrofitkt.feature.fruit.FruitFetcher
 import foo.bar.example.foreretrofitkt.feature.fruit.SuccessCallback
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
-import kotlinx.android.synthetic.main.activity_fruit.*
 
-class FruitActivity : FragmentActivity(R.layout.activity_fruit), SyncableView {
-
+class FruitActivity : FragmentActivity(), SyncableView {
 
     //models that we need to sync with
     private val fruitFetcher: FruitFetcher = OG[FruitFetcher::class.java]
 
-
-    private val success: SuccessCallback = {
-        showToast("Success!")
-    }
-    private val failureWithPayload: FailureCallback<ErrorMessage> = { userMessage ->
-        showToast(userMessage)
-    }
+    private lateinit var binding: ActivityFruitBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityFruitBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         lifecycle.addObserver(LifecycleObserver(this, fruitFetcher))
 
@@ -39,28 +35,35 @@ class FruitActivity : FragmentActivity(R.layout.activity_fruit), SyncableView {
     }
 
     private fun setupButtonClickListeners() {
-        fruit_fetchsuccess_btn.setOnClickListener { fruitFetcher.fetchFruitsAsync(success, failureWithPayload) }
-        fruit_fetchchainsuccess_btn.setOnClickListener { fruitFetcher.chainedCall(success, failureWithPayload) }
-        fruit_fetchfailbasic_btn.setOnClickListener { fruitFetcher.fetchFruitsButFail(success, failureWithPayload) }
-        fruit_fetchfailadvanced_btn.setOnClickListener { fruitFetcher.fetchFruitsButFailAdvanced(success, failureWithPayload) }
+        binding.fruitFetchsuccessBtn.setOnClickListener { fruitFetcher.fetchFruitsAsync(success, failureWithPayload) }
+        binding.fruitFetchchainsuccessBtn.setOnClickListener { fruitFetcher.chainedCall(success, failureWithPayload) }
+        binding.fruitFetchfailbasicBtn.setOnClickListener { fruitFetcher.fetchFruitsButFail(success, failureWithPayload) }
+        binding.fruitFetchfailadvancedBtn.setOnClickListener { fruitFetcher.fetchFruitsButFailAdvanced(success, failureWithPayload) }
     }
 
     override fun syncView() {
-        fruit_fetchsuccess_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_fetchchainsuccess_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_fetchfailbasic_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_fetchfailadvanced_btn.isEnabled = !fruitFetcher.isBusy
-        fruit_name_textview.text = fruitFetcher.currentFruit.name
-        fruit_citrus_img.setImageResource(
+        binding.fruitFetchsuccessBtn.isEnabled = !fruitFetcher.isBusy
+        binding.fruitFetchsuccessBtn.isEnabled = !fruitFetcher.isBusy
+        binding.fruitFetchfailbasicBtn.isEnabled = !fruitFetcher.isBusy
+        binding.fruitFetchfailadvancedBtn.isEnabled = !fruitFetcher.isBusy
+        binding.fruitNameTextview.text = fruitFetcher.currentFruit.name
+        binding.fruitCitrusImg.setImageResource(
             if (fruitFetcher.currentFruit.isCitrus)
                 R.drawable.lemon_positive else R.drawable.lemon_negative
         )
-        fruit_tastyrating_tastybar.setTastyPercent(fruitFetcher.currentFruit.tastyPercentScore.toFloat())
-        fruit_tastyrating_textview.text = String.format(
+        binding.fruitTastyratingTastybar.setTastyPercent(fruitFetcher.currentFruit.tastyPercentScore.toFloat())
+        binding.fruitTastyratingTextview.text = String.format(
             this.getString(R.string.fruit_percent), fruitFetcher.currentFruit.tastyPercentScore.toString()
         )
-        fruit_busy_progbar.showOrInvisible(fruitFetcher.isBusy)
-        fruit_detailcontainer_linearlayout.showOrGone(!fruitFetcher.isBusy)
+        binding.fruitBusyProgbar.showOrInvisible(fruitFetcher.isBusy)
+        binding.fruitDetailcontainerLinearlayout.showOrGone(!fruitFetcher.isBusy)
+    }
+
+    private val success: SuccessCallback = {
+        showToast("Success!")
+    }
+    private val failureWithPayload: FailureCallback<ErrorMessage> = { userMessage ->
+        showToast(userMessage)
     }
 }
 

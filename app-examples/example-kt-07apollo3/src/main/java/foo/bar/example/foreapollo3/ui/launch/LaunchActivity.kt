@@ -10,31 +10,26 @@ import co.early.fore.kt.core.ui.showOrGone
 import co.early.fore.kt.core.ui.showOrInvisible
 import coil.load
 import foo.bar.example.foreapollo3.OG
-import foo.bar.example.foreapollo3.R
+import foo.bar.example.foreapollo3.databinding.ActivityLaunchesBinding
 import foo.bar.example.foreapollo3.feature.FailureCallback
 import foo.bar.example.foreapollo3.feature.SuccessCallback
 import foo.bar.example.foreapollo3.feature.authentication.Authenticator
 import foo.bar.example.foreapollo3.feature.launch.LaunchesModel
 import foo.bar.example.foreapollo3.message.ErrorMessage
-import kotlinx.android.synthetic.main.activity_launches.*
 
-class LaunchActivity : FragmentActivity(R.layout.activity_launches), SyncableView {
-
+class LaunchActivity : FragmentActivity(), SyncableView {
 
     //models that we need to sync with
     private val launchesModel: LaunchesModel = OG[LaunchesModel::class.java]
     private val authenticator: Authenticator = OG[Authenticator::class.java]
 
-
-    private val success: SuccessCallback = {
-        showToast("Success!")
-    }
-    private val failureWithPayload: FailureCallback<ErrorMessage> = { userMessage ->
-        showToast(userMessage)
-    }
+    private lateinit var binding: ActivityLaunchesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityLaunchesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         lifecycle.addObserver(LifecycleObserver(this, launchesModel, authenticator))
 
@@ -42,28 +37,35 @@ class LaunchActivity : FragmentActivity(R.layout.activity_launches), SyncableVie
     }
 
     private fun setupButtonClickListeners() {
-        launch_fetch_btn.setOnClickListener { launchesModel.fetchLaunches(success, failureWithPayload) }
-        launch_login_btn.setOnClickListener { authenticator.login("example@test.com", success, failureWithPayload) }
-        launch_logout_btn.setOnClickListener { authenticator.logout() }
-        launch_chain_btn.setOnClickListener { launchesModel.chainedCall(success, failureWithPayload) }
+        binding.launchFetchBtn.setOnClickListener { launchesModel.fetchLaunches(success, failureWithPayload) }
+        binding.launchLoginBtn.setOnClickListener { authenticator.login("example@test.com", success, failureWithPayload) }
+        binding.launchLogoutBtn.setOnClickListener { authenticator.logout() }
+        binding.launchChainBtn.setOnClickListener { launchesModel.chainedCall(success, failureWithPayload) }
     }
 
     override fun syncView() {
-        launch_login_btn.showOrGone(!authenticator.hasSessionToken())
-        launch_logout_btn.showOrGone(authenticator.hasSessionToken())
-        launch_login_btn.isEnabled = !authenticator.isBusy
-        launch_logout_btn.isEnabled = !authenticator.isBusy
-        launch_fetch_btn.isEnabled = !launchesModel.isBusy
-        launch_chain_btn.isEnabled = !launchesModel.isBusy && !authenticator.isBusy
-        launch_session_txt.text = "session token:${authenticator.sessionToken}"
-        launch_authbusy_progbar.showOrGone(authenticator.isBusy)
-        launch_session_txt.showOrGone(!authenticator.isBusy)
-        launch_id_textview.text = "id:" + launchesModel.currentLaunch.id
-        launch_patch_img.load(launchesModel.currentLaunch.patchImgUrl)
-        launch_busy_progbar.showOrInvisible(launchesModel.isBusy)
-        launch_detailcontainer_linearlayout.showOrGone(!launchesModel.isBusy)
-        launch_booked_txt.showOrGone(!launchesModel.isBusy && authenticator.hasSessionToken())
-        launch_booked_txt.text = "booked:${launchesModel.currentLaunch.isBooked}"
+        binding.launchLoginBtn.showOrGone(!authenticator.hasSessionToken())
+        binding.launchLogoutBtn.showOrGone(authenticator.hasSessionToken())
+        binding.launchLoginBtn.isEnabled = !authenticator.isBusy
+        binding.launchLogoutBtn.isEnabled = !authenticator.isBusy
+        binding.launchFetchBtn.isEnabled = !launchesModel.isBusy
+        binding.launchChainBtn.isEnabled = !launchesModel.isBusy && !authenticator.isBusy
+        binding.launchSessionTxt.text = "session token:${authenticator.sessionToken}"
+        binding.launchAuthbusyProgbar.showOrGone(authenticator.isBusy)
+        binding.launchSessionTxt.showOrGone(!authenticator.isBusy)
+        binding.launchIdTextview.text = "id:" + launchesModel.currentLaunch.id
+        binding.launchPatchImg.load(launchesModel.currentLaunch.patchImgUrl)
+        binding.launchBusyProgbar.showOrInvisible(launchesModel.isBusy)
+        binding.launchDetailcontainerLinearlayout.showOrGone(!launchesModel.isBusy)
+        binding.launchBookedTxt.showOrGone(!launchesModel.isBusy && authenticator.hasSessionToken())
+        binding.launchBookedTxt.text = "booked:${launchesModel.currentLaunch.isBooked}"
+    }
+
+    private val success: SuccessCallback = {
+        showToast("Success!")
+    }
+    private val failureWithPayload: FailureCallback<ErrorMessage> = { userMessage ->
+        showToast(userMessage)
     }
 }
 

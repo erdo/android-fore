@@ -5,7 +5,6 @@ plugins {
     id("com.android.application")
     id("com.apollographql.apollo").version("2.5.4")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -28,6 +27,9 @@ android {
 
     compileSdk = Shared.Android.compileSdk
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = appId
         minSdk = Shared.Android.minSdk

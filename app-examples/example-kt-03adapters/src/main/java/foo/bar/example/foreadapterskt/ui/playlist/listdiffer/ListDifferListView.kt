@@ -2,14 +2,16 @@ package foo.bar.example.foreadapterskt.ui.playlist.listdiffer
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.Button
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import co.early.fore.adapters.CrossFadeRemover
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.logging.Logger
 import foo.bar.example.foreadapterskt.OG
-import kotlinx.android.synthetic.main.view_playlists_immutable.view.*
-import kotlinx.android.synthetic.main.view_playlists_listadapter.view.*
+import foo.bar.example.foreadapterskt.R
 
 /**
  * Copyright © 2015-2020 early.co. All rights reserved.
@@ -23,10 +25,21 @@ class ListDifferListView @JvmOverloads constructor(
     //models that we need to sync with
     private val logger: Logger = OG[Logger::class.java]
 
+    private lateinit var listdifferAddButton: Button
+    private lateinit var listdifferAdd5Button: Button
+    private lateinit var listdifferAdd100Button: Button
+    private lateinit var listdifferRemove5Button: Button
+    private lateinit var listdifferRemove100Button: Button
+    private lateinit var listdifferClearButton: Button
+    private lateinit var listdifferTotaltracksTextview: TextView
+    private lateinit var listdifferListRecycleview: RecyclerView
+
     private lateinit var listDifferAdapter: ListDifferPlaylistAdapter
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+
+        setupUiReferences()
 
         setupClickListeners()
 
@@ -37,18 +50,29 @@ class ListDifferListView @JvmOverloads constructor(
         syncView()
     }
 
+    private fun setupUiReferences() {
+        listdifferAddButton = findViewById(R.id.listdiffer_add_button)
+        listdifferAdd5Button = findViewById(R.id.listdiffer_add5_button)
+        listdifferAdd100Button = findViewById(R.id.listdiffer_add100_button)
+        listdifferRemove5Button = findViewById(R.id.listdiffer_remove5_button)
+        listdifferRemove100Button = findViewById(R.id.listdiffer_remove100_button)
+        listdifferClearButton = findViewById(R.id.listdiffer_clear_button)
+        listdifferTotaltracksTextview = findViewById(R.id.listdiffer_totaltracks_textview)
+        listdifferListRecycleview = findViewById(R.id.listdiffer_list_recycleview)
+    }
+
     private fun setupClickListeners() {
-        listdiffer_add_button.setOnClickListener { listDifferAdapter.addNTracks(1) }
-        listdiffer_clear_button.setOnClickListener { listDifferAdapter.removeAllTracks() }
-        listdiffer_add5_button.setOnClickListener { listDifferAdapter.addNTracks(5) }
-        listdiffer_remove5_button.setOnClickListener { listDifferAdapter.removeNTracks(5) }
-        listdiffer_add100_button.setOnClickListener { listDifferAdapter.addNTracks(100) }
-        listdiffer_remove100_button.setOnClickListener { listDifferAdapter.removeNTracks(100) }
+        listdifferAddButton.setOnClickListener { listDifferAdapter.addNTracks(1) }
+        listdifferClearButton.setOnClickListener { listDifferAdapter.removeAllTracks() }
+        listdifferAdd5Button.setOnClickListener { listDifferAdapter.addNTracks(5) }
+        listdifferRemove5Button.setOnClickListener { listDifferAdapter.removeNTracks(5) }
+        listdifferAdd100Button.setOnClickListener { listDifferAdapter.addNTracks(100) }
+        listdifferRemove100Button.setOnClickListener { listDifferAdapter.removeNTracks(100) }
     }
 
     private fun setupAdapters() {
         listDifferAdapter = ListDifferPlaylistAdapter(this, logger)
-        listdiffer_list_recycleview.apply{
+        listdifferListRecycleview.apply{
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = listDifferAdapter
             itemAnimator = CrossFadeRemover()
@@ -58,9 +82,9 @@ class ListDifferListView @JvmOverloads constructor(
 
     override fun syncView() {
         logger.i("syncView()")
-        listdiffer_totaltracks_textview.text = listDifferAdapter.itemCount.toString()
-        listdiffer_clear_button.isEnabled = !listDifferAdapter.isEmpty()
-        listdiffer_remove5_button.isEnabled = listDifferAdapter.hasAtLeastNItems(5)
-        listdiffer_remove100_button.isEnabled = listDifferAdapter.hasAtLeastNItems(100)
+        listdifferTotaltracksTextview.text = listDifferAdapter.itemCount.toString()
+        listdifferClearButton.isEnabled = !listDifferAdapter.isEmpty()
+        listdifferRemove5Button.isEnabled = listDifferAdapter.hasAtLeastNItems(5)
+        listdifferRemove100Button.isEnabled = listDifferAdapter.hasAtLeastNItems(100)
     }
 }
