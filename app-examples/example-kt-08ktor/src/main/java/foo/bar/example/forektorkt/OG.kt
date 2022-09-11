@@ -45,7 +45,7 @@ object OG {
 
         // models
         val fruitFetcher = FruitFetcher(
-            FruitService.create(httpClient),
+            FruitService(httpClient),
             callWrapper,
             logger
         )

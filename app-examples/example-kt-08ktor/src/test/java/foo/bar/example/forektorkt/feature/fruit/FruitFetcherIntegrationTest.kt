@@ -66,7 +66,7 @@ class FruitFetcherIntegrationTest {
         //arrange
         val httpClient = stubbedHttpClient(stubbedSuccess)
         val fruitFetcher = FruitFetcher(
-            FruitService.create(httpClient),
+            FruitService(httpClient),
             callWrapper,
             logger
         )
@@ -106,7 +106,7 @@ class FruitFetcherIntegrationTest {
         //arrange
         val httpClient = stubbedHttpClient(stubbedFailUserLocked)
         val fruitFetcher = FruitFetcher(
-            FruitService.create(httpClient),
+            FruitService(httpClient),
             callWrapper,
             logger
         )
@@ -138,7 +138,7 @@ class FruitFetcherIntegrationTest {
         //arrange
         val httpClient = stubbedHttpClient(stubbedFailureUserNotEnabled)
         val fruitFetcher = FruitFetcher(
-            FruitService.create(httpClient),
+            FruitService(httpClient),
             callWrapper,
             logger
         )
@@ -180,7 +180,7 @@ class FruitFetcherIntegrationTest {
             clearMocks(mockSuccess, mockFailureWithPayload)
             val httpClient = stubbedHttpClient(stub)
             val fruitFetcher = FruitFetcher(
-                FruitService.create(httpClient),
+                FruitService(httpClient),
                 callWrapper,
                 logger
             )
