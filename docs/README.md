@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.15](https://img.shields.io/badge/central-1.5.15-green.svg){: .float-left}
+![central-1.5.16](https://img.shields.io/badge/central-1.5.16-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -16,7 +16,7 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.15")
+implementation("co.early.fore:fore-kt-android:1.5.16")
 ```
 
 More detailed [version information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
