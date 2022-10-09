@@ -26,7 +26,7 @@ class StateBuilder internal constructor(private val mockCallWrapperKtor: CallWra
 
         coEvery {
             mockCallWrapperKtor.processCallAwait(
-                any() as Class<MessageProvider<ErrorMessage>>,
+                any() as kotlin.reflect.KClass<MessageProvider<ErrorMessage>>,
                 any() as suspend () -> List<FruitPojo>
             )
         } returns fail(errorMessage)

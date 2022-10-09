@@ -126,7 +126,7 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = callWrapperKtor.processCallAwait(FruitsCustomError::class.java) {
+            val result = callWrapperKtor.processCallAwait(FruitsCustomError::class) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 

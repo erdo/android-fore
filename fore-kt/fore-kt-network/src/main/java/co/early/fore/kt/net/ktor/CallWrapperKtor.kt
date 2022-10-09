@@ -16,14 +16,14 @@ interface CallerKtor<F> {
         call: suspend () -> S
     ): Either<F, S>
     suspend fun <S, CE : MessageProvider<F>> processCallAwait(
-        customErrorClazz: Class<CE>,
+        customErrorKlazz: kotlin.reflect.KClass<CE>,
         call: suspend () -> S
     ): Either<F, S>
     suspend fun <S> processCallAsync(
         call: suspend () -> S
     ): Deferred<Either<F, S>>
     suspend fun <S, CE : MessageProvider<F>> processCallAsync(
-        customErrorClazz: Class<CE>,
+        customErrorKlazz: kotlin.reflect.KClass<CE>,
         call: suspend () -> S
     ): Deferred<Either<F, S>>
 }
@@ -70,10 +70,10 @@ class CallWrapperKtor<F>(
      * @param <S> Successful response body type
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
-            customErrorClazz: Class<CE>,
+        customErrorKlazz: kotlin.reflect.KClass<CE>,
             call: suspend () -> S
     ): Either<F, S> {
-        return processCallAsync(customErrorClazz, call).await()
+        return processCallAsync(customErrorKlazz, call).await()
     }
 
     /**
@@ -91,14 +91,14 @@ class CallWrapperKtor<F>(
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAsync(
-            customErrorClazz: Class<CE>,
+        customErrorKlazz: kotlin.reflect.KClass<CE>,
             call: suspend () -> S
     ): Deferred<Either<F, S>> {
-        return doCallAsync(customErrorClazz, call)
+        return doCallAsync(customErrorKlazz, call)
     }
 
     private suspend fun <S, CE : MessageProvider<F>> doCallAsync(
-            customErrorClazz: Class<CE>?,
+        customErrorKlazz: kotlin.reflect.KClass<CE>?,
             call: suspend () -> S
     ): Deferred<Either<F, S>> {
 
@@ -122,7 +122,7 @@ class CallWrapperKtor<F>(
 
                 Fore.getLogger(logger).w("processFailResponse() thread:${Thread.currentThread()} ${t.message}")
 
-                fail(errorHandler.handleError(t, customErrorClazz))
+                fail(errorHandler.handleError(t, customErrorKlazz))
             }
         }
     }

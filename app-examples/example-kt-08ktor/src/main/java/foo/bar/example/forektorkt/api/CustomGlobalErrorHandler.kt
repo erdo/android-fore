@@ -15,6 +15,7 @@ import java.io.IOException
 import java.io.UnsupportedEncodingException
 import java.net.UnknownServiceException
 import java.nio.charset.CoderMalfunctionError
+import kotlin.reflect.KClass
 
 /**
  * You can probably use this class almost as is for your own app, but you might want to
@@ -23,8 +24,8 @@ import java.nio.charset.CoderMalfunctionError
 class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMessage> {
 
     override suspend fun <CE : MessageProvider<ErrorMessage>> handleError(
-            t: Throwable,
-            customErrorClazz: Class<CE>?
+        t: Throwable,
+        customErrorKlazz: KClass<CE>?
     ): ErrorMessage {
 
         if (t == null) {
@@ -59,8 +60,8 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
                 } ?: msg
 
                 //let's get even more specifics about the error
-                customErrorClazz?.let { clazz ->
-                    msg = parseCustomError(msg, response, clazz)
+                customErrorKlazz?.let { klazz ->
+                    msg = parseCustomError(msg, response, klazz)
                 }
 
                 msg
@@ -80,7 +81,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
     private suspend fun <CE : MessageProvider<ErrorMessage>> parseCustomError(
             provisionalErrorMessage: ErrorMessage,
             errorResponse: HttpResponse,
-            customErrorClazz: Class<CE>
+            customErrorKlazz: KClass<CE>
     ): ErrorMessage {
 
         var customError: ErrorMessage = provisionalErrorMessage
@@ -89,7 +90,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
 
             val bodyContent = errorResponse.bodyAsText(Charsets.UTF_8)
             logWrapper.d("parseCustomError() attempting to parse this content:\n $bodyContent")
-            val errorClass = Json.decodeFromString(serializer(customErrorClazz), bodyContent) as CE
+            val errorClass = Json.decodeFromString(serializer(customErrorKlazz.java), bodyContent) as CE
             customError = errorClass.message
 
         } catch (t: Throwable) {

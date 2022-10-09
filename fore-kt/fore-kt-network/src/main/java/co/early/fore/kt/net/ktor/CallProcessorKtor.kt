@@ -122,7 +122,7 @@ class CallProcessorKtor<F>(
 
                 Fore.getLogger(logger).w("processFailResponse() thread:${Thread.currentThread()} ${t.message}")
 
-                Either.left(errorHandler.handleError(t, customErrorClazz))
+                Either.left(errorHandler.handleError(t, customErrorClazz?.kotlin))
             }
         }
     }
