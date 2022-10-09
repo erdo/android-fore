@@ -23,7 +23,7 @@ import java.nio.charset.CoderMalfunctionError
 class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMessage> {
 
     override suspend fun <CE : MessageProvider<ErrorMessage>> handleError(
-            t: Throwable?,
+            t: Throwable,
             customErrorClazz: Class<CE>?
     ): ErrorMessage {
 

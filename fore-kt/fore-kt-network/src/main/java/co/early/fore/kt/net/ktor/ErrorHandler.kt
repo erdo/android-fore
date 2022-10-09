@@ -10,10 +10,10 @@ import co.early.fore.net.MessageProvider
 interface ErrorHandler<F> {
     /**
      *
-     * @param t throwable that caused the error, may be null
+     * @param t throwable that caused the error
      * @param customErrorClazz custom error class expected from the errorResponse, may be null
      * @param <CE> class type of the custom error if specified
      * @return the parsed error from the server
     </CE> */
-    suspend fun <CE : MessageProvider<F>> handleError(t: Throwable?, customErrorClazz: Class<CE>?): F
+    suspend fun <CE : MessageProvider<F>> handleError(t: Throwable, customErrorClazz: Class<CE>?): F
 }
