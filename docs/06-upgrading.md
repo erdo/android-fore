@@ -1,9 +1,7 @@
 
-# Version information
+# Version and package information
 
-For the 5 years that fore has been published on <strike>jcenter</strike> & mavenCentral, the core code has remained almost identical (apart from the addition of kotlin / coroutines under the hood several years ago).
-
-Most version number bumps have been due to updating dependencies, adding new classes to the optional packages, and occasionally tidying up the naming or the API (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
+Most version number bumps have been due to updating dependencies, and occasionally adding the odd lifecycle utility or support for things like Apollo in the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
 **kotlin** API android package
 ```
@@ -15,11 +13,18 @@ co.early.fore:fore-kt-android
 co.early.fore:fore-jv-android
 ```
 
-The fore library is divided into optional packages which you can pull in independently if you want (though the fat package is so small, it doesn't really seem worth it IMO).
+The fore library is divided into optional packages which you can pull in independently if you want (all the packages are so small, it's not really worth it IMO). But for example, you might just want **fore-kt-core** for a kotlin only domain module if you're writing a clean architecture app ([clean modules example](https://github.com/erdo/clean-modules-sample)).
 
 **kotlin** API
 ```
 co.early.fore:fore-kt-core
+co.early.fore:fore-kt-network
+co.early.fore:fore-kt-network-okhttp3v3x
+co.early.fore:fore-kt-network-okhttp3v4x
+```
+
+**kotlin plus android** API
+```
 co.early.fore:fore-kt-android-core
 co.early.fore:fore-kt-android-adapters
 co.early.fore:fore-kt-android-network
@@ -28,14 +33,14 @@ co.early.fore:fore-kt-android-network
 **java** API
 ```
 co.early.fore:fore-jv-core
+co.early.fore:fore-jv-network
+```
+
+**java plus android** API
+```
 co.early.fore:fore-jv-android-core
 co.early.fore:fore-jv-android-adapters
 co.early.fore:fore-jv-android-network
-```
-
-If you have a kotlin only domain module you are using as part of a clean architecture implementation, this is the package to pull in to that module (full [clean modules example](https://github.com/erdo/clean-modules-sample)):
-```
-co.early.fore:fore-kt-core
 ```
 
 ## Maven central

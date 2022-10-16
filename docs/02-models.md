@@ -27,7 +27,7 @@ If you need to hop onto another thread for IO or any heavy processing, do it exp
 
 > pop back on to the UI thread when you are ready to update your state
 
-Check out a [[few]](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/main/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcher.java) [[examples]](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice is generic and applies to writing ViewModels too, so it's all fairly obvious)_ feel free to skim over the checklist below for a refresher and you should be good to go.
+Check out a [[few]](https://github.com/erdo/clean-modules-sample/blob/main/app/domain/src/main/java/foo/bar/clean/domain/weather/WeatherModel.kt) [[examples]](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-02coroutine/src/main/java/foo/bar/example/forecoroutine/feature/counter/Counter.kt) from the sample apps, or if you're already comfortable writing model code _(most of this advice is generic and applies to writing ViewModels too, so it's all fairly obvious)_ feel free to skim over the checklist below for a refresher and you should be good to go.
 
 ## Model Checklist
 

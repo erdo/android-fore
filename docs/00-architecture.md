@@ -14,13 +14,15 @@ By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean t
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much by design).
 
-*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/clean-modules-sample) written in kotlin modules. This one is a larger but more standard MVO implementation written in [Kotlin](https://github.com/erdo/fore-full-example-02-kotlin) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
+*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/clean-modules-sample) written in kotlin modules. This one is a more simple MVO implementation written in [Kotlin](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
 In a nutshell this is what we have with MVO:
 
 > "Observable **Models**; **Views** doing the observing; and some **Reactive UI** tricks to tie it all together"
 
 Here's an example app structure showing some models being observed by fragments in typical MVO style. As discussed below, the dependency arrows point towards the models (i.e. the view layer is aware of the models, the models are not aware of the view layer).
+
+<a name="architecture-diag"/>
 
 <a name="an overview of the structure of an MVO app, showing models (like NetworkModel and WalletModel) that are informing various views (like DashBoardFragment and WalletFragment) that their states have changed"></a>
 
@@ -42,7 +44,7 @@ Here is where a ViewModel would fit in our example app:
 
 ![data binding](img/app_arch_2_viewmodel.png)
 
-The Mobile Wallet Model / Wallet Fragment section of that diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) and the [**view code**](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) that does the observing. (That's the expressive style of doing things so that you can easily see what is happening, even that boilerplate is [optional](https://erdo.github.io/android-fore/03-reactive-uis.html#boiler-plate) though, this is what an implementation of a very [**similar view**](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) looks like with the add and remove boiler plate removed).
+The Mobile Wallet Model / Wallet Fragment section of that diagram matches what is happening in [**sample app 1**](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example). Here are the relevant bits of code: the [**observable model code**](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) and the [**view code**](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) that does the observing.
 
 One great thing about MVO is that the view layer and the rest of the app are so loosely coupled, that supporting rotation already works out of the box. In the code examples above, the code just works if you rotate the screen simply because of how it's structured - you don't need to do a single thing.
 
