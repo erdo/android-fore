@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-29
+      - image: cimg/android:2022.04.1
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: -Dorg.gradle.daemon=true
@@ -25,19 +25,19 @@ jobs:
 
       - run:
           name: Run Tests fore-jv-android
-          command: ./gradlew fore-jv-android:lintRelease fore-jv-android:testRelease
+          command: ./gradlew fore-jv:fore-jv-android:lintRelease fore-jv:fore-jv-android:testRelease
       - store_artifacts:
-          path: fore-jv-android/build/reports
+          path: fore-jv/fore-jv-android/build/reports
       - store_test_results:
-          path: fore-jv-android/build/test-results
+          path: fore-jv/fore-jv-android/build/test-results
 
       - run:
           name: Run Tests fore-kt-android
-          command: ./gradlew fore-kt-android:lintRelease fore-kt-android:testRelease
+          command: ./gradlew fore-kt:fore-kt-android:lintRelease fore-kt:fore-kt-android:testRelease
       - store_artifacts:
-          path: fore-kt-android/build/reports
+          path: fore-kt/fore-kt-android/build/reports
       - store_test_results:
-          path: fore-kt-android/build/test-results
+          path: fore-kt/fore-kt-android/build/test-results
 
       - run:
           name: Run Tests example-jv-01reactiveui
