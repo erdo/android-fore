@@ -4,7 +4,6 @@ import co.early.fore.Shared.BuildTypes
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
     kotlin("plugin.serialization")
 }
@@ -28,6 +27,9 @@ android {
 
     compileSdk = Shared.Android.compileSdk
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = appId
         minSdk = Shared.Android.minSdk
@@ -75,11 +77,12 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation("co.early.fore:fore-kt-android:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt-android"))
+        implementation(project(":fore-kt:fore-kt-android"))
     }
 
-    implementation("io.ktor:ktor-client-serialization:${Shared.Versions.ktor_client}")
     implementation("io.ktor:ktor-client-okhttp:${Shared.Versions.ktor_client}")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:${Shared.Versions.ktor_client}")
+    implementation("io.ktor:ktor-client-content-negotiation:${Shared.Versions.ktor_client}")
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")

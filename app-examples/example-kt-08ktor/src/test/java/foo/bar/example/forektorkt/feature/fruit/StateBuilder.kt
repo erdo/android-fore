@@ -9,9 +9,6 @@ import foo.bar.example.forektorkt.message.ErrorMessage
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 
-/**
- *
- */
 class StateBuilder internal constructor(private val mockCallWrapperKtor: CallWrapperKtor<ErrorMessage>) {
 
     internal fun getFruitSuccess(fruitPojo: FruitPojo): StateBuilder {
@@ -29,7 +26,7 @@ class StateBuilder internal constructor(private val mockCallWrapperKtor: CallWra
 
         coEvery {
             mockCallWrapperKtor.processCallAwait(
-                any() as Class<MessageProvider<ErrorMessage>>,
+                any() as kotlin.reflect.KClass<MessageProvider<ErrorMessage>>,
                 any() as suspend () -> List<FruitPojo>
             )
         } returns fail(errorMessage)

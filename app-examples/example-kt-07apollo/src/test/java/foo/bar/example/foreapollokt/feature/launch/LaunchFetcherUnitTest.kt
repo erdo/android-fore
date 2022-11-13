@@ -19,15 +19,12 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-
 /**
  * Tests for this model cover a few areas:
- *
  *
  * 1) Construction: we check that the model is constructed in the correct state
  * 2) Receiving data: we check that the model behaves appropriately when receiving various success and fail responses from the CallProcessor
  * 3) Observers and State: we check that the model updates its observers correctly and presents its current state accurately
- *
  */
 class LaunchesModelUnitTest {
 
@@ -51,7 +48,6 @@ class LaunchesModelUnitTest {
     @MockK
     private lateinit var mockObserver: Observer
 
-
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
@@ -60,7 +56,6 @@ class LaunchesModelUnitTest {
         // System.out.println() so we see it in the test log
         Fore.setDelegate(TestDelegateDefault())
     }
-
 
     @Test
     @Throws(Exception::class)
@@ -82,7 +77,6 @@ class LaunchesModelUnitTest {
         Assert.assertEquals(false, launchesModel.currentLaunch.isBooked)
     }
 
-
     @Test
     @Throws(Exception::class)
     fun fetchLaunch_MockSuccess() {
@@ -99,10 +93,8 @@ class LaunchesModelUnitTest {
             logger
         )
 
-
         //act
         launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 1) {
@@ -116,7 +108,6 @@ class LaunchesModelUnitTest {
         Assert.assertEquals(launch.isBooked, launchesModel.currentLaunch.isBooked)
         Assert.assertEquals(launch.id, launchesModel.currentLaunch.id)
     }
-
 
     @Test
     @Throws(Exception::class)
@@ -133,10 +124,8 @@ class LaunchesModelUnitTest {
             logger
         )
 
-
         //act
         launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 0) {
@@ -150,9 +139,7 @@ class LaunchesModelUnitTest {
         Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
     }
 
-
     /**
-     *
      * NB all we are checking here is that observers are called AT LEAST once
      *
      * We don't really want tie our tests (OR any observers in production code)
@@ -184,10 +171,8 @@ class LaunchesModelUnitTest {
         )
         launchesModel.addObserver(mockObserver)
 
-
         //act
         launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(atLeast = 1) {

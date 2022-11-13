@@ -23,7 +23,7 @@ callProcessor.processCall(service.getFruits("3s"), workMode,
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-launchMain(workMode) {
+launchMain {
 
     val result = callWrapper.processCallAwait {
         service.getFruits("3s")
@@ -74,7 +74,7 @@ If all those useCases return fore Eithers, we basically have:
 
 You can see this technique being used to create a weather report by calling separate wind speed, pollen level, and temperature services in this [clean modules sample app](https://github.com/erdo/clean-modules-sample/blob/810a688b32cd2e32f2e0c8680e7cdc8cbd693c63/app/domain/src/main/java/foo/bar/clean/domain/weather/WeatherModel.kt#L94-L115)
 
-## Custom APIs
+## Custom HTTP rest APIs
 
 All APIs will be slightly different regarding what global headers they require, what HTTP response codes they return and under what circumstances and how these codes map to domain model states. There will be a certain amount of customisation required, see the sample apps in the repo for an example of this customization.
 
@@ -86,11 +86,11 @@ The sample apps all use JSON over HTTP, but there is no reason you can't use som
 Another advantage of using the CallWrapper is that your network code can easily be mocked out during tests. The networking sample apps in the fore repo take two alternative approaches to testing:
 
 - one ([java](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherUnitTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherUnitTest.kt)) is to simply mock the callWrapper so that it returns successes or failures
-- the other ([java](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the call processor
+- the other ([java](https://github.com/erdo/android-fore/blob/master/app-examples/example-jv-04retrofit/src/test/java/foo/bar/example/foreretrofit/feature/fruit/FruitFetcherIntegrationTest.java)\|[kotlin](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-04retrofit/src/test/java/foo/bar/example/foreretrofitkt/feature/fruit/FruitFetcherIntegrationTest.kt)) is to use canned HTTP responses (local json data, and faked HTTP codes) to drive the callWrapper
 
 As with testing any asynchronous code with **fore**, the calls are processed synchronously when using the TestDelegateDefault which simplifies our test code considerably (no need for latches, or magic).
 
-# Adapter animations [non-compose only]
+# Adapter animations
 
 *For some robust and testable implementations, please see the [Adapter Example Apps](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
 
@@ -169,9 +169,9 @@ The [**fore 6 db example**](https://erdo.github.io/android-fore/#fore-6-db-examp
 
 A lot of **fore** classes take parameters for WorkMode, Logger and SystemTimeWrapper in their constructor. That's done to make it very clear what needs to be swapped out when you want to inject different dehaviour (e.g. pass in a mock SystemTimeWrapper rather than a real one, when you want to test various time based behaviour). It's simple and clear but potentially annoying to see these parameters crop up all the time.
 
-From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `ForeDelegateHolder.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt#L24-L27) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
+From **1.2.0** the kotlin APIs will set default values for these parameters if you don't specify them. If you chose to do that, you'll probably want to use `Fore.setDelegate()` to [setup](https://github.com/erdo/android-fore/blob/004dda740625d2d5224f0eaddec4254b18ccf90d/app-examples/example-kt-08ktor/src/test/java/foo/bar/example/forektorkt/feature/fruit/FruitFetcherUnitTest.kt#L55) your tests with. You will usually want `TestDelegateDefault()` for that, but you can create your own if you have some specific mocking requirements.
 
-By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `ForeDelegateHolder.setDelegate(DebugDelegateDefault("mytagprefix_"))` Setting `TestDelegateDefault()` will redirect any android logs to println() so you can easily see them during unit tests
+By default, a SilentLogger will be used so if you do nothing, your release build will have nothing logged by fore. During development you may wish to turn on fore logs by calling: `Fore.setDelegate(DebugDelegateDefault("mytagprefix_"))` Setting `TestDelegateDefault()` will redirect any android logs to println() so you can easily see them during unit tests
 
 All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt) and [here](https://github.com/erdo/android-fore/blob/master/fore-kt-android-core/src/main/java/co/early/fore/kt/core/delegate/AndroidDebugDelegate.kt).
 
@@ -181,7 +181,7 @@ We don't really want to be putting asynchronous code in the View layer unless we
 
 **fore** offers some [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them easily testable in common usage scenarios.
 
-As mentioned above, passing `TestDelegateDefault()` to the `Fore.setDelegate()` function during [setup](https://github.com/erdo/android-fore/blob/d859bfe40ffdf2d253fbed6df4bf9105633ab258/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt#L24-L27) will ensure your coroutine code runs synchronously during tests
+As mentioned above, passing `TestDelegateDefault()` to the `Fore.setDelegate()` function during [setup](https://github.com/erdo/android-fore/blob/004dda740625d2d5224f0eaddec4254b18ccf90d/app-examples/example-kt-08ktor/src/test/java/foo/bar/example/forektorkt/feature/fruit/FruitFetcherUnitTest.kt#L55) will ensure your coroutine code runs synchronously during tests
 
 
 # AsyncTasks with Lambdas [for Java clients]

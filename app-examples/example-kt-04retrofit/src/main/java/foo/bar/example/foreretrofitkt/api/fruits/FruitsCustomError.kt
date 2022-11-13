@@ -3,7 +3,6 @@ package foo.bar.example.foreretrofitkt.api.fruits
 import co.early.fore.net.MessageProvider
 import com.google.gson.annotations.SerializedName
 import foo.bar.example.foreretrofitkt.message.ErrorMessage
-import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_MISC
 
 /**
  *
@@ -19,7 +18,7 @@ import foo.bar.example.foreretrofitkt.message.ErrorMessage.ERROR_MISC
  *
  *
  */
-class FruitsCustomError(private val errorCode: ErrorCode?) : MessageProvider<ErrorMessage> {
+class FruitsCustomError(private val errorCode: ErrorCode) : MessageProvider<ErrorMessage> {
 
     enum class ErrorCode constructor(val errorMessage: ErrorMessage) {
 
@@ -34,8 +33,8 @@ class FruitsCustomError(private val errorCode: ErrorCode?) : MessageProvider<Err
 
     }
 
-    override fun getMessage(): ErrorMessage {
-        return errorCode?.errorMessage ?: ERROR_MISC
-    }
-
+    override val message: ErrorMessage
+        get() {
+            return errorCode.errorMessage
+        }
 }

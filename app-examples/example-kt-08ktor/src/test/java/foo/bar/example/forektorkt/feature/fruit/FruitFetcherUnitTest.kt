@@ -19,11 +19,9 @@ import org.junit.Test
 /**
  * Tests for this model cover a few areas:
  *
- *
  * 1) Construction: we check that the model is constructed in the correct state
  * 2) Receiving data: we check that the model behaves appropriately when receiving various success and fail responses from the CallProcessor
  * 3) Observers and State: we check that the model updates its observers correctly and presents its current state accurately
- *
  */
 class FruitFetcherUnitTest {
 

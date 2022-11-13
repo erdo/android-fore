@@ -5,8 +5,8 @@ import co.early.fore.kt.core.delegate.TestDelegateDefault
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.net.InterceptorLogging
 import co.early.fore.kt.net.apollo3.CallWrapperApollo3
-import co.early.fore.net.testhelpers.InterceptorStubbedService
-import co.early.fore.net.testhelpers.StubbedServiceDefinition
+import co.early.fore.kt.net.testhelpers.InterceptorStubOkHttp3
+import co.early.fore.kt.net.testhelpers.Stub
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import foo.bar.example.foreapollo3.*
@@ -25,17 +25,13 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-
 /**
  * This is a slightly more end-to-end style of test, but without actually connecting to a network
  *
- * Using [InterceptorStubbedService] we
- * replace the server response with a canned response taken from static text files saved
- * in /resources. This all happens in OkHttp land so the model under test is not aware of any
- * difference.
- *
+ * Using [InterceptorStubOkHttp3] we replace the server response with a canned response taken
+ * from static text files saved in /resources. This all happens in OkHttp land so the model
+ * under test is not aware of any difference.
  */
-@ExperimentalStdlibApi
 class LaunchFetcherIntegrationTest {
 
     private val interceptorLogging = InterceptorLogging()
@@ -51,7 +47,6 @@ class LaunchFetcherIntegrationTest {
     @MockK
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
-
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
@@ -60,7 +55,6 @@ class LaunchFetcherIntegrationTest {
         // System.out.println() so we see it in the test log
         Fore.setDelegate(TestDelegateDefault())
     }
-
 
     /**
      * Here we are making sure that the model correctly handles a successful server response
@@ -81,10 +75,8 @@ class LaunchFetcherIntegrationTest {
             logger
         )
 
-
         //act
         launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 1) {
@@ -95,10 +87,10 @@ class LaunchFetcherIntegrationTest {
         }
         Assert.assertEquals(false, launchesModel.isBusy)
         Assert.assertEquals(
-            stubbedSuccess.expectedResult.isBooked,
+            stubbedSuccess.expectedResult?.isBooked,
             launchesModel.currentLaunch.isBooked
         )
-        Assert.assertEquals(stubbedSuccess.expectedResult.id, launchesModel.currentLaunch.id)
+        Assert.assertEquals(stubbedSuccess.expectedResult?.id, launchesModel.currentLaunch.id)
     }
 
     /**
@@ -120,17 +112,15 @@ class LaunchFetcherIntegrationTest {
             logger
         )
 
-
         //act
         launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 0) {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailSaysNo.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailSaysNo.expectedResult as ErrorMessage))
         }
         Assert.assertEquals(false, launchesModel.isBusy)
         Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
@@ -155,22 +145,19 @@ class LaunchFetcherIntegrationTest {
             logger
         )
 
-
         //act
         launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
         //assert
         verify(exactly = 0) {
             mockSuccess()
         }
         verify(exactly = 1) {
-            mockFailureWithPayload(eq(stubbedFailureInternalServerError.expectedResult))
+            mockFailureWithPayload(eq(stubbedFailureInternalServerError.expectedResult as ErrorMessage))
         }
         Assert.assertEquals(false, launchesModel.isBusy)
         Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
     }
-
 
     /**
      * Here we are making sure that the model correctly handles common API failed responses
@@ -181,19 +168,19 @@ class LaunchFetcherIntegrationTest {
     @Throws(Exception::class)
     fun fetchLaunch_CommonFailures() {
 
-        for (stubbedServiceDefinition in CommonServiceFailures()) {
+        for (stub in CommonServiceFailures()) {
 
             logger.i(
                 "------- Common Service Failure: HTTP:"
-                        + stubbedServiceDefinition.httpCode
-                        + " res:" + stubbedServiceDefinition.resourceFileName
-                        + " expect:" + stubbedServiceDefinition.expectedResult
+                        + stub.httpCode
+                        + " res:" + stub.bodyContentResourceFileName
+                        + " expect:" + stub.expectedResult
                         + " --------"
             )
 
             //arrange
             clearMocks(mockSuccess, mockFailureWithPayload)
-            val apolloClient = stubbedApolloClient(stubbedServiceDefinition)
+            val apolloClient = stubbedApolloClient(stub)
             val launchesModel = LaunchesModel(
                 createLaunchService(apolloClient),
                 callWrapper,
@@ -201,30 +188,25 @@ class LaunchFetcherIntegrationTest {
                 logger
             )
 
-
             //act
             launchesModel.fetchLaunches(mockSuccess, mockFailureWithPayload)
-
 
             //assert
             verify(exactly = 0) {
                 mockSuccess()
             }
             verify(exactly = 1) {
-                mockFailureWithPayload(eq(stubbedServiceDefinition.expectedResult))
+                mockFailureWithPayload(eq(stub.expectedResult as ErrorMessage))
             }
             Assert.assertEquals(false, launchesModel.isBusy)
             Assert.assertEquals(NO_ID, launchesModel.currentLaunch.id)
         }
     }
 
-
-    private fun stubbedApolloClient(stubbedServiceDefinition: StubbedServiceDefinition<*>): ApolloClient {
+    private fun stubbedApolloClient(stubbedServiceDefinition: Stub<*>): ApolloClient {
         return CustomApolloBuilder.create(
-            InterceptorStubbedService(
-                stubbedServiceDefinition
-            ),
-            interceptorLogging
+            interceptorLogging,
+            InterceptorStubOkHttp3(stubbedServiceDefinition),
         )
     }
 
@@ -240,27 +222,22 @@ class LaunchFetcherIntegrationTest {
 
     companion object {
 
-        private val stubbedSuccess =
-            StubbedServiceDefinition(
-                200, //stubbed HTTP code
-                "launches/success.json", //stubbed body response
-                Launch("109", "Site 40") //expected result
-            )
+        private val stubbedSuccess = Stub(
+            httpCode = 200, //stubbed HTTP code
+            bodyContentResourceFileName = "launches/success.json", //stubbed body response
+            expectedResult = Launch("109", "Site 40") //expected result
+        )
 
+        private val stubbedFailSaysNo = Stub(
+            httpCode = 200, //stubbed HTTP code
+            bodyContentResourceFileName = "launches/error_launch_service_says_no.json", //stubbed body response
+            expectedResult = ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
+        )
 
-        private val stubbedFailSaysNo =
-            StubbedServiceDefinition(
-                200, //stubbed HTTP code
-                "launches/error_launch_service_says_no.json", //stubbed body response
-                ErrorMessage.LAUNCH_SERVICE_SAYS_NO_ERROR //expected result
-            )
-
-        private val stubbedFailureInternalServerError =
-            StubbedServiceDefinition(
-                200, //stubbed HTTP code - all 200 because GraphQL
-                "common/error_internal_server.json", //stubbed body response
-                ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
-            )
+        private val stubbedFailureInternalServerError = Stub(
+            httpCode = 200, //stubbed HTTP code - all 200 because GraphQL
+            bodyContentResourceFileName = "common/error_internal_server.json", //stubbed body response
+            expectedResult = ErrorMessage.INTERNAL_SERVER_ERROR  //expected result
+        )
     }
-
 }

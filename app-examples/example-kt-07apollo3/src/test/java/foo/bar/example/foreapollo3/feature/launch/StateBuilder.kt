@@ -10,17 +10,14 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 
-/**
- *
- */
-@ExperimentalStdlibApi
 class StateBuilder internal constructor() {
 
     val mockCallWrapperApollo: CallWrapperApollo3<ErrorMessage> = mockk()
 
     internal fun getLaunchSuccess(launches: LaunchListQuery.Data): StateBuilder {
 
-        val mockResponseSuccess: CallWrapperApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage> = mockk()
+        val mockResponseSuccess: CallWrapperApollo3.SuccessResult<LaunchListQuery.Data, ErrorMessage> =
+            mockk()
 
         every {
             mockResponseSuccess.data
@@ -49,5 +46,4 @@ class StateBuilder internal constructor() {
 
         return this
     }
-
 }

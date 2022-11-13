@@ -62,7 +62,7 @@ class Authenticator(
             }
 
             when (val result = deferredResult.await()) {
-                is Success -> handleSuccess(success, result.value.data.login)
+                is Success -> handleSuccess(success, result.value.data.login?.token)
                 is Fail -> handleFailure(failureWithPayload, result.value)
             }
         }

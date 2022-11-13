@@ -8,31 +8,33 @@ object Shared {
 
     object Android {
         const val minSdk = 16
-        const val compileSdk = 32
-        const val targetSdk = 32
+        const val compileSdk = 33
+        const val targetSdk = 33
         val javaVersion = JavaVersion.VERSION_1_8
     }
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.2.1"
-        const val kotlin_version = "1.6.21"
-        const val kotlinx_coroutines_core = "1.6.1"
+        const val android_gradle_plugin = "7.3.1" // must manually change buildSrc.build version
+        const val kotlin_version = "1.7.10" // must manually change buildSrc.build version
+        const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
-        const val kotlinx_coroutines_android = "1.6.1"
+        const val kotlinx_coroutines_android = "1.6.4"
         const val androidx_lifecycle_common = "2.2.0"
         const val recyclerview = "1.1.0"
-        const val apollo = "2.5.4"
+        const val okhttp3v3 = "3.14.9"
+        const val okhttp3v4 = "4.10.0"
+        const val apollo = "2.5.13"
         const val apollo3 = "3.2.2"
         const val retrofit = "2.9.0"
-        const val compose = "1.2.0-beta03"
+        const val compose = "1.3.0"
         // example app and test dependencies
         const val android_core = "1.1.0"
         const val annotation = "1.0.0"
         const val material = "1.1.0"
         const val appcompat = "1.1.0"
         const val coil = "1.1.0"
-        const val androidxtest = "1.4.0-beta01"
+        const val androidxtest = "1.4.0"
         const val androidxjunit = "1.1.2"
         const val room_runtime = "2.2.5"
         const val room_compiler = "2.2.0-rc01"
@@ -48,7 +50,7 @@ object Shared {
         const val robolectric = "4.4"
         const val gson = "2.8.5"
         const val constraintlayout = "1.1.3"
-        const val ktor_client = "1.5.2"
+        const val ktor_client = "2.0.3"
         const val converter_gson = "2.6.0"
     }
 
@@ -59,8 +61,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.14" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 81
+        const val LIB_VERSION_NAME = "1.5.18" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 85
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -73,8 +75,8 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.5.14"
-        const val use_published_version = true
+        const val published_fore_version_for_examples = "1.5.18"
+        const val use_published_version = false
     }
 
     object Secrets {

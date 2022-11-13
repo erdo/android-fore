@@ -52,7 +52,7 @@ class MutablePlaylistModelTest {
         //act
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.itemCount.toLong())
+        Assert.assertEquals(0, playlistAdvancedModel.getItemCount().toLong())
         Assert.assertEquals(false, playlistAdvancedModel.hasObservers())
         Assert.assertEquals(UpdateSpec.UpdateType.FULL_UPDATE, playlistAdvancedModel.getAndClearLatestUpdateSpec(50).type)
     }
@@ -68,7 +68,7 @@ class MutablePlaylistModelTest {
         playlistAdvancedModel.addNTracks(1)
 
         //assert
-        Assert.assertEquals(1, playlistAdvancedModel.itemCount.toLong())
+        Assert.assertEquals(1, playlistAdvancedModel.getItemCount().toLong())
         Assert.assertEquals(1, playlistAdvancedModel.getItem(0).numberOfPlaysRequested.toLong())
     }
 
@@ -84,7 +84,7 @@ class MutablePlaylistModelTest {
         playlistAdvancedModel.removeTrack(0)
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.itemCount.toLong())
+        Assert.assertEquals(0, playlistAdvancedModel.getItemCount().toLong())
     }
 
 
@@ -98,7 +98,7 @@ class MutablePlaylistModelTest {
         playlistAdvancedModel.addNTracks(5)
 
         //assert
-        Assert.assertEquals(5, playlistAdvancedModel.itemCount.toLong())
+        Assert.assertEquals(5, playlistAdvancedModel.getItemCount().toLong())
         Assert.assertEquals(1, playlistAdvancedModel.getItem(4).numberOfPlaysRequested.toLong())
     }
 
@@ -114,7 +114,7 @@ class MutablePlaylistModelTest {
         playlistAdvancedModel.removeNTracks(5)
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.itemCount.toLong())
+        Assert.assertEquals(0, playlistAdvancedModel.getItemCount().toLong())
     }
 
 
@@ -162,7 +162,7 @@ class MutablePlaylistModelTest {
         playlistAdvancedModel.removeAllTracks()
 
         //assert
-        Assert.assertEquals(0, playlistAdvancedModel.itemCount.toLong())
+        Assert.assertEquals(0, playlistAdvancedModel.getItemCount().toLong())
     }
 
 

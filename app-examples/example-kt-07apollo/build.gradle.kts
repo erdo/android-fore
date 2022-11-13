@@ -3,9 +3,8 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("com.apollographql.apollo").version("2.5.4")
+    id("com.apollographql.apollo").version("2.5.13")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -28,6 +27,9 @@ android {
 
     compileSdk = Shared.Android.compileSdk
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = appId
         minSdk = Shared.Android.minSdk
@@ -74,7 +76,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 // fetch the graphql schema:
-//./gradlew :example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'
+//./gradlew :app-examples:example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/graphql' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'
 // creating graphql queries:
 // https://www.youtube.com/watch?v=omSpI1Nu_pg
 
@@ -88,7 +90,7 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation("co.early.fore:fore-kt-android-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt-android-network"))
+        implementation(project(":fore-kt:fore-kt-android-network"))
     }
 
     implementation("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")

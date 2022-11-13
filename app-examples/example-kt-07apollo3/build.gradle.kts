@@ -5,7 +5,6 @@ plugins {
     id("com.android.application")
     id("com.apollographql.apollo3").version("3.2.2")
     kotlin("android")
-    kotlin("android.extensions")
     kotlin("kapt")
 }
 
@@ -28,6 +27,9 @@ android {
 
     compileSdk = Shared.Android.compileSdk
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = appId
         minSdk = Shared.Android.minSdk
@@ -67,11 +69,10 @@ android {
 
 apollo {
     packageName.set(appId)
-    srcDir("src/main/graphql")
 }
 
 // fetch the graphql schema:
-// ./gradlew :example-kt-07apollo:downloadApolloSchema --endpoint="https://apollo-fullstack-tutorial.herokuapp.com/" --schema="src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json"
+// ./gradlew :app-examples:example-kt-07apollo3:downloadApolloSchema --endpoint='https://apollo-fullstack-tutorial.herokuapp.com/graphql' --schema='app-examples/example-kt-07apollo3/src/main/graphql/schema.json'
 //
 // dev.to article
 // https://dev.to/erdo/android-apollo3-and-graphql-1e8m
@@ -90,8 +91,8 @@ dependencies {
         implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
         implementation("co.early.fore:fore-kt-network:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt-android-core"))
-        implementation(project(":fore-kt-network"))
+        implementation(project(":fore-kt:fore-kt-android-core"))
+        implementation(project(":fore-kt:fore-kt-network"))
     }
 
     implementation("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
