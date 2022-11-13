@@ -25,7 +25,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 For Compose, use fore's observeAsState() function (the versioning matches compose itself)
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.2.0")
+implementation("co.early.fore:fore-kt-android-compose:1.3.0")
 ```
 
 ## Current status
