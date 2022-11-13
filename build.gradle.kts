@@ -2,11 +2,13 @@
  *
  * ./gradlew check
  *
+ * ./gradlew testDebugUnitTest
  * ./gradlew testDebugUnitTest --warning-mode all
  *
  * for espresso tests: https://developer.android.com/training/testing/espresso/setup#set-up-environment
  *
  * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue
+ * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue --warning-mode all
  * ./gradlew connectedAndroidTest -PtestBuildType=release
  * ./gradlew app-examples:example-kt-01reactiveui:connectedAndroidTest -PtestBuildType=release --info
  * ./gradlew app-examples:example-kt-01reactiveui:testDebugUnitTest --info
@@ -27,10 +29,10 @@
  * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
  * ./gradlew :buildEnvironment
- * ./gradlew :fore-kt-core:dependencies
- * ./gradlew :app-examples:example-kt-04retrofit:dependencies
+ * ./gradlew :fore-kt:fore-kt-core:dependencies
  *
- * ./gradlew -q dependencyInsight --dependency okhttp3
+ * ./gradlew :app-examples:example-kt-04retrofit:dependencies
+ * ./gradlew -q :fore-kt:fore-kt-core:dependencyInsight --configuration compileClasspath --dependency okhttp3
  *
  * bundle exec jekyll serve
  *

@@ -34,18 +34,18 @@ For the 5 plus years that fore has been published on <strike>jcenter</strike> & 
 
 fore still supports Java, and an extremely performant, reactive UI, running on an Android 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-network** is where most of the development happens nowadays
 
-**fore v2.0** will have no major API changes, to prepare for it just make sure to update any older deprecated functions with their replacements - those will finally get removed in 2.0 (this applies mainly to the non-core packages)
+**fore v2.0** will have no major API changes. To prepare for it just make sure to update any older deprecated functions with their replacements - the deprecated code will finally get removed in 2.0 (this applies mainly to the non-core packages)
 
 ## New to fore
 
 **fore** is a small library, plus a selection of techniques. Its main job is to reactively tie together architectural layers in the safest, most de-coupled and low boiler plate way possible.
 
-It doesn't dictate any particular architecture (UI / presentation layers observing changes that originate elsewhere is a requirement in many different reactive architectures).
+It doesn't dictate any particular architecture (presentation layers observing changes that originate in other layers is a requirement of many different reactive architectures).
 
-For instance in a clean architecture app, you could use fore to have your UI/presentation layer reacting to domain layer changes.
+For instance in a clean architecture app, you could create a reactive UI which uses fore observers to update itself based on changes that originate in the domain layer.
 
 
-The quickest integration, from an Activity say, observe your model(s):
+The quickest integration (from an Activity say) - observe your model(s):
 
 ```
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,13 +81,13 @@ This level of separation is a goal of lots of architectures and it's a great way
 
 ### Observers and Observables
 
-This is the kind of challenge that the [observer pattern](https://en.wikipedia.org/wiki/Observer_pattern) has been solving for decades. And the main innovation in fore is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
+This is the kind of challenge that the observer pattern (see the GoF book for more info) has been solving for decades. And the main innovation in fore is its radically simplified observer implementation. It lets you decouple architectural layers to a degree that would not normally be possible.
 
 At this point, you might be thinking that fore is a reactive streams implementation like Rx or Kotlin Flow. In fact (other than the observer pattern) fore and reactive streams have very little to do with each other, and it's perfectly possible to find them both in the same project.
 
-While connecting architectural layers with reactive streams is often done, it usually (always?) results in more code in the view layer when compared with a fore style solution. Plus this additional code needs to consider lifecycle issues which are only present in the view layer. This boilerplate difference becomes steadily more apparent as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)).
+While connecting architectural layers with reactive streams is often done, it usually (always?) results in more boiler plate when compared with a fore style solution. Plus this additional code (when it appears in a view layer) needs to be aware of lifecycle and threading issues which are only present in view layers. This boilerplate difference becomes steadily more apparent as app complexity increases (this explains [why](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)).
 
-On the other hand, processing and combining data streams in the data layer on different threads using fore would be pointless, and a natural fit for something like Rx or Flow.
+On the other hand, asynchronously processing real time data io with back pressure handling would be a natural fit for something like Rx or Flow (that is basically what [reactive streams](http://www.reactive-streams.org/) lives for). Trying to do that with a fore observable would be pointless.
 
 **fore**'s observable classes basically let you **make anything observable** from the perspective of the UI thread (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
 
@@ -218,9 +218,7 @@ override fun syncView() {
 
 </code></pre>
 
-In this example the wallet state is being exposed via getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) it's entirely up to you, it makes no difference to the syncView() technique.
-
-**fore** has low boiler-plate overhead anyway, but its structure enables you to go further and remove almost all of it, see [here](https://erdo.github.io/android-fore/03-reactive-uis.html#removing-even-more-boiler-plate) for details.
+In this example the wallet state is being exposed via individual getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) it's entirely up to you, it makes no difference to the syncView() technique.
 
 Making the most of fore's ability to remove boiler plate, a fully reactive, fully testable, memory leak free, rotatable view layer can easily come in under 100 lines of code:
 
@@ -278,7 +276,7 @@ Simple != Easy but fore aims to get you and your team to Simple (and performant)
 
 [gmk57](https://gmk57.medium.com/) on medium forwarded me a great [comment](https://medium.com/@a.artikov/i-in-my-opinion-this-solution-is-over-complicated-77ce684a4014) which I think applies here: **_In quantum physics there is an effect where observing of a system changes properties of this system_**. That complication is something we are explicity avoiding with fore (the things being observed with fore don't know or even care what is observing them). If you do want to link your UI state to some app behaviour though, that's as easy as: ```onResume(){gpsTracker.start()}``` for example. It doesn't require you to manage any streams of data in order to do that (the fore observers will continue to ensure that the UI reflects the current app state regardless).
 
-Anyway, because of the low boiler plate and the clear separation of architectural layers you get when developing this way, MVO implemented with fore can help you with issues like **code complexity**; **testability**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
+Anyway, because of the low boiler plate and the clear separation of architectural layers you get when developing this way, reactivity implemented with fore can help you with issues like **code complexity**; **testability**; **UI consistency**; **memory leaks**; and **development speed** - and if you're spending time dealing with any of those issues in your code base or team, it's well worth considering!
 
 ## Where to get more information
 

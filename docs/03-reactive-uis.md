@@ -263,7 +263,7 @@ To put that another way: the **production** of data in an app (an *isLoading* bo
 
 The **consumption** of that data (the loading spinner ui element is set from gone to visible, and then back to gone) is a **sub-millisecond** affair.
 
-This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example). You might wonder why on earth RxJava featured so heavily in android architectures for half a decade or so, and why Flow (another implementation of reactive streams) is now such a popular replacement 😂🤷
+This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example). You might wonder why on earth RxJava featured so heavily in android architectures for half a decade or so, and why Flow (another implementation of reactive streams) is now such a popular replacement 🤷
 
 You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be reactive, let alone reactive streams, in the first place).[\[1\]](#1)
 
@@ -274,7 +274,7 @@ It turns out that this separation **also** has some pretty stunning advantages i
 ### 1) Views want different things from the same model
 Usually, view layer components are going to want different things from the same model.
 
-(If you've just joined us here by the way, we are using the term model as it's defined by [wikipedia](https://en.wikipedia.org/wiki/Domain_model), a software representation of a real life thing, the model can have state and/or logic. And for all this to work, it just has to be observable i.e. if its state changes, it needs to tell all its observers that its state changed. The following example models expose their state via getters, but you can also expose a kotlin data class which encapsulates all the public state in an immutable object like we do in the clean architecture sample - it makes no difference to the pattern or how fore works.)
+(If you've just joined us here by the way, we are using the term model as it's defined by [wikipedia](https://en.wikipedia.org/wiki/Domain_model), a software representation of a real life thing, the model can have state and/or logic. And for all this to work, it just has to be observable i.e. if its state changes, it needs to tell all its observers that its state changed. The following example models expose their state via getters, but you can make your own choices here - it makes no difference to the pattern or how fore works.)
 
 Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
 
