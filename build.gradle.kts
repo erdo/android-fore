@@ -2,7 +2,7 @@
  *
  * ./gradlew check
  *
- * ./gradlew testDebugUnitTest
+ * ./gradlew testDebugUnitTest --warning-mode all
  *
  * for espresso tests: https://developer.android.com/training/testing/espresso/setup#set-up-environment
  *
@@ -40,8 +40,10 @@
  * git tag -a v1.5.9 -m 'v1.5.9'
  * git push origin --tags
  */
+
 buildscript {
     repositories {
+        gradlePluginPortal()
         mavenCentral()
         google()
     }
@@ -49,14 +51,6 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${co.early.fore.Shared.Versions.kotlin_version}")
         classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
-    }
-}
-
-allprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        google()
     }
 }
 

@@ -20,6 +20,8 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 android {
 
+    namespace = appId
+
     compileOptions {
         sourceCompatibility = Shared.Android.javaVersion
         targetCompatibility = Shared.Android.javaVersion
@@ -79,11 +81,6 @@ apollo {
 //
 // creating graphql queries:
 // https://www.youtube.com/watch?v=omSpI1Nu_pg
-
-repositories {
-    mavenCentral()
-    google()
-}
 
 dependencies {
 

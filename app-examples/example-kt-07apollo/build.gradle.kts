@@ -20,6 +20,8 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 android {
 
+    namespace = appId
+
     compileOptions {
         sourceCompatibility = Shared.Android.javaVersion
         targetCompatibility = Shared.Android.javaVersion
@@ -79,11 +81,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 //./gradlew :app-examples:example-kt-07apollo:downloadApolloSchema -Pcom.apollographql.apollo.endpoint='https://apollo-fullstack-tutorial.herokuapp.com/graphql' -Pcom.apollographql.apollo.schema='src/main/graphql/foo/bar/example/foreapollokt/graphql/schema.json'
 // creating graphql queries:
 // https://www.youtube.com/watch?v=omSpI1Nu_pg
-
-repositories {
-    mavenCentral()
-    google()
-}
 
 dependencies {
 

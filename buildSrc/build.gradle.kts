@@ -10,6 +10,13 @@ repositories {
   google()
 }
 
+java {
+  // sourceCompatibility = co.early.fore.Shared.Android.javaVersion
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  // targetCompatibility = co.early.fore.Shared.Android.javaVersion
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
   kotlinOptions {
     //jvmTarget = co.early.fore.Shared.Android.javaVersion.toString()
