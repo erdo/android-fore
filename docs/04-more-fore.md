@@ -183,8 +183,8 @@ We don't really want to be putting asynchronous code in the View layer unless we
 
 As mentioned above, passing `TestDelegateDefault()` to the `Fore.setDelegate()` function during [setup](https://github.com/erdo/android-fore/blob/004dda740625d2d5224f0eaddec4254b18ccf90d/app-examples/example-kt-08ktor/src/test/java/foo/bar/example/forektorkt/feature/fruit/FruitFetcherUnitTest.kt#L55) will ensure your coroutine code runs synchronously during tests
 
-
-# AsyncTasks with Lambdas [for Java clients]
+<a name="syncview"></a>
+# <a name="asynctasks-with-lambdas"></a> AsyncTasks with Lambdas [for Java clients]
 
 For legacy Java based clients, fore has some wrappers that make AsyncTask much easier to use and to test
 

@@ -3,10 +3,12 @@
  * ./gradlew check
  *
  * ./gradlew testDebugUnitTest
+ * ./gradlew testDebugUnitTest --warning-mode all
  *
  * for espresso tests: https://developer.android.com/training/testing/espresso/setup#set-up-environment
  *
  * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue
+ * ./gradlew connectedAndroidTest -PtestBuildType=debug --no-daemon --no-parallel --continue --warning-mode all
  * ./gradlew connectedAndroidTest -PtestBuildType=release
  * ./gradlew app-examples:example-kt-01reactiveui:connectedAndroidTest -PtestBuildType=release --info
  * ./gradlew app-examples:example-kt-01reactiveui:testDebugUnitTest --info
@@ -27,10 +29,10 @@
  * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
  * ./gradlew :buildEnvironment
- * ./gradlew :fore-kt-core:dependencies
- * ./gradlew :app-examples:example-kt-04retrofit:dependencies
+ * ./gradlew :fore-kt:fore-kt-core:dependencies
  *
- * ./gradlew -q dependencyInsight --dependency okhttp3
+ * ./gradlew :app-examples:example-kt-04retrofit:dependencies
+ * ./gradlew -q :fore-kt:fore-kt-core:dependencyInsight --configuration compileClasspath --dependency okhttp3
  *
  * bundle exec jekyll serve
  *
@@ -40,8 +42,10 @@
  * git tag -a v1.5.9 -m 'v1.5.9'
  * git push origin --tags
  */
+
 buildscript {
     repositories {
+        gradlePluginPortal()
         mavenCentral()
         google()
     }
@@ -49,14 +53,6 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${co.early.fore.Shared.Versions.kotlin_version}")
         classpath("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
-    }
-}
-
-allprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        google()
     }
 }
 

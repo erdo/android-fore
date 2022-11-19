@@ -5,7 +5,6 @@ plugins {
     id("com.android.application")
 }
 
-
 val appId = "foo.bar.example.forereactiveui"
 
 fun getTestBuildType(): String {
@@ -16,6 +15,8 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 
 android {
+
+    namespace = appId
 
     compileOptions {
         sourceCompatibility = Shared.Android.javaVersion
@@ -56,11 +57,6 @@ android {
         abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
-}
-
-repositories {
-    mavenCentral()
-    google()
 }
 
 dependencies {

@@ -20,6 +20,8 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 android {
 
+    namespace = appId
+
     compileOptions {
         sourceCompatibility = Shared.Android.javaVersion
         targetCompatibility = Shared.Android.javaVersion
@@ -65,11 +67,6 @@ android {
     kotlinOptions {
         jvmTarget = Shared.Android.javaVersion.toString()
     }
-}
-
-repositories {
-    mavenCentral()
-    google()
 }
 
 dependencies {

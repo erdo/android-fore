@@ -16,6 +16,8 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 android {
 
+    namespace = appId
+
     compileOptions {
         sourceCompatibility = Shared.Android.javaVersion
         targetCompatibility = Shared.Android.javaVersion
@@ -57,11 +59,6 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-    google()
-}
-
 dependencies {
 
     if (Shared.Publish.use_published_version) {
@@ -70,7 +67,7 @@ dependencies {
         implementation(project(":fore-jv:fore-jv-android"))
     }
 
-    annotationProcessor("androidx.room:room-compiler:${Shared.Versions.room_compiler}")
+    annotationProcessor("androidx.room:room-compiler:${Shared.Versions.room_version}")
     annotationProcessor("com.jakewharton:butterknife-compiler:${Shared.Versions.butterknife}")
     //noinspection AnnotationProcessorOnCompilePath
     implementation("com.jakewharton:butterknife:${Shared.Versions.butterknife}")
@@ -80,11 +77,11 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
     implementation("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
     implementation("com.squareup.retrofit2:converter-gson:${Shared.Versions.converter_gson}")
-    implementation("androidx.room:room-runtime:${Shared.Versions.room_runtime}")
+    implementation("androidx.room:room-runtime:${Shared.Versions.room_version}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Shared.Versions.kotlin_version}")
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
-    testImplementation("androidx.room:room-testing:${Shared.Versions.room_testing}")
+    testImplementation("androidx.room:room-testing:${Shared.Versions.room_version}")
     testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
     testImplementation("org.hamcrest:hamcrest-library:${Shared.Versions.hamcrest_library}")
     testImplementation("org.robolectric:robolectric:${Shared.Versions.robolectric}") {
