@@ -2,7 +2,7 @@
 
 # MVO Architecture
 
-This little library helps you implement an architecture we call **MVO (Model View Observer)**. MVO is a convenient way to talk about how **fore connects architectural layers together** in an app, but fore style observers are just as useful when using clean architecture as you can see [here](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3).
+This little library helps you implement an architecture we'll call **MVO (Model View Observer)**. MVO is a convenient way to talk about how **fore connects architectural layers together**, but fore doesn't really mandate a specific architecture: as long as an architecture has layers fore style observers can be used to make them reactive. For example, fore style observers are being used in this [clean architecture](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3) app.
 
 ![mvo anotated](img/arch_mvo_anotated.png)
 
@@ -12,7 +12,7 @@ By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean
 
 By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose, a custom View class, or a Composable.
 
-By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much by design).
+By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much [by design](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)).
 
 *For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/clean-modules-sample) written in kotlin modules. This one is a more simple MVO implementation written in [Kotlin](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
