@@ -2,7 +2,6 @@ package foo.bar.example.forektorkt.api
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import okhttp3.Interceptor

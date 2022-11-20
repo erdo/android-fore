@@ -33,7 +33,7 @@
   subitems:
     - text: Connecting Views and Models
       url: "#connecting-views-and-models"
-    - text: Connecting Views and Models in Compose
+    - text: Compose
       url: "#connecting-views-and-models-in-compose"
     - text: fore's Observer API deep dive
       url: "#somethingchanged-parameter"

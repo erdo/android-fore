@@ -34,8 +34,7 @@ This will also enable you to observe multiple models if required
 
 ### How connecting views and models works
 
-Somewhere in the view layer (Activity/Fragment/View) there will be a piece of code like this:
-
+Even if you don't use the lifecycle observer, it's still quite easy to setup the observers manually. Somewhere in the view layer (Activity/Fragment/View) you need a piece of code like this:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -51,16 +50,7 @@ Observer observer = this::syncView;
 val observer = Observer { syncView() }
  </code></pre>
 
-
-**Be careful with Kotlin btw**
-
-- val observer = this::syncView will **NOT** work
-- val observer =  { syncView() } will **NOT** work
-
-Both will compile and run though and the observer will be triggered successfully **but you will end up with a memory leak when you come to remove this observer as the reference will have changed.**
-
-
-And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer will be added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using Fragment lifecycle methods to do it)*:
+And in line with android lifecycle methods (of either the Activity, the Fragment or the View), this observer needs to be added and removed accordingly *(in this case we are observing two models: wallet and account, and we are using Fragment lifecycle methods to do it)*:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -102,72 +92,44 @@ override fun onStop() {
 
 That's everything you need to do to get bullet proof reactive UIs in your app, everything now takes care of itself, no matter what happens to the state of the model or the rotation of the device.
 
+### <a name="boiler-plate"></a><a name="forelifecycleobserver"></a><a name="lifecycleobserver"></a>fore LifecycleObserver
 
-## <a name="boiler-plate"></a>Removing even more boiler plate
+As mentioned above, if you want to remove more boiler plate then you can use the fore LifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally). The full code looks like this:
 
-If the list of things you are observing gets a little long, you can remove some of this *add and remove* boiler plate by using an **ObservableGoup** (it's just a convenience class that maintains a list of observables internally)
+ <pre class="codesample"><code>
+class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
 
-### <a name="observablegroup"></a>Using ObservableGroup in a ViewModel
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-Here's how you can use an ObservableGroup with a ViewModel that needs to react to state changes in any/all of these observable classes (AccountModel, NetworkInfo, EmailInbox & WeatherRepository). The ViewModel is itself observable, so the reactive fragment code is similarly terse - that's what fore means by "thinner android view layers". We're using this technique in the [clean architecture modules sample app](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt).
-
-<pre class="codesample"><code>
-
-class MyViewModel(
-    private val accountModel: AccountModel,
-    private val networkInfo: NetworkInfo,
-    private val emailInBox: EmailInBox,
-    private val weatherRepository: WeatherRepository
-) : BaseViewModel(
-    accountModel, networkInfo, emailInBox, weatherRepository
-), Observable by ObservableImp() {
-
-    var viewState = MyViewState()
-        private set
-
-    init {
-        syncView()
-    }
-
-    // this gets called whenever our domain models' state changes
-    override fun syncView() {
-        // Here you might create an immutable view state
-        // to pass to your fragment (based on the state of
-        // the various models that you're observing)
-        viewState = MyViewState(
-            ...
+    lifecycle.addObserver(
+        LifecycleObserver(
+            this,
+            viewModel
         )
-        notifyObservers()
-    }
+    )
+
+  }
+
+  override fun syncView() {
+     ...
+  }
 }
+
  </code></pre>
 
-For completeness, here is an example BaseViewModel
+You can see this technique in the [sample app for the persista library](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt). It's also used to observe a view model in the [clean architecture sample](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt). The point of all these techniques is to reduce view layer code to its absolute fundamentals: what things look like.
 
-<pre class="codesample"><code>
+### Connecting Views and Models in Compose
 
-abstract class BaseViewModel(
-    vararg observablesList: Observable
-): ViewModel(), SyncableView {
+For Compose UIs, simply use fore's observerAsState() extension function
 
-    private val observableGroup: ObservableGroup
-    private val observer = Observer { syncView() }
+<pre class="codesample"><code>val walletState by wallet.observeAsState { wallet.state }
+</code></pre>
 
-    init {
-        observableGroup = ObservableGroupImp(*observablesList)
-        observableGroup.addObserver(observer)
-    }
+### <a name="observablegroup"></a>Integrating a ViewModel
 
-    override fun onCleared() {
-        super.onCleared()
-        observableGroup.removeObserver(observer)
-    }
-}
- </code></pre>
-
-As you can see in the example BaseViewModel above, the observers will exist throught the life time of your viewmodel (which may or may not be what you want). You can add / remove the observers in line with  onStart / onStop by adding the onStart() and onStop() functions to the viewModel yourself and calling them from the host fragment or activity (the androidx viewModel doesn't have support for onStart onStop by itself).
-
-You can alternatively use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
+The usual set up is a Fragment or Activity class observing the ViewModel state, and the ViewModel in turn observing whatever Domain models the ViewModel needs in order to create that state. Typically, you'll add those observers in the onStart and remove them in the onStop. The easiest way to do that is to use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
 
 <pre class="codesample"><code>
 
@@ -200,45 +162,9 @@ class MyViewModel(
 }
  </code></pre>
 
-### <a name="forelifecycleobserver"></a><a name="lifecycleobserver"></a>fore LifecycleObserver
+## <a name="somethingchanged-parameter"></a>fore Observer API deep dive
 
-If you want to remove _even more_ boiler plate then you can use the fore LifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally):
-
- <pre class="codesample"><code>
-class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    lifecycle.addObserver(
-        LifecycleObserver(
-            this,
-            viewModel
-        )
-    )
-
-  }
-
-  override fun syncView() {
-     ...
-  }
-}
-
- </code></pre>
-
-You can see this technique in the [sample app for the persista library](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt). It's also used to observe a view model in the [clean architecture sample](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt). The point of all these techniques is to reduce view layer code to its absolute fundamentals: what things look like.
-
-## Connecting Views and Models in Compose
-
-For Compose UIs, simply use fore's observerAsState() extension function
-
-<pre class="codesample"><code>val walletState by wallet.observeAsState { wallet.state }
-</code></pre>
-
-
-## <a name="somethingchanged-parameter"></a>Why not put a parameter in the Observer.somethingChanged() function?
-
-This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did briefly have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that adding it had *significantly increased* the amount of boiler plate and view code that had to be written.
+Why not put a parameter in fore's Observer.somethingChanged() function? This is the obvious question for anyone familiar with Reactive Stream based APIs like Rx, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by greenrobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did briefly have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that adding it had *significantly increased* the amount of boiler plate and view code that had to be written.
 
 If you're sceptical about that - and why wouldn't you be? I'd encourage you to do a before and after comparison in a small sample app, there is nothing quite like seeing it for yourself. You could use one of the fore samples to get started [very simple app](https://github.com/erdo/persista/tree/main/example-app), [clean modules app](https://github.com/erdo/clean-modules-sample) - make sure to consider what happens once you add more data sources that need to be observed
 
@@ -247,29 +173,43 @@ There are a few different ways to explain why reactive stream style APIs are not
 But you might want to consider the possibility that using reactive streams to tie your architectural layers together may only be providing a local maximum in terms of performance and code clarity, there is another way...
 
 ### Reactive Streams
-While we're on the subject, let's briefly detour to a discussion of reactive streams. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
+While we're on the subject, let's briefly detour to a discussion of reactive streams. Both RxJava and Kotlin Flow are implementations of the reactive streams initiative. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
 
 - Observers (tell me whenever you've changed)
 - Streams (data and operators like .map .filter etc)
 
-For some specific use cases: handling streams of changing data which you want to process on various threads (like the raw output of an IoT device for example) reactive streams is a natural fit. That's especially true when it comes to back pressure (the danger of data being *produced* faster than it is able to be *consumed*). The needs of most android app architectures however tend to be a little more along the lines of:
+For some specific use cases: handling streams of changing data which you want to process on various threads (like the raw output of an IoT device for example) reactive streams is a natural fit. That's especially true when it comes to **back pressure**.
 
- - connect to a network to download discreet pieces of data (_always_ on an IO thread)
- - update a UI, based on some change of state (_always_ on the UI thread)
+#### Back pressure
 
-The timescales that these UI state changes happen in, are several orders of magnitude slower than the timescales that would require back pressure management (which is basically what [reactive streams](http://www.reactive-streams.org/) lives for).
+Back pressure refers the problem of data being *produced*, faster than it is able to be *consumed*. Handling back pressure in streams of data is basically what [reactive streams](http://www.reactive-streams.org/) lives for. The needs of most android app architectures however tend to be a little more along the lines of:
 
-To put that another way: the **production** of data in an app (an *isLoading* boolean goes from false to true and back again as data is loaded from a network) happens in the order of **seconds**.
+ - connect to a network to download discreet pieces of data (_always_ on an IO thread, takes _seconds_)
+ - update a UI, based on some change of state (_always_ on the UI thread, takes _milliseconds_)
 
-The **consumption** of that data (the loading spinner ui element is set from gone to visible, and then back to gone) is a **sub-millisecond** affair.
+The timescales that these UI state changes happen in, are orders of magnitude slower than the timescales that would require back pressure management.
+
+To put that another way: the **production** of data in an app (a user logs in, and a session token is fetched from the network) tends to happen in the order of **seconds**. The **consumption** of that data (the waiting spinner on the ui is changed from visible to invisible) is often a **sub-millisecond** affair.
 
 This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example). You might wonder why on earth RxJava featured so heavily in android architectures for half a decade or so, and why Flow (another implementation of reactive streams) is now such a popular replacement 🤷 [\[1\]](#1)
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be reactive, let alone reactive streams, in the first place).[\[2\]](#2)
+#### What if we just pretend?
 
-Anyway, it's entirely possible to treat these two concepts separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ (that's what **fore** does - it deals exclusively with the first, letting you handle the second however you wish). This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Something&gt;s or Flow&lt;Something&gt;s won't slowly spread throughout your code base unnecessarily.
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be asynchronous or reactive, let alone reactive streams, in the first place).[\[2\]](#2)
 
-It turns out that this separation **also** has some pretty stunning advantages in terms of boiler plate written in the view layer as we'll see...
+### The fore approach
+
+Those two concepts we mentioned above (Observers / Streams) can be treated separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ . And that's what fore does - it deals exclusively with the first, letting you handle the second however you wish. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Something&gt;s or Flow&lt;Something&gt;s won't slowly spread throughout your code base unnecessarily.
+
+One of the benefits of this is that it lets you isolate asynchronous code styles, to code that actually needs to be asynchronous (db access, network connections, calculation work etc). The rest of the code remains explicitly synchronous, on the UI thread, and highly predictable / testable because of it.
+
+#### The UI thread
+
+The funny thing is... if you're writing an app that has a UI, much of the code that you write will be on the UI thread _anyway_.
+
+Take a very common pattern with reactive streams based android apps: an app collecting a Flow in a ViewModel to update its UI. That code _still_ runs on the UI thread, even though it's written with all the trappings of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
+
+Apart from removing this pretend asynchronous code from the view layer, there are other boiler plate advantages to fore style observers...
 
 ### 1) Views want different things from the same model
 Usually, view layer components are going to want different things from the same model.
@@ -490,7 +430,9 @@ Try to get comfortable using these observers to just notify observing view code 
 For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
 #### [1]
-There were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless. And as for Kotlin Flow? Flow is a much better RxJava in android, so there is a clear mental migration path from RxJava to Flow
+There were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless.
+
+And as for Kotlin Flow? Flow is a much better RxJava in Android, so if you are already heavily invested in a reactive streams architecture, there is a clear mental migration path from RxJava to Flow
 
 #### [2]
 This is how reactive streams can unintentionally spread complexity throughout a code base. When this **tendency-to-spread** is combined with a large non-obvious API, and a focus on asynchronicity even when none is required it can quite easily swamp otherwise fairly trivial app projects. That risk is increased on larger projects employing developers with a mixture of skill levels, especially where there is a reasonably high turn over of developers. Keeping control of ever ballooning complexity in these situations can be a significant challenge.
