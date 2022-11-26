@@ -2,7 +2,7 @@
 
 # MVO Architecture
 
-This little library helps you implement an architecture we'll call **MVO (Model View Observer)**. MVO is a convenient way to talk about how **fore connects architectural layers together**, but fore doesn't really mandate a specific architecture: as long as an architecture has layers fore style observers can be used to make them reactive. For example, fore style observers are being used in this [clean architecture](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3) app.
+This little library helps you implement an architecture we'll call **MVO (Model View Observer)**. MVO is a convenient way to talk about how **fore connects architectural layers together**, but fore doesn't really mandate a specific architecture: as long as an architecture has layers, fore style observers can be used to make them reactive. For example, fore style observers are being used in this [clean architecture](https://dev.to/erdo/clean-architecture-minus-reactive-streams-10i3) app.
 
 ![mvo anotated](img/arch_mvo_anotated.png)
 
