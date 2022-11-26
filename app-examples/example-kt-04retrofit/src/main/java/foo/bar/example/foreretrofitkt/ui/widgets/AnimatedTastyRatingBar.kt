@@ -11,7 +11,7 @@ import foo.bar.example.foreretrofitkt.R
 
 @Suppress("DEPRECATION")
 class AnimatedTastyRatingBar @JvmOverloads constructor(
-        context: Context?,
+        context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {

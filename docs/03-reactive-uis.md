@@ -1,12 +1,12 @@
 # Reactive UIs
 
-Data Binding is the old term for this, and its basic definition is: any changes of state that happen in your underlying model, get automatically represented in your view.
+Essentially this means your UI responds immediately to any change to the system state, and it does so automatically. It doesn't require the user to manually refresh the screen, it doesn't even require the developer to "manually" refresh the screen (using techniques like polling, or setter type "showEmptyTodos" functions called at the correct time for example). When setup correctly, the UI layer can become extremely simple, all it needs to do is synchronize it's UI with whatever state the system has. In a reactive UI, it does that in milliseconds, whenever it's told that something has changed
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 
 So if your shopping basket model is empty: the checkout button on your view needs to be invisible or disabled. And as soon as your shopping basket model has something in it, your checkout button needs to reflect that by being enabled. This concept is decades old, and in UI frameworks is generally implemented with some form of Observer pattern.
 
-Lately it's been applied to other (non UI) areas of code very successfully under the name of *reactive* programming. Back at the UI layer, you could say that the view is *reacting* to changes in the model (i.e. the view layer does not need to explicitly check the model to see if it has changed, and of course there is no polling involved).
+Lately it's been applied to other (non UI) areas of code very successfully under the name of *reactive* programming. Back at the UI layer, you could say that the view is *reacting* to changes in the model (i.e. the view layer does not need to explicitly check the model to see if it has changed).
 
 
 ## **fore** Observables
@@ -207,7 +207,7 @@ One of the benefits of this is that it lets you isolate asynchronous code styles
 
 The funny thing is... if you're writing an app that has a UI, much of the code that you write will be on the UI thread _anyway_.
 
-Take a very common pattern with reactive streams based android apps: an app collecting a Flow in a ViewModel to update its UI. That code _still_ runs on the UI thread, even though it's written with all the trappings of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
+Take a very common pattern with reactive streams based android apps: an app **collecting a Flow in a ViewModel to update its UI**. That code _still_ runs on the UI thread, even though it's written with all the trappings of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
 
 Apart from removing this pretend asynchronous code from the view layer, there are other boiler plate advantages to fore style observers...
 

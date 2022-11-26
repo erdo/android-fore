@@ -28,11 +28,7 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
         customErrorKlazz: KClass<CE>?
     ): ErrorMessage {
 
-        if (t == null) {
-            logWrapper.d("handling error in global error handler, throwable:null")
-        } else {
-            logWrapper.d("handling error in global error handler", t)
-        }
+        logWrapper.d("handling error in global error handler", t)
 
         val errorMessage = when (t) {
 

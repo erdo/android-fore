@@ -32,7 +32,7 @@ implementation("co.early.fore:fore-kt-android-compose:1.3.0")
 
 For the 5 plus years that fore has been published on <strike>jcenter</strike> & mavenCentral, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
 
-fore still supports Java, and an extremely performant, reactive UI, running on an Android 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-network** is where most of the development happens nowadays
+fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-network** is where most of the development happens nowadays
 
 **fore v2.0** will have no major API changes. To prepare for it just make sure to update any older deprecated functions with their replacements - the deprecated code will finally get removed in 2.0 (this applies mainly to the non-core packages)
 
@@ -91,7 +91,7 @@ On the other hand, asynchronously processing real time data io with back pressur
 
 **fore**'s observable classes basically let you **make anything observable** from the perspective of the UI thread (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
 
-These code samples will make more sense in the web docs, so [(click here)](https://erdo.github.io/android-fore/#shoom) if you're reading this on github
+These code samples will make more sense in the web docs, so [(click here)](https://erdo.github.io/android-fore/#observers-and-observables) if you're reading this on github
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -130,13 +130,13 @@ class AccountRepository
     <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
   </div>
 
- <pre class="tabcontent tabbed java"><code>
- Observer observer = this::syncView;
-  </code></pre>
+<pre class="tabcontent tabbed java"><code>
+Observer observer = this::syncView;
+</code></pre>
 
- <pre class="tabcontent tabbed kotlin"><code>
- val observer = Observer { syncView() }
-  </code></pre>
+<pre class="tabcontent tabbed kotlin"><code>
+val observer = Observer { syncView() }
+</code></pre>
 
 
 And that observer is typically added and removed from the observable in line with lifecycle methods so that we dont get any memory leaks. In the case below, a fragment is observing a Wallet [model](https://en.wikipedia.org/wiki/Domain_model) representing the details of a user's wallet.
@@ -178,15 +178,15 @@ override fun onStop() {
 That's what a line like:
 
 ```
-    //setup observers
-    lifecycle.addObserver(LifecycleObserver(this, wallet))
+//setup observers
+lifecycle.addObserver(LifecycleObserver(this, wallet))
     
 ```
 does for you automatically. It takes a **vararg**, so you're not limited in the number of observable models you can observe, for example this is also fine:
 
 ```
-    //setup observers
-    lifecycle.addObserver(LifecycleObserver(this, wallet, inbox, account))
+//setup observers
+lifecycle.addObserver(LifecycleObserver(this, wallet, inbox, account))
     
 ```
 
@@ -296,7 +296,7 @@ If you have a question about the best way to achieve what you want with fore, co
 
 ![all samples](img/screenshot_asaf_samples_phone_all_1000.png)
 
-The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts - all that you can do later in the **View** layers whether in traditional XML, or Jetpack Compose, and it should have no impact on the stability of the app.
+The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts - all that you can do later in the **View** layers whether in traditional XML, or Jetpack Compose, and it should have no impact on the stability of the app. Process death in the sample apps just wipes all the data, if you're looking for ways to handle that without cluttering up the view layer, the clean architecture sample app linked to above uses [persista](https://github.com/erdo/persista) to save/recover the state of the app across process death. 
 
 These apps are however, totally robust and comprehensively tested (and properly support rotation). And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
