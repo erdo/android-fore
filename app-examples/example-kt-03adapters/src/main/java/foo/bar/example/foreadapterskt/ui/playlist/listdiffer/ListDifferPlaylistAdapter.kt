@@ -162,21 +162,21 @@ class ListDifferPlaylistAdapter(
             //if you tap very fast on different rows removing them
             //while you are using adapter animations you will crash unless
             //you check for this
-            val betterPosition = holder.adapterPosition
+            val betterPosition = holder.bindingAdapterPosition
             if (betterPosition != NO_POSITION) {
                 increasePlaysForTrack(betterPosition)
             }
         }
 
         holder.trackDecreasePlaysButton.setOnClickListener {
-            val betterPosition = holder.adapterPosition
+            val betterPosition = holder.bindingAdapterPosition
             if (betterPosition != NO_POSITION) {
                 decreasePlaysForTrack(betterPosition)
             }
         }
 
         holder.trackRemoveButton.setOnClickListener {
-            val betterPosition = holder.adapterPosition
+            val betterPosition = holder.bindingAdapterPosition
             if (betterPosition != NO_POSITION) {
                 removeTrack(betterPosition)
             }

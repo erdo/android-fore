@@ -34,6 +34,8 @@
  * ./gradlew :app-examples:example-kt-04retrofit:dependencies
  * ./gradlew -q :fore-kt:fore-kt-core:dependencyInsight --configuration compileClasspath --dependency okhttp3
  *
+ * tag:fore_
+ *
  * bundle exec jekyll serve
  *
  * bundle lock --update
