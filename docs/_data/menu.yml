@@ -3,8 +3,6 @@
   subitems:
     - text: Quick Start
       url: /#quick-start
-    - text: Overview
-      url: /#overview
     - text: Sample Apps
       url: /#sample-apps
     - text: License
