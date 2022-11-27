@@ -170,7 +170,9 @@ If you're sceptical about that - and why wouldn't you be? I'd encourage you to d
 
 There are a few different ways to explain why reactive stream style APIs are not a good fit here, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are certain that you **want** an app architecture based on it (for whatever reason), then I'd advise you to stay with Rx or migrate to Flow! fore observers are NOT reactive streams - quite deliberately so.
 
-But you might want to consider the possibility that using reactive streams to tie your architectural layers together may only be providing a local maximum in terms of performance and code clarity, there is another way...
+By the way, much of what we are about to discuss is specific to mobile applications. The server side is a very different beast. Of course, blindly applying best practice from one context to a totally different context would be a beginner's mistake that we are going to avoid here! [\[1\]](#1)
+
+Anyway you might want to consider the possibility that using reactive streams to tie your architectural layers together may only be providing a local maximum in terms of performance and code clarity, there is another way...
 
 ### Reactive Streams
 While we're on the subject, let's briefly detour to a discussion of reactive streams. Both RxJava and Kotlin Flow are implementations of the reactive streams initiative. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
@@ -191,11 +193,11 @@ The timescales that these UI state changes happen in, are orders of magnitude sl
 
 To put that another way: the **production** of data in an app (a user logs in, and a session token is fetched from the network) tends to happen in the order of **seconds**. The **consumption** of that data (the waiting spinner on the ui is changed from visible to invisible) is often a **sub-millisecond** affair.
 
-This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example). You might wonder why on earth RxJava featured so heavily in android architectures for half a decade or so, and why Flow (another implementation of reactive streams) is now such a popular replacement 🤷 [\[1\]](#1)
+This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example). You might wonder why on earth RxJava featured so heavily in android architectures for half a decade or so, and why Flow (another implementation of reactive streams) is now such a popular replacement 🤷 [\[2\]](#2)
 
 #### What if we just pretend?
 
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be asynchronous or reactive, let alone reactive streams, in the first place).[\[2\]](#2)
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be asynchronous or reactive, let alone reactive streams, in the first place).[\[3\]](#3)
 
 ### The fore approach
 
@@ -430,11 +432,20 @@ Try to get comfortable using these observers to just notify observing view code 
 For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
 #### [1]
+Most of developer internet is talking about the server side. Somewhat amusingly, this advice is sometimes absorbed and repeated unthinkingly for a mobile context, without the new author realising that the prior _assumptions_ on which the advice was built are no longer relevant in their new context.
+
+**Stateless vs Stateful** on the server side is a great example of this. Stateless microservices have a lot going for them. While potentially less intuitive and sometimes less performant, stateless is easier to scale using cloud services, stateless can be made more robust (any managed state can be hard to recover, potentially affecting millions of users at once), and if the service can be designed to not need even a database, it will be significantly less expensive to maintain and meet SLAs.
+
+None of these considerations are applicable to a mobile client application of course.
+
+Mobile clients have a ui thread, view layers that come into and out of existence from something like a device rotation, low processor speeds, and performance requirements such that 10ms vs 100ms significantly affects a user's perception of speed. For instance, a network connection made each time the screen is rotated can feel very sluggish (just from the json parsing alone i.e. even if that network call is cached locally somewhere in the data layer).
+
+#### [2]
 There were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless.
 
 And as for Kotlin Flow? Flow is a much better RxJava in Android, so if you are already heavily invested in a reactive streams architecture, there is a clear mental migration path from RxJava to Flow
 
-#### [2]
+#### [3]
 This is how reactive streams can unintentionally spread complexity throughout a code base. When this **tendency-to-spread** is combined with a large non-obvious API, and a focus on asynchronicity even when none is required it can quite easily swamp otherwise fairly trivial app projects. That risk is increased on larger projects employing developers with a mixture of skill levels, especially where there is a reasonably high turn over of developers. Keeping control of ever ballooning complexity in these situations can be a significant challenge.
 
 This is somewhat related to the famous [what color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) blog post - although that post is dealing with asynchronous code in general, which kotlin's **suspend** [handles pretty well](https://elizarov.medium.com/how-do-you-color-your-functions-a6bb423d936d). There is a parallel here though where blue is regular code, and red is reactive streams code (again though, Kotlin Flow beats RxJava hands down here. But even Flow reactive streams can be viewed as an unnecessary complication when applied to android architectural layers).
