@@ -12,7 +12,7 @@ By [**Model**](https://erdo.github.io/android-fore/02-models.html#shoom) we mean
 
 By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean the thinest possible UI layer that holds buttons, text fields, list adapters etc and whose main job is to observe one or more observable models and sync its UI with whatever state the models hold. If you're going to implement MVO on android you might choose to use an Activity or Fragment class for this purpose, a custom View class, or a Composable.
 
-By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much [by design](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter)).
+By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models for any changes. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much [by design](https://erdo.github.io/android-fore/07-fore-api.html#somethingchanged-parameter)).
 
 *For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/clean-modules-sample) written in kotlin modules. This one is a more simple MVO implementation written in [Kotlin](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
@@ -28,7 +28,7 @@ Here's an example app structure showing some models being observed by fragments 
 
 ![data binding](img/app_arch_0.png)
 
-A lot of the time, things happen in an app that do not originate directly from user interaction: incoming notifications, network connectivity changes, Bluetooth LE connections etc. We have to propagate those events to the view layer somehow. Sometimes that is done by locating the current foreground activity / fragment (using ActivityLifecycleCallbacks for example) and then pushing the information to the view layer directly: this is the <strong>opposite</strong> of a reactive UI. Implementing this with reactive-streams is doable, but not without paying the reactive-streams [tax](https://erdo.github.io/android-fore/03-reactive-uis.html#reactive-streams).
+A lot of the time, things happen in an app that do not originate directly from user interaction: incoming notifications, network connectivity changes, Bluetooth LE connections etc. We have to propagate those events to the view layer somehow. Sometimes that is done by locating the current foreground activity / fragment (using ActivityLifecycleCallbacks for example) and then pushing the information to the view layer directly: this is the <strong>opposite</strong> of a reactive UI. Implementing this with reactive-streams is doable, but not without paying the reactive-streams [tax](https://erdo.github.io/android-fore/07-fore-api.html#reactive-streams).
 
 MVO's observable models provide an easy and much less boiler-plate intensive solution: when the models' state changes, they notify their observers (they don't need to involve themselves in any view layer considerations at all).
 
@@ -83,7 +83,7 @@ If you know your MV[X]s then you'll notice MVO has some similarity with both MVI
 
 **There are a few important things in MVO that allow you an architecture this simple:**
 
-* The first is a very robust but simple [**Observer API**](https://erdo.github.io/android-fore/03-reactive-uis.html#somethingchanged-parameter) that lets views attach themselves to any model (or multiple models) they are interested in
+* The first is a very robust but simple [**Observer API**](https://erdo.github.io/android-fore/07-fore-api.html#somethingchanged-parameter) that lets views attach themselves to any model (or multiple models) they are interested in
 * The second is the [**syncView()**](https://erdo.github.io/android-fore/01-views.html#syncview) convention
 * The third is writing [**models**](https://erdo.github.io/android-fore/02-models.html#shoom) at an appropriate level of abstraction, something which comes with a little practice
 * The fourth is making appropriate use of [**DI**](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics)
