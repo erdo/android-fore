@@ -35,8 +35,13 @@
       url: "#connecting-views-and-models"
     - text: Compose
       url: "#connecting-views-and-models-in-compose"
-    - text: fore's Observer API deep dive
-      url: "#somethingchanged-parameter"
+- text: fore API Deep Dive
+  url: /07-fore-api.html
+  subitems:
+    - text: Reactive Streams
+      url: "#reactive-streams"
+    - text: The fore Approach
+      url: "#the-fore-approach"
 - text: More fore
   url: /04-more-fore.html
   subitems:
