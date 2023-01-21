@@ -30,7 +30,7 @@ dependencies {
   //implementation("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
   implementation("com.android.tools.build:gradle:7.4.0")
   //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.21")
 
   //for custom plugins
   implementation(gradleApi())

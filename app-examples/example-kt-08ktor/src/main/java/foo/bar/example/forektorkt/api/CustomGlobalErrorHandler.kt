@@ -64,8 +64,8 @@ class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<Er
             }
             is NoTransformationFoundException -> ERROR_SERVER // content type is probably wrong, check response from server in app logs
             is SerializationException -> ERROR_SERVER //parsing issue, maybe response is not json, or does not match expected type, or is empty
-            is IOException -> ERROR_NETWORK //airplane mode is on, no network coverage etc
             is UnknownServiceException -> ERROR_SECURITY_UNKNOWN //most likely https related, check for usesCleartextTraffic if required
+            is IOException -> ERROR_NETWORK //airplane mode is on, no network coverage etc
             else -> ERROR_NETWORK
         }
 

@@ -16,7 +16,7 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
-        const val kotlin_version = "1.7.10" // must manually change buildSrc.build version
+        const val kotlin_version = "1.7.21" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.4"
@@ -27,7 +27,7 @@ object Shared {
         const val apollo = "2.5.13"
         const val apollo3 = "3.2.2"
         const val retrofit = "2.9.0"
-        const val compose = "1.3.0"
+        const val compose = "1.4.0-alpha02"
         // example app and test dependencies
         const val android_core = "1.8.0"
         const val annotation = "1.0.0"
