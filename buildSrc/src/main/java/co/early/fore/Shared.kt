@@ -15,7 +15,7 @@ object Shared {
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.3.1" // must manually change buildSrc.build version
+        const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
         const val kotlin_version = "1.7.10" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
