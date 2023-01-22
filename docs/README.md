@@ -23,9 +23,9 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 ### Compose
 
-For Compose, use fore's observeAsState() function (the versioning matches compose itself) [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8)
+For Compose, use fore's observeAsState() function [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8)
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.3.0")
+implementation("co.early.fore:fore-kt-android-compose:1.4.0-alpha02")
 ```
 
 ## Current status
