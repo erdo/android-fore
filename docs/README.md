@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.18](https://img.shields.io/badge/central-1.5.18-green.svg){: .float-left}
+![central-1.5.19](https://img.shields.io/badge/central-1.5.19-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -16,16 +16,16 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.18")
+implementation("co.early.fore:fore-kt-android:1.5.19")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
 ### Compose
 
-For Compose, use fore's observeAsState() function (the versioning matches compose itself) [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8)
+For Compose, use fore's observeAsState() function [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8)
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.3.0")
+implementation("co.early.fore:fore-kt-android-compose:1.4.0-alpha02")
 ```
 
 ## Current status

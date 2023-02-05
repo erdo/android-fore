@@ -33,7 +33,6 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
     defaultConfig {
 
         minSdk = Shared.Android.minSdk
-        targetSdk = Shared.Android.targetSdk
 
         multiDexEnabled = true
 
