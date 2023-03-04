@@ -1,4 +1,4 @@
-package co.early.fore.kt.core.ui
+package co.early.fore.compose
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -21,19 +21,18 @@ import co.early.fore.kt.core.delegate.Fore
  * lifecycle is STARTED. If either or both conditions are false, the observer is removed (and
  * will be added again as appropriate when conditions change).
  *
- * If you want to see exactly what is happening in your UI, you can pass a logString in to this function,
- * and then set a debug logger as usual:
+ * If you want to see exactly what is happening in your UI, you can pass a logLabel in to this
+ * function, and then set a debug logger as usual, so put this somewhere in your code before
+ * calling observeAsState:
  * ```
  *   if (BuildConfig.DEBUG) {
  *       Fore.setDelegate(DebugDelegateDefault("foo_"))
  *   }
- * ```
- * Filter your logs on "foo_" and to Debug level
+ * ``` (and in that case you would filter your logs on "foo_" and to Debug level)
  *
  * There is a sample app that you can use to investigate this behaviour (and the behaviour
  * of Flow.collectAsState and LiveData.observeAsState here: https://github.com/erdo/compose-observe-as-state-explorer)
  */
-@Deprecated("observeAsState has moved to co.early.fore.compose, please update the import")
 @Composable
 fun <T> ObservableGroup.observeAsState(
     logLabel: String? = null,
