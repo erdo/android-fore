@@ -23,14 +23,15 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Shared.Versions.compose
+        kotlinCompilerExtensionVersion = Shared.Versions.composeCompiler
     }
     namespace = "co.early.fore.kt.compose"
 }
 
 dependencies {
     api(project(":fore-kt:fore-kt-android"))
-    implementation("androidx.compose.ui:ui:${Shared.Versions.compose}")
+    implementation("androidx.compose.ui:ui:${Shared.Versions.composeUi}")
+    implementation("androidx.window:window:${Shared.Versions.androidWindow}")
 }
 
 apply(from = "../../publish-android-compose-lib.gradle.kts")

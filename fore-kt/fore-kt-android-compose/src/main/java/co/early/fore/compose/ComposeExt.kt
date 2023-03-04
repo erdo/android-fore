@@ -44,10 +44,6 @@ fun <T> ObservableGroup.observeAsState(
     val observer = Observer { state.value = getState() }
     var refCount = 0
 
-    logLabel?.let {
-        logMessage(logLabel, "", refCount)
-    }
-
     val lifeCycleObserver = object : DefaultLifecycleObserver {
         override fun onStart(owner: LifecycleOwner) {
             logLabel?.let {
@@ -88,7 +84,7 @@ fun <T> ObservableGroup.observeAsState(
 private fun addIfThresholdMet(logLabel: String?, observable: ObservableGroup, observer: Observer, count: Int, threshold: Int = 2){
     if (count == threshold) {
         logLabel?.let {
-            logMessage(logLabel, "[ADD FORE OBSERVER]", count)
+            logMessage(logLabel, "[ADD <<<FORE>>> OBSERVER]", count)
         }
         observable.addObserver(observer)
         observer.somethingChanged()
@@ -98,7 +94,7 @@ private fun addIfThresholdMet(logLabel: String?, observable: ObservableGroup, ob
 private fun removeIfThresholdSkirted(logLabel: String?, observable: ObservableGroup, observer: Observer, count: Int, threshold: Int = 2){
     if (count == (threshold - 1)) {
         logLabel?.let {
-            logMessage(logLabel, "[REMOVE FORE OBSERVER]", count)
+            logMessage(logLabel, "[REMOVE <<<FORE>>> OBSERVER]", count)
         }
         observable.removeObserver(observer)
     }

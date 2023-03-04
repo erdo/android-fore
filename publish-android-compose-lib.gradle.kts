@@ -27,7 +27,7 @@ val LIB_DESCRIPTION: String? by project
 println("[$LIB_ARTIFACT_ID android compose publish file]")
 
 group = "${Shared.Publish.LIB_GROUP}"
-version = "${Shared.Versions.compose}" //compose version, not fore version
+version = "${Shared.Versions.composeCompiler}" //compose version, not fore version
 
 project.afterEvaluate {
     configure<PublishingExtension> {
@@ -36,7 +36,7 @@ project.afterEvaluate {
 
                 groupId = "${Shared.Publish.LIB_GROUP}"
                 artifactId = LIB_ARTIFACT_ID
-                version = "${Shared.Versions.compose}" //compose version, not fore version
+                version = "${Shared.Versions.composeCompiler}" //compose version, not fore version
 
                 artifact(tasks["bundleReleaseAar"])
                 artifact(project.tasks["androidSourcesJar"])
