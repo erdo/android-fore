@@ -27,10 +27,6 @@ dependencies {
     api(project(":fore-jv:fore-jv-android-adapters"))
     api(project(":fore-jv:fore-jv-android-network"))
 
-    compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
-    compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
-    compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
-
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("org.mockito:mockito-core:${Shared.Versions.mockito_core}")
     testImplementation("org.hamcrest:hamcrest-library:${Shared.Versions.hamcrest_library}")

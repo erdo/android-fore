@@ -8,6 +8,7 @@ object Shared {
 
     object Android {
         const val minSdk = 16
+        const val minComposeSdk = 21
         const val compileSdk = 33
         const val targetSdk = 33
         val javaVersion = JavaVersion.VERSION_1_8
@@ -16,7 +17,7 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
-        const val kotlin_version = "1.7.21" // must manually change buildSrc.build version
+        const val kotlin_version = "1.8.0" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.4"
@@ -31,6 +32,7 @@ object Shared {
         const val composeUi = "1.4.0-alpha05"
         const val androidWindow = "1.1.0-alpha06"
         // example app and test dependencies
+        const val material3 = "1.1.0-alpha02"
         const val android_core = "1.8.0"
         const val annotation = "1.0.0"
         const val material = "1.7.0"
