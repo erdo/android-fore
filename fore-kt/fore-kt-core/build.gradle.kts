@@ -24,7 +24,6 @@ ext.apply {
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 dependencies {
-   // api("org.jetbrains.kotlin:kotlin-stdlib:${Shared.Versions.kotlin_version}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Shared.Versions.kotlinx_coroutines_core}")
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
