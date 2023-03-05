@@ -84,8 +84,8 @@ dependencies {
     }
 
     // persistence
-    implementation("co.early.persista:persista:1.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("co.early.persista:persista:${Shared.Versions.perSista}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Shared.Versions.kotlinxSerializationJson}")
 
     // design
     implementation("androidx.compose.material3:material3:${Shared.Versions.material3}")

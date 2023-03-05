@@ -38,6 +38,7 @@ object Shared {
         const val material = "1.7.0"
         const val appcompat = "1.5.1"
         const val coil = "1.1.0"
+        const val perSista = "1.4.0"
         const val androidxtest = "1.4.0"
         const val androidxjunit = "1.1.2"
         const val room_version = "2.4.3"
@@ -54,6 +55,7 @@ object Shared {
         const val constraintlayout = "2.1.4"
         const val ktor_client = "2.0.3"
         const val converter_gson = "2.6.0"
+        const val kotlinxSerializationJson = "1.3.2"
     }
 
     object BuildTypes {
