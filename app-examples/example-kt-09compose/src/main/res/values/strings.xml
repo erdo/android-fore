@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">kt 9 compose ex</string>
+
+    <string name="increase">+</string>
+    <string name="decrease">-</string>
+    <string name="show">SHOW</string>
+    <string name="hide">HIDE</string>
+
+    <!-- common error messages -->
+    <string name="msg_empty_message"></string>
+    <string name="err_retry_later">Please retry later</string>
+    <string name="err_network">Please check your network and try again</string>
+    <string name="err_session">Please login and try again</string>
+    <string name="err_account">Please check your account for funds</string>
+
+</resources>

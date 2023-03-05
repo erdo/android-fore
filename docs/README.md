@@ -23,7 +23,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 ### Compose
 
-For Compose, use fore's observeAsState() function [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8)
+For Compose, use fore's observeAsState() function [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and fore's windowSize classes as discussed [here](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4)
 ```
 implementation("co.early.fore:fore-kt-android-compose:1.4.0-alpha02")
 ```
@@ -367,6 +367,11 @@ In a similar vein we have a networking sample that integrates with a GraphQL API
 ### **fore 8** Ktor Example
 [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-08ktor)
 Ditto but using Ktor (and OkHttp). And as usual includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests)
+
+<div class="shoom" id="fore-9-compose-example"/>
+### **fore 9** Compose Example
+[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-09compose)
+Sample for the [observeAsState](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function and the [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes
 
 <div class="shoom" id="fore-6-db-example-room"/>
 ### **fore 6** DB Example (Room db driven to-do list)
