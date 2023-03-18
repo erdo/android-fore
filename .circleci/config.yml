@@ -134,3 +134,11 @@ jobs:
           path: app-examples/example-kt-08ktor/build/reports
       - store_test_results:
           path: app-examples/example-kt-08ktor/build/test-results
+
+      - run:
+          name: Run Tests example-kt-09compose
+          command: ./gradlew app-examples:example-kt-09compose:lintRelease app-examples:example-kt-09compose:testRelease
+      - store_artifacts:
+          path: app-examples/example-kt-09compose/build/reports
+      - store_test_results:
+          path: app-examples/example-kt-09compose/build/test-results

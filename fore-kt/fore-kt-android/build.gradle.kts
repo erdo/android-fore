@@ -30,12 +30,9 @@ android {
 
 dependencies {
 
+    api(project(":fore-kt:fore-kt-android-core"))
     api(project(":fore-kt:fore-kt-android-adapters"))
     api(project(":fore-kt:fore-kt-android-network"))
-
-    compileOnly("androidx.recyclerview:recyclerview:${Shared.Versions.recyclerview}")
-    compileOnly("com.apollographql.apollo:apollo-runtime:${Shared.Versions.apollo}")
-    compileOnly("com.squareup.retrofit2:retrofit:${Shared.Versions.retrofit}")
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")

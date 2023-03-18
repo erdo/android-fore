@@ -33,6 +33,7 @@ import co.early.fore.kt.core.delegate.Fore
  * There is a sample app that you can use to investigate this behaviour (and the behaviour
  * of Flow.collectAsState and LiveData.observeAsState here: https://github.com/erdo/compose-observe-as-state-explorer)
  */
+@Deprecated("observeAsState has moved to co.early.fore.compose, please update the import")
 @Composable
 fun <T> ObservableGroup.observeAsState(
     logLabel: String? = null,

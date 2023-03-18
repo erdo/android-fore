@@ -8,6 +8,7 @@ object Shared {
 
     object Android {
         const val minSdk = 16
+        const val minComposeSdk = 21
         const val compileSdk = 33
         const val targetSdk = 33
         val javaVersion = JavaVersion.VERSION_1_8
@@ -16,7 +17,7 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
-        const val kotlin_version = "1.7.21" // must manually change buildSrc.build version
+        const val kotlin_version = "1.8.0" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.4"
@@ -27,13 +28,17 @@ object Shared {
         const val apollo = "2.5.13"
         const val apollo3 = "3.2.2"
         const val retrofit = "2.9.0"
-        const val compose = "1.4.0-alpha02"
+        const val composeCompiler = "1.4.0"
+        const val composeUi = "1.4.0-alpha05"
+        const val androidWindow = "1.1.0-alpha06"
         // example app and test dependencies
+        const val material3 = "1.1.0-alpha02"
         const val android_core = "1.8.0"
         const val annotation = "1.0.0"
         const val material = "1.7.0"
         const val appcompat = "1.5.1"
         const val coil = "1.1.0"
+        const val perSista = "1.4.0"
         const val androidxtest = "1.4.0"
         const val androidxjunit = "1.1.2"
         const val room_version = "2.4.3"
@@ -50,6 +55,7 @@ object Shared {
         const val constraintlayout = "2.1.4"
         const val ktor_client = "2.0.3"
         const val converter_gson = "2.6.0"
+        const val kotlinxSerializationJson = "1.3.2"
     }
 
     object BuildTypes {
@@ -59,8 +65,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.19" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 86
+        const val LIB_VERSION_NAME = "1.5.20" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 87
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -73,8 +79,8 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val published_fore_version_for_examples = "1.5.19"
         const val use_published_version = false
+        const val published_fore_version_for_examples = "1.5.20"
     }
 
     object Secrets {
