@@ -23,18 +23,18 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 ### Compose
 
-For Compose, use fore's observeAsState() function [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and fore's windowSize classes as discussed [here](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4)
+For Compose, use fore's observeAsState() function as in this [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), and fore's WindowSize classes as discussed [here](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4)
 ```
 implementation("co.early.fore:fore-kt-android-compose:1.4.0")
 ```
 
 ## Current status
 
-For the 5 plus years that fore has been published on <strike>jcenter</strike> & mavenCentral, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
+Since fore was first published back in 2017, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
 
-fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-network** is where most of the development happens nowadays
+fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-android-compose** is where most of the development happens nowadays
 
-**fore v2.0** will have no major API changes. To prepare for it just make sure to update any older deprecated functions with their replacements - the deprecated code will finally get removed in 2.0 (this applies mainly to the non-core packages)
+**fore v2.0** will have no major API changes. To prepare for it, just make sure to update any older deprecated functions with their replacements - the deprecated code will finally get removed in 2.0 (this applies mainly to the non-core packages)
 
 ## New to fore
 
@@ -405,7 +405,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2015-2022 early.co
+    Copyright 2015-2023 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

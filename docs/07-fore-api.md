@@ -268,13 +268,24 @@ Try to get comfortable using these observers to just notify observing view code 
 For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
 
 #### [1]
-A lot of developer internet is talking about the server side. Somewhat amusingly, this advice is sometimes absorbed and repeated unthinkingly for a mobile context, without the new author realising that the prior _assumptions_ on which the advice was built are no longer relevant in their new context.
+A lot of "developer advice internet" is implicitly talking about the server side. Unfortunately this advice is sometimes absorbed and repeated unthinkingly for a mobile context, without the new author realising that the prior _assumptions_ on which the advice was built, are no longer relevant in their new context.
 
-**Stateless vs Stateful** on the server side is a great example of this. Stateless microservices have a lot going for them. While potentially less intuitive and sometimes less performant, stateless is easier to scale using cloud services, stateless can be more robust (state can be hard to recover after a system crash, potentially affecting millions of users at once), and if the service can be designed to not even need a database, it will be significantly less expensive to maintain and meet SLAs with that service.
+**Stateless vs Stateful** is a great example of this. Stateless microservices on the server-side have a lot going for them. While potentially less intuitive and sometimes less performant, stateless is easier to scale using cloud services, stateless can be more robust (state can be hard to recover after a system crash, on the server side that can potentially affect millions of users at once), and if the service can be designed to not even need a database, it will be significantly less expensive to maintain and meet SLAs with that service.
 
-None of these considerations are applicable to a mobile client app of course.
+None of those considerations are applicable to a mobile client app.
 
-Some considerations are universal though, like: if you're not careful, state (and especially duplication of state) can be a source of bugs. But the mobile context has its own, equally important considerations such as: mobile clients have a UI thread, view layers come into and out of existence from something like a device rotation, the devices have low processor speeds, but they have high performance requirements such that 10ms vs 100ms significantly affects a user's perception of speed.
+Some considerations are universal though, like: if you're not careful, state (and especially duplication of state) can be a source of complexity, and therefore of bugs. That's a strong argument for having a crystal clear, single source of truth for your state.
+
+fore's approach is to keep that state inside the relevant model classes e.g: accountModel.state.balance, always consistent from the perspective of the UI thread, always _readable_ from anywhere - view model scopes not withstanding, (and persistently stored to disk with something like [PerSista](https://github.com/erdo/persista) if it's something you want to recover in the event of process-death).
+
+But the mobile context has its own, equally important considerations such as:
+- mobile clients have a UI thread
+- view layers come into and out of existence from something like a device rotation (i.e. it's easy to cause memory leaks: see rxJava's checkered history with Android and memory leaks [example](https://medium.com/@scanarch/how-to-leak-memory-with-subscriptions-in-rxjava-ae0ef01ad361))
+- the devices have low processor speeds, but they have high performance requirements such that 10ms vs 100ms significantly affects a user's perception of speed.
+
+When applied to a mobile context, a "stateless" approach using reactive streams might actually keep the state in the stream itself (with a StateFlow, held in a ViewModel for example), or use stateless UseCases that return Flows and have the state kept nowhere apart from in the UI, or have state kept in a network cache - which can be slow enough to cause noticeable sluggishness in a mobile app that could otherwise be instant.
+
+In addition, without a clear, single source of truth for the application's state, sharing this state with various components (UI or otherwise) can start to be problematic as soon as the app becomes more complex than a collection of simple independent pages of data. Can we be sure that the whole app is sharing the same view of state when reactive streams is providing this state via different stream instances, potentially on different threads, or in different coroutine contexts? I dare say anything is doable, and there are many way to skin a cat (some ways just leave you with slightly more scratches!)
 
 #### [2]
 There were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless.
