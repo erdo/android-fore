@@ -91,7 +91,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:${Shared.Versions.material3}")
 
     // compose
-    implementation("androidx.activity:activity-compose:${Shared.Versions.composeCompiler}")
+    implementation("androidx.activity:activity-compose:${Shared.Versions.activityCompose}")
     implementation("androidx.compose.ui:ui:${Shared.Versions.composeUi}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Shared.Versions.composeUi}")
     implementation("androidx.compose.ui:ui-tooling:${Shared.Versions.composeUi}")
