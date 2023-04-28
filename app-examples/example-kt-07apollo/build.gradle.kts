@@ -40,6 +40,7 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testBuildType = getTestBuildType()
+        multiDexEnabled = true
     }
     signingConfigs {
         create(BuildTypes.RELEASE) {
