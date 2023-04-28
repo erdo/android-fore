@@ -45,16 +45,12 @@ class Track(
     }
 
     override fun itemsTheSame(other: Track): Boolean {
-        return if (other != null) {
-            this.id == other.id
-        } else false
+        return this.id == other.id
     }
 
     override fun itemsLookTheSame(other: Track): Boolean {
-        return if (other != null) {
-            this.numberOfPlaysRequested == other.numberOfPlaysRequested
-                    && this.colourResource == other.colourResource
-        } else false
+        return (this.numberOfPlaysRequested == other.numberOfPlaysRequested
+                && this.colourResource == other.colourResource)
     }
 
     override fun deepCopy(): Track {
