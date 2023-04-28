@@ -3,7 +3,7 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("com.apollographql.apollo").version("2.5.13")
+    id("com.apollographql.apollo").version("2.5.14")
     kotlin("android")
     kotlin("kapt")
 }
