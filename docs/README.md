@@ -360,8 +360,8 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 <div class="shoom" id="fore-7-apollo-example"/>
 ### **fore 7** Apollo Example
-[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo) \| [source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo3)
-In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is competely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
+[source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo3)
+In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo3. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
 
 <div class="shoom" id="fore-8-ktor-example"/>
 ### **fore 8** Ktor Example
