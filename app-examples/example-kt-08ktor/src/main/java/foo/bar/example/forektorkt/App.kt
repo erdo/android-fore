@@ -1,11 +1,12 @@
 package foo.bar.example.forektorkt
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
+
 
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
-class App : MultiDexApplication() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
