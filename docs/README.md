@@ -23,10 +23,11 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 ### Compose
 
-For Compose, use fore's observeAsState() function as in this [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), and fore's WindowSize classes as discussed [here](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4)
+For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
 implementation("co.early.fore:fore-kt-android-compose:1.4.6")
 ```
+(The versioning matches the composeCompiler version, but the versions are interchangeable)
 
 ## Current status
 
