@@ -17,7 +17,7 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
-        const val kotlin_version = "1.8.20" // must manually change buildSrc.build version
+        const val kotlin_version = "1.8.21" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.4"
@@ -28,7 +28,7 @@ object Shared {
         const val apollo = "2.5.14"
         const val apollo3 = "3.8.1"
         const val retrofit = "2.9.0"
-        const val composeCompiler = "1.4.6" // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+        const val composeCompiler = "1.4.7" // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
         const val composeUi = "1.4.3"
         const val androidWindow = "1.1.0-beta02"
         // example app and test dependencies
