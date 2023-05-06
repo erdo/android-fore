@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.24](https://img.shields.io/badge/central-1.5.24-green.svg){: .float-left}
+![central-1.5.25](https://img.shields.io/badge/central-1.5.25-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -16,7 +16,7 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.24")
+implementation("co.early.fore:fore-kt-android:1.5.25")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -25,7 +25,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.4.6")
+implementation("co.early.fore:fore-kt-android-compose:1.4.7")
 ```
 (The versioning matches the composeCompiler version, but the versions are interchangeable)
 
