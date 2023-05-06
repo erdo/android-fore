@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.20](https://img.shields.io/badge/central-1.5.20-green.svg){: .float-left}
+![central-1.5.25](https://img.shields.io/badge/central-1.5.25-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -16,17 +16,18 @@
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.20")
+implementation("co.early.fore:fore-kt-android:1.5.25")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
 ### Compose
 
-For Compose, use fore's observeAsState() function as in this [example](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), and fore's WindowSize classes as discussed [here](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4)
+For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.4.0")
+implementation("co.early.fore:fore-kt-android-compose:1.4.7")
 ```
+(The versioning matches the composeCompiler version, but the versions are interchangeable)
 
 ## Current status
 
@@ -360,8 +361,8 @@ As usual this is a complete and tested app. In reality the tests are probably mo
 
 <div class="shoom" id="fore-7-apollo-example"/>
 ### **fore 7** Apollo Example
-[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo) \| [source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo3)
-In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is competely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
+[source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo3)
+In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo3. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
 
 <div class="shoom" id="fore-8-ktor-example"/>
 ### **fore 8** Ktor Example

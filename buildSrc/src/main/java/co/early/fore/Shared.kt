@@ -17,7 +17,7 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
-        const val kotlin_version = "1.8.0" // must manually change buildSrc.build version
+        const val kotlin_version = "1.8.21" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.4"
@@ -25,14 +25,15 @@ object Shared {
         const val recyclerview = "1.2.1"
         const val okhttp3v3 = "3.14.9"
         const val okhttp3v4 = "4.10.0"
-        const val apollo = "2.5.13"
-        const val apollo3 = "3.2.2"
+        const val apollo = "2.5.14"
+        const val apollo3 = "3.8.1"
         const val retrofit = "2.9.0"
-        const val composeCompiler = "1.4.0"
-        const val composeUi = "1.4.0-alpha05"
-        const val androidWindow = "1.1.0-alpha06"
+        const val composeCompiler = "1.4.7" // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+        const val composeUi = "1.4.3"
+        const val androidWindow = "1.1.0-beta02"
         // example app and test dependencies
-        const val material3 = "1.1.0-alpha02"
+        const val activityCompose = "1.4.0"
+        const val material3 = "1.1.0-rc01"
         const val android_core = "1.8.0"
         const val annotation = "1.0.0"
         const val material = "1.7.0"
@@ -65,8 +66,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.20" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 87
+        const val LIB_VERSION_NAME = "1.5.25" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 92
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -80,7 +81,7 @@ object Shared {
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
         const val use_published_version = false
-        const val published_fore_version_for_examples = "1.5.20"
+        const val published_fore_version_for_examples = "1.5.25"
     }
 
     object Secrets {

@@ -3,7 +3,7 @@ import co.early.fore.Shared.BuildTypes
 
 plugins {
     id("com.android.application")
-    id("com.apollographql.apollo3").version("3.2.2")
+    id("com.apollographql.apollo3").version("3.8.1")
     kotlin("android")
     kotlin("kapt")
 }
@@ -40,6 +40,7 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testBuildType = getTestBuildType()
+        multiDexEnabled = true
     }
     signingConfigs {
         create(BuildTypes.RELEASE) {
@@ -70,7 +71,9 @@ android {
 }
 
 apollo {
-    packageName.set(appId)
+    service("apollo-fullstack-tutorial") {
+        packageName.set(appId)
+    }
 }
 
 // fetch the graphql schema:
