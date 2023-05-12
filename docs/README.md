@@ -74,6 +74,25 @@ override fun syncView() {
 ```
 Full examples: [here](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt)
 
+For a **Compose UI**, it looks like this:
+
+```
+@Composable
+fun MyScreen(
+    viewModel: ViewModel, // or any observable thing
+) {
+
+    val viewState by viewModel.observeAsState { viewModel.state }
+    
+    ...
+    
+}
+```
+Full example: [here](https://github.com/erdo/compose-windowsize)
+
+Fore's observeAsState function takes into account both the lifecycle of the Activity/Fragment **and** the composition state of the composable (i.e. if it has been launched or disposed). That means it’s safe to use whether you have a single Activity architecture hosting all of your composables, or you have composables that are spread across multiple activities.
+
+
 ## Overview
 
 Imagine your app existing entirely separately from its UI (its UI could be a command line interface, or a GUI, compose or otherwise - the app shouldn't care or even know what type of UI it has). Then imagine the UI layer as a thin window on to this app, free to deal exclusively with _what things look like_.
@@ -90,9 +109,11 @@ While connecting architectural layers with reactive streams is often done, it us
 
 On the other hand, asynchronously processing real time data io with back pressure handling would be a natural fit for something like Rx or Flow (that is basically what [reactive streams](http://www.reactive-streams.org/) lives for). Trying to do that with a fore observable would be pointless.
 
-**fore**'s observable classes basically let you **make anything observable** from the perspective of the UI thread (usually it's repositories or classes in the domain layer that are made **observable**, and things in the view layer like activities, fragments or custom views do the **observing**). Here's how you make an AccountRepository class observable for example (no need to use a Repository for this, it works with any class):
+**fore**'s observable classes basically let you **make anything observable** from the perspective of the UI thread (usually it's classes in the domain layer or viewModels that are made **observable**, and UI components like activities, fragments or custom views do the **observing**).
 
-These code samples will make more sense in the web docs, so [(click here)](https://erdo.github.io/android-fore/#observers-and-observables) if you're reading this on github
+The following code samples will make more sense in the web docs, so [(click here)](https://erdo.github.io/android-fore/#observers-and-observables) if you're reading this on github
+
+Let's take a "Wallet" [model](https://en.wikipedia.org/wiki/Domain_model), representing the details of a user's wallet (depending on the conventions or architecture of your app, you might be using repositories etc, but the technique works with any class that has state available to observe). Here's how you would make Wallet observable:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -101,9 +122,9 @@ These code samples will make more sense in the web docs, so [(click here)](https
  </div>
 
 <pre class="tabcontent tabbed java"><code>
-public class AccountRepository extends ObservableImp {
+public class Wallet extends ObservableImp {
 
-  public AccountRepository(WorkMode workMode) {
+  public Wallet(WorkMode workMode) {
     super(workMode);
   }
 
@@ -113,163 +134,56 @@ public class AccountRepository extends ObservableImp {
  </code></pre>
 
 <pre class="tabcontent tabbed kotlin"><code>
-class AccountRepository
-: Observable by ObservableImp() {
+class Wallet: Observable by ObservableImp() {
 
+    var currentState = WalletState(amount = 99)
+        private set
   ...
 
 }
  </code></pre>
 
+- Wallet is the single source of truth for the state of the wallet (duh)
+- Wallet exposes that (read only) state, through properties or getters (it's up to you how you want to write your code)
+- You call Wallet on the UI thread, and functions are expected to return immediately (asynchronous code is managed internally, there is no need to expose it to the outside world)
+- Wallet doesn't know about UI, or care if it has any observers or not
+- Wallet's only real responsibility is to notify observers whenever it changes its own state
+- You can call functions on Wallet, like ```emptyWallet()```, but it's still Wallet that is in charge of changing the state
 
- Somewhere in the view layer (Activity/Fragment/View or ViewModel) there will be a piece of code like this:
-
-
- <!-- Tabbed code sample -->
-  <div class="tab">
-    <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-    <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
-  </div>
-
-<pre class="tabcontent tabbed java"><code>
-Observer observer = this::syncView;
-</code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-val observer = Observer { syncView() }
-</code></pre>
-
-
-And that observer is typically added and removed from the observable in line with lifecycle methods so that we dont get any memory leaks. In the case below, a fragment is observing a Wallet [model](https://en.wikipedia.org/wiki/Domain_model) representing the details of a user's wallet.
-
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
-
-<pre class="tabcontent tabbed java"><code>
-@Override
-protected void onStart() {
-    super.onStart();
-    wallet.addObserver(observer);
-    syncView(); //  <- don't forget this
-}
-
-@Override
-protected void onStop() {
-    super.onStop();
-    wallet.removeObserver(observer);
-}
- </code></pre>
-
-<pre class="tabcontent tabbed kotlin"><code>
-override fun onStart() {
-    super.onStart()
-    wallet.addObserver(observer)
-    syncView() //  <- don't forget this
-}
-
-override fun onStop() {
-    super.onStop()
-    wallet.removeObserver(observer)
-}
- </code></pre>
-
-That's what a line like:
+For example that ```emptyWallet()``` function might be implemented like this:
 
 ```
-//setup observers
-lifecycle.addObserver(LifecycleObserver(this, wallet))
-    
-```
-does for you automatically. It takes a **vararg**, so you're not limited in the number of observable models you can observe, for example this is also fine:
-
-```
-//setup observers
-lifecycle.addObserver(LifecycleObserver(this, wallet, inbox, account))
-    
+fun emptyWallet() {
+    currentState = currentState.copy(amount = 0)
+    notifyObservers() // we changed our externally visible state, so we will notify our observers
+}
 ```
 
-All that's left to do now is to implement **syncView()** which will be called on the UI thread whenever the state of your observables change. You'll probably notice that syncView() shares some characteristics with MVI's render() or MvRx's invalidate(), though you might be surprised to learn that fore has been using syncView() to implement unidirectional data flow since at least 2013!
+To observe the state of that Wallet in an activity say, we just add it to fore's lifecycle observer:
 
-<!-- Tabbed code sample -->
- <div class="tab">
-   <button class="tablinks java" onclick="openLanguage('java')">Java</button>
-   <button class="tablinks kotlin" onclick="openLanguage('kotlin')">Kotlin</button>
- </div>
+```
+lifecycle.addObserver(LifecycleObserver(this, wallet)) 
 
-<pre class="tabcontent tabbed java"><code>
-public void syncView(){
-    increaseMobileWalletBtn.setEnabled(wallet.canIncrease());
-    decreaseMobileWalletBtn.setEnabled(wallet.canDecrease());
-    mobileWalletAmount.setText("" + wallet.getMobileWalletAmount());
-    savingsWalletAmount.setText("" + wallet.getSavingsWalletAmount());
-}
- </code></pre>
+// or observe as many models as you like - LifecycleObserver takes a vararg
 
-<pre class="tabcontent tabbed kotlin"><code>
-override fun syncView() {
-    wallet_increase_btn.isEnabled = wallet.canIncrease()
-    wallet_decrease_btn.isEnabled = wallet.canDecrease()
-    wallet_mobileamount_txt.text = wallet.mobileWalletAmount.toString()
-    wallet_savingsamount_txt.text = wallet.savingsWalletAmount.toString()
-    wallet_balancewarning_img.showOrGone(wallet.mobileWalletAmount<2)
-}
+lifecycle.addObserver(LifecycleObserver(this, wallet, inbox, account, etc))
+```
 
-</code></pre>
+Or you can use the Compose equivalent:
 
-In this example the wallet state is being exposed via individual getters / properties, but the state could just as well be exposed via a single immutable state (like in the clean architecture sample linked to below) it's entirely up to you, it makes no difference to the syncView() technique.
+```
+val walletState by wallet.observeAsState { wallet.currentState }
+```
 
-Making the most of fore's ability to remove boiler plate, a fully reactive, fully testable, memory leak free, rotatable view layer can easily come in under 100 lines of code:
+All that's left to do now is to use the state in your **compose function**, or implement **syncView()** in your activity/fragment/view as detailed in the intro.
 
-<pre class="codesample"><code>
-class DashboardActivity : FragmentActivity(R.layout.activity_dashboard), SyncableView {
-
-    //models that we need to sync with
-    private val viewModel: DashboardViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        //setup observers
-        lifecycle.addObserver(LifecycleObserver(this, viewModel))
-
-        //setup click listeners
-        dashboard_startautorefresh_btn.setOnClickListener { viewModel.startAutoRefresh() }
-        dashboard_stopautorefresh_btn.setOnClickListener { viewModel.stopAutoRefresh() }
-        dashboard_updatenow_btn.setOnClickListener { viewModel.updateNow() }
-    }
-
-    //called on the UI thread, whenever the viewModel state changes
-    override fun syncView() {
-        viewModel.viewState.apply {
-            dashboard_busy.showOrInvisible(isUpdating)
-            dashboard_updatenow_btn.isEnabled = !isUpdating
-            dashboard_startautorefresh_btn.isEnabled = !autoRefresh.autoRefreshing
-            dashboard_stopautorefresh_btn.isEnabled = autoRefresh.autoRefreshing
-            dashboard_pollenlevel_img.setImageResource(weather.pollenLevel.toImgRes())
-            dashboard_tempmaxmin.setMaxPercent(weather.maxTempPercent())
-            dashboard_tempmaxmin.setMinPercent(weather.minTempPercent())
-        }
-    }
-}
-
-</code></pre>
-
-That's the essential code which runs this UI
-
-![video of sample](clean-modules-vid.gif)
-
-The [full code](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt) with animations is not much bigger
+### Motivation
 
 Writing view layers this way helps quite a bit from a complexity standpoint, and it's one of the things that makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code. Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious though. This [discussion](https://erdo.github.io/android-fore/07-fore-api.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on the complexity / robustness aspect.
 
 Here's a very basic example from one of the mini kotlin apps included in the fore repo: [View](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivity.kt) and [Model](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt) code, and the tests: a [Unit Test](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/test/java/foo/bar/example/forereactiveuikt/feature/wallet/WalletTest.kt) for the Model, and an [Espresso Test](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/androidTest/java/foo/bar/example/forereactiveuikt/ui/wallet/WalletsActivityTest.kt) for the View
 
 Read more about the [MVO](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture of fore apps.
-
-### Motivation
 
 There is often a tendency in business requirements towards complexity, the longer a project exists, the more complex it becomes. For an android app to remain maintainable over a period of years, it needs to be able to absorb this complexity without too much damage to the code base. So if there was one guiding principle followed when developing fore and its techniques, it was probably: *complexity is the enemy*.
 

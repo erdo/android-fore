@@ -19,9 +19,31 @@ In short, not a great place to put business logic or networking code, any code p
 It might seem obvious, but still: handling those issues accounts for a fairly large chunk of the boiler plate (and bugs) present in a typical android app.
 
 
+## Compose UI
+
+Fore's **observeAsState()** function takes into account both the lifecycle of the Activity/Fragment **and** the composition state of the composable (i.e. if it has been launched or disposed).
+
+That means it’s safe to use whether you have a single Activity architecture hosting all of your composables, or you have composables that are spread across multiple activities.
+
+```
+@Composable
+fun MyScreen(
+    viewModel: ViewModel, // or any observable thing
+) {
+
+    val viewState by viewModel.observeAsState { viewModel.state }
+    
+    ...
+    
+}
+```
+Full example: [here](https://github.com/erdo/compose-windowsize)
+
+_The rest of this page relates to non Compose UIs_
+
 ## Code that belongs in the view layer
 
-Pretty much all views in **fore** do the same few things when they are created:
+Pretty much all non-compose views in **fore** do the same few things when they are created:
 
 - get a reference to all the view components like Buttons, TextViews etc.
 - get a reference to all models that the view needs to observe (using some form of DI)
@@ -32,13 +54,13 @@ Pretty much all views in **fore** do the same few things when they are created:
 In addition to that there will be:
 
 - the [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview) function which sets an affirmative state on each of the view components, in line with what the models indicate.
-- the add / remove observers methods where the view registers with the models it is interested in.
+- the fore lifecycleObserver which adds / removes observers in line with the android lifecycle
 
 This leaves almost all everything else to be handled in other modules or layers in the form of plain, unit testable code. A few view [examples](https://erdo.github.io/android-fore/01-views.html#view-examples) are listed at the bottom of this page
 
 ## <a name="syncview"></a> SyncView()
 
-MVO uses one of the most simple (but extremely reliable) reactive implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method)*. On the surface it looks very simple, but there are some important details to discuss that can trip you up, or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
+fore uses one of the most simple (but extremely reliable) reactive implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method)*. On the surface it looks very simple, but there are some important details to discuss that can trip you up, or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.
 
 That simplicity is surprisingly powerful so we're going to go into further detail about why, after I've quoted myself so that you remember it...
 
@@ -63,7 +85,6 @@ As part of refreshing the entire view, the syncView() method must set an **affir
 It's not good enough to just set a button as **disabled** if a total is 0 or less. You must also set that button as **enabled** if the total is greater than 0. If you don't set an affirmative step for both the positive and negative scenarios, then you run the risk of a syncView() call not setting a state at all, which means that the result will be indeterministic (it will be whatever state it had previously). This is one of those sneaky edge case things that at first glance might look fine, but can reveal itself as a bug later. (And by the way, this applies even more so to writing ui binding code for android adapters).
 
 So don't do this inside your syncView() function:
-
 
 <!-- Tabbed code sample -->
  <div class="tab">

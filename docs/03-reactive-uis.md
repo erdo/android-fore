@@ -1,6 +1,10 @@
 # Reactive UIs
 
-Essentially this means your UI responds immediately to any change to the system state, and it does so automatically. It doesn't require the user to manually refresh the screen, it doesn't even require the developer to "manually" refresh the screen (using techniques like polling, or setter type "showEmptyToDos" functions called at the correct time for example). When setup correctly, the UI layer can become extremely simple, all it needs to do is synchronize it's UI with whatever state the system has. In a reactive UI, it does that in milliseconds, whenever it's told that something has changed
+Essentially this means your UI responds immediately to any change to the system state, and it does so automatically.
+
+It doesn't require the **user** to manually refresh the screen... it doesn't even require the **developer** to "manually" refresh the screen (using techniques like polling, or refreshing things from the onResume() callback for example).
+
+When setup correctly, the UI layer can become extremely simple, all it needs to do is synchronize it's UI with whatever state the system has. In a reactive UI, it does that in milliseconds, whenever it's told that something has changed
 
 > "Any changes of state in your underlying model, get automatically represented in your view."
 
@@ -10,15 +14,15 @@ Lately it's been applied to other (non UI) areas of code very successfully under
 
 
 ## **fore** Observables
-In MVO, the models are usually Observable, and the Views are mostly doing the Observing.
+To get the best out of fore, the models are usually Observable, and the Views are mostly doing the Observing.
 
 By extending ObservableImp / implementing Observable in the case of java, or delegating to ObservableImp in the case of kotlin [like this](https://github.com/erdo/android-fore/blob/master/app-examples/example-kt-01reactiveui/src/main/java/foo/bar/example/forereactiveuikt/feature/wallet/Wallet.kt), the models gain the following characteristics:
 
 - Any observers (usually views) can add() themselves to the model so that the **observer will be told of any changes in the model's state**
-- When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()**)
+- When the model's state changes, each added observer will be told in turn by having its **somethingChanged()** method called (which in turn typically causes a call to **syncView()** or a recompose in the case of Compose UI)
 - For this to work, all a model must do is call **notifyObservers()** whenever its own state changes (see the [Model](https://erdo.github.io/android-fore/02-models.html#shoom) section)
 - To avoid memory leaks, **views are responsible for removing their observer callback** from the observable model once they are no longer interested in receiving notifications. That's typically a one liner: ```lifecycle.addObserver(LifecycleObserver(this, wallet))``` (or for compose: ```val walletState by wallet.observeAsState { wallet.state }```)
-- The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse, even if a View is Observing multiple Models, only a single observer is required.
+- The fact that the **fore** observable contract has no parameter means that this view layer code is extremely sparse in non compose code, even if a View is Observing multiple Models, only a single observer is required.
 
 ## Connecting Views and Models
 
@@ -32,9 +36,16 @@ This will also enable you to observe multiple models if required
 <pre class="codesample"><code>lifecycle.addObserver(LifecycleObserver(this, wallet, account, inbox))
 </code></pre>
 
+### Connecting Views and Models in Compose
+
+For Compose UIs, simply use fore's observerAsState() extension function
+
+<pre class="codesample"><code>val walletState by wallet.observeAsState { wallet.state }
+</code></pre>
+
 ### How connecting views and models works
 
-Even if you don't use the lifecycle observer, it's still quite easy to setup the observers manually. Somewhere in the view layer (Activity/Fragment/View) you need a piece of code like this:
+For a non compose UI, even if you don't use the lifecycle observer, it's still quite easy to setup the observers manually. Somewhere in the view layer (Activity/Fragment/View) you need a piece of code like this:
 
 <!-- Tabbed code sample -->
  <div class="tab">
@@ -92,44 +103,13 @@ override fun onStop() {
 
 That's everything you need to do to get bullet proof reactive UIs in your app, everything now takes care of itself, no matter what happens to the state of the model or the rotation of the device.
 
-### <a name="boiler-plate"></a><a name="forelifecycleobserver"></a><a name="lifecycleobserver"></a>fore LifecycleObserver
-
-As mentioned above, if you want to remove more boiler plate then you can use the fore LifecycleObserver from an Activity or Fragment which will handle the adding and removing for you (it hooks on to onStart() and onStop() internally). The full code looks like this:
-
- <pre class="codesample"><code>
-class MyActivity : FragmentActivity(R.layout.activity_my), SyncableView {
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    lifecycle.addObserver(
-        LifecycleObserver(
-            this,
-            viewModel
-        )
-    )
-
-  }
-
-  override fun syncView() {
-     ...
-  }
-}
-
- </code></pre>
-
-You can see this technique in the [sample app for the persista library](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt). It's also used to observe a view model in the [clean architecture sample](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt). The point of all these techniques is to reduce view layer code to its absolute fundamentals: what things look like.
-
-### Connecting Views and Models in Compose
-
-For Compose UIs, simply use fore's observerAsState() extension function
-
-<pre class="codesample"><code>val walletState by wallet.observeAsState { wallet.state }
-</code></pre>
+> "The point of all these techniques is to reduce view layer code to its absolute fundamentals: what things look like"
 
 ### <a name="observablegroup"></a>Integrating a ViewModel
 
-The usual set up is a Fragment or Activity class observing the ViewModel state, and the ViewModel in turn observing whatever Domain models the ViewModel needs in order to create that state. Typically, you'll add those observers in the onStart and remove them in the onStop. The easiest way to do that is to use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
+A common set up is a Fragment or Activity class observing the ViewModel state, and the ViewModel in turn, observing whatever Domain models it needs. Typically, you'll add those observers in the onStart and remove them in the onStop.
+
+The easiest way to do that is to use fore's **ViewModelObservability** to add this behaviour to your ViewModel as follows:
 
 <pre class="codesample"><code>
 
@@ -161,3 +141,5 @@ class MyViewModel(
     }
 }
  </code></pre>
+
+Take a look at the [clean architecture](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardViewModel.kt) app for example use
