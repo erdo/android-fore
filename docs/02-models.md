@@ -2,9 +2,11 @@
 # Models
 There are lots of definitions of the word Model. We will follow this description: [domain model](https://en.wikipedia.org/wiki/Domain_model).
 
-In practice, model classes in MVO will mostly contain data and/or logic, they will very likely pass off tasks like network or database access to sub layers, making good use of composition. They typically employ dependency injection techniques to do that, preferably via their constructors. In MVO, the state is located in these models and accessible via quick returning getter methods or properties (usually called by thin views), it's the state of these models that is the main focus for tests.
+In practice, model classes in fore (whether they are explicitly named "Model" or not) will mostly contain data and/or logic, they will very likely pass off tasks like network or database access to sub layers, making good use of composition. They typically employ dependency injection techniques to do that, preferably via their constructors.
 
-When the model's state changes, it's the model's responsibility to call **notifyObservers()** after that change, this will inform any observers that it's now time to re-query the model for fresh data.
+Model classes manage their own state and expose it via quick returning getter methods or properties (usually called by thin views), it's the state of these models that is the single source of truth for the app, and something that can be persisted to maintain state across process death. The value of this state is also the main focus for unit tests.
+
+When the model's state changes, it's the model's responsibility to call **notifyObservers()** after that change, this will inform any observers that it's now time to re-query the model to get the current state (often to redraw a UI).
 
 > "It's the model's responsibility to call **notifyObservers()**"
 
@@ -38,7 +40,7 @@ For reference here's a check list of recommendations for the model classes, as u
 - **Avoid referencing Contexts** from your model if you can, although sometimes the design of Android makes this [awkward](https://erdo.github.io/android-fore/05-extras.html#androids-original-mistake)
 - **Prefer referencing Application over Context or Activity** if you have a choice, as that reduces the chance of a memory leak
 - Where it's reasonable, prefer the [observer](https://erdo.github.io/android-fore/03-reactive-uis.html#fore-observables) pattern over callbacks / listeners
-- In MVO, the model's current **state at any point in time is typically exposed by getters or properties**. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
+- To get the most out of fore, the model's current **state at any point in time is typically exposed by getters or properties**. These are used by the View classes to ensure they are displaying the correct data, and by the test classes to ensure the model is calculating its state correctly.
 - The **getters must return quickly**. Don't do any complicated processing here, just return data that the model should already have. i.e. front load the processing and do work in setter type methods if necessary, not the getters. You'll find similar advice applies when using a Compose based UI - the composables must be able to complete quickly.
 - You'll **save yourself the need to write a lot of tricky thread safety code** by keeping access to your models on the UI thread (or test thread), user interaction like clicks will all come through on the UI thread anyway, even in Compose. Where you need asynchronous operation for db or network access etc, make it explicit and obvious, then return to the UI thread once you are done.
 - When any data in your model changes, inside the model code call **notifyObservers()** after the state has changed.

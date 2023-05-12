@@ -2,6 +2,7 @@
  *
  * ./gradlew check
  *
+ * ./gradlew test
  * ./gradlew testDebugUnitTest
  * ./gradlew testDebugUnitTest --warning-mode all
  *

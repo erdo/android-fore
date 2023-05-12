@@ -1,17 +1,51 @@
-# <a name="somethingchanged-parameter"></a>fore API deep dive
+# <a name="somethingchanged-parameter"></a>fore deep dive
 
-fore's observer API is very simple, it's a single, parameter-less function: **somethingChanged()** which is called on the UI thread whenever the model in question has changed. The function doesn't include a parameter for the actual data that changed, so why not add that? This is the obvious question for anyone familiar with reactive streams based APIs like RxJava or Kotlin Flow, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by GreenRobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did briefly have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that adding it had *significantly increased* the amount of boiler plate and view code that had to be written.
+Much of what we are about to discuss is specific to mobile applications, the server side is a very different beast. Of course, applying best practice from one context to a totally different context without recognising the differences would be a mistake that we are going to avoid here!
 
-If you're sceptical about that - and why wouldn't you be? I'd encourage you to do a before and after comparison in a small sample app, there is nothing quite like seeing it for yourself. You could use one of the fore samples to get started [very simple app](https://github.com/erdo/persista/tree/main/example-app) or [clean modules app](https://github.com/erdo/clean-modules-sample) - make sure to consider what happens once you add more data sources that need to be observed.
+## Server side and Client side are different
+A lot of "developer advice internet" is implicitly talking about the server side. Unfortunately this advice is sometimes absorbed and repeated unthinkingly for a mobile context, without the new author realising that the prior _assumptions_ on which the advice was built, are no longer relevant in their new context.
 
-There are a few different ways to explain why reactive stream style APIs are not a good fit here, but a good starting point would be to say that firstly, if you know what a reactive stream is, and you are certain that you **want** an app architecture based on it (for whatever reason), then I'd advise you to stay with Rx or migrate to Flow! fore observers are NOT reactive streams - quite deliberately so.
+**Stateless vs Stateful** is a great example of this. Stateless microservices on the server-side have a lot going for them. While potentially less intuitive and sometimes less performant, stateless is easier to scale using cloud services, stateless can be more robust (state can be hard to recover after a system crash, on the server side which can potentially affect millions of users at once), and if the service can be designed to not even need a database, it can be significantly less expensive to maintain and meet SLAs with that service. There are therefore good reasons that a lot of "developer advice internet" is pro stateless architectures!
 
-By the way, much of what we are about to discuss is specific to mobile applications. The server side is a very different beast. Of course, blindly applying best practice from one context to a totally different context would be a beginner's mistake that we are going to avoid here! [\[1\]](#1)
+None of those considerations are applicable to a mobile client. But there are more universal state considerations that _do_ apply, no matter what the context.
 
-Anyway you might want to consider the possibility that using reactive streams to tie your architectural layers together in a mobile client app may only be providing a local maximum in terms of performance and code clarity, there is another way...
+## State
+Something that's pretty universal: if we're not careful, state (and especially duplication of state) can be a source of complexity, and therefore of bugs. That's a strong argument for having a crystal clear, single source of truth for your state.
+
+> "state and its duplication can be a significant source of complexity, and therefore of bugs"
+
+- The source of truth for state in "stateless" mobile architectures implemented with reactive streams is often "in the stream" and can be spread across multiple useCases returning Flows (potentially backed by StateFlows, SharedFlows, Channels etc, each with their own caching or replay idiosyncrasies)
+
+- If not "in the stream", the truth will be kept in network caches, databases or other data sources and re-read / parsed each time it is required (which can have a significant impact on how "sluggish" an app feels to a user - many production apps in the wild have this problem).
+
+Sharing this state with various components (UI or otherwise) can start to be problematic as soon as the app becomes more complex than a collection of simple independent pages of data - can we be sure that the whole app has the same view of state when it's being accessed via different usecase instances and from different co-routine contexts?
+
+(I dare say we can, but it's rare to encounter a project with sufficient rigor and consistency to ensure that once the number of useCases starts to balloon as they tend to, especially considering the ease with which you can switch coroutine contexts)
+
+Even _accessing_ that truth suddenly becomes non-trivial. You will at the very least need to write code that launches a coroutine to collect the Flow, and ensure you don't leak memory while doing it, your tests will also become marginally more complicated. And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream.
+
+Those fairly common situations are a strong argument against using reactive streams in a mobile app unless absolutely necessary (it's necessary when you need backpressure to handle multiple streams of asynchronous data from say an IoT device see:[reactive-streams.org](http://www.reactive-streams.org/))
+
+> "And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream"
+
+fore's approach to state is to keep the source of truth inside the relevant model classes e.g: accountModel.state.balance, internally managed, always consistent from the perspective of the UI thread, always easily and immediately _readable_ from anywhere, (and persistently stored to disk with something like a db or [PerSista](https://github.com/erdo/persista) if it's something you want to recover in the event of process-death).
+
+## Mobile's unique context
+
+The mobile context has its own, unique considerations such as:
+- mobile clients have a UI thread
+- view layers come into and out of existence from something like a device rotation (i.e. it's easy to cause memory leaks: see rxJava's checkered history with Android and memory leaks [example](https://medium.com/@scanarch/how-to-leak-memory-with-subscriptions-in-rxjava-ae0ef01ad361))
+- the devices have low processor speeds, but they have high performance requirements such that any screen "jank" significantly affects a user's perception of speed.
+
+This fits pretty well with the way that fore works. fore enables your code to operate almost exclusively in synchronous mode (i.e. on the UI thread) which means much less unnecessary suspend / co-routine theatre gets written, especially in the UI layer. The UI layers being thinner also require far less boiler plate to ensure memory leak free code. Performance is also extremely snappy as the state is available in memory for immediate rendering on a UI (and fetched or saved asynchronously, away from the view layer)
 
 ## Reactive Streams
-While we're on the subject, let's briefly detour to a discussion of reactive streams. Both RxJava and Kotlin Flow are implementations of the reactive streams initiative. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
+
+So far these docs probably seem quite anti reactive streams! but that's not the case. It's simply a plea to introduce a powerful tool like reactive streams mindfully, when it makes sense to do so, with a recognition of how it will change your code base if it's used for a purpose it is not designed for.
+
+Anyway by now I'm hoping that you're considering the possibility that using reactive streams to tie architectural layers together in a mobile client app may only be providing a local maximum in terms of performance and code clarity, and that there is another way...
+
+Actually let's backup a little first and discuss reactive streams itself (which is a term many users of RxJava of Flow are a little vague about). Both RxJava and Kotlin Flow are implementations of the reactive streams initiative. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
 
 - Observers (tell me whenever you've changed)
 - Streams (data and operators like .map .filter etc)
@@ -20,20 +54,18 @@ For some specific use cases: handling streams of changing data which you want to
 
 ### Back pressure
 
-Back pressure refers the problem of data being *produced*, faster than it is able to be *consumed*. Handling back pressure in streams of data is basically what [reactive streams](http://www.reactive-streams.org/) lives for. The needs of most android app architectures however tend to be a little more along the lines of:
+Back pressure refers to the problem of data being *produced*, faster than it is able to be *consumed*. Handling back pressure in streams of data is basically what [reactive streams](http://www.reactive-streams.org/) lives for. The needs of most android app architectures however tend to be a little more along the lines of:
 
  - connect to a network to download discreet pieces of data (_always_ on an IO thread, takes _seconds_)
  - update a UI, based on some change of state (_always_ on the UI thread, takes _milliseconds_)
 
-The timescales that these UI state changes happen in, are orders of magnitude slower than the timescales that would require back pressure management.
+The timescales that these UI state changes happen in [loading=true, (wait), loading=false], are orders of magnitude slower than the timescales that would require back pressure management.
 
-To put that another way: the **production** of data in an app (a user logs in, and a session token is fetched from the network) tends to happen in the order of **seconds**. The **consumption** of that data (the waiting spinner on the ui is changed from visible to invisible) is often a **sub-millisecond** affair.
+To put that another way: the **production** of data in an app (a user logs in, and a session token is fetched from the network) tends to happen in the order of **seconds**. The **consumption** of that data (the waiting spinner on the ui is re-rendered from visible to invisible) is often a **sub-millisecond** affair.
 
-This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example). You might wonder why on earth RxJava featured so heavily in android architectures for half a decade or so, and why Flow (another implementation of reactive streams) is now such a popular replacement 🤷 [\[2\]](#2)
+This is very obviously not a situation that reactive streams was designed to help with (unlike processing streaming video for example).
 
-### What if we just pretend?
-
-You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be asynchronous or reactive, let alone reactive streams, in the first place).[\[3\]](#3)
+If you weren't there from the beginning, you might wonder why RxJava became popular in android architectures in the first place. I have some theories about that (of course I do 😂) [\[1\]](#1)
 
 ## The fore approach
 
@@ -45,254 +77,173 @@ One of the benefits of this is that it lets you isolate asynchronous code styles
 
 The funny thing is... if you're writing an app that has a UI, much of the code that you write will be on the UI thread _anyway_.
 
-Take a very common pattern with reactive streams based android apps: an app **collecting a Flow in a ViewModel to update its UI**. That code _still_ runs on the UI thread, even though it's written with all the trappings of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
+Take a very common pattern with reactive streams based android apps: an app **collecting a Flow in a ViewModel to update its UI**. That code _still_ runs on the UI thread, even though it's written with all the theatre of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
 
-Apart from removing this pretend asynchronous code from the view layer, there are other boiler plate advantages to fore style observers...
+### What if we just pretend?
 
-## 1) Views want different things from the same model
-Usually, view layer components are going to want different things from the same model.
+You certainly _can_ treat everything as a reactive stream if you wish, and if parts of your app actually aren't a great match for reactive streams, you can (and sometimes must) have your functions return Single&lt;Whatever&gt;s. Unfortunately regular code that touches reactive streams often gets _reactive-streamified_ like this, giving it unasked-for complexity (even code that isn't, and has no need to be asynchronous or reactive, let alone reactive streams, in the first place).[\[2\]](#2)
 
-(If you've just joined us here by the way, we are using the term model as it's defined by [wikipedia](https://en.wikipedia.org/wiki/Domain_model), a software representation of a real life thing, the model can have state and/or logic. And for all this to work, it just has to be observable i.e. if its state changes, it needs to tell all its observers that its state changed. The following example models expose their state via getters, but you can make your own choices here - it makes no difference to the pattern or how fore works.)
+So consider a world where we remove this pretend asynchronous code from the view layer and strip out as much observer and memory-leak-management boiler plate as possible, it takes us closer to the fundamental minimum requirements of a UI layer: "what things look like"
 
-Take an example **AccountModel**, most views are going to want to know if the account is logged in or not, a settings page might want to display the last time the user logged in, an account page might want to know the status of the account such as ACTIVE, DORMANT, BANNED or whatever. Maybe a view will want to show all those things, or just two of them.
+> "reduce view layer code to its absolute fundamentals: what things look like"
 
-Regardless, our example model will be managing these three pieces of state
+## fore's API
 
-<pre class="codesample"><code>
-fun hasSessionToken(): Boolean
-fun getLastLoggedInTimeStampMs(): Long
-fun getAccountStatus(): Account.Status
+fore's observer API is very simple, it's a single, parameter-less function: **somethingChanged()** which is called on the UI thread whenever the model in question has changed.
 
-</code></pre>
+The function doesn't include a parameter for the actual data that changed, so why not add that? This is the obvious question for anyone familiar with reactive streams based APIs like RxJava or Kotlin Flow, or indeed anyone who worked with the messenger bus APIs that used to be popular on Android like EventBus by GreenRobot or Otto by Square. And actually, in the distant past (long before publishing) the fore Observer interface did briefly have a generic on it along the lines of Observable&lt;SomeClass&gt; which supported this behaviour. But it was removed when we realised that adding it had *significantly increased* the amount of boiler plate and view code that had to be written.
 
-All those states may change (potentially as a result of a network request completing in the background, or a notification arriving on the device etc). And if they change, the views need to update themselves immediately without us needing to do it (that's the whole point of reactive UIs after all!).
+> "adding generics to the API *significantly increases* the amount of boiler-plate required to observe multiple data sources"
 
-If we make all these things individually observable, we might choose something like RxJava observables, or LiveData, and the views will need to observe each piece of state individually. Taking LiveData as an example, the view layer will have to contain something like this:
+If you're sceptical about that - and why wouldn't you be? I'd encourage you to do a before and after comparison in a small sample app, there is nothing quite like seeing it for yourself. You could use one of the fore samples to get started [very simple app](https://github.com/erdo/persista/tree/main/example-app) or [clean modules app](https://github.com/erdo/clean-modules-sample) - make sure to consider what happens once you add more data sources that need to be observed.
 
+The reason fundamentally boils down to the fact that UI layers (ViewModels/Activities/Fragments) typically want things from more than one source (UseCase/Repository/DataSource). And if you're passing the data via your observable API, **observers will be tied to the Type**, and can't be shared across observables.
 
-<pre class="codesample"><code>
-accountModel.sessionTokenLiveData.observer(this, Observer { hasToken ->
-  //update the view based on the hasToken Boolean
+> "Observers will be tied to a Type"
+
+### LiveData
+Let's take a LiveData example (a similar issue presents itself with RxJava or Flow - or EventBus for that matter). We need a different observer instance for each type
+
+```
+emailInbox.unreadCountLiveData.observer(this, Observer { unread -> // Int
+  // update the view / presenter / viewmodel / viewState / whatever
 })
-
-accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp ->
-  //update the view based on the timeStamp Long
+accountModel.hasSessionTokenLiveData.observer(this, Observer { hasToken -> // Boolean
+  // update the view / presenter / viewmodel / viewState / whatever
 })
-
-accountModel.accountStateLiveData.observer(this, Observer { status ->
-  //update the view based on the status class
+accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp -> // Long
+  // update the view / presenter / viewmodel / viewState / whatever
 })
+accountModel.accountStateLiveData.observer(this, Observer { status -> // Enum
+  // update the view / presenter / viewmodel / viewState / whatever
+})
+weatherModel.weatherForecastLiveData.observer(this, Observer { forecast -> // String
+  // update the view / presenter / viewmodel / viewState / whatever
+})
+weatherModel.temperatureLiveData.observer(this, Observer { temperature -> // Float
+  // update the view / presenter / viewmodel / viewState / whatever
+})
+```
 
-</code></pre>
+### Flow
 
-We already learnt about how updating views in this way introduces very [hard to spot bugs](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k). But for the moment let's focus on the view layer boiler-plate that needs to be written. If you've worked with MVVM and LiveData, you probably recognise this as fairly typical.
+Let's try it with Flow
 
-None of the observables can be reused because they all have different parameter requirements, so they all have to be specified invidivually. This is what **fore** code would also look like if we had a parameter in the somethingChanged() method, luckily there is no parameter. All fore observables have exactly the same code signature, no matter what type of data is involved.
+```
+scope.launch {
+    observeUnreadCountUseCase().collect { unread -> // Int
+        // update the view / presenter / viewmodel / viewState / whatever
+    }
+    observeHasSessionTokenUseCase().collect { hasToken -> // Boolean
+        // update the view / presenter / viewmodel / viewState / whatever
+    }
+    observeLastLoggedInTimeStampUseCase().collect { timeStamp -> // Long
+        // update the view / presenter / viewmodel / viewState / whatever
+    }
+    observeAccountStatusUseCase().collect { status -> // Enum
+        // update the view / presenter / viewmodel / viewState / whatever
+    }
+    observeWeatherForecastUseCase().collect { forecast -> // String
+        // update the view / presenter / viewmodel / viewState / whatever
+    }
+    observeTemperatureUseCase().collect { temperature -> // Float
+        // update the view / presenter / viewmodel / viewState / whatever
+    }
+}
+```
 
-This is the fore equivalent of the code above (the data is accessed directly from the models from within the syncView() function)
+Both Flow and RxJava do have dedicated function implementations for combining: **two things**, **three things** etc (Flow's combine functions go up to 5 **things**).
 
-<pre class="codesample"><code>
+```
+scope.launch {
+    val combinedFlow: Flow<ViewState> = combine(
+        observeUnreadCountUseCase(),
+        observeHasSessionTokenUseCase(),
+        observeLastLoggedInTimeStampUseCase(),
+        observeAccountStatusUseCase(),
+        observeWeatherForecastUseCase(),
+    ) { unread, hasToken, timeStamp, status, forecast ->
+        ViewState (
+            unread = unread, // Int
+            hasToken = hasToken, // Boolean
+            timeStamp = timeStamp, // Long
+            status = status, // Enum
+            forecast = forecast, // String
+        )
+    }
+}
+```
+
+Even here though you can see the API slightly creaking under the weight of the Types being returned. If we stick to a maximum of 5 Flows then we're ok. But beyond that, we need to switch to the vararg function, which then provides us an Array with the type information lost, leaving us no option but to cast values
+
+```
+scope.launch {
+    val combinedFlow: Flow<ViewState> = combine(
+        observeUnreadCountUseCase(),
+        observeHasSessionTokenUseCase(),
+        observeLastLoggedInTimeStampUseCase(),
+        observeAccountStatusUseCase(),
+        observeWeatherForecastUseCase(),
+        observeTemperatureUseCase(),
+    ) { array -> // Array<Any>
+        ViewState(
+            unread = array[0] as Int,
+            hasToken = array[1] as Boolean,
+            timeStamp = array[2] as Long,
+            status = array[3] as Enum,
+            forecast = array[4] as String,
+            temperature = array[5] as Float,
+        )
+    }
+}
+```
+
+Flow isn't that bad here (if you know how to use it) but all the other issues still exist. At the end of the day it's an enormous and complicated API which is not particularly well suited, nor designed for, the simple task of reactively tieing architectural layers together in an app.
+
+*If you think this example is a little extreme by the way, at the time of writing I am part of the dev team of a fairly popular app (500k+ users), whose main UI reactively updates itself based on 7 different observable data sources*
+
+### fore
+
+fore has a slight advantage even over Flow here because of its stupidly simple API (no need to use suspend functions or manage a scope with fore)
+
+```
 lifecycle.addObserver(
-  LifecycleObserver(this, accountModel)
-)
-
-</code></pre>
-
-Now, hopefully you'll have spotted a way around this problem even without using fore (especially if you've worked with something like MVI before), and that's to have all your individual states wrapped up in a single immutable state like this:
-
-<pre class="codesample"><code>
-data class AccountState (
-    val hasSessionToken: Boolean,
-    val lastLoggedInTimeStampMs: Long,
-    val status: Account.Status,
+    LifecycleObserver(this, emailInbox, accountModel, weatherModel)
 )
 
 ...
 
-var currentState = AccountState()
-    private set
-
-</code></pre>
-
-But you have to enforce that yourself, it doesn't come automatically as a result of the api design. It also won't help if you are observing more than one model, which is the next problem...
-
-
-## 2) Views want things from more than one model
-Any non-trivial reactive UI is going to be interested in data from more than one source (all of which could change with no direct user input and this needs to be immediately reflected in the UI). It's easy to imagine a view that shows the number of unread emails, the user's current account status, and a little weather icon in a corner.
-
-Probably best not to write that management code in an Activity or a Fragment, and typically you would write a Presenter, ViewModel or Interactor to help you manage all that according to your preferences. But the problem of observing multiple things at once is still there, it just gets moved to a different class.
-
-Each model is going to have different types of state available to observe, so the view layer is going to need to manage even more observer implementations, (we'll stick with LiveData examples for brevity but the same issue presents itself with an API like RxJava's)
-
-<pre class="codesample"><code>
-emailInbox.unreadCountLiveData.observer(this, Observer { unread ->
-  //update the [view / presenter / viewmodel / viewState] based on the unread Int
-})
-
-accountModel.sessionTokenLiveData.observer(this, Observer { hasToken ->
-  //update the [view / presenter / viewmodel / viewState] based on the hasToken Boolean
-})
-
-accountModel.lastLoggedInTimeStampLiveData.observer(this, Observer { timeStamp ->
-  //update the [view / presenter / viewmodel / viewState] based on the timeStamp Long
-})
-
-accountModel.accountStateLiveData.observer(this, Observer { status ->
-  //update the [view / presenter / viewmodel / viewState] based on the status enum
-})
-
-weatherModel.weatherForecastLiveData.observer(this, Observer { forecast ->
-  //update the [view / presenter / viewmodel / viewState] based on the forecast String
-})
-
-weatherModel.temperatureLiveData.observer(this, Observer { temperature ->
-  //update the [view / presenter / viewmodel / viewState] based on the temperature int
-})
-
-weatherModel.windSpeedLiveData.observer(this, Observer { windSpeed ->
-  //update the [view / presenter / viewmodel / viewState] based on the windSpeed int
-})
-
-</code></pre>
-
-fore's API enables the observing of multiple **things** by simply specifying a list of those things: you can observe as many things as you care to list.
-
-Both Rx and Flow have operators that can **combine** observable things, so that would be your option with a reactive streams solution. You and your team do have to know about those functions & use them properly though, it's not something that comes for free due to the API design.
-
-But both Flow and RxJava need to have different dedicated function implementations for combining: **two things**, **three things** or **four things** (Flow's combine functions go up to 5 **things**, after that you need to write your own function).
-
-*If you think this is a little extreme, at the time of writing I am part of the dev team of a fairly popular app (500k+ users), whose main UI reactively updates itself based on 7 different observable data sources*
-
-When you look into the details of the reactive streams solution to this very common problem of reactive mobile UIs, it can start to feel a little hacky - (or maybe pragmatic if what you are actually doing is processing streams of real time data, of course).
-
-Here's the fore equivalent to the code above
-
-<pre class="codesample"><code>
-lifecycle.addObserver(
-  LifecycleObserver(this, emailInbox, accountModel, weatherModel)
+fun syncView(){
+    ViewState(
+        unread = emailInbox.unread,
+        hasToken = accountModel.hasSessionToken,
+        timeStamp = accountModel.lastLoggedInTimeStamp,
+        status = accountModel.status,
+        forecast = weatherModel.forecast,
+        temperature = weatherModel.temperatire,
+    )
 )
+```
 
-</code></pre>
+Once in a compose UI though, the three finally start to get close to parity
 
-Or you could use a BaseViewModel to do this (see above for the BaseViewModel code)
+```
+// LiveData
+val viewState by viewModel.viewStateLiveData.observeAsState(ViewState())
+// Flow
+val viewState by viewModel.viewStateFlow.collectAsState(ViewState())
+// Fore
+val viewState by viewModel.observeAsState { viewModel.state }
+```
 
-<pre class="codesample"><code>
-class MyViewModel(
-    private val emailInBox: EmailInBox,
-    private val accountModel: AccountModel,
-    private val weatherModel: WeatherModel
-) : BaseViewModel(emailInBox, accountModel, weatherModel) {
-  ...
-}
+[This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is getting pretty dated now, but it's worth a read for historical interest.
 
-</code></pre>
+#### <a name="1"></a> [1] Android meets reactive streams
+I think there were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless. Apart from those (no longer relevant) arguments...it seems a little uncharitable to say so, but the rx cool-juice was once pretty strong (maybe because it was difficult to master, and once you mastered it you were justifiably proud of that). I remember encountering people who thought RxJava had literally invented the observer pattern(!)
 
-This kind of code is only possible because fore separates a model's _observable nature_ from the _data that actually changed_
+And as for Kotlin Flow? Flow is a much better RxJava in Android, so if the team is already heavily invested in a reactive streams way of thinking, there is a clear mental migration path from RxJava to Flow (which also has the benefit of letting us completely avoid facing up to the sunk cost fallacy of learning reactive streams in the first place!).
 
-## Remove the parameter, remove the boilerplate
-
-Doing away with a parameter in somethingChanged() is the key innovation in **fore** that enables **any view to observe any model** or multiple models, with almost no boiler plate. It's also what powers the robustness you get from using [syncView()](https://erdo.github.io/android-fore/01-views.html#syncview), and it's what lets us write simple code like this:
-
-<pre class="codesample"><code>
-//single observer reference
-private var observer = Observer { syncView() }
-
-override fun onStart() {
-    super.onStart()
-    emailInbox.addObserver(observer)
-    accountModel.addObserver(observer)
-    weatherModel.addObserver(observer)
-    syncView() //<-- don't forget this
-}
-
-override fun onStop() {
-    super.onStop()
-    emailInbox.removeObserver(observer)
-    accountModel.removeObserver(observer)
-    weatherModel.removeObserver(observer)
-}
-
-</code></pre>
-
-Or take it further as we did with the examples above and remove almost all the boiler plate with an ObservableGroup or the fore [LifecycleObserver](https://erdo.github.io/android-fore/03-reactive-uis.html#lifecycleobserver).
-
-<pre class="codesample"><code>
-lifecycle.addObserver(LifecycleObserver(this, emailInbox, accountModel, weatherModel))
-
-</code></pre>
-
-> "reduce view layer code to its absolute fundamentals: what things look like"
-
-This lets you reduce view layer code to its absolute fundamentals: what things look like. Imagine a fairly complex reactive UI that displays if the user is logged in or not, shows the last time the user logged in, the number of unread emails, what the account status is, a weather forecast, and the current wind speed and temperature. With appropriately written, observable models, the syncView implementation for that screen would be:
-
-<pre class="codesample"><code>
-fun syncView() {
-    homepage_unreademails.text = "${emailInbox.getUnreadCount()}"
-    homepage_loggedin.text = if (accountModel.hasSessionToken()) "IN" else "OUT"
-    homepage_lastloggedin.text = LAST_LOGGED_IN_FORMATTER.format(accountModel.getLastLoggedInTimeStampMs())
-    homepage_accountstatus.text = accountModel.getStatus().name
-    homepage_weatherforecast.text = weatherModel.getForecast()
-    homepage_temperature.text = "${weatherModel.getTemperature()}"
-    homepage_windspeed.text = "${weatherModel.getWindSpeed()}"
-}
-
-</code></pre>
-
-If we used a ViewModel to constuct a ViewState (placed in between the Activity/Fragment code and the model code), the syncView() function can directly reference this single ViewState, it would have the same number of lines but it would make the code even clearer.
-
-<pre class="codesample"><code>
-fun syncView() {
-    homepage_unreademails.text = viewState.unreadCountText
-    homepage_loggedin.text = viewState.loggedInStatusText
-    homepage_lastloggedin.text = viewState.lastLoggedInText
-    homepage_accountstatus.text = viewState.accountStatusText
-    homepage_weatherforecast.text = viewState.forecastText
-    homepage_temperature.text = viewState.temperatureText
-    homepage_windspeed.text = viewState.windspeedText
-}
-
-</code></pre>
-
-[This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is worth a read, but the upshot is that adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer.
-
-It would also lead developers down the wrong path regarding how to move data about in the UI layer whilst ensuring consistency when the application is rotated etc. It sounds a little strange, but part of the benefit of using **fore** in a team is that it automatically discourages developers from making that mistake. It's almost like an automatic, invisible code review.
-
-Not having the ability to send data via the somethingChanged() function is one of the key reasons that fore UI code tends to be so compact compared with other architectures - and also why fore naturally lends itself to supporting rotation on android.
-
-
-> "adding a parameter to the somethingChanged() function would balloon the amount of code that gets written in the view layer"
-
-
-Try to get comfortable using these observers to just notify observing view code of any (unspecified) changes to the model's state (once the observing view code has been told there are changes, it will call fast returning getters on the model to find out what actually happened, redraw it's state, or whatever - if this isn't straight forward then the models you have implemented probably need to be refactored slightly.
-
-For some, this is a strange way to develop, but once you've done it a few times and you understand it, the resulting code is rock solid and very compact.
-
-#### [1]
-A lot of "developer advice internet" is implicitly talking about the server side. Unfortunately this advice is sometimes absorbed and repeated unthinkingly for a mobile context, without the new author realising that the prior _assumptions_ on which the advice was built, are no longer relevant in their new context.
-
-**Stateless vs Stateful** is a great example of this. Stateless microservices on the server-side have a lot going for them. While potentially less intuitive and sometimes less performant, stateless is easier to scale using cloud services, stateless can be more robust (state can be hard to recover after a system crash, on the server side that can potentially affect millions of users at once), and if the service can be designed to not even need a database, it will be significantly less expensive to maintain and meet SLAs with that service.
-
-None of those considerations are applicable to a mobile client app.
-
-Some considerations are universal though, like: if you're not careful, state (and especially duplication of state) can be a source of complexity, and therefore of bugs. That's a strong argument for having a crystal clear, single source of truth for your state.
-
-fore's approach is to keep that state inside the relevant model classes e.g: accountModel.state.balance, always consistent from the perspective of the UI thread, always _readable_ from anywhere - view model scopes not withstanding, (and persistently stored to disk with something like [PerSista](https://github.com/erdo/persista) if it's something you want to recover in the event of process-death).
-
-But the mobile context has its own, equally important considerations such as:
-- mobile clients have a UI thread
-- view layers come into and out of existence from something like a device rotation (i.e. it's easy to cause memory leaks: see rxJava's checkered history with Android and memory leaks [example](https://medium.com/@scanarch/how-to-leak-memory-with-subscriptions-in-rxjava-ae0ef01ad361))
-- the devices have low processor speeds, but they have high performance requirements such that 10ms vs 100ms significantly affects a user's perception of speed.
-
-When applied to a mobile context, a "stateless" approach using reactive streams might actually keep the state in the stream itself (with a StateFlow, held in a ViewModel for example), or use stateless UseCases that return Flows and have the state kept nowhere apart from in the UI, or have state kept in a network cache - which can be slow enough to cause noticeable sluggishness in a mobile app that could otherwise be instant.
-
-In addition, without a clear, single source of truth for the application's state, sharing this state with various components (UI or otherwise) can start to be problematic as soon as the app becomes more complex than a collection of simple independent pages of data. Can we be sure that the whole app is sharing the same view of state when reactive streams is providing this state via different stream instances, potentially on different threads, or in different coroutine contexts? I dare say anything is doable, and there are many way to skin a cat (some ways just leave you with slightly more scratches!)
-
-#### [2]
-There were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless.
-
-And as for Kotlin Flow? Flow is a much better RxJava in Android, so if you are already heavily invested in a reactive streams architecture, there is a clear mental migration path from RxJava to Flow
-
-#### [3]
+#### <a name="2"></a> [2] Reactive stream tentacles
 This is how reactive streams can unintentionally spread complexity throughout a code base. When this **tendency-to-spread** is combined with a large non-obvious API, and a focus on asynchronicity even when none is required it can quite easily swamp otherwise fairly trivial app projects. That risk is increased on larger projects employing developers with a mixture of skill levels, especially where there is a reasonably high turn over of developers. Keeping control of ever ballooning complexity in these situations can be a significant challenge.
 
 This is somewhat related to the famous [what color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) blog post - although that post is dealing with asynchronous code in general, which kotlin's **suspend** [handles pretty well](https://elizarov.medium.com/how-do-you-color-your-functions-a6bb423d936d). There is a parallel here though where blue is regular code, and red is reactive streams code (again though, Kotlin Flow beats RxJava hands down here. But even Flow reactive streams can be viewed as an unnecessary complication when applied to android architectural layers).
