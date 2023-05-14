@@ -15,7 +15,7 @@ co.early.fore:fore-jv-android
 
 The fore library is divided into optional packages which you can pull in independently if you want (all the packages are so small, it's not really worth it IMO). But for example, you might just want **fore-kt-core** for a kotlin only domain module if you're writing a clean architecture app ([clean modules example](https://github.com/erdo/clean-modules-sample)).
 
-**kotlin** API
+**pure kotlin** API
 ```
 co.early.fore:fore-kt-core
 co.early.fore:fore-kt-network
@@ -26,11 +26,12 @@ co.early.fore:fore-kt-network-okhttp3v4x
 **kotlin plus android** API
 ```
 co.early.fore:fore-kt-android-core
+co.early.fore:fore-kt-android-compose (versioning matches the compose compiler)
 co.early.fore:fore-kt-android-adapters
 co.early.fore:fore-kt-android-network
 ```
 
-**java** API
+**pure java** API
 ```
 co.early.fore:fore-jv-core
 co.early.fore:fore-jv-network
