@@ -1,18 +1,12 @@
 import co.early.fore.Shared
 
 plugins {
-    id("java-library")
     id("kotlin")
 }
 
-java {
-    sourceCompatibility = Shared.Android.javaVersion
-    targetCompatibility = Shared.Android.javaVersion
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = Shared.Android.javaVersion.toString()
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(Shared.Versions.jvm_toolchain))
     }
 }
 

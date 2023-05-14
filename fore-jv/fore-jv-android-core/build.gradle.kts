@@ -9,6 +9,12 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(co.early.fore.Shared.Versions.jvm_toolchain))
+    }
+}
+
 android {
     namespace = "co.early.fore.core"
 }

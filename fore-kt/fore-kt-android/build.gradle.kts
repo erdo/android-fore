@@ -12,16 +12,18 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-android {
-
-    kotlinOptions {
-        jvmTarget = Shared.Android.javaVersion.toString()
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(Shared.Versions.jvm_toolchain))
     }
+}
+
+android {
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            consumerProguardFiles("../proguard-library-consumer-network.pro")
+            consumerProguardFiles("../../proguard-library-consumer-network.pro")
         }
     }
 

@@ -11,14 +11,14 @@ object Shared {
         const val minComposeSdk = 21
         const val compileSdk = 33
         const val targetSdk = 33
-        val javaVersion = JavaVersion.VERSION_1_8
     }
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "7.4.0" // must manually change buildSrc.build version
+        const val android_gradle_plugin = "8.0.1" // must manually change buildSrc.build version
         const val kotlin_version = "1.8.21" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.6.4"
+        const val jvm_toolchain = 8
         // fore optional package dependencies
         const val kotlinx_coroutines_android = "1.6.4"
         const val androidx_lifecycle_common = "2.5.1"
@@ -66,8 +66,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.5.25" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 92
+        const val LIB_VERSION_NAME = "1.5.26" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 93
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -81,7 +81,7 @@ object Shared {
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
         const val use_published_version = false
-        const val published_fore_version_for_examples = "1.5.25"
+        const val published_fore_version_for_examples = "1.5.26"
     }
 
     object Secrets {

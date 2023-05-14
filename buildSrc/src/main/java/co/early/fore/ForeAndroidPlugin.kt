@@ -18,11 +18,6 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
 
     // android {
 
-    compileOptions {
-        sourceCompatibility = Shared.Android.javaVersion
-        targetCompatibility = Shared.Android.javaVersion
-    }
-
     compileSdk = Shared.Android.compileSdk
 
     lint {
@@ -31,18 +26,15 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
     }
 
     defaultConfig {
-
         minSdk = Shared.Android.minSdk
-
         multiDexEnabled = true
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            consumerProguardFiles("../proguard-library-consumer.pro")
+            consumerProguardFiles("../../proguard-library-consumer.pro")
         }
     }
 

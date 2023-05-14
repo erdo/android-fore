@@ -13,16 +13,15 @@ fun getTestBuildType(): String {
 
 println("[$appId testBuildType:${getTestBuildType()}]")
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
 
 android {
 
     namespace = appId
-
-    compileOptions {
-        sourceCompatibility = Shared.Android.javaVersion
-        targetCompatibility = Shared.Android.javaVersion
-    }
-
     compileSdk = Shared.Android.compileSdk
 
     defaultConfig {

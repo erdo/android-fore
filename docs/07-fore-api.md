@@ -20,11 +20,11 @@ Something that's pretty universal: if we're not careful, state (and especially d
 
 Sharing this state with various components (UI or otherwise) can start to be problematic as soon as the app becomes more complex than a collection of simple independent pages of data - can we be sure that the whole app has the same view of state when it's being accessed via different usecase instances and from different co-routine contexts?
 
-(I dare say we can, but it's rare to encounter a project with sufficient rigor and consistency to ensure that once the number of useCases starts to balloon as they tend to, especially considering the ease with which you can switch coroutine contexts)
+(I dare say we can, but it's rare to encounter a project with sufficient rigor and consistency to ensure that - once the number of useCases starts to balloon, and especially considering the ease with which you can switch coroutine contexts)
 
-Even _accessing_ that truth suddenly becomes non-trivial. You will at the very least need to write code that launches a coroutine to collect the Flow, and ensure you don't leak memory while doing it, your tests will also become marginally more complicated. And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream.
+Even _accessing_ that truth suddenly becomes non-trivial. If you want to check a Boolean over a reactive stream, you will at the very least need to write code that launches a coroutine, chooses an appropriate dispatcher, and collects a Flow. You'll also need to ensure you don't accidentally leak memory while doing that, and your tests will also become marginally more complicated. And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream.
 
-Those fairly common situations are a strong argument against using reactive streams in a mobile app unless absolutely necessary (it's necessary when you need backpressure to handle multiple streams of asynchronous data from say an IoT device see:[reactive-streams.org](http://www.reactive-streams.org/))
+Those fairly common situations are a good argument against using reactive streams in a mobile app unless absolutely necessary (it's necessary when you need backpressure to handle multiple streams of asynchronous data from say an IoT device see:[reactive-streams.org](http://www.reactive-streams.org/))
 
 > "And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream"
 
@@ -77,7 +77,7 @@ One of the benefits of this is that it lets you isolate asynchronous code styles
 
 The funny thing is... if you're writing an app that has a UI, much of the code that you write will be on the UI thread _anyway_.
 
-Take a very common pattern with reactive streams based android apps: an app **collecting a Flow in a ViewModel to update its UI**. That code _still_ runs on the UI thread, even though it's written with all the theatre of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
+Take a very common pattern with reactive streams based android apps: an app **collecting a Flow in a ViewModel to update its UI**. That code _still_ runs on the UI thread, even though it's written with all the trappings of asynchronous reactive streams 🧐 Android prevents you from shooting yourself in the foot here - for a change ;) and viewModelScope is bound to the UI thread - this is why you can update the UI from inside it without needing to switch to the UI thread first. (It's the same reason that fore's syncView() is always called from the UI thread).
 
 ### What if we just pretend?
 
@@ -152,7 +152,7 @@ scope.launch {
 }
 ```
 
-Both Flow and RxJava do have dedicated function implementations for combining: **two things**, **three things** etc (Flow's combine functions go up to 5 **things**).
+Both Flow and RxJava do have dedicated function implementations for combining: **two things**, **three things** etc (Flow's combine functions go up to **five things**).
 
 ```
 scope.launch {
@@ -198,13 +198,13 @@ scope.launch {
 }
 ```
 
-Flow isn't that bad here (if you know how to use it) but all the other issues still exist. At the end of the day it's an enormous and complicated API which is not particularly well suited, nor designed for, the simple task of reactively tieing architectural layers together in an app.
+Flow isn't that bad here (if you know how to use it, and can stomach the casting) but all the other issues still exist. At the end of the day it's an enormous and complicated API which is not particularly well suited, nor designed for, the simple task of reactively tieing architectural layers together in an app.
 
 *If you think this example is a little extreme by the way, at the time of writing I am part of the dev team of a fairly popular app (500k+ users), whose main UI reactively updates itself based on 7 different observable data sources*
 
 ### fore
 
-fore has a slight advantage even over Flow here because of its stupidly simple API (no need to use suspend functions or manage a scope with fore)
+Even here, fore has a slight advantage over Flow because of fore's stupidly simple API (no need to use suspend functions or manage a scope with fore, and of course no need for casting)
 
 ```
 lifecycle.addObserver(
@@ -239,12 +239,13 @@ val viewState by viewModel.observeAsState { viewModel.state }
 [This section](https://dev.to/erdo/tutorial-android-fore-basics-1155#now-for-the-really-cool-stuff) of the dev.to tutorial on fore basics is getting pretty dated now, but it's worth a read for historical interest.
 
 #### <a name="1"></a> [1] Android meets reactive streams
-I think there were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless. Apart from those (no longer relevant) arguments...it seems a little uncharitable to say so, but the rx cool-juice was once pretty strong (maybe because it was difficult to master, and once you mastered it you were justifiably proud of that). I remember encountering people who thought RxJava had literally invented the observer pattern(!)
+I think there were a few reasons that RxJava exploded in popularity when it arrived on the android scene. Firstly: every one hated AsyncTask (although you could always wrap it, and once you were able to [give it a lamda interface](https://erdo.github.io/android-fore/04-more-fore.html#asynctasks-with-lambdas) it was actually pretty ok - but not many people were aware you could do that). The second often stated reason was that it could help prevent "callback-hell", there are some pretty decent ways of [handling that](https://dev.to/erdo/intro-to-eithers-in-android-2om9#so-you-said-eithers-were-good) in kotlin nowadays regardless. Apart from those (no longer relevant) arguments...it seems a little uncharitable to say so, but the rx cool-juice was once pretty strong (maybe because it was difficult to master, and once you mastered it you were justifiably proud of that).
 
-And as for Kotlin Flow? Flow is a much better RxJava in Android, so if the team is already heavily invested in a reactive streams way of thinking, there is a clear mental migration path from RxJava to Flow (which also has the benefit of letting us completely avoid facing up to the sunk cost fallacy of learning reactive streams in the first place!).
+There was also a serious dearth of knowledge around at the time, maybe because android was so new, I remember encountering people who thought RxJava had literally invented the observer pattern(!)
+
+And as for Kotlin Flow? Flow is a much better RxJava in Android, so if the team is already heavily invested in a reactive streams way of thinking, there is a clear mental migration path from RxJava to Flow (which also has the benefit of letting us completely avoid facing up to the sunk cost of learning reactive streams in the first place!).
 
 #### <a name="2"></a> [2] Reactive stream tentacles
 This is how reactive streams can unintentionally spread complexity throughout a code base. When this **tendency-to-spread** is combined with a large non-obvious API, and a focus on asynchronicity even when none is required it can quite easily swamp otherwise fairly trivial app projects. That risk is increased on larger projects employing developers with a mixture of skill levels, especially where there is a reasonably high turn over of developers. Keeping control of ever ballooning complexity in these situations can be a significant challenge.
 
-This is somewhat related to the famous [what color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) blog post - although that post is dealing with asynchronous code in general, which kotlin's **suspend** [handles pretty well](https://elizarov.medium.com/how-do-you-color-your-functions-a6bb423d936d). There is a parallel here though where blue is regular code, and red is reactive streams code (again though, Kotlin Flow beats RxJava hands down here. But even Flow reactive streams can be viewed as an unnecessary complication when applied to android architectural layers).
-
+This is somewhat related to the famous [what color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) blog post - although that post is dealing with asynchronous code in general. There is a parallel here though where blue is regular code, and red is reactive streams code.
