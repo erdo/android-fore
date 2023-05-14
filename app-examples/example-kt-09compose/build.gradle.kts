@@ -17,17 +17,23 @@ fun getTestBuildType(): String {
 
 println("[$appId testBuildType:${getTestBuildType()}]")
 
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(Shared.Versions.jvm_toolchain))
+    }
+}
 
 android {
 
     namespace = appId
-
-    compileOptions {
-        sourceCompatibility = Shared.Android.javaVersion
-        targetCompatibility = Shared.Android.javaVersion
-    }
-
     compileSdk = Shared.Android.compileSdk
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Shared.Versions.composeCompiler
+    }
 
     defaultConfig {
         applicationId = appId
@@ -61,15 +67,6 @@ android {
     lint {
         abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
-    }
-    kotlinOptions {
-        jvmTarget = Shared.Android.javaVersion.toString()
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Shared.Versions.composeCompiler
     }
 }
 
