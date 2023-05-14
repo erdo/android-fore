@@ -1,5 +1,7 @@
 /**
  *
+ * ./release.sh ui|unit|both
+ *
  * ./gradlew check
  *
  * ./gradlew test
