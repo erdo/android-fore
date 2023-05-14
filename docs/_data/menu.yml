@@ -3,8 +3,8 @@
   subitems:
     - text: Quick Start
       url: /#quick-start
-    - text: License
-      url: /#license
+    - text: Intro
+      url: /#current-status
 - text: MVO
   url: /00-architecture.html
   subitems:

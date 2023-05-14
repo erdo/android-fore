@@ -6,7 +6,7 @@
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
-[![circleci](https://circleci.com/gh/erdo/android-fore/tree/master.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/master){: .float-left}
+[![circleci](https://circleci.com/gh/erdo/android-fore/tree/main.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/main){: .float-left}
 
 <br/>
 <br/>
@@ -105,9 +105,9 @@ This is the kind of challenge that the observer pattern (see the GoF book for mo
 
 At this point, you might be thinking that fore is a reactive streams implementation like Rx or Kotlin Flow. In fact (other than the observer pattern) fore and reactive streams have very little to do with each other, and it's perfectly possible to find them both in the same project.
 
-While connecting architectural layers with reactive streams is often done, it usually (always?) results in more boiler plate when compared with a fore style solution. Plus this additional code (when it appears in a view layer) needs to be aware of lifecycle and threading issues which are only present in view layers. This boilerplate difference becomes steadily more apparent as app complexity increases (this explains [why](https://erdo.github.io/android-fore/07-fore-api.html#somethingchanged-parameter)).
+While connecting architectural layers with reactive streams is a very common technique, it almost always results in more boiler plate when compared with a fore style solution [\[1\]](#1). Plus this additional code (when it appears in a view layer) needs to be aware of lifecycle and threading issues which are only present in view layers. This difference becomes steadily more apparent as app complexity increases.
 
-On the other hand, asynchronously processing real time data io with back pressure handling would be a natural fit for something like Rx or Flow (that is basically what [reactive streams](http://www.reactive-streams.org/) lives for). Trying to do that with a fore observable would be pointless.
+On the other hand, asynchronously processing real time data IO with back pressure handling would be a natural fit for something like Rx or Flow (that is basically what [reactive streams](http://www.reactive-streams.org/) lives for). Trying to do that with a fore observable would be pointless.
 
 **fore**'s observable classes basically let you **make anything observable** from the perspective of the UI thread (usually it's classes in the domain layer or viewModels that are made **observable**, and UI components like activities, fragments or custom views do the **observing**).
 
@@ -143,7 +143,7 @@ class Wallet: Observable by ObservableImp() {
 }
  </code></pre>
 
-- Wallet is the single source of truth for the state of the wallet (duh)
+- Wallet is the single source of truth for the state of the wallet
 - Wallet exposes that (read only) state, through properties or getters (it's up to you how you want to write your code)
 - You call Wallet on the UI thread, and functions are expected to return immediately (asynchronous code is managed internally, there is no need to expose it to the outside world)
 - Wallet doesn't know about UI, or care if it has any observers or not
@@ -206,6 +206,9 @@ Most of the sample apps take a minimalist approach to architecture (though they 
 The most recent fore sample comes from the [fore and Compose article](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) on dev.to which covers the basics of migrating a tick-tac-toe app from MVP to Compose.
 
 If you have a question about the best way to achieve what you want with fore, consider opening an issue (even better, a stackoverflow question which you can link to from an issue). Also, if you want to write an article related to fore, if you open an issue about it, we might include a link to it from the docs
+
+#### <a name="1"></a> [1] Why do we care about boiler-plate?
+Boiler plate dilutes code which is implementing requirements, in other words it gets in the way and makes it harder to see what the code is actually doing. It can distract developers, and if it gets really bad it can even fool developers into thinking things are more difficult than they really are. It's generally better to have less boiler-plate, but developers also don't tend to like things that work by "magic" either so the ideal tends to be minimal boiler plate, that works in an obvious way.
 
 ## Sample Apps
 
