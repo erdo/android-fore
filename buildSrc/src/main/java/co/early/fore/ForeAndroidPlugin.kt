@@ -34,7 +34,7 @@ internal fun Project.configureAndroid() = this.extensions.getByType<LibraryExten
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            consumerProguardFiles("../proguard-library-consumer.pro")
+            consumerProguardFiles("../../proguard-library-consumer.pro")
         }
     }
 

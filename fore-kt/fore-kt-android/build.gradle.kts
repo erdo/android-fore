@@ -23,7 +23,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            consumerProguardFiles("../proguard-library-consumer-network.pro")
+            consumerProguardFiles("../../proguard-library-consumer-network.pro")
         }
     }
 
