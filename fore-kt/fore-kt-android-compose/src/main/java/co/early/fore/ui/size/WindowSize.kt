@@ -1,11 +1,7 @@
 package co.early.fore.ui.size
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.*
-import androidx.window.layout.WindowInfoTracker
-import androidx.window.layout.WindowMetricsCalculator
 
 data class WindowSize(
     val width: Width = Width.Medium,
