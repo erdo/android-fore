@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.26](https://img.shields.io/badge/central-1.5.26-green.svg){: .float-left}
+![central-1.6.0](https://img.shields.io/badge/central-1.6.0-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -11,12 +11,14 @@
 <br/>
 <br/>
 
-**fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
+The main principle behind **fore**: *drive your app by observing state*. This works well with UDF style apps or clean architecture. And with modern reactive UI frameworks like Compose, observing state becomes even more natural.
+
+Trying to use **fore** observers without understanding the practical differences between state driven and event driven apps can be confusing at first, here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
 
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.26")
+implementation("co.early.fore:fore-kt-android:1.6.0")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -25,7 +27,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.4.7")
+implementation("co.early.fore:fore-kt-android-compose:1.4.8")
 ```
 (The versioning matches the composeCompiler version, but the versions are interchangeable)
 
@@ -175,7 +177,9 @@ Or you can use the Compose equivalent:
 val walletState by wallet.observeAsState { wallet.currentState }
 ```
 
-All that's left to do now is to use the state in your **compose function**, or implement **syncView()** in your activity/fragment/view as detailed in the intro.
+All that's left to do for a completely reactive UI is to use the state in your **compose function**, or implement **syncView()** in your activity/fragment/view as detailed in the intro.
+
+Any code that needs to empty the wallet calls **walletModel.emptyWallet()** and that's it. No manual refreshing, no getting contexts, no rotation issues or memory leaks. Just rock solid, performant UIs that update themselves instantly
 
 ### Motivation
 

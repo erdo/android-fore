@@ -22,7 +22,7 @@ dependencies {
   //implementation("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
   implementation("com.android.tools.build:gradle:8.0.1")
   //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
+  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
 
   //for custom plugins
   implementation(gradleApi())
