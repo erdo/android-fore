@@ -179,16 +179,3 @@ sealed class Aspect {
         }
     }
 }
-
-//
-//fun Activity.deleteme(){
-//
-//    androidx.window.core.layout.compute
-//
-//    val layoutInfo by WindowInfoTracker.getOrCreate(this)
-//        .windowLayoutInfo(this).collectAsState(
-//            initial = null
-//        )
-//    val windowMetrics = WindowMetricsCalculator.getOrCreate()
-//        .computeCurrentWindowMetrics(this)
-//}
