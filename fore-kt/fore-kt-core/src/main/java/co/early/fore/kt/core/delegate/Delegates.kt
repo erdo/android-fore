@@ -79,5 +79,40 @@ class Fore {
         fun getSystemTimeWrapper(specified: SystemTimeWrapper? = null) : SystemTimeWrapper {
             return specified ?: delegate.systemTimeWrapper
         }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).e()
+         */
+        fun e(message: String){
+            delegate.logger.e(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).w()
+         */
+        fun w(message: String){
+            delegate.logger.w(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).i()
+         */
+        fun i(message: String){
+            delegate.logger.i(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).d()
+         */
+        fun d(message: String){
+            delegate.logger.d(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).w()
+         */
+        fun v(message: String){
+            delegate.logger.w(message)
+        }
     }
 }

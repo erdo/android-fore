@@ -89,9 +89,7 @@ class ObservableImp(
                 Fore.getLogger(logger).w(
                     "You have tried to remove an observer that wasn't added in the first place. This is almost certainly an error and " +
                             "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
-                            "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()). Be careful with double-colon " +
-                            "references in Kotlin: val observer = Observer { doStuffOnChange } will work, val observer = ::doStuffOnChange() " +
-                            "will NOT work, but it will compile."
+                            "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow())"
                 )
             }
         }
@@ -129,7 +127,7 @@ class ObservableImp(
                 val errorMessage = "\nIt looks like you are running in a non-android module\n" +
                         "If this is intentional, you will need to specify a dispatcher in the\n" +
                         "constructor, we'd recommend Dispatchers.Main.immediate\n" +
-                        "If this is NOT intentional, move this code to a module that supports\n" +
+                        "If this is NOT intentional, move your code to a module that supports\n" +
                         "Dispatchers.Main.immediate"
                 Fore.getLogger(logger).e(errorMessage)
                 throw IllegalArgumentException(errorMessage)

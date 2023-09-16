@@ -28,7 +28,8 @@ import co.early.fore.kt.core.delegate.Fore
  *   if (BuildConfig.DEBUG) {
  *       Fore.setDelegate(DebugDelegateDefault("foo_"))
  *   }
- * ``` (and in that case you would filter your logs on "foo_" and to Debug level)
+ * ```
+ * (and in that case you would filter your logs on "foo_" and to Debug level)
  *
  * There is a sample app that you can use to investigate this behaviour (and the behaviour
  * of Flow.collectAsState and LiveData.observeAsState here: https://github.com/erdo/compose-observe-as-state-explorer)

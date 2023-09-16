@@ -30,6 +30,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Shared.Versions.composeCompiler
@@ -84,17 +85,16 @@ dependencies {
     implementation("co.early.persista:persista:${Shared.Versions.perSista}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Shared.Versions.kotlinxSerializationJson}")
 
-    // design
-    implementation("androidx.compose.material3:material3:${Shared.Versions.material3}")
-
     // compose
     implementation("androidx.activity:activity-compose:${Shared.Versions.activityCompose}")
-    implementation("androidx.compose.ui:ui:${Shared.Versions.composeUi}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${Shared.Versions.composeUi}")
-    implementation("androidx.compose.ui:ui-tooling:${Shared.Versions.composeUi}")
-    debugImplementation("androidx.compose.ui:ui-tooling-preview:${Shared.Versions.composeUi}")
-    debugImplementation("androidx.compose.ui:ui-tooling:${Shared.Versions.composeUi}")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:${Shared.Versions.composeUi}")
+    implementation(platform("androidx.compose:compose-bom:${Shared.Versions.composeBom}"))
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //testing
     testImplementation("junit:junit:${Shared.Versions.junit}")

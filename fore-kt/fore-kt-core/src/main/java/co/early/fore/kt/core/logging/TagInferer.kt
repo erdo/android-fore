@@ -12,7 +12,7 @@ class TagInfererImpl : TagInferer {
         val trace = Throwable().stackTrace
         return if (trace.size > 3) {
             extractClassName(trace[3]).let {
-                if (it == "ObservableImp" && trace.size > 4){
+                if ((it == "ObservableImp" || it == "Fore\$Companion") && trace.size > 4){
                     extractClassName(trace[4])
                 } else {
                     it

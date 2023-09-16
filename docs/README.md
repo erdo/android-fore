@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.5.26](https://img.shields.io/badge/central-1.5.26-green.svg){: .float-left}
+![central-1.6.0](https://img.shields.io/badge/central-1.6.0-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -11,12 +11,14 @@
 <br/>
 <br/>
 
-**fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
+The main principle behind **fore**: *drive your app by observing state*. This works well with UDF style apps or clean architecture. And with modern reactive UI frameworks like Compose, observing state becomes even more natural.
+
+Trying to use **fore** observers without understanding the practical differences between state driven and event driven apps can be confusing at first, here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
 
 ## Quick Start
 
 ```
-implementation("co.early.fore:fore-kt-android:1.5.26")
+implementation("co.early.fore:fore-kt-android:1.6.0")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -25,7 +27,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.4.7")
+implementation("co.early.fore:fore-kt-android-compose:1.4.8")
 ```
 (The versioning matches the composeCompiler version, but the versions are interchangeable)
 
@@ -33,9 +35,9 @@ implementation("co.early.fore:fore-kt-android-compose:1.4.7")
 
 Since fore was first published back in 2017, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
 
-fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-android-compose** is where most of the development happens nowadays
-
 **fore v2.0** will have no major API changes. To prepare for it, just make sure to update any older deprecated functions with their replacements - the deprecated code will finally get removed in 2.0 (this applies mainly to the non-core packages)
+
+fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-android-compose** is where most of the development happens nowadays
 
 ## New to fore
 
@@ -175,7 +177,9 @@ Or you can use the Compose equivalent:
 val walletState by wallet.observeAsState { wallet.currentState }
 ```
 
-All that's left to do now is to use the state in your **compose function**, or implement **syncView()** in your activity/fragment/view as detailed in the intro.
+All that's left to do for a completely reactive UI is to use the state in your **compose function**, or implement **syncView()** in your activity/fragment/view as detailed in the intro.
+
+Any code that needs to empty the wallet calls **walletModel.emptyWallet()** and that's it. No manual refreshing, no getting contexts, no rotation issues or memory leaks. Just rock solid, performant UIs that update themselves instantly
 
 ### Motivation
 
@@ -187,7 +191,7 @@ Read more about the [MVO](https://erdo.github.io/android-fore/00-architecture.ht
 
 There is often a tendency in business requirements towards complexity, the longer a project exists, the more complex it becomes. For an android app to remain maintainable over a period of years, it needs to be able to absorb this complexity without too much damage to the code base. So if there was one guiding principle followed when developing fore and its techniques, it was probably: *complexity is the enemy*.
 
-Simple != Easy but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
+It's a paradox that writing complicated code is easy (it's the usual default for a first iteration). Discovering the simple implementation for the same set of requirements is a bit of an art - but once it's achieved, progress can rapidly gain pace, and of course bugs are less likely in a code base that is clearer. So simple code is not easy to achieve, but fore aims to get you and your team to Simple (and performant) as quickly as possible so you can spend more time writing features and less time fixing bugs.
 
 [gmk57](https://gmk57.medium.com/) on medium forwarded me a great [comment](https://medium.com/@a.artikov/i-in-my-opinion-this-solution-is-over-complicated-77ce684a4014) which I think applies here: **_In quantum physics there is an effect where observing of a system changes properties of this system_**. That complication is something we are explicity avoiding with fore (the things being observed with fore don't know or even care what is observing them). If you do want to link your UI state to some app behaviour though, that's as easy as: ```onResume(){gpsTracker.start()}``` for example. It doesn't require you to manage any streams of data in order to do that (the fore observers will continue to ensure that the UI reflects the current app state regardless).
 

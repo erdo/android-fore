@@ -4,6 +4,8 @@ import android.app.Activity
 import android.graphics.Rect
 import android.os.Build
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.platform.LocalConfiguration
@@ -12,6 +14,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.min
 import androidx.window.layout.WindowMetricsCalculator
+
+val LocalForeWindowSize =
+    compositionLocalOf<WindowSize> { error("To access LocalForeWindowSize, your compose code must be wrapped in a ForeWindowSize{} block, we'd suggest somewhere high up in the UI tree/hierarchy, just inside setContent{}") }
 
 @Composable
 fun Activity.rememberWindowSize(includeAlmostSquareAspect: Boolean = true): WindowSize {
@@ -64,5 +69,12 @@ fun DpSize.minimumDimension(): Dp {
 private fun Activity.rememberWindowMetrics(): Rect {
     return remember(LocalConfiguration.current) {
         WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this).bounds
+    }
+}
+
+@Composable
+fun Activity.ForeWindowSize(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalForeWindowSize provides rememberWindowSize()) {
+        content()
     }
 }

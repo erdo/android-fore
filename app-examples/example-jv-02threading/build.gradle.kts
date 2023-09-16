@@ -57,6 +57,9 @@ android {
         abortOnError = true
         lintConfig = File(project.rootDir, "lint-example-apps.xml")
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
