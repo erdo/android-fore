@@ -1,10 +1,10 @@
 - text: Main Readme
   url: /
   subitems:
+    - text: Intro
+      url: /#new-to-fore
     - text: Quick Start
       url: /#quick-start
-    - text: Intro
-      url: /#current-status
 - text: MVO
   url: /00-architecture.html
   subitems:

@@ -24,7 +24,7 @@ Sharing this state with various components (UI or otherwise) can start to be pro
 
 Even _accessing_ that truth suddenly becomes non-trivial. If you want to check a Boolean over a reactive stream, you will at the very least need to write code that launches a coroutine, chooses an appropriate dispatcher, and collects a Flow. You'll also need to ensure you don't accidentally leak memory while doing that, and your tests will also become marginally more complicated. And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream.
 
-Those fairly common situations are a good argument against using reactive streams in a mobile app unless absolutely necessary (it's necessary when you need backpressure to handle multiple streams of asynchronous data from say an IoT device see:[reactive-streams.org](http://www.reactive-streams.org/))
+Those fairly common situations are a good argument against using reactive streams in a mobile app unless absolutely necessary (it's necessary when you need **backpressure**. For example, to handle multiple streams of asynchronous data from say an IoT device see:[reactive-streams.org](http://www.reactive-streams.org/))
 
 > "And this tax is being paid, for no particular reason other than deciding to access state via a reactive stream"
 
@@ -37,7 +37,7 @@ The mobile context has its own, unique considerations such as:
 - view layers come into and out of existence from something like a device rotation (i.e. it's easy to cause memory leaks: see rxJava's checkered history with Android and memory leaks [example](https://medium.com/@scanarch/how-to-leak-memory-with-subscriptions-in-rxjava-ae0ef01ad361))
 - the devices have low processor speeds, but they have high performance requirements such that any screen "jank" significantly affects a user's perception of speed.
 
-This fits pretty well with the way that fore works. fore enables your code to operate almost exclusively in synchronous mode (i.e. on the UI thread) which means much less unnecessary suspend / co-routine theatre gets written, especially in the UI layer. The UI layers being thinner also require far less boiler plate to ensure memory leak free code. Performance is also extremely snappy as the state is available in memory for immediate rendering on a UI (and fetched or saved asynchronously, away from the view layer)
+This fits pretty well with the way that fore works. fore enables your code to operate almost exclusively in synchronous mode (i.e. on the UI thread) which means much less unnecessary suspend / co-routine theatre gets written, especially in the UI layer. The UI layers being thinner also require far less boiler plate to ensure memory leak free code. Performance is also extremely snappy as the state tends to be available in memory for immediate rendering on a UI (and fetched or saved asynchronously, away from the view layer)
 
 ## Reactive Streams
 
@@ -53,13 +53,14 @@ Actually let's backup a little first and discuss reactive streams itself (which 
 For some specific use cases: handling streams of changing data which you want to process on various threads (like the raw output of an IoT device for example) reactive streams is a natural fit. That's especially true when it comes to **back pressure**.
 
 ### Back pressure
+### Back pressure
 
 Back pressure refers to the problem of data being *produced*, faster than it is able to be *consumed*. Handling back pressure in streams of data is basically what [reactive streams](http://www.reactive-streams.org/) lives for. The needs of most android app architectures however tend to be a little more along the lines of:
 
  - connect to a network to download discreet pieces of data (_always_ on an IO thread, takes _seconds_)
- - update a UI, based on some change of state (_always_ on the UI thread, takes _milliseconds_)
+ - update a UI, based on some event or state (_always_ on the UI thread, takes _milliseconds_)
 
-The timescales that these UI state changes happen in [loading=true, (wait), loading=false], are orders of magnitude slower than the timescales that would require back pressure management.
+The timescales that these UI changes happen in [loading=true, (wait), loading=false], are orders of magnitude slower than the timescales that would require back pressure management.
 
 To put that another way: the **production** of data in an app (a user logs in, and a session token is fetched from the network) tends to happen in the order of **seconds**. The **consumption** of that data (the waiting spinner on the ui is re-rendered from visible to invisible) is often a **sub-millisecond** affair.
 
@@ -69,7 +70,7 @@ If you weren't there from the beginning, you might wonder why RxJava became popu
 
 ## The fore approach
 
-Those two concepts we mentioned above (Observers / Streams) can be treated separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ . And that's what fore does - it deals exclusively with the first, letting you handle the second however you wish. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Something&gt;s or Flow&lt;Something&gt;s won't slowly spread throughout your code base unnecessarily.
+Those two concepts we mentioned above (Observers / Streams) can be treated separately. We can consider a piece of code's _observable nature_ separate to the _data that actually changed_ . And that's what fore does - it deals exclusively with the first, letting you handle the second however you wish. This means your function signatures don't have to change, you can continue returning a Boolean if that's what you need to do, and Observable&lt;Boolean&gt;s or Flow&lt;Boolean&gt;s won't slowly spread throughout your code base unnecessarily.
 
 One of the benefits of this is that it lets you isolate asynchronous code styles, to code that actually needs to be asynchronous (db access, network connections, calculation work etc). The rest of the code remains explicitly synchronous, on the UI thread, and highly predictable / testable because of it.
 
@@ -200,7 +201,7 @@ scope.launch {
 
 Flow isn't that bad here (if you know how to use it, and can stomach the casting) but all the other issues still exist. At the end of the day it's an enormous and complicated API which is not particularly well suited, nor designed for, the simple task of reactively tieing architectural layers together in an app.
 
-*If you think this example is a little extreme by the way, at the time of writing I am part of the dev team of a fairly popular app (500k+ users), whose main UI reactively updates itself based on 7 different observable data sources*
+*If you think this example is a little extreme by the way, at the time of writing I am part of the dev team of a fairly popular app (a million active users or so), whose main UI reactively updates itself based on 7 different observable data sources*
 
 ### fore
 

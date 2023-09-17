@@ -11,11 +11,7 @@
 <br/>
 <br/>
 
-The main principle behind **fore**: *drive your app by observing state*. This works well with UDF style apps or clean architecture. And with modern reactive UI frameworks like Compose, observing state becomes even more natural.
-
-Trying to use **fore** observers without understanding the practical differences between state driven and event driven apps can be confusing at first, here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
-
-## Quick Start
+**fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ```
 implementation("co.early.fore:fore-kt-android:1.6.0")
@@ -31,6 +27,18 @@ implementation("co.early.fore:fore-kt-android-compose:1.4.8")
 ```
 (The versioning matches the composeCompiler version, but the versions are interchangeable)
 
+## New to fore
+
+The main principle behind **fore**: *drive your app by observing state*
+
+This works well with UDF style apps or clean architecture for example, and with modern reactive UI frameworks like Compose, observing state becomes even more natural.
+
+Diving straight into **fore** is unlikely to be optimal without first being clear about the practical differences between _state driven_ and _event driven_ code. Many legacy apps drive their UIs primarily from events (or state _changes_: state changes being analogous to events). The UI layer code often has a sequence to it: show spinner, hide spinner, show data.
+
+**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code's only job is to mirror the state of the domain (sometimes the state of the view model). It's a subtle difference. Pre-Compose it results in comically tiny UI layer code. In a Compose world it helps you take full advantage of what Compose is great at: observing state, and working out the state changes for you.
+
+Here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
+
 ## Current status
 
 Since fore was first published back in 2017, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
@@ -39,13 +47,13 @@ Since fore was first published back in 2017, the core code has proven pretty sta
 
 fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-android-compose** is where most of the development happens nowadays
 
-## New to fore
+## Quick Start
 
 **fore** is a small library, plus a selection of techniques. Its main job is to reactively tie together architectural layers in the safest, most de-coupled and low boiler plate way possible.
 
-It doesn't dictate any particular architecture (presentation layers observing changes that originate in other layers is a requirement of many different reactive architectures).
+It doesn't dictate any particular architecture (presentation layers observing other layers is a requirement of many different reactive architectures).
 
-For instance in a clean architecture app, you could create a reactive UI which uses fore observers to update itself based on changes that originate in the domain layer.
+For instance in a clean architecture app, you could create a reactive UI which uses fore observers to update itself based on state that originates in the domain layer.
 
 
 The quickest integration (from an Activity say) - observe your model(s):
@@ -74,7 +82,7 @@ override fun syncView() {
     }
 }
 ```
-Full examples: [here](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt)
+Examples: [here](https://github.com/erdo/persista/blob/main/example-app/src/main/java/foo/bar/example/ui/wallet/WalletsActivity.kt) and [here](https://github.com/erdo/clean-modules-sample/blob/main/app/ui/src/main/java/foo/bar/clean/ui/dashboard/DashboardActivity.kt)
 
 For a **Compose UI**, it looks like this:
 
@@ -90,7 +98,7 @@ fun MyScreen(
     
 }
 ```
-Full example: [here](https://github.com/erdo/compose-windowsize)
+Example: [here](https://github.com/erdo/compose-windowsize/blob/d4812822650367c776d62aa8d911784d94ff60ea/app/src/main/java/foo/bar/compose/ui/screens/home/HomeScreen.kt#L39) or [here](https://github.com/erdo/fore-mvp-compose-tutorial/blob/93d5eedb372ec755ef754fd186cacc76bfc198c4/app/src/main/java/foo/bar/compose/ui/tictactoe/TicTacToeActivityCompose.kt#L65)
 
 Fore's observeAsState function takes into account both the lifecycle of the Activity/Fragment **and** the composition state of the composable (i.e. if it has been launched or disposed). That means it’s safe to use whether you have a single Activity architecture hosting all of your composables, or you have composables that are spread across multiple activities.
 
