@@ -33,9 +33,9 @@ The main principle behind **fore**: *drive your app by observing state*
 
 This works well with UDF style apps or clean architecture for example, and with modern reactive UI frameworks like Compose, observing state becomes even more natural.
 
-Diving straight into **fore** is unlikely to be optimal without first being clear about the practical differences between _state driven_ and _event driven_ code. Many legacy apps drive their UIs primarily from events (or state _changes_: state changes being analogous to events). The UI layer code often has a sequence to it: show spinner, hide spinner, show data.
+Diving straight into **fore** is unlikely to be optimal without first being clear about the practical differences between _event driven_ and _state driven_ code. Many legacy apps drive their UIs primarily from events (or state _changes_ - state changes being analogous to events). In this style of code, the UI layer often (but not always) has an explicit sequence embedded in it: show spinner -> hide spinner -> show data.
 
-**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code's only job is to mirror the state of the domain (sometimes the state of the view model). It's a subtle difference. Pre-Compose it results in comically tiny UI layer code. In a Compose world it helps you take full advantage of what Compose is great at: observing state, and working out the state changes for you.
+**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code makes no assumptions about sequencing, its only job is to mirror the state of the domain (sometimes the state of the view model). The UI represents the current truth, and nothing else. It's a subtle difference. Pre-Compose it results in comically tiny UI layer code. In a Compose world it helps you take full advantage of what Compose is great at: observing state, and working out the state _changes_ for you.
 
 Here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
 
