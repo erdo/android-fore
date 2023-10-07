@@ -23,7 +23,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.5.0")
+implementation("co.early.fore:fore-kt-android-compose:1.5.1")
 ```
 (The versioning matches the composeCompiler version, but the versions are interchangeable)
 
