@@ -29,7 +29,7 @@ object Shared {
         const val apollo = "2.5.14"
         const val apollo3 = "3.8.1"
         const val retrofit = "2.9.0"
-        const val composeCompiler = "1.5.1" // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+        const val composeCompiler = "1.5.2" // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
         const val composeUi = "1.5.1"
         const val androidWindow = "1.1.0"
         // example app and test dependencies
