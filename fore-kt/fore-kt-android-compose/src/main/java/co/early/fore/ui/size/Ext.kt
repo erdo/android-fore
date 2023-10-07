@@ -72,8 +72,14 @@ private fun Activity.rememberWindowMetrics(): Rect {
     }
 }
 
+@Deprecated(message = "this will be removed in a future version of fore, please use WindowSize", replaceWith = ReplaceWith(expression = "WindowSize(content)", "co.early.fore.ui.size.WindowSize"))
 @Composable
 fun Activity.ForeWindowSize(content: @Composable () -> Unit) {
+    WindowSize(content)
+}
+
+@Composable
+fun Activity.WindowSize(content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalForeWindowSize provides rememberWindowSize()) {
         content()
     }

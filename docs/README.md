@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.6.0](https://img.shields.io/badge/central-1.6.0-green.svg){: .float-left}
+![central-1.6.1](https://img.shields.io/badge/central-1.6.1-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -14,7 +14,7 @@
 **fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ```
-implementation("co.early.fore:fore-kt-android:1.6.0")
+implementation("co.early.fore:fore-kt-android:1.6.1")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
@@ -23,7 +23,7 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
 ```
-implementation("co.early.fore:fore-kt-android-compose:1.4.8")
+implementation("co.early.fore:fore-kt-android-compose:1.5.0")
 ```
 (The versioning matches the composeCompiler version, but the versions are interchangeable)
 
@@ -33,9 +33,9 @@ The main principle behind **fore**: *drive your app by observing state*
 
 This works well with UDF style apps or clean architecture for example, and with modern reactive UI frameworks like Compose, observing state becomes even more natural.
 
-Diving straight into **fore** is unlikely to be optimal without first being clear about the practical differences between _state driven_ and _event driven_ code. Many legacy apps drive their UIs primarily from events (or state _changes_: state changes being analogous to events). The UI layer code often has a sequence to it: show spinner, hide spinner, show data.
+Diving straight into **fore** is unlikely to be optimal without first being clear about the practical differences between _event driven_ and _state driven_ code. Many legacy apps drive their UIs primarily from events (or state _changes_ - state changes being analogous to events). In this style of code, the UI layer often (but not always) has an explicit sequence embedded in it: show spinner -> hide spinner -> show data.
 
-**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code's only job is to mirror the state of the domain (sometimes the state of the view model). It's a subtle difference. Pre-Compose it results in comically tiny UI layer code. In a Compose world it helps you take full advantage of what Compose is great at: observing state, and working out the state changes for you.
+**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code makes no assumptions about sequencing, its only job is to mirror the state of the domain (sometimes the state of the view model). The UI represents the current truth, and nothing else. It's a subtle difference. Pre-Compose it results in comically tiny UI layer code. In a Compose world it helps you take full advantage of what Compose is great at: observing state, and working out the state _changes_ for you.
 
 Here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
 
