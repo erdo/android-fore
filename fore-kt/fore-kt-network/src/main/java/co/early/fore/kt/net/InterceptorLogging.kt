@@ -25,9 +25,11 @@ const val BIG_LOG = 250000
  * correlate logs in the event that you have many calls being logged simultaneously
  */
 class InterceptorLogging @JvmOverloads constructor(
-        private val logger: Logger? = null,
-        private val maxBodyLogCharacters: Int = 4000,
-        private val networkingLogSanitizer: NetworkingLogSanitizer? = null) : Interceptor {
+    private val logger: Logger? = null,
+    private val maxBodyLogCharacters: Int = 4000,
+    private val networkingLogSanitizer: NetworkingLogSanitizer? = null,
+    private val curlStyleRequests: Boolean = true,
+) : Interceptor {
 
     private val nanosFormat = DecimalFormat("#,###")
     private val UTF8 = Charset.forName("UTF-8")
@@ -89,7 +91,8 @@ class InterceptorLogging @JvmOverloads constructor(
 
     private fun logWarning(t: Throwable) {
         if (!printedWarningAlready) {
-            Fore.getLogger(logger).w("No network logging available: fore doesn't recognise this version of OkHttp, or you have excluded kotlin-reflect from your dependencies. ${t.message}")
+            Fore.getLogger(logger)
+                .w("No network logging available: fore doesn't recognise this version of OkHttp, or you have excluded kotlin-reflect from your dependencies. ${t.message}")
             printedWarningAlready = true
         }
     }
@@ -101,9 +104,15 @@ class InterceptorLogging @JvmOverloads constructor(
 
         Fore.getLogger(logger).i(TAG + randomPostTag, String.format("HTTP %s --> %s", method, url))
 
+        if (curlStyleRequests) {
+            Fore.getLogger(logger)
+                .i(TAG + randomPostTag, String.format("curl --request %s \\", method))
+            Fore.getLogger(logger).i(TAG + randomPostTag, String.format(" --url '%s' \\", url))
+        }
+
         networkingLogSanitizer?.let {
-            logHeaders(it.sanitizeHeaders(headers(request)), randomPostTag)
-        } ?: logHeaders(headers(request), randomPostTag)
+            logHeaders(it.sanitizeHeaders(headers(request)), randomPostTag, curlStyle = curlStyleRequests)
+        } ?: logHeaders(headers(request), randomPostTag, curlStyle = curlStyleRequests)
 
         body(request)?.let {
 
@@ -115,7 +124,11 @@ class InterceptorLogging @JvmOverloads constructor(
             if (isPlaintext(buffer)) {
 
                 val body = networkingLogSanitizer?.let {
-                    truncate(networkingLogSanitizer.sanitizeBody(buffer.clone().readString(charset)))
+                    truncate(
+                        networkingLogSanitizer.sanitizeBody(
+                            buffer.clone().readString(charset)
+                        )
+                    )
                 } ?: truncate(buffer.clone().readString(charset))
 
                 try {
@@ -123,9 +136,10 @@ class InterceptorLogging @JvmOverloads constructor(
                         body.replace(",", ", "),
                         150
                     )
-                    logLines(wrappedLines, randomPostTag)
+                    logLines(wrappedLines, randomPostTag, curlStyle = curlStyleRequests)
                 } catch (oom: OutOfMemoryError) {
-                    Fore.getLogger(logger).e("Network request was too large to format nicely, consider reducing maxBodyLogCharacters from:$maxBodyLogCharacters")
+                    Fore.getLogger(logger)
+                        .e("Network request was too large to format nicely, consider reducing maxBodyLogCharacters from:$maxBodyLogCharacters")
                     Fore.getLogger(logger).e(oom.toString())
                 }
 
@@ -137,12 +151,19 @@ class InterceptorLogging @JvmOverloads constructor(
         return url to method
     }
 
-    private fun logResponse(response: Response, randomPostTag: String, method: String?, url: HttpUrl?, timeTaken: Long) {
+    private fun logResponse(
+        response: Response,
+        randomPostTag: String,
+        method: String?,
+        url: HttpUrl?,
+        timeTaken: Long
+    ) {
 
         Fore.getLogger(logger).i(
-                TAG + randomPostTag,
-                "HTTP " + method + " <-- Server replied HTTP-${code(response)}  " +
-                        "${nanosFormat.format(timeTaken / (1000 * 1000))} ms $url")
+            TAG + randomPostTag,
+            "HTTP " + method + " <-- Server replied HTTP-${code(response)}  " +
+                    "${nanosFormat.format(timeTaken / (1000 * 1000))} ms $url"
+        )
 
         networkingLogSanitizer?.let {
             logHeaders(it.sanitizeHeaders(headers(response)), randomPostTag)
@@ -156,16 +177,19 @@ class InterceptorLogging @JvmOverloads constructor(
             val buffer = source.buffer
             if (!isPlaintext(buffer)) {
                 Fore.getLogger(logger).i(
-                        TAG + randomPostTag,
-                        " (binary body omitted)")
+                    TAG + randomPostTag,
+                    " (binary body omitted)"
+                )
             } else {
                 if (contentLength != 0L) {
                     val bodyJson = truncate(buffer.clone().readString(charset))
                     try {
-                        val wrappedLines = BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
+                        val wrappedLines =
+                            BasicTextWrapper.wrapMonospaceText(bodyJson.replace(",", ", "), 150)
                         logLines(wrappedLines, randomPostTag)
                     } catch (oom: OutOfMemoryError) {
-                        Fore.getLogger(logger).e("Network response was too large to format nicely, consider reducing maxBodyLogCharacters from:$maxBodyLogCharacters")
+                        Fore.getLogger(logger)
+                            .e("Network response was too large to format nicely, consider reducing maxBodyLogCharacters from:$maxBodyLogCharacters")
                         Fore.getLogger(logger).e(oom.toString())
                     }
                 } else {
@@ -175,24 +199,52 @@ class InterceptorLogging @JvmOverloads constructor(
         }
     }
 
-    private fun logLines(wrappedLines: List<String>, rndmPostTag: String) {
-        for (line in wrappedLines) {
-            Fore.getLogger(logger).i(TAG + rndmPostTag, line)
+    private fun logLines(
+        wrappedLines: List<String>,
+        rndmPostTag: String,
+        curlStyle: Boolean = false
+    ) {
+        if (curlStyle) {
+            wrappedLines.withIndex().forEach {
+                if (it.index == 0) {
+                    Fore.getLogger(logger).i(TAG + rndmPostTag, " -d '${it.value}")
+                } else if (it.index == wrappedLines.size - 1) {
+                    Fore.getLogger(logger).i(TAG + rndmPostTag, "${it.value}'")
+                } else {
+                    Fore.getLogger(logger).i(TAG + rndmPostTag, it.value)
+                }
+            }
+        } else {
+            for (line in wrappedLines) {
+                Fore.getLogger(logger).i(TAG + rndmPostTag, line)
+            }
         }
     }
 
     private fun truncate(potentiallyLongString: String): String {
         return if (potentiallyLongString.length > maxBodyLogCharacters) {
             potentiallyLongString.substring(0, maxBodyLogCharacters) + "...truncated " +
-                    if (maxBodyLogCharacters < BIG_LOG) { "(set maxBodyLogCharacters=BIG_LOG)" } else ""
+                    if (maxBodyLogCharacters < BIG_LOG) {
+                        "(set maxBodyLogCharacters=BIG_LOG)"
+                    } else ""
         } else {
             potentiallyLongString
         }
     }
 
-    private fun logHeaders(headers: Headers, randomPostTag: String) {
+    private fun logHeaders(headers: Headers, randomPostTag: String, curlStyle: Boolean = false) {
         for (headerName in headers.names()) {
-            Fore.getLogger(logger).i(TAG + randomPostTag, String.format("    %s: %s", headerName, headers[headerName]))
+            if (curlStyle) {
+                Fore.getLogger(logger).i(
+                    TAG + randomPostTag,
+                    String.format(" --header '%s: %s' \\", headerName, headers[headerName])
+                )
+            } else {
+                Fore.getLogger(logger).i(
+                    TAG + randomPostTag,
+                    String.format("    %s: %s", headerName, headers[headerName])
+                )
+            }
         }
     }
 
@@ -243,11 +295,13 @@ class InterceptorLogging @JvmOverloads constructor(
     private fun method(request: Request): String = call(request, "method") as String
     private fun url(request: Request): HttpUrl = call(request, "url") as HttpUrl
     private fun headers(request: Request): Headers = call(request, "headers") as Headers
-    private fun body(request: Request): RequestBody? = call(request, "body")?.let { it as RequestBody }
+    private fun body(request: Request): RequestBody? =
+        call(request, "body")?.let { it as RequestBody }
 
     private fun code(response: Response): Int = call(response, "code") as Int
     private fun headers(response: Response): Headers = call(response, "headers") as Headers
-    private fun body(response: Response): ResponseBody? = call(response, "body")?.let { it as ResponseBody }
+    private fun body(response: Response): ResponseBody? =
+        call(response, "body")?.let { it as ResponseBody }
 
     private fun call(clazz: Any, name: String): Any? {
         return clazz::class.members.find {
