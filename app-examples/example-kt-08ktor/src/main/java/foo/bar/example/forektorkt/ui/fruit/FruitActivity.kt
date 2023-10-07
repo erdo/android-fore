@@ -3,6 +3,7 @@ package foo.bar.example.forektorkt.ui.fruit
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.ui.SyncableView
 import co.early.fore.kt.core.ui.LifecycleObserver
