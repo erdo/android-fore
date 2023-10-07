@@ -15,7 +15,7 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(Shared.Versions.jvm_toolchain))
     }
 }
 
