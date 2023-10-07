@@ -31,6 +31,8 @@
  * ./gradlew publishToMavenLocal
  * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
+ * ./gradlew :fore-kt:fore-kt-android-compose:publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
+ *
  * ./gradlew :buildEnvironment
  * ./gradlew :fore-kt:fore-kt-core:dependencies
  *

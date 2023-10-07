@@ -53,7 +53,6 @@ Actually let's backup a little first and discuss reactive streams itself (which 
 For some specific use cases: handling streams of changing data which you want to process on various threads (like the raw output of an IoT device for example) reactive streams is a natural fit. That's especially true when it comes to **back pressure**.
 
 ### Back pressure
-### Back pressure
 
 Back pressure refers to the problem of data being *produced*, faster than it is able to be *consumed*. Handling back pressure in streams of data is basically what [reactive streams](http://www.reactive-streams.org/) lives for. The needs of most android app architectures however tend to be a little more along the lines of:
 
