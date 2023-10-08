@@ -2,7 +2,7 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.6.1](https://img.shields.io/badge/central-1.6.1-green.svg){: .float-left}
+![central-1.6.2](https://img.shields.io/badge/central-1.6.2-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
@@ -14,7 +14,7 @@
 **fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ```
-implementation("co.early.fore:fore-kt-android:1.6.1")
+implementation("co.early.fore:fore-kt-android:1.6.2")
 ```
 
 More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
