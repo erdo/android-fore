@@ -68,8 +68,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.6.2" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 96
+        const val LIB_VERSION_NAME = "1.6.3" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 97
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -83,7 +83,7 @@ object Shared {
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
         const val use_published_version = false
-        const val published_fore_version_for_examples = "1.6.2"
+        const val published_fore_version_for_examples = "1.6.3"
     }
 
     object Secrets {
