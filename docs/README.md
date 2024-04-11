@@ -14,6 +14,7 @@
 **fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ```
+implementation("co.early.fore:fore-kt-core:1.6.4")
 implementation("co.early.fore:fore-kt-android:1.6.4")
 implementation("co.early.fore:fore-kt-android-compose:1.6.4")
 ```
@@ -330,7 +331,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2015-2023 early.co
+    Copyright 2015-2024 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
