@@ -37,4 +37,4 @@ dependencies {
     implementation("androidx.window:window:${Shared.Versions.androidWindow}")
 }
 
-apply(from = "../../publish-android-compose-lib.gradle.kts")
+apply(from = "../../publish-android-lib.gradle.kts")

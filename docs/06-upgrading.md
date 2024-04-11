@@ -26,7 +26,7 @@ co.early.fore:fore-kt-network-okhttp3v4x
 **kotlin plus android** API
 ```
 co.early.fore:fore-kt-android-core
-co.early.fore:fore-kt-android-compose (versioning matches the compose compiler)
+co.early.fore:fore-kt-android-compose
 co.early.fore:fore-kt-android-adapters
 co.early.fore:fore-kt-android-network
 ```
@@ -46,7 +46,7 @@ co.early.fore:fore-jv-android-network
 
 ## Maven central
 
-To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and/or are no longer updated. The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
+To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and/or are no longer updated.
 
 ## fore 1.5.14
 **fore 1.5.14** networking packages deprecate the CallProcessors and introduce CallWrappers so that clients can migrate away from the old style Eithers at their own pace
