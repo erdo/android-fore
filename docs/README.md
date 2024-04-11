@@ -18,7 +18,9 @@ implementation("co.early.fore:fore-kt-android:1.6.3")
 implementation("co.early.fore:fore-kt-android-compose:1.6.4")
 ```
 
+The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
 
+More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
 ## New to fore
 
