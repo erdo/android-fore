@@ -26,7 +26,7 @@ co.early.fore:fore-kt-network-okhttp3v4x
 **kotlin plus android** API
 ```
 co.early.fore:fore-kt-android-core
-co.early.fore:fore-kt-android-compose (versioning matches the compose compiler)
+co.early.fore:fore-kt-android-compose
 co.early.fore:fore-kt-android-adapters
 co.early.fore:fore-kt-android-network
 ```

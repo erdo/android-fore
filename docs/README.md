@@ -15,17 +15,10 @@
 
 ```
 implementation("co.early.fore:fore-kt-android:1.6.3")
+implementation("co.early.fore:fore-kt-android-compose:1.6.4")
 ```
 
-More detailed [version / package information here](https://erdo.github.io/android-fore/06-upgrading.html#shoom).
 
-### Compose
-
-For fore's [observeAsState()](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function, and fore's [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes (from 1.4.0 and above):
-```
-implementation("co.early.fore:fore-kt-android-compose:1.5.10")
-```
-(The versioning matches the composeCompiler version, but the versions are interchangeable)
 
 ## New to fore
 
