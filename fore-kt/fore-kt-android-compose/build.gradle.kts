@@ -1,8 +1,8 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-android-plugin")
-    kotlin("android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 ext.apply {
@@ -19,9 +19,6 @@ kotlin {
 }
 
 android {
-    defaultConfig {
-        minSdk = 21
-    }
     buildFeatures {
         compose = true
     }
@@ -29,6 +26,32 @@ android {
         kotlinCompilerExtensionVersion = Shared.Versions.composeCompiler
     }
     namespace = "co.early.fore.kt.compose"
+
+    // following was previously in BuildSrc
+
+    compileSdk = Shared.Android.compileSdk
+
+    lint {
+        abortOnError = true
+        lintConfig = File(project.rootDir, "lint-library.xml")
+    }
+
+    defaultConfig {
+        minSdk = 21 // NB higher minimum due to compose
+        multiDexEnabled = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            consumerProguardFiles("../../proguard-library-consumer.pro")
+        }
+    }
+
+    buildFeatures {
+        buildConfig = false
+    }
 }
 
 dependencies {

@@ -15,7 +15,7 @@ object Shared {
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "8.3.1" // must manually change buildSrc.build version
+        const val android_gradle_plugin = "8.3.2" // must manually change buildSrc.build version
         const val kotlin_version = "1.9.22" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.8.0"
         const val jvm_toolchain = 8
@@ -68,8 +68,8 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "1.6.4" //"x.x.x-SNAPSHOT"
-        const val LIB_VERSION_CODE = 98
+        const val LIB_VERSION_NAME = "1.6.5" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_CODE = 99
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"

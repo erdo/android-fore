@@ -2,9 +2,9 @@ import co.early.fore.Shared
 import co.early.fore.Shared.BuildTypes
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
     id("com.apollographql.apollo3").version("3.8.3")
-    kotlin("android")
     kotlin("kapt")
 }
 

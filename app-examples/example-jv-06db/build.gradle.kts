@@ -2,7 +2,7 @@ import co.early.fore.Shared
 import co.early.fore.Shared.BuildTypes
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.androidApplication)
 }
 
 val appId = "foo.bar.example.foredb"

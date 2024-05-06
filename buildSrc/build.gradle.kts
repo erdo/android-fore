@@ -1,5 +1,3 @@
-//import co.early.fore.Shared
-
 plugins {
   `kotlin-dsl`
 }
@@ -15,17 +13,3 @@ kotlin {
     languageVersion.set(JavaLanguageVersion.of(11))
   }
 }
-
-dependencies {
-
-  // we want the kotlin and android gradle plugin, because we want to access them in our plugin
-  //implementation("com.android.tools.build:gradle:${co.early.fore.Shared.Versions.android_gradle_plugin}")
-  implementation("com.android.tools.build:gradle:8.3.1")
-  //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${co.early.fore.Shared.Versions.kotlin_version}")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
-
-  //for custom plugins
-  implementation(gradleApi())
-  implementation(localGroovy())
-}
-

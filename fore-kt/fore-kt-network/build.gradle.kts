@@ -1,7 +1,7 @@
 import co.early.fore.Shared
 
 plugins {
-    id("kotlin")
+    alias(libs.plugins.kotlin)
 }
 
 kotlin {
