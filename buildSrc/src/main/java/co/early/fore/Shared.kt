@@ -15,7 +15,7 @@ object Shared {
 
     object Versions {
         // fore core package dependencies
-        const val android_gradle_plugin = "8.3.1" // must manually change buildSrc.build version
+        const val android_gradle_plugin = "8.3.2" // must manually change buildSrc.build version
         const val kotlin_version = "1.9.22" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.8.0"
         const val jvm_toolchain = 8

@@ -2,10 +2,10 @@ import co.early.fore.Shared
 import co.early.fore.Shared.BuildTypes
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinSerialization)
     kotlin("kapt")
-    kotlin("plugin.serialization")
 }
 
 

@@ -1,8 +1,8 @@
 import co.early.fore.Shared
 
 plugins {
-    id("fore-android-plugin")
-    kotlin("android")
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 ext.apply {
@@ -20,6 +20,38 @@ kotlin {
 
 android {
     namespace = "co.early.fore.kt.core"
+
+    // following was previously in BuildSrc
+
+    compileSdk = Shared.Android.compileSdk
+
+    lint {
+        abortOnError = true
+        lintConfig = File(project.rootDir, "lint-library.xml")
+    }
+
+    defaultConfig {
+        minSdk = Shared.Android.minSdk
+        multiDexEnabled = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            consumerProguardFiles("../../proguard-library-consumer.pro")
+        }
+    }
+
+    buildFeatures {
+        buildConfig = false
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
