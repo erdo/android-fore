@@ -14,7 +14,7 @@ By [**View**](https://erdo.github.io/android-fore/01-views.html#shoom) we mean t
 
 By [**Observer**](https://en.wikipedia.org/wiki/Observer_pattern) we mean the standard definition of the Observable pattern. In MVO, the Views observe the Models. (This has nothing to do with Rx by the way, fore is not an implementation of reactive-streams - very much [by design](https://erdo.github.io/android-fore/07-fore-api.html#somethingchanged-parameter)).
 
-*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/clean-modules-sample) written in kotlin modules. This one is a more simple MVO implementation written in [Kotlin](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
+*For the avoidance of doubt, most non-trivial apps will of course have more layers behind the model layer, typically you'll have some kind of repository, a networking abstraction etc. There are a few slightly larger, more commercial style app examples to check out: this one takes the MVO structure and applies it to a full [clean architecture implementation](https://github.com/erdo/commercial-template) written in kotlin modules. This one is a more simple MVO implementation written in [Kotlin](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) and another in [Java](https://github.com/erdo/android-architecture) (which has a [tutorial](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to go along with it).*
 
 In a nutshell this is what we have with MVO:
 
@@ -75,6 +75,11 @@ fun syncView() {
 </code></pre>
 
 Notice the syncView() method does not take a parameter. It gets all it needs from the models that the view is observing. This style of view state binding is deceptively simple, and is _one_ of the reasons that fore is so tiny and the resulting view layer code so sparse.
+
+For Compose UIs syncView() is not even necessary, simply use fore's observerAsState() extension function and write your state driven Compose UI code as usual
+
+<pre class="codesample"><code>val walletState by wallet.observeAsState { wallet.state }
+</code></pre>
 
 Send Actions to this gameModel when you need to do something like play a round: you have yourself the basics of a UDF app
 

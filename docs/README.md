@@ -29,12 +29,6 @@ The main principle behind **fore**: *drive your app by observing state*
 
 This works well with UDF style apps or clean architecture for example, and with modern reactive UI frameworks like Compose, observing state becomes even more natural.
 
-Diving straight into **fore** is unlikely to be optimal without first being clear about the practical differences between _event driven_ and _state driven_ code. Many legacy apps drive their UIs primarily from events (or state _changes_ - state changes being analogous to events). In this style of code, the UI layer often (but not always) has an explicit sequence embedded in it: show spinner -> hide spinner -> show data.
-
-**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code makes no assumptions about sequencing, its only job is to mirror the state of the domain (sometimes the state of the view model). The UI represents the current truth, and nothing else. It's a subtle difference. Pre-Compose it results in comically tiny UI layer code. In a Compose world it helps you take full advantage of what Compose is great at: observing state, and working out the state _changes_ for you.
-
-Here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k), [re-writing the android architecture blueprints app](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o)
-
 ## Current status
 
 Since fore was first published back in 2017, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
@@ -111,7 +105,7 @@ This is the kind of challenge that the observer pattern (see the GoF book for mo
 
 At this point, you might be thinking that fore is a reactive streams implementation like Rx or Kotlin Flow. In fact (other than the observer pattern) fore and reactive streams have very little to do with each other, and it's perfectly possible to find them both in the same project.
 
-While connecting architectural layers with reactive streams is a very common technique, it almost always results in more boiler plate when compared with a fore style solution [\[1\]](#1). Plus this additional code (when it appears in a view layer) needs to be aware of lifecycle and threading issues which are only present in view layers. This difference becomes steadily more apparent as app complexity increases.
+While connecting architectural layers with reactive streams is a very common technique, it almost always results in more boiler plate when compared with a fore style solution. Plus this additional code (when it appears in a view layer) needs to be aware of lifecycle and threading issues which are only present in view layers. This difference becomes steadily more apparent as app complexity increases.
 
 On the other hand, asynchronously processing real time data IO with back pressure handling would be a natural fit for something like Rx or Flow (that is basically what [reactive streams](http://www.reactive-streams.org/) lives for). Trying to do that with a fore observable would be pointless.
 
@@ -185,6 +179,16 @@ All that's left to do for a completely reactive UI is to use the state in your *
 
 Any code that needs to empty the wallet calls **walletModel.emptyWallet()** and that's it. No manual refreshing, no getting contexts, no rotation issues or memory leaks. Just rock solid, performant UIs that update themselves instantly
 
+
+### Events vs State
+
+Over the years I've realised that diving straight into **fore** can be uncomfortable for developers more accustomed to driving their UIs from _events_ rather than simple _state_. Many legacy apps drive their UIs primarily from events (or state _changes_ - state changes being analogous to events). In this style of code, the UI layer often (but not always) has an explicit sequence embedded in it: show spinner -> hide spinner -> show data.
+
+**fore** is for developers driving their UIs primarily with state alone. In this paradigm, the UI code makes no assumptions about sequencing, its only job is to mirror the state of the domain (sometimes the state of the view model). The UI doesn't know or care what came before, it represents the current truth, and nothing else. It's a subtle difference. Pre-Compose it results in [comically tiny UI layer code](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o). In a Compose world it helps us take full advantage of what Compose is great at: observing state, and working out the state _changes_ for you.
+
+Here are a few recommended background reading articles: [compose related](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8), [some fundamentals](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k)
+
+
 ### Motivation
 
 Writing view layers this way helps quite a bit from a complexity standpoint, and it's one of the things that makes fore suitable for both quick prototypes, and large complex commercial projects with 100K+ lines of code. Specifically _why_ it is that apps written this way are both sparse _and_ scalable is not always immediately obvious though. This [discussion](https://erdo.github.io/android-fore/07-fore-api.html#somethingchanged-parameter) gets into the design of the fore api and why it drastically reduces boiler plate for a typical android app compared with alternatives. Some of the dev.to tutorials (see below) also touch on the complexity / robustness aspect.
@@ -215,8 +219,8 @@ The most recent fore sample comes from the [fore and Compose article](https://de
 
 If you have a question about the best way to achieve what you want with fore, consider opening an issue (even better, a stackoverflow question which you can link to from an issue). Also, if you want to write an article related to fore, if you open an issue about it, we might include a link to it from the docs
 
-#### <a name="1"></a> [1] Why do we care about boiler-plate?
-Boiler plate dilutes code which is implementing requirements, in other words it gets in the way and makes it harder to see what the code is actually doing. It can distract developers, and if it gets really bad it can even fool developers into thinking things are more difficult than they really are. It's generally better to have less boiler-plate, but developers also don't tend to like things that work by "magic" either so the ideal tends to be minimal boiler plate, that works in an obvious way.
+#### Why do we care about boiler-plate?
+Boiler plate dilutes code which is implementing requirements, in other words it gets in the way and makes it harder to see what the code is actually doing. It can distract developers, and if it gets really bad it can even fool developers into thinking things are more difficult than they really are. It's generally better to have less boiler-plate, but we developers also don't tend to like things that work by "magic" either so the ideal tends to be minimal boiler plate, that works in an obvious way. Fore is always trying to strike that balance.
 
 ## Sample Apps
 
