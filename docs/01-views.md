@@ -58,6 +58,8 @@ In addition to that there will be:
 
 This leaves almost all everything else to be handled in other modules or layers in the form of plain, unit testable code. A few view [examples](https://erdo.github.io/android-fore/01-views.html#view-examples) are listed at the bottom of this page
 
+** Most of the following applies to pre-compose android only... **
+
 ## <a name="syncview"></a> SyncView()
 
 fore uses one of the most simple (but extremely reliable) reactive implementations you can have. It really all boils down to a single **syncView()** method *(the concept is similar to MVI's render() method)*. On the surface it looks very simple, but there are some important details to discuss that can trip you up, or otherwise result in a less than optimal implementation of this method. The basic philosophy is: If a model being observed changes **in any way**, then the **entire** view is refreshed.

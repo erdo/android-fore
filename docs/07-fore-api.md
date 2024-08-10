@@ -16,7 +16,7 @@ Something that's pretty universal: if we're not careful, state (and especially d
 
 - The source of truth for state in "stateless" mobile architectures implemented with reactive streams is often "in the stream" and can be spread across multiple useCases returning Flows (potentially backed by StateFlows, SharedFlows, Channels etc, each with their own caching or replay idiosyncrasies)
 
-- If not "in the stream", the truth will be kept in network caches, databases or other data sources and re-read / parsed each time it is required (which can have a significant impact on how "sluggish" an app feels to a user - many production apps in the wild have this problem).
+- If not "in the stream", the truth will be kept in network caches, databases or other data sources and re-read / parsed each time it is required (which can have a significant impact on how sluggish an app feels to a user - many production apps in the wild have this problem).
 
 Sharing this state with various components (UI or otherwise) can start to be problematic as soon as the app becomes more complex than a collection of simple independent pages of data - can we be sure that the whole app has the same view of state when it's being accessed via different usecase instances and from different co-routine contexts?
 
@@ -37,7 +37,7 @@ The mobile context has its own, unique considerations such as:
 - view layers come into and out of existence from something like a device rotation (i.e. it's easy to cause memory leaks: see rxJava's checkered history with Android and memory leaks [example](https://medium.com/@scanarch/how-to-leak-memory-with-subscriptions-in-rxjava-ae0ef01ad361))
 - the devices have low processor speeds, but they have high performance requirements such that any screen "jank" significantly affects a user's perception of speed.
 
-This fits pretty well with the way that fore works. fore enables your code to operate almost exclusively in synchronous mode (i.e. on the UI thread) which means much less unnecessary suspend / co-routine theatre gets written, especially in the UI layer. The UI layers being thinner also require far less boiler plate to ensure memory leak free code. Performance is also extremely snappy as the state tends to be available in memory for immediate rendering on a UI (and fetched or saved asynchronously, away from the view layer)
+This fits pretty well with the way that fore works. fore enables your code to operate almost exclusively in synchronous mode (i.e. on the UI thread) which means much less unnecessary suspend / co-routine [theatre](https://erdo.github.io/android-fore/07-fore-api.html#the-ui-thread) gets written, especially in the UI layer. The UI layers being thinner also require far less boiler plate to ensure memory leak free code. Performance is also extremely snappy as the state tends to be available in memory for immediate rendering on a UI (and fetched or saved asynchronously, away from the view layer)
 
 ## Reactive Streams
 
@@ -45,7 +45,7 @@ So far these docs probably seem quite anti reactive streams! but that's not the 
 
 Anyway by now I'm hoping that you're considering the possibility that using reactive streams to tie architectural layers together in a mobile client app may only be providing a local maximum in terms of performance and code clarity, and that there is another way...
 
-Actually let's backup a little first and discuss reactive streams itself (which is a term many users of RxJava of Flow are a little vague about). Both RxJava and Kotlin Flow are implementations of the reactive streams initiative. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
+Actually let's backup a little first and discuss reactive streams itself (which is a term many users of RxJava or Flow are a little vague about). Both RxJava and Kotlin Flow are implementations of the reactive streams initiative. Reactive Streams could just as well have been called Observable Streams, and you can consider it a combination of two concepts:
 
 - Observers (tell me whenever you've changed)
 - Streams (data and operators like .map .filter etc)
@@ -59,7 +59,7 @@ Back pressure refers to the problem of data being *produced*, faster than it is 
  - connect to a network to download discreet pieces of data (_always_ on an IO thread, takes _seconds_)
  - update a UI, based on some event or state (_always_ on the UI thread, takes _milliseconds_)
 
-The timescales that these UI changes happen in [loading=true, (wait), loading=false], are orders of magnitude slower than the timescales that would require back pressure management.
+The timescales that these UI changes happen in [loading=true, (wait), loading=false], are orders of magnitude slower than the timescales that would require back pressure management, especially if all your UI code is doing is reflecting the current state.
 
 To put that another way: the **production** of data in an app (a user logs in, and a session token is fetched from the network) tends to happen in the order of **seconds**. The **consumption** of that data (the waiting spinner on the ui is re-rendered from visible to invisible) is often a **sub-millisecond** affair.
 

@@ -90,6 +90,16 @@ Another advantage of using the CallWrapper is that your network code can easily 
 
 As with testing any asynchronous code with **fore**, the calls are processed synchronously when using the TestDelegateDefault which simplifies our test code considerably (no need for latches, or magic).
 
+# Kotlin Coroutines
+
+We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
+
+**fore** offers some [extension functions](https://github.com/erdo/android-fore/blob/main/fore-kt/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them easily testable in common usage scenarios (see the code comments for why this even exists).
+
+Passing `TestDelegateDefault()` to the `Fore.setDelegate()` function during [setup](https://github.com/erdo/android-fore/blob/004dda740625d2d5224f0eaddec4254b18ccf90d/app-examples/example-kt-08ktor/src/test/java/foo/bar/example/forektorkt/feature/fruit/FruitFetcherUnitTest.kt#L55) will ensure your coroutine code runs synchronously during tests
+
+** Most of the following applies to pre-compose android only... **
+
 # Adapter animations
 
 *For some robust and testable implementations, please see the [Adapter Example Apps](https://erdo.github.io/android-fore/#fore-3-adapter-example)*
@@ -175,15 +185,6 @@ By default, a SilentLogger will be used so if you do nothing, your release build
 
 All the defaults used are specified [here](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/delegate/Delegates.kt) and [here](https://github.com/erdo/android-fore/blob/master/fore-kt-android-core/src/main/java/co/early/fore/kt/core/delegate/AndroidDebugDelegate.kt).
 
-# Kotlin Coroutines
-
-We don't really want to be putting asynchronous code in the View layer unless we're very careful about it. So in this section we are mostly talking about Model code which often needs to do asynchronous operations, and also needs to be easily testable.
-
-**fore** offers some [extension functions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that enable you to use coroutines in a way that makes them easily testable in common usage scenarios.
-
-As mentioned above, passing `TestDelegateDefault()` to the `Fore.setDelegate()` function during [setup](https://github.com/erdo/android-fore/blob/004dda740625d2d5224f0eaddec4254b18ccf90d/app-examples/example-kt-08ktor/src/test/java/foo/bar/example/forektorkt/feature/fruit/FruitFetcherUnitTest.kt#L55) will ensure your coroutine code runs synchronously during tests
-
-<a name="syncview"></a>
 # <a name="asynctasks-with-lambdas"></a> AsyncTasks with Lambdas [for Java clients]
 
 For legacy Java based clients, fore has some wrappers that make AsyncTask much easier to use and to test
