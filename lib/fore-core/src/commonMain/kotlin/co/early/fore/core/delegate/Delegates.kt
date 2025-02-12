@@ -1,0 +1,124 @@
+package co.early.fore.core.delegate
+
+import co.early.fore.core.WorkMode
+import co.early.fore.core.WorkMode.ASYNCHRONOUS
+import co.early.fore.core.WorkMode.SYNCHRONOUS
+import co.early.fore.core.logging.Logger
+import co.early.fore.core.logging.MultiplatformLogger
+import co.early.fore.core.time.SystemTimeWrapper
+import co.early.fore.core.time.getSystemTimeWrapper
+import co.early.fore.core.logging.SilentLogger
+import co.early.fore.core.logging.SystemLogger
+
+/**
+ * Many fore classes take: WorkMode, Logger and/or SystemTimeWrapper as construction parameters.
+ * If these parameters are not specified, they will default to null and when they are needed by
+ * the fore class they will be exchanged for the default delegate values indicated below.
+ *
+ * To set your own Delegate e.g. `Fore.setDelegate(DefaultTestDelegate())`
+ */
+interface Delegate {
+    val workMode: WorkMode
+    val logger: Logger
+    val systemTimeWrapper: SystemTimeWrapper
+}
+
+class DebugDelegateDefault (
+    tagPrefix: String? = null,
+    override val workMode: WorkMode = ASYNCHRONOUS,
+    override val logger: Logger = MultiplatformLogger(tagPrefix),
+    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
+) : Delegate
+
+class ReleaseDelegateDefault(
+    override val workMode: WorkMode = ASYNCHRONOUS,
+    override val logger: Logger = SilentLogger(),
+    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
+) : Delegate
+
+class TestDelegateDefault(
+    override val workMode: WorkMode = SYNCHRONOUS,
+    override val logger: Logger = SystemLogger(),
+    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
+) : Delegate
+
+
+class Fore {
+
+    companion object {
+
+        private var delegate: Delegate = ReleaseDelegateDefault()
+
+        /**
+         * For release builds you will generally not need to call this function -
+         * (ReleaseDelegateDefault() is the default delegate)
+         *
+         * For debug builds you may optionally set the DebugDelegateDefault() here - this will
+         * give you debug information, which the ReleaseDelegateDefault won't
+         *
+         * For running tests you will most likely want to set the TestDelegateDefault() here -
+         * this will give you logging output to the console rather than Android Logs, and also uses
+         * WorkMode.SYNCHRONOUS rather than the WorkMode.ASYNCHRONOUS provided by the Release
+         * and Debug versions
+         *
+         * These defaults are just a convenience and the if you pass WorkMode/Logger/SystemTimeWrapper
+         * parameters manually to any fore component via the constructor, they will be used in
+         * preference to the defaults specified here
+         *
+         * Keep in mind that this is a global operation, so if you are using it with tests that
+         * run in parallel they will need to be running in separate JVMs to avoid synchronization
+         * issues. If this is a problem for your set up, you can revert to passing the parameters
+         * to the fore component via the constructor
+         */
+        fun setDelegate(delegate: Delegate) {
+            Companion.delegate = delegate
+        }
+
+        fun getWorkMode(specified: WorkMode? = null): WorkMode {
+            return specified ?: delegate.workMode
+        }
+
+        fun getLogger(specified: Logger? = null): Logger {
+            return specified ?: delegate.logger
+        }
+
+        fun getSystemTimeWrapper(specified: SystemTimeWrapper? = null): SystemTimeWrapper {
+            return specified ?: delegate.systemTimeWrapper
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).e()
+         */
+        fun e(message: String) {
+            delegate.logger.e(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).w()
+         */
+        fun w(message: String) {
+            delegate.logger.w(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).i()
+         */
+        fun i(message: String) {
+            delegate.logger.i(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).d()
+         */
+        fun d(message: String) {
+            delegate.logger.d(message)
+        }
+
+        /**
+         * convenience function, same as calling: Fore.getLogger(null).w()
+         */
+        fun v(message: String) {
+            delegate.logger.w(message)
+        }
+    }
+}

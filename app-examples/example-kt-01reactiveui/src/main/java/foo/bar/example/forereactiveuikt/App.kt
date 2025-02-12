@@ -1,8 +1,8 @@
 package foo.bar.example.forereactiveuikt
 
 import android.app.Application
-import co.early.fore.kt.core.delegate.DebugDelegateDefault
-import co.early.fore.kt.core.delegate.Fore
+import co.early.fore.core.delegate.DebugDelegateDefault
+import co.early.fore.core.delegate.Fore
 
 /**
  * Copyright © 2015-2020 early.co. All rights reserved.

@@ -4,7 +4,6 @@ import org.gradle.kotlin.dsl.signing
 import java.net.URI
 
 apply(plugin = "maven-publish")
-apply(plugin = "java-library")
 apply(plugin = "signing")
 
 val LIB_ARTIFACT_ID: String? by project

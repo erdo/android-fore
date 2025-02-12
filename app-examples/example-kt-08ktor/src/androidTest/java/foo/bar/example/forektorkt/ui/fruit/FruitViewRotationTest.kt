@@ -16,7 +16,7 @@ import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.logging.SystemLogger
 import co.early.fore.kt.core.type.Either
 import co.early.fore.kt.core.type.Either.Companion.success
-import co.early.fore.kt.net.ktor.CallWrapperKtor
+import co.early.fore.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.forektorkt.R
 import foo.bar.example.forektorkt.api.fruits.FruitPojo

@@ -19,7 +19,7 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(Shared.Versions.jvm_toolchain))
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
     }
 }
 
@@ -70,11 +70,16 @@ android {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-kt-android:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-kt-core:2.0.0")
+        implementation("co.early.fore:fore-kt-network:2.0.0")
+        // implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt:fore-kt-android"))
+        implementation(project(":lib:fore-core"))
+        implementation(project(":lib:fore-net"))
     }
 
+    implementation("io.ktor:ktor-client-cio:${Shared.Versions.ktor_client}")
+    implementation("io.ktor:ktor-client-logging:${Shared.Versions.ktor_client}")
     implementation("io.ktor:ktor-client-okhttp:${Shared.Versions.ktor_client}")
     implementation("io.ktor:ktor-serialization-kotlinx-json:${Shared.Versions.ktor_client}")
     implementation("io.ktor:ktor-client-content-negotiation:${Shared.Versions.ktor_client}")

@@ -1,7 +1,8 @@
 package foo.bar.example.forereactiveuikt
 
 import android.app.Application
-import co.early.fore.kt.core.logging.AndroidLogger
+import co.early.fore.core.logging.AndroidLogger
+//import co.early.fore.core.logging.AndroidLogger
 import foo.bar.example.forereactiveuikt.feature.wallet.Wallet
 import java.util.HashMap
 

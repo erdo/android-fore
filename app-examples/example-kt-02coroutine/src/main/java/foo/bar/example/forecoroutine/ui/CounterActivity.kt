@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import co.early.fore.core.ui.SyncableView
-import co.early.fore.kt.core.ui.LifecycleObserver
+import co.early.fore.core.ui.LifecycleObserver
 import foo.bar.example.forecoroutine.OG
 import foo.bar.example.forecoroutine.databinding.ActivityCounterBinding
 import foo.bar.example.forecoroutine.feature.counter.Counter

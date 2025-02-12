@@ -29,7 +29,12 @@
  *
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
- * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
+ * ./gradlew lib:fore-core:publishToMavenLocal
+ * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository
+ *
+ * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel //pre KMP
+ *
+ * ./gradlew tasks --all | grep publish
  *
  * ./gradlew :fore-kt:fore-kt-android-compose:publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
@@ -38,6 +43,7 @@
  *
  * ./gradlew :app-examples:example-kt-04retrofit:dependencies
  * ./gradlew -q :fore-kt:fore-kt-core:dependencyInsight --configuration compileClasspath --dependency okhttp3
+ * ./gradlew lib:fore-core:dependencies --scan
  *
  * tag:fore_
  *
@@ -53,11 +59,9 @@
 plugins {
     alias(libs.plugins.androidApplication).apply(false)
     alias(libs.plugins.androidLibrary).apply(false)
-    alias(libs.plugins.kotlin).apply(false)
+    alias(libs.plugins.kotlinJvm).apply(false)
     alias(libs.plugins.kotlinAndroid).apply(false)
+    alias(libs.plugins.kotlinMultiplatform).apply(false)
+    alias(libs.plugins.kotlinCocoapods).apply(false)
     alias(libs.plugins.kotlinSerialization).apply(false)
-}
-
-tasks.register("clean", Delete::class){
-    delete(rootProject.layout.buildDirectory)
 }

@@ -1,8 +1,8 @@
 package foo.bar.example.forereactiveuikt.feature.wallet
 
-import co.early.fore.kt.core.logging.Logger
+import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.observer.ObservableImp
+import co.early.fore.core.observer.ObservableImp
 
 /**
  * Copyright © 2015-2020 early.co. All rights reserved.

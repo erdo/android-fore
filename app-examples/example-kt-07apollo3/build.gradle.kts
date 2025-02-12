@@ -19,7 +19,7 @@ println("[$appId testBuildType:${getTestBuildType()}]")
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(Shared.Versions.jvm_toolchain))
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
     }
 }
 

@@ -2,11 +2,11 @@ package foo.bar.example.forecoroutine.feature.counter
 
 
 import co.early.fore.core.WorkMode
-import co.early.fore.kt.core.logging.Logger
+import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.Observable
-import co.early.fore.kt.core.coroutine.*
-import co.early.fore.kt.core.delegate.Fore
-import co.early.fore.kt.core.observer.ObservableImp
+import co.early.fore.core.coroutine.*
+import co.early.fore.core.delegate.Fore
+import co.early.fore.core.observer.ObservableImp
 import kotlinx.coroutines.delay
 
 /**
