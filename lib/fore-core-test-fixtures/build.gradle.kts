@@ -44,22 +44,9 @@ kotlin {
     mingwX64()
 
     sourceSets {
-
         val commonMain by getting {
             dependencies {
-                api(libs.kotlinx.coroutines.core)
-            }
-        }
-
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
-        }
-
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.androidx.lifecycle)
+                implementation(project(":lib:fore-core"))
             }
         }
     }
@@ -101,8 +88,11 @@ android {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-core")
-    set("LIB_DESCRIPTION", "fore - core code")
+    set("LIB_ARTIFACT_ID", "fore-core-test-fixtures")
+    set(
+        "LIB_DESCRIPTION",
+        "fore-core some test fixtures to avoid the need to use mocking frameworks during client code tests"
+    )
 }
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")

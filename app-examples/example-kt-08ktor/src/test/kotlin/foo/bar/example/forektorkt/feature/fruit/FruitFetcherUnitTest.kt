@@ -1,9 +1,9 @@
 package foo.bar.example.forektorkt.feature.fruit
 
-import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.kt.core.delegate.Fore
-import co.early.fore.kt.core.delegate.TestDelegateDefault
+import co.early.fore.core.delegate.Fore
+import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
@@ -136,7 +136,6 @@ class FruitFetcherUnitTest {
 
 
     /**
-     *
      * NB all we are checking here is that observers are called AT LEAST once
      *
      * We don't really want tie our tests (OR any observers in production code)
@@ -147,7 +146,7 @@ class FruitFetcherUnitTest {
      * only that they will be called if something changes ("something" is not defined
      * and can change between implementations).
      *
-     * See the databinding docs for more information about this
+     * See the fore docs for more information about this
      *
      * @throws Exception
      */

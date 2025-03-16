@@ -20,7 +20,9 @@ class FruitService(private val httpClient: HttpClient) {
     private val smallDelay = 1
 
     suspend fun getFruitsSimulateOk(): List<FruitPojo> {
-        return httpClient.get("${baseUrl}57760938-6a45-49de-8f34-2cc061d26bbd/?mocky-delay=${mediumDelay}s").body()
+        return httpClient.get("${baseUrl}978bfa2b-cb05-45fa-b079-1b49a87d1832/?mocky-delay=${mediumDelay}s").body()
+        //return httpClient.get("${baseUrl}95fc2cb1-d8bf-43ef-a5cb-7db61736f40f/?mocky-delay=${mediumDelay}s").body()
+      //  return httpClient.get("${baseUrl}57760938-6a45-49de-8f34-2cc061d26bbd/?mocky-delay=${mediumDelay}s").body()
     }
 
     suspend fun getFruitsSimulateNotAuthorised(): List<FruitPojo> {

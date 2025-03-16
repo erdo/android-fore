@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
  * You can probably use this class almost as is for your own app, but you might want to
  * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
  */
-class CustomGlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMessage> {
+class GlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMessage> {
 
     override suspend fun <CE : MessageProvider<ErrorMessage>> handleError(
         t: Throwable,

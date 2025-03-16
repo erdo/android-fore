@@ -57,7 +57,7 @@ class DataHeuristicsTest {
 
     @Test
     fun testJsFileFormatDetection() {
-        val body = Buffer().writeUtf8(readFileString("src/jvmTest/resources/jquery.js"))
+        val body = Buffer().writeUtf8(readFileString("src/commonTest/resources/jquery.js"))
         val result = inferBodyRenderFormat(body)
         assertEquals(BodyRenderFormat.PlainText, result)
     }
@@ -78,7 +78,7 @@ class DataHeuristicsTest {
 
     @Test
     fun testPolishTextDetection3() {
-        val body = Buffer().writeUtf8(readFileString("src/jvmTest/resources/polish.txt"))
+        val body = Buffer().writeUtf8(readFileString("src/commonTest/resources/polish.txt"))
         val result = inferBodyRenderFormat(body)
         assertEquals(BodyRenderFormat.PlainText, result)
     }
@@ -111,7 +111,7 @@ class DataHeuristicsTest {
 
     @Test
     fun testJpgBinaryDetection() {
-        val body = Buffer().writeUtf8(readFileString("src/jvmTest/resources/test.jpg"))
+        val body = Buffer().writeUtf8(readFileString("src/commonTest/resources/test.jpg"))
         val result = inferBodyRenderFormat(body)
         assertEquals(BodyRenderFormat.Binary, result)
     }

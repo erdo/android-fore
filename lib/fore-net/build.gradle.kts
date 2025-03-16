@@ -1,12 +1,23 @@
+import co.early.fore.Shared
+import co.early.fore.applyPublishingConfig
+import org.gradle.jvm.tasks.Jar
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinMultiPlatformPlugin)
+    alias(libs.plugins.androidLibraryPlugin)
+    alias(libs.plugins.dokkaPlugin)
+    id("maven-publish")
+    id("signing")
 }
 
 kotlin {
 
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
+    }
+
+    androidTarget{
+        publishLibraryVariants("release")
     }
 
     jvm()
@@ -30,6 +41,8 @@ kotlin {
     linuxX64()
     linuxArm64()
 
+    mingwX64()
+
     sourceSets {
 
         val commonMain by getting {
@@ -37,8 +50,11 @@ kotlin {
                 api(project(":lib:fore-core"))
                 implementation(libs.ktor.client.core)
                 implementation(libs.okio)
-                implementation(libs.kotlin.serialization)
-                //     implementation(libs.apollo4)
+                implementation(libs.kotlinx.serialization)
+                implementation(libs.kotlinx.io)
+
+                // compileOnly(libs.apollo3-v3)
+               // compileOnly(libs.apollo4)
             }
         }
 
@@ -74,6 +90,41 @@ kotlin {
     }
 }
 
+android {
+
+    namespace = "co.early.fore.net"
+
+    compileSdk = Shared.Android.compileSdk
+
+    lint {
+        abortOnError = true
+        lintConfig = File(project.rootDir, "lint-library.xml")
+    }
+
+    defaultConfig {
+        minSdk = Shared.Android.minSdk
+        multiDexEnabled = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = false
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            consumerProguardFiles("../../proguard-library-consumer.pro")
+        }
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
 ext.apply {
     set("LIB_ARTIFACT_ID", "fore-net")
     set("LIB_DESCRIPTION", "fore - network code")
@@ -81,4 +132,10 @@ ext.apply {
 
 println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
-//apply(from = "../../publish-kmp-lib.gradle.kts")
+
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    from(tasks.dokkaHtml)
+}
+
+applyPublishingConfig()

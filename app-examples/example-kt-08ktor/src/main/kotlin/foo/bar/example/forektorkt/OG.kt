@@ -4,8 +4,8 @@ import android.app.Application
 import co.early.fore.core.delegate.DebugDelegateDefault
 import co.early.fore.core.delegate.Fore
 import co.early.fore.net.ktor.CallWrapperKtor
-import foo.bar.example.forektorkt.api.CustomGlobalErrorHandler
-import foo.bar.example.forektorkt.api.CustomKtorBuilder
+import foo.bar.example.forektorkt.api.GlobalErrorHandler
+import foo.bar.example.forektorkt.api.KtorClientBuilder
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.feature.fruit.FruitFetcher
 import kotlin.collections.set
@@ -32,9 +32,9 @@ object OG {
         val logger = Fore.getLogger()
 
         // networking classes common to all models
-        val httpClient = CustomKtorBuilder.create()
+        val httpClient = KtorClientBuilder.create()
         val callWrapper = CallWrapperKtor(
-            errorHandler = CustomGlobalErrorHandler(logger),
+            errorHandler = GlobalErrorHandler(logger),
             logger = logger
         )
 

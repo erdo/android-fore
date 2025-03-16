@@ -2,10 +2,10 @@ import co.early.fore.Shared
 import co.early.fore.Shared.BuildTypes
 
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinSerialization)
-    kotlin("kapt")
+    alias(libs.plugins.androidAppPlugin)
+    alias(libs.plugins.kotlinAndroidPlugin)
+    alias(libs.plugins.kotlinSerializationPlugin)
+    alias(libs.plugins.kotlinKaptPlugin)
 }
 
 
@@ -70,8 +70,8 @@ android {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-kt-core:2.0.0")
-        implementation("co.early.fore:fore-kt-network:2.0.0")
+        implementation("co.early.fore:fore-core:2.0.0-rc.2")
+        implementation("co.early.fore:fore-net:2.0.0-rc.2")
         // implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
     } else {
         implementation(project(":lib:fore-core"))

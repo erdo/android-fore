@@ -16,7 +16,7 @@ object Shared {
     object Versions {
         // fore core package dependencies
         const val android_gradle_plugin = "8.3.2" // must manually change buildSrc.build version
-        const val kotlin_version = "1.9.22" // must manually change buildSrc.build version
+        const val kotlin_version = "2.0.20" // must manually change buildSrc.build version
         const val kotlinx_coroutines_core = "1.8.0"
        // const val jvm_toolchain = 8
         // fore optional package dependencies
@@ -56,7 +56,7 @@ object Shared {
         const val robolectric = "4.9"
         const val gson = "2.8.5"
         const val constraintlayout = "2.1.4"
-        const val ktor_client = "2.3.9"
+        const val ktor_client = "3.1.1"
         const val converter_gson = "2.6.0"
         const val kotlinxSerializationJson = "1.5.1"
     }
@@ -68,7 +68,7 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "2.0.0-rc.1" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_NAME = "2.0.0-rc.2" //"x.x.x-SNAPSHOT"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -80,8 +80,8 @@ object Shared {
         const val LICENCE_NAME = "The Apache Software License, Version 2.0"
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
-        const val use_published_version = true
-        const val published_fore_version_for_examples = "2.0.0-rc.1"//"1.6.3"
+        const val use_published_version = false
+        const val published_fore_version_for_examples = "2.0.0-rc.2"//"1.6.3"
     }
 
     object Secrets {

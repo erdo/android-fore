@@ -1,7 +1,7 @@
 package foo.bar.example.forektorkt.feature.fruit
 
-import co.early.fore.kt.core.type.Either.Companion.fail
-import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.core.type.Either.Companion.fail
+import co.early.fore.core.type.Either.Companion.success
 import co.early.fore.net.ktor.CallWrapperKtor
 import co.early.fore.net.MessageProvider
 import foo.bar.example.forektorkt.api.fruits.FruitPojo

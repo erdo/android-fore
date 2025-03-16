@@ -1,6 +1,6 @@
 package foo.bar.example.forektorkt.api
 
-import co.early.fore.net.testhelpers.Stub
+import co.early.fore.net.stub.Stub
 import foo.bar.example.forektorkt.message.ErrorMessage
 import foo.bar.example.forektorkt.message.ErrorMessage.*
 import java.io.IOException
@@ -8,7 +8,7 @@ import java.net.SocketTimeoutException
 import java.util.ArrayList
 
 /**
- * This will be specific to your own app, it's closely linked to: [CustomGlobalErrorHandler]
+ * This will be specific to your own app, it's closely linked to: [GlobalErrorHandler]
  */
 class CommonServiceFailures : ArrayList<Stub<ErrorMessage>>() {
     init {

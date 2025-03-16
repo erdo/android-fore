@@ -11,10 +11,19 @@ import co.early.fore.net.EncodingGuess.Big5
 import co.early.fore.net.EncodingGuess.Shift_Js
 import co.early.fore.net.EncodingGuess.Utf16_32
 import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.http.content.OutgoingContent.*
+import io.ktor.http.content.OutgoingContent.ByteArrayContent
+import io.ktor.http.content.OutgoingContent.NoContent
+import io.ktor.http.content.OutgoingContent.ProtocolUpgrade
+import io.ktor.http.content.OutgoingContent.ReadChannelContent
+import io.ktor.http.content.OutgoingContent.WriteChannelContent
+import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.availableForRead
+import io.ktor.utils.io.copyAndClose
+import io.ktor.utils.io.copyTo
 import io.ktor.utils.io.readAvailable
 import okio.Buffer
+
 
 internal sealed class BodyRenderFormat {
     data object Json : BodyRenderFormat()
@@ -43,7 +52,7 @@ private const val big5Threshold = 1f / 3f
 internal fun inferBodyRenderFormat(body: Buffer): BodyRenderFormat {
 
     body.utf8TrimStart() // start by assuming utf-8
-    if (body.size == 0L) {
+    if (body.size == 0L || body.exhausted()) {
         return PlainText
     }
 
@@ -158,32 +167,37 @@ private fun Buffer.utf8TrimStart() {
 }
 
 internal suspend fun extractBodyInfo(
-    anyBody: Any,
+    body: Any,
     maxBodyLogBytes: Int,
     logEmptyBody: Boolean = true,
 ): Pair<Buffer, String> {
 
     var message = ""
 
-    val body = anyBody.let {
-        it
-//        if (it is ContentWrapper) {
-//            it.delegate()
-//        } else it
-    }
-
     val bodyBuffer = when (body) {
         /**
          * Responses
          */
         is ByteReadChannel -> {
-            val bytes = ByteArray(maxBodyLogBytes)
-            body.readAvailable(bytes, 0, maxBodyLogBytes)
-            if (!body.isClosedForRead) {
-                message = "[truncated, consider increasing maxBodyLogBytes from:$maxBodyLogBytes, e.g try maxBodyLogBytes=BIG_LOG in PluginLogging constructor]"
-            }
+
             val buffer = Buffer()
-            buffer.write(bytes)
+
+            if (!body.isClosedForRead && body.availableForRead > 0) {
+                val copiedChannel = ByteChannel(autoFlush = true)
+                var bytesRead: Int
+                maxBodyLogBytes.toLong().let {
+                    bytesRead = body.copyTo(copiedChannel, it + 1).toInt()
+                    if (bytesRead > it) {
+                        message =
+                            "[truncated, consider increasing maxBodyLogBytes from:$maxBodyLogBytes]"
+                        bytesRead--
+                    }
+                }
+                val bytes = ByteArray(bytesRead)
+                copiedChannel.readAvailable(bytes, 0, bytesRead)
+                buffer.write(bytes)
+            }
+
             buffer
         }
         /**

@@ -1,15 +1,14 @@
 package foo.bar.example.forektorkt.feature.fruit
 
-import co.early.fore.kt.core.delegate.Fore
-import co.early.fore.kt.core.delegate.TestDelegateDefault
-import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.net.InterceptorLogging
+import co.early.fore.core.delegate.Fore
+import co.early.fore.core.delegate.TestDelegateDefault
+import co.early.fore.core.logging.SystemLogger
 import co.early.fore.net.ktor.CallWrapperKtor
 import co.early.fore.net.testhelpers.InterceptorStubOkHttp3
-import co.early.fore.net.testhelpers.Stub
+import co.early.fore.net.stub.Stub
 import foo.bar.example.forektorkt.api.CommonServiceFailures
-import foo.bar.example.forektorkt.api.CustomGlobalErrorHandler
-import foo.bar.example.forektorkt.api.CustomKtorBuilder
+import foo.bar.example.forektorkt.api.GlobalErrorHandler
+import foo.bar.example.forektorkt.api.KtorClientBuilder
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.message.ErrorMessage
@@ -34,7 +33,7 @@ class FruitFetcherIntegrationTest {
     private val logger = SystemLogger()
     private val interceptorLogging = InterceptorLogging(logger)
     private val callWrapper = CallWrapperKtor(
-        errorHandler = CustomGlobalErrorHandler(logger),
+        errorHandler = GlobalErrorHandler(logger),
         logger = logger
     )
 
@@ -201,10 +200,16 @@ class FruitFetcherIntegrationTest {
     }
 
     private fun stubbedHttpClient(stub: Stub<*>): HttpClient {
-        return CustomKtorBuilder.create(
+        return KtorClientBuilder.create(
             interceptorLogging,
             InterceptorStubOkHttp3(stub),
         )
+
+//        stubs = listOf(
+//            { request: HttpRequestBuilder -> request.url.encodedPath == "/api/test" } to Stub<String>("Test Response"),
+//            { request: HttpRequestBuilder -> request.url.encodedPath.startsWith("/api/data") } to Stub<Int>(42),
+//            { request: HttpRequestBuilder -> request.method.value == "POST" } to Stub<Unit>(Unit)
+//        )
     }
 
     companion object {

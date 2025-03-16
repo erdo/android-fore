@@ -30,9 +30,9 @@
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
  * ./gradlew lib:fore-core:publishToMavenLocal
- * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository
+ * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
  *
- * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel //pre KMP
+ * // pre KMP ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
  * ./gradlew tasks --all | grep publish
  *
@@ -57,11 +57,12 @@
  */
 
 plugins {
-    alias(libs.plugins.androidApplication).apply(false)
-    alias(libs.plugins.androidLibrary).apply(false)
-    alias(libs.plugins.kotlinJvm).apply(false)
-    alias(libs.plugins.kotlinAndroid).apply(false)
-    alias(libs.plugins.kotlinMultiplatform).apply(false)
-    alias(libs.plugins.kotlinCocoapods).apply(false)
-    alias(libs.plugins.kotlinSerialization).apply(false)
+    alias(libs.plugins.androidAppPlugin).apply(false)
+    alias(libs.plugins.androidLibraryPlugin).apply(false)
+    alias(libs.plugins.kotlinJvmPlugin).apply(false)
+    alias(libs.plugins.kotlinAndroidPlugin).apply(false)
+    alias(libs.plugins.kotlinMultiPlatformPlugin).apply(false)
+    alias(libs.plugins.kotlinCocoapodsPlugin).apply(false)
+    alias(libs.plugins.kotlinSerializationPlugin).apply(false)
+    alias(libs.plugins.kotlinKaptPlugin).apply(false)
 }

@@ -1,4 +1,9 @@
-package co.early.fore.net.testhelpers
+package co.early.fore.net.stub
+
+import io.ktor.http.Headers
+import io.ktor.http.HttpProtocolVersion
+import io.ktor.http.HttpProtocolVersion.Companion.HTTP_1_1
+import io.ktor.http.headersOf
 
 /**
  * When used in combination with [InterceptorStubOkHttp3] this class helps you junit test networking
@@ -44,18 +49,15 @@ package co.early.fore.net.testhelpers
  */
 class Stub<R>(
     val httpCode: Int = 0,
+    val httpMessage: String = "",
     val bodyContentResourceFileName: String = "",
     val throwable: Throwable? = null,
-    val headers: List<Header> = emptyList(), // listOf(Header("Content-Type","application/json")),
-    val protocol: String = "http/1.1",
-    val httpMessage: String = "",
+    val headers: Headers = headersOf(), // headersOf("Content-Type" to listOf("application/json"))
+    val protocol: HttpProtocolVersion = HTTP_1_1,
     val expectedResult: R? = null,
 ) {
 
-    data class Header(
-        val name: String,
-        val value: String,
-    )
-
     fun successfullyConnected() = (throwable == null)
 }
+
+typealias StubNoResult = Stub<Unit>

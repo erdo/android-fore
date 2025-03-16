@@ -2,9 +2,9 @@ import co.early.fore.Shared
 import co.early.fore.Shared.BuildTypes
 
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
-    kotlin("kapt")
+    alias(libs.plugins.androidAppPlugin)
+    alias(libs.plugins.kotlinAndroidPlugin)
+    alias(libs.plugins.kotlinKaptPlugin)
 }
 
 val appId = "foo.bar.example.forecoroutine"
