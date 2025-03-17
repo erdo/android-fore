@@ -89,6 +89,7 @@ dependencies {
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
+    testImplementation("org.slf4j:slf4j-simple:2.0.13") // just to get rid of the SL4J warning in unit tests that come from ktor
 
     androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
     androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")

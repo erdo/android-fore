@@ -2,6 +2,8 @@
 
 package co.early.fore.net.stub
 
+import co.early.fore.core.delegate.Fore
+import co.early.fore.core.logging.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.HttpClientCall
 import io.ktor.client.plugins.HttpClientPlugin
@@ -15,6 +17,8 @@ import io.ktor.util.AttributeKey
 import io.ktor.util.date.GMTDate
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.InternalAPI
+import okio.FileSystem
+import okio.SYSTEM
 import readFileBytes
 import kotlin.coroutines.CoroutineContext
 
@@ -28,12 +32,16 @@ import kotlin.coroutines.CoroutineContext
  */
 class PluginStubInterceptor private constructor(
     private val forceStubMatch: Boolean,
-    private val stubs: List<Pair<(HttpRequestBuilder) -> Boolean, Stub<*>>>
+    private val fileSystem: FileSystem,
+    private val stubs: List<Pair<(HttpRequestBuilder) -> Boolean, Stub<*>>>,
+    private val logger: Logger,
 ) {
 
     class Config {
         var forceStubMatch: Boolean = true  // i.e. crash if there is no matching stub
+        var fileSystem = FileSystem.SYSTEM
         var stubs: List<Pair<(HttpRequestBuilder) -> Boolean, Stub<*>>> = emptyList()
+        var logger: Logger? = null
     }
 
 
@@ -45,7 +53,9 @@ class PluginStubInterceptor private constructor(
             val config = Config().apply(block)
             return PluginStubInterceptor(
                 forceStubMatch = config.forceStubMatch,
-                stubs = config.stubs
+                fileSystem = config.fileSystem,
+                stubs = config.stubs,
+                logger = Fore.getLogger(config.logger)
             )
         }
 
@@ -54,6 +64,8 @@ class PluginStubInterceptor private constructor(
                 scope.sendPipeline.intercept(HttpSendPipeline.Before) {
 
                     stubs.firstOrNull { it.first(context) }?.second?.let { stub ->
+
+                        logger.i("[intercepting call]")
 
                         stub.throwable?.let { throw it } // simulates a connection failure
 

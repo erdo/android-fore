@@ -3,10 +3,13 @@ package foo.bar.example.forektorkt
 import android.app.Application
 import co.early.fore.core.delegate.DebugDelegateDefault
 import co.early.fore.core.delegate.Fore
+import co.early.fore.net.NetworkingLogSanitizer
+import co.early.fore.net.PluginNetworkLogs
 import co.early.fore.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.api.GlobalErrorHandler
 import foo.bar.example.forektorkt.api.KtorClientBuilder
 import foo.bar.example.forektorkt.api.fruits.FruitService
+import foo.bar.example.forektorkt.api.offlineConfig
 import foo.bar.example.forektorkt.feature.fruit.FruitFetcher
 import kotlin.collections.set
 
@@ -32,7 +35,40 @@ object OG {
         val logger = Fore.getLogger()
 
         // networking classes common to all models
-        val httpClient = KtorClientBuilder.create()
+        val httpClient = KtorClientBuilder.create(
+            configurePluginsAfter = {
+                install(PluginNetworkLogs) {
+                    // all these are optional, default will suit most requirements
+                    this.logger = logger
+                    curlStyleRequestLogs = true
+                    prettifyResponseLogs = true
+                    networkingLogSanitizer = object : NetworkingLogSanitizer {
+                        override fun sanitizeHeaders(headers: Set<Map.Entry<String, List<String>>>): Set<Map.Entry<String, List<String>>> {
+                            return headers
+                                .filterNot { header ->
+                                    setOf(
+                                        "Authorization",
+                                        "X-Auth-Token",
+                                        "X-Session-Token"
+                                    ).any { it.equals(header.key, ignoreCase = true) }
+                                }
+                                .toSet()
+                        }
+
+                        override fun sanitizeBody(text: String): String {
+                            // highly implementation specific, e.g. you might want
+                            // to recursively search through json keys for "id" or whatever
+                            // and redact all the corresponding values etc
+                            return text.replace("secret", "XXXX")
+                        }
+                    }
+                    filters = listOf { request ->
+                        // don't log any hosts containing notinteresting.com
+                        !request.url.host.contains("notinteresting.com")
+                    }
+                }
+            }
+        )
         val callWrapper = CallWrapperKtor(
             errorHandler = GlobalErrorHandler(logger),
             logger = logger

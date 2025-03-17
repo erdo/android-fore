@@ -59,7 +59,7 @@ class CallWrapperKtor<F>(
 ) : CallerKtor<F> {
 
     /**
-     * @param call Retrofit call to be processed
+     * @param call network call to be processed
      * @param <S> Successful response body type
      */
     override suspend fun <S> processCallAwait(call: suspend () -> S): Either<F, S> {
@@ -67,7 +67,7 @@ class CallWrapperKtor<F>(
     }
 
     /**
-     * @param call Retrofit call to be processed
+     * @param call network call to be processed
      * @param <S> Successful response body type
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
@@ -78,7 +78,7 @@ class CallWrapperKtor<F>(
     }
 
     /**
-     * @param call Retrofit call to be processed
+     * @param call network call to be processed
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
@@ -87,7 +87,7 @@ class CallWrapperKtor<F>(
     }
 
     /**
-     * @param call Retrofit call to be processed
+     * @param call network call to be processed
      * @param <S> Successful response body type
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */

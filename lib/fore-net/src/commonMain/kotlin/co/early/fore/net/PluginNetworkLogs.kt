@@ -38,8 +38,8 @@ class PluginNetworkLogs private constructor(
         var prettifyResponseLogs: Boolean = true
         var maxBodyLogBytes: Int = 4000
         var networkingLogSanitizer: NetworkingLogSanitizer? = null
-        var logger: Logger? = null
         var filters: List<(HttpRequestBuilder) -> Boolean> = emptyList()
+        var logger: Logger? = null
     }
 
     companion object Plugin : HttpClientPlugin<Config, PluginNetworkLogs> {

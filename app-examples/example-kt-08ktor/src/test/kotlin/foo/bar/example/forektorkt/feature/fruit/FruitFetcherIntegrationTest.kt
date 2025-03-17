@@ -3,8 +3,9 @@ package foo.bar.example.forektorkt.feature.fruit
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.core.logging.SystemLogger
+import co.early.fore.net.PluginNetworkLogs
 import co.early.fore.net.ktor.CallWrapperKtor
-import co.early.fore.net.testhelpers.InterceptorStubOkHttp3
+import co.early.fore.net.stub.PluginStubInterceptor
 import co.early.fore.net.stub.Stub
 import foo.bar.example.forektorkt.api.CommonServiceFailures
 import foo.bar.example.forektorkt.api.GlobalErrorHandler
@@ -13,6 +14,8 @@ import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.message.ErrorMessage
 import io.ktor.client.*
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.http.headersOf
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.impl.annotations.MockK
@@ -24,14 +27,13 @@ import org.junit.Test
 /**
  * This is a slightly more end-to-end style of test, but without actually connecting to a network
  *
- * Using [InterceptorStubOkHttp3] we replace the server response with a canned response taken
- * from static text files saved in /resources. This all happens in OkHttp land so the model
+ * Using [PluginStubInterceptor] we replace the server response with a canned response taken
+ * from static text files saved in /resources. This all happens in Ktor land so the model
  * under test is not aware of any difference.
  */
 class FruitFetcherIntegrationTest {
 
     private val logger = SystemLogger()
-    private val interceptorLogging = InterceptorLogging(logger)
     private val callWrapper = CallWrapperKtor(
         errorHandler = GlobalErrorHandler(logger),
         logger = logger
@@ -165,7 +167,7 @@ class FruitFetcherIntegrationTest {
     @Throws(Exception::class)
     fun fetchFruit_CommonFailures() {
 
-        for (stub in CommonServiceFailures()) {
+        CommonServiceFailures.forEach { stub ->
 
             logger.i(
                 "------- Common Service Failure: HTTP:"
@@ -201,15 +203,15 @@ class FruitFetcherIntegrationTest {
 
     private fun stubbedHttpClient(stub: Stub<*>): HttpClient {
         return KtorClientBuilder.create(
-            interceptorLogging,
-            InterceptorStubOkHttp3(stub),
+            configurePluginsAfter = {
+                install(PluginNetworkLogs) {
+                    curlStyleRequestLogs = false
+                }
+                install(PluginStubInterceptor) {
+                    stubs = listOf({ _: HttpRequestBuilder -> true } to stub)
+                }
+            }
         )
-
-//        stubs = listOf(
-//            { request: HttpRequestBuilder -> request.url.encodedPath == "/api/test" } to Stub<String>("Test Response"),
-//            { request: HttpRequestBuilder -> request.url.encodedPath.startsWith("/api/data") } to Stub<Int>(42),
-//            { request: HttpRequestBuilder -> request.method.value == "POST" } to Stub<Unit>(Unit)
-//        )
     }
 
     companion object {
@@ -217,21 +219,21 @@ class FruitFetcherIntegrationTest {
         private val stubbedSuccess = Stub(
             httpCode = 201, //stubbed HTTP code
             bodyContentResourceFileName = "fruit/success.json", //stubbed body response
-            headers = listOf(Stub.Header("Content-Type", "application/json")), //headers
+            headers = headersOf("Content-Type" to listOf("application/json")), //headers
             expectedResult = FruitPojo("orange", true, 43) //expected result
         )
 
         private val stubbedFailUserLocked = Stub(
             httpCode = 401, //stubbed HTTP code
             bodyContentResourceFileName = "common/error_user_locked.json", //stubbed body response
-            headers = listOf(Stub.Header("Content-Type", "application/json")), //headers
+            headers = headersOf("Content-Type", listOf("application/json")), //headers
             expectedResult = ErrorMessage.ERROR_FRUIT_USER_LOCKED //expected result
         )
 
         private val stubbedFailureUserNotEnabled = Stub(
             httpCode = 401, //stubbed HTTP code
             bodyContentResourceFileName = "common/error_user_not_enabled.json", //stubbed body response
-            headers = listOf(Stub.Header("Content-Type", "application/json")), //headers
+            headers = headersOf("Content-Type", listOf( "application/json")), //headers
             expectedResult = ErrorMessage.ERROR_FRUIT_USER_NOT_ENABLED //expected result
         )
     }
