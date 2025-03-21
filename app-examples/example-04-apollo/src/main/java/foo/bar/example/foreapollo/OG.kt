@@ -10,17 +10,11 @@ import co.early.fore.core.logging.AndroidLogger
 import co.early.fore.core.logging.SilentLogger
 import foo.bar.example.foreapollo.api.ApolloClientBuilder
 import foo.bar.example.foreapollo.api.CustomGlobalErrorHandler
-import foo.bar.example.foreapollo.api.CustomGlobalRequestInterceptor
 import foo.bar.example.foreapollo.feature.authentication.AuthService
 import foo.bar.example.foreapollo.feature.authentication.Authenticator
 import foo.bar.example.foreapollo.feature.launch.LaunchService
 import foo.bar.example.foreapollo.feature.launch.LaunchesModel
 import com.apollographql.apollo.api.Optional
-
-//add test fixtures lib
-//finish both sample apps w. basic unit tests only
-//release and tag an rc.2
-
 
 /**
  *
