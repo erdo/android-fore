@@ -42,8 +42,8 @@ object OG {
         Fore.setDelegate(DebugDelegateDefault(logger = logger))
 
         // networking classes common to all models
-        val globalRequestInterceptor = CustomGlobalRequestInterceptor(logger)
-        val apolloClient = ApolloClientBuilder.create()
+
+        val apolloClient by lazy { ApolloClientBuilder.create(OG[Authenticator::class.java]) }
 
         val callWrapper = CallWrapperApollo(
             CustomGlobalErrorHandler(logger),
@@ -58,7 +58,7 @@ object OG {
             callWrapper,
             logger
         )
-        globalRequestInterceptor.setAuthenticator(authenticator)
+
         val launchesModel = LaunchesModel(
             launchService = LaunchService(
                 getLaunchList = { apolloClient.query(LaunchListQuery()).execute() },

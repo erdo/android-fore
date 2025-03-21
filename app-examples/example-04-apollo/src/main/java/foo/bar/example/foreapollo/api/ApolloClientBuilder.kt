@@ -2,6 +2,7 @@ package foo.bar.example.foreapollo.api
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.ktor.ktorClient
+import foo.bar.example.foreapollo.feature.authentication.Authenticator
 
 /**
  * Most of this will all be specific to your application, when customising for your own case
@@ -12,11 +13,12 @@ import com.apollographql.ktor.ktorClient
  *
  */
 object ApolloClientBuilder {
-
-    fun create(): ApolloClient {
+    fun create(authenticator: Authenticator): ApolloClient {
         return ApolloClient.Builder()
             .serverUrl("https://apollo-fullstack-tutorial.herokuapp.com/graphql")
-            .ktorClient(KtorClientBuilder.create())
+            .ktorClient(KtorClientBuilder.create {
+                addSessionToken(authenticator = authenticator)
+            })
             .build()
     }
 }
