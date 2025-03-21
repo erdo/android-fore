@@ -4,6 +4,7 @@ import co.early.fore.core.delegate.Fore
 import co.early.fore.core.logging.Logger
 import co.early.fore.net.NetworkingLogSanitizer
 import co.early.fore.net.ForeNetworkLogs
+import co.early.fore.net.ForeNetworkLogs2
 import foo.bar.example.foreapollo.BuildConfig
 import io.ktor.client.*
 import io.ktor.client.engine.cio.CIO
@@ -45,7 +46,7 @@ object KtorClientBuilder {
                     ignoreUnknownKeys = true
                 }
             }
-            install(ForeNetworkLogs) {
+            install(ForeNetworkLogs2) {
                 // all these are optional, default will suit most requirements
                 logger = lgr
                 curlStyleRequestLogs = true

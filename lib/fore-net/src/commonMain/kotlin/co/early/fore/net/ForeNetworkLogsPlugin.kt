@@ -17,6 +17,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.util.AttributeKey
+import io.ktor.utils.io.KtorDsl
 import okio.Buffer
 import kotlin.random.Random
 
@@ -32,6 +33,7 @@ class ForeNetworkLogs private constructor(
     private val networkingLogSanitizer: NetworkingLogSanitizer?,
     private val logger: Logger,
 ) {
+    @KtorDsl
     class Config {
         var preTag: String = "Net"
         var curlStyleRequestLogs: Boolean = true
@@ -156,6 +158,16 @@ class ForeNetworkLogs private constructor(
             networkingLogSanitizer = plugin.networkingLogSanitizer,
         )
 
+        // remove the new line character of the curl request if there is no body
+        if (plugin.curlStyleRequestLogs &&
+            requestStringBuilder.length > 2 &&
+            requestStringBuilder[requestStringBuilder.length - 2] == '\\' &&
+            requestBody.first.size < 1
+        ) {
+            requestStringBuilder.setLength(requestStringBuilder.length - 2)
+            requestStringBuilder.appendLine()
+        }
+
         requestStringBuilder.logBody(
             bodyToLog = requestBody.first,
             message = requestBody.second,
@@ -242,15 +254,11 @@ class ForeNetworkLogs private constructor(
         val sanitizedHeaderEntries =
             networkingLogSanitizer?.sanitizeHeaders(headers) ?: headers
 
-        sanitizedHeaderEntries.forEachIndexed { index, (key, values) ->
+        sanitizedHeaderEntries.forEach { (key, values) ->
             if (curlStyleRequestLogging) {
-                if (index < sanitizedHeaderEntries.size - 1) {
-                    appendLine(" --header '$key: $values' \\")
-                } else {
-                    appendLine(" --header '$key: $values'")
-                }
+                appendLine(" --header '$key: ${values.joinToString(", ")}' \\")
             } else {
-                appendLine("    $key: $values")
+                appendLine("    $key: ${values.joinToString(", ")}")
             }
         }
     }
@@ -291,7 +299,7 @@ class ForeNetworkLogs private constructor(
                 val sanitized = networkingLogSanitizer?.sanitizeBody(pretty) ?: pretty
 
                 if (curlStyleLogging) {
-                    appendLine("-d '$sanitized'")
+                    appendLine(" --data '$sanitized'")
                 } else {
                     appendLine(sanitized)
                 }

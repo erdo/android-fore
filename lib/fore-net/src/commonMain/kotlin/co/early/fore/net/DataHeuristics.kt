@@ -19,8 +19,8 @@ import io.ktor.http.content.OutgoingContent.WriteChannelContent
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.availableForRead
-import io.ktor.utils.io.copyAndClose
 import io.ktor.utils.io.copyTo
+import io.ktor.utils.io.core.toByteArray
 import io.ktor.utils.io.readAvailable
 import okio.Buffer
 
@@ -221,6 +221,12 @@ internal suspend fun extractBodyInfo(
         is ReadChannelContent, is WriteChannelContent, is ProtocolUpgrade -> {
             message = "[body logging unsupported for $body]"
             null
+        }
+
+        is String -> { //often how apollo gql will send requests
+            val buffer = Buffer()
+            buffer.write(body.toByteArray())
+            buffer
         }
 
         is NoContent -> {
