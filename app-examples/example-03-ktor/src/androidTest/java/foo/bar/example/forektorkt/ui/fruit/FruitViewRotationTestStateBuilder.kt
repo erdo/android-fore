@@ -3,8 +3,8 @@ package foo.bar.example.forektorkt.ui.fruit
 import android.content.pm.ActivityInfo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.rule.ActivityTestRule
-import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.core.type.Either
+import co.early.fore.core.logging.SystemLogger
+import co.early.fore.core.type.Either
 import foo.bar.example.forektorkt.App
 import foo.bar.example.forektorkt.OG
 import foo.bar.example.forektorkt.ProgressBarIdler

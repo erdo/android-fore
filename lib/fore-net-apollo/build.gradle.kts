@@ -31,25 +31,19 @@ kotlin {
 
     watchosArm32()
     watchosArm64()
-    watchosX64()
     watchosSimulatorArm64()
 
     tvosArm64()
     tvosX64()
     tvosSimulatorArm64()
 
-    linuxX64()
-    linuxArm64()
-
-    mingwX64()
-
     sourceSets {
 
         val commonMain by getting {
             dependencies {
                 api(project(":lib:fore-net"))
-                compileOnly(libs.apollo3.v3)
-                compileOnly(libs.apollo4)
+                compileOnly(libs.apollo.runtime)
+                api(libs.apollo.runtime) // remove the api line if KMP ever supports compileOnly
             }
         }
 

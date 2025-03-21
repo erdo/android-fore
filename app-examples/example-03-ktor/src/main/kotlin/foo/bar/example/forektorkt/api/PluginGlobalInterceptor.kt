@@ -7,6 +7,10 @@ import io.ktor.client.request.*
 import io.ktor.util.*
 import io.ktor.client.HttpClient
 
+/**
+ * Before creating your own custom ktor plugin check what's available first,
+ * for instance: install(DefaultRequest) { headers.append("User-Agent", "my ua") }
+ */
 class PluginGlobalInterceptor private constructor(
     private val logger: Logger,
    // private val session: Session,

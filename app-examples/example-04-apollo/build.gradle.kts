@@ -2,14 +2,14 @@ import co.early.fore.Shared
 import co.early.fore.Shared.BuildTypes
 
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
-    id("com.apollographql.apollo3").version("3.8.3")
-    kotlin("kapt")
+    alias(libs.plugins.androidAppPlugin)
+    alias(libs.plugins.kotlinAndroidPlugin)
+    alias(libs.plugins.kotlinSerializationPlugin)
+    alias(libs.plugins.kotlinKaptPlugin)
+    alias(libs.plugins.apolloPlugin)
 }
 
-
-val appId = "foo.bar.example.foreapollo3"
+val appId = "foo.bar.example.foreapollo"
 
 fun getTestBuildType(): String {
     return project.properties["testBuildType"] as String? ?: BuildTypes.DEFAULT
@@ -57,7 +57,10 @@ android {
         }
         getByName(BuildTypes.RELEASE) {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "../proguard-example-app.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-example-kt-08ktor.pro"
+            )
             signingConfig = signingConfigs.getByName(BuildTypes.RELEASE)
         }
     }
@@ -85,14 +88,21 @@ apollo {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
-        implementation("co.early.fore:fore-kt-network:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-core:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-net:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-net-apollo:${Shared.Publish.published_fore_version_for_examples}")
     } else {
-        implementation(project(":fore-kt:fore-kt-android-core"))
-        implementation(project(":fore-kt:fore-kt-network"))
+        implementation(project(":lib:fore-core"))
+        implementation(project(":lib:fore-net"))
+        implementation(project(":lib:fore-net-apollo"))
     }
 
-    implementation("com.apollographql.apollo3:apollo-runtime:${Shared.Versions.apollo3}")
+    implementation(libs.apollo.runtime)
+    implementation(libs.apollo.engine.ktor)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.serialization.json)
+    implementation(libs.ktor.content.negotiation)
 
     implementation("io.coil-kt:coil:${Shared.Versions.coil}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

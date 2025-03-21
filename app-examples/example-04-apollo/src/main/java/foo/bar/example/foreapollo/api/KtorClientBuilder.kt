@@ -1,13 +1,15 @@
-package foo.bar.example.forektorkt.api
+package foo.bar.example.foreapollo.api
 
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.logging.Logger
 import co.early.fore.net.NetworkingLogSanitizer
 import co.early.fore.net.ForeNetworkLogs
+import foo.bar.example.foreapollo.BuildConfig
 import io.ktor.client.*
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import kotlinx.serialization.json.Json
 
 /**
  * Most of this will all be specific to your application, when customising for your own case
@@ -35,11 +37,13 @@ object KtorClientBuilder {
 
             additionalPlugins(this)
 
-            install(ContentNegotiation) {
-                json()
+            install(DefaultRequest) {
+                headers.append("User-Agent", "fore-example-user-agent-${BuildConfig.VERSION_NAME}")
             }
-            install(PluginGlobalInterceptor) {
-                logger = lgr
+            install(ContentNegotiation) {
+                Json {
+                    ignoreUnknownKeys = true
+                }
             }
             install(ForeNetworkLogs) {
                 // all these are optional, default will suit most requirements

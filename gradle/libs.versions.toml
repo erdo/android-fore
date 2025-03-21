@@ -6,10 +6,8 @@ jvm-toolchain = "8"
 okhttp3v3 = "3.14.9"
 okhttp3v4 = "4.12.0"
 okhttp3v5 = "5.0.0-alpha.12"
-apollo = "2.5.14"
-apollo3 = "3.8.3"
-apollo4 = "4.1.1"
-retrofit = "2.11.0"
+apollo = "4.1.1"
+apolloEngineKtor = "0.1.1"
 ktor = "3.1.1"
 coroutines = "1.10.1"
 lifecycle = "2.6.2" # from 2.7.0 onwards lifecycle-livedata-ktx has broken support for minSdk 16
@@ -26,14 +24,15 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+
 okio = "com.squareup.okio:okio:3.10.2"
 okhttp3-v3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3v3" }
 okhttp3-v4 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3v4" }
 okhttp3-v5 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3v5" }
-
-
-apollo3-v3 = { module = "com.apollographql.apollo3:apollo-runtime", version.ref = "apollo3" }
-apollo4 = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo4" }
+apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
+apollo-engine-ktor = { module = "com.apollographql.ktor:apollo-engine-ktor", version.ref = "apolloEngineKtor" }
 
 [plugins]
 androidAppPlugin = { id = "com.android.application", version.ref = "androidPluginVersion" }
@@ -44,5 +43,6 @@ kotlinMultiPlatformPlugin = { id = "org.jetbrains.kotlin.multiplatform", version
 kotlinKaptPlugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinVersion" }
 kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
 composePlugin = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
+apolloPlugin = { id = "com.apollographql.apollo", version.ref = "apollo"}
 kotlinCocoapodsPlugin = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlinVersion" }
 dokkaPlugin = "org.jetbrains.dokka:2.0.0"

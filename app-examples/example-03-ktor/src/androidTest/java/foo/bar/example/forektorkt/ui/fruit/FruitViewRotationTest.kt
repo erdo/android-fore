@@ -12,10 +12,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.logging.SystemLogger
-import co.early.fore.kt.core.type.Either
-import co.early.fore.kt.core.type.Either.Companion.success
+import co.early.fore.core.logging.Logger
+import co.early.fore.core.logging.SystemLogger
+import co.early.fore.core.type.Either
+import co.early.fore.core.type.Either.Companion.success
 import co.early.fore.net.ktor.CallWrapperKtor
 import foo.bar.example.forektorkt.EspressoTestMatchers.withDrawable
 import foo.bar.example.forektorkt.R
@@ -136,7 +136,7 @@ class FruitViewRotationTest {
         }
     }
 
-    fun setDeferredResult(deferredResult: CompletableDeferred<co.early.fore.kt.core.type.Either<ErrorMessage, List<FruitPojo>>>) {
+    fun setDeferredResult(deferredResult: CompletableDeferred<co.early.fore.core.type.Either<ErrorMessage, List<FruitPojo>>>) {
         logger.i("setDeferredResult()")
         this.deferredResult = deferredResult
     }

@@ -1,7 +1,7 @@
-package foo.bar.example.forektorkt
+package foo.bar.example.foreapollo
+
 
 import android.app.Application
-
 
 /**
  * Copyright © 2019 early.co. All rights reserved.

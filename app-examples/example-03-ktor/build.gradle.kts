@@ -70,9 +70,8 @@ android {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-core:2.0.0-rc.2")
-        implementation("co.early.fore:fore-net:2.0.0-rc.2")
-        // implementation("co.early.fore:fore-kt-android-core:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-core:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-net:${Shared.Publish.published_fore_version_for_examples}")
     } else {
         implementation(project(":lib:fore-core"))
         implementation(project(":lib:fore-net"))

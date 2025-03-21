@@ -43,4 +43,5 @@ include(':lib:fore-net-apollo')
 //include(":app-examples")
 include(':app-examples:example-01-reactiveui',
         ':app-examples:example-02-coroutine',
-        ':app-examples:example-03-ktor')
+        ':app-examples:example-03-ktor',
+        ':app-examples:example-04-apollo')
