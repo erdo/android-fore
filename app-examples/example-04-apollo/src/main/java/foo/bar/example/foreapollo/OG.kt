@@ -17,11 +17,6 @@ import foo.bar.example.foreapollo.feature.launch.LaunchService
 import foo.bar.example.foreapollo.feature.launch.LaunchesModel
 import com.apollographql.apollo.api.Optional
 
-//look into network traffic, why is logging not showing everything? maybe the order in which they
-//apply the ktor plugins
-//
-//double check curl functionality, copy paste seemed not to work
-//
 //add test fixtures lib
 //finish both sample apps w. basic unit tests only
 //release and tag an rc.2

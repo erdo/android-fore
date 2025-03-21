@@ -9,309 +9,257 @@ import co.early.fore.net.BodyRenderFormat.Html
 import co.early.fore.net.BodyRenderFormat.Json
 import co.early.fore.net.BodyRenderFormat.PlainText
 import co.early.fore.net.BodyRenderFormat.Xml
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpClientPlugin
-import io.ktor.client.plugins.HttpSend
-import io.ktor.client.plugins.plugin
+import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsChannel
-import io.ktor.util.AttributeKey
-import io.ktor.utils.io.KtorDsl
 import okio.Buffer
 import kotlin.random.Random
 
 const val BIG_LOG = 250000
 private const val someCharacters = "ABDEFGH023456789"
 
-class ForeNetworkLogs private constructor(
-    private val tag: String,
-    private val curlStyleRequestLogs: Boolean,
-    private val prettifyResponseLogs: Boolean,
-    private val maxBodyLogBytes: Int,
-    private val filters: List<(HttpRequestBuilder) -> Boolean>,
-    private val networkingLogSanitizer: NetworkingLogSanitizer?,
-    private val logger: Logger,
+class ForeNetworkLogsConfig {
+    var preTag: String = "Net"
+    var curlStyleRequestLogs: Boolean = true
+    var prettifyResponseLogs: Boolean = true
+    var maxBodyLogBytes: Int = 4000
+    var networkingLogSanitizer: NetworkingLogSanitizer? = null
+    var filters: List<(HttpRequestBuilder) -> Boolean> = emptyList()
+    var logger: Logger? = null
+}
+
+val ForeNetworkLogs = createClientPlugin("ForeNetworkLogs", ::ForeNetworkLogsConfig) {
+
+    val config = pluginConfig
+    val logger = Fore.getLogger(config.logger)
+    val compositeTag = "${config.preTag}${createRandomTag()}"
+    var enabled = false
+    var method = ""
+    var url = ""
+
+    onRequest { request, _ ->
+
+        enabled = (config.logger !is SilentLogger && shouldBeLogged(request, config.filters))
+
+        if (enabled) {
+            val (m, u) = logRequest(
+                request = request,
+                config = config,
+                compositeTag = compositeTag,
+                lggr = logger,
+            )
+            method = m
+            url = u
+        }
+    }
+
+    onResponse { response ->
+        if (enabled) {
+            logResponse(
+                response = response,
+                config = config,
+                method = method,
+                url = url,
+                compositeTag = compositeTag,
+                lggr = logger,
+            )
+        }
+    }
+}
+
+private val someChars = someCharacters.toCharArray()
+
+private fun shouldBeLogged(
+    request: HttpRequestBuilder,
+    filters: List<(HttpRequestBuilder) -> Boolean>
+): Boolean =
+    filters.isEmpty() || filters.any { it(request) }
+
+private fun createRandomTag() = " " +
+        nextChar(someChars) +
+        nextChar(someChars) +
+        nextChar(someChars) +
+        nextChar(someChars) +
+        nextChar(someChars)
+
+private fun nextChar(someChars: CharArray) =
+    someChars[Random.Default.nextInt(someChars.size - 1)]
+
+private suspend fun logRequest(
+    request: HttpRequestBuilder,
+    config: ForeNetworkLogsConfig,
+    compositeTag: String,
+    lggr: Logger
+): Pair<String, String> {
+    val requestStringBuilder = StringBuilder()
+    val requestBody = extractBodyInfo(request.body, config.maxBodyLogBytes, false)
+
+    val method = request.method.value
+    val url = request.url.buildString()
+
+    requestStringBuilder.logRequestInfo(
+        method = method,
+        url = url,
+        curlStyleRequestLogging = config.curlStyleRequestLogs,
+    )
+
+    requestStringBuilder.logHeaders(
+        headers = request.headers.entries(),
+        curlStyleRequestLogging = config.curlStyleRequestLogs,
+        networkingLogSanitizer = config.networkingLogSanitizer,
+    )
+
+    // remove the new line character of the curl request if there is no body
+    if (config.curlStyleRequestLogs &&
+        requestStringBuilder.length > 2 &&
+        requestStringBuilder[requestStringBuilder.length - 2] == '\\' &&
+        requestBody.first.size < 1
+    ) {
+        requestStringBuilder.setLength(requestStringBuilder.length - 2)
+        requestStringBuilder.appendLine()
+    }
+
+    requestStringBuilder.logBody(
+        bodyToLog = requestBody.first,
+        message = requestBody.second,
+        curlStyleLogging = config.curlStyleRequestLogs,
+        attemptToPrettify = false,
+        networkingLogSanitizer = config.networkingLogSanitizer,
+        logger = lggr,
+    )
+
+    lggr.d(compositeTag, requestStringBuilder.toString())
+    return Pair(method, url)
+}
+
+private fun StringBuilder.logRequestInfo(
+    method: String,
+    url: String,
+    curlStyleRequestLogging: Boolean,
 ) {
-    @KtorDsl
-    class Config {
-        var preTag: String = "Net"
-        var curlStyleRequestLogs: Boolean = true
-        var prettifyResponseLogs: Boolean = true
-        var maxBodyLogBytes: Int = 4000
-        var networkingLogSanitizer: NetworkingLogSanitizer? = null
-        var filters: List<(HttpRequestBuilder) -> Boolean> = emptyList()
-        var logger: Logger? = null
+    if (curlStyleRequestLogging) {
+        appendLine("curl -i --request $method \\")
+        appendLine(" --url '$url' \\")
+    } else {
+        appendLine("HTTP $method --> $url")
     }
+}
 
-    companion object Plugin : HttpClientPlugin<Config, ForeNetworkLogs> {
+private suspend fun logResponse(
+    response: HttpResponse,
+    config: ForeNetworkLogsConfig,
+    method: String,
+    url: String,
+    compositeTag: String,
+    lggr: Logger
+) {
+    val responseStringBuilder = StringBuilder()
+    val responseBody = extractBodyInfo(response.bodyAsChannel(), config.maxBodyLogBytes)
 
-        override val key: AttributeKey<ForeNetworkLogs> = AttributeKey("ForeNetworkLogs")
+    responseStringBuilder.logResponseInfo(
+        method = method,
+        code = "${response.status.value}, ${response.status.description}",
+        url = url,
+        curlStyleRequestLogs = config.curlStyleRequestLogs
+    )
 
-        override fun prepare(block: Config.() -> Unit): ForeNetworkLogs {
-            Config().apply(block).apply {
-                return ForeNetworkLogs(
-                    tag = preTag,
-                    curlStyleRequestLogs = curlStyleRequestLogs,
-                    prettifyResponseLogs = prettifyResponseLogs,
-                    maxBodyLogBytes = maxBodyLogBytes,
-                    networkingLogSanitizer = networkingLogSanitizer,
-                    filters = filters,
-                    logger = Fore.getLogger(logger),
-                )
-            }
-        }
+    responseStringBuilder.logHeaders(
+        headers = response.headers.entries(),
+        curlStyleRequestLogging = false,
+        networkingLogSanitizer = config.networkingLogSanitizer,
+    )
 
-        override fun install(plugin: ForeNetworkLogs, scope: HttpClient) {
-            scope.plugin(HttpSend).intercept { request ->
+    responseStringBuilder.logBody(
+        bodyToLog = responseBody.first,
+        message = responseBody.second,
+        curlStyleLogging = false,
+        attemptToPrettify = config.prettifyResponseLogs,
+        networkingLogSanitizer = config.networkingLogSanitizer,
+        logger = lggr,
+    )
 
-                val lggr = plugin.logger
+    lggr.d(compositeTag, responseStringBuilder.toString())
+}
 
-                if (lggr !is SilentLogger && plugin.shouldBeLogged(request)) {
 
-                    val compositeTag = "${plugin.tag}${plugin.createRandomTag()}"
+private fun StringBuilder.logResponseInfo(
+    method: String,
+    code: String,
+    url: String,
+    curlStyleRequestLogs: Boolean,
+) {
+    appendLine(
+        "HTTP $method ${if (curlStyleRequestLogs) "Response," else "<--"} Server replied: HTTP-${code} $url"
+    )
+}
 
-                    val (method, url) = plugin.logRequest(
-                        request = request,
-                        plugin = plugin,
-                        compositeTag = compositeTag,
-                        lggr = lggr
-                    )
+private fun StringBuilder.logHeaders(
+    headers: Set<Map.Entry<String, List<String>>>,
+    curlStyleRequestLogging: Boolean,
+    networkingLogSanitizer: NetworkingLogSanitizer?,
+) {
 
-                    val measuredCall = plugin.measureNanos {
-                        try {
-                            execute(request)
-                        } catch (e: Throwable) {
-                            lggr.d(
-                                compositeTag,
-                                "HTTP $method <-- Connection dropped, GETs may be retried $url : $e"
-                            )
-                            throw e
-                        }
-                    }
+    val sanitizedHeaderEntries =
+        networkingLogSanitizer?.sanitizeHeaders(headers) ?: headers
 
-                    plugin.logResponse(
-                        response = measuredCall.first.response,
-                        plugin = plugin,
-                        method = method,
-                        timeTakenNs = measuredCall.second,
-                        url = url,
-                        compositeTag = compositeTag,
-                        lggr = lggr
-                    )
-
-                    measuredCall.first
-                } else {
-                    execute(request)
-                }
-            }
-        }
-    }
-
-    private val someChars = someCharacters.toCharArray()
-
-    private fun shouldBeLogged(request: HttpRequestBuilder): Boolean =
-        filters.isEmpty() || filters.any { it(request) }
-
-    private fun createRandomTag() = " " +
-            nextChar(someChars) +
-            nextChar(someChars) +
-            nextChar(someChars) +
-            nextChar(someChars) +
-            nextChar(someChars)
-
-    private fun nextChar(someChars: CharArray) =
-        someChars[Random.Default.nextInt(someChars.size - 1)]
-
-    private inline fun <T> measureNanos(function: () -> T): Pair<T, Long> {
-        val startTime = Fore.getSystemTimeWrapper().nanoTime()
-        val result: T = function.invoke()
-        return result to (Fore.getSystemTimeWrapper().nanoTime() - startTime)
-    }
-
-    private fun formatNumberWithCommas(number: Long): String {
-        val chunks = number.toString().reversed().chunked(3)
-        return chunks.joinToString(",").reversed()
-    }
-
-    private suspend fun logRequest(
-        request: HttpRequestBuilder,
-        plugin: ForeNetworkLogs,
-        compositeTag: String,
-        lggr: Logger
-    ): Pair<String, String> {
-        val requestStringBuilder = StringBuilder()
-        val requestBody = extractBodyInfo(request.body, plugin.maxBodyLogBytes, false)
-
-        val method = request.method.value
-        val url = request.url.buildString()
-
-        requestStringBuilder.logRequestInfo(
-            method = method,
-            url = url,
-            curlStyleRequestLogging = plugin.curlStyleRequestLogs,
-        )
-
-        requestStringBuilder.logHeaders(
-            headers = request.headers.entries(),
-            curlStyleRequestLogging = plugin.curlStyleRequestLogs,
-            networkingLogSanitizer = plugin.networkingLogSanitizer,
-        )
-
-        // remove the new line character of the curl request if there is no body
-        if (plugin.curlStyleRequestLogs &&
-            requestStringBuilder.length > 2 &&
-            requestStringBuilder[requestStringBuilder.length - 2] == '\\' &&
-            requestBody.first.size < 1
-        ) {
-            requestStringBuilder.setLength(requestStringBuilder.length - 2)
-            requestStringBuilder.appendLine()
-        }
-
-        requestStringBuilder.logBody(
-            bodyToLog = requestBody.first,
-            message = requestBody.second,
-            curlStyleLogging = plugin.curlStyleRequestLogs,
-            attemptToPrettify = false,
-            networkingLogSanitizer = plugin.networkingLogSanitizer,
-            logger = lggr,
-        )
-
-        lggr.d(compositeTag, requestStringBuilder.toString())
-        return Pair(method, url)
-    }
-
-    private fun StringBuilder.logRequestInfo(
-        method: String,
-        url: String,
-        curlStyleRequestLogging: Boolean,
-    ) {
+    sanitizedHeaderEntries.forEach { (key, values) ->
         if (curlStyleRequestLogging) {
-            appendLine("curl -i --request $method \\")
-            appendLine(" --url '$url' \\")
+            appendLine(" --header '$key: ${values.joinToString(", ")}' \\")
         } else {
-            appendLine("HTTP $method --> $url")
+            appendLine("    $key: ${values.joinToString(", ")}")
         }
     }
+}
 
-    internal suspend fun logResponse(
-        response: HttpResponse,
-        plugin: ForeNetworkLogs,
-        method: String,
-        timeTakenNs: Long,
-        url: String,
-        compositeTag: String,
-        lggr: Logger
-    ) {
-        val responseStringBuilder = StringBuilder()
-        val responseBody = extractBodyInfo(response.bodyAsChannel(), plugin.maxBodyLogBytes)
+private fun StringBuilder.logBody(
+    bodyToLog: Buffer,
+    message: String = "",
+    curlStyleLogging: Boolean,
+    attemptToPrettify: Boolean,
+    networkingLogSanitizer: NetworkingLogSanitizer? = null,
+    logger: Logger,
+) {
 
-        responseStringBuilder.logResponseInfo(
-            method = method,
-            code = "${response.status.value}, ${response.status.description}",
-            timeTakenNs = timeTakenNs,
-            url = url,
-            curlStyleRequestLogs = plugin.curlStyleRequestLogs
-        )
+    val size = bodyToLog.size
+    if (size > 0) {
 
-        responseStringBuilder.logHeaders(
-            headers = response.headers.entries(),
-            curlStyleRequestLogging = false,
-            networkingLogSanitizer = plugin.networkingLogSanitizer,
-        )
+        try {
 
-        responseStringBuilder.logBody(
-            bodyToLog = responseBody.first,
-            message = responseBody.second,
-            curlStyleLogging = false,
-            attemptToPrettify = plugin.prettifyResponseLogs,
-            networkingLogSanitizer = plugin.networkingLogSanitizer,
-            logger = lggr,
-        )
-
-        lggr.d(compositeTag, responseStringBuilder.toString())
-    }
-
-    private fun StringBuilder.logResponseInfo(
-        method: String,
-        code: String,
-        timeTakenNs: Long,
-        url: String,
-        curlStyleRequestLogs: Boolean,
-    ) {
-        appendLine(
-            "HTTP $method ${if (curlStyleRequestLogs) "Response," else "<--"} Server replied: HTTP-${code}. took:" +
-                    "${formatNumberWithCommas(timeTakenNs / (1000 * 1000))}ms $url"
-        )
-    }
-
-    private fun StringBuilder.logHeaders(
-        headers: Set<Map.Entry<String, List<String>>>,
-        curlStyleRequestLogging: Boolean,
-        networkingLogSanitizer: NetworkingLogSanitizer?,
-    ) {
-
-        val sanitizedHeaderEntries =
-            networkingLogSanitizer?.sanitizeHeaders(headers) ?: headers
-
-        sanitizedHeaderEntries.forEach { (key, values) ->
-            if (curlStyleRequestLogging) {
-                appendLine(" --header '$key: ${values.joinToString(", ")}' \\")
+            val inferredBodyType = if (curlStyleLogging) {
+                Curl
+            } else if (!attemptToPrettify) {
+                PlainText
             } else {
-                appendLine("    $key: ${values.joinToString(", ")}")
+                inferBodyRenderFormat(bodyToLog)
             }
+
+            val pretty = when (inferredBodyType) {
+                Binary -> {
+                    "(we think this body probably contains binary data - if not, " +
+                            "please open a PR at https://github.com/erdo/android-fore)"
+                }
+
+                Html, Xml -> bodyToLog.xmlPrettyPrint()
+                Json -> bodyToLog.jsonPrettyPrint()
+                PlainText, Curl -> bodyToLog.readUtf8() // make minimal changes
+            }
+
+            val sanitized = networkingLogSanitizer?.sanitizeBody(pretty) ?: pretty
+
+            if (curlStyleLogging) {
+                appendLine(" --data '$sanitized'")
+            } else {
+                appendLine(sanitized)
+            }
+
+        } catch (e: Exception) {
+            logger.e("too large to format nicely, consider reducing maxBodyLogBytes from:$size")
+            logger.e(e.toString())
         }
     }
 
-    private fun StringBuilder.logBody(
-        bodyToLog: Buffer,
-        message: String = "",
-        curlStyleLogging: Boolean,
-        attemptToPrettify: Boolean,
-        networkingLogSanitizer: NetworkingLogSanitizer? = null,
-        logger: Logger,
-    ) {
-
-        val size = bodyToLog.size
-        if (size > 0) {
-
-            try {
-
-                val inferredBodyType = if (curlStyleLogging) {
-                    Curl
-                } else if (!attemptToPrettify) {
-                    PlainText
-                } else {
-                    inferBodyRenderFormat(bodyToLog)
-                }
-
-                val pretty = when (inferredBodyType) {
-                    Binary -> {
-                        "(we think this body probably contains binary data - if not, " +
-                                "please open a PR at https://github.com/erdo/android-fore)"
-                    }
-
-                    Html, Xml -> bodyToLog.xmlPrettyPrint()
-                    Json -> bodyToLog.jsonPrettyPrint()
-                    PlainText, Curl -> bodyToLog.readUtf8() // make minimal changes
-                }
-
-                val sanitized = networkingLogSanitizer?.sanitizeBody(pretty) ?: pretty
-
-                if (curlStyleLogging) {
-                    appendLine(" --data '$sanitized'")
-                } else {
-                    appendLine(sanitized)
-                }
-
-            } catch (e: Exception) {
-                logger.e("too large to format nicely, consider reducing maxBodyLogBytes from:$size")
-                logger.e(e.toString())
-            }
-        }
-
-        if (message.isNotBlank()) {
-            append(message)
-        }
+    if (message.isNotBlank()) {
+        append(message)
     }
 }

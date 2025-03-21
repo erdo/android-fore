@@ -19,21 +19,19 @@ object KtorClientBuilder {
     /**
      *
      * @param configurePluginsBefore ktor plugin configuration block to be run first
-     * @param configurePluginsAfter ktor plugin configuration block to be run  last
      * NB the logging plugin is usually the last one assuming you want to log what is actually
-     * sent from the device after all the other plugins have run (an exception might be an offline
-     * data plugin intercepting real requests)
+     * sent from the device after all the other plugins have run
      * @return ktor HttpClient object suitable for instantiating service interfaces
      */
     fun create(
         lgr: Logger = Fore.getLogger(),
-        additionalPlugins: HttpClientConfig<*>.() -> Unit = {},
+        configurePluginsBefore: HttpClientConfig<*>.() -> Unit = {},
     ): HttpClient {
 
         return HttpClient(CIO) { // CIO or Darwin etc
             expectSuccess = true
 
-            additionalPlugins(this)
+            configurePluginsBefore(this)
 
             install(ContentNegotiation) {
                 json()
