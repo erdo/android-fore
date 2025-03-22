@@ -3,7 +3,7 @@ package foo.bar.example.forektorkt
 import android.app.Application
 import co.early.fore.core.delegate.DebugDelegateDefault
 import co.early.fore.core.delegate.Fore
-import co.early.fore.net.ktor.CallWrapperKtor
+import co.early.fore.net.wrap.CallWrapper
 import foo.bar.example.forektorkt.api.GlobalErrorHandler
 import foo.bar.example.forektorkt.api.KtorClientBuilder
 import foo.bar.example.forektorkt.api.fruits.FruitService
@@ -33,7 +33,7 @@ object OG {
 
         // networking classes common to all models
         val httpClient = KtorClientBuilder.create(logger)
-        val callWrapper = CallWrapperKtor(
+        val callWrapper = CallWrapper(
             errorHandler = GlobalErrorHandler(logger),
             logger = logger
         )

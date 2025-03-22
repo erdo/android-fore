@@ -2,34 +2,32 @@ package foo.bar.example.forektorkt.feature.fruit
 
 import co.early.fore.core.type.Either.Companion.fail
 import co.early.fore.core.type.Either.Companion.success
-import co.early.fore.net.ktor.CallWrapperKtor
+import co.early.fore.net.wrap.CallWrapper
 import co.early.fore.net.MessageProvider
+import co.early.fore.net.wrap.FakeCallWrapper
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.message.ErrorMessage
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred
 
-class StateBuilder internal constructor(private val mockCallWrapperKtor: CallWrapperKtor<ErrorMessage>) {
+class StateBuilder {
+
+    lateinit var fakeCallWrapper: FakeCallWrapper<ErrorMessage>
 
     internal fun getFruitSuccess(fruitPojo: FruitPojo): StateBuilder {
 
-        coEvery {
-            mockCallWrapperKtor.processCallAsync(
-                any() as suspend () -> List<FruitPojo>
-            )
-        } returns CompletableDeferred(success(listOf(fruitPojo)))
+        fakeCallWrapper = FakeCallWrapper<ErrorMessage>(
+            listOf(fruitPojo).toFakeSuccesss()
+        )
 
         return this
     }
 
     internal fun getFruitFail(errorMessage: ErrorMessage): StateBuilder {
 
-        coEvery {
-            mockCallWrapperKtor.processCallAwait(
-                any() as kotlin.reflect.KClass<MessageProvider<ErrorMessage>>,
-                any() as suspend () -> List<FruitPojo>
-            )
-        } returns fail(errorMessage)
+        fakeCallWrapper = FakeCallWrapper<ErrorMessage>(
+            errorMessage.toFakeFail()
+        )
 
         return this
     }

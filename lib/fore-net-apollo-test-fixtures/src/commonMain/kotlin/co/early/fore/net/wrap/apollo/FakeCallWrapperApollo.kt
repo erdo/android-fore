@@ -1,17 +1,14 @@
-package co.early.fore.net.apollo
+package co.early.fore.net.wrap.apollo
 
 import co.early.fore.core.type.Either
 import co.early.fore.net.apollo.CallWrapperApollo.SuccessResult
+import co.early.fore.net.apollo.WrapperApollo
 import com.apollographql.apollo.api.ApolloResponse
 import com.apollographql.apollo.api.Operation
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-
-fun <F, S> S.toApolloSuccess(): Either<Throwable, Either<F, S>> = Either.success(Either.success(this))
-fun <F, S> F.toApolloFail(): Either<Throwable, Either<F, S>> = Either.success(Either.fail(this))
-fun <F, S> Throwable.toApolloThrowable(): Either<Throwable, Either<F, S>> = Either.fail(this)
 
 /**
  * @param fakeResponses For simple test cases, just specify one fakeResponse here which will
@@ -25,17 +22,17 @@ fun <F, S> Throwable.toApolloThrowable(): Either<Throwable, Either<F, S>> = Eith
  * Example use (see example apps in repo)
  *
  * fakeCallWrapperApollo = FakeCallWrapperApollo(
- *     success1.toApolloSuccess(),
- *     success2.toApolloSuccess(),
- *     ErrorMessage.ERROR_NETWORK.toApolloFail(),
- *     success3.toApolloSuccess(),
- *     RuntimeException().toApolloThrowable()
+ *     success1.toFakeSuccess(),
+ *     success2.toFakeSuccess(),
+ *     ErrorMessage.ERROR_NETWORK.toFakeFail(),
+ *     success3.toFakeSuccess(),
+ *     RuntimeException().toFakeThrowable()
  * )
  *
  */
 class FakeCallWrapperApollo<F>(
     vararg fakeResponses: Either<Throwable, Either<F, SuccessResult<*, F>>>,
-) : CallerApollo<F> {
+) : WrapperApollo<F> {
 
     private val pendingFakeResponses: MutableList<Either<Throwable, Either<F, SuccessResult<*, F>>>> =
         fakeResponses.toMutableList()

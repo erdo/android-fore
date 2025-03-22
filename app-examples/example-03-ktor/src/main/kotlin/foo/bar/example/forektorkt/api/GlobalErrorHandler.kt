@@ -1,7 +1,7 @@
 package foo.bar.example.forektorkt.api
 
 import co.early.fore.core.logging.Logger
-import co.early.fore.net.ktor.ErrorHandler
+import co.early.fore.net.wrap.ErrorHandler
 import co.early.fore.net.MessageProvider
 import foo.bar.example.forektorkt.message.ErrorMessage
 import foo.bar.example.forektorkt.message.ErrorMessage.*

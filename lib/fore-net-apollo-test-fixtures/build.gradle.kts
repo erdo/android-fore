@@ -41,6 +41,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":lib:fore-net-apollo"))
+                api(project(":lib:fore-test-fixtures"))
             }
         }
     }

@@ -7,7 +7,7 @@ import co.early.fore.core.observer.ObservableImp
 import co.early.fore.core.type.Either.Fail
 import co.early.fore.core.type.Either.Success
 import co.early.fore.core.type.carryOn
-import co.early.fore.net.ktor.CallWrapperKtor
+import co.early.fore.net.wrap.CallWrapper
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.api.fruits.FruitsCustomError
@@ -22,7 +22,7 @@ typealias FailureCallback<T> = (T) -> Unit
  */
 class FruitFetcher(
     private val fruitService: FruitService,
-    private val callWrapperKtor: CallWrapperKtor<ErrorMessage>,
+    private val callWrapper: CallWrapper<ErrorMessage>,
     private val logger: Logger
 ) : Observable by ObservableImp(logger = logger) {
 
@@ -51,7 +51,7 @@ class FruitFetcher(
 
             logger.i("about to use CallWrapper t:" + Thread.currentThread())
 
-            val deferredResult = callWrapperKtor.processCallAsync {
+            val deferredResult = callWrapper.processCallAsync {
 
                 logger.i("processing call t:" + Thread.currentThread())
 
@@ -88,7 +88,7 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = callWrapperKtor.processCallAwait {
+            val result = callWrapper.processCallAwait {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
@@ -121,7 +121,7 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = callWrapperKtor.processCallAwait(FruitsCustomError::class) {
+            val result = callWrapper.processCallAwait(FruitsCustomError::class) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 
@@ -166,35 +166,35 @@ class FruitFetcher(
              * errors at each step - Internet search for "railway oriented programming"
              * or "andThen" functions)
              */
-            val response = callWrapperKtor.processCallAwait {
+            val response = callWrapper.processCallAwait {
                 logger.i("...create user...")
                 fruitService.createUser()
             }.carryOn {
                 logger.i("...create user ticket...")
-                callWrapperKtor.processCallAwait {
+                callWrapper.processCallAwait {
                     fruitService.createUserTicket(it.userId)
                 }
             }.carryOn {
                 ticketRef = it.ticketRef
                 logger.i("...get waiting time...")
-                callWrapperKtor.processCallAwait {
+                callWrapper.processCallAwait {
                     fruitService.getEstimatedWaitingTime(it.ticketRef)
                 }
             }.carryOn {
                 if (it.minutesWait > 10) {
                     logger.i("...cancel ticket...")
-                    callWrapperKtor.processCallAwait {
+                    callWrapper.processCallAwait {
                         fruitService.cancelTicket(ticketRef)
                     }
                 } else {
                     logger.i("...confirm ticket...")
-                    callWrapperKtor.processCallAwait {
+                    callWrapper.processCallAwait {
                         fruitService.confirmTicket(ticketRef)
                     }
                 }
             }.carryOn {
                 logger.i("...claim free fruit!...")
-                callWrapperKtor.processCallAwait {
+                callWrapper.processCallAwait {
                     fruitService.claimFreeFruit(it.ticketRef)
                 }
             }

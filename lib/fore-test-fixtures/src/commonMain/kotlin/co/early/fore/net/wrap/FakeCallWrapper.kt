@@ -1,4 +1,4 @@
-package co.early.fore.net.ktor
+package co.early.fore.net.wrap
 
 import co.early.fore.core.type.Either
 import co.early.fore.net.MessageProvider
@@ -6,6 +6,12 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+
+
+fun <F, S> S.toFakeSuccess(): Either<Throwable, Either<F, S>> = Either.success(Either.success(this))
+fun <F, S> F.toFakeFail(): Either<Throwable, Either<F, S>> = Either.success(Either.fail(this))
+fun <F, S> Throwable.toFakeThrowable(): Either<Throwable, Either<F, S>> = Either.fail(this)
+
 
 /**
  * @param fakeResponses For simple test cases, just specify one fakeResponse here which will
@@ -15,10 +21,20 @@ import kotlinx.coroutines.sync.withLock
  *
  * Be careful with the Success(S) generic of the fake responses you list here, there'll be a
  * ClassCastException if it doesn't match what is expected by the client code
+ *
+ * Example use (see example apps in repo)
+ *
+ * fakeCallWrapper = FakeCallWrapper(
+ *     success1.toFakeSuccess(),
+ *     success2.toFakeSuccess(),
+ *     ErrorMessage.ERROR_NETWORK.toFakeFail(),
+ *     success3.toFakeSuccess(),
+ *     RuntimeException().toFakeThrowable()
+ * )
  */
-class FakeCallWrapperKtor<F>(
+class FakeCallWrapper<F>(
     vararg fakeResponses: Either<Throwable, Either<F, *>>,
-) : CallerKtor<F> {
+) : Wrapper<F> {
 
     private val pendingFakeResponses: MutableList<Either<Throwable, Either<F, *>>> =
         fakeResponses.toMutableList()

@@ -4,7 +4,7 @@ import co.early.fore.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.delegate.TestDelegateDefault
-import co.early.fore.net.ktor.CallWrapperKtor
+import co.early.fore.net.wrap.CallWrapper
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.message.ErrorMessage
@@ -34,7 +34,7 @@ class FruitFetcherUnitTest {
     private lateinit var mockFailureWithPayload: FailureCallback<ErrorMessage>
 
     @MockK
-    private lateinit var mockCallWrapperKtor: CallWrapperKtor<ErrorMessage>
+    private lateinit var mockCallWrapper: CallWrapper<ErrorMessage>
 
     @MockK
     private lateinit var mockFruitService: FruitService
@@ -61,7 +61,7 @@ class FruitFetcherUnitTest {
         //arrange
         val fruitFetcher = FruitFetcher(
                 mockFruitService,
-                mockCallWrapperKtor,
+                mockCallWrapper,
                 logger
         )
 
@@ -79,10 +79,10 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockSuccess() {
 
         //arrange
-        StateBuilder(mockCallWrapperKtor).getFruitSuccess(fruitPojo)
+        val fakeCallWrapper = StateBuilder().getFruitSuccess(fruitPojo).fakeCallWrapper
         val fruitFetcher = FruitFetcher(
                 mockFruitService,
-                mockCallWrapperKtor,
+                fakeCallWrapper,
                 logger
         )
 
@@ -110,10 +110,10 @@ class FruitFetcherUnitTest {
     fun fetchFruit_MockFailure() {
 
         //arrange
-        StateBuilder(mockCallWrapperKtor).getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT)
+        val fakeCallWrapper = StateBuilder().getFruitFail(ErrorMessage.ERROR_FRUIT_USER_LOGIN_CREDENTIALS_INCORRECT).fakeCallWrapper
         val fruitFetcher = FruitFetcher(
                 mockFruitService,
-                mockCallWrapperKtor,
+                fakeCallWrapper,
                 logger
         )
 
@@ -155,10 +155,10 @@ class FruitFetcherUnitTest {
     fun observersNotifiedAtLeastOnce() {
 
         //arrange
-        StateBuilder(mockCallWrapperKtor).getFruitSuccess(fruitPojo)
+        val fakeCallWrapper = StateBuilder().getFruitSuccess(fruitPojo).fakeCallWrapper
         val fruitFetcher = FruitFetcher(
                 mockFruitService,
-                mockCallWrapperKtor,
+            fakeCallWrapper,
                 logger
         )
         fruitFetcher.addObserver(mockObserver)

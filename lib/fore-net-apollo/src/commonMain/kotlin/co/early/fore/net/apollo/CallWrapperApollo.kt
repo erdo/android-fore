@@ -14,7 +14,7 @@ import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.api.Operation
 import kotlinx.coroutines.Deferred
 
-interface CallerApollo<F> {
+interface WrapperApollo<F> {
     suspend fun <S : Operation.Data> processCallAwait(
         call: suspend () -> ApolloResponse<S>
     ): Either<F, CallWrapperApollo.SuccessResult<S, F>>
@@ -46,7 +46,7 @@ class CallWrapperApollo<F>(
     private val logger: Logger? = null,
     private val workMode: WorkMode? = null,
     private val allowPartialSuccesses: Boolean = true
-) : CallerApollo<F> {
+) : WrapperApollo<F> {
 
     data class SuccessResult<S, F>(
         val data: S,

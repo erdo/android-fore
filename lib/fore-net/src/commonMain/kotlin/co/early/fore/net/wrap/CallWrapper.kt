@@ -1,4 +1,4 @@
-package co.early.fore.net.ktor
+package co.early.fore.net.wrap
 
 import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.Logger
@@ -12,7 +12,7 @@ import co.early.fore.core.type.Either.Companion.success
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
 
-interface CallerKtor<F> {
+interface Wrapper<F> {
     suspend fun <S> processCallAwait(
         call: suspend () -> S
     ): Either<F, S>
@@ -52,11 +52,11 @@ interface CallerKtor<F> {
  * @param <F>  The class type passed back in the event of a failure, Globally applicable
  * failure message class, like an enum for example
  */
-class CallWrapperKtor<F>(
+class CallWrapper<F>(
     private val errorHandler: ErrorHandler<F>,
     private val workMode: WorkMode? = null,
     private val logger: Logger? = null
-) : CallerKtor<F> {
+) : Wrapper<F> {
 
     /**
      * @param call network call to be processed
