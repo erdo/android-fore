@@ -76,7 +76,7 @@ class FakeCallWrapperApollo<F>(
                 is Either.Fail<*> -> throw fakeResponse.value as Throwable
                 is Either.Success<*> -> {
                     CompletableDeferred(
-                        @Suppress("UNCHECKED_CAST") (fakeResponse as Either<F, SuccessResult<S, F>>)
+                        @Suppress("UNCHECKED_CAST") (fakeResponse.value as Either<F, SuccessResult<S, F>>)
                     )
                 }
             }
