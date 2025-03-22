@@ -5,7 +5,8 @@ package co.early.fore.core.time
  */
 interface SystemTimeWrapper {
     /**
-     * Android / Linux / JVM uses System.currentTimeMillis(),
+     * Android / JVM uses System.currentTimeMillis(),
+     * Linux uses TimeSource.Monotonic.markNow()
      * iOS uses NSDate().timeIntervalSince1970,
      * Windows uses GetSystemTimeAsFileTime() [NB:but referenced to the Unix epoch i.e. NOT 1/1/1601]
      */
@@ -14,7 +15,8 @@ interface SystemTimeWrapper {
     /**
      * intended for measuring time _differences_
      *
-     * Android / Linux / JVM uses System.nanoTime(),
+     * Android / JVM uses System.nanoTime(),
+     * Linux uses TimeSource.Monotonic.markNow()
      * iOS uses clock_gettime(CLOCK_UPTIME_RAW)
      * Windows uses QueryPerformance
      */

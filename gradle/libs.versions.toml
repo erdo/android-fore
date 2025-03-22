@@ -1,6 +1,6 @@
 [versions]
 androidPluginVersion = "8.5.2"
-kotlinVersion = "2.0.20"
+kotlinVersion = "2.1.10"
 kotlinXIoVersion = "0.1.8"
 jvm-toolchain = "8"
 okhttp3v3 = "3.14.9"
