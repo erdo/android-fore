@@ -1,48 +1,30 @@
 package foo.bar.example.foreapollo.feature.launch
 
-import co.early.fore.core.type.Either.Companion.fail
-import co.early.fore.core.type.Either.Companion.success
-import co.early.fore.net.apollo.CallWrapperApollo
+import co.early.fore.net.apollo.CallWrapperApollo.SuccessResult
+import co.early.fore.net.apollo.FakeCallWrapperApollo
+import co.early.fore.net.apollo.toApolloFail
+import co.early.fore.net.apollo.toApolloSuccess
 import foo.bar.example.foreapollo.LaunchListQuery
 import foo.bar.example.foreapollo.message.ErrorMessage
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.CompletableDeferred
 
 class StateBuilder internal constructor() {
 
-    val mockCallWrapperApollo: CallWrapperApollo<ErrorMessage> = mockk()
+    lateinit var fakeCallWrapperApollo: FakeCallWrapperApollo<ErrorMessage>
 
     internal fun getLaunchSuccess(launches: LaunchListQuery.Data): StateBuilder {
 
-        val mockResponseSuccess: CallWrapperApollo.SuccessResult<LaunchListQuery.Data, ErrorMessage> =
-            mockk()
-
-        every {
-            mockResponseSuccess.data
-        } answers { launches }
-
-        coEvery {
-            mockCallWrapperApollo.processCallAsync<LaunchListQuery.Data>(any())
-        } returns CompletableDeferred(success(mockResponseSuccess))
-
-        coEvery {
-            mockCallWrapperApollo.processCallAwait<LaunchListQuery.Data>(any())
-        } returns success(mockResponseSuccess)
+        fakeCallWrapperApollo = FakeCallWrapperApollo(
+            SuccessResult<LaunchListQuery.Data, ErrorMessage>(launches).toApolloSuccess()
+        )
 
         return this
     }
 
     internal fun getLaunchFail(errorMessage: ErrorMessage): StateBuilder {
 
-        coEvery {
-            mockCallWrapperApollo.processCallAsync<LaunchListQuery.Data>(any())
-        } returns CompletableDeferred(fail(errorMessage))
-
-        coEvery {
-            mockCallWrapperApollo.processCallAwait<LaunchListQuery.Data>(any())
-        } returns fail(errorMessage)
+        fakeCallWrapperApollo = FakeCallWrapperApollo(
+            errorMessage.toApolloFail()
+        )
 
         return this
     }

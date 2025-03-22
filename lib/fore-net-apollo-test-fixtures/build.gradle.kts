@@ -31,22 +31,16 @@ kotlin {
 
     watchosArm32()
     watchosArm64()
-    watchosX64()
     watchosSimulatorArm64()
 
     tvosArm64()
     tvosX64()
     tvosSimulatorArm64()
 
-    linuxX64()
-    linuxArm64()
-
-    mingwX64()
-
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":lib:fore-core"))
+                implementation(project(":lib:fore-net-apollo"))
             }
         }
     }
@@ -88,7 +82,7 @@ android {
 }
 
 ext.apply {
-    set("LIB_ARTIFACT_ID", "fore-core-test-fixtures")
+    set("LIB_ARTIFACT_ID", "fore-net-apollo-test-fixtures")
     set(
         "LIB_DESCRIPTION",
         "fore-core some test fixtures to avoid the need to use mocking frameworks during client code tests"

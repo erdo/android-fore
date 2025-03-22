@@ -26,12 +26,11 @@ dependencyResolutionManagement {
 rootProject.name = "android-fore"
 
 include(':lib:fore-core')
-include(':lib:fore-core-test-fixtures')
-
 include(':lib:fore-net')
+include(':lib:fore-test-fixtures')
+
 include(':lib:fore-net-apollo')
-//include(':lib:fore-net-okhttp3v3x')
-//include(":lib:fore-net-okhttp3v4x")
+include(':lib:fore-net-apollo-test-fixtures')
 
 // kotlin android
 //include(":fore-kt:fore-kt-android") // everything

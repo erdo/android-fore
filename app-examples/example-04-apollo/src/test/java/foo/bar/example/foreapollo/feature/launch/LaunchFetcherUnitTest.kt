@@ -89,7 +89,7 @@ class LaunchesModelUnitTest {
 
         //arrange
         val callWrapper =
-            StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallWrapperApollo
+            StateBuilder().getLaunchSuccess(mockLaunchesData).fakeCallWrapperApollo
         val launchesModel = LaunchesModel(
             mockLaunchService,
             callWrapper,
@@ -121,7 +121,7 @@ class LaunchesModelUnitTest {
         //arrange
 
         val callWrapper =
-            StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).mockCallWrapperApollo
+            StateBuilder().getLaunchFail(ErrorMessage.INTERNAL_SERVER_ERROR).fakeCallWrapperApollo
         val launchesModel = LaunchesModel(
             mockLaunchService,
             callWrapper,
@@ -169,7 +169,7 @@ class LaunchesModelUnitTest {
 
         //arrange
         val callWrapper =
-            StateBuilder().getLaunchSuccess(mockLaunchesData).mockCallWrapperApollo
+            StateBuilder().getLaunchSuccess(mockLaunchesData).fakeCallWrapperApollo
         val launchesModel = LaunchesModel(
             mockLaunchService,
             callWrapper,

@@ -90,11 +90,15 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation("co.early.fore:fore-core:${Shared.Publish.published_fore_version_for_examples}")
         implementation("co.early.fore:fore-net:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-test-fixtures:${Shared.Publish.published_fore_version_for_examples}")
         implementation("co.early.fore:fore-net-apollo:${Shared.Publish.published_fore_version_for_examples}")
+        implementation("co.early.fore:fore-net-apollo-test-fixtures:${Shared.Publish.published_fore_version_for_examples}")
     } else {
         implementation(project(":lib:fore-core"))
         implementation(project(":lib:fore-net"))
+        implementation(project(":lib:fore-test-fixtures"))
         implementation(project(":lib:fore-net-apollo"))
+        implementation(project(":lib:fore-net-apollo-test-fixtures"))
     }
 
     implementation(libs.apollo.runtime)
@@ -107,6 +111,8 @@ dependencies {
     implementation("io.coil-kt:coil:${Shared.Versions.coil}")
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
     implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
+
+    implementation("org.slf4j:slf4j-nop:2.0.7") // to get rid of the slf4 warning that comes from ktor
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
