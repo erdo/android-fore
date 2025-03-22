@@ -9,8 +9,8 @@ import kotlinx.coroutines.sync.withLock
 
 
 fun <F, S> S.toFakeSuccess(): Either<Throwable, Either<F, S>> = Either.success(Either.success(this))
-fun <F, S> F.toFakeFail(): Either<Throwable, Either<F, S>> = Either.success(Either.fail(this))
-fun <F, S> Throwable.toFakeThrowable(): Either<Throwable, Either<F, S>> = Either.fail(this)
+fun <F> F.toFakeFail(): Either<Throwable, Either<F, Nothing>> = Either.success(Either.fail(this))
+fun Throwable.toFakeThrowable(): Either<Throwable, Nothing> = Either.fail(this)
 
 
 /**
@@ -83,7 +83,7 @@ class FakeCallWrapper<F>(
                 is Either.Fail<*> -> throw fakeResponse.value as Throwable
                 is Either.Success<*> -> {
                     CompletableDeferred(
-                        @Suppress("UNCHECKED_CAST") (fakeResponse as Either<F, S>)
+                        @Suppress("UNCHECKED_CAST") (fakeResponse.value as Either<F, S>)
                     )
                 }
             }

@@ -1,14 +1,10 @@
 package foo.bar.example.forektorkt.feature.fruit
 
-import co.early.fore.core.type.Either.Companion.fail
-import co.early.fore.core.type.Either.Companion.success
-import co.early.fore.net.wrap.CallWrapper
-import co.early.fore.net.MessageProvider
 import co.early.fore.net.wrap.FakeCallWrapper
+import co.early.fore.net.wrap.toFakeFail
+import co.early.fore.net.wrap.toFakeSuccess
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.message.ErrorMessage
-import io.mockk.coEvery
-import kotlinx.coroutines.CompletableDeferred
 
 class StateBuilder {
 
@@ -16,8 +12,8 @@ class StateBuilder {
 
     internal fun getFruitSuccess(fruitPojo: FruitPojo): StateBuilder {
 
-        fakeCallWrapper = FakeCallWrapper<ErrorMessage>(
-            listOf(fruitPojo).toFakeSuccesss()
+        fakeCallWrapper = FakeCallWrapper(
+            listOf(fruitPojo).toFakeSuccess()
         )
 
         return this
@@ -25,8 +21,8 @@ class StateBuilder {
 
     internal fun getFruitFail(errorMessage: ErrorMessage): StateBuilder {
 
-        fakeCallWrapper = FakeCallWrapper<ErrorMessage>(
-            errorMessage.toFakeFail()
+        fakeCallWrapper = FakeCallWrapper(
+            errorMessage.toFakeFail(),
         )
 
         return this

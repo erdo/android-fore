@@ -3,10 +3,11 @@ package foo.bar.example.foreapollo.feature.launch
 import co.early.fore.net.apollo.CallWrapperApollo.SuccessResult
 import co.early.fore.net.wrap.apollo.FakeCallWrapperApollo
 import co.early.fore.net.wrap.toFakeFail
+import co.early.fore.net.wrap.toFakeSuccess
 import foo.bar.example.foreapollo.LaunchListQuery
 import foo.bar.example.foreapollo.message.ErrorMessage
 
-class StateBuilder constructor() {
+class StateBuilder {
 
     lateinit var fakeCallWrapperApollo: FakeCallWrapperApollo<ErrorMessage>
 

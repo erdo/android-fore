@@ -8,6 +8,7 @@ import co.early.fore.core.type.Either.Fail
 import co.early.fore.core.type.Either.Success
 import co.early.fore.core.type.carryOn
 import co.early.fore.net.wrap.CallWrapper
+import co.early.fore.net.wrap.Wrapper
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
 import foo.bar.example.forektorkt.api.fruits.FruitsCustomError
@@ -22,7 +23,7 @@ typealias FailureCallback<T> = (T) -> Unit
  */
 class FruitFetcher(
     private val fruitService: FruitService,
-    private val callWrapper: CallWrapper<ErrorMessage>,
+    private val callWrapper: Wrapper<ErrorMessage>,
     private val logger: Logger
 ) : Observable by ObservableImp(logger = logger) {
 

@@ -1,7 +1,7 @@
 package foo.bar.example.forereactiveuikt.feature.wallet
 
-import co.early.fore.kt.core.logging.Logger
-import co.early.fore.kt.core.logging.SystemLogger
+import co.early.fore.core.logging.Logger
+import co.early.fore.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.core.delegate.Fore
