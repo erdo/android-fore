@@ -88,17 +88,17 @@ apollo {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-core:${Shared.Publish.published_fore_version_for_examples}")
-        implementation("co.early.fore:fore-net:${Shared.Publish.published_fore_version_for_examples}")
-        implementation("co.early.fore:fore-test-fixtures:${Shared.Publish.published_fore_version_for_examples}")
-        implementation("co.early.fore:fore-net-apollo:${Shared.Publish.published_fore_version_for_examples}")
-        implementation("co.early.fore:fore-net-apollo-test-fixtures:${Shared.Publish.published_fore_version_for_examples}")
+        implementation(libs.fore.core)
+        implementation(libs.fore.net)
+        implementation(libs.fore.net.apollo)
+        testImplementation(libs.fore.test.fixtures)
+        testImplementation(libs.fore.net.apollo.test.fixtures)
     } else {
         implementation(project(":lib:fore-core"))
         implementation(project(":lib:fore-net"))
-        implementation(project(":lib:fore-test-fixtures"))
         implementation(project(":lib:fore-net-apollo"))
-        implementation(project(":lib:fore-net-apollo-test-fixtures"))
+        testImplementation(project(":lib:fore-test-fixtures"))
+        testImplementation(project(":lib:fore-net-apollo-test-fixtures"))
     }
 
     implementation(libs.apollo.runtime)

@@ -67,9 +67,11 @@ android {
 dependencies {
 
     if (Shared.Publish.use_published_version) {
-        implementation("co.early.fore:fore-core:${Shared.Publish.published_fore_version_for_examples}")
+        implementation(libs.fore.core)
+        testImplementation(libs.fore.test.fixtures)
     } else {
         implementation(project(":lib:fore-core"))
+        testImplementation(project(":lib:fore-test-fixtures"))
     }
 
     implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")

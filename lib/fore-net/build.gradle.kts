@@ -52,16 +52,12 @@ kotlin {
                 implementation(libs.okio)
                 implementation(libs.kotlinx.serialization)
                 implementation(libs.kotlinx.io)
-
-                // compileOnly(libs.apollo3-v3)
-               // compileOnly(libs.apollo4)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-              //  implementation(libs.okio)
             }
         }
 

@@ -4,12 +4,13 @@ import co.early.fore.Shared.BuildTypes
 plugins {
     alias(libs.plugins.androidAppPlugin)
     alias(libs.plugins.kotlinAndroidPlugin)
+    alias(libs.plugins.composePlugin)
     alias(libs.plugins.kotlinSerializationPlugin)
     alias(libs.plugins.kotlinKaptPlugin)
 }
 
 
-val appId = "foo.bar.example.forektorkt"
+val appId = "foo.bar.example.forecompose"
 
 fun getTestBuildType(): String {
     return project.properties["testBuildType"] as String? ?: BuildTypes.DEFAULT
@@ -29,12 +30,13 @@ android {
     compileSdk = Shared.Android.compileSdk
 
     buildFeatures {
-        viewBinding = true
+        compose = true
         buildConfig = true
     }
+
     defaultConfig {
         applicationId = appId
-        minSdk = Shared.Android.minSdk
+        minSdk = Shared.Android.minComposeSdk
         targetSdk = Shared.Android.targetSdk
         versionCode = 1
         versionName = "1.0"
@@ -57,7 +59,7 @@ android {
         }
         getByName(BuildTypes.RELEASE) {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-example-kt-08ktor.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "../proguard-example-app.pro")
             signingConfig = signingConfigs.getByName(BuildTypes.RELEASE)
         }
     }
@@ -72,35 +74,40 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation(libs.fore.core)
         implementation(libs.fore.net)
+        implementation(libs.fore.compose.android)
         testImplementation(libs.fore.test.fixtures)
     } else {
         implementation(project(":lib:fore-core"))
         implementation(project(":lib:fore-net"))
+        implementation(project(":lib:fore-compose-android"))
         testImplementation(project(":lib:fore-test-fixtures"))
     }
 
-    implementation("io.ktor:ktor-client-mock:${Shared.Versions.ktor_client}")
-    implementation("io.ktor:ktor-client-cio:${Shared.Versions.ktor_client}")
-    implementation("io.ktor:ktor-client-logging:${Shared.Versions.ktor_client}")
-    implementation("io.ktor:ktor-client-okhttp:${Shared.Versions.ktor_client}")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:${Shared.Versions.ktor_client}")
-    implementation("io.ktor:ktor-client-content-negotiation:${Shared.Versions.ktor_client}")
+    // persistence
+    implementation(libs.persista)
+    implementation(libs.kotlinx.serialization)
 
-    implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
-    implementation("androidx.constraintlayout:constraintlayout:${Shared.Versions.constraintlayout}")
+    // compose
 
-    implementation("org.slf4j:slf4j-nop:2.0.7") /// to get rid of the slf4 warning that comes from ktor
+//    implementation("androidx.compose.ui:ui:1.6.0") // Update to latest
+//    implementation("androidx.compose.runtime:runtime:1.6.0")
 
-    testImplementation("junit:junit:${Shared.Versions.junit}")
-    testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.ui.tooling)
 
-    androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
-    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test:rules:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test.ext:junit-ktx:${Shared.Versions.androidxjunit}")
-    androidTestImplementation("androidx.annotation:annotation:${Shared.Versions.annotation}")
-    androidTestImplementation("androidx.test.espresso:espresso-core:${Shared.Versions.espresso_core}") {
-        exclude(group = "com.android.support", module = "support-annotations")
-    }
+    implementation(libs.slf4j.nop) // to get rid of the slf4 warning that comes from ktor
+
+    debugImplementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.wear.compose.tooling)
+    debugImplementation(libs.androidx.wear.tooling.preview)
+
+    //testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }

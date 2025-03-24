@@ -1,16 +1,15 @@
 package co.early.fore
 
-import org.gradle.api.JavaVersion
 import java.io.File
-import java.util.*
+import java.util.Properties
 
 object Shared {
 
     object Android {
         const val minSdk = 16
         const val minComposeSdk = 21
-        const val compileSdk = 34
-        const val targetSdk = 34
+        const val compileSdk = 35
+        const val targetSdk = 35
     }
 
     object Versions {
@@ -41,7 +40,7 @@ object Shared {
         const val material = "1.7.0"
         const val appcompat = "1.5.1"
         const val coil = "1.1.0"
-        const val perSista = "1.4.0"
+        const val perSista = "2.0.0-rc.1"
         const val androidxtest = "1.4.0"
         const val androidxjunit = "1.1.2"
         const val room_version = "2.4.3"
@@ -68,7 +67,7 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "2.0.0-rc.2" //"x.x.x-SNAPSHOT"
+        const val LIB_VERSION_NAME = "2.0.0-rc.3" //"x.x.x-SNAPSHOT"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"
@@ -81,7 +80,7 @@ object Shared {
         const val LICENCE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 
         const val use_published_version = false
-        const val published_fore_version_for_examples = "2.0.0-rc.2"//"1.6.3"
+        const val published_fore_version_for_examples = "2.0.0-rc.3"//"1.6.3"
     }
 
     object Secrets {

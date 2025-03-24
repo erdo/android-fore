@@ -27,6 +27,7 @@ rootProject.name = "android-fore"
 
 include(':lib:fore-core')
 include(':lib:fore-net')
+include(':lib:fore-compose-android')
 include(':lib:fore-test-fixtures')
 
 include(':lib:fore-net-apollo')
@@ -43,4 +44,5 @@ include(':lib:fore-net-apollo-test-fixtures')
 include(':app-examples:example-01-reactiveui',
         ':app-examples:example-02-coroutine',
         ':app-examples:example-03-ktor',
-        ':app-examples:example-04-apollo')
+        ':app-examples:example-04-apollo',
+        ':app-examples:example-06-compose-android')
