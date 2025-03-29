@@ -1,6 +1,7 @@
 import co.early.fore.Shared
 import co.early.fore.applyPublishingConfig
 import org.gradle.jvm.tasks.Jar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiPlatformPlugin)
@@ -14,6 +15,16 @@ kotlin {
 
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
+    }
+
+    targets.withType<org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget> {
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.target.get()))
+                }
+            }
+        }
     }
 
     androidTarget{
@@ -60,29 +71,6 @@ kotlin {
                 implementation(libs.kotlin.test)
             }
         }
-
-//        androidMain.dependencies {
-//            implementation(libs.ktor.client.okhttp)
-//            implementation(libs.kotlinx.coroutines.android)
-//        }
-//
-//        iosMain.dependencies {
-//            implementation(libs.ktor.client.darwin)
-//        }
-
-//        val jvmMain by getting {
-//            dependencies {
-//                //     implementation(libs.okhttp3.v5)
-//                //     implementation(libs.apollo4)
-//                compileOnly(libs.okhttp3.v4)
-//                // OkHttp3 v3.X.X used by Retrofit2 and Apollo2 has method calls: method(), body(), code() etc
-//                // OkHttp3 v4.X.X used by Ktor and Apollo3 has fields: method, body, code etc instead
-//                // we use reflection so that we can handle either case in InterceptorLogging.kt
-//                implementation(libs.kotlin.reflect)
-//                api(project(":lib:fore-net-okhttp3v3x"))
-//                api(project(":lib:fore-net-okhttp3v4x"))
-//            }
-//        }
     }
 }
 

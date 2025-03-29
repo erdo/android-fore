@@ -27,7 +27,7 @@ rootProject.name = "android-fore"
 
 include(':lib:fore-core')
 include(':lib:fore-net')
-include(':lib:fore-compose-android')
+include(':lib:fore-compose')
 include(':lib:fore-test-fixtures')
 
 include(':lib:fore-net-apollo')

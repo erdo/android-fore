@@ -63,7 +63,8 @@ plugins {
     alias(libs.plugins.kotlinAndroidPlugin).apply(false)
     alias(libs.plugins.kotlinMultiPlatformPlugin).apply(false)
     alias(libs.plugins.kotlinCocoapodsPlugin).apply(false)
-    alias(libs.plugins.composePlugin).apply(false)
+    alias(libs.plugins.composeCompilerPlugin).apply(false)
+    //alias(libs.plugins.composeMultiplatformPlugin).apply(false)
     alias(libs.plugins.kotlinSerializationPlugin).apply(false)
     alias(libs.plugins.kotlinKaptPlugin).apply(false)
 }

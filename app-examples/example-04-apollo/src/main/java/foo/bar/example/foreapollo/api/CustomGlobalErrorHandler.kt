@@ -2,7 +2,7 @@ package foo.bar.example.foreapollo.api
 
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.delegate.Fore
-import co.early.fore.net.apollo.ErrorHandler
+import co.early.fore.net.wrap.apollo.ErrorHandler
 import com.apollographql.apollo.api.ApolloResponse
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.apollo.exception.ApolloNetworkException

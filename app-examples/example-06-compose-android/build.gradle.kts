@@ -4,7 +4,7 @@ import co.early.fore.Shared.BuildTypes
 plugins {
     alias(libs.plugins.androidAppPlugin)
     alias(libs.plugins.kotlinAndroidPlugin)
-    alias(libs.plugins.composePlugin)
+    alias(libs.plugins.composeCompilerPlugin)
     alias(libs.plugins.kotlinSerializationPlugin)
     alias(libs.plugins.kotlinKaptPlugin)
 }
@@ -74,12 +74,12 @@ dependencies {
     if (Shared.Publish.use_published_version) {
         implementation(libs.fore.core)
         implementation(libs.fore.net)
-        implementation(libs.fore.compose.android)
+        implementation(libs.fore.compose)
         testImplementation(libs.fore.test.fixtures)
     } else {
         implementation(project(":lib:fore-core"))
         implementation(project(":lib:fore-net"))
-        implementation(project(":lib:fore-compose-android"))
+        implementation(project(":lib:fore-compose"))
         testImplementation(project(":lib:fore-test-fixtures"))
     }
 
@@ -95,7 +95,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.compose)
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui.tooling)
 

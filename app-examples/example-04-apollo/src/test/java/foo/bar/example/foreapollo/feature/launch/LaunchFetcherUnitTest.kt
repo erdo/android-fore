@@ -4,7 +4,7 @@ import co.early.fore.core.observer.Observer
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.core.logging.SystemLogger
-import co.early.fore.net.apollo.CallWrapperApollo
+import co.early.fore.net.wrap.apollo.CallWrapperApollo
 import foo.bar.example.foreapollo.LaunchListQuery
 import foo.bar.example.foreapollo.feature.FailureCallback
 import foo.bar.example.foreapollo.feature.SuccessCallback

@@ -8,7 +8,7 @@ import co.early.fore.core.observer.ObservableImp
 import co.early.fore.core.type.Either.Fail
 import co.early.fore.core.type.Either.Success
 import co.early.fore.core.type.carryOn
-import co.early.fore.net.apollo.WrapperApollo
+import co.early.fore.net.wrap.apollo.WrapperApollo
 import com.apollographql.apollo.api.ApolloResponse
 import foo.bar.example.foreapollo.*
 import foo.bar.example.foreapollo.feature.FailureCallback

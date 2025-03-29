@@ -1,6 +1,6 @@
 package foo.bar.example.foreapollo
 
-import co.early.fore.net.apollo.CallWrapperApollo
+import co.early.fore.net.wrap.apollo.CallWrapperApollo
 
 
 import android.app.Application

@@ -7,7 +7,7 @@ import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.ObservableImp
 import co.early.fore.core.type.Either.Fail
 import co.early.fore.core.type.Either.Success
-import co.early.fore.net.apollo.CallWrapperApollo
+import co.early.fore.net.wrap.apollo.CallWrapperApollo
 import com.apollographql.apollo.api.ApolloResponse
 import foo.bar.example.foreapollo.LoginMutation
 import foo.bar.example.foreapollo.feature.FailureCallback

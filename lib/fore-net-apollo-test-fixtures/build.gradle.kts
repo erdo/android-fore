@@ -1,6 +1,7 @@
 import co.early.fore.Shared
 import co.early.fore.applyPublishingConfig
 import org.gradle.jvm.tasks.Jar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiPlatformPlugin)
@@ -14,6 +15,16 @@ kotlin {
 
     jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
+    }
+
+    targets.withType<org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget> {
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.target.get()))
+                }
+            }
+        }
     }
 
     androidTarget{
@@ -49,7 +60,7 @@ kotlin {
 
 android {
 
-    namespace = "co.early.fore.core"
+    namespace = "co.early.fore.net.wrap.apollo"
 
     compileSdk = Shared.Android.compileSdk
 

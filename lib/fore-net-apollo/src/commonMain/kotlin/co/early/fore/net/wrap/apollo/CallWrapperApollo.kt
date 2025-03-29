@@ -1,4 +1,4 @@
-package co.early.fore.net.apollo
+package co.early.fore.net.wrap.apollo
 
 import co.early.fore.core.WorkMode
 import co.early.fore.core.coroutine.asyncMain

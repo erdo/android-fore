@@ -1,8 +1,8 @@
 package co.early.fore.net.wrap.apollo
 
 import co.early.fore.core.type.Either
-import co.early.fore.net.apollo.CallWrapperApollo.SuccessResult
-import co.early.fore.net.apollo.WrapperApollo
+import co.early.fore.net.wrap.apollo.CallWrapperApollo.SuccessResult
+import co.early.fore.net.wrap.apollo.WrapperApollo
 import com.apollographql.apollo.api.ApolloResponse
 import com.apollographql.apollo.api.Operation
 import kotlinx.coroutines.CompletableDeferred

@@ -1,9 +1,9 @@
 package co.early.fore.compose
 
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.observer.ObservableGroup
 import co.early.fore.core.observer.Observer

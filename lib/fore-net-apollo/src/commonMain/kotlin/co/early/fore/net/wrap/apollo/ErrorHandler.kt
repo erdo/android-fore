@@ -1,4 +1,4 @@
-package co.early.fore.net.apollo
+package co.early.fore.net.wrap.apollo
 
 import com.apollographql.apollo.api.ApolloResponse
 
