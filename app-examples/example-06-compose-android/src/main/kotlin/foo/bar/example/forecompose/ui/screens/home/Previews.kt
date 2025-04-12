@@ -1,5 +1,6 @@
 package foo.bar.example.forecompose.ui.screens.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import co.early.fore.ui.size.wXS_low
 import foo.bar.example.forecompose.feature.counter.CounterState
 import foo.bar.example.forecompose.ui.theme.ComposeTheme
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun PreviewWithWindowSize(isRound: Boolean = false, content: @Composable (size: WindowSize) -> Unit) {
     ComposeTheme {

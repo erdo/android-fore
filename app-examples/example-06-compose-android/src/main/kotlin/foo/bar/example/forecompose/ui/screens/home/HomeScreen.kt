@@ -28,6 +28,7 @@ import foo.bar.example.forecompose.OG
 import foo.bar.example.forecompose.R
 import foo.bar.example.forecompose.feature.counter.CounterModel
 import foo.bar.example.forecompose.feature.counter.CounterState
+import foo.bar.example.forecompose.ui.screens.common.ShowHideWrapper
 import foo.bar.example.forecompose.ui.screens.common.toLabel
 
 @Composable
@@ -41,7 +42,6 @@ fun HomeScreen(
     val counterState by counterModel.observeAsState("FOO") { counterModel.state }
 
     ShowHideWrapper(counterState, size) {
-
         HomeView(
             size = size,
             counterState = counterState,
@@ -267,109 +267,4 @@ fun BoxScope.MiniDiagnostics(size: WindowSize) {
         text = diagnosticText,
         style = TextStyle(color = Color.Blue, fontSize = diagnosticsFontSize)
     )
-}
-
-/**
- * This is mainly to demonstrate that [ObservableGroup.observeAsState()] works as intended,
- * as the app is backgrounded or the composable is hidden, the logs show the fore
- * observer being added / removed as appropriate. See the observeAsState code comments for a
- * full explanation
- */
-@Composable
-fun ShowHideWrapper(state: Any, size: WindowSize, content: @Composable () -> Unit) {
-
-    val show = remember { mutableStateOf(true) }
-    val btnColor by animateColorAsState(
-        targetValue = if (show.value) Color.Red else Color.Green,
-        animationSpec = tween(durationMillis = 500),
-    )
-
-    AnimatedVisibility(
-        visible = show.value,
-        enter = slideInVertically(initialOffsetY = { it / 2 }) + fadeIn(),
-        exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut(),
-    ) {
-        content()
-    }
-
-    val stateFontSize = WidthBasedTextUnit(
-        xs = 12.sp,
-        m = 20.sp,
-        l = 35.sp
-    )
-
-    val stateAsString = state.prettyPrint()
-
-    AnimatedVisibility(
-        visible = !show.value,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = stateAsString,
-                style = TextStyle(fontSize = stateFontSize(size))
-            )
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        DisplayToggleView(
-            size = size,
-            displayed = show.value,
-            btnColor = btnColor,
-            toggleDisplayCallback = { show.value = !show.value },
-        )
-    }
-}
-
-// https://gist.github.com/Mayankmkh/92084bdf2b59288d3e74c3735cccbf9f
-fun Any.prettyPrint(): String {
-
-    var indentLevel = 0
-    val indentWidth = 4
-
-    fun padding() = "".padStart(indentLevel * indentWidth)
-
-    val toString = toString()//.replace("foo.bar.clean.domain.features.", "")
-
-    val stringBuilder = StringBuilder(toString.length)
-
-    var i = 0
-    while (i < toString.length) {
-        when (val char = toString[i]) {
-            '(', '[', '{' -> {
-                indentLevel++
-                stringBuilder.appendLine(char).append(padding())
-            }
-
-            ')', ']', '}' -> {
-                indentLevel--
-                stringBuilder.appendLine().append(padding()).append(char)
-            }
-
-            ',' -> {
-                stringBuilder.appendLine(char).append(padding())
-                // ignore space after comma as we have added a newline
-                val nextChar = toString.getOrElse(i + 1) { char }
-                if (nextChar == ' ') i++
-            }
-
-            else -> {
-                stringBuilder.append(char)
-            }
-        }
-        i++
-    }
-
-    return stringBuilder.toString().replace("=", " = ")
 }
