@@ -33,16 +33,8 @@ include(':lib:fore-test-fixtures')
 include(':lib:fore-net-apollo')
 include(':lib:fore-net-apollo-test-fixtures')
 
-// kotlin android
-//include(":fore-kt:fore-kt-android") // everything
-//include(":lib:fore-kt-android-core")
-//include(":fore-kt:fore-kt-android-adapters")
-//include(":fore-kt:fore-kt-android-network")
-//include(":fore-kt:fore-kt-android-compose")
-//
-//include(":app-examples")
 include(':app-examples:example-01-reactiveui',
         ':app-examples:example-02-coroutine',
         ':app-examples:example-03-ktor',
         ':app-examples:example-04-apollo',
-        ':app-examples:example-06-compose-android')
+        ':app-examples:example-06-compose',)

@@ -30,9 +30,15 @@
  * ./gradlew clean
  * ./gradlew publishToMavenLocal
  * ./gradlew lib:fore-core:publishToMavenLocal
+ * ./gradlew publishToMavenLocal
  * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
+ * ./gradlew publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
  *
  * // pre KMP ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
+ *
+ * to build shared framework for the kmp sample app before running the ios app:
+ * ./gradlew :shared:prepAllXCFrameworkForXcode
+ *
  *
  * ./gradlew tasks --all | grep publish
  *
@@ -64,7 +70,6 @@ plugins {
     alias(libs.plugins.kotlinMultiPlatformPlugin).apply(false)
     alias(libs.plugins.kotlinCocoapodsPlugin).apply(false)
     alias(libs.plugins.composeCompilerPlugin).apply(false)
-    //alias(libs.plugins.composeMultiplatformPlugin).apply(false)
     alias(libs.plugins.kotlinSerializationPlugin).apply(false)
     alias(libs.plugins.kotlinKaptPlugin).apply(false)
 }
