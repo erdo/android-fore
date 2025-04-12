@@ -6,6 +6,7 @@ import co.early.fore.core.logging.Logger
 import co.early.fore.core.coroutine.launchCustom
 import co.early.fore.core.coroutine.launchMain
 import co.early.fore.core.delegate.Fore
+import co.early.fore.core.logging.MultiplatformLogger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -41,6 +42,9 @@ class ObservableImp(
     private val logger: Logger? = null,
     private val dispatcher: CoroutineDispatcher? = null
 ) : Observable {
+
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor() : this(null, null, null)
 
     private val observerList = mutableListOf<Observer>()
     private val addRemoveMutex = Mutex()

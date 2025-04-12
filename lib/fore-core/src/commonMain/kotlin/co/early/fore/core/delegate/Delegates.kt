@@ -23,24 +23,42 @@ interface Delegate {
     val systemTimeWrapper: SystemTimeWrapper
 }
 
-class DebugDelegateDefault (
+class DebugDelegateDefault(
     tagPrefix: String? = null,
     override val workMode: WorkMode = ASYNCHRONOUS,
     override val logger: Logger = MultiplatformLogger(tagPrefix),
     override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
-) : Delegate
+) : Delegate {
+
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor(tagPrefix: String) : this(
+        tagPrefix,
+        ASYNCHRONOUS,
+        MultiplatformLogger(tagPrefix),
+        getSystemTimeWrapper()
+    )
+    constructor() : this(null, ASYNCHRONOUS, MultiplatformLogger(null), getSystemTimeWrapper())
+}
 
 class ReleaseDelegateDefault(
     override val workMode: WorkMode = ASYNCHRONOUS,
     override val logger: Logger = SilentLogger(),
     override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
-) : Delegate
+) : Delegate {
+
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor() : this(ASYNCHRONOUS, SilentLogger(), getSystemTimeWrapper())
+}
 
 class TestDelegateDefault(
     override val workMode: WorkMode = SYNCHRONOUS,
     override val logger: Logger = SystemLogger(),
     override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
-) : Delegate
+) : Delegate {
+
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor() : this(ASYNCHRONOUS, SystemLogger(), getSystemTimeWrapper())
+}
 
 
 class Fore {

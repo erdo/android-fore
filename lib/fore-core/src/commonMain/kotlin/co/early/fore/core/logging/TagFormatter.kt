@@ -5,7 +5,7 @@ interface TagFormatter {
     fun padTagWithSpace(tag: String): String
 }
 
-class TagFormatterImp(private val overrideMaxTagLength: Int? = null) : TagFormatter {
+internal class TagFormatterImp(private val overrideMaxTagLength: Int? = null) : TagFormatter {
 
     init {
         if (overrideMaxTagLength != null && overrideMaxTagLength<4){

@@ -9,6 +9,7 @@ import co.early.fore.core.observer.threadName
 import co.early.fore.core.type.Either
 import co.early.fore.core.type.Either.Companion.fail
 import co.early.fore.core.type.Either.Companion.success
+import co.early.fore.net.wrap.CallWrapper
 import com.apollographql.apollo.api.ApolloResponse
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.api.Operation
@@ -47,6 +48,9 @@ class CallWrapperApollo<F>(
     private val workMode: WorkMode? = null,
     private val allowPartialSuccesses: Boolean = true
 ) : WrapperApollo<F> {
+
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor(errorHandler: ErrorHandler<F>) : this(errorHandler, null, null, true)
 
     data class SuccessResult<S, F>(
         val data: S,

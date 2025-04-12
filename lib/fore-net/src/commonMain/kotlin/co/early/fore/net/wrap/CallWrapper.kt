@@ -5,6 +5,7 @@ import co.early.fore.core.logging.Logger
 import co.early.fore.core.coroutine.asyncMain
 import co.early.fore.core.coroutine.awaitIO
 import co.early.fore.core.delegate.Fore
+import co.early.fore.core.observer.ObservableImp
 import co.early.fore.core.observer.threadName
 import co.early.fore.core.type.Either
 import co.early.fore.core.type.Either.Companion.fail
@@ -57,6 +58,9 @@ class CallWrapper<F>(
     private val workMode: WorkMode? = null,
     private val logger: Logger? = null
 ) : Wrapper<F> {
+
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor(errorHandler: ErrorHandler<F>) : this(errorHandler, null, null)
 
     /**
      * @param call network call to be processed

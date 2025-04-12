@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.kotlinKaptPlugin)
 }
 
-
 val appId = "foo.bar.example.forecompose"
 
 fun getTestBuildType(): String {

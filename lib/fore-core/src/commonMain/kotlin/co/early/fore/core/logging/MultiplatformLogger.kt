@@ -8,6 +8,10 @@ class MultiplatformLogger(
     overrideMaxTagLength: Int? = null
 ) : Logger, TagFormatter by TagFormatterImp(overrideMaxTagLength) {
 
+    // this is for iOS target benefit which doesn't like default parameters in constructors
+    constructor(tagPrefix: String) : this(tagPrefix, false, null)
+    constructor() : this(null, false, null)
+
     private val tagInferer: TagInferer = getTagInferer()
 
     override fun e(message: String) {
