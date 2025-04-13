@@ -57,7 +57,7 @@ class TestDelegateDefault(
 ) : Delegate {
 
     // this is for iOS target benefit which doesn't like default parameters in constructors
-    constructor() : this(ASYNCHRONOUS, SystemLogger(), getSystemTimeWrapper())
+    constructor() : this(SYNCHRONOUS, SystemLogger(), getSystemTimeWrapper())
 }
 
 
