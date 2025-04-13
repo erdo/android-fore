@@ -61,7 +61,6 @@
  * git tag -a v1.5.9 -m 'v1.5.9'
  * git push origin --tags
  */
-
 plugins {
     alias(libs.plugins.androidAppPlugin).apply(false)
     alias(libs.plugins.androidLibraryPlugin).apply(false)
