@@ -6,7 +6,8 @@ import io.ktor.utils.io.core.toByteArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import okio.Buffer
-import readFileString
+import okio.Path.Companion.toPath
+import okio.SYSTEM
 import kotlin.test.BeforeTest
 
 class DataHeuristicsTest {
@@ -258,4 +259,8 @@ class DataHeuristicsTest {
         val result = inferBodyRenderFormat(body)
         assertEquals(BodyRenderFormat.PlainText, result)
     }
+}
+
+fun readFileString(path: String): String {
+    return okio.FileSystem.SYSTEM.read(path.toPath()) { readUtf8() }
 }
