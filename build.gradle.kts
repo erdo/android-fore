@@ -28,7 +28,6 @@
  * co.early.fore.core.testhelpers.CountDownLatchWrapper() //fore-jv-core
  *
  * ./gradlew clean
- * ./gradlew publishToMavenLocal
  * ./gradlew lib:fore-core:publishToMavenLocal
  * ./gradlew publishToMavenLocal
  * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
