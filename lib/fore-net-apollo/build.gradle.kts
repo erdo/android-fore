@@ -68,7 +68,7 @@ kotlin {
 
 android {
 
-    namespace = "co.early.fore.net.wrap.apollo"
+    namespace = "co.early.fore.net.apollo"
 
     compileSdk = Shared.Android.compileSdk
 

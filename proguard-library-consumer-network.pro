@@ -5,7 +5,6 @@
 -keep class co.early.fore.core.logging.SystemLogger
 -keep class co.early.fore.core.logging.Logger
 -keep class co.early.fore.core.delegate.** { *; }
--dontwarn co.early.fore.kt.net.**
 -dontwarn co.early.fore.net.**
 -keep class okhttp3.Request { *;}
 -keep class okhttp3.Response { *;}

@@ -97,6 +97,8 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.wear.compose.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
 
     implementation(libs.slf4j.nop) // to get rid of the slf4 warning that comes from ktor
 

@@ -66,7 +66,7 @@ kotlin {
 
 android {
 
-    namespace = "co.early.fore"
+    namespace = "co.early.fore.testfixtures"
 
     compileSdk = Shared.Android.compileSdk
 
