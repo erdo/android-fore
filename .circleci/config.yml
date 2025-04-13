@@ -98,8 +98,8 @@ jobs:
 
       - run:
           name: Run Tests example-07-kmp
-          command: ./gradlew app-examples:example-07-kmp:lintRelease app-examples:example-07-kmp:testRelease
+          command: ./gradlew app-examples:example-07-kmp:androidApp:lintRelease app-examples:example-07-kmp:testRelease
       - store_artifacts:
-          path: app-examples/example-07-kmp/build/reports
+          path: app-examples/example-07-kmp/androidApp/build/reports
       - store_test_results:
-          path: app-examples/example-07-kmp/build/test-results
+          path: app-examples/example-07-kmp/androidApp/build/test-results
