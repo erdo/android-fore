@@ -37,4 +37,4 @@ include(':app-examples:example-01-reactiveui',
         ':app-examples:example-02-coroutine',
         ':app-examples:example-03-ktor',
         ':app-examples:example-04-apollo',
-        ':app-examples:example-06-compose',)
+        ':app-examples:example-06-compose')

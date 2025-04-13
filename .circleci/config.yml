@@ -96,10 +96,3 @@ jobs:
       - store_test_results:
           path: app-examples/example-06-compose/build/test-results
 
-      - run:
-          name: Run Tests example-07-kmp
-          command: ./gradlew app-examples:example-07-kmp:androidApp:lintRelease app-examples:example-07-kmp:testRelease
-      - store_artifacts:
-          path: app-examples/example-07-kmp/androidApp/build/reports
-      - store_test_results:
-          path: app-examples/example-07-kmp/androidApp/build/test-results
