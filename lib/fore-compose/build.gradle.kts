@@ -61,12 +61,6 @@ kotlin {
             }
         }
 
-        val appleMain by getting {
-            dependencies {
-                implementation(libs.jetbrains.compose.ui)
-            }
-        }
-
         val iosMain by getting {
             dependencies {
                 implementation(libs.jetbrains.compose.ui)
