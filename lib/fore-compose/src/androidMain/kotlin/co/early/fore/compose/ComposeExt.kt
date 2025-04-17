@@ -8,6 +8,7 @@ import co.early.fore.core.observer.Observable
 import co.early.fore.core.observer.ObservableGroup
 import co.early.fore.core.observer.Observer
 import co.early.fore.core.delegate.Fore
+import co.early.fore.core.observer.threadName
 
 /**
  * Observes this [Observable] or [ObservableGroup] representing its state via [State]
@@ -42,7 +43,12 @@ fun <T> ObservableGroup.observeAsState(
 ): State<T> {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state = remember { mutableStateOf(getState(), policy) }
-    val observer = Observer { state.value = getState() }
+    val observer = Observer {
+        logLabel?.let {
+            logMessage(logLabel, "[somethingChanged() received, setting compose state]")
+        }
+        state.value = getState()
+    }
     var refCount = 0
 
     val lifeCycleObserver = object : DefaultLifecycleObserver {
@@ -101,6 +107,8 @@ private fun removeIfThresholdSkirted(logLabel: String?, observable: ObservableGr
     }
 }
 
-private fun logMessage(label: String, msg: String, refCount: Int){
-    Fore.getLogger().d("observeAsState $label $msg refCount:${refCount}")
+private fun logMessage(label: String, msg: String, refCount: Int? = null){
+    refCount?.let {
+        Fore.getLogger().d("observeAsState $label $msg refCount:${refCount} t:${threadName()}")
+    } ?: Fore.getLogger().d("observeAsState $label $msg t:${threadName()}")
 }

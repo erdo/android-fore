@@ -1,12 +1,10 @@
 package co.early.fore.core.observer
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.getTagInferer
-import co.early.fore.core.logging.Logger
 import co.early.fore.core.coroutine.launchCustom
-import co.early.fore.core.coroutine.launchMain
 import co.early.fore.core.delegate.Fore
-import co.early.fore.core.logging.MultiplatformLogger
+import co.early.fore.core.logging.Logger
+import co.early.fore.core.logging.getTagInferer
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -22,9 +20,9 @@ import kotlinx.coroutines.sync.withLock
  * @param logger If you want to be told about warnings, pass an implementation of Logger
  * here (recommended)
  *
- * @param dispatcher You will only need to specify this if you are running in a non-android module,
- * we'd recommend passing in Dispatchers.Main.immediate here in that case, otherwise leave this as
- * null
+ * @param dispatcherImmediate You will only need to specify this if you are running on a platform
+ * that doesn't have Dispatchers.Main.immediate otherwise leave this as null
+ *
  *
  * If you don't specify any construction parameters, they will be taken from ForeDelegateHolder
  *
@@ -40,7 +38,7 @@ import kotlinx.coroutines.sync.withLock
 class ObservableImp(
     private val notificationMode: WorkMode? = null,
     private val logger: Logger? = null,
-    private val dispatcher: CoroutineDispatcher? = null
+    dispatcherImmediate: CoroutineDispatcher? = null,
 ) : Observable {
 
     // this is for iOS target benefit which doesn't like default parameters in constructors
@@ -49,14 +47,33 @@ class ObservableImp(
     private val observerList = mutableListOf<Observer>()
     private val addRemoveMutex = Mutex()
     private val inferredTag: String = getTagInferer().inferTag()
+    private val mainDispatcherImmediate: CoroutineDispatcher
+
+    init {
+        if (dispatcherImmediate == null) {
+            try {
+                mainDispatcherImmediate = Dispatchers.Main.immediate
+            } catch (uoe: UnsupportedOperationException){
+                val errorMessage = "\nIt looks like you are running on a KMP platform that doesn't " +
+                        "support \n" +
+                        "Dispatchers.Main.immediate\n" +
+                        "If this is intentional, you will need to specify a dispatcher in the\n" +
+                        "constructor"
+                Fore.getLogger(logger).e(inferredTag, errorMessage)
+                throw IllegalArgumentException(errorMessage)
+            }
+        } else {
+            mainDispatcherImmediate = dispatcherImmediate
+        }
+    }
 
     /**
      * Take the observer and add it to the list of registered observers that
      * want to be notified when the model data changes. Usually you will do this
-     * from android lifecycle methods like onStart() (and remove the observer in onStop())
+     * from lifecycle methods like onStart() (and remove the observer in onStop())
      */
     override fun addObserver(observer: Observer) {
-        launchMain {
+        launchCustom(mainDispatcherImmediate, notificationMode) {
             addRemoveMutex.withLock {
 
                 if (observerList.contains(observer)) {
@@ -69,7 +86,7 @@ class ObservableImp(
 
                 observerList.add(observer)
 
-                Fore.getLogger(logger).i(inferredTag, "Observer added to....... [${inferredTag}]: $observer")
+                Fore.getLogger(logger).i(inferredTag, "Observer added to [${inferredTag}]: $observer t:${threadName()}")
 
                 if (observerList.size > 4) {
                     Fore.getLogger(logger).w(inferredTag,
@@ -95,13 +112,13 @@ class ObservableImp(
      * from the model when its data changes
      */
     override fun removeObserver(observer: Observer) {
-        launchMain {
+        launchCustom(mainDispatcherImmediate, notificationMode) {
             addRemoveMutex.withLock {
 
                 val beforeSize = observerList.size
                 observerList.remove(observer)
 
-                Fore.getLogger(logger).i(inferredTag, "Observer removed from... [$inferredTag]: $observer")
+                Fore.getLogger(logger).i(inferredTag, "Observer removed from [$inferredTag]: $observer")
 
                 if (observerList.size == beforeSize) {
                     Fore.getLogger(logger).w(inferredTag,
@@ -137,26 +154,10 @@ class ObservableImp(
      */
     override fun notifyObservers() {
 
-        var dispatch = dispatcher
-
-        if (dispatch == null) {
-            try {
-                dispatch = Dispatchers.Main.immediate
-            } catch (uoe: UnsupportedOperationException){
-                val errorMessage = "\nIt looks like you are running in a module that doesn't support \n" +
-                        "Dispatchers.Main.immediate\n" +
-                        "If this is intentional, you will need to specify a dispatcher in the\n" +
-                        "constructor, we'd recommend Dispatchers.Main in that case\n" +
-                        "If this is NOT intentional, move your code to a module that supports\n" +
-                        "Dispatchers.Main.immediate (e.g. an android module)"
-                Fore.getLogger(logger).e(inferredTag, errorMessage)
-                throw IllegalArgumentException(errorMessage)
-            }
-        }
-
-        launchCustom(dispatch, Fore.getWorkMode(notificationMode)) {
+        launchCustom(mainDispatcherImmediate, Fore.getWorkMode(notificationMode)) {
             addRemoveMutex.withLock {
                 for (observer in observerList) {
+                    Fore.getLogger(logger).d(inferredTag, "notifying [$inferredTag] changes to: $observer")
                     doNotification(observer)
                 }
             }
@@ -172,16 +173,12 @@ class ObservableImp(
             observer.somethingChanged()
         } catch (e: Exception) {
 
-            val dispatcherMsg = if (dispatcher!=null) {
-                        " and the dispatcher used was: $dispatcher \n" +
-                        "If you are trying to update any part of the android UI directly from the somethingChanged() callback,\n" +
-                        "then ObservableImp needs to be constructed with Dispatchers.Main.immediate" } else ""
-
-            val errorMessage = "\nOne of the observers of [$inferredTag] has thrown an exception during it's somethingChanged() callback\n" +
-                    "The currentThread id is: ${threadName()} $dispatcherMsg\n" +
-                    "If you are updating an android adapter directly, you will want to make sure that notifyObservers()\n" +
-                    "is being called from the UI thread. Having said that, it's quite possible you just have a crash somewhere\n" +
-                    "in your UI code which has bubbled its way up to here. See stack trace for further info, Error Message: "
+            val errorMessage = "\nOne of the observers of [$inferredTag] has thrown an exception " +
+                    "during it's somethingChanged() callback\n" +
+                    "The currentThread id is: ${threadName()}" +
+                    "It's quite possible you just have a crash somewhere\n" +
+                    "in your UI code which has bubbled its way up to here. See stack trace for " +
+                    "further info, Error Message: "
 
             Fore.getLogger(logger).e(inferredTag, errorMessage + e.message)
             throw e
