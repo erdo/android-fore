@@ -74,3 +74,5 @@ secrets.properties
 
 # Ignore Kotlin/Native metadata and build artifacts
 .kotlin/
+
+**/iosApp/Frameworks/
