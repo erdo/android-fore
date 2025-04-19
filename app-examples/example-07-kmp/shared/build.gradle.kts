@@ -8,6 +8,22 @@ plugins {
 }
 
 kotlin {
+
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.jvm.toolchain.get().toInt()))
+    }
+
+    targets.withType<org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget> {
+        compilations.configureEach {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.target.get()))
+                }
+            }
+        }
+    }
+
+
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -33,6 +49,8 @@ kotlin {
             export(libs.fore.net)
             export(libs.fore.compose)
             export(libs.persista)
+            export(libs.n8.core)
+            export(libs.n8.compose)
             export(libs.okio)
             export(libs.kotlinx.serialization)
 
@@ -46,6 +64,8 @@ kotlin {
             api(libs.fore.net)
             api(libs.fore.compose)
             api(libs.persista)
+            api(libs.n8.core)
+            api(libs.n8.compose)
             api(libs.kotlinx.serialization)
             api(libs.okio)
         }
@@ -73,8 +93,8 @@ android {
 //
 //   ./gradlew :shared:prepAllXCFrameworkForXcode
 //
-//    then from XCode, add framework
-//   you might need JDL specifid explicitly in gradle.properties org.gradle.java.home=/Applications/Android Studio.app/Contents/jbr/Contents/Home
+//   then from XCode, add framework
+//   you might need JDK specified explicitly in gradle.properties org.gradle.java.home=/Applications/Android Studio.app/Contents/jbr/Contents/Home
 
 fun prepXCFrameworkForXcode(config: String) = tasks.registering(Sync::class) {
     from(layout.buildDirectory.dir("XCFrameworks/$config/shared.xcframework"))
