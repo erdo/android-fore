@@ -7,6 +7,7 @@ import co.early.fore.core.delegate.Fore
 import co.early.persista.PerSista
 import com.kmpfoo.feature.counter.CounterModel
 import okio.Path.Companion.toOkioPath
+import kotlin.reflect.KClass
 
 /**
  * Copyright © 2015-2023 early.co. All rights reserved.
@@ -15,7 +16,7 @@ import okio.Path.Companion.toOkioPath
 object OG {
 
     private var initialized = false
-    private val dependencies = HashMap<Class<*>, Any>()
+    private val dependencies = HashMap<KClass<*>, Any>()
 
     fun setApplication(application: Application) {
 
@@ -38,7 +39,7 @@ object OG {
         )
 
         // add models to the dependencies map if you will need them later
-        dependencies[CounterModel::class.java] = counterModel
+        dependencies[CounterModel::class] = counterModel
     }
 
     fun init() {
@@ -79,9 +80,9 @@ object OG {
      *
      */
     @Suppress("UNCHECKED_CAST")
-    operator fun <T> get(model: Class<T>): T = dependencies[model] as T
+    operator fun <T : Any> get(model: KClass<T>): T = dependencies[model] as T
 
-    fun <T> putMock(clazz: Class<T>, instance: T) {
+    fun <T : Any> putMock(clazz: KClass<T>, instance: T) {
         dependencies[clazz] = instance as Any
     }
 }

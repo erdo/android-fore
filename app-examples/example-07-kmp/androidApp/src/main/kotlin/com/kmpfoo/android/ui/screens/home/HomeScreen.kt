@@ -33,7 +33,7 @@ import com.kmpfoo.android.ui.screens.common.toLabel
 @Composable
 fun HomeScreen(
     size: WindowSize = WindowSize(),
-    counterModel: CounterModel = OG[CounterModel::class.java],
+    counterModel: CounterModel = OG[CounterModel::class],
 ) {
 
     Fore.getLogger().i("HomeScreen $size")
