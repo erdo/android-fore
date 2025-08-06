@@ -8,8 +8,8 @@ object Shared {
     object Android {
         const val minSdk = 16
         const val minComposeSdk = 21
-        const val compileSdk = 35
-        const val targetSdk = 35
+        const val compileSdk = 36
+        const val targetSdk = 36
     }
 
     object Versions {

@@ -61,7 +61,7 @@ kotlin {
                 api(project(":lib:fore-core"))
                 implementation(libs.ktor.client.core)
                 implementation(libs.okio)
-                implementation(libs.kotlinx.serialization)
+                api(libs.kotlinx.serialization)
                 implementation(libs.kotlinx.io)
             }
         }
