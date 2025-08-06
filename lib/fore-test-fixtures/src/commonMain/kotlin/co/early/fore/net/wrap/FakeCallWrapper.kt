@@ -6,6 +6,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.KSerializer
 
 
 fun <F, S> S.toFakeSuccess(): Either<Throwable, Either<F, S>> = Either.success(Either.success(this))
@@ -41,7 +42,7 @@ class FakeCallWrapper<F>(
     private val mutex = Mutex()
 
     init {
-        require(fakeResponses.isNotEmpty()){
+        require(fakeResponses.isNotEmpty()) {
             "you must include at least one fake response in the constructor"
         }
     }
@@ -51,10 +52,10 @@ class FakeCallWrapper<F>(
     }
 
     override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
-        customErrorKlazz: kotlin.reflect.KClass<CE>,
+        kSerializer: KSerializer<CE>,
         call: suspend () -> S
     ): Either<F, S> {
-        return processCallAsync(customErrorKlazz, call).await()
+        return processCallAsync(kSerializer, call).await()
     }
 
     override suspend fun <S> processCallAsync(call: suspend () -> S): Deferred<Either<F, S>> {
@@ -62,14 +63,14 @@ class FakeCallWrapper<F>(
     }
 
     override suspend fun <S, CE : MessageProvider<F>> processCallAsync(
-        customErrorKlazz: kotlin.reflect.KClass<CE>,
+        kSerializer: KSerializer<CE>,
         call: suspend () -> S
     ): Deferred<Either<F, S>> {
-        return doCallAsync(customErrorKlazz, call)
+        return doCallAsync(kSerializer, call)
     }
 
     private suspend fun <S, CE : MessageProvider<F>> doCallAsync(
-        customErrorKlazz: kotlin.reflect.KClass<CE>?,
+        kSerializer: KSerializer<CE>?,
         call: suspend () -> S
     ): Deferred<Either<F, S>> {
         mutex.withLock {

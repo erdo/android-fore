@@ -106,7 +106,7 @@ class CallWrapperApollo<F>(
                 success(
                     SuccessResult(
                         data,
-                        errorHandler.handlePartialErrors(response.errors),
+                        errorHandler.handlePartialErrors(response.errors ?: emptyList()),
                         response.extensions,
                         response.executionContext
                     )

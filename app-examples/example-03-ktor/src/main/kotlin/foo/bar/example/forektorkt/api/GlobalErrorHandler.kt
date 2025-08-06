@@ -1,51 +1,63 @@
 package foo.bar.example.forektorkt.api
 
+import co.early.fore.core.delegate.Fore
 import co.early.fore.core.logging.Logger
-import co.early.fore.net.wrap.ErrorHandler
 import co.early.fore.net.MessageProvider
+import co.early.fore.net.wrap.ErrorHandler
 import foo.bar.example.forektorkt.message.ErrorMessage
 import foo.bar.example.forektorkt.message.ErrorMessage.*
 import io.ktor.client.call.*
-import io.ktor.client.plugins.*
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.RedirectResponseException
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.*
-import io.ktor.serialization.ContentConvertException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
-import java.io.IOException
-import java.io.UnsupportedEncodingException
-import java.net.UnknownServiceException
-import java.nio.charset.CoderMalfunctionError
-import kotlin.reflect.KClass
 
 /**
- * You can probably use this class almost as is for your own app, but you might want to
- * customise the behaviour for specific HTTP codes etc, hence it's not in the fore library
+ * KMP-compatible error handler for REST API calls.
+ *
+ * Something like this will be suitable for most HTTP services,
+ * consider customizing for the particularities of your own server side
+ *
+ * Retry logic is handled in KtorBuilder
  */
-class GlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMessage> {
+class GlobalErrorHandler(private val logWrapper: Logger? = null) : ErrorHandler<ErrorMessage> {
 
     override suspend fun <CE : MessageProvider<ErrorMessage>> handleError(
         t: Throwable,
-        customErrorKlazz: KClass<CE>?
+        kSerializer: KSerializer<CE>?,
     ): ErrorMessage {
 
-        logWrapper.e("handling error in global error handler", t)
+        Fore.getLogger(logWrapper).e("handling error in global error handler", t)
 
         val errorMessage = when (t) {
 
             is ResponseException -> {
 
-                //initial error type (we use ERROR_SERVER as our "try again later" message to the user
+                //initial error type
                 var msg = when (t) {
-                    is ClientRequestException -> { ERROR_SERVER } // in 400..499
-                    is RedirectResponseException -> { ERROR_SERVER } //in 300..399
-                    is ServerResponseException -> { ERROR_SERVER } //in 500..599
-                    else -> { ERROR_NETWORK } //something else
+                    is ClientRequestException -> {
+                        ERROR_SERVER
+                    } // in 400..499
+                    is RedirectResponseException -> {
+                        ERROR_SERVER
+                    } //in 300..399
+                    is ServerResponseException -> {
+                        ERROR_SERVER
+                    } //in 500..599
+                    else -> {
+                        ERROR_NETWORK
+                    } //something else
                 }
 
                 val response = t.response
 
-                logWrapper.e("handleError() HTTP:" + response.status)
+                Fore.getLogger(logWrapper).e("handleError() HTTP:" + response.status)
 
                 //get more specific with the error type
                 msg = when (response.status.value) {
@@ -57,53 +69,105 @@ class GlobalErrorHandler(private val logWrapper: Logger) : ErrorHandler<ErrorMes
                 } ?: msg
 
                 //let's get even more specifics about the error
-                customErrorKlazz?.let { klazz ->
-                    msg = parseCustomError(msg, response, klazz)
+                kSerializer?.let { serializer ->
+                    msg = parseCustomError(msg, response, serializer)
                 }
 
                 msg
             }
+
             is NoTransformationFoundException -> ERROR_SERVER // content type is probably wrong, check response from server in app logs
-            is SerializationException, is ContentConvertException -> ERROR_SERVER //parsing issue, maybe response is not json, or does not match expected type, or is empty
-            is UnknownServiceException -> ERROR_SECURITY_UNKNOWN //most likely https related, check for usesCleartextTraffic if required
-            is IOException -> ERROR_NETWORK //airplane mode is on, no network coverage etc
-            else -> ERROR_NETWORK
+            is SerializationException -> ERROR_SERVER //parsing issue, maybe response is not json, or does not match expected type, or is empty
+            is TimeoutCancellationException -> ERROR_NETWORK // network timeout
+            is CancellationException -> ERROR_CLIENT // user cancellation, lifecycle takedown
+
+            else -> {
+                when {
+                    isProbablyNetworkError(t) -> ERROR_NETWORK
+                    isProbablySecurityError(t) -> ERROR_SECURITY_UNKNOWN
+                    else -> ERROR_NETWORK
+                }
+            }
         }
 
-        logWrapper.e("replyWithFailure() returning:$errorMessage")
+        Fore.getLogger(logWrapper).w("replyWithFailure() returning:$errorMessage")
         return errorMessage
     }
 
+    // this works a little better in KMP where we don't have unified exceptions
+    // because of platform differences
+    private fun isProbablyNetworkError(throwable: Throwable): Boolean {
+        val message = throwable.message?.lowercase() ?: ""
+        val className = throwable::class.simpleName?.lowercase() ?: ""
+
+        return message.contains("network") ||
+                message.contains("connection") ||
+                message.contains("timeout") ||
+                message.contains("unreachable") ||
+                className.contains("network") ||
+                className.contains("connection") ||
+                className.contains("timeout") ||
+                className.contains("io")
+    }
+
+    // this works a little better in KMP where we don't have unified exceptions
+    // because of platform differences
+    private fun isProbablySecurityError(throwable: Throwable): Boolean {
+        val message = throwable.message?.lowercase() ?: ""
+        val className = throwable::class.simpleName?.lowercase() ?: ""
+
+        return message.contains("ssl") ||
+                message.contains("tls") ||
+                message.contains("certificate") ||
+                message.contains("security") ||
+                className.contains("ssl") ||
+                className.contains("tls") ||
+                className.contains("security")
+    }
+
+
     @Suppress("UNCHECKED_CAST")
     private suspend fun <CE : MessageProvider<ErrorMessage>> parseCustomError(
-            provisionalErrorMessage: ErrorMessage,
-            errorResponse: HttpResponse,
-            customErrorKlazz: KClass<CE>
+        provisionalErrorMessage: ErrorMessage,
+        errorResponse: HttpResponse,
+        customErrorSerializer: KSerializer<CE>
     ): ErrorMessage {
 
         var customError: ErrorMessage = provisionalErrorMessage
 
         try {
 
-            val bodyContent = errorResponse.bodyAsText(Charsets.UTF_8)
-            logWrapper.e("parseCustomError() attempting to parse this content:\n $bodyContent")
-            val errorClass = Json.decodeFromString(serializer(customErrorKlazz.java), bodyContent) as CE
+            val bodyContent = errorResponse.bodyAsText()
+            Fore.getLogger(logWrapper)
+                .w("parseCustomError() attempting to parse this content:\n $bodyContent")
+
+            val errorClass = Json.decodeFromString(customErrorSerializer, bodyContent)
             customError = errorClass.message
 
         } catch (t: Throwable) {
 
-            logWrapper.e("parseCustomError() unexpected issue" + t)
+            Fore.getLogger(logWrapper).e("parseCustomError() unexpected issue $t")
 
             when (t) {
-                is IllegalStateException, is CoderMalfunctionError -> {logWrapper.e("01")} //problem reading body text
-                is SerializationException -> {logWrapper.e("02")} //parsing error, @Serializable missing, wrong error class specified etc
-                is UnsupportedEncodingException -> {logWrapper.e("03")}
-                is NullPointerException -> {logWrapper.e("04")}
-                else -> {logWrapper.e("05")}
+                is IllegalStateException -> {
+                    Fore.getLogger(logWrapper).e("01") // problem reading body text
+                }
+                is SerializationException -> {
+                    Fore.getLogger(logWrapper).e("02") // parsing error, @Serializable missing, wrong error class specified etc
+                }
+                is IllegalArgumentException -> {
+                    Fore.getLogger(logWrapper).e("03") // encoding or argument issues
+                }
+                is NullPointerException -> {
+                    Fore.getLogger(logWrapper).e("04")
+                }
+                else -> {
+                    Fore.getLogger(logWrapper).e("05")
+                }
             }
         }
 
-        logWrapper.e("parseCustomError() returning:$customError")
+        Fore.getLogger(logWrapper).w("parseCustomError() returning:$customError")
         return customError
     }
 }

@@ -122,7 +122,7 @@ class FruitFetcher(
 
         launchMain {
 
-            val result = callWrapper.processCallAwait(FruitsCustomError::class) {
+            val result = callWrapper.processCallAwait(FruitsCustomError.serializer()) {
                 fruitService.getFruitsSimulateNotAuthorised()
             }
 

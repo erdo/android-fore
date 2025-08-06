@@ -25,17 +25,19 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
 
         Fore.getLogger(logger).e("handleError() t:$t errorResponse:$errorResponse")
 
-        val message = parseSpecificError(errorResponse?.errors?.first()) ?: parseGeneralErrors(t)
+        val message = errorResponse?.errors?.firstNotNullOf { it }?.let{
+            parseSpecificError(it)
+        } ?: parseGeneralErrors(t)
 
         Fore.getLogger(logger).e("handleError() returning:$message")
 
         return message
     }
 
-    override fun handlePartialErrors(errors: List<com.apollographql.apollo.api.Error?>?): List<ErrorMessage> {
-        return errors?.mapNotNull {
+    override fun handlePartialErrors(errors: List<com.apollographql.apollo.api.Error>): List<ErrorMessage> {
+        return errors.mapNotNull {
             parseSpecificError(it)
-        } ?: emptyList()
+        }
     }
 
     private fun parseGeneralErrors(t: Throwable?): ErrorMessage {
@@ -63,14 +65,14 @@ class CustomGlobalErrorHandler(private val logger: Logger?) :
         } ?: ERROR_MISC
     }
 
-    private fun parseSpecificError(error: com.apollographql.apollo.api.Error?): ErrorMessage? {
+    private fun parseSpecificError(error: com.apollographql.apollo.api.Error): ErrorMessage {
         // amazingly GraphQL never had an error code in its standard error
         // block so it usually gets put under the extensions block like this:
         // https://spec.graphql.org/draft/#example-8b658
-        return error?.extensions?.let { extensions ->
+        return error.extensions?.let { extensions ->
             (extensions as? Map<*, *>)?.get("code")?.let { code ->
                 ErrorMessage.createFromName(code as? String)
             }
-        }
+        } ?: ERROR_MISC
     }
 }

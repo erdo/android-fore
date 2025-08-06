@@ -17,8 +17,8 @@ interface ErrorHandler<F> {
     fun handleError(t: Throwable?, errorResponse: ApolloResponse<*>?): F
 
     /**
-     * @param errors partial graphql error responses from the server, may be null or empty
+     * @param errors partial graphql error responses from the server
      * @return list of representative failure messages
      */
-    fun handlePartialErrors(errors: List<com.apollographql.apollo.api.Error?>?): List<F>
+    fun handlePartialErrors(errors: List<com.apollographql.apollo.api.Error>): List<F>
 }

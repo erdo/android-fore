@@ -1,31 +1,34 @@
 package co.early.fore.net.wrap
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
 import co.early.fore.core.coroutine.asyncMain
 import co.early.fore.core.coroutine.awaitIO
 import co.early.fore.core.delegate.Fore
-import co.early.fore.core.observer.ObservableImp
+import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.threadName
 import co.early.fore.core.type.Either
 import co.early.fore.core.type.Either.Companion.fail
 import co.early.fore.core.type.Either.Companion.success
 import co.early.fore.net.MessageProvider
 import kotlinx.coroutines.Deferred
+import kotlinx.serialization.KSerializer
 
 interface Wrapper<F> {
     suspend fun <S> processCallAwait(
         call: suspend () -> S
     ): Either<F, S>
+
     suspend fun <S, CE : MessageProvider<F>> processCallAwait(
-        customErrorKlazz: kotlin.reflect.KClass<CE>,
+        kSerializer: KSerializer<CE>,
         call: suspend () -> S
     ): Either<F, S>
+
     suspend fun <S> processCallAsync(
         call: suspend () -> S
     ): Deferred<Either<F, S>>
+
     suspend fun <S, CE : MessageProvider<F>> processCallAsync(
-        customErrorKlazz: kotlin.reflect.KClass<CE>,
+        kSerializer: KSerializer<CE>,
         call: suspend () -> S
     ): Deferred<Either<F, S>>
 }
@@ -75,10 +78,10 @@ class CallWrapper<F>(
      * @param <S> Successful response body type
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAwait(
-        customErrorKlazz: kotlin.reflect.KClass<CE>,
-            call: suspend () -> S
+        kSerializer: KSerializer<CE>,
+        call: suspend () -> S
     ): Either<F, S> {
-        return processCallAsync(customErrorKlazz, call).await()
+        return processCallAsync(kSerializer, call).await()
     }
 
     /**
@@ -96,15 +99,15 @@ class CallWrapper<F>(
      * @param <CE> Class of error expected from server, must implement MessageProvider&lt;F&gt;
      */
     override suspend fun <S, CE : MessageProvider<F>> processCallAsync(
-        customErrorKlazz: kotlin.reflect.KClass<CE>,
-            call: suspend () -> S
+        kSerializer: KSerializer<CE>,
+        call: suspend () -> S
     ): Deferred<Either<F, S>> {
-        return doCallAsync(customErrorKlazz, call)
+        return doCallAsync(kSerializer, call)
     }
 
     private suspend fun <S, CE : MessageProvider<F>> doCallAsync(
-        customErrorKlazz: kotlin.reflect.KClass<CE>?,
-            call: suspend () -> S
+        kSerializer: KSerializer<CE>?,
+        call: suspend () -> S
     ): Deferred<Either<F, S>> {
 
         Fore.getLogger(logger).v("doCallAsync() thread:" + threadName())
@@ -114,20 +117,23 @@ class CallWrapper<F>(
 
                 val result: S = awaitIO(Fore.getWorkMode(workMode)) {
 
-                    Fore.getLogger(logger).v("about to make call from io dispatcher, thread:" + threadName())
+                    Fore.getLogger(logger)
+                        .v("about to make call from io dispatcher, thread:" + threadName())
 
                     call()
                 }
 
-                Fore.getLogger(logger).v("continuing back on main dispatcher thread:" + threadName())
+                Fore.getLogger(logger)
+                    .v("continuing back on main dispatcher thread:" + threadName())
 
                 success(result)
 
             } catch (t: Throwable) {
 
-                Fore.getLogger(logger).w("processFailResponse() thread:${threadName()} ${t.message}")
+                Fore.getLogger(logger)
+                    .w("processFailResponse() thread:${threadName()} ${t.message}")
 
-                fail(errorHandler.handleError(t, customErrorKlazz))
+                fail(errorHandler.handleError(t, kSerializer))
             }
         }
     }

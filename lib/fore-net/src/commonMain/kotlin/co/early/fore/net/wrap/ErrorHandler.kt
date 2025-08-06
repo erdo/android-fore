@@ -1,6 +1,7 @@
 package co.early.fore.net.wrap
 
 import co.early.fore.net.MessageProvider
+import kotlinx.serialization.KSerializer
 
 /**
  *
@@ -11,9 +12,9 @@ interface ErrorHandler<F> {
     /**
      *
      * @param t throwable that caused the error
-     * @param customErrorClazz custom error class expected from the errorResponse, may be null
+     * @param KSerializer serializer for the custom error class expected from the errorResponse, may be null
      * @param <CE> class type of the custom error if specified
      * @return the parsed error from the server
     </CE> */
-    suspend fun <CE : MessageProvider<F>> handleError(t: Throwable, customErrorKlazz: kotlin.reflect.KClass<CE>?): F
+    suspend fun <CE : MessageProvider<F>> handleError(t: Throwable, kSerializer: KSerializer<CE>?): F
 }
