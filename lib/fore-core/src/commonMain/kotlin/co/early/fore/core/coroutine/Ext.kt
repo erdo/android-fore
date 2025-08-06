@@ -38,7 +38,7 @@ import kotlin.coroutines.coroutineContext
  * https://www.thedevtavern.com/blog/posts/structured-concurrency-exceptions-and-cancellations/
  */
 
-fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+inline fun launchIO(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
@@ -46,7 +46,7 @@ fun launchIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Uni
     }
 }
 
-fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+inline fun launchDefault(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
@@ -54,10 +54,10 @@ fun launchDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
     }
 }
 
-fun launchCustom(
+inline fun launchCustom(
     dispatcher: CoroutineContext,
     workMode: WorkMode? = null,
-    block: suspend CoroutineScope.() -> Unit
+    crossinline block: suspend CoroutineScope.() -> Unit
 ): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -70,7 +70,7 @@ fun launchCustom(
  * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
  * if using this code from a pure kotlin module
  */
-fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+inline fun launchMain(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
@@ -84,7 +84,7 @@ fun launchMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> U
  *
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
-fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> Unit): Job {
+inline fun launchMainImm(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
@@ -92,7 +92,7 @@ fun launchMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
     }
 }
 
-fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+inline fun <T> asyncIO(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
@@ -100,9 +100,9 @@ fun <T> asyncIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> 
     }
 }
 
-fun <T> asyncDefault(
+inline fun <T> asyncDefault(
     workMode: WorkMode? = null,
-    block: suspend CoroutineScope.() -> T
+    crossinline block: suspend CoroutineScope.() -> T
 ): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -111,10 +111,10 @@ fun <T> asyncDefault(
     }
 }
 
-fun <T> asyncCustom(
+inline fun <T> asyncCustom(
     dispatcher: CoroutineContext,
     workMode: WorkMode? = null,
-    block: suspend CoroutineScope.() -> T
+    crossinline block: suspend CoroutineScope.() -> T
 ): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -127,7 +127,7 @@ fun <T> asyncCustom(
  * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
  * if using this code from a pure kotlin module
  */
-fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): Deferred<T> {
+inline fun <T> asyncMain(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
     } else {
@@ -141,9 +141,9 @@ fun <T> asyncMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -
  *
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
-fun <T> asyncMainImm(
+inline fun <T> asyncMainImm(
     workMode: WorkMode? = null,
-    block: suspend CoroutineScope.() -> T
+    crossinline block: suspend CoroutineScope.() -> T
 ): Deferred<T> {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         runBlocking { CompletableDeferred(block()) }
@@ -152,7 +152,7 @@ fun <T> asyncMainImm(
     }
 }
 
-suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend inline fun <T> awaitIO(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
@@ -160,7 +160,7 @@ suspend fun <T> awaitIO(workMode: WorkMode? = null, block: suspend CoroutineScop
     }
 }
 
-suspend fun <T> awaitDefault(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend inline fun <T> awaitDefault(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
@@ -168,10 +168,10 @@ suspend fun <T> awaitDefault(workMode: WorkMode? = null, block: suspend Coroutin
     }
 }
 
-suspend fun <T> awaitCustom(
+suspend inline fun <T> awaitCustom(
     dispatcher: CoroutineContext,
     workMode: WorkMode? = null,
-    block: suspend CoroutineScope.() -> T
+    crossinline block: suspend CoroutineScope.() -> T
 ): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
@@ -184,7 +184,7 @@ suspend fun <T> awaitCustom(
  * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
  * if using this code from a pure kotlin module
  */
-suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend inline fun <T> awaitMain(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
@@ -198,7 +198,7 @@ suspend fun <T> awaitMain(workMode: WorkMode? = null, block: suspend CoroutineSc
  *
  * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
  */
-suspend fun <T> awaitMainImm(workMode: WorkMode? = null, block: suspend CoroutineScope.() -> T): T {
+suspend inline fun <T> awaitMainImm(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
     return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
         block(CoroutineScope(coroutineContext))
     } else {
