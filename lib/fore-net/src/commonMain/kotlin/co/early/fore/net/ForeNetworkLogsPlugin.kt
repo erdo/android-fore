@@ -13,6 +13,8 @@ import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsChannel
+import io.ktor.client.statement.request
+import io.ktor.util.AttributeKey
 import okio.Buffer
 import kotlin.random.Random
 
@@ -33,29 +35,52 @@ val ForeNetworkLogs = createClientPlugin("ForeNetworkLogs", ::ForeNetworkLogsCon
 
     val config = pluginConfig
     val logger = Fore.getLogger(config.logger)
-    val compositeTag = "${config.preTag}${createRandomTag()}"
-    var enabled = false
-    var method = ""
-    var url = ""
+
+    val compositeTagKey = AttributeKey<String>("CompositeTag")
+    val enabledKey = AttributeKey<Boolean>("Enabled")
+    val methodKey = AttributeKey<String>("Method")
+    val urlKey = AttributeKey<String>("Url")
 
     onRequest { request, _ ->
 
-        enabled = (config.logger !is SilentLogger && shouldBeLogged(request, config.filters))
+        val enabled = (config.logger !is SilentLogger && shouldBeLogged(request, config.filters))
+
+        request.attributes.put(
+            enabledKey,
+            enabled
+        )
 
         if (enabled) {
-            val (m, u) = logRequest(
+
+            val compositeTag = "${config.preTag}${createRandomTag()}"
+
+            request.attributes.put(
+                compositeTagKey,
+                compositeTag
+            )
+
+            val url = logRequest(
                 request = request,
                 config = config,
                 compositeTag = compositeTag,
                 lggr = logger,
             )
-            method = m
-            url = u
+
+            request.attributes.put(methodKey, request.method.value)
+            request.attributes.put(urlKey, url)
         }
     }
 
     onResponse { response ->
+
+        val enabled = response.request.attributes[enabledKey]
+
         if (enabled) {
+
+            val compositeTag = response.request.attributes.get(compositeTagKey)
+            val method = response.request.attributes.get(methodKey)
+            val url = response.request.attributes.get(urlKey)
+
             logResponse(
                 response = response,
                 config = config,
@@ -91,7 +116,7 @@ private suspend fun logRequest(
     config: ForeNetworkLogsConfig,
     compositeTag: String,
     lggr: Logger
-): Pair<String, String> {
+): String {
     val requestStringBuilder = StringBuilder()
     val requestBody = extractBodyInfo(request.body, config.maxBodyLogBytes, false)
 
@@ -130,7 +155,8 @@ private suspend fun logRequest(
     )
 
     lggr.d(compositeTag, requestStringBuilder.toString())
-    return Pair(method, url)
+
+    return url
 }
 
 private fun StringBuilder.logRequestInfo(
