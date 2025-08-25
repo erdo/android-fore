@@ -7,6 +7,7 @@ import co.early.fore.net.ForeNetworkLogs
 import io.ktor.client.*
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.*
 
 /**
@@ -39,6 +40,8 @@ object KtorClientBuilder {
             install(PluginGlobalInterceptor) {
                 logger = lgr
             }
+            // install(Logging)
+            // alternatively
             install(ForeNetworkLogs) {
                 // all these are optional, default will suit most requirements
                 logger = lgr

@@ -11,8 +11,10 @@ import co.early.fore.net.BodyRenderFormat.PlainText
 import co.early.fore.net.BodyRenderFormat.Xml
 import io.ktor.client.HttpClient
 import io.ktor.client.call.HttpClientCall
+import io.ktor.client.call.replaceResponse
 import io.ktor.client.plugins.api.ClientHook
 import io.ktor.client.plugins.api.createClientPlugin
+import io.ktor.client.plugins.isSaved
 import io.ktor.client.plugins.observer.wrapWithContent
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.statement.HttpReceivePipeline
@@ -114,8 +116,6 @@ val ForeNetworkLogs = createClientPlugin("ForeNetworkLogs", ::ForeNetworkLogsCon
             if (newResponse != response) {
                 proceedWith(newResponse)
             }
-        } else {
-            proceedWith(response)
         }
     }
 }
@@ -212,10 +212,6 @@ private suspend fun logResponse(
 ): HttpResponse {
     val responseStringBuilder = StringBuilder()
 
-    val (origChannel, bodyChannel) = response.rawContent.split(response)
-
-    val responseBody = extractBodyInfo(bodyChannel, config.maxBodyLogBytes)
-
     responseStringBuilder.logResponseInfo(
         method = method,
         code = "${response.status.value}, ${response.status.description}",
@@ -229,6 +225,16 @@ private suspend fun logResponse(
         networkingLogSanitizer = config.networkingLogSanitizer,
     )
 
+    var origChannel: ByteReadChannel? = null
+    val channel = if (response.isSaved) {
+        response.rawContent
+    } else {
+        val (original, newChannel) = response.rawContent.split(response)
+        origChannel = original
+        newChannel
+    }
+    val responseBody = extractBodyInfo(channel, config.maxBodyLogBytes)
+
     responseStringBuilder.logBody(
         bodyToLog = responseBody.first,
         message = responseBody.second,
@@ -237,11 +243,12 @@ private suspend fun logResponse(
         networkingLogSanitizer = config.networkingLogSanitizer,
         logger = lggr,
     )
-
     lggr.d(compositeTag, responseStringBuilder.toString())
 
-    val call = response.call.wrapWithContent(origChannel)
-    return call.response
+    return origChannel?.let { it ->
+        val call = response.call.replaceResponse { origChannel }
+        call.response
+    } ?: response
 }
 
 

@@ -22,6 +22,7 @@ import io.ktor.utils.io.availableForRead
 import io.ktor.utils.io.copyTo
 import io.ktor.utils.io.core.toByteArray
 import io.ktor.utils.io.readAvailable
+import io.ktor.utils.io.readFully
 import okio.Buffer
 
 
@@ -88,7 +89,7 @@ internal fun inferBodyRenderFormat(body: Buffer): BodyRenderFormat {
                     // Ignore any final 0xFFFD, because that could have been due to mid character
                     // truncation of a valid 4 byte UTF-8 character
                     val utf8 = body.readUtf8().let {
-                        if (it.endsWith(0xFFFD.toChar())){
+                        if (it.endsWith(0xFFFD.toChar())) {
                             it.dropLast(1)
                         } else {
                             it
@@ -182,19 +183,20 @@ internal suspend fun extractBodyInfo(
 
             val buffer = Buffer()
 
-            if (!body.isClosedForRead && body.availableForRead > 0) {
-                val copiedChannel = ByteChannel(autoFlush = true)
-                var bytesRead: Int
-                maxBodyLogBytes.toLong().let {
-                    bytesRead = body.copyTo(copiedChannel, it + 1).toInt()
-                    if (bytesRead > it) {
-                        message =
-                            "[truncated, consider increasing maxBodyLogBytes from:$maxBodyLogBytes]"
-                        bytesRead--
-                    }
+            val copiedChannel = ByteChannel(autoFlush = true)
+            var bytesRead: Int
+            maxBodyLogBytes.toLong().let {
+                bytesRead = body.copyTo(copiedChannel, it + 1).toInt()
+                if (bytesRead > it) {
+                    message =
+                        "[truncated, consider increasing maxBodyLogBytes from:$maxBodyLogBytes]"
+                    bytesRead--
                 }
+            }
+
+            if (bytesRead > 0 || logEmptyBody) {
                 val bytes = ByteArray(bytesRead)
-                copiedChannel.readAvailable(bytes, 0, bytesRead)
+                copiedChannel.readFully(bytes, 0, bytesRead)
                 buffer.write(bytes)
             }
 
@@ -205,7 +207,8 @@ internal suspend fun extractBodyInfo(
          */
         is ByteArrayContent -> {
             if (body.bytes().size > maxBodyLogBytes) {
-                message = "[truncated, consider increasing maxBodyLogBytes from:$maxBodyLogBytes, e.g try maxBodyLogBytes=BIG_LOG in PluginLogging constructor]"
+                message =
+                    "[truncated, consider increasing maxBodyLogBytes from:$maxBodyLogBytes, e.g try maxBodyLogBytes=BIG_LOG in PluginLogging constructor]"
             }
             val bytes = body.bytes().take(maxBodyLogBytes).toByteArray()
             val buffer = Buffer()
@@ -214,7 +217,8 @@ internal suspend fun extractBodyInfo(
         }
 
         is MultiPartFormDataContent -> {
-            message = "[multipart form data - boundary:${body.boundary} contentType:${body.contentType}]"
+            message =
+                "[multipart form data - boundary:${body.boundary} contentType:${body.contentType}]"
             null
         }
 
@@ -230,7 +234,9 @@ internal suspend fun extractBodyInfo(
         }
 
         is NoContent -> {
-            message = if (logEmptyBody){ "[no body]" } else ""
+            message = if (logEmptyBody) {
+                "[no body]"
+            } else ""
             null
         }
 
