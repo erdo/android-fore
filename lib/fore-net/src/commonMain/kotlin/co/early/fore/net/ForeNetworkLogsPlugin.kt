@@ -9,13 +9,34 @@ import co.early.fore.net.BodyRenderFormat.Html
 import co.early.fore.net.BodyRenderFormat.Json
 import co.early.fore.net.BodyRenderFormat.PlainText
 import co.early.fore.net.BodyRenderFormat.Xml
+import io.ktor.client.HttpClient
+import io.ktor.client.call.HttpClientCall
+import io.ktor.client.plugins.api.ClientHook
 import io.ktor.client.plugins.api.createClientPlugin
+import io.ktor.client.plugins.observer.wrapWithContent
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.statement.HttpReceivePipeline
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.HttpResponseContainer
+import io.ktor.client.statement.HttpResponsePipeline
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.client.statement.request
+import io.ktor.http.Headers
+import io.ktor.http.HttpProtocolVersion
+import io.ktor.http.HttpStatusCode
 import io.ktor.util.AttributeKey
+import io.ktor.util.date.GMTDate
+import io.ktor.util.pipeline.PipelineContext
+import io.ktor.util.pipeline.PipelinePhase
+import io.ktor.util.split
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.InternalAPI
+import io.ktor.utils.io.core.readBytes
+import io.ktor.utils.io.readRemaining
+import io.ktor.utils.io.toByteArray
+import kotlinx.io.readByteArray
 import okio.Buffer
+import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
 const val BIG_LOG = 250000
@@ -71,17 +92,17 @@ val ForeNetworkLogs = createClientPlugin("ForeNetworkLogs", ::ForeNetworkLogsCon
         }
     }
 
-    onResponse { response ->
+    on(ResponseAfterEncodingHook) { response ->
 
         val enabled = response.request.attributes[enabledKey]
 
         if (enabled) {
 
-            val compositeTag = response.request.attributes.get(compositeTagKey)
-            val method = response.request.attributes.get(methodKey)
-            val url = response.request.attributes.get(urlKey)
+            val compositeTag = response.request.attributes[compositeTagKey]
+            val method = response.request.attributes[methodKey]
+            val url = response.request.attributes[urlKey]
 
-            logResponse(
+            val newResponse = logResponse(
                 response = response,
                 config = config,
                 method = method,
@@ -89,6 +110,12 @@ val ForeNetworkLogs = createClientPlugin("ForeNetworkLogs", ::ForeNetworkLogsCon
                 compositeTag = compositeTag,
                 lggr = logger,
             )
+
+            if (newResponse != response) {
+                proceedWith(newResponse)
+            }
+        } else {
+            proceedWith(response)
         }
     }
 }
@@ -172,6 +199,9 @@ private fun StringBuilder.logRequestInfo(
     }
 }
 
+// internal because of the response.rawContent line (which is how ktor's
+// Logging plugin works) if we want our own logging we have no choice
+@OptIn(InternalAPI::class)
 private suspend fun logResponse(
     response: HttpResponse,
     config: ForeNetworkLogsConfig,
@@ -179,9 +209,12 @@ private suspend fun logResponse(
     url: String,
     compositeTag: String,
     lggr: Logger
-) {
+): HttpResponse {
     val responseStringBuilder = StringBuilder()
-    val responseBody = extractBodyInfo(response.bodyAsChannel(), config.maxBodyLogBytes)
+
+    val (origChannel, bodyChannel) = response.rawContent.split(response)
+
+    val responseBody = extractBodyInfo(bodyChannel, config.maxBodyLogBytes)
 
     responseStringBuilder.logResponseInfo(
         method = method,
@@ -206,6 +239,9 @@ private suspend fun logResponse(
     )
 
     lggr.d(compositeTag, responseStringBuilder.toString())
+
+    val call = response.call.wrapWithContent(origChannel)
+    return call.response
 }
 
 
@@ -287,5 +323,24 @@ private fun StringBuilder.logBody(
 
     if (message.isNotBlank()) {
         append(message)
+    }
+}
+
+private object ResponseAfterEncodingHook :
+    ClientHook<suspend ResponseAfterEncodingHook.Context.(response: HttpResponse) -> Unit> {
+
+    class Context(private val context: PipelineContext<HttpResponse, Unit>) {
+        suspend fun proceedWith(response: HttpResponse) = context.proceedWith(response)
+    }
+
+    override fun install(
+        client: HttpClient,
+        handler: suspend Context.(response: HttpResponse) -> Unit
+    ) {
+        val afterState = PipelinePhase("AfterState")
+        client.receivePipeline.insertPhaseAfter(HttpReceivePipeline.State, afterState)
+        client.receivePipeline.intercept(afterState) {
+            handler(Context(this), subject)
+        }
     }
 }
