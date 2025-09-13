@@ -7,7 +7,6 @@ import co.early.fore.core.observer.ObservableImp
 import co.early.fore.core.type.Either.Fail
 import co.early.fore.core.type.Either.Success
 import co.early.fore.core.type.carryOn
-import co.early.fore.net.wrap.CallWrapper
 import co.early.fore.net.wrap.Wrapper
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService

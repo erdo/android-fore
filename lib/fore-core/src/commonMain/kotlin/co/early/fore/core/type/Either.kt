@@ -22,12 +22,33 @@ sealed class Either<out F, out S> {
 
 /**
  * If this is a Success, the extension function calls next() with the success value
- * If this is a Fail, it returns the Fail
+ * If this is a Fail, it returns the Fail.
+ *
+ * This is a monadic bind, and common names for this type of function
+ * are: chain, andThen or flatMap
  *
  * Copyright © 2020 early.co. All rights reserved.
  */
 suspend fun <E, S, S2> Either<E, S>.carryOn(
         nextBlock: suspend (S) -> Either<E, S2>
+): Either<E, S2> {
+    return when (this) {
+        is Either.Fail -> this
+        is Either.Success -> nextBlock(value)
+    }
+}
+
+/**
+ * If this is a Success, the extension function calls next() with the success value
+ * If this is a Fail, it returns the Fail.
+ *
+ * This is a monadic bind, and common names for this type of function
+ * are: chain, andThen or flatMap
+ *
+ * Copyright © 2020 early.co. All rights reserved.
+ */
+fun <E, S, S2> Either<E, S>.carryOnNoSuspend(
+    nextBlock: (S) -> Either<E, S2>
 ): Either<E, S2> {
     return when (this) {
         is Either.Fail -> this
