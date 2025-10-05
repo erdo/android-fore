@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.min
 import androidx.window.layout.WindowMetricsCalculator
 
 val LocalWindowSize =
-    compositionLocalOf<WindowSize> { error("To access LocalWindowSize, your compose code must be wrapped in a WindowSize{} block, we'd suggest somewhere high up in the UI tree/hierarchy, just inside setContent{}") }
+    compositionLocalOf<WindowSize> { error("To access LocalWindowSize, your compose code must be wrapped in a WindowSize{} block (or WindowSizePreview{}), we'd suggest somewhere high up in the UI tree/hierarchy, just inside setContent{}") }
 
 @Composable
 fun Activity.rememberWindowSize(includeAlmostSquareAspect: Boolean = true): WindowSize {
@@ -75,6 +75,13 @@ private fun Activity.rememberWindowMetrics(): Rect {
 @Composable
 fun Activity.WindowSize(content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalWindowSize provides rememberWindowSize()) {
+        content()
+    }
+}
+
+@Composable
+fun WindowSizePreview(previewWindowSize: WindowSize, content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalWindowSize provides previewWindowSize) {
         content()
     }
 }
