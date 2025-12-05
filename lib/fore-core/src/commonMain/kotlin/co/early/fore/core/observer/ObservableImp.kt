@@ -47,24 +47,20 @@ class ObservableImp(
     private val observerList = mutableListOf<Observer>()
     private val addRemoveMutex = Mutex()
     private val inferredTag: String = getTagInferer().inferTag()
-    private val mainDispatcherImmediate: CoroutineDispatcher
-
-    init {
-        if (dispatcherImmediate == null) {
-            try {
-                mainDispatcherImmediate = Dispatchers.Main.immediate
-            } catch (uoe: UnsupportedOperationException){
-                val errorMessage = "\nIt looks like you are running on a KMP platform that doesn't " +
-                        "support \n" +
-                        "Dispatchers.Main.immediate\n" +
-                        "If this is intentional, you will need to specify a dispatcher in the\n" +
-                        "constructor"
-                Fore.getLogger(logger).e(inferredTag, errorMessage)
-                throw IllegalArgumentException(errorMessage)
-            }
-        } else {
-            mainDispatcherImmediate = dispatcherImmediate
+    private val mainDispatcherImmediate: CoroutineDispatcher = if (dispatcherImmediate != null) {
+        dispatcherImmediate
+    } else {
+        val dispatcher = try {
+            Dispatchers.Main.immediate
+        } catch (e: Exception) {
+            val message = """
+            Running on a KMP platform that doesn't support Dispatchers.Main or Dispatchers.Main.immediate.
+            Using Dispatchers.Default, consider specifying a dispatcher in the ObservableImp constructor
+        """.trimIndent()
+            Fore.getLogger(logger).w(inferredTag, message)
+            Dispatchers.Default
         }
+        dispatcher
     }
 
     /**
@@ -77,7 +73,8 @@ class ObservableImp(
             addRemoveMutex.withLock {
 
                 if (observerList.contains(observer)) {
-                    Fore.getLogger(logger).w(inferredTag,
+                    Fore.getLogger(logger).w(
+                        inferredTag,
                         "You are about to add the same observer twice to [$inferredTag]. This is almost certainly an error and indicates code that " +
                                 "could cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
                                 "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()) thread:${threadName()}"
@@ -86,10 +83,14 @@ class ObservableImp(
 
                 observerList.add(observer)
 
-                Fore.getLogger(logger).i(inferredTag, "Observer added to [${inferredTag}]: $observer t:${threadName()}")
+                Fore.getLogger(logger).i(
+                    inferredTag,
+                    "Observer added to [${inferredTag}]: $observer t:${threadName()}"
+                )
 
                 if (observerList.size > 4) {
-                    Fore.getLogger(logger).w(inferredTag,
+                    Fore.getLogger(logger).w(
+                        inferredTag,
                         "There are now:" + observerList.size + " Observers added to the Observable [$inferredTag], that's quite a lot.\n" +
                                 "It's sometimes indicative of code which is not removing observers when it should\n" +
                                 "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
@@ -118,10 +119,12 @@ class ObservableImp(
                 val beforeSize = observerList.size
                 observerList.remove(observer)
 
-                Fore.getLogger(logger).i(inferredTag, "Observer removed from [$inferredTag]: $observer")
+                Fore.getLogger(logger)
+                    .i(inferredTag, "Observer removed from [$inferredTag]: $observer")
 
                 if (observerList.size == beforeSize) {
-                    Fore.getLogger(logger).w(inferredTag,
+                    Fore.getLogger(logger).w(
+                        inferredTag,
                         "You have tried to remove an observer from [$inferredTag] that wasn't added in the first place. This is almost certainly an error and\n" +
                                 "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods\n" +
                                 "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()) thread:${threadName()}"
@@ -157,7 +160,8 @@ class ObservableImp(
         launchCustom(mainDispatcherImmediate, Fore.getWorkMode(notificationMode)) {
             addRemoveMutex.withLock {
                 for (observer in observerList) {
-                    Fore.getLogger(logger).d(inferredTag, "notifying [$inferredTag] changes to: $observer")
+                    Fore.getLogger(logger)
+                        .d(inferredTag, "notifying [$inferredTag] changes to: $observer")
                     doNotification(observer)
                 }
             }
