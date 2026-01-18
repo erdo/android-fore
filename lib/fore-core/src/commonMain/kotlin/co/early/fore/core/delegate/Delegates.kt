@@ -1,63 +1,118 @@
 package co.early.fore.core.delegate
 
-import co.early.fore.core.WorkMode
-import co.early.fore.core.WorkMode.ASYNCHRONOUS
-import co.early.fore.core.WorkMode.SYNCHRONOUS
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.logging.MultiplatformLogger
+import co.early.fore.core.logging.SilentLogger
 import co.early.fore.core.time.SystemTimeWrapper
 import co.early.fore.core.time.getSystemTimeWrapper
-import co.early.fore.core.logging.SilentLogger
-import co.early.fore.core.logging.SystemLogger
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 
 /**
- * Many fore classes take: WorkMode, Logger and/or SystemTimeWrapper as construction parameters.
- * If these parameters are not specified, they will default to null and when they are needed by
- * the fore class they will be exchanged for the default delegate values indicated below.
+ * Many classes take: Dispatchers, Loggers and/or SystemTimeWrappers as construction parameters.
+ * These can be provided by the Fore delegates (and swapped out globally during tests)
  *
  * To set your own Delegate e.g. `Fore.setDelegate(DefaultTestDelegate())`
  */
 interface Delegate {
-    val workMode: WorkMode
     val logger: Logger
     val systemTimeWrapper: SystemTimeWrapper
+    val isTest: Boolean
+
+    val ioScope: CoroutineScope
+    val defaultScope: CoroutineScope
+    val mainScope: CoroutineScope
+    val mainImmediateScope: CoroutineScope
+
+    val exceptionHandler: CoroutineExceptionHandler?
 }
 
-class DebugDelegateDefault(
+abstract class DelegateBase : Delegate {
+
+  //  protected open val delegateJob = SupervisorJob()
+
+    override val isTest = false
+
+    override val exceptionHandler: CoroutineExceptionHandler? = null
+
+    override val ioScope: CoroutineScope by lazy {
+        createScope(Dispatchers.IO + SupervisorJob())
+    }
+
+    override val defaultScope: CoroutineScope by lazy {
+        createScope(Dispatchers.Default + SupervisorJob())
+    }
+
+    override val mainScope: CoroutineScope by lazy {
+        val dispatcher = try {
+            Dispatchers.Main
+        } catch (e: Exception) {
+            val message = """
+            Running on a KMP platform that doesn't support Dispatchers.Main or Dispatchers.Main.immediate.
+            Using Dispatchers.Default, consider specifying a dispatcher in the ObservableImp constructor
+        """.trimIndent()
+            Fore.w(message)
+            Dispatchers.Default
+        }
+        createScope(dispatcher + SupervisorJob())
+    }
+
+    override val mainImmediateScope: CoroutineScope by lazy {
+        val dispatcher = try {
+            Dispatchers.Main.immediate
+        } catch (e: Exception) {
+            val message = """
+            Running on a KMP platform that doesn't support Dispatchers.Main or Dispatchers.Main.immediate.
+            Using Dispatchers.Default, consider specifying a dispatcher in the ObservableImp constructor
+        """.trimIndent()
+            Fore.w(message)
+            Dispatchers.Default
+        }
+        createScope(dispatcher + SupervisorJob())
+    }
+
+    protected fun createScope(context: CoroutineContext): CoroutineScope {
+        val combinedContext = exceptionHandler?.let { context + it } ?: context
+        return CoroutineScope(combinedContext)
+    }
+}
+
+class DelegateDebug(
     tagPrefix: String? = null,
-    override val workMode: WorkMode = ASYNCHRONOUS,
     override val logger: Logger = MultiplatformLogger(tagPrefix),
-    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
-) : Delegate {
+    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper(),
+    override val exceptionHandler: CoroutineExceptionHandler? = null
+) : DelegateBase() {
 
     // this is for iOS target benefit which doesn't like default parameters in constructors
     constructor(tagPrefix: String) : this(
-        tagPrefix,
-        ASYNCHRONOUS,
-        MultiplatformLogger(tagPrefix),
-        getSystemTimeWrapper()
+        tagPrefix = tagPrefix,
+        logger = MultiplatformLogger(tagPrefix),
+        systemTimeWrapper = getSystemTimeWrapper(),
+        exceptionHandler = null
     )
-    constructor() : this(null, ASYNCHRONOUS, MultiplatformLogger(null), getSystemTimeWrapper())
+
+    constructor() : this(
+        tagPrefix = null,
+        logger = MultiplatformLogger(null),
+        systemTimeWrapper = getSystemTimeWrapper(),
+        exceptionHandler = null
+    )
 }
 
-class ReleaseDelegateDefault(
-    override val workMode: WorkMode = ASYNCHRONOUS,
+class DelegateRelease(
     override val logger: Logger = SilentLogger(),
-    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
-) : Delegate {
+    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper(),
+    override val exceptionHandler: CoroutineExceptionHandler? = null
+) : DelegateBase() {
 
     // this is for iOS target benefit which doesn't like default parameters in constructors
-    constructor() : this(ASYNCHRONOUS, SilentLogger(), getSystemTimeWrapper())
-}
-
-class TestDelegateDefault(
-    override val workMode: WorkMode = SYNCHRONOUS,
-    override val logger: Logger = SystemLogger(),
-    override val systemTimeWrapper: SystemTimeWrapper = getSystemTimeWrapper()
-) : Delegate {
-
-    // this is for iOS target benefit which doesn't like default parameters in constructors
-    constructor() : this(SYNCHRONOUS, SystemLogger(), getSystemTimeWrapper())
+    constructor() : this(SilentLogger(), getSystemTimeWrapper(), null)
 }
 
 
@@ -65,7 +120,7 @@ class Fore {
 
     companion object {
 
-        private var delegate: Delegate = ReleaseDelegateDefault()
+        private var delegate: Delegate = DelegateRelease()
 
         /**
          * For release builds you will generally not need to call this function -
@@ -92,10 +147,6 @@ class Fore {
             Companion.delegate = delegate
         }
 
-        fun getWorkMode(specified: WorkMode? = null): WorkMode {
-            return specified ?: delegate.workMode
-        }
-
         fun getLogger(specified: Logger? = null): Logger {
             return specified ?: delegate.logger
         }
@@ -103,6 +154,11 @@ class Fore {
         fun getSystemTimeWrapper(specified: SystemTimeWrapper? = null): SystemTimeWrapper {
             return specified ?: delegate.systemTimeWrapper
         }
+
+        fun scopeIo(): CoroutineScope = delegate.ioScope
+        fun scopeDefault(): CoroutineScope = delegate.defaultScope
+        fun scopeMain(): CoroutineScope = delegate.mainScope
+        fun scopeMainImm(): CoroutineScope = delegate.mainImmediateScope
 
         /**
          * convenience function, same as calling: Fore.getLogger(null).e()

@@ -12,7 +12,6 @@ import co.early.fore.adapters.immutable.DiffCalculator;
 import co.early.fore.adapters.immutable.DiffSpec;
 import co.early.fore.adapters.immutable.Diffable;
 import co.early.fore.core.Affirm;
-import co.early.fore.core.WorkMode;
 import co.early.fore.core.logging.Logger;
 import co.early.fore.core.observer.ObservableImp;
 import co.early.fore.core.threading.AsyncBuilder;

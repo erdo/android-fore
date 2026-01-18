@@ -1,7 +1,7 @@
 package foo.bar.example.forektorkt
 
 import android.app.Application
-import co.early.fore.core.delegate.DebugDelegateDefault
+import co.early.fore.core.delegate.DelegateDebug
 import co.early.fore.core.delegate.Fore
 import co.early.fore.net.wrap.CallWrapper
 import foo.bar.example.forektorkt.api.GlobalErrorHandler
@@ -27,7 +27,7 @@ object OG {
         // create dependency graph
 
         if (BuildConfig.DEBUG) {
-            Fore.setDelegate(DebugDelegateDefault("fore_"))
+            Fore.setDelegate(DelegateDebug("fore_"))
         }
         val logger = Fore.getLogger()
 

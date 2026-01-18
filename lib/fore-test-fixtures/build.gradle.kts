@@ -1,4 +1,6 @@
 import co.early.fore.Shared
+import co.early.fore.Shared.Android.compileSdk
+import co.early.fore.Shared.Android.minSdk
 import co.early.fore.applyPublishingConfig
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -27,7 +29,7 @@ kotlin {
         }
     }
 
-    androidTarget{
+    androidTarget {
         publishLibraryVariants("release")
     }
 
@@ -55,10 +57,12 @@ kotlin {
     mingwX64()
 
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(project(":lib:fore-core"))
                 implementation(project(":lib:fore-net"))
+                api(libs.kotlin.test)
+                implementation(libs.kotlin.coroutines.test)
             }
         }
     }

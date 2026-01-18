@@ -1,6 +1,5 @@
 package co.early.fore.net.wrap.apollo
 
-import co.early.fore.core.WorkMode
 import co.early.fore.core.coroutine.asyncMain
 import co.early.fore.core.coroutine.awaitIO
 import co.early.fore.core.delegate.Fore
@@ -9,7 +8,6 @@ import co.early.fore.core.observer.threadName
 import co.early.fore.core.type.Either
 import co.early.fore.core.type.Either.Companion.fail
 import co.early.fore.core.type.Either.Companion.success
-import co.early.fore.net.wrap.CallWrapper
 import com.apollographql.apollo.api.ApolloResponse
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.api.Operation
@@ -19,6 +17,7 @@ interface WrapperApollo<F> {
     suspend fun <S : Operation.Data> processCallAwait(
         call: suspend () -> ApolloResponse<S>
     ): Either<F, CallWrapperApollo.SuccessResult<S, F>>
+
     suspend fun <S : Operation.Data> processCallAsync(
         call: suspend () -> ApolloResponse<S>
     ): Deferred<Either<F, CallWrapperApollo.SuccessResult<S, F>>>
@@ -32,7 +31,6 @@ interface WrapperApollo<F> {
  * case it can sometimes be easier to use a separate CallProcessor instance (and ErrorHandler) for
  * each micro service.
  * @property logger (optional: ForeDelegateHolder will choose a sensible default)
- * @property workMode (optional: ForeDelegateHolder will choose a sensible default)
  * @property allowPartialSuccesses (defaults to true) The GraphQL spec allows for success responses
  * with qualified errors, like this: https://spec.graphql.org/draft/#example-90475 if true, you will
  * receive these responses as successes, together with the list of partial errors that were attached
@@ -45,12 +43,11 @@ interface WrapperApollo<F> {
 class CallWrapperApollo<F>(
     private val errorHandler: ErrorHandler<F>,
     private val logger: Logger? = null,
-    private val workMode: WorkMode? = null,
     private val allowPartialSuccesses: Boolean = true
 ) : WrapperApollo<F> {
 
     // this is for iOS target benefit which doesn't like default parameters in constructors
-    constructor(errorHandler: ErrorHandler<F>) : this(errorHandler, null, null, true)
+    constructor(errorHandler: ErrorHandler<F>) : this(errorHandler, null, true)
 
     data class SuccessResult<S, F>(
         val data: S,
@@ -77,12 +74,13 @@ class CallWrapperApollo<F>(
      */
     override suspend fun <S : Operation.Data> processCallAsync(call: suspend () -> ApolloResponse<S>): Deferred<Either<F, SuccessResult<S, F>>> {
 
-        return asyncMain(Fore.getWorkMode(workMode)) {
+        return asyncMain {
             try {
 
-                val result: ApolloResponse<S> = awaitIO(Fore.getWorkMode(workMode)) {
+                val result: ApolloResponse<S> = awaitIO {
 
-                    Fore.getLogger(logger).d("about to make call from io dispatcher, thread:" + threadName())
+                    Fore.getLogger(logger)
+                        .d("about to make call from io dispatcher, thread:" + threadName())
 
                     call()
                 }
@@ -96,7 +94,7 @@ class CallWrapperApollo<F>(
     }
 
     private fun <S : Operation.Data> processSuccessResponse(
-            response: ApolloResponse<S>
+        response: ApolloResponse<S>
     ): Either<F, SuccessResult<S, F>> {
 
         val data: S? = response.data
@@ -120,7 +118,7 @@ class CallWrapperApollo<F>(
     }
 
     private fun <S> processFailResponse(
-            t: Throwable?, errorResponse: ApolloResponse<*>?
+        t: Throwable?, errorResponse: ApolloResponse<*>?
     ): Either<F, SuccessResult<S, F>> {
 
         if (t != null) {
@@ -128,7 +126,8 @@ class CallWrapperApollo<F>(
         }
 
         if (errorResponse != null) {
-            Fore.getLogger(logger).e("processFailResponse() errorResponse:$errorResponse t:" + threadName())
+            Fore.getLogger(logger)
+                .e("processFailResponse() errorResponse:$errorResponse t:" + threadName())
         }
 
         return fail(errorHandler.handleError(t, errorResponse))

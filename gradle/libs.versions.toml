@@ -19,8 +19,8 @@ composeMultiplatformUiVersion = "1.7.3"
 composeMultiplatformPluginVersion = "2.1.10"
 androidxWindowVersion = "1.4.0"
 mockkVersion = "1.13.11"
-persistaVersion = "2.0.0"
-foreVersion = "2.0.0"
+persistaVersion = "2.0.1"
+foreVersion = "2.0.1"
 
 [libraries]
 
@@ -67,6 +67,7 @@ okio = "com.squareup.okio:okio:3.10.2"
 
 # test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVersion" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 junit = { module = "junit:junit", version.ref = "junitVersion" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 

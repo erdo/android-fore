@@ -1,12 +1,13 @@
 package foo.bar.example.forecoroutine.feature.counter
 
+import co.early.fore.core.delegate.runWithTestDelegate
 import co.early.fore.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
-import io.mockk.MockKAnnotations
 import io.mockk.mockk
 import io.mockk.verify
+import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -14,18 +15,16 @@ import org.junit.Test
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class CounterTest {
 
     @Before
     fun setup() {
-        // make the code run synchronously, reroute Log.x to
-        // System.out.println() so we see it in the test log
-        Fore.setDelegate(TestDelegateDefault())
+
     }
 
     @Test
-    @Throws(Exception::class)
-    fun initialConditions() {
+    fun initialConditions() = runWithTestDelegate {
 
         //arrange
         val counter = Counter(logger)
@@ -37,22 +36,20 @@ class CounterTest {
         Assert.assertEquals(0, counter.count.toLong())
     }
 
-
     @Test
-    @Throws(Exception::class)
-    fun increasesBy20() {
-
-        //arrange
+    fun increasesBy20() = runWithTestDelegate {
+        // arrange
         val counter = Counter(logger)
 
-        //act
+        // act
         counter.increaseBy20()
 
-        //assert
-        Assert.assertEquals(false, counter.isBusy)
-        Assert.assertEquals(20, counter.count.toLong())
-    }
+        advanceUntilIdle()
 
+        // assert
+        assertEquals(false, counter.isBusy)
+        assertEquals(20, counter.count.toLong())
+    }
 
     /**
      *
@@ -71,8 +68,7 @@ class CounterTest {
      * @throws Exception
      */
     @Test
-    @Throws(Exception::class)
-    fun observersNotifiedAtLeastOnce() {
+    fun observersNotifiedAtLeastOnce() = runWithTestDelegate {
 
         //arrange
         val counter = Counter(logger)
@@ -81,6 +77,8 @@ class CounterTest {
 
         //act
         counter.increaseBy20()
+
+        advanceUntilIdle()
 
         //assert
         verify(atLeast = 1) {
@@ -91,5 +89,4 @@ class CounterTest {
     companion object {
         private val logger = SystemLogger()
     }
-
 }

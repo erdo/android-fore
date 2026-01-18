@@ -27,7 +27,6 @@ public class BossMode extends ObservableImp{
     //notice how we use the TodoListModel, we don't go directly to the db layer
     private final TodoListModel todoListModel;
     private final SystemTimeWrapper systemTimeWrapper;
-    private final WorkMode workMode;
     private final Logger logger;
 
     private boolean bossModeOn = false;
@@ -38,11 +37,10 @@ public class BossMode extends ObservableImp{
     private static final String BOSS = App.getInst().getString(R.string.todo_boss);
 
 
-    public BossMode(TodoListModel todoListModel, SystemTimeWrapper systemTimeWrapper, WorkMode workMode, Logger logger) {
-        super(workMode, logger);
+    public BossMode(TodoListModel todoListModel, SystemTimeWrapper systemTimeWrapper, Logger logger) {
+        super(logger);
         this.todoListModel = Affirm.notNull(todoListModel);
         this.systemTimeWrapper = Affirm.notNull(systemTimeWrapper);
-        this.workMode = Affirm.notNull(workMode);
         this.logger = Affirm.notNull(logger);
     }
 

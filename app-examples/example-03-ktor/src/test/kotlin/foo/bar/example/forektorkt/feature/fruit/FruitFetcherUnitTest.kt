@@ -1,9 +1,9 @@
 package foo.bar.example.forektorkt.feature.fruit
 
+import co.early.fore.core.delegate.Fore
+import co.early.fore.core.delegate.DelegateTestSynchronous
 import co.early.fore.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.net.wrap.CallWrapper
 import foo.bar.example.forektorkt.api.fruits.FruitPojo
 import foo.bar.example.forektorkt.api.fruits.FruitService
@@ -11,6 +11,7 @@ import foo.bar.example.forektorkt.message.ErrorMessage
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -42,15 +43,23 @@ class FruitFetcherUnitTest {
     @MockK
     private lateinit var mockObserver: Observer
 
+    private lateinit var delegate: DelegateTestSynchronous
 
     @Before
     fun setup() {
 
-        MockKAnnotations.init(this, relaxed = true)
-
         // make the code run synchronously, reroute Log.x to
         // System.out.println() so we see it in the test log
-        Fore.setDelegate(TestDelegateDefault())
+        delegate = DelegateTestSynchronous()
+        Fore.setDelegate(delegate)
+
+        MockKAnnotations.init(this, relaxed = true)
+    }
+
+    @After
+    fun cleanup() {
+
+        delegate.cleanup()
     }
 
 

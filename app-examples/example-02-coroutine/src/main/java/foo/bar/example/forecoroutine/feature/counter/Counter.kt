@@ -1,12 +1,9 @@
 package foo.bar.example.forecoroutine.feature.counter
 
-
-import co.early.fore.core.WorkMode
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.coroutine.awaitDefault
 import co.early.fore.core.coroutine.launchMain
-import co.early.fore.core.delegate.Fore
 import co.early.fore.core.observer.ObservableImp
 import kotlinx.coroutines.delay
 
@@ -14,8 +11,8 @@ import kotlinx.coroutines.delay
  * Copyright © 2019 early.co. All rights reserved.
  */
 class Counter(
-        private val logger: Logger
-) : Observable by ObservableImp(logger = logger) {
+    private val logger: Logger
+) : Observable by ObservableImp() {
 
     var isBusy = false
         private set
@@ -54,7 +51,7 @@ class Counter(
 
         for (ii in 1..countTo) {
 
-            delay((if (Fore.getWorkMode() == WorkMode.SYNCHRONOUS) 1 else 100).toLong())
+            delay(100)
 
             ++totalIncrease
 

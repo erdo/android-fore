@@ -83,9 +83,14 @@ object Shared {
         const val published_fore_version_for_examples = "2.0.0"
     }
 
+    private fun findSecretsFile(relativePaths: String): File {
+        // This assumes the secrets are relative to the root of the project
+        return File(System.getProperty("user.dir")).resolve(relativePaths)
+    }
+
     object Secrets {
 
-        private val secrets = readProperties(File("../secrets/secrets.properties"))
+        private val secrets = readProperties(findSecretsFile("../secrets/secrets.properties"))
 
         val MAVEN_USER = (System.getenv("MAVEN_USER") ?: secrets.getProperty("MAVEN_USER")) ?: "MISSING"
         val MAVEN_PASSWORD = (System.getenv("MAVEN_PASSWORD") ?: secrets.getProperty("MAVEN_PASSWORD")) ?: "MISSING"

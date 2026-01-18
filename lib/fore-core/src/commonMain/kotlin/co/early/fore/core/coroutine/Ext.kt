@@ -1,207 +1,211 @@
 package co.early.fore.core.coroutine
 
-import co.early.fore.core.WorkMode
 import co.early.fore.core.delegate.Fore
-import kotlinx.coroutines.*
+import co.early.fore.core.observer.Observable
+import co.early.fore.core.observer.Observer
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 
 /**
- * Copyright © 2019 early.co. All rights reserved. (See update below)
+ * Copyright © 2019 early.co. All rights reserved.
  *
- * Testing unwrapped co-routines is not as straight forward as it could be, depending on
- * kotlinx-coroutines-test, was not giving us determinate test results at
- * the moment - and for unit tests that's a total deal breaker. It's ok to test single suspend
- * functions, but not if you want to test units of code that contain more than one suspend function
- * and use a mixture of IO and Main dispatchers.
+ * === Historical context ===
  *
- * There is a complicated discussion about that here: https://github.com/Kotlin/kotlinx.coroutines/pull/1206
+ * 2019 kotlinx-coroutines-test did not provide
+ * deterministic behaviour when code mixed multiple dispatchers (e.g. IO and Main), which made
+ * reliable unit testing of non-trivial coroutine flows impractical.
  *
- * In any case https://github.com/Kotlin/kotlinx.coroutines/blob/coroutines-test/kotlinx-coroutines-test/README.md
- * is focussed on swapping out the main dispatcher for unit tests. Even with runBlockingTest, other dispatchers can
- * still run concurrently with your tests, making tests much more complicated. The whole thing is extremely
- * complicated in fact (which is probably why it doesn't work yet).
+ * while it was possible to test individual suspend functions, testing larger units that launched
+ * multiple coroutines could result in flaky tests. at the time, coroutine testing support focused
+ * primarily on replacing Dispatchers.Main, while other dispatchers could still execute
+ * concurrently with tests
  *
- * For the moment we continue to use the very simple and clear WorkMode switch as we have done in the past.
- * SYNCHRONOUS means everything is run sequentially in a blocking manner and on whatever thread the caller
- * is on. ASYNCHRONOUS gives you the co-routine behaviour you would expect.
+ * See discussion here:
+ * https://github.com/Kotlin/kotlinx.coroutines/pull/1206
  *
- * NB. This means there is no virtual time unless you implement it yourself though, for instance if you have code
- * like this in your app: delay(10 000), it will sit there and wait during a unit test, same as it would in app code.
- * You can write something like this instead: delay(if (workMode == WorkMode.ASYNCHRONOUS) 10000 else 1)
+ * Fore introduced an explicit WorkMode switch:
  *
- * Update Jan 2022: hopefully the reworked version of kotlinx-coroutines-test for 1.6 is going to fix these
- * issues: https://blog.jetbrains.com/kotlin/2021/12/introducing-kotlinx-coroutines-1-6-0/
- * The fore extension methods will remain as a convenience or just to use if you prefer testing asynchronous
- * code by making them synchronous for tests
+ * - SYNCHRONOUS: work executes immediately and sequentially on the caller thread
+ * - ASYNCHRONOUS: work executes using standard coroutine dispatchers
  *
+ * This allowed asynchronous code paths to be exercised deterministically in tests without relying
+ * on virtual time or complex scheduler control.
+ *
+ * Note: This approach does not provide virtual time. Calls such as delay(10_000) will block for
+ * real time in tests unless explicitly shortened (e.g. delay(if (workMode == ASYNCHRONOUS) 10_000 else 1)).
+ *
+ * === Update (Jan 2022) ===
+ *
+ * kotlinx-coroutines-test is significantly reworked in version 1.6, addressing many of the
+ * original issues around determinism and structured testing:
+ * https://blog.jetbrains.com/kotlin/2021/12/introducing-kotlinx-coroutines-1-6-0/
+ *
+ * We're keeping the Fore coroutine helpers as a convenient and low boiler plate way to run
+ * fire and forget coroutines that run synchronously during tests
+ *
+ * === Update (Dec 2025) ===
+ *
+ * Adding globally configured CoroutineScopes, so we can take advantage of runBlocking (especially
+ * for integration testing complicated coroutines flows where strictly synchronous mode is not
+ * always feasible)
+ *
+ * - Fire-and-forget, unstructured concurrency in production by default
+ * - Fully structured concurrency in tests by swapping the Delegate to provide a test-owned scope
+ * - Deterministic testing using runBlocking or runTest without latches, sleeps, or thread blocking
+ * - Consistent cancellation and failure semantics via shared SupervisorJobs
+ *
+ * In SYNCHRONOUS mode, coroutines are started using CoroutineStart.UNDISPATCHED to provide immediate,
+ * non-blocking execution while preserving coroutine structure.
+ *
+ * Fore's default delegate scopes use `SupervisorJob` to preserve independent task execution in
+ * production, while test delegates can provide a shared scope so that `runBlocking` or
+ * `runTest` deterministically waits for all child coroutines
+ *
+ * Additional reading:
  * https://www.thedevtavern.com/blog/posts/structured-concurrency-exceptions-and-cancellations/
  */
 
-inline fun launchIO(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.IO).launch { block() }
-    }
+inline fun launchIO(
+    name: String = "launchIO",
+    crossinline block: suspend CoroutineScope.() -> Unit
+): Job {
+    return Fore.scopeIo().launch(CoroutineName(name)) { block() }
 }
 
-inline fun launchDefault(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Default).launch { block() }
-    }
+inline fun launchDefault(
+    name: String = "launchDefault",
+    crossinline block: suspend CoroutineScope.() -> Unit
+): Job {
+    return Fore.scopeDefault().launch(CoroutineName(name)) { block() }
 }
 
 inline fun launchCustom(
-    dispatcher: CoroutineContext,
-    workMode: WorkMode? = null,
+    coContext: CoroutineContext,
+    name: String = "launchCustom",
     crossinline block: suspend CoroutineScope.() -> Unit
 ): Job {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(dispatcher).launch { block() }
-    }
+    return CoroutineScope(Fore.scopeDefault().coroutineContext + coContext).launch(
+        CoroutineName(
+            name
+        )
+    ) { block() }
 }
 
-/**
- * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
- * if using this code from a pure kotlin module
- */
-inline fun launchMain(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main).launch { block() }
-    }
+inline fun launchMain(
+    name: String = "launchMain",
+    crossinline block: suspend CoroutineScope.() -> Unit
+): Job {
+    return Fore.scopeMain().launch(CoroutineName(name)) { block() }
 }
 
-/**
- * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
- * if using this code from a pure kotlin module
- *
- * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
- */
-inline fun launchMainImm(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> Unit): Job {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main.immediate).launch { block() }
-    }
+inline fun launchMainImm(
+    name: String = "launchMainImm",
+    crossinline block: suspend CoroutineScope.() -> Unit
+): Job {
+    return Fore.scopeMainImm().launch(CoroutineName(name)) { block() }
 }
 
-inline fun <T> asyncIO(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.IO).async { block() }
-    }
+inline fun <T> asyncIO(
+    name: String = "asyncIO",
+    crossinline block: suspend CoroutineScope.() -> T
+): Deferred<T> {
+    return Fore.scopeIo().async(CoroutineName(name)) { block() }
 }
 
 inline fun <T> asyncDefault(
-    workMode: WorkMode? = null,
+    name: String = "asyncDefault",
     crossinline block: suspend CoroutineScope.() -> T
 ): Deferred<T> {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Default).async { block() }
-    }
+    return Fore.scopeDefault().async(CoroutineName(name)) { block() }
 }
 
 inline fun <T> asyncCustom(
-    dispatcher: CoroutineContext,
-    workMode: WorkMode? = null,
+    coContext: CoroutineContext,
+    name: String = "asyncCustom",
     crossinline block: suspend CoroutineScope.() -> T
 ): Deferred<T> {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(dispatcher).async { block() }
-    }
+    return CoroutineScope(Fore.scopeDefault().coroutineContext + coContext).async(CoroutineName(name)) { block() }
 }
 
-/**
- * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
- * if using this code from a pure kotlin module
- */
-inline fun <T> asyncMain(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): Deferred<T> {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main).async { block() }
-    }
+inline fun <T> asyncMain(
+    name: String = "asyncMain",
+    crossinline block: suspend CoroutineScope.() -> T
+): Deferred<T> {
+    return Fore.scopeMain().async(CoroutineName(name)) { block() }
 }
 
-/**
- * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
- * if using this code from a pure kotlin module
- *
- * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
- */
 inline fun <T> asyncMainImm(
-    workMode: WorkMode? = null,
+    name: String = "asyncMainImm",
     crossinline block: suspend CoroutineScope.() -> T
 ): Deferred<T> {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        runBlocking { CompletableDeferred(block()) }
-    } else {
-        CoroutineScope(Dispatchers.Main.immediate).async { block() }
-    }
+    return Fore.scopeMainImm().async(CoroutineName(name)) { block() }
 }
 
-suspend inline fun <T> awaitIO(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(Dispatchers.IO) { block() }
-    }
+suspend inline fun <T> awaitIO(
+    name: String = "awaitIO",
+    crossinline block: suspend CoroutineScope.() -> T
+): T {
+    return withContext(Fore.scopeIo().coroutineContext + CoroutineName(name)) { block() }
 }
 
-suspend inline fun <T> awaitDefault(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(Dispatchers.Default) { block() }
-    }
+suspend inline fun <T> awaitDefault(
+    name: String = "awaitDefault",
+    crossinline block: suspend CoroutineScope.() -> T
+): T {
+    return withContext(Fore.scopeDefault().coroutineContext + CoroutineName(name)) { block() }
 }
 
 suspend inline fun <T> awaitCustom(
-    dispatcher: CoroutineContext,
-    workMode: WorkMode? = null,
+    coContext: CoroutineContext,
+    name: String = "awaitCustom",
     crossinline block: suspend CoroutineScope.() -> T
 ): T {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(dispatcher) { block() }
-    }
+    return withContext(coContext + CoroutineName(name)) { block() }
 }
 
-/**
- * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
- * if using this code from a pure kotlin module
- */
-suspend inline fun <T> awaitMain(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(Dispatchers.Main) { block() }
-    }
+suspend inline fun <T> awaitMain(
+    name: String = "awaitMain",
+    crossinline block: suspend CoroutineScope.() -> T
+): T {
+    return withContext(Fore.scopeMain().coroutineContext + CoroutineName(name)) { block() }
 }
 
-/**
- * Platform may or may not provide instance of `MainDispatcher`, see kotlin documentation to [Dispatchers.Main]
- * if using this code from a pure kotlin module
- *
- * Implementation note: [MainCoroutineDispatcher.immediate] is not supported on Native and JS platforms.
- */
-suspend inline fun <T> awaitMainImm(workMode: WorkMode? = null, crossinline block: suspend CoroutineScope.() -> T): T {
-    return if (Fore.getWorkMode(workMode) == WorkMode.SYNCHRONOUS) {
-        block(CoroutineScope(coroutineContext))
-    } else {
-        withContext(Dispatchers.Main.immediate) { block() }
+suspend inline fun <T> awaitMainImm(
+    name: String = "awaitMainImm",
+    crossinline block: suspend CoroutineScope.() -> T
+): T {
+    return withContext(Fore.scopeMainImm().coroutineContext + CoroutineName(name)) { block() }
+}
+
+suspend fun Observable.waitUntil(
+    condition: () -> Boolean
+) {
+    waitWhile { !condition() }
+}
+
+suspend fun Observable.waitWhile(condition: () -> Boolean) {
+    awaitMain {
+
+        if (!condition()) return@awaitMain
+
+        val done = CompletableDeferred<Unit>()
+
+        lateinit var temporaryObserver: Observer
+        temporaryObserver = Observer {
+            if (!condition() && !done.isCompleted) {
+                removeObserver(temporaryObserver)
+                done.complete(Unit)
+            }
+        }
+
+        addObserver(temporaryObserver)
+        done.await()
     }
 }

@@ -1,9 +1,9 @@
 package foo.bar.example.foreapollo.feature.launch
 
-import co.early.fore.core.observer.Observer
 import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
+import co.early.fore.core.delegate.DelegateTestSynchronous
 import co.early.fore.core.logging.SystemLogger
+import co.early.fore.core.observer.Observer
 import co.early.fore.net.wrap.apollo.CallWrapperApollo
 import foo.bar.example.foreapollo.LaunchListQuery
 import foo.bar.example.foreapollo.feature.FailureCallback
@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -49,16 +50,23 @@ class LaunchesModelUnitTest {
     @MockK
     private lateinit var mockObserver: Observer
 
+    private lateinit var delegate: DelegateTestSynchronous
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this, relaxed = true)
 
         // make the code run synchronously, reroute Log.x to
         // System.out.println() so we see it in the test log
-        Fore.setDelegate(TestDelegateDefault())
+        delegate = DelegateTestSynchronous()
+        Fore.setDelegate(delegate)
+
+        MockKAnnotations.init(this, relaxed = true)
     }
 
+    @After
+    fun cleanup() {
+        delegate.cleanup()
+    }
 
     @Test
     @Throws(Exception::class)

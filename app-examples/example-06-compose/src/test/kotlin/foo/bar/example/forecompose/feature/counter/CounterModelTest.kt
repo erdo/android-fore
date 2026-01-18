@@ -1,50 +1,46 @@
 package foo.bar.example.forecompose.feature.counter
 
-import co.early.fore.core.logging.Logger
-import co.early.fore.core.logging.SystemLogger
-import co.early.fore.core.observer.Observer
-import co.early.fore.core.delegate.TestDelegateDefault
 import co.early.fore.core.delegate.Fore
+import co.early.fore.core.delegate.runWithTestDelegate
+import co.early.fore.core.observer.Observer
 import co.early.persista.PerSista
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import okio.Path.Companion.toOkioPath
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import java.io.File
-import java.util.concurrent.Executors
 
 /**
  * Copyright © 2015-2023 early.co. All rights reserved.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class CounterModelTest {
 
     @MockK
     private lateinit var mockObserver: Observer
 
-    private val testDispatcher: CoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-
     @Before
     fun setup() {
-
-        // make the code run synchronously, reroute Log.x to
-        // System.out.println() so we see it in the test log
-        Fore.setDelegate(TestDelegateDefault())
-
         MockKAnnotations.init(this, relaxed = true)
     }
 
+    @After
+    fun cleanup() {
+    }
+
     @Test
-    @Throws(Exception::class)
-    fun initialConditions() {
+    fun initialConditions() = runWithTestDelegate {
 
         //arrange
         val counterModel = createCounterModel()
+
+        advanceUntilIdle()
 
         //act
 
@@ -55,14 +51,16 @@ class CounterModelTest {
     }
 
     @Test
-    @Throws(Exception::class)
-    fun increaseCounter() {
+    fun increaseCounter() = runWithTestDelegate {
 
         //arrange
         val counterModel = createCounterModel()
+        advanceUntilIdle()
+        // alternatively: counterModel.waitUntil { counterModel.state.loading }
 
         //act
         counterModel.increase()
+        advanceUntilIdle()
 
         //assert
         Assert.assertEquals(true, counterModel.state.canIncrease())
@@ -71,8 +69,7 @@ class CounterModelTest {
     }
 
     @Test
-    @Throws(Exception::class)
-    fun decreaseCounter() {
+    fun decreaseCounter() = runWithTestDelegate {
 
         //arrange
         val counterModel = createCounterModel()
@@ -80,6 +77,7 @@ class CounterModelTest {
 
         //act
         counterModel.decrease()
+        advanceUntilIdle()
 
         //assert
         Assert.assertEquals(true, counterModel.state.canIncrease())
@@ -88,16 +86,17 @@ class CounterModelTest {
     }
 
     @Test
-    @Throws(Exception::class)
-    fun canIncreaseIsFalseAtLimit() {
+    fun canIncreaseIsFalseAtLimit() = runWithTestDelegate {
 
         //arrange
         val counterModel = createCounterModel()
-        for (ii in 0 until COUNTER_MAX_AMOUNT) {
-            counterModel.increase()
-        }
+        advanceUntilIdle()
 
         //act
+        repeat (COUNTER_MAX_AMOUNT) {
+            counterModel.increase()
+            advanceUntilIdle()
+        }
 
         //assert
         Assert.assertEquals(false, counterModel.state.canIncrease())
@@ -121,8 +120,7 @@ class CounterModelTest {
      * @throws Exception
      */
     @Test
-    @Throws(Exception::class)
-    fun observersNotifiedAtLeastOnceForIncrease() {
+    fun observersNotifiedAtLeastOnceForIncrease() = runWithTestDelegate {
 
         //arrange
         val counterModel = createCounterModel()
@@ -130,6 +128,8 @@ class CounterModelTest {
 
         //act
         counterModel.increase()
+
+        advanceUntilIdle()
 
         //assert
         verify(atLeast = 1) {
@@ -138,8 +138,7 @@ class CounterModelTest {
     }
 
     @Test
-    @Throws(Exception::class)
-    fun observersNotifiedAtLeastOnceForDecrease() {
+    fun observersNotifiedAtLeastOnceForDecrease() = runWithTestDelegate {
 
         //arrange
         val counterModel = createCounterModel()
@@ -148,6 +147,7 @@ class CounterModelTest {
 
         //act
         counterModel.decrease()
+        advanceUntilIdle()
 
         //assert
         verify(atLeast = 1) {
@@ -161,8 +161,6 @@ class CounterModelTest {
         return CounterModel(
             PerSista(
                 dataPath = dataFolder.newFolder().toOkioPath(),
-                mainDispatcher = testDispatcher,
-                writeReadDispatcher = testDispatcher,
                 logger = Fore.getLogger(),
             ),
             Fore.getLogger(),

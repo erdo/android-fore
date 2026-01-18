@@ -1,67 +1,20 @@
 package co.early.fore.core.observer
 
-import co.early.fore.core.WorkMode
-import co.early.fore.core.coroutine.launchCustom
+import co.early.fore.core.coroutine.launchMainImm
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.logging.getTagInferer
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-
 /**
- * @param notificationMode If notifications should be run on the UI thread (appropriate for most
- * app code) then use ASYNCHRONOUS. For tests, you will want to inject SYNCHRONOUS here which will
- * force all the notifications to come through on the same thread that notifyObservers()
- * is called on.
- *
- * @param logger If you want to be told about warnings, pass an implementation of Logger
- * here (recommended)
- *
- * @param dispatcherImmediate You will only need to specify this if you are running on a platform
- * that doesn't have Dispatchers.Main.immediate otherwise leave this as null
- *
- *
- * If you don't specify any construction parameters, they will be taken from ForeDelegateHolder
- *
- * NB: If there are any Android Adapters depending on your model for their list data, you will
- * want to make sure that you only update this list based data on the UI thread (i.e. for use
- * with adapters, you should only call notifyObservers() on the UI thread). This remains true
- * regardless of whether this Observable has been created with ASYNCHRONOUS or SYNCHRONOUS
- * WorkMode.
- * Synchronizing any list updates is not enough, Android will call Adapter.count() and
- * Adapter.get() on the UI thread and you cannot change the adapter's size between these calls.
- *
+ * A non-null logger parameter will be used in preference to the logger from the Fore delegate
  */
-class ObservableImp(
-    private val notificationMode: WorkMode? = null,
-    private val logger: Logger? = null,
-    dispatcherImmediate: CoroutineDispatcher? = null,
-) : Observable {
-
-    // this is for iOS target benefit which doesn't like default parameters in constructors
-    constructor() : this(null, null, null)
+class ObservableImp(private val logger: Logger? = null) : Observable {
 
     private val observerList = mutableListOf<Observer>()
     private val addRemoveMutex = Mutex()
     private val inferredTag: String = getTagInferer().inferTag()
-    private val mainDispatcherImmediate: CoroutineDispatcher = if (dispatcherImmediate != null) {
-        dispatcherImmediate
-    } else {
-        val dispatcher = try {
-            Dispatchers.Main.immediate
-        } catch (e: Exception) {
-            val message = """
-            Running on a KMP platform that doesn't support Dispatchers.Main or Dispatchers.Main.immediate.
-            Using Dispatchers.Default, consider specifying a dispatcher in the ObservableImp constructor
-        """.trimIndent()
-            Fore.getLogger(logger).w(inferredTag, message)
-            Dispatchers.Default
-        }
-        dispatcher
-    }
 
     /**
      * Take the observer and add it to the list of registered observers that
@@ -69,38 +22,42 @@ class ObservableImp(
      * from lifecycle methods like onStart() (and remove the observer in onStop())
      */
     override fun addObserver(observer: Observer) {
-        launchCustom(mainDispatcherImmediate, notificationMode) {
-            addRemoveMutex.withLock {
+        launchMainImm {
+            add(observer)
+        }
+    }
 
-                if (observerList.contains(observer)) {
-                    Fore.getLogger(logger).w(
-                        inferredTag,
-                        "You are about to add the same observer twice to [$inferredTag]. This is almost certainly an error and indicates code that " +
-                                "could cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
-                                "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()) thread:${threadName()}"
-                    )
-                }
+    private suspend fun add(observer: Observer) {
+        addRemoveMutex.withLock {
 
-                observerList.add(observer)
-
-                Fore.getLogger(logger).i(
+            if (observerList.contains(observer)) {
+                Fore.getLogger(logger).w(
                     inferredTag,
-                    "Observer added to [${inferredTag}]: $observer t:${threadName()}"
+                    "You are about to add the same observer twice to [$inferredTag]. This is almost certainly an error and indicates code that " +
+                            "could cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods " +
+                            "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()) thread:${threadName()}"
                 )
+            }
 
-                if (observerList.size > 4) {
-                    Fore.getLogger(logger).w(
-                        inferredTag,
-                        "There are now:" + observerList.size + " Observers added to the Observable [$inferredTag], that's quite a lot.\n" +
-                                "It's sometimes indicative of code which is not removing observers when it should\n" +
-                                "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
-                                "Failing to remove observers when you no longer need them will cause memory leaks,\n" +
-                                "you might want to look in to the ForeLifecycleObserver (legacy Android) or\n" +
-                                "Fore's observeAsState() extension function (Compose UI) which handles this for you.\n" +
-                                "(If the number of observers steadily increases as you use the app, that's probably what you have,\n" +
-                                "if the number remains constant or goes down, then you're probably ok :) ) Thread:${threadName()}"
-                    )
-                }
+            observerList.add(observer)
+
+            Fore.getLogger(logger).i(
+                inferredTag,
+                "Observer added to [${inferredTag}]: $observer t:${threadName()}"
+            )
+
+            if (observerList.size > 4) {
+                Fore.getLogger(logger).w(
+                    inferredTag,
+                    "There are now:" + observerList.size + " Observers added to the Observable [$inferredTag], that's quite a lot.\n" +
+                            "It's sometimes indicative of code which is not removing observers when it should\n" +
+                            "(forgetting to remove observers in an onStop(), onClear() or onDetachedFromWindow() method for example)\n" +
+                            "Failing to remove observers when you no longer need them will cause memory leaks,\n" +
+                            "you might want to look in to the ForeLifecycleObserver (legacy Android) or\n" +
+                            "Fore's observeAsState() extension function (Compose UI) which handles this for you.\n" +
+                            "(If the number of observers steadily increases as you use the app, that's probably what you have,\n" +
+                            "if the number remains constant or goes down, then you're probably ok :) ) Thread:${threadName()}"
+                )
             }
         }
     }
@@ -113,23 +70,27 @@ class ObservableImp(
      * from the model when its data changes
      */
     override fun removeObserver(observer: Observer) {
-        launchCustom(mainDispatcherImmediate, notificationMode) {
-            addRemoveMutex.withLock {
+        launchMainImm {
+            remove(observer)
+        }
+    }
 
-                val beforeSize = observerList.size
-                observerList.remove(observer)
+    private suspend fun remove(observer: Observer) {
+        addRemoveMutex.withLock {
 
-                Fore.getLogger(logger)
-                    .i(inferredTag, "Observer removed from [$inferredTag]: $observer")
+            val beforeSize = observerList.size
+            observerList.remove(observer)
 
-                if (observerList.size == beforeSize) {
-                    Fore.getLogger(logger).w(
-                        inferredTag,
-                        "You have tried to remove an observer from [$inferredTag] that wasn't added in the first place. This is almost certainly an error and\n" +
-                                "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods\n" +
-                                "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()) thread:${threadName()}"
-                    )
-                }
+            Fore.getLogger(logger)
+                .i(inferredTag, "Observer removed from [$inferredTag]: $observer")
+
+            if (observerList.size == beforeSize) {
+                Fore.getLogger(logger).w(
+                    inferredTag,
+                    "You have tried to remove an observer from [$inferredTag] that wasn't added in the first place. This is almost certainly an error and\n" +
+                            "will cause a memory leak. Usually an observer is added and removed in line with _mirrored_ lifecycle methods\n" +
+                            "(for example onStart()/onStop() or onAttachedToWindow()/onDetachedFromWindow()) thread:${threadName()}"
+                )
             }
         }
     }
@@ -156,20 +117,23 @@ class ObservableImp(
      * Adapter.get() on the UI thread and you cannot change the adapter's size between these calls.
      */
     override fun notifyObservers() {
+        launchMainImm {
+            notify()
+        }
+    }
 
-        launchCustom(mainDispatcherImmediate, Fore.getWorkMode(notificationMode)) {
-            addRemoveMutex.withLock {
-                for (observer in observerList) {
-                    Fore.getLogger(logger)
-                        .d(inferredTag, "notifying [$inferredTag] changes to: $observer")
-                    doNotification(observer)
-                }
+    private suspend fun notify() {
+        addRemoveMutex.withLock {
+            for (observer in observerList) {
+                Fore.getLogger(logger)
+                    .d(inferredTag, "notifying [$inferredTag] changes to: $observer")
+                doNotification(observer)
             }
         }
     }
 
     override fun hasObservers(): Boolean {
-        return observerList.size > 0
+        return observerList.isNotEmpty()
     }
 
     private fun doNotification(observer: Observer) {
@@ -179,10 +143,11 @@ class ObservableImp(
 
             val errorMessage = "\nOne of the observers of [$inferredTag] has thrown an exception " +
                     "during it's somethingChanged() callback\n" +
-                    "The currentThread id is: ${threadName()}" +
+                    "The currentThread id is: ${threadName()}\n" +
                     "It's quite possible you just have a crash somewhere\n" +
                     "in your UI code which has bubbled its way up to here. See stack trace for " +
-                    "further info, Error Message: "
+                    "further info,\n" +
+                    "Error Message: "
 
             Fore.getLogger(logger).e(inferredTag, errorMessage + e.message)
             throw e

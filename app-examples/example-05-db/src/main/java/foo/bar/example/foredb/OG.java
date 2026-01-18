@@ -37,31 +37,22 @@ public class OG {
 
 
     public static void setApplication(Application application) {
-        setApplication(application, WorkMode.ASYNCHRONOUS);
-    }
-
-    public static void setApplication(Application application, final WorkMode workMode) {
 
         notNull(application);
-        notNull(workMode);
-
 
         // create dependency graph
         AndroidLogger logger = new AndroidLogger("fore_");
         SystemTimeWrapper systemTimeWrapper = new SystemTimeWrapper();
         TodoItemDatabase todoItemDatabase = TodoItemDatabase.getInstance(
                 application,
-                false,
-                workMode);
+                false);
         TodoListModel todoListModel = new TodoListModel(
                 todoItemDatabase,
                 logger,
-                systemTimeWrapper,
-                workMode);
+                systemTimeWrapper);
         BossMode bossMode = new BossMode(
                 todoListModel,
                 systemTimeWrapper,
-                workMode,
                 logger);
 
         Retrofit retrofit = CustomRetrofitBuilder.create(

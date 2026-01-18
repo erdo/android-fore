@@ -1,20 +1,32 @@
 package co.early.fore.net
 
+import co.early.fore.DelegateTestSynchronousCopy
 import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
 import io.ktor.utils.io.core.toByteArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import okio.Buffer
 import okio.Path.Companion.toPath
 import okio.SYSTEM
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 
 class DataHeuristicsTest {
 
+    private lateinit var delegate: DelegateTestSynchronousCopy
+
     @BeforeTest
-    fun setup(){
-        Fore.setDelegate(TestDelegateDefault())
+    fun setup() {
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        delegate = DelegateTestSynchronousCopy()
+        Fore.setDelegate(delegate)
+    }
+
+    @AfterTest
+    fun cleanup() {
+        delegate.cleanup()
     }
 
     @Test

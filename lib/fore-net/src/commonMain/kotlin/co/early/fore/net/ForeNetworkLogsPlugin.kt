@@ -17,6 +17,7 @@ import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.plugins.isSaved
 import io.ktor.client.plugins.observer.wrapWithContent
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.HttpSendPipeline
 import io.ktor.client.statement.HttpReceivePipeline
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.HttpResponseContainer
@@ -64,7 +65,7 @@ val ForeNetworkLogs = createClientPlugin("ForeNetworkLogs", ::ForeNetworkLogsCon
     val methodKey = AttributeKey<String>("Method")
     val urlKey = AttributeKey<String>("Url")
 
-    onRequest { request, _ ->
+    on(RequestAfterEncodingHook) { request, encodedBody ->
 
         val enabled = (config.logger !is SilentLogger && shouldBeLogged(request, config.filters))
 
@@ -330,6 +331,25 @@ private fun StringBuilder.logBody(
 
     if (message.isNotBlank()) {
         append(message)
+    }
+}
+
+private object RequestAfterEncodingHook :
+    ClientHook<suspend RequestAfterEncodingHook.Context.(builder: HttpRequestBuilder, body: Any) -> Unit> {
+
+    class Context(private val context: PipelineContext<Any, HttpRequestBuilder>) {
+        suspend fun proceedWith(body: Any) = context.proceedWith(body)
+    }
+
+    override fun install(
+        client: HttpClient,
+        handler: suspend Context.(builder: HttpRequestBuilder, body: Any) -> Unit
+    ) {
+        val afterEncoding = PipelinePhase("AfterRequestEncoding")
+        client.sendPipeline.insertPhaseBefore(HttpSendPipeline.Engine, afterEncoding)
+        client.sendPipeline.intercept(afterEncoding) {
+            handler(Context(this), context, subject)
+        }
     }
 }
 

@@ -4,7 +4,7 @@ import co.early.fore.net.wrap.apollo.CallWrapperApollo
 
 
 import android.app.Application
-import co.early.fore.core.delegate.DebugDelegateDefault
+import co.early.fore.core.delegate.DelegateDebug
 import co.early.fore.core.delegate.Fore
 import co.early.fore.core.logging.AndroidLogger
 import co.early.fore.core.logging.SilentLogger
@@ -33,7 +33,7 @@ object OG {
         // create dependency graph
 
         val logger = if (BuildConfig.DEBUG) AndroidLogger("fore_") else SilentLogger()
-        Fore.setDelegate(DebugDelegateDefault(logger = logger))
+        Fore.setDelegate(DelegateDebug(logger = logger))
 
         // networking classes common to all models
 

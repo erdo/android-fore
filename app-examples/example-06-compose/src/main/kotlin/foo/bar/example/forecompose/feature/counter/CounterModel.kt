@@ -3,6 +3,7 @@ package foo.bar.example.forecompose.feature.counter
 import co.early.fore.core.logging.Logger
 import co.early.fore.core.observer.Observable
 import co.early.fore.core.coroutine.launchIO
+import co.early.fore.core.delegate.Fore
 import co.early.fore.core.observer.ObservableImp
 import co.early.persista.PerSista
 import kotlinx.coroutines.delay

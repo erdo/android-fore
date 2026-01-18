@@ -78,6 +78,7 @@ dependencies {
 
     testImplementation("junit:junit:${Shared.Versions.junit}")
     testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
+    testImplementation(libs.kotlin.coroutines.test)
 
     androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
     androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")

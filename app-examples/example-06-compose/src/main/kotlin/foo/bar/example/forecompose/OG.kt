@@ -1,7 +1,7 @@
 package foo.bar.example.forecompose
 
 import android.app.Application
-import co.early.fore.core.delegate.DebugDelegateDefault
+import co.early.fore.core.delegate.DelegateDebug
 import co.early.fore.core.delegate.Fore
 import co.early.persista.PerSista
 import foo.bar.example.forecompose.feature.counter.CounterModel
@@ -20,7 +20,7 @@ object OG {
 
         // create dependency graph
         if (BuildConfig.DEBUG) {
-            Fore.setDelegate(DebugDelegateDefault("foo_"))
+            Fore.setDelegate(DelegateDebug("foo_"))
         }
         val logger = Fore.getLogger()
 

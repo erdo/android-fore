@@ -1,7 +1,7 @@
 package foo.bar.example.forereactiveuikt
 
 import android.app.Application
-import co.early.fore.core.delegate.DebugDelegateDefault
+import co.early.fore.core.delegate.DelegateDebug
 import co.early.fore.core.delegate.Fore
 
 /**
@@ -13,7 +13,7 @@ class App : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG){
-            Fore.setDelegate(DebugDelegateDefault("fore_"))
+            Fore.setDelegate(DelegateDebug("fore_"))
         }
 
         inst = this

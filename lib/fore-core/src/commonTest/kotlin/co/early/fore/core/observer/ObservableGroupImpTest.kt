@@ -1,7 +1,8 @@
 package co.early.fore.core.observer
 
+import co.early.fore.core.DelegateTestSynchronousCopy
 import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,9 +19,20 @@ class ObservableGroupImpTest {
     private val observable2 = ObservableImp()
     private val observable3 = ObservableImp()
 
+    private lateinit var delegate: DelegateTestSynchronousCopy
+
     @BeforeTest
     fun setup() {
-        Fore.setDelegate(TestDelegateDefault())
+
+        // make the code run synchronously, reroute Log.x to
+        // System.out.println() so we see it in the test log
+        delegate = DelegateTestSynchronousCopy()
+        Fore.setDelegate(delegate)
+    }
+
+    @AfterTest
+    fun cleanup() {
+        delegate.cleanup()
     }
 
     @Test

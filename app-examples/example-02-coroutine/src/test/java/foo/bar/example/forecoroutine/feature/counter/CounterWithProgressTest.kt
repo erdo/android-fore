@@ -1,12 +1,14 @@
 package foo.bar.example.forecoroutine.feature.counter
 
-import co.early.fore.core.WorkMode
+import co.early.fore.core.coroutine.waitWhile
+import co.early.fore.core.delegate.Fore
+import co.early.fore.core.delegate.runWithTestDelegate
 import co.early.fore.core.logging.SystemLogger
 import co.early.fore.core.observer.Observer
-import co.early.fore.core.delegate.Fore
-import co.early.fore.core.delegate.TestDelegateDefault
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -15,18 +17,16 @@ import org.junit.Test
 /**
  * Copyright © 2019 early.co. All rights reserved.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class CounterWithProgressTest {
 
     @Before
     fun setup() {
-        // make the code run synchronously, reroute Log.x to
-        // System.out.println() so we see it in the test log
-        Fore.setDelegate(TestDelegateDefault())
     }
 
     @Test
     @Throws(Exception::class)
-    fun initialConditions() {
+    fun initialConditions() = runWithTestDelegate {
 
         //arrange
         val counterWithProgress = CounterWithProgress(logger)
@@ -39,23 +39,26 @@ class CounterWithProgressTest {
         Assert.assertEquals(0, counterWithProgress.count.toLong())
     }
 
-
     @Test
-    @Throws(Exception::class)
-    fun increasesBy20() {
+    fun increasesBy20() = runWithTestDelegate {
 
         //arrange
         val counterWithProgress = CounterWithProgress(logger)
 
+
+        Fore.e("02 TEST runTestFore() ")
         //act
         counterWithProgress.increaseBy20()
+
+        advanceUntilIdle()
+
+        Fore.e("12 TEST")
 
         //assert
         Assert.assertEquals(false, counterWithProgress.isBusy)
         Assert.assertEquals(0, counterWithProgress.progress.toLong())
         Assert.assertEquals(20, counterWithProgress.count.toLong())
     }
-
 
     /**
      *
@@ -75,7 +78,7 @@ class CounterWithProgressTest {
      */
     @Test
     @Throws(Exception::class)
-    fun observersNotifiedAtLeastOnce() {
+    fun observersNotifiedAtLeastOnce() = runWithTestDelegate {
 
         //arrange
         val counterWithProgress = CounterWithProgress(logger)
@@ -84,6 +87,8 @@ class CounterWithProgressTest {
 
         //act
         counterWithProgress.increaseBy20()
+
+        advanceUntilIdle()
 
         //assert
         verify(atLeast = 1) {
@@ -102,15 +107,19 @@ class CounterWithProgressTest {
      */
     @Test
     @Throws(Exception::class)
-    fun progressIsPublished() {
+    fun progressIsPublished() = runWithTestDelegate {
 
         //arrange
         val counterWithProgress = CounterWithProgress(logger)
         val pt = ProgressTracker()
         counterWithProgress.addObserver {
+            Fore.e("in observer progress:${counterWithProgress.progress}")
             val latestProgress = counterWithProgress.progress
             if (latestProgress != 0) {//or we just ignore it
-                Assert.assertEquals(true, latestProgress >= pt.latestProgress)//never want progress to go down
+                Assert.assertEquals(
+                    true,
+                    latestProgress >= pt.latestProgress
+                )//never want progress to go down
                 if (latestProgress > pt.latestProgress) {//if progress ticks up, then we count it as a progress publication
                     pt.latestProgress = latestProgress
                     pt.numberOfProgressPublications++
@@ -118,13 +127,22 @@ class CounterWithProgressTest {
             }
         }
 
+        Fore.e("about to increase by 20")
+
         //act
         counterWithProgress.increaseBy20()
+
+        advanceUntilIdle()
+
+        Fore.e("starting to wait")
+        counterWithProgress.waitWhile { counterWithProgress.isBusy }
+        Fore.e("finished waiting")
+
+        Fore.e("about to assert")
 
         //assert
         Assert.assertEquals(20, pt.numberOfProgressPublications.toLong())
     }
-
 
     private inner class ProgressTracker {
         var numberOfProgressPublications = 0

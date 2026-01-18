@@ -109,6 +109,7 @@ dependencies {
     debugImplementation(libs.androidx.wear.tooling.preview)
 
     //testing
+    testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
 }
