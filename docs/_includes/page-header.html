@@ -2,5 +2,34 @@
   <h1 class="project-name">fore</h1>
   <h2 class="project-tagline">thinner android view layers</h2>
   <a href="https://github.com/erdo/android-fore" class="btn">View on GitHub</a>
+  <select class="btn version-switcher" id="versionSwitcher" onchange="switchVersion(this.value)">
+    <option value="v2">2.x</option>
+    <option value="v1">1.x</option>
+  </select>
   <div class="shoom" id="shoom"/>
 </section>
+
+<script>
+(function() {
+  var path = window.location.pathname;
+  var baseurl = '{{ site.baseurl }}';
+  if (path.indexOf(baseurl + '/v1/') === 0 || path === baseurl + '/v1') {
+    document.getElementById('versionSwitcher').value = 'v1';
+  }
+})();
+
+function switchVersion(target) {
+  var path = window.location.pathname;
+  var baseurl = '{{ site.baseurl }}';
+  var v1Prefix = baseurl + '/v1';
+
+  if (target === 'v1') {
+    var rel = path.replace(baseurl, '');
+    window.location.href = (rel === '/' || rel === '') ? v1Prefix + '/' : v1Prefix + rel;
+  } else {
+    var rel = path.replace(v1Prefix, '');
+    window.location.href = (rel === '/' || rel === '' || rel === '/index.html')
+      ? baseurl + '/' : baseurl + rel;
+  }
+}
+</script>

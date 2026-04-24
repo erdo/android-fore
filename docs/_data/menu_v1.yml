@@ -1,0 +1,72 @@
+- text: Main Readme
+  url: /v1/
+  subitems:
+    - text: Intro
+      url: /#new-to-fore
+    - text: Quick Start
+      url: /#quick-start
+- text: MVO
+  url: /v1/00-architecture.html
+  subitems:
+    - text: Overview
+      url: "#mvo-architecture"
+- text: M (models)
+  url: /v1/02-models.html
+  subitems:
+    - text: Model Checklist
+      url: "#model-checklist"
+- text: V (views)
+  url: /v1/01-views.html
+  subitems:
+    - text: Compose UI
+      url: "#compose-ui"
+    - text: SyncView()
+      url: "#syncview"
+    - text: Triggers
+      url: "#synctrigger"
+- text: O (observers)
+  url: /v1/03-reactive-uis.html
+  subitems:
+    - text: Connecting Views and Models
+      url: "#connecting-views-and-models"
+    - text: Compose
+      url: "#connecting-views-and-models-in-compose"
+- text: fore Deep Dive
+  url: /v1/07-fore-api.html
+  subitems:
+    - text: State
+      url: "#state"
+    - text: Reactive Streams
+      url: "#reactive-streams"
+    - text: The fore Approach
+      url: "#the-fore-approach"
+    - text: API
+      url: "#fores-api"
+- text: More fore
+  url: /v1/04-more-fore.html
+  subitems:
+    - text: Retrofit, Apollo and Ktor
+      url: "#fore-network"
+    - text: Adapter animations
+      url: "#adapter-animations"
+    - text: Default WorkMode
+      url: "#default-params"
+    - text: Async and Coroutines
+      url: "#kotlin-coroutines"
+- text: Extras
+  url: /v1/05-extras.html
+  subitems:
+    - text: Tutorials
+      url: "#tutorials"
+    - text: Presentation Slides
+      url: "#presentations"
+    - text: State versus Events
+      url: "#state-versus-events"
+    - text: Android's Original Mistake
+      url: "#androids-original-mistake"
+    - text: Troubleshooting and Code Reviews
+      url: "#troubleshooting--how-to-smash-code-reviews"
+    - text: Dependency Injection Basics
+      url: "#dependency-injection-basics"
+    - text: Syncview and Efficiency
+      url: "#syncview"
