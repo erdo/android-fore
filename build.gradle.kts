@@ -53,6 +53,7 @@
  * tag:fore_
  *
  * bundle exec jekyll serve
+ * bundle exec jekyll serve --baseurl /android-fore
  *
  * bundle lock --update
  * bundle install
