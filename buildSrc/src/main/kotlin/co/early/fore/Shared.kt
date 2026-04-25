@@ -7,7 +7,7 @@ object Shared {
 
     object Android {
         const val minSdk = 16
-        const val minComposeSdk = 21
+        const val minComposeSdk = 23
         const val compileSdk = 36
         const val targetSdk = 36
     }

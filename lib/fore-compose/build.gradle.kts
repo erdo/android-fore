@@ -40,9 +40,9 @@ kotlin {
 
     applyDefaultHierarchyTemplate()
 
+    iosSimulatorArm64()
     iosArm64()
     iosX64()
-    iosSimulatorArm64()
 
     sourceSets {
 
@@ -55,7 +55,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
-                api(project(":lib:fore-test-fixtures"))
+                implementation(project(":lib:fore-test-fixtures"))
             }
         }
 
@@ -133,7 +133,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from(tasks.dokkaHtml)
+    from(tasks.named("dokkaGenerateHtml"))
 }
 
 applyPublishingConfig()

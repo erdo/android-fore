@@ -33,21 +33,20 @@ kotlin {
 
     jvm()
 
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
-
-    macosX64()
+    // Tier 1
     macosArm64()
+    iosSimulatorArm64()
+    iosArm64()
 
+    // Tier 2
+    watchosSimulatorArm64()
     watchosArm32()
     watchosArm64()
-    watchosSimulatorArm64()
-
-    tvosArm64()
-    tvosX64()
     tvosSimulatorArm64()
+    tvosArm64()
 
+    // Tier 3
+    iosX64()
     sourceSets {
 
         val commonMain by getting {
@@ -124,7 +123,7 @@ println("[${ext.get("LIB_ARTIFACT_ID")} build file]")
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
-    from(tasks.dokkaHtml)
+    from(tasks.named("dokkaGenerateHtml"))
 }
 
 applyPublishingConfig()
