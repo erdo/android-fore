@@ -30,8 +30,13 @@
  * ./gradlew clean
  * ./gradlew lib:fore-core:publishToMavenLocal
  * ./gradlew publishToMavenLocal
+ *
+ * OLD MAVEN CENTRAL:
  * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
  * ./gradlew publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
+ *
+ * 2026 MAVEN CENTRAL:
+ * ./gradlew publishAggregationToCentralPortal --no-daemon --no-parallel
  *
  * // pre KMP ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
@@ -61,6 +66,8 @@
  * git tag -a v1.5.9 -m 'v1.5.9'
  * git push origin --tags
  */
+import co.early.fore.Shared
+
 plugins {
     alias(libs.plugins.androidAppPlugin).apply(false)
     alias(libs.plugins.androidLibraryPlugin).apply(false)
@@ -71,4 +78,22 @@ plugins {
     alias(libs.plugins.composeCompilerPlugin).apply(false)
     alias(libs.plugins.kotlinSerializationPlugin).apply(false)
     alias(libs.plugins.kotlinKaptPlugin).apply(false)
+    id("com.gradleup.nmcp.aggregation")
+}
+
+nmcpAggregation {
+    centralPortal {
+        username = Shared.Secrets.MAVEN_USER
+        password = Shared.Secrets.MAVEN_PASSWORD
+        publishingType = "USER_MANAGED" // USER_MANAGED | AUTOMATIC
+    }
+}
+
+dependencies {
+    nmcpAggregation(project(":lib:fore-core"))
+    nmcpAggregation(project(":lib:fore-net"))
+    nmcpAggregation(project(":lib:fore-compose"))
+    nmcpAggregation(project(":lib:fore-test-fixtures"))
+    nmcpAggregation(project(":lib:fore-net-apollo"))
+    nmcpAggregation(project(":lib:fore-net-apollo-test-fixtures"))
 }

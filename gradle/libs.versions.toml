@@ -22,6 +22,7 @@ androidxWindowVersion = "1.5.1"
 mockkVersion = "1.14.4"
 persistaVersion = "2.1.0"
 foreVersion = "2.0.1"
+nmcpVersion = "1.4.1" #1.4.2 jumps to kotlin 2.2.0 which is too high for gradle-8.14.4
 
 [libraries]
 
@@ -91,6 +92,9 @@ persista = { module = "co.early.persista:persista", version.ref = "persistaVersi
 
 # logging
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNopVersion" }
+
+# gradle plugins (used in buildSrc as implementation deps)
+nmcp-gradle-plugin = { module = "com.gradleup.nmcp:nmcp", version.ref = "nmcpVersion" }
 
 
 [plugins]

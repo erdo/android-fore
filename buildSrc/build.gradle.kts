@@ -8,6 +8,10 @@ repositories {
   google()
 }
 
+dependencies {
+  implementation(libs.nmcp.gradle.plugin)
+}
+
 kotlin {
   jvmToolchain {
     languageVersion.set(JavaLanguageVersion.of(21))
