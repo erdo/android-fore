@@ -67,7 +67,7 @@ object Shared {
     }
 
     object Publish {
-        const val LIB_VERSION_NAME = "2.0.0"
+        const val LIB_VERSION_NAME = "2.1.0"
         const val LIB_GROUP = "co.early.fore"
         const val PROJ_NAME = "fore"
         const val LIB_DEVELOPER_ID = "erdo"

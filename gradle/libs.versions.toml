@@ -21,7 +21,7 @@ composeMultiplatformPluginVersion = "2.1.10"
 androidxWindowVersion = "1.5.1"
 mockkVersion = "1.14.4"
 persistaVersion = "2.1.0"
-foreVersion = "2.0.1"
+foreVersion = "2.1.0"
 nmcpVersion = "1.4.1" #1.4.2 jumps to kotlin 2.2.0 which is too high for gradle-8.14.4
 
 [libraries]
