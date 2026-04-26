@@ -1,0 +1,74 @@
+package foo.bar.example.forecoroutine.feature.counter
+
+import co.early.fore.core.logging.Logger
+import co.early.fore.core.observer.Observable
+import co.early.fore.core.coroutine.awaitDefault
+import co.early.fore.core.coroutine.launchMain
+import co.early.fore.core.observer.ObservableImp
+import kotlinx.coroutines.delay
+
+/**
+ * Copyright © 2019 early.co. All rights reserved.
+ */
+class Counter(
+    private val logger: Logger
+) : Observable by ObservableImp() {
+
+    var isBusy = false
+        private set
+    var count: Int = 0
+        private set
+
+
+    fun increaseBy20() {
+
+        logger.i("increaseBy20() t:" + Thread.currentThread())
+
+        if (isBusy) {
+            return
+        }
+
+        isBusy = true
+        notifyObservers()
+
+
+        launchMain {
+
+            val result = awaitDefault {
+                doStuffInBackground(20)
+            }
+
+            doThingsWithTheResult(result)
+        }
+    }
+
+
+    private suspend fun doStuffInBackground(countTo: Int): Int {
+
+        logger.i("doStuffInBackground() t:" + Thread.currentThread())
+
+        var totalIncrease = 0
+
+        for (ii in 1..countTo) {
+
+            delay(100)
+
+            ++totalIncrease
+
+            logger.i("-tick- t:" + Thread.currentThread())
+        }
+
+        return totalIncrease
+    }
+
+
+    private fun doThingsWithTheResult(result: Int) {
+
+        logger.i("doThingsWithTheResult() t:" + Thread.currentThread())
+
+        count += result
+        isBusy = false
+        notifyObservers()
+    }
+
+}

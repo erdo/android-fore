@@ -3,10 +3,8 @@
 -keep public class co.early.fore.core.observer.Observer
 -keep public class co.early.fore.core.observer.Observable
 -keep class co.early.fore.core.logging.SystemLogger
--keep class co.early.fore.kt.core.logging.SystemLogger
--keep class co.early.fore.kt.core.delegate.** { *; }
--keep class co.early.fore.core.testhelpers.** { *; }
--dontwarn co.early.fore.kt.net.**
+-keep class co.early.fore.core.logging.Logger
+-keep class co.early.fore.core.delegate.** { *; }
 -dontwarn co.early.fore.net.**
 -keep class okhttp3.Request { *;}
 -keep class okhttp3.Response { *;}

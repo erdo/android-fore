@@ -336,3 +336,14 @@ pre.tabbed {
 .warning {
     color: #ff0400;
 }
+
+/* version switcher */
+.version-switcher {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+.version-switcher option {
+  color: #444444;
+  background-color: #ffffff;
+}

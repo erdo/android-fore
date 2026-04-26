@@ -3,50 +3,12 @@
 
 Most version number bumps have been due to updating dependencies, and occasionally adding the odd lifecycle utility or support for things like Apollo in the optional packages (the version numbers for all the packages are incremented at the same time so that they will always match - this means some version bumps have no effect for a particular package).
 
-**kotlin** API android package
-```
-co.early.fore:fore-kt-android
-```
-
-**java** API android package
-```
-co.early.fore:fore-jv-android
-```
-
-The fore library is divided into optional packages which you can pull in independently if you want (all the packages are so small, it's not really worth it IMO). But for example, you might just want **fore-kt-core** for a kotlin only domain module if you're writing a clean architecture app ([clean modules example](https://github.com/erdo/clean-modules-sample)).
-
-**pure kotlin** API
-```
-co.early.fore:fore-kt-core
-co.early.fore:fore-kt-network
-co.early.fore:fore-kt-network-okhttp3v3x
-co.early.fore:fore-kt-network-okhttp3v4x
-```
-
-**kotlin plus android** API
-```
-co.early.fore:fore-kt-android-core
-co.early.fore:fore-kt-android-compose
-co.early.fore:fore-kt-android-adapters
-co.early.fore:fore-kt-android-network
-```
-
-**pure java** API
-```
-co.early.fore:fore-jv-core
-co.early.fore:fore-jv-network
-```
-
-**java plus android** API
-```
-co.early.fore:fore-jv-android-core
-co.early.fore:fore-jv-android-adapters
-co.early.fore:fore-jv-android-network
-```
-
 ## Maven central
 
-To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/). The other packages you will see in mavenCentral have been rolled in to the packages listed above and/or are no longer updated.
+To check what versions of what transitive dependencies each package pulls in, the definitive answer is found in the pom files hosted at [mavenCentral](https://repo1.maven.org/maven2/co/early/fore/)
+
+## fore 2
+**fore 2** introduces KMP support and drops Java support
 
 ## fore 1.5.14
 **fore 1.5.14** networking packages deprecate the CallProcessors and introduce CallWrappers so that clients can migrate away from the old style Eithers at their own pace

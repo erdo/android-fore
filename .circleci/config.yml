@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: cimg/android:2023.07
+      - image: cimg/android:2025.04
     environment:
       JVM_OPTS: -Xmx3200m
       GRADLE_OPTS: -Dorg.gradle.daemon=true
@@ -12,7 +12,7 @@ jobs:
       - checkout
       - restore_cache:
           # bump the cache version number if you want to wipe the gradle cache
-          key: v6-gradle-dependencies-cache
+          key: v7-gradle-dependencies-cache
 #      - run:
 #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
@@ -22,116 +22,77 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v6-gradle-dependencies-cache
+          key: v7-gradle-dependencies-cache
 
       - run:
-          name: Run Tests fore-jv-android
-          command: ./gradlew fore-jv:fore-jv-android:lintRelease fore-jv:fore-jv-android:testRelease
+          name: Run Tests fore-compose
+          command: ./gradlew lib:fore-compose:lintRelease lib:fore-compose:testRelease
       - store_artifacts:
-          path: fore-jv/fore-jv-android/build/reports
+          path: lib/fore-compose/build/reports
       - store_test_results:
-          path: fore-jv/fore-jv-android/build/test-results
+          path: lib/fore-compose/build/test-results
 
       - run:
-          name: Run Tests fore-kt-android
-          command: ./gradlew fore-kt:fore-kt-android:lintRelease fore-kt:fore-kt-android:testRelease
+          name: Run Tests fore-core
+          command: ./gradlew lib:fore-core:lintRelease lib:fore-core:testRelease
       - store_artifacts:
-          path: fore-kt/fore-kt-android/build/reports
+          path: lib/fore-core/build/reports
       - store_test_results:
-          path: fore-kt/fore-kt-android/build/test-results
+          path: lib/fore-core/build/test-results
 
       - run:
-          name: Run Tests example-jv-01reactiveui
-          command: ./gradlew app-examples:example-jv-01reactiveui:lintRelease app-examples:example-jv-01reactiveui:testRelease
+          name: Run Tests fore-net
+          command: ./gradlew lib:fore-net:lintRelease lib:fore-net:testRelease
       - store_artifacts:
-          path: app-examples/example-jv-01reactiveui/build/reports
+          path: lib/fore-net/build/reports
       - store_test_results:
-          path: app-examples/example-jv-01reactiveui/build/test-results
+          path: lib/fore-net/build/test-results
 
       - run:
-          name: Run Tests example-jv-02threading
-          command: ./gradlew app-examples:example-jv-02threading:lintRelease app-examples:example-jv-02threading:testRelease
+          name: Run Tests example-01-reactiveui
+          command: ./gradlew app-examples:example-01-reactiveui:lintRelease app-examples:example-01-reactiveui:testRelease
       - store_artifacts:
-          path: app-examples/example-jv-02threading/build/reports
+          path: app-examples/example-01-reactiveui/build/reports
       - store_test_results:
-          path: app-examples/example-jv-02threading/build/test-results
+          path: app-examples/example-01-reactiveui/build/test-results
 
       - run:
-          name: Run Tests example-jv-03adapters
-          command: ./gradlew app-examples:example-jv-03adapters:lintRelease app-examples:example-jv-03adapters:testRelease
+          name: Run Tests example-02-coroutine
+          command: ./gradlew app-examples:example-02-coroutine:lintRelease app-examples:example-02-coroutine:testRelease
       - store_artifacts:
-          path: app-examples/example-jv-03adapters/build/reports
+          path: app-examples/example-02-coroutine/build/reports
       - store_test_results:
-          path: app-examples/example-jv-03adapters/build/test-results
+          path: app-examples/example-02-coroutine/build/test-results
 
       - run:
-          name: Run Tests example-jv-04retrofit
-          command: ./gradlew app-examples:example-jv-04retrofit:lintRelease app-examples:example-jv-04retrofit:testRelease
+          name: Run Tests example-03-ktor
+          command: ./gradlew app-examples:example-03-ktor:lintRelease app-examples:example-03-ktor:testRelease
       - store_artifacts:
-          path: app-examples/example-jv-04retrofit/build/reports
+          path: app-examples/example-03-ktor/build/reports
       - store_test_results:
-          path: app-examples/example-jv-04retrofit/build/test-results
+          path: app-examples/example-03-ktor/build/test-results
 
       - run:
-          name: Run Tests example-jv-06db
-          command: ./gradlew app-examples:example-jv-06db:lintRelease app-examples:example-jv-06db:testRelease
+          name: Run Tests example-04-apollo
+          command: ./gradlew app-examples:example-04-apollo:lintRelease app-examples:example-04-apollo:testRelease
       - store_artifacts:
-          path: app-examples/example-jv-06db/build/reports
+          path: app-examples/example-04-apollo/build/reports
       - store_test_results:
-          path: app-examples/example-jv-06db/build/test-results
+          path: app-examples/example-04-apollo/build/test-results
+
+#      - run:
+#          name: Run Tests example-05-db
+#          command: ./gradlew app-examples:example-05-db:lintRelease app-examples:example-05-db:testRelease
+#      - store_artifacts:
+#          path: app-examples/example-05-db/build/reports
+#      - store_test_results:
+#          path: app-examples/example-05-db/build/test-results
 
       - run:
-          name: Run Tests example-kt-01reactiveui
-          command: ./gradlew app-examples:example-kt-01reactiveui:lintRelease app-examples:example-kt-01reactiveui:testRelease
+          name: Run Tests example-06-compose
+          command: ./gradlew app-examples:example-06-compose:lintRelease app-examples:example-06-compose:testRelease
       - store_artifacts:
-          path: app-examples/example-kt-01reactiveui/build/reports
+          path: app-examples/example-06-compose/build/reports
       - store_test_results:
-          path: app-examples/example-kt-01reactiveui/build/test-results
+          path: app-examples/example-06-compose/build/test-results
 
-      - run:
-          name: Run Tests example-kt-02coroutine
-          command: ./gradlew app-examples:example-kt-02coroutine:lintRelease app-examples:example-kt-02coroutine:testRelease
-      - store_artifacts:
-          path: app-examples/example-kt-02coroutine/build/reports
-      - store_test_results:
-          path: app-examples/example-kt-02coroutine/build/test-results
-
-      - run:
-          name: Run Tests example-kt-03adapters
-          command: ./gradlew app-examples:example-kt-03adapters:lintRelease app-examples:example-kt-03adapters:testRelease
-      - store_artifacts:
-          path: app-examples/example-kt-03adapters/build/reports
-      - store_test_results:
-          path: app-examples/example-kt-03adapters/build/test-results
-
-      - run:
-          name: Run Tests example-kt-04retrofit
-          command: ./gradlew app-examples:example-kt-04retrofit:lintRelease app-examples:example-kt-04retrofit:testRelease
-      - store_artifacts:
-          path: app-examples/example-kt-04retrofit/build/reports
-      - store_test_results:
-          path: app-examples/example-kt-04retrofit/build/test-results
-
-      - run:
-          name: Run Tests example-kt-07apollo3
-          command: ./gradlew app-examples:example-kt-07apollo3:lintRelease app-examples:example-kt-07apollo3:testRelease
-      - store_artifacts:
-          path: app-examples/example-kt-07apollo3/build/reports
-      - store_test_results:
-          path: app-examples/example-kt-07apollo3/build/test-results
-
-      - run:
-          name: Run Tests example-kt-08ktor
-          command: ./gradlew app-examples:example-kt-08ktor:lintRelease app-examples:example-kt-08ktor:testRelease
-      - store_artifacts:
-          path: app-examples/example-kt-08ktor/build/reports
-      - store_test_results:
-          path: app-examples/example-kt-08ktor/build/test-results
-
-      - run:
-          name: Run Tests example-kt-09compose
-          command: ./gradlew app-examples:example-kt-09compose:lintRelease app-examples:example-kt-09compose:testRelease
-      - store_artifacts:
-          path: app-examples/example-kt-09compose/build/reports
-      - store_test_results:
-          path: app-examples/example-kt-09compose/build/test-results

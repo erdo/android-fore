@@ -1,12 +1,112 @@
 [versions]
-agp = "8.3.2"
-kotlin = "1.9.22"
+androidPluginVersion = "8.11.2"
+composeBomVersion = "2026.04.01"
+slf4jNopVersion = "2.0.17"
+wearComposeVersion = "1.6.1"
+wearToolingPreviewVersion = "1.0.0"
+junitVersion = "4.13.2"
+kotlinVersion = "2.3.21"
+kotlinXIoVersion = "0.1.16"
+jvm-toolchain = "21"
+jvm-target = "1.8"
+kotlin-floor = "2.0"
+apollo = "4.4.3"
+apolloEngineKtor = "0.1.1"
+ktor = "3.4.3"
+coroutines = "1.10.2"
+lifecycle = "2.6.2" # from 2.7.0 onwards lifecycle-livedata-ktx has broken support for minSdk 16
+composeUiVersion = "1.11.0"
+composeMultiplatformUiVersion = "1.10.3"
+composeMultiplatformPluginVersion = "2.1.10"
+androidxWindowVersion = "1.5.1"
+mockkVersion = "1.14.4"
+persistaVersion = "2.1.0"
+foreVersion = "2.1.0"
+nmcpVersion = "1.4.1" #1.4.2 jumps to kotlin 2.2.0 which is too high for gradle-8.14.4
+
+[libraries]
+
+# kotlin
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io", version.ref = "kotlinXIoVersion" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0"
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinVersion" }
+
+# android
+androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-common", version.ref = "lifecycle" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# compose androidx
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-wear-compose-tooling = { module = "androidx.wear.compose:compose-ui-tooling", version.ref = "wearComposeVersion" }
+androidx-wear-tooling-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "wearToolingPreviewVersion" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "composeUiVersion" }
+androidx-activity-compose = "androidx.activity:activity-compose:1.13.0"
+
+# compose jetbrains
+jetbrains-compose-ui  = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatformUiVersion" }
+jetbrains-compose-desktop = { module = "org.jetbrains.compose.desktop:desktop", version.ref = "composeMultiplatformUiVersion" }
+jetbrains-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMultiplatformUiVersion" }
+
+# ui
+androidx-window = { module = "androidx.window:window", version.ref = "androidxWindowVersion" }
+# androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidxWindowVersion" }
+
+# ktor
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+
+# okio
+okio = "com.squareup.okio:okio:3.17.0"
+
+# test
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVersion" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+junit = { module = "junit:junit", version.ref = "junitVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
+
+# apollo
+apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
+apollo-engine-ktor = { module = "com.apollographql.ktor:apollo-engine-ktor", version.ref = "apolloEngineKtor" }
+
+# fore
+fore-core = { module = "co.early.fore:fore-core", version.ref = "foreVersion" }
+fore-net = { module = "co.early.fore:fore-net", version.ref = "foreVersion" }
+fore-compose = { module = "co.early.fore:fore-compose", version.ref = "foreVersion" }
+fore-test-fixtures = { module = "co.early.fore:fore-test-fixtures", version.ref = "foreVersion" }
+
+# fore-apollo
+fore-net-apollo = { module = "co.early.fore:fore-net-apollo", version.ref = "foreVersion" }
+fore-net-apollo-test-fixtures = { module = "co.early.fore:fore-net-apollo-test-fixtures", version.ref = "foreVersion" }
+
+# persistence
+persista = { module = "co.early.persista:persista", version.ref = "persistaVersion" }
+
+# logging
+slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4jNopVersion" }
+
+# gradle plugins (used in buildSrc as implementation deps)
+nmcp-gradle-plugin = { module = "com.gradleup.nmcp:nmcp", version.ref = "nmcpVersion" }
+
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+androidAppPlugin = { id = "com.android.application", version.ref = "androidPluginVersion" }
+androidLibraryPlugin = { id = "com.android.library", version.ref = "androidPluginVersion" }
+kotlinAndroidPlugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlinJvmPlugin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinVersion" }
+kotlinMultiPlatformPlugin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinVersion" }
+kotlinKaptPlugin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinVersion" }
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinVersion" }
+composeCompilerPlugin = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
+#composeMultiplatformPlugin = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "composeMultiplatformPluginVersion" }
+apolloPlugin = { id = "com.apollographql.apollo", version.ref = "apollo"}
+kotlinCocoapodsPlugin = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlinVersion" }
+dokkaPlugin = "org.jetbrains.dokka:2.2.0"

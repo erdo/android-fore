@@ -2,11 +2,23 @@
 
 [![license-apache2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/erdo/android-fore/blob/master/LICENSE.txt){: .float-left}
 
-![central-1.6.5](https://img.shields.io/badge/central-1.6.5-green.svg){: .float-left}
+![central-2.1.0](https://img.shields.io/badge/central-2.1.0-green.svg){: .float-left}
 
 ![api-16](https://img.shields.io/badge/api-16%2B-orange.svg){: .float-left}
 
+![compose api-23](https://img.shields.io/badge/compose%20api-23%2B-yellow.svg){: .float-left}
+
 [![circleci](https://circleci.com/gh/erdo/android-fore/tree/main.svg?style=shield)](https://circleci.com/gh/erdo/android-fore/tree/main){: .float-left}
+
+<br/>
+
+![kmp-jvm](https://img.shields.io/badge/KMP-jvm-7f52ff.svg){: .float-left}
+![kmp-ios](https://img.shields.io/badge/KMP-ios-7f52ff.svg){: .float-left}
+![kmp-macos](https://img.shields.io/badge/KMP-macos-7f52ff.svg){: .float-left}
+![kmp-watchos](https://img.shields.io/badge/KMP-watchos-7f52ff.svg){: .float-left}
+![kmp-tvos](https://img.shields.io/badge/KMP-tvos-7f52ff.svg){: .float-left}
+![kmp-linux](https://img.shields.io/badge/KMP-linux-7f52ff.svg){: .float-left}
+![kmp-windows](https://img.shields.io/badge/KMP-windows-7f52ff.svg){: .float-left}
 
 <br/>
 <br/>
@@ -14,9 +26,20 @@
 **fore** helps you move code out of the view layer, leaving your reactive view code to deal with the absolute fundamentals: *what things look like*
 
 ```
-implementation("co.early.fore:fore-kt-core:1.6.5")
-implementation("co.early.fore:fore-kt-android:1.6.5")
-implementation("co.early.fore:fore-kt-android-compose:1.6.5")
+implementation("co.early.fore:fore-core:2.1.0")
+testImplementation("co.early.fore:fore-test-fixtures:2.1.0")
+```
+
+Extensions:
+```
+implementation("co.early.fore:fore-net:2.1.0")
+implementation("co.early.fore:fore-compose:2.1.0")
+```
+
+Apollo artifacts:
+```
+implementation("co.early.fore:fore-net-apollo:2.1.0")
+testImplementation("co.early.fore:fore-net-apollo-test-fixtures:2.1.0")
 ```
 
 The GPG fingerprint used to sign the maven packages is: <strong>5B83EC7248CCAEED24076AF87D1CC9121D51BA24</strong> and the GPG public cert is [here](https://erdo.github.io/android-fore/gpg-pub-cert.asc).
@@ -25,17 +48,11 @@ More detailed [version / package information here](https://erdo.github.io/androi
 
 ## New to fore
 
-The main principle behind **fore**: *drive your app by observing state*
+Since **fore** was first published back in 2017, the main principle behind it has been: *drive your app by observing state*
 
 This works well with UDF style apps or clean architecture for example, and with modern reactive UI frameworks like Compose, observing state becomes even more natural.
 
-## Current status
-
-Since fore was first published back in 2017, the core code has proven pretty stable and has remained almost identical apart from the addition of kotlin / coroutines under the hood several years ago.
-
-**fore v2.0** will have no major API changes. To prepare for it, just make sure to update any older deprecated functions with their replacements - the deprecated code will finally get removed in 2.0 (this applies mainly to the non-core packages)
-
-fore still supports Java, and an extremely performant Android app with a reactive UI, running on a 4.1 device from 10 years ago is still completely doable (and with an apk measured in kB rather than MB). But the Kotlin non-core packages like **fore-kt-android-compose** is where most of the development happens nowadays
+**fore v2** introduced support for KMP and is now pretty stable with no major API changes planned. V2 also dropped support for Java (still available on the legacy v1 branch)
 
 ## Quick Start
 
@@ -97,7 +114,7 @@ Fore's observeAsState function takes into account both the lifecycle of the Acti
 
 Imagine your app existing entirely separately from its UI (its UI could be a command line interface, or a GUI, compose or otherwise - the app shouldn't care or even know what type of UI it has). Then imagine the UI layer as a thin window on to this app, free to deal exclusively with _what things look like_.
 
-This level of separation is a goal of lots of architectures and it's a great way to develop anything that has a UI. It's especially helpful for a platform like android with its ephemeral view layer that gets destroyed and recreated on rotation. It also lets you junit test almost everything, the UI layer becoming as close to trivial as possible.
+This level of separation is a goal of lots of architectures and it's a great way to develop anything that has a UI. It's especially helpful for a platform like android with its ephemeral view layer that gets destroyed and recreated on rotation. It also lets you unit test almost everything, the UI layer becoming as close to trivial as possible.
 
 ### Observers and Observables
 
@@ -207,7 +224,7 @@ Anyway, because of the low boiler plate and the clear separation of architectura
 
 ## Where to get more information
 
-This repo includes the tiny fore library, the optional packages, and 12 mini example apps. Any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
+This repo includes the tiny fore library, the optional packages, and 6 mini example apps. Any updates to fore are immediately reflected in the example apps and all their tests need to pass before new versions of fore are released, so they tend to remain current and are a good place to start if you're trying to figure out how things fit together:
 
 `git clone git@github.com:erdo/android-fore.git`
 
@@ -226,7 +243,7 @@ Boiler plate dilutes code which is implementing requirements, in other words it 
 
 ![all samples](img/screenshot_asaf_samples_phone_all_1000.png)
 
-The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to nicely structure XML layouts - all that you can do later in the **View** layers whether in traditional XML, or Jetpack Compose, and it should have no impact on the stability of the app. Process death in the sample apps just wipes all the data, if you're looking for ways to handle that without cluttering up the view layer, the clean architecture sample app linked to above uses [persista](https://github.com/erdo/persista) to save/recover the state of the app across process death. 
+The mini example apps included with the repo are deliberately sparse and ugly so that you can see exactly what they are doing. These are not examples for how to write good looking UI components - all that you can do later in the **View** layers whether in traditional XML, or Jetpack Compose, and it should have no impact on the stability of the app. Process death in the sample apps just wipes all the data, if you're looking for ways to handle that without cluttering up the view layer, the clean architecture sample app linked to above uses [persista](https://github.com/erdo/persista) to save/recover the state of the app across process death. 
 
 These apps are however, totally robust and comprehensively tested (and properly support rotation). And that's really where you should try to get to as quickly as possible, so that you can **then** start doing the fun stuff like adding beautiful graphics and cute animations.
 
@@ -237,7 +254,7 @@ For the sample apps there is a one-to-one relationship between the sub-packages 
 <div class="shoom" id="fore-1-reactive-ui-example"/>
 ### **fore 1** Reactive UI Example
 
-[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-01reactiveui) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-01reactiveui)
+[video](https://www.youtube.com/watch?v=wDu6iaSzKHI) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-01-reactiveui)
 
 ![fore reactive UI sample app](img/fore-android-sample-reactive.gif)
 
@@ -249,38 +266,22 @@ In the app you move money from a "Savings" wallet to a "Mobile" wallet and then 
 <div class="shoom" id="fore-2-async-example"/>
 ### **fore 2** Asynchronous Code Example
 
-[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-02threading) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-02coroutine)
+[video](https://www.youtube.com/watch?v=di_xvaYUTxo) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-02-coroutine)
 
-![fore threading sample app](img/fore-android-sample-async.gif)
+![fore coroutine sample app](img/fore-android-sample-async.gif)
 
-This one demonstrates asynchronous programming, and importantly how to test it. The **java** version uses ([Async](https://erdo.github.io/android-fore/04-more-fore.html#async) and [AsyncBuilder](https://erdo.github.io/android-fore/04-more-fore.html#asyncbuilder)), the **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that make the coroutines unit testable). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
+This one demonstrates asynchronous programming, and importantly how to test it. This **kotlin** version uses coroutines (with some [fore extensions](https://github.com/erdo/android-fore/blob/master/fore-kt-core/src/main/java/co/early/fore/kt/core/coroutine/Ext.kt) that are useful for the testable, fire and forget style asynchronous coding that works well with fore). Again, it's a bare bones (but complete and tested) app - just the minimum required to demonstrate asynchronous programming.
 
 This app has a counter that you can increase by pressing a button (but it takes time to do the increasing - so you can rotate the device, background the app etc and see the effect).
 
-<div class="shoom" id="fore-3-adapter-example"/>
-### **fore 3** Adapter Example
+<div class="shoom" id="fore-3-ktor-example"/>
+### **fore 3** Ktor Example
 
-[video](https://www.youtube.com/watch?v=eAbyhOyoMxU) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-03adapters) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-03adapters)
+[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-03-ktor)
 
-![fore adapters sample app](img/fore-android-sample-adapters.gif)
+![fore ktor sample app](img/fore-android-sample-network.gif)
 
-This one demonstrates how to use [**adapters**](https://erdo.github.io/android-fore/04-more-fore.html#adapter-animations-non-compose-only) with **fore**.
-
-The **java** sample has two lists side by side so you can see the how the implementation differs depending on if you are backed by immutable list data (typical in architectures that use view states such as MVI) or mutable list data. As usual it's a complete and tested app but contains just the minimum required to demonstrate adapters.
-
-The **kotlin** version has three lists, adding an implementation of google's **AsyncListDiffer**. All three implementations have slightly different characteristics, most notably the google version moves logic out of the model and into the adapter (that's why it doesn't automatically support rotation - but it could be added easily enough by passing an external list copy to the adapter). Check the source code for further infomation.
-
-The UI for each app is deliberately challenging to implement on android, and although it's ugly, the UI lets you smash buttons to not only add and remove multiple items, but also to change the state of each item in the list. All changes are animated, it supports rotation, it's totally robust and the UI layer is extremely thin for both apps.
-
-
-<div class="shoom" id="fore-4-retrofit-example"/>
-### **fore 4** Retrofit Example
-
-[video](https://www.youtube.com/watch?v=zOIoK8Fj0Ug) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-04retrofit) \| [source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-04retrofit)
-
-![fore retrofit sample app](img/fore-android-sample-network.gif)
-
-Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallWrapper](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-kt-network package, the kotlin implementation of CallWrapper is implemented with coroutines and has an API better suited to kotlin and functional programming.
+Clicking the buttons in this app will perform network requests to some static files that are hosted on [Mocky](https://www.mocky.io/) (have you seen that thing? it's awesome). The buttons make various network connections, various successful and failed responses are handled in different ways. It's all managed by the [CallWrapper](https://erdo.github.io/android-fore/04-more-fore.html#fore-network) class which is the main innovation in the fore-net package, the kotlin implementation of CallWrapper is implemented with coroutines and has an API better suited to kotlin and functional programming.
 
 As you're using the app, please notice:
 
@@ -288,45 +289,19 @@ As you're using the app, please notice:
 
 As usual this is a complete and tested app. In reality the tests are probably more than I would do for a real app this simple, but they should give you an idea of how you can do **unit testing**, **integration testing** and **UI testing** whilst steering clear of accidentally testing implementation details.
 
-<div class="shoom" id="fore-7-apollo-example"/>
-### **fore 7** Apollo Example
-[source code (kotlin, Apollo3)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-07apollo3)
-In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo3. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
+<div class="shoom" id="fore-4-apollo-example"/>
+### **fore 4** Apollo Example
+[source code (kotlin, Apollo)](https://github.com/erdo/android-fore/tree/master/app-examples/example-04-apollo)
+In a similar vein we have a networking sample that integrates with a GraphQL API using Apollo. Includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests) and of course has a wafer thin UI layer.
 
-<div class="shoom" id="fore-8-ktor-example"/>
-### **fore 8** Ktor Example
-[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-08ktor)
-Ditto but using Ktor (and OkHttp). And as usual includes the ability to chain network calls together, support rotation, handle all error conditions gracefully, and is completely testable / tested (Unit tests and UI tests)
-
-<div class="shoom" id="fore-9-compose-example"/>
-### **fore 9** Compose Example
-[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-kt-09compose)
+<div class="shoom" id="fore-6-compose-example"/>
+### **fore 6** Compose Example
+[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-06-compose)
 Sample for the [observeAsState](https://dev.to/erdo/tic-tac-toe-from-mvp-to-jetpack-compose-57d8) function and the [WindowSize](https://dev.to/erdo/jetpack-compose-and-windowsize-classes-gb4) classes
 
-<div class="shoom" id="fore-6-db-example-room"/>
-### **fore 6** DB Example (Room db driven to-do list)
-
-[video](https://www.youtube.com/watch?v=a1ehGU5O8i8) \| [source code (java)](https://github.com/erdo/android-fore/tree/master/app-examples/example-jv-06db)
-
-![fore room db sample app](img/fore-android-sample-db.gif)
-
-
-A To-do list on steroids that lets you:
-
-- manually add 50 random todos at a time
-- turn on a "boss mode" which randomly fills your list with even more todos over the following 10 seconds
-- "work from home" which connects to the network and downloads 25 extra todos (up to 9 simultaneous network connections)
-- randomly delete about 10% of your todos
-- randomly change 10% of your outstanding todos to done
-
-It's obviously ridiculously contrived, but the idea is to implement something that would be quite challenging and to see how little code you need in the view layer to do it.
-
-It is driven by a Room db, and there are a few distinct architectural layers: as always there is a view layer and a model layer (in packages: ui and feature). There is also a networking and a persistence layer. The UI layer is driven by the model which in turn is driven by the db.
-
-All the database changes are done away from the UI thread, RecyclerView animations using DiffUtil are supported (for lists below 1000 rows), the app is totally robust and supports rotation out of the box.
-
-There is only one test class included with this app which demonstrates how to test Models which are driven by a Room DB (using CountdownLatches etc). For other test examples, please see the other sample apps
-
+<div class="shoom" id="fore-7-kmp-example"/>
+### **fore 7** KMP Example
+[source code (kotlin)](https://github.com/erdo/android-fore/tree/master/app-examples/example-07-kmp)
 
 ## Contributing
 Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CONDUCT.html#shoom), and check out the [issues](https://github.com/erdo/android-fore/issues) :)
@@ -335,7 +310,7 @@ Please read the [Code of Conduct](https://erdo.github.io/android-fore/CODE-OF-CO
 ## License
 
 
-    Copyright 2015-2024 early.co
+    Copyright 2015-2026 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

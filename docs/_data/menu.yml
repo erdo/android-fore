@@ -31,7 +31,7 @@
       url: "#connecting-views-and-models"
     - text: Compose
       url: "#connecting-views-and-models-in-compose"
-- text: fore Deep Dive
+- text: More fore
   url: /07-fore-api.html
   subitems:
     - text: State
@@ -42,31 +42,3 @@
       url: "#the-fore-approach"
     - text: API
       url: "#fores-api"
-- text: More fore
-  url: /04-more-fore.html
-  subitems:
-    - text: Retrofit, Apollo and Ktor
-      url: "#fore-network"
-    - text: Adapter animations
-      url: "#adapter-animations"
-    - text: Default WorkMode
-      url: "#default-params"
-    - text: Async and Coroutines
-      url: "#kotlin-coroutines"
-- text: Extras
-  url: /05-extras.html
-  subitems:
-    - text: Tutorials
-      url: "#tutorials"
-    - text: Presentation Slides
-      url: "#presentations"
-    - text: State versus Events
-      url: "#state-versus-events"
-    - text: Android's Original Mistake
-      url: "#androids-original-mistake"
-    - text: Troubleshooting and Code Reviews
-      url: "#troubleshooting--how-to-smash-code-reviews"
-    - text: Dependency Injection Basics
-      url: "#dependency-injection-basics"
-    - text: Syncview and Efficiency
-      url: "#syncview"

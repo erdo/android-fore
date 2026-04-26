@@ -28,8 +28,23 @@
  * co.early.fore.core.testhelpers.CountDownLatchWrapper() //fore-jv-core
  *
  * ./gradlew clean
+ * ./gradlew lib:fore-core:publishToMavenLocal
  * ./gradlew publishToMavenLocal
- * ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
+ *
+ * OLD MAVEN CENTRAL:
+ * ./gradlew lib:fore-core:publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
+ * ./gradlew publishAllPublicationsToMavenCentralRepository --no-daemon --no-parallel
+ *
+ * 2026 MAVEN CENTRAL:
+ * ./gradlew publishAggregationToCentralPortal --no-daemon --no-parallel
+ *
+ * // pre KMP ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
+ *
+ * to build shared framework for the kmp sample app before running the ios app:
+ * ./gradlew :shared:prepAllXCFrameworkForXcode
+ *
+ *
+ * ./gradlew tasks --all | grep publish
  *
  * ./gradlew :fore-kt:fore-kt-android-compose:publishReleasePublicationToMavenCentralRepository --no-daemon --no-parallel
  *
@@ -38,10 +53,12 @@
  *
  * ./gradlew :app-examples:example-kt-04retrofit:dependencies
  * ./gradlew -q :fore-kt:fore-kt-core:dependencyInsight --configuration compileClasspath --dependency okhttp3
+ * ./gradlew lib:fore-core:dependencies --scan
  *
  * tag:fore_
  *
  * bundle exec jekyll serve
+ * bundle exec jekyll serve --baseurl /android-fore
  *
  * bundle lock --update
  * bundle install
@@ -49,15 +66,34 @@
  * git tag -a v1.5.9 -m 'v1.5.9'
  * git push origin --tags
  */
+import co.early.fore.Shared
 
 plugins {
-    alias(libs.plugins.androidApplication).apply(false)
-    alias(libs.plugins.androidLibrary).apply(false)
-    alias(libs.plugins.kotlin).apply(false)
-    alias(libs.plugins.kotlinAndroid).apply(false)
-    alias(libs.plugins.kotlinSerialization).apply(false)
+    alias(libs.plugins.androidAppPlugin).apply(false)
+    alias(libs.plugins.androidLibraryPlugin).apply(false)
+    alias(libs.plugins.kotlinJvmPlugin).apply(false)
+    alias(libs.plugins.kotlinAndroidPlugin).apply(false)
+    alias(libs.plugins.kotlinMultiPlatformPlugin).apply(false)
+    alias(libs.plugins.kotlinCocoapodsPlugin).apply(false)
+    alias(libs.plugins.composeCompilerPlugin).apply(false)
+    alias(libs.plugins.kotlinSerializationPlugin).apply(false)
+    alias(libs.plugins.kotlinKaptPlugin).apply(false)
+    id("com.gradleup.nmcp.aggregation")
 }
 
-tasks.register("clean", Delete::class){
-    delete(rootProject.layout.buildDirectory)
+nmcpAggregation {
+    centralPortal {
+        username = Shared.Secrets.MAVEN_USER
+        password = Shared.Secrets.MAVEN_PASSWORD
+        publishingType = "USER_MANAGED" // USER_MANAGED | AUTOMATIC
+    }
+}
+
+dependencies {
+    nmcpAggregation(project(":lib:fore-core"))
+    nmcpAggregation(project(":lib:fore-net"))
+    nmcpAggregation(project(":lib:fore-compose"))
+    nmcpAggregation(project(":lib:fore-test-fixtures"))
+    nmcpAggregation(project(":lib:fore-net-apollo"))
+    nmcpAggregation(project(":lib:fore-net-apollo-test-fixtures"))
 }

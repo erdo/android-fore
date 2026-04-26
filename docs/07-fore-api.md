@@ -1,4 +1,4 @@
-# <a name="somethingchanged-parameter"></a>fore deep dive
+# <a name="somethingchanged-parameter"></a>More fore
 
 Much of what we are about to discuss is specific to mobile applications, the server side is a very different beast. Of course, applying best practice from one context to a totally different context without recognising the differences would be a mistake that we are going to avoid here!
 
@@ -231,7 +231,7 @@ Once in a compose UI though, the three finally start to get close to parity
 // LiveData
 val viewState by viewModel.viewStateLiveData.observeAsState(ViewState())
 // Flow
-val viewState by viewModel.viewStateFlow.collectAsState(ViewState())
+val viewState by viewModel.viewStateFlow.collectAsStateWithLifecycle(ViewState())
 // Fore
 val viewState by viewModel.observeAsState { viewModel.state }
 ```

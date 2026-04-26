@@ -25,41 +25,16 @@ dependencyResolutionManagement {
 
 rootProject.name = "android-fore"
 
-// java
-include(":fore-jv")
-include(":fore-jv:fore-jv-core")
-include(":fore-jv:fore-jv-network")
+include(':lib:fore-core')
+include(':lib:fore-net')
+include(':lib:fore-compose')
+include(':lib:fore-test-fixtures')
 
-// java android
-include(":fore-jv:fore-jv-android") // everything
-include(":fore-jv:fore-jv-android-core")
-include(":fore-jv:fore-jv-android-adapters")
-include(":fore-jv:fore-jv-android-network")
+include(':lib:fore-net-apollo')
+include(':lib:fore-net-apollo-test-fixtures')
 
-// kotlin
-include(":fore-kt")
-include(":fore-kt:fore-kt-core")
-include(":fore-kt:fore-kt-network")
-include(":fore-kt:fore-kt-network-okhttp3v3x")
-include(":fore-kt:fore-kt-network-okhttp3v4x")
-
-// kotlin android
-include(":fore-kt:fore-kt-android") // everything
-include(":fore-kt:fore-kt-android-core")
-include(":fore-kt:fore-kt-android-adapters")
-include(":fore-kt:fore-kt-android-network")
-include(":fore-kt:fore-kt-android-compose")
-
-include(":app-examples")
-include(":app-examples:example-kt-01reactiveui",
-        ":app-examples:example-kt-02coroutine",
-        ":app-examples:example-kt-03adapters",
-        ":app-examples:example-kt-04retrofit",
-        ":app-examples:example-kt-07apollo3",
-        ":app-examples:example-kt-08ktor",
-        ":app-examples:example-kt-09compose",
-        ":app-examples:example-jv-01reactiveui",
-        ":app-examples:example-jv-02threading",
-        ":app-examples:example-jv-03adapters",
-        ":app-examples:example-jv-04retrofit",
-        ":app-examples:example-jv-06db")
+include(':app-examples:example-01-reactiveui',
+        ':app-examples:example-02-coroutine',
+        ':app-examples:example-03-ktor',
+        ':app-examples:example-04-apollo',
+        ':app-examples:example-06-compose')
