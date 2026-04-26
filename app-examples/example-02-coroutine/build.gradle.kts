@@ -74,19 +74,19 @@ dependencies {
         testImplementation(project(":lib:fore-test-fixtures"))
     }
 
-    implementation("androidx.appcompat:appcompat:${Shared.Versions.appcompat}")
+    implementation("androidx.appcompat:appcompat:1.5.1")
 
-    testImplementation("junit:junit:${Shared.Versions.junit}")
-    testImplementation("io.mockk:mockk:${Shared.Versions.mockk}")
+    testImplementation("junit:junit:${Shared.ExampleAppVersions.junit}")
+    testImplementation("io.mockk:mockk:${Shared.ExampleAppVersions.mockk}")
     testImplementation(libs.kotlin.coroutines.test)
 
-    androidTestImplementation("io.mockk:mockk-android:${Shared.Versions.mockk}")
-    androidTestImplementation("androidx.test:core:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test:runner:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test:rules:${Shared.Versions.androidxtest}")
-    androidTestImplementation("androidx.test.ext:junit-ktx:${Shared.Versions.androidxjunit}")
-    androidTestImplementation("androidx.annotation:annotation:${Shared.Versions.annotation}")
-    androidTestImplementation("androidx.test.espresso:espresso-core:${Shared.Versions.espresso_core}") {
+    androidTestImplementation("io.mockk:mockk-android:${Shared.ExampleAppVersions.mockk}")
+    androidTestImplementation("androidx.test:core:${Shared.ExampleAppVersions.androidxtest}")
+    androidTestImplementation("androidx.test:runner:${Shared.ExampleAppVersions.androidxtest}")
+    androidTestImplementation("androidx.test:rules:${Shared.ExampleAppVersions.androidxtest}")
+    androidTestImplementation("androidx.test.ext:junit-ktx:${Shared.ExampleAppVersions.androidxjunit}")
+    androidTestImplementation("androidx.annotation:annotation:1.0.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:${Shared.ExampleAppVersions.espresso_core}") {
         exclude(group = "com.android.support", module = "support-annotations")
     }
 }
